@@ -1,13 +1,16 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
+  root: "src",
   plugins: [react()],
-  root: "./src",
   build: {
     outDir: "../dist",
   },
-  optimizeDeps: {
-    exclude: ["pg-hstore", "pg", "mysql2", "tedious"], // bỏ các driver không dùng
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, "./src"),
+    },
   },
 });
