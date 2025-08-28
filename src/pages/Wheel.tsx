@@ -10,13 +10,17 @@ const sections = [
 
 export default function Wheel() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const rollSoundRef = useRef<HTMLAudioElement | null>(null);
   const [angle, setAngle] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
   const radius = 200;
 
-  // Vẽ vòng quay
+  useEffect(() => {
+    rollSoundRef.current = new Audio("/assets/no-story-70330.mp3");
+  }, []);
+
   const drawWheel = (ctx: CanvasRenderingContext2D, currentAngle: number) => {
     const totalWeight = sections.reduce((sum, sec) => sum + sec.weight, 0);
     let startAngle = 0;
@@ -76,26 +80,43 @@ export default function Wheel() {
     const finalAngle = angle + extraRotations + randomAngle;
 
     let start: number | null = null;
-    const duration = 2000; // ms
+    const duration = 3500 + Math.random() * 2000; // 3.5 → 5.5 s
+    let lastSectionIndex = -1;
 
     const animate = (timestamp: number) => {
       if (!start) start = timestamp;
       const progress = Math.min((timestamp - start) / duration, 1);
-
-      const eased = 1 - Math.pow(1 - progress, 4); // quartOut easing giống cocos
+      const eased = 1 - Math.pow(1 - progress, 4); // quartOut easing
       const current = angle + eased * (finalAngle - angle);
-
       setAngle(current);
+
+      // phát âm thanh khi qua section mới
+      const totalWeight = sections.reduce((s, sec) => s + sec.weight, 0);
+      let cumulative = 0;
+      const normalizedAngle = (360 - (current % 360)) % 360;
+      let currentSectionIndex = -1;
+      for (let i = 0; i < sections.length; i++) {
+        const step = (sections[i].weight / totalWeight) * 360;
+        cumulative += step;
+        if (normalizedAngle <= cumulative) {
+          currentSectionIndex = i;
+          break;
+        }
+      }
+      if (
+        currentSectionIndex !== -1 &&
+        currentSectionIndex !== lastSectionIndex
+      ) {
+        rollSoundRef.current?.play();
+        lastSectionIndex = currentSectionIndex;
+      }
 
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
-        // xác định result
-        const totalWeight = sections.reduce((s, sec) => s + sec.weight, 0);
-        let cumulative = 0;
+        // xác định kết quả
         let chosen: string | null = null;
-        const normalizedAngle = (360 - (finalAngle % 360)) % 360;
-
+        cumulative = 0;
         for (const section of sections) {
           const step = (section.weight / totalWeight) * 360;
           cumulative += step;
@@ -106,7 +127,7 @@ export default function Wheel() {
         }
         setResult(chosen);
         setIsSpinning(false);
-        setAngle(finalAngle % 360); // normalize lại góc
+        setAngle(finalAngle % 360);
       }
     };
 
