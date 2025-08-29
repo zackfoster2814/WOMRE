@@ -1,6 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-// Define the User attributes interface
 interface PlayersAttributes {
   id?: number;
   stt: number;

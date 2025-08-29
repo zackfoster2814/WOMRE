@@ -4,8 +4,6 @@ import fs from "fs";
 
 const db: any = {};
 
-
-
 const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: path.join(process.cwd(), "womre.sqlite"),
@@ -31,7 +29,7 @@ export default async function initDb() {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.DataTypes = DataTypes;
+db.dataTypes = DataTypes;
 db.QueryTypes = QueryTypes;
 db.Op = Op;
 
