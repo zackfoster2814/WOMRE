@@ -5,7 +5,6 @@ export default function Menu() {
   const navigate = useNavigate();
 
   const handleClick = (action: string) => {
-    console.log(`Clicked: ${action}`);
     if (action === "exit") {
       window.close();
     }
@@ -15,44 +14,51 @@ export default function Menu() {
   };
 
   const btnStyle =
-    "w-60 h-16 rounded-2xl font-bold text-white text-xl shadow-lg hover:scale-110 transition-transform bg-gradient-to-br from-purple-600 to-indigo-500 border-2 border-yellow-300";
+    "w-64 h-16 rounded-xl font-bold text-lg text-gray-200 shadow-[0_0_15px_rgba(128,0,128,0.6)] " +
+    "hover:scale-110 transition-transform bg-gradient-to-b from-[#2b1d42] to-[#1a1029] " +
+    "border border-[#8a5b1a] hover:shadow-[0_0_25px_rgba(200,50,50,0.8)]";
 
   return (
-    <div
-      className="w-screen h-screen bg-cover flex items-center justify-center"
-      style={{ backgroundImage: "url('./assets/bg.jpg')" }}
-    >
+    <div className="w-screen h-screen relative flex items-center justify-center">
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('./assets/Backgrounds/menu-bg.jpg')",
+        }}
+      />
+
+      {/* Overlay u ám */}
+      <div className="absolute inset-0 bg-black/60" />
+
       {/* Sidebar menu */}
-      <div className="flex flex-col justify-center items-center gap-6">
+      <div className="flex flex-col justify-center items-center gap-6 ml-10 z-10">
         <button onClick={() => handleClick("start")} className={btnStyle}>
           START
         </button>
-
         <button onClick={() => handleClick("setting")} className={btnStyle}>
           SETTING
         </button>
-
         <button onClick={() => handleClick("data")} className={btnStyle}>
           DATA
         </button>
-
         <button onClick={() => handleClick("exit")} className={btnStyle}>
           EXIT
         </button>
       </div>
 
-      {/* Right side: title */}
-      <div className="flex-1 flex flex-col justify-center items-center ml-16">
-        <h1 className="text-7xl font-handwriting mb-2 text-yellow-200 drop-shadow-lg">
+      {/* Title */}
+      <div className="flex-1 flex flex-col justify-center items-center ml-16 z-10">
+        <h1 className="text-7xl font-black mb-2 text-[#d4af37] drop-shadow-[0_0_20px_rgba(255,180,50,0.8)] tracking-widest">
           Wheel
         </h1>
-        <h1 className="text-7xl font-handwriting mb-2 text-yellow-200 drop-shadow-lg">
+        <h1 className="text-7xl font-black mb-2 text-[#d4af37] drop-shadow-[0_0_20px_rgba(255,180,50,0.8)] tracking-widest">
           of
         </h1>
-        <h1 className="text-7xl font-handwriting mb-4 text-yellow-200 drop-shadow-lg">
+        <h1 className="text-7xl font-black mb-6 text-[#d4af37] drop-shadow-[0_0_20px_rgba(255,180,50,0.8)] tracking-widest">
           Multiverse
         </h1>
-        <span className="text-3xl font-handwriting text-purple-300 drop-shadow-md">
+        <span className="text-2xl font-semibold text-purple-400 drop-shadow-[0_0_15px_rgba(150,50,200,0.9)]">
           V2.36
         </span>
       </div>
