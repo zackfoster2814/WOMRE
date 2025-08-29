@@ -6,6 +6,9 @@ dist/
 out/
 build/
 
+#db
+.sqlite
+
 # Vite cache
 .vite/
 .cache/
