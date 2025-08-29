@@ -5,13 +5,16 @@
   "scripts": {
     "dev:vite": "vite",
     "dev:electron": "cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
-    "dev": "concurrently \"npm run dev:vite\" \"npm run dev:electron\""
+    "dev": "concurrently \"npm run dev:vite\" \"npm run dev:electron\"",
+    "build": "tsc && vite build"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.8",
+    "@tailwindcss/postcss": "^4.1.12",
+    "@types/lodash": "^4.17.20",
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.8",
@@ -46,15 +49,14 @@
     }
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.8",
-    "@tailwindcss/vite": "^4.1.12",
+    "dotenv": "^17.2.1",
     "pg-hstore": "^2.3.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.8.2",
     "sequelize": "^6.37.7",
-    "sqlite3": "^5.1.7",
-    "tailwindcss-animate": "^1.0.7",
-    "tw-animate-css": "^1.3.2"
+    "sequelize-auto": "^0.8.8",
+    "sequelize-cli": "^6.6.3",
+    "sqlite3": "^5.1.7"
   }
 }

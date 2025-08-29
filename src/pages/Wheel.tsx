@@ -14,7 +14,12 @@ export default function Wheel() {
   const [angle, setAngle] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+  const [players, setPlayers] = useState([]);
 
+  useEffect(() => {
+    window.api.fetchAllPlayers().then(setPlayers);
+    console.log(players)  ;
+  }, []);
   const radius = 200;
 
   useEffect(() => {
