@@ -1,19 +1,36 @@
-import { Sequelize } from "sequelize";
+import { Sequelize,Op,DataTypes,QueryTypes } from "sequelize";
 import path from "path";
-import { UserFactory } from "./models";
+import fs from "fs";
+
+const db: any = {};
 
 const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: path.join(process.cwd(), "womre.sqlite"),
+  dialectOptions: {
+    dateStrings: true,
+    typeCast: true
+  },
+  // logging: false,
   logging: false,
+  benchmark: true,
+  define: {
+    timestamps: false,
+    underscored: true
+  },
 });
 
-const User = UserFactory(sequelize);
 
-export async function initDb() {
+export default async function initDb() {
   await sequelize.authenticate();
   await sequelize.sync();
   console.log("✅ Database synced");
 }
 
-export { User, sequelize };
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+db.dataTypes = DataTypes;
+db.QueryTypes = QueryTypes;
+db.Op = Op;
+
+export { sequelize, db };

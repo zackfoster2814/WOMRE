@@ -57,7 +57,12 @@ const Wheel: React.FC = () => {
   const [angles, setAngles] = useState({ main: 0, troll: 0, elf: 0 });
   const [isSpinning, setIsSpinning] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
+  const [players, setPlayers] = useState([]);
 
+  useEffect(() => {
+    window.api.fetchAllPlayers().then(setPlayers);
+    console.log(players)  ;
+  }, []);
   const radius = 150;
 
   useEffect(() => {
