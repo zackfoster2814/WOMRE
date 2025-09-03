@@ -1,8 +1,15 @@
 import { Sequelize,Op,DataTypes,QueryTypes } from "sequelize";
 import path from "path";
-import fs from "fs";
 
-const db: any = {};
+interface DbConnection {
+  sequelize: Sequelize;
+  Sequelize: typeof Sequelize;
+  dataTypes: typeof DataTypes;
+  QueryTypes: typeof QueryTypes;
+  Op: typeof Op;
+}
+
+const db = {} as DbConnection;
 
 const sequelize = new Sequelize({
   dialect: "sqlite",

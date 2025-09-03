@@ -2,5 +2,8 @@ import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("api", {
   fetchAllPlayers: () => ipcRenderer.invoke("fetch-players"),
-  //expose cac ham ipc khac tai day
+  insertPlayer: async (Playerdata:any) => {
+      return await ipcRenderer.invoke('insert-player', Playerdata);
+    },  
+    //expose cac ham ipc khac tai day
 });
