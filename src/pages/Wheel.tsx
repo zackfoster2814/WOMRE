@@ -1145,59 +1145,49 @@ export default function CharacterWheel() {
     setCharDevMax(0);
   };
 
-const spin = useCallback(() => {
-  if (isSpinning || !currentWheel) return;
-  setIsSpinning(true);
-  setRolledResult(null);
-
-  const duration = 3500 + Math.random() * 2500;
-  const spins = 4 + Math.random() * 4;
-  const extraDeg = Math.random() * 360;
-  const startAngle = angle;
-  const totalDeg = spins * 360 + extraDeg;
-  const finalAngle = startAngle + totalDeg;
-  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-
-  let startTs: number | null = null;
-  let animationFrameId: number;
-
-  const animate = (ts: number) => {
-    if (!startTs) startTs = ts;
-    const elapsed = ts - startTs;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = easeOutCubic(progress);
-    const current = startAngle + eased * (finalAngle - startAngle);
-    setAngle(current);
-
-    if (progress < 1) {
-      animationFrameId = requestAnimationFrame(animate);
-    } else {
-      const finalNormalized = ((finalAngle % 360) + 360) % 360;
-      const pointerDeg = (360 - finalNormalized) % 360;
-      const pointerRad = (pointerDeg * Math.PI) / 180;
-      let landed = cachedSections[0];
-
-      for (const sec of cachedSections) {
-        if (pointerRad >= sec.startAngle && pointerRad < sec.endAngle) {
-          landed = sec;
-          break;
+  // Spin logic
+  const spin = useCallback(() => {
+    if (isSpinning || !currentWheel) return;
+    setIsSpinning(true);
+    setRolledResult(null);
+    const duration = 3500 + Math.random() * 2500;
+    const spins = 4 + Math.random() * 4;
+    const extraDeg = Math.random() * 360;
+    const startAngle = angle;
+    const totalDeg = spins * 360 + extraDeg;
+    const finalAngle = startAngle + totalDeg;
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+    let startTs: number | null = null;
+    const animate = (ts: number) => {
+      if (!startTs) startTs = ts;
+      const elapsed = ts - startTs;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutCubic(progress);
+      const current = startAngle + eased * (finalAngle - startAngle);
+      setAngle(current);
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        const finalNormalized = ((finalAngle % 360) + 360) % 360;
+        const pointerDeg = (360 - finalNormalized) % 360;
+        const pointerRad = (pointerDeg * Math.PI) / 180;
+        let landed = cachedSections[0];
+        for (const sec of cachedSections) {
+          if (pointerRad >= sec.startAngle && pointerRad < sec.endAngle) {
+            landed = sec;
+            break;
+          }
+        }
+        setIsSpinning(false);
+        setRolledResult(landed);
+        // Play audio if available
+        if (landed && audioRefs[landed.name]) {
+          audioRefs[landed.name].current?.play().catch(console.warn);
         }
       }
-
-      setIsSpinning(false);
-      setRolledResult(landed);
-
-      // Play audio if available
-      if (landed && audioRefs[landed.name]) {
-        audioRefs[landed.name].current?.play().catch(console.warn);
-      }
-    }
-  };
-
-  animationFrameId = requestAnimationFrame(animate);
-
-  return () => cancelAnimationFrame(animationFrameId); // Cleanup
-}, [isSpinning, currentWheel, angle, cachedSections, audioRefs]);
+    };
+    requestAnimationFrame(animate);
+  }, [isSpinning, currentWheel, angle, cachedSections, audioRefs]);
 
   // Next step handler
   const nextStep = useCallback(() => {
@@ -1229,27 +1219,59 @@ const spin = useCallback(() => {
   }, []);
 
   // UI Components
-  const LeftPanel = () => {
-    const handleNameChange = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch({ type: "SET_CHARACTER_NAME", name: e.target.value });
-      },
-      []
-    );
-    return (
-      <div className="w-[22%] flex flex-col gap-4 border-2 border-[#5a2d0c] p-3 rounded-lg shadow-[0_0_20px_rgba(200,50,0,0.6)] bg-black/70">
-        <div className="border-2 border-[#d4af37] bg-black/60 h-52 flex items-center justify-center rounded-md text-amber-200 font-bold text-xl shadow-[0_0_15px_rgba(255,215,0,0.5)]"></div>
-        <div className="border border-[#d4af37] p-2 text-center rounded bg-black/50 text-lg font-bold tracking-wide flex flex-col gap-2">
-          <span>Tên nhân vật</span>
-          <input
-            type="text"
-            value={characterState.characterName}
-            onChange={handleNameChange}
-            placeholder="Nhập tên nhân vật..."
-            className="text-center bg-black/30 text-amber-200 "
-            autoComplete="off"
-          />
-        </div>
+const LeftPanel = () => {
+  const inputRef = useRef<HTMLInputElement>(null); // Specify HTMLInputElement type for the ref
+  const [isAutoFocus, setIsAutoFocus] = useState(true); // State to control autoFocus
+
+  const handleNameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch({ type: "SET_CHARACTER_NAME", name: e.target.value });
+    },
+    [] // Không cần dependencies vì dispatch từ useReducer không thay đổi
+  );
+
+  // Handle click outside to remove focus and disable autoFocus
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => { // Add MouseEvent type
+      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+        inputRef.current.blur(); // Remove focus from the input
+        setIsAutoFocus(false); // Disable autoFocus
+      }
+    };
+
+    // Add event listener for clicks
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []); // Empty dependency array since this runs once on mount
+
+  // Handle click on input to re-enable autoFocus
+  const handleInputClick = () => {
+    setIsAutoFocus(true); // Re-enable autoFocus when input is clicked
+  };
+
+  return (
+    <div className="w-[22%] flex flex-col gap-4 border-2 border-[#5a2d0c] p-3 rounded-lg shadow-[0_0_20px_rgba(200,50,0,0.6)] bg-black/70">
+      <div className="border-2 border-[#d4af37] bg-black/60 h-52 flex items-center justify-center rounded-md text-amber-200 font-bold text-xl shadow-[0_0_15px_rgba(255,215,0,0.5)]"></div>
+      <div className="border border-[#d4af37] p-2 text-center rounded bg-black/50 text-lg font-bold tracking-wide flex flex-col gap-2">
+        <span>Tên nhân vật</span>
+        <input
+          type="text"
+          ref={inputRef} // Attach ref to the input
+          value={characterState.characterName}
+          onChange={handleNameChange}
+          onClick={handleInputClick} // Re-enable autoFocus on click
+          placeholder="Nhập tên nhân vật..."
+          className="text-center bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-amber-400"
+          autoComplete="off"
+          spellCheck="false" // Tắt kiểm tra chính tả để tránh gián đoạn
+          autoFocus={isAutoFocus} // Conditionally apply autoFocus based on state
+          onKeyDown={(e) => e.stopPropagation()} // Ngăn các sự kiện phím không mong muốn
+        />
+      </div>
         <div className="border border-[#d4af37] p-2 flex items-center gap-2 rounded bg-black/50 text-lg">
           <label className="font-bold shrink-0">Race</label>
           <select
@@ -1590,7 +1612,26 @@ const spin = useCallback(() => {
           })}
         </div>
       </div>
-
+{/* Enchants - Thêm mới */}
+    <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl flex flex-col">
+      <p
+        onClick={() => jumpToWheel("enchant")}
+        className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+      >
+        Enchants
+      </p>
+      <ul className="ml-4 space-y-2 text-lg mt-3 overflow-y-auto max-h-[90px] min-h-[90px]">
+        {characterState.enchants.length > 0 ? (
+          characterState.enchants.map((e, i) => (
+            <li key={i} className="text-amber-300">
+              • {e.name}
+            </li>
+          ))
+        ) : (
+          <li className="text-gray-400"></li>
+        )}
+      </ul>
+    </div>
       {/* Quirks */}
       <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl flex flex-col">
         <p
