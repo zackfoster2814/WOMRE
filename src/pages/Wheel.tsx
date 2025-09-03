@@ -1145,49 +1145,59 @@ export default function CharacterWheel() {
     setCharDevMax(0);
   };
 
-  // Spin logic
-  const spin = useCallback(() => {
-    if (isSpinning || !currentWheel) return;
-    setIsSpinning(true);
-    setRolledResult(null);
-    const duration = 3500 + Math.random() * 2500;
-    const spins = 4 + Math.random() * 4;
-    const extraDeg = Math.random() * 360;
-    const startAngle = angle;
-    const totalDeg = spins * 360 + extraDeg;
-    const finalAngle = startAngle + totalDeg;
-    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-    let startTs: number | null = null;
-    const animate = (ts: number) => {
-      if (!startTs) startTs = ts;
-      const elapsed = ts - startTs;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = easeOutCubic(progress);
-      const current = startAngle + eased * (finalAngle - startAngle);
-      setAngle(current);
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        const finalNormalized = ((finalAngle % 360) + 360) % 360;
-        const pointerDeg = (360 - finalNormalized) % 360;
-        const pointerRad = (pointerDeg * Math.PI) / 180;
-        let landed = cachedSections[0];
-        for (const sec of cachedSections) {
-          if (pointerRad >= sec.startAngle && pointerRad < sec.endAngle) {
-            landed = sec;
-            break;
-          }
-        }
-        setIsSpinning(false);
-        setRolledResult(landed);
-        // Play audio if available
-        if (landed && audioRefs[landed.name]) {
-          audioRefs[landed.name].current?.play().catch(console.warn);
+const spin = useCallback(() => {
+  if (isSpinning || !currentWheel) return;
+  setIsSpinning(true);
+  setRolledResult(null);
+
+  const duration = 3500 + Math.random() * 2500;
+  const spins = 4 + Math.random() * 4;
+  const extraDeg = Math.random() * 360;
+  const startAngle = angle;
+  const totalDeg = spins * 360 + extraDeg;
+  const finalAngle = startAngle + totalDeg;
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+  let startTs: number | null = null;
+  let animationFrameId: number;
+
+  const animate = (ts: number) => {
+    if (!startTs) startTs = ts;
+    const elapsed = ts - startTs;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOutCubic(progress);
+    const current = startAngle + eased * (finalAngle - startAngle);
+    setAngle(current);
+
+    if (progress < 1) {
+      animationFrameId = requestAnimationFrame(animate);
+    } else {
+      const finalNormalized = ((finalAngle % 360) + 360) % 360;
+      const pointerDeg = (360 - finalNormalized) % 360;
+      const pointerRad = (pointerDeg * Math.PI) / 180;
+      let landed = cachedSections[0];
+
+      for (const sec of cachedSections) {
+        if (pointerRad >= sec.startAngle && pointerRad < sec.endAngle) {
+          landed = sec;
+          break;
         }
       }
-    };
-    requestAnimationFrame(animate);
-  }, [isSpinning, currentWheel, angle, cachedSections, audioRefs]);
+
+      setIsSpinning(false);
+      setRolledResult(landed);
+
+      // Play audio if available
+      if (landed && audioRefs[landed.name]) {
+        audioRefs[landed.name].current?.play().catch(console.warn);
+      }
+    }
+  };
+
+  animationFrameId = requestAnimationFrame(animate);
+
+  return () => cancelAnimationFrame(animationFrameId); // Cleanup
+}, [isSpinning, currentWheel, angle, cachedSections, audioRefs]);
 
   // Next step handler
   const nextStep = useCallback(() => {
