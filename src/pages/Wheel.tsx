@@ -479,6 +479,11 @@ export default function CharacterWheel() {
                 color: "#98FB98",
               },
             });
+            setCurrentWheel({
+              key: "subrace",
+              title: raceConfig[resultName]?.subrace || "Subrace",
+              sections: subraceMap[resultName],
+            });
           } else if (subraceMap[resultName]?.length > 0) {
             setCurrentWheel({
               key: "subrace",
