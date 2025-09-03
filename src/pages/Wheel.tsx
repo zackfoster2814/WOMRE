@@ -366,7 +366,7 @@ export default function CharacterWheel() {
           break;
         case "pve":
           // if (results.charDev) {
-          setCurrentWheel(raceWheel);
+          setCurrentWheel(pveWheel);
           // }
           break;
       }
