@@ -234,7 +234,6 @@ export default function CharacterWheel() {
 
   // Drawing functions
   const drawWheelOffscreen = useCallback(() => {
-    if (!canvasRef.current) return;
     if (!offscreenRef.current) {
       offscreenRef.current = document.createElement("canvas");
       offscreenRef.current.width = CANVAS_SIZE;
@@ -265,7 +264,7 @@ export default function CharacterWheel() {
       );
       ctx.rotate(midAngle);
       ctx.textAlign = "center";
-      ctx.font = "bold 18px san-serif";
+      ctx.font = "bold 18px sans-serif";
       ctx.fillStyle = "#fff";
       ctx.strokeStyle = "#000";
       ctx.lineWidth = 4;
@@ -278,21 +277,21 @@ export default function CharacterWheel() {
 
   useEffect(() => {
     drawWheelOffscreen();
+    drawWheel(0); // Initial draw
   }, [drawWheelOffscreen]);
 
-  useEffect(() => {
+  const drawWheel = (rotation: number) => {
     const canvas = canvasRef.current;
     if (!canvas || !offscreenRef.current) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate((angle * Math.PI) / 180);
+    ctx.rotate((rotation * Math.PI) / 180);
     ctx.drawImage(offscreenRef.current, -canvas.width / 2, -canvas.height / 2);
     ctx.restore();
-  }, [angle]);
+  };
 
   // Navigation function for clicking labels
   const jumpToWheel = useCallback(
@@ -1145,29 +1144,35 @@ export default function CharacterWheel() {
     setCharDevMax(0);
   };
 
-  // Spin logic
+  // Spin logic - Improved for stability by drawing directly in animation loop without state updates
   const spin = useCallback(() => {
     if (isSpinning || !currentWheel) return;
     setIsSpinning(true);
     setRolledResult(null);
+
     const duration = 3500 + Math.random() * 2500;
     const spins = 4 + Math.random() * 4;
     const extraDeg = Math.random() * 360;
     const startAngle = angle;
     const totalDeg = spins * 360 + extraDeg;
     const finalAngle = startAngle + totalDeg;
+
     const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
     let startTs: number | null = null;
     const animate = (ts: number) => {
       if (!startTs) startTs = ts;
       const elapsed = ts - startTs;
       const progress = Math.min(elapsed / duration, 1);
       const eased = easeOutCubic(progress);
-      const current = startAngle + eased * (finalAngle - startAngle);
-      setAngle(current);
+      const currentAngle = startAngle + eased * (finalAngle - startAngle);
+
+      drawWheel(currentAngle); // Draw directly with current angle
+
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
+        setAngle(finalAngle % 360); // Set final angle for state consistency
         const finalNormalized = ((finalAngle % 360) + 360) % 360;
         const pointerDeg = (360 - finalNormalized) % 360;
         const pointerRad = (pointerDeg * Math.PI) / 180;
@@ -1187,7 +1192,7 @@ export default function CharacterWheel() {
       }
     };
     requestAnimationFrame(animate);
-  }, [isSpinning, currentWheel, angle, cachedSections, audioRefs]);
+  }, [isSpinning, currentWheel, angle, cachedSections, audioRefs, drawWheel]);
 
   // Next step handler
   const nextStep = useCallback(() => {
@@ -1220,8 +1225,8 @@ export default function CharacterWheel() {
 
   // UI Components
 const LeftPanel = () => {
-  const inputRef = useRef<HTMLInputElement>(null); // Specify HTMLInputElement type for the ref
-  const [isAutoFocus, setIsAutoFocus] = useState(true); // State to control autoFocus
+  const inputRef = useRef<HTMLInputElement>(null); // Ref cho input
+  const [shouldAutoFocus, setShouldAutoFocus] = useState(true); // State để kiểm soát autofocus
 
   const handleNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1230,28 +1235,23 @@ const LeftPanel = () => {
     [] // Không cần dependencies vì dispatch từ useReducer không thay đổi
   );
 
-  // Handle click outside to remove focus and disable autoFocus
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => { // Add MouseEvent type
-      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
-        inputRef.current.blur(); // Remove focus from the input
-        setIsAutoFocus(false); // Disable autoFocus
+  // Xử lý khi input mất focus
+  const handleBlur = useCallback(() => {
+    setShouldAutoFocus(false); // Tắt autofocus
+    if (inputRef.current) {
+      inputRef.current.blur(); // Bỏ focus khỏi input
+    }
+  }, []);
+
+  // Xử lý phím Enter
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        handleBlur(); // Bỏ focus khi nhấn Enter
       }
-    };
-
-    // Add event listener for clicks
-    document.addEventListener('mousedown', handleClickOutside);
-
-    // Cleanup event listener on component unmount
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []); // Empty dependency array since this runs once on mount
-
-  // Handle click on input to re-enable autoFocus
-  const handleInputClick = () => {
-    setIsAutoFocus(true); // Re-enable autoFocus when input is clicked
-  };
+    },
+    [handleBlur]
+  );
 
   return (
     <div className="w-[22%] flex flex-col gap-4 border-2 border-[#5a2d0c] p-3 rounded-lg shadow-[0_0_20px_rgba(200,50,0,0.6)] bg-black/70">
@@ -1260,231 +1260,262 @@ const LeftPanel = () => {
         <span>Tên nhân vật</span>
         <input
           type="text"
-          ref={inputRef} // Attach ref to the input
+          ref={inputRef}
           value={characterState.characterName}
           onChange={handleNameChange}
-          onClick={handleInputClick} // Re-enable autoFocus on click
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
           placeholder="Nhập tên nhân vật..."
           className="text-center bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-amber-400"
           autoComplete="off"
-          spellCheck="false" // Tắt kiểm tra chính tả để tránh gián đoạn
-          autoFocus={isAutoFocus} // Conditionally apply autoFocus based on state
-          onKeyDown={(e) => e.stopPropagation()} // Ngăn các sự kiện phím không mong muốn
+          spellCheck="false"
+          autoFocus={shouldAutoFocus} // Chỉ autofocus khi shouldAutoFocus là true
         />
       </div>
-        <div className="border border-[#d4af37] p-2 flex items-center gap-2 rounded bg-black/50 text-lg">
-          <label className="font-bold shrink-0">Race</label>
+      <div className="border border-[#d4af37] p-2 flex items-center gap-2 rounded bg-black/50 text-lg">
+        <label className="font-bold shrink-0">Race</label>
+        <select
+          value={characterState.results.race || ""}
+          onChange={(e) => {
+            const val = e.target.value;
+            dispatch({ type: "SET_RESULT", key: "race", value: val });
+            handleNextStep("race", val);
+            handleBlur(); // Bỏ focus khi chọn Race
+          }}
+          className="bg-black/30 text-amber-200 px-2 py-1 flex-1"
+        >
+          <option value="" disabled>
+            -- Chọn Race --
+          </option>
+          {raceWheel.sections.map((sec) => (
+            <option key={sec.name} value={sec.name}>
+              {sec.name}
+            </option>
+          ))}
+        </select>
+        <button
+          onClick={() => {
+            jumpToWheel("race");
+            handleBlur(); // Bỏ focus khi nhấn Roll
+          }}
+          className="px-2 py-1 bg-[#3a2a18] border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded shadow hover:scale-110 transition"
+        >
+          Roll
+        </button>
+      </div>
+      {characterState.results.race === "Uma" ? (
+        <div className="flex justify-between items-center gap-2 w-full">
           <select
-            value={characterState.results.race || ""}
+            value={characterState.results["uma-parent-1"] || ""}
             onChange={(e) => {
               const val = e.target.value;
-              dispatch({ type: "SET_RESULT", key: "race", value: val });
-              handleNextStep("race", val);
-            }}
-            className="bg-black/30 text-amber-200 px-2 py-1 flex-1"
-          >
-            <option value="" disabled>
-              -- Chọn Race --
-            </option>
-            {raceWheel.sections.map((sec) => (
-              <option key={sec.name} value={sec.name}>
-                {sec.name}
-              </option>
-            ))}
-          </select>
-          <button
-            onClick={() => jumpToWheel("race")}
-            className="px-2 py-1 bg-[#3a2a18] border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded shadow hover:scale-110 transition"
-          >
-            Roll
-          </button>
-        </div>
-        {characterState.results.race === "Uma" ? (
-          <div className="flex justify-between items-center gap-2 w-full">
-            {/* Parent 1 */}
-            <select
-              value={characterState.results["uma-parent-1"] || ""}
-              onChange={(e) => {
-                const val = e.target.value;
-                dispatch({
-                  type: "SET_RESULT",
-                  key: "uma-parent-1",
-                  value: val,
-                });
-                if (characterState.results["uma-parent-2"] === val) {
-                  dispatch({
-                    type: "SET_RESULT",
-                    key: "uma-parent-2",
-                    value: "",
-                  });
-                }
-              }}
-              className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
-            >
-              <option value="" disabled>
-                -- Parent 1 --
-              </option>
-              {subraceMap["Uma"].map((s) => (
-                <option key={s.name} value={s.name}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-            <span className="text-amber-300 font-bold px-2">+</span>
-            {/* Parent 2 */}
-            <select
-              value={characterState.results["uma-parent-2"] || ""}
-              onChange={(e) => {
-                const val = e.target.value;
+              dispatch({
+                type: "SET_RESULT",
+                key: "uma-parent-1",
+                value: val,
+              });
+              if (characterState.results["uma-parent-2"] === val) {
                 dispatch({
                   type: "SET_RESULT",
                   key: "uma-parent-2",
-                  value: val,
+                  value: "",
                 });
-                dispatch({
-                  type: "SET_RESULT",
-                  key: "subrace",
-                  value: `${characterState.results["uma-parent-1"]} - ${val}`,
-                });
-              }}
-              className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
-            >
-              <option value="" disabled>
-                -- Parent 2 --
-              </option>
-              {subraceMap["Uma"]
-                .filter(
-                  (s) => s.name !== characterState.results["uma-parent-1"]
-                )
-                .map((s) => (
-                  <option key={s.name} value={s.name}>
-                    {s.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-        ) : (
-          // Subrace dropdown cho các race khác
-          <select
-            value={characterState.results.subrace || ""}
-            onChange={(e) =>
-              dispatch({
-                type: "SET_RESULT",
-                key: "subrace",
-                value: e.target.value,
-              })
-            }
-            className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] w-full"
+              }
+              handleBlur(); // Bỏ focus khi chọn Parent 1
+            }}
+            className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
           >
             <option value="" disabled>
-              -- Chọn Subrace --
+              -- Parent 1 --
             </option>
-            {(subraceMap[characterState.results.race] || []).map((s) => (
+            {subraceMap["Uma"].map((s) => (
               <option key={s.name} value={s.name}>
                 {s.name}
               </option>
             ))}
           </select>
-        )}
-        <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
-          <span
-            onClick={() => jumpToWheel("archetype")}
-            className="cursor-pointer hover:text-amber-400 hover:underline"
+          <span className="text-amber-300 font-bold px-2">+</span>
+          <select
+            value={characterState.results["uma-parent-2"] || ""}
+            onChange={(e) => {
+              const val = e.target.value;
+              dispatch({
+                type: "SET_RESULT",
+                key: "uma-parent-2",
+                value: val,
+              });
+              dispatch({
+                type: "SET_RESULT",
+                key: "subrace",
+                value: `${characterState.results["uma-parent-1"]} - ${val}`,
+              });
+              handleBlur(); // Bỏ focus khi chọn Parent 2
+            }}
+            className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
           >
-            Archetype
-          </span>
-          <span className="text-amber-300">
-            {characterState.archetypes.length > 0
-              ? characterState.archetypes.map((a) => a.name).join(", ")
-              : "???"}
+            <option value="" disabled>
+              -- Parent 2 --
+            </option>
+            {subraceMap["Uma"]
+              .filter(
+                (s) => s.name !== characterState.results["uma-parent-1"]
+              )
+              .map((s) => (
+                <option key={s.name} value={s.name}>
+                  {s.name}
+                </option>
+              ))}
+          </select>
+        </div>
+      ) : (
+        <select
+          value={characterState.results.subrace || ""}
+          onChange={(e) => {
+            dispatch({
+              type: "SET_RESULT",
+              key: "subrace",
+              value: e.target.value,
+            });
+            handleBlur(); // Bỏ focus khi chọn Subrace
+          }}
+          className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] w-full"
+        >
+          <option value="" disabled>
+            -- Chọn Subrace --
+          </option>
+          {(subraceMap[characterState.results.race] || []).map((s) => (
+            <option key={s.name} value={s.name}>
+              {s.name}
+            </option>
+          ))}
+        </select>
+      )}
+      <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
+        <span
+          onClick={() => {
+            jumpToWheel("archetype");
+            handleBlur(); // Bỏ focus khi nhấn Archetype
+          }}
+          className="cursor-pointer hover:text-amber-400 hover:underline"
+        >
+          Archetype
+        </span>
+        <span className="text-amber-300">
+          {characterState.archetypes.length > 0
+            ? characterState.archetypes.map((a) => a.name).join(", ")
+            : "???"}
+        </span>
+      </div>
+      <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
+        <span
+          onClick={() => {
+            jumpToWheel("house");
+            handleBlur(); // Bỏ focus khi nhấn House
+          }}
+          className="cursor-pointer hover:text-amber-400 hover:underline"
+        >
+          House
+        </span>
+        <span className="text-amber-300">
+          {characterState.results.house || "???"}
+        </span>
+      </div>
+      <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
+        <span
+          onClick={() => {
+            jumpToWheel("charDev");
+            handleBlur(); // Bỏ focus khi nhấn Char dev
+          }}
+          className="cursor-pointer hover:text-amber-400 hover:underline"
+        >
+          Char dev
+        </span>
+        <span className="text-amber-300">
+          {characterState.charDevs.length > 0
+            ? characterState.charDevs.map((dev) => dev.name).join(", ")
+            : "???"}
+        </span>
+      </div>
+      <div className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
+        <p className="font-bold underline text-[#f5e6d3] text-xl mb-2">
+          Stats
+        </p>
+        <div
+          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
+          onClick={() => {
+            jumpToWheel("strength");
+            handleBlur(); // Bỏ focus khi nhấn Strength
+          }}
+        >
+          <span>Strength</span>
+          <span className="text-red-400">
+            {characterState.stats.strength || "x"}
           </span>
         </div>
-        <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
-          <span
-            onClick={() => jumpToWheel("house")}
-            className="cursor-pointer hover:text-amber-400 hover:underline"
-          >
-            House
-          </span>
-          <span className="text-amber-300">
-            {characterState.results.house || "???"}
-          </span>
-        </div>
-        <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
-          <span
-            onClick={() => jumpToWheel("charDev")}
-            className="cursor-pointer hover:text-amber-400 hover:underline"
-          >
-            Char dev
-          </span>
-          <span className="text-amber-300">
-            {characterState.charDevs.length > 0
-              ? characterState.charDevs.map((dev) => dev.name).join(", ")
-              : "???"}
+        <div
+          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
+          onClick={() => {
+            jumpToWheel("speed");
+            handleBlur(); // Bỏ focus khi nhấn Speed
+          }}
+        >
+          <span>Speed</span>
+          <span className="text-green-400">
+            {characterState.stats.speed || "x"}
           </span>
         </div>
-        <div className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
-          <p className="font-bold underline text-[#f5e6d3] text-xl mb-2">
-            Stats
-          </p>
-          <div
-            className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-            onClick={() => jumpToWheel("strength")}
-          >
-            <span>Strength</span>
-            <span className="text-red-400">
-              {characterState.stats.strength || "x"}
-            </span>
-          </div>
-          <div
-            className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-            onClick={() => jumpToWheel("speed")}
-          >
-            <span>Speed</span>
-            <span className="text-green-400">
-              {characterState.stats.speed || "x"}
-            </span>
-          </div>
-          <div
-            className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-            onClick={() => jumpToWheel("durability")}
-          >
-            <span>Durability</span>
-            <span className="text-blue-400">
-              {characterState.stats.durability || "x"}
-            </span>
-          </div>
-          <div
-            className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-            onClick={() => jumpToWheel("iq")}
-          >
-            <span>IQ</span>
-            <span className="text-purple-300">
-              {characterState.stats.iq || "x"}
-            </span>
-          </div>
-          <div
-            className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-            onClick={() => jumpToWheel("battleIQ")}
-          >
-            <span>Battle IQ</span>
-            <span className="text-yellow-300">
-              {characterState.stats.battleIQ || "x"}
-            </span>
-          </div>
-          <div
-            className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-            onClick={() => jumpToWheel("martialArts")}
-          >
-            <span>Martial Arts</span>
-            <span className="text-orange-400">
-              {characterState.stats.martialArts || "x"}
-            </span>
-          </div>
+        <div
+          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
+          onClick={() => {
+            jumpToWheel("durability");
+            handleBlur(); // Bỏ focus khi nhấn Durability
+          }}
+        >
+          <span>Durability</span>
+          <span className="text-blue-400">
+            {characterState.stats.durability || "x"}
+          </span>
+        </div>
+        <div
+          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
+          onClick={() => {
+            jumpToWheel("iq");
+            handleBlur(); // Bỏ focus khi nhấn IQ
+          }}
+        >
+          <span>IQ</span>
+          <span className="text-purple-300">
+            {characterState.stats.iq || "x"}
+          </span>
+        </div>
+        <div
+          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
+          onClick={() => {
+            jumpToWheel("battleIQ");
+            handleBlur(); // Bỏ focus khi nhấn Battle IQ
+          }}
+        >
+          <span>Battle IQ</span>
+          <span className="text-yellow-300">
+            {characterState.stats.battleIQ || "x"}
+          </span>
+        </div>
+        <div
+          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
+          onClick={() => {
+            jumpToWheel("martialArts");
+            handleBlur(); // Bỏ focus khi nhấn Martial Arts
+          }}
+        >
+          <span>Martial Arts</span>
+          <span className="text-orange-400">
+            {characterState.stats.martialArts || "x"}
+          </span>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
+};
 
   const CenterWheel = () => (
     <div className="flex-1 flex flex-col items-center justify-center">
