@@ -60,8 +60,10 @@ const Wheel: React.FC = () => {
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
-    window.api.fetchAllPlayers().then(setPlayers);
-    console.log(players)  ;
+    const Playerdata = {}
+    const result =  window.api.insertPlayer(Playerdata);
+    const getplayer = window.api.fetchAllPlayers();
+    setPlayers(getplayer);
   }, []);
   const radius = 150;
 
