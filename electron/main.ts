@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
-import initDb from "../src/db/index.ts" ;
+import initDb from "../src/db/index.ts";
 import { registerPlayerIpcHandlers } from "../src/utils/player.ipcHandler.ts";
 import { fileURLToPath } from "url";
 
@@ -19,16 +19,13 @@ app.whenReady().then(async () => {
       nodeIntegration: true,
       contextIsolation: true,
     },
-});
-    registerPlayerIpcHandlers();
-    //goi cac ipc handler khac tai day
-    
+  });
+  registerPlayerIpcHandlers();
+  //goi cac ipc handler khac tai day
 
- if (process.env.VITE_DEV_SERVER_URL) {
+  if (process.env.VITE_DEV_SERVER_URL) {
     win.loadURL(process.env.VITE_DEV_SERVER_URL);
   } else {
     win.loadFile(path.join(app.getAppPath(), "../dist/index.html"));
   }
 });
-
-

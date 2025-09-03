@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        handwriting: ["'Caveat', cursive"],
+        sans: ["'Inter', sans-serif"],
       },
     },
   },

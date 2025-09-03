@@ -1,0 +1,730 @@
+import { WheelStep } from "../Types/types.ts";
+
+import bananaPeel from "@/assets/Weapon/banana_peel.png";
+import brokenStraightSword from "@/assets/Weapon/broken_straight_sword.png";
+import ukulele from "@/assets/Weapon/ukulele.png";
+import uchigatana from "@/assets/Weapon/uchigatana.png";
+import kunai from "@/assets/Weapon/kunai.png";
+import drums from "@/assets/Weapon/drums.png";
+import magicalStaff from "@/assets/Weapon/magical_staff.png";
+import glassBottle from "@/assets/Weapon/glass_bottle.png";
+import woodenSword from "@/assets/Weapon/wooden_sword.png";
+import cursedPennywort from "@/assets/Weapon/cursed_pennywort.png";
+import slingshot from "@/assets/Weapon/slingshot.png";
+import bfSword from "@/assets/Weapon/b.f._sword.png";
+import longBow from "@/assets/Weapon/longbow.png";
+import hiddenBlade from "@/assets/Weapon/hidden_blade.png";
+import summoningScroll from "@/assets/Weapon/summoning_scroll.png";
+import nunchuck from "@/assets/Weapon/nunchuck.png";
+import grimoire from "@/assets/Weapon/grimoire.png";
+import whip from "@/assets/Weapon/whip.png";
+import halberd from "@/assets/Weapon/halberd.png";
+import saxophone from "@/assets/Weapon/saxophone.png";
+
+export const weaponExistWheel: WheelStep = {
+  key: "weapon-exist",
+  title: "Weapon?",
+  sections: [
+    {
+      id: "w0",
+      name: "No Weapon",
+      weight: 36,
+      color: "#CCCCCC",
+      description: "Không có vũ khí.",
+    },
+    {
+      id: "w1",
+      name: "Has Weapon",
+      weight: 64,
+      color: "#FFD700",
+      description: "Nhận 1 vũ khí.",
+    },
+  ],
+};
+
+export const uniqueWeaponExistWheel: WheelStep = {
+  key: "unique-weapon-exist",
+  title: "Unique Weapon?",
+  sections: [
+    {
+      id: "uw0",
+      name: "No",
+      weight: 82,
+      color: "#A2D149",
+      description: "Nhận 1 vũ khí thường.",
+    },
+    {
+      id: "uw1",
+      name: "Yes",
+      weight: 18,
+      color: "#FF69B4",
+      description: "Nhận 1 vũ khí đặc biệt.",
+    },
+  ],
+};
+
+export const weaponWheel: WheelStep = {
+  key: "weapon",
+  title: "Weapon",
+  sections: [
+    {
+      id: "1",
+      name: "Banana Peel",
+      weight: 5,
+      color: "#FFD700",
+      description:
+        "Trong Combat: -1 all stats nếu IQ < đối phương, +1 all stats nếu IQ > đối phương. (100%, Physical)",
+      image: bananaPeel,
+      usableRate: 100,
+    },
+    {
+      id: "2",
+      name: "Broken Straight Sword",
+      weight: 5,
+      color: "#CCCCCC",
+      description: "Nhận -1 all stats. (50%, Physical)",
+      image: brokenStraightSword,
+      usableRate: 50,
+    },
+    {
+      id: "3",
+      name: "Ukulele",
+      weight: 5,
+      color: "#87CEEB",
+      description: "Đối thủ nhận -1 IQ và -1 BIQ. (75%, P/M)",
+      image: ukulele,
+      usableRate: 75,
+    },
+    {
+      id: "4",
+      name: "Uchigatana",
+      weight: 5,
+      color: "#A2D149",
+      description: "+2 BIQ và +1 Martial Arts. (85%, Physical)",
+      image: uchigatana,
+      usableRate: 85,
+    },
+    {
+      id: "5",
+      name: "Kunai",
+      weight: 5,
+      color: "#FFD700",
+      description: "+2 Speed. (99%, Physical)",
+      image: kunai,
+      usableRate: 99,
+    },
+    {
+      id: "6",
+      name: "Drums",
+      weight: 5,
+      color: "#87CEEB",
+      description: "Mỗi PvP win: nhận thêm 1 combat reward. (33%, P/M)",
+      image: drums,
+      usableRate: 33,
+    },
+    {
+      id: "7",
+      name: "Magical Staff",
+      weight: 5,
+      color: "#FF69B4",
+      description: "+3 IQ. (66%, Magic)",
+      image: magicalStaff,
+      usableRate: 66,
+    },
+    {
+      id: "8",
+      name: "Glass Bottle",
+      weight: 5,
+      color: "#CCCCCC",
+      description: "+2 all stats, biến mất sau 1 combat. (15%, Physical)",
+      image: glassBottle,
+      usableRate: 15,
+    },
+    {
+      id: "9",
+      name: "Wooden Sword",
+      weight: 5,
+      color: "#A2D149",
+      description: "+1 Strength. (100%, Physical)",
+      image: woodenSword,
+      usableRate: 100,
+    },
+    {
+      id: "10",
+      name: "Cursed Pennywort",
+      weight: 5,
+      color: "#FFD700",
+      description: "36%: vô hiệu hóa 3 power random của địch. (36%, P/M)",
+      image: cursedPennywort,
+      usableRate: 36,
+    },
+    {
+      id: "11",
+      name: "Slingshot",
+      weight: 5,
+      color: "#87CEEB",
+      description: "+1 Str, +1 BIQ. (70%, Physical)",
+      image: slingshot,
+      usableRate: 70,
+    },
+    {
+      id: "12",
+      name: "B.F Sword",
+      weight: 5,
+      color: "#FF69B4",
+      description: "+3 Str. (66%, Physical)",
+      image: bfSword,
+      usableRate: 66,
+    },
+    {
+      id: "13",
+      name: "Long Bow",
+      weight: 5,
+      color: "#A2D149",
+      description: "+2 BIQ. (90%, Physical)",
+      image: longBow,
+      usableRate: 90,
+    },
+    {
+      id: "14",
+      name: "Hidden Blade",
+      weight: 5,
+      color: "#FFD700",
+      description:
+        "+1 Speed, Power 'Critical Strike'. Nếu Archetype 'Assassins' → always usable. (55%, Physical)",
+      image: hiddenBlade,
+      usableRate: 55,
+    },
+    {
+      id: "15",
+      name: "Summoning Scroll",
+      weight: 5,
+      color: "#87CEEB",
+      description:
+        "Combat: Summon random (Summon Wheel), biến mất sau trận. (60%, Magic)",
+      image: summoningScroll,
+      usableRate: 60,
+    },
+    {
+      id: "16",
+      name: "Nunchuck",
+      weight: 5,
+      color: "#FF69B4",
+      description: "+3 Martial Arts. (66%, Physical)",
+      image: nunchuck,
+      usableRate: 66,
+    },
+    {
+      id: "17",
+      name: "Grimoire",
+      weight: 5,
+      color: "#CCCCCC",
+      description: "+1 IQ. (100%, Magic)",
+      image: grimoire,
+      usableRate: 100,
+    },
+    {
+      id: "18",
+      name: "Whip",
+      weight: 5,
+      color: "#A2D149",
+      description:
+        "+1 Speed, +1 MA. Luôn usable nếu House Hoslow. (40%, Physical)",
+      image: whip,
+      usableRate: 40,
+    },
+    {
+      id: "19",
+      name: "Halberd",
+      weight: 5,
+      color: "#FFD700",
+      description:
+        "Nếu Str >7: usable+25%. Thắng round Str: +1 BIQ, +1MA. (40%, Physical)",
+      image: halberd,
+      usableRate: 40,
+    },
+    {
+      id: "20",
+      name: "Saxophone",
+      weight: 5,
+      color: "#87CEEB",
+      description: "+1 IQ, +1 BIQ. (60%, P/M)",
+      image: saxophone,
+      usableRate: 60,
+    },
+  ],
+};
+
+export const uniqueWeaponWheel: WheelStep = {
+  key: "unique-weapon",
+  title: "Unique Weapon",
+  sections: [
+    {
+      id: "u1",
+      name: "Infinity Edge",
+      weight: 2.78,
+      color: "#FFD700",
+      description:
+        "(1).Nhận +2 Strength và Power 'Critical Strike'. (2).Mỗi khi Crit, nhận thêm 1 điểm. (66%, Physical)",
+    },
+    {
+      id: "u2",
+      name: "Blade of Chaos",
+      weight: 2.78,
+      color: "#A2D149",
+      description:
+        "(1).Nhận +3 Strength và +3 Martial Arts. (2).Trong Combat: Gấp đôi 2 chỉ số nhận thêm này nếu đối thủ là 'God'. (75%, Physical)",
+    },
+    {
+      id: "u3",
+      name: "River of Blood",
+      weight: 2.78,
+      color: "#87CEEB",
+      description: "Nhận +2 Speed, +2 BIQ và +1 Martial Arts. (80%, Physical)",
+    },
+    {
+      id: "u4",
+      name: "Staff of Moses",
+      weight: 2.78,
+      color: "#FF69B4",
+      description: "Sau mỗi combat, nhận 1 power ngẫu nhiên. (70%, Magic)",
+    },
+    {
+      id: "u5",
+      name: "Staff of Homa",
+      weight: 2.78,
+      color: "#CCCCCC",
+      description: "Nhận +1 all stats. (80%, Physical)",
+    },
+    {
+      id: "u6",
+      name: "Frostmourne",
+      weight: 2.78,
+      color: "#A2D149",
+      description:
+        "Sau mỗi combat thắng, nhận +1 stat ngẫu nhiên và 1 power từ đối thủ. (50%, Physical/Magic)",
+    },
+    {
+      id: "u7",
+      name: "Death's Scythe",
+      weight: 2.78,
+      color: "#FFD700",
+      description: "Trong combat: đối thủ nhận -1 all stats. (65%, Magic)",
+    },
+    {
+      id: "u8",
+      name: "Excalibur",
+      weight: 2.78,
+      color: "#87CEEB",
+      description: "Nhận +7 Strength. (70%, Physical)",
+    },
+    {
+      id: "u9",
+      name: "Yamato Blade",
+      weight: 2.78,
+      color: "#FF69B4",
+      description: "Nhận +4 Speed và +2 Martial Arts. (80%, Physical)",
+    },
+    {
+      id: "u10",
+      name: "Moonlight Greatsword",
+      weight: 2.78,
+      color: "#CCCCCC",
+      description:
+        "Nhận +3 Durability và +2 Martial Arts. (90%, Physical/Magic)",
+    },
+    {
+      id: "u11",
+      name: "Divine Rapier",
+      weight: 2.78,
+      color: "#FFD700",
+      description:
+        "(1).Nhận +2 all stats. (2).Khi thua trận người sở hữu sẽ mất vũ khí này. (90%, Physical)",
+    },
+    {
+      id: "u12",
+      name: "Bloodthrist Dagger",
+      weight: 2.78,
+      color: "#A2D149",
+      description:
+        "Nhận Power 'Critical Strike' và tăng thêm 16% tỉ lệ crit. (72%, Physical)",
+    },
+    {
+      id: "u13",
+      name: "Ruyi Jingu Bang",
+      weight: 2.78,
+      color: "#87CEEB",
+      description:
+        "Ngay trước combat: +1 all stats với mỗi 3 power sở hữu. Chỉ hiệu lực trong combat đó. (72%, Physical/Magic)",
+    },
+    {
+      id: "u14",
+      name: "Playful Cloud",
+      weight: 2.78,
+      color: "#FF69B4",
+      description:
+        "Trong Combat: luôn chiến thắng vòng Martial Arts. (80%, Physical)",
+    },
+    {
+      id: "u15",
+      name: "Necronomicon",
+      weight: 2.78,
+      color: "#CCCCCC",
+      description: "Nhận +3 IQ và +3 BIQ. (66%, Magic)",
+    },
+    {
+      id: "u16",
+      name: "Death's Web Wand",
+      weight: 2.78,
+      color: "#FFD700",
+      description:
+        "Sau mỗi combat, nhận +1 all stats và mất vĩnh viễn 1 Power. (90%, Magic)",
+    },
+    {
+      id: "u17",
+      name: "Forbidden Tome",
+      weight: 2.78,
+      color: "#A2D149",
+      description:
+        "Sau mỗi combat thắng, nhận ngẫu nhiên 1 'Forbidden Power'. (88%, Magic)",
+    },
+    {
+      id: "u18",
+      name: "Shadow Killer",
+      weight: 2.78,
+      color: "#87CEEB",
+      description: "Nhận +3 Speed và Power 'Evasion'. (90%, Physical)",
+    },
+    {
+      id: "u19",
+      name: "Great Highland Bagpipe",
+      weight: 2.78,
+      color: "#FF69B4",
+      description:
+        "(1).Nhận +1 all stats. (2).Combat: Nếu có nhiều power hơn đối thủ, +1 all stats. (77%, Physical/Magic)",
+    },
+    {
+      id: "u20",
+      name: "Yoriichi's Black Nichirin",
+      weight: 2.78,
+      color: "#CCCCCC",
+      description: "Combat: mặc định thắng tộc Demon. (100%, Physical)",
+    },
+    {
+      id: "u21",
+      name: "Sarastro's Flute",
+      weight: 2.78,
+      color: "#FFD700",
+      description:
+        "Combat: Đối thủ nhận -1 all stats với mỗi 3 power mà họ có. (70%, Magic)",
+    },
+    {
+      id: "u22",
+      name: "Two Dragons Sword",
+      weight: 2.78,
+      color: "#A2D149",
+      description:
+        "Nhận +2 Strength, +2 BIQ và 2 Power ngẫu nhiên. (80%, Physical)",
+    },
+    {
+      id: "u23",
+      name: "Lusat's Glintstone Staff",
+      weight: 2.78,
+      color: "#87CEEB",
+      description:
+        "(1).Nhận +4 IQ. (2).Sau combat mà bạn thắng round IQ, nhận 1 Power. (90%, Magic)",
+    },
+    {
+      id: "u24",
+      name: "Instruments of the Sirens",
+      weight: 2.78,
+      color: "#FF69B4",
+      description:
+        "(1).Combat: Đối thủ nhận -1 all stats. (2).Sau combat, +1 chỉ số ngẫu nhiên. (70%, Magic)",
+    },
+    {
+      id: "u25",
+      name: "Chastiefol",
+      weight: 2.78,
+      color: "#CCCCCC",
+      description:
+        "Combat: +2 vào 2 chỉ số thấp nhất của đối thủ. (88%, Physical)",
+    },
+    {
+      id: "u26",
+      name: "Desolator",
+      weight: 2.78,
+      color: "#FFD700",
+      description:
+        "Combat: +3 Strength, đối phương -3 Durability. (70%, Physical)",
+    },
+    {
+      id: "u27",
+      name: "Diamond Sword",
+      weight: 2.78,
+      color: "#A2D149",
+      description: "Nhận +4 Strength và +1 Speed. (100%, Physical)",
+    },
+    {
+      id: "u28",
+      name: "Aghanim's Scepter",
+      weight: 2.78,
+      color: "#87CEEB",
+      description:
+        "Mỗi enchant trên vũ khí này: +1 all stats (tối đa 2). Nếu đủ 2, nhận thêm 2 Power. (100%, Magic)",
+    },
+    {
+      id: "u29",
+      name: "Galeforce",
+      weight: 2.78,
+      color: "#FF69B4",
+      description:
+        "Round đầu tiên thua: đối thủ không nhận điểm và không thể kích hoạt hiệu ứng. (80%, Physical)",
+    },
+    {
+      id: "u30",
+      name: "Battlefury",
+      weight: 2.78,
+      color: "#CCCCCC",
+      description:
+        "Combat: Khi thắng 2 round liên tiếp, nhận thêm 1 điểm. (88%, Physical)",
+    },
+    {
+      id: "u31",
+      name: "Dawnbreaker",
+      weight: 2.78,
+      color: "#FFD700",
+      description:
+        "Sau combat: mỗi 2 round thắng → +2 chỉ số ngẫu nhiên. (95%, Physical)",
+    },
+    {
+      id: "u32",
+      name: "Moonveil",
+      weight: 2.78,
+      color: "#A2D149",
+      description:
+        "Nếu IQ > đối thủ: +1 điểm. Nếu có nhiều Power hơn: +1 điểm. (100%, Physical/Magic)",
+    },
+    {
+      id: "u33",
+      name: "Misericorde",
+      weight: 2.78,
+      color: "#87CEEB",
+      description:
+        "Mỗi khi thua round: 10% khả năng nhận điểm thay vì đối thủ. (90%, Physical)",
+    },
+    {
+      id: "u34",
+      name: "Andúril",
+      weight: 2.78,
+      color: "#FF69B4",
+      description:
+        "(1).Nhận Summon Wheel sau mỗi combat. (2).Combat với Demon: +1 điểm khởi đầu mỗi Summon hiện có. (80%, Physical)",
+    },
+    {
+      id: "u35",
+      name: "Needle",
+      weight: 2.78,
+      color: "#CCCCCC",
+      description:
+        "Nhận +2 Speed. Round Speed & MA thắng → +1 điểm. (80%, Physical)",
+    },
+    {
+      id: "u36",
+      name: "12 đôi dép 🍀",
+      weight: 2.78,
+      color: "#FFD700",
+      description:
+        "(1).Khi thua combat: nhận +3 và +6 vào 2 stat bất kì. (2).Chuyển sang đối thủ sau trận nếu thua, loại bỏ vũ khí hiện tại của đối thủ. (100%, Physical)",
+    },
+  ],
+};
+
+export const enchantCountWheel: WheelStep = {
+  key: "weapon-enchant-count",
+  title: "Bạn có bao nhiêu Enchant",
+  sections: [
+    {
+      id: "e0",
+      name: "0 Enchant",
+      weight: 33.33,
+      color: "#CCCCCC",
+      description: "Vũ khí không nhận Enchant.",
+    },
+    {
+      id: "e1",
+      name: "1 Enchant",
+      weight: 33.33,
+      color: "#FFD700",
+      description: "Vũ khí nhận 1 Enchant.",
+    },
+    {
+      id: "e2",
+      name: "2 Enchant",
+      weight: 33.33,
+      color: "#87CEEB",
+      description: "Vũ khí nhận 2 Enchant.",
+    },
+  ],
+};
+
+export const dualWieldEnchantWheel: WheelStep = {
+  key: "dual-enchant",
+  title: "Bạn có bao nhiêu Enchant (2 Vũ khí)",
+  sections: [
+    {
+      id: "d0",
+      name: "0 Enchant",
+      weight: 20,
+      color: "#CCCCCC",
+      description: "Cả 2 vũ khí không có Enchant.",
+    },
+    {
+      id: "d1",
+      name: "Weapon 1: 1 Enchant",
+      weight: 20,
+      color: "#FFD700",
+      description: "Chỉ vũ khí 1 nhận 1 Enchant.",
+    },
+    {
+      id: "d2",
+      name: "Weapon 1: 2 Enchant",
+      weight: 20,
+      color: "#87CEEB",
+      description: "Chỉ vũ khí 1 nhận 2 Enchant.",
+    },
+    {
+      id: "d3",
+      name: "Weapon 2: 1 Enchant",
+      weight: 20,
+      color: "#A2D149",
+      description: "Chỉ vũ khí 2 nhận 1 Enchant.",
+    },
+    {
+      id: "d4",
+      name: "Weapon 2: 2 Enchant",
+      weight: 20,
+      color: "#FF69B4",
+      description: "Chỉ vũ khí 2 nhận 2 Enchant.",
+    },
+  ],
+};
+
+export const enchantWheel: WheelStep = {
+  key: "enchant-wheel",
+  title: "Enchanted: Phù phép Weapon của bạn",
+  sections: [
+    {
+      id: "e1",
+      name: "Powerful",
+      weight: 5.9,
+      color: "#FFD700",
+      description: "Nhận thêm +1 vào Str",
+    },
+    {
+      id: "e2",
+      name: "Swifty",
+      weight: 5.9,
+      color: "#87CEEB",
+      description: "Nhận thêm +1 vào Spd",
+    },
+    {
+      id: "e3",
+      name: "Sturdy",
+      weight: 5.9,
+      color: "#A2D149",
+      description: "Nhận thêm +1 vào Dura",
+    },
+    {
+      id: "e4",
+      name: "Arcana",
+      weight: 5.9,
+      color: "#FF69B4",
+      description: "Nhận thêm +1 vào IQ",
+    },
+    {
+      id: "e5",
+      name: "Fearsome",
+      weight: 5.9,
+      color: "#CCCCCC",
+      description: "Nhận thêm +1 vào BIQ",
+    },
+    {
+      id: "e6",
+      name: "Flexible",
+      weight: 5.9,
+      color: "#FFD700",
+      description: "Nhận thêm +1 vào MA",
+    },
+    {
+      id: "e7",
+      name: "Indestructible Flesh Attached Weapon",
+      weight: 7,
+      color: "#87CEEB",
+      description:
+        "Vũ khí của bạn không thể bị phá hủy, không thể bị tước đoạt, không thể bị tháo rời, thay thế trừ khi bạn chết đi.",
+    },
+    {
+      id: "e8",
+      name: "Trickery",
+      weight: 8,
+      color: "#A2D149",
+      description:
+        "Sau 2 lần combat, toàn bộ Gear Normal của bạn sẽ biến mất. Nhận 2 Power ngẫu nhiên vào lúc đó.",
+    },
+    {
+      id: "e9",
+      name: "Perfect",
+      weight: 8,
+      color: "#FF69B4",
+      description:
+        "Nhận 1 lần Creator's Favor, nhưng chỉ giới hạn trong phạm vi 'Gear/Weapon'.",
+    },
+    {
+      id: "e10",
+      name: "Hungry",
+      weight: 8,
+      color: "#CCCCCC",
+      description: "Nhận thêm 1 trận đánh PvE sau khi nhận Enchant này.",
+    },
+    {
+      id: "e11",
+      name: "Chaos",
+      weight: 8,
+      color: "#FFD700",
+      description: "Nhận -4 ở Stat bất kì để lấy 2 Power.",
+    },
+    {
+      id: "e12",
+      name: "Warlord",
+      weight: 8,
+      color: "#87CEEB",
+      description:
+        "Nếu bạn chưa thể sử dụng vũ khí, Roll lại với tỉ lệ dùng được +15%. Nếu đã có thể dùng được vũ khí, nhận thêm 1 Gear.",
+    },
+    {
+      id: "e13",
+      name: "Valyrian Touched",
+      weight: 8,
+      color: "#A2D149",
+      description:
+        "Vô hiệu hóa nội tại của Quái PvE. Nhận Round PvE với 'White Walker'. Không Roll PvE wheel nữa nếu nhận được Enchant này trong lúc tạo nhân vật.",
+    },
+    {
+      id: "e14",
+      name: "Melodic",
+      weight: 9,
+      color: "#FF69B4",
+      description:
+        "Vũ khí của bạn sẽ phát ra nhạc Ngọt lúc chiến đấu và được tính là nhạc cụ. Nếu 1 vũ khí có nhiều 'Melodic Weapon' Enchant, tất cả tiếng nhạc phát ra đều sẽ là nhạc Indie.",
+    },
+    {
+      id: "e15",
+      name: "All-Father Blesses",
+      weight: 0.6,
+      color: "#CCCCCC",
+      description:
+        "Nhận +1 all stats, nhận thêm 1 Archetype, 1 Quirk, 1 Power, 1 Char Dev và 1 round PvE",
+    },
+  ],
+};
