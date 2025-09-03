@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 export default function Menu() {
   const navigate = useNavigate();
 
-  const handleClick = (action: string) => {
+  const handleClick = (action: string, disabled?: boolean) => {
+    if (disabled) {
+      alert("Chức năng đang cập nhật!");
+      return;
+    }
     if (action === "exit") {
       window.close();
     }
@@ -17,6 +21,9 @@ export default function Menu() {
     "w-64 h-16 rounded-xl font-bold text-lg text-gray-200 shadow-[0_0_15px_rgba(128,0,128,0.6)] " +
     "hover:scale-110 transition-transform bg-gradient-to-b from-[#2b1d42] to-[#1a1029] " +
     "border border-[#8a5b1a] hover:shadow-[0_0_25px_rgba(200,50,50,0.8)]";
+
+  const disabledStyle =
+    "opacity-50 cursor-not-allowed hover:scale-100 hover:shadow-none";
 
   return (
     <div className="w-screen h-screen relative flex items-center justify-center">
@@ -36,10 +43,16 @@ export default function Menu() {
         <button onClick={() => handleClick("start")} className={btnStyle}>
           START
         </button>
-        <button onClick={() => handleClick("setting")} className={btnStyle}>
+        <button
+          onClick={() => handleClick("setting", true)}
+          className={`${btnStyle} ${disabledStyle}`}
+        >
           SETTING
         </button>
-        <button onClick={() => handleClick("data")} className={btnStyle}>
+        <button
+          onClick={() => handleClick("data", true)}
+          className={`${btnStyle} ${disabledStyle}`}
+        >
           DATA
         </button>
         <button onClick={() => handleClick("exit")} className={btnStyle}>

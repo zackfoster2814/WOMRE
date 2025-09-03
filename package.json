@@ -6,7 +6,10 @@
     "dev:vite": "vite",
     "dev:electron": "cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
     "dev": "concurrently \"npm run dev:vite\" \"npm run dev:electron\"",
-    "build": "tsc && vite build"
+    "build:ts": "tsc -p electron/tsconfig.json",
+    "build:web": "vite build",
+    "build": "npm run build:ts && npm run build:web",
+    "build-electron": "npm run build && electron-builder"
   },
   "type": "module",
   "author": "",
@@ -23,6 +26,7 @@
     "concurrently": "^9.2.1",
     "cross-env": "^10.0.0",
     "electron": "^37.3.1",
+    "electron-builder": "^26.0.12",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.12",
     "tailwindcss-animate": "^1.0.7",
@@ -35,12 +39,11 @@
     "appId": "com.womre.app",
     "productName": "womre",
     "directories": {
-      "output": "dist"
+      "output": "release"
     },
     "files": [
       "dist/**",
       "dist-electron/**",
-      "node_modules/**",
       "package.json"
     ],
     "win": {
@@ -52,6 +55,7 @@
     "dotenv": "^17.2.1",
     "pg-hstore": "^2.3.4",
     "react": "^19.1.1",
+    "react-audio-player": "^0.17.0",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.8.2",
     "sequelize": "^6.37.7",

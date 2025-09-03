@@ -1,4 +1,4 @@
-import { WheelStep } from "../Types/types.ts";
+import { WheelStep } from "../Types/Types.ts";
 
 export const raceWheel: WheelStep = {
   key: "race",

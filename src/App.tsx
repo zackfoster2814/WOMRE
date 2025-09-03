@@ -1,7 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Menu from "./pages/Menu";
-import Wheel from "./pages/Wheel";
+
+import Wheel from "./pages/Wheel.tsx";
+import Menu from "./pages/Menu.tsx";
 
 export default function App() {
   return (
