@@ -365,7 +365,7 @@ export default function CharacterWheel() {
           break;
         case "pve":
           // if (results.charDev) {
-          setCurrentWheel(raceWheel);
+          setCurrentWheel(pveWheel);
           // }
           break;
       }
@@ -477,6 +477,11 @@ export default function CharacterWheel() {
                 weight: 2,
                 color: "#98FB98",
               },
+            });
+            setCurrentWheel({
+              key: "subrace",
+              title: raceConfig[resultName]?.subrace || "Subrace",
+              sections: subraceMap[resultName],
             });
           } else if (subraceMap[resultName]?.length > 0) {
             setCurrentWheel({

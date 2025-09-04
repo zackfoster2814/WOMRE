@@ -19,6 +19,28 @@ export const getAllPlayers = async function (): Promise<any> {
         });
     });
 }
+// example raw query 
+export const insertPlayer = async function (Playerdata:any) {
+    try{
+        const {stt,name,note} = Playerdata
+         const query = `INSERT INTO Players (stt, name, note) 
+                   VALUES (:stt, :name, :note)`;
+    
+    
+    const data = await db.sequelize.query(query, {
+      replacements: {
+        stt: stt,
+        name: name,
+        note: note,
+      },
+      type: QueryTypes.INSERT,
+      raw: true,
+    });
+        return data;
+    }catch(err){
+        console.error("er:",err)
+    }
+}
 //example
 // export const updatePlayers = async function(where:any,obj:any) : Promise<any>{
 //     return new Promise<any>((resolve,reject) => {
@@ -39,20 +61,3 @@ export const getAllPlayers = async function (): Promise<any> {
 //         });
 //     });
 // }
-
-//Exmaple Raw Query cho cach query phuc tap hoac cho a nao thich old style
-// export const ... = async function (params:type) {
-//     try{
-//         const query = '...';
-//         const data = Players.sequelize.query(query,{
-//             replacements:{
-//                 ...
-//             },
-//             type: QueryTypes.SELECT,
-//             raw:true
-//         })
-//         return data;
-//     }catch (error){
-//         console.error(...);
-//     }
-// };
