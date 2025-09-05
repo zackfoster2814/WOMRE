@@ -12,9 +12,10 @@
     "baseUrl": ".",
     "allowImportingTsExtensions": true,
     "noEmit": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "electron"]
+  "include": ["src", "electron", "src/**/*", "src/types/**/*"]
 }

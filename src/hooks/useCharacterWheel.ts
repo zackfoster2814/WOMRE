@@ -1,11 +1,5 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useReducer,
-} from "react";
+import { useState, useReducer, useCallback } from "react";
+import { Section, WheelStep } from "@/Common/Types/Types.ts";
 import { raceConfig, raceWheel } from "@/Common/Config/RaceConfig.ts";
 import { subraceMap } from "@/Common/Config/SubRaceConfig.ts";
 import {
@@ -17,21 +11,19 @@ import {
   standsWheel,
   wibuWheel,
 } from "@/Common/Config/ArchetypeConfig.ts";
-import { Section, WheelStep } from "@/Common/Types/Types.ts";
-import arrowImg from "@/assets/Images/arrow-2.png";
-import { getStrengthWheel } from "@/Common/Config/StrengthConfig.ts";
-import { getDurabilityWheel } from "@/Common/Config/DurabilityConfig.ts";
-import { getSpeedWheel } from "@/Common/Config/SpeedConfig.ts";
-import { getBattleIQWheel } from "@/Common/Config/BattleIQConfig.ts";
-import { getIQWheel } from "@/Common/Config/IQConfig.ts";
-import { getMartialArtsWheel } from "@/Common/Config/MartialArtConfig.ts";
+import {
+  getStatWheel,
+  getRaceOrSubrace,
+  usabilityWheel,
+  STAT_WHEELS,
+} from "@/utils/wheelUtils.ts";
 import {
   archetypeExtraWheels,
   uniqueVampireTrainWheel,
   vampireTasteWheel,
 } from "@/Common/Config/ArchetypeExtraWheels.ts";
 import { quirkCountOptions, quirkList } from "@/Common/Config/QuirkConfig.ts";
-import { houseWheel, useHouseAudios } from "@/Common/Config/HouseConfig.ts";
+import { houseWheel } from "@/Common/Config/HouseConfig.ts";
 import {
   ashinaSwordWheel,
   dessendreSkillWheel,
@@ -57,18 +49,6 @@ import { charDevWheel } from "@/Common/Config/CharDevConfig.ts";
 import { pveWheel } from "@/Common/Config/PvEConfig.ts";
 import { exportCharacter } from "@/Common/exportCharacter.ts";
 
-// Constants
-const CANVAS_SIZE = 700;
-const WHEEL_RADIUS_OFFSET = 20;
-const STAT_WHEELS = [
-  "strength",
-  "speed",
-  "durability",
-  "iq",
-  "battleIQ",
-  "martialArts",
-];
-
 // Types
 interface CharacterState {
   results: Record<string, string>;
@@ -84,7 +64,21 @@ interface CharacterState {
   characterName: string;
 }
 
-// State management using reducer for better control
+type Action =
+  | { type: "SET_RESULT"; key: string; value: string }
+  | { type: "SET_STAT"; key: string; value: string }
+  | { type: "ADD_QUIRK"; quirk: Section }
+  | { type: "ADD_GEAR"; gear: Section }
+  | { type: "ADD_LEGACY_GEAR"; gear: Section }
+  | { type: "ADD_WEAPON"; weapon: Section }
+  | { type: "ADD_ENCHANT"; enchant: Section }
+  | { type: "ADD_POWER"; power: Section }
+  | { type: "SET_CHARACTER_NAME"; name: string }
+  | { type: "ADD_CHARDEV"; charDev: Section }
+  | { type: "ADD_ARCHETYPE"; archetype: Section }
+  | { type: "RESET" };
+
+// Initial state
 const initialState: CharacterState = {
   results: {},
   stats: {
@@ -106,20 +100,9 @@ const initialState: CharacterState = {
   characterName: "",
 };
 
-type Action =
-  | { type: "SET_RESULT"; key: string; value: string }
-  | { type: "SET_STAT"; key: string; value: string }
-  | { type: "ADD_QUIRK"; quirk: Section }
-  | { type: "ADD_GEAR"; gear: Section }
-  | { type: "ADD_LEGACY_GEAR"; gear: Section }
-  | { type: "ADD_WEAPON"; weapon: Section }
-  | { type: "ADD_ENCHANT"; enchant: Section }
-  | { type: "ADD_POWER"; power: Section }
-  | { type: "SET_CHARACTER_NAME"; name: string }
-  | { type: "ADD_CHARDEV"; charDev: Section }
-  | { type: "ADD_ARCHETYPE"; archetype: Section }
-  | { type: "RESET" };
+const DEBUG_RESULT = "Guardian of Demons";
 
+// Reducer
 function characterReducer(
   state: CharacterState,
   action: Action
@@ -166,30 +149,10 @@ function characterReducer(
   }
 }
 
-// Utility functions
-const getStatWheel = (race: string, key: string): WheelStep | null => {
-  const wheelGetters: Record<string, (race: string) => WheelStep> = {
-    strength: getStrengthWheel,
-    speed: getSpeedWheel,
-    durability: getDurabilityWheel,
-    iq: getIQWheel,
-    battleIQ: getBattleIQWheel,
-    martialArts: getMartialArtsWheel,
-  };
-  return wheelGetters[key]?.(race) || null;
-};
-
-const getRaceOrSubrace = (results: Record<string, string>): string => {
-  return results.race === "Skeleton" ? results.subrace : results.race;
-};
-
-export default function CharacterWheel() {
+export const useCharacterWheel = () => {
   // Core state
   const [characterState, dispatch] = useReducer(characterReducer, initialState);
   const [currentWheel, setCurrentWheel] = useState<WheelStep>(raceWheel);
-  const [angle, setAngle] = useState(0);
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [rolledResult, setRolledResult] = useState<Section | null>(null);
 
   // Progress tracking
   const [statStep, setStatStep] = useState(0);
@@ -203,95 +166,12 @@ export default function CharacterWheel() {
   const [enchantCount, setEnchantCount] = useState(0);
   const [powerStep, setPowerStep] = useState(0);
   const [powerCount, setPowerCount] = useState(0);
-  const [showDialog, setShowDialog] = useState(false);
-  const [dialogData, setDialogData] = useState<any>(null);
   const [charDevStep, setCharDevStep] = useState(0);
   const [charDevMax, setCharDevMax] = useState(1);
 
-  // Refs
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const offscreenRef = useRef<HTMLCanvasElement | null>(null);
-  const { audioRefs, audioSources } = useHouseAudios();
-
-  // Memoized calculations
-  const cachedSections = useMemo(() => {
-    const totalWeight = currentWheel.sections.reduce(
-      (sum, s) => sum + s.weight,
-      0
-    );
-    let startAngle = 0;
-    return currentWheel.sections.map((sec) => {
-      const angleStep = (sec.weight / totalWeight) * 2 * Math.PI;
-      const secWithAngles = {
-        ...sec,
-        startAngle,
-        endAngle: startAngle + angleStep,
-      };
-      startAngle += angleStep;
-      return secWithAngles;
-    });
-  }, [currentWheel]);
-
-  // Drawing functions
-  const drawWheelOffscreen = useCallback(() => {
-    if (!offscreenRef.current) {
-      offscreenRef.current = document.createElement("canvas");
-      offscreenRef.current.width = CANVAS_SIZE;
-      offscreenRef.current.height = CANVAS_SIZE;
-    }
-    const canvas = offscreenRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    const { width, height } = canvas;
-    const radius = Math.min(width, height) / 2 - WHEEL_RADIUS_OFFSET;
-    ctx.clearRect(0, 0, width, height);
-    ctx.save();
-    ctx.translate(width / 2, height / 2);
-    cachedSections.forEach((section) => {
-      // Draw section
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, radius, section.startAngle, section.endAngle);
-      ctx.closePath();
-      ctx.fillStyle = section.color;
-      ctx.fill();
-      // Draw text
-      const midAngle = (section.startAngle + section.endAngle) / 2;
-      ctx.save();
-      ctx.translate(
-        Math.cos(midAngle) * radius * 0.65,
-        Math.sin(midAngle) * radius * 0.65
-      );
-      ctx.rotate(midAngle);
-      ctx.textAlign = "center";
-      ctx.font = "bold 18px sans-serif";
-      ctx.fillStyle = "#fff";
-      ctx.strokeStyle = "#000";
-      ctx.lineWidth = 4;
-      ctx.strokeText(section.name, 0, 0);
-      ctx.fillText(section.name, 0, 0);
-      ctx.restore();
-    });
-    ctx.restore();
-  }, [cachedSections]);
-
-  useEffect(() => {
-    drawWheelOffscreen();
-    drawWheel(0); // Initial draw
-  }, [drawWheelOffscreen]);
-
-  const drawWheel = (rotation: number) => {
-    const canvas = canvasRef.current;
-    if (!canvas || !offscreenRef.current) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate((rotation * Math.PI) / 180);
-    ctx.drawImage(offscreenRef.current, -canvas.width / 2, -canvas.height / 2);
-    ctx.restore();
-  };
+  // Dialog state
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogData, setDialogData] = useState<any>(null);
 
   // Navigation function for clicking labels
   const jumpToWheel = useCallback(
@@ -359,14 +239,10 @@ export default function CharacterWheel() {
           }
           break;
         case "charDev":
-          // if (characterState.powers.length > 0) {
           setCurrentWheel(charDevWheel);
-          // }
           break;
         case "pve":
-          // if (results.charDev) {
           setCurrentWheel(pveWheel);
-          // }
           break;
       }
     },
@@ -409,6 +285,7 @@ export default function CharacterWheel() {
       starkWolf: characterState.results["stark-wolf"],
       ashinaSword: characterState.results["ashina-sword"],
       dessendreSkill: characterState.results["dessendre-skill"],
+      houseSpyTarget: characterState.results["house-spy-target"],
     };
   }, [characterState]);
 
@@ -418,29 +295,11 @@ export default function CharacterWheel() {
     setShowDialog(true);
   }, [getCompleteCharacterInfo]);
 
-  const usabilityWheel = (usableRate: number, itemName: string): WheelStep => ({
-    key: "usabilityCheck",
-    sections: [
-      {
-        name: "Dùng được",
-        weight: usableRate,
-        id: "usable",
-        color: "#10b981", // Green
-      },
-      {
-        name: "Không dùng được",
-        weight: 100 - usableRate,
-        id: "not-usable",
-        color: "#ef4444", // Red
-      },
-    ],
-    title: `${itemName} - Kiểm tra khả năng sử dụng`,
-  });
-
-  // Flow management - Refactored for clarity
+  // Flow management - Main handler for wheel progression
   const handleNextStep = useCallback(
     (key: string, resultName: string) => {
       const { results } = characterState;
+
       // Helper to transition to stats
       const goToStats = () => {
         const raceOrSubrace = getRaceOrSubrace(results);
@@ -451,8 +310,9 @@ export default function CharacterWheel() {
           setStatStep(1);
         }
       };
+
       switch (key) {
-        // 1. Race & Sub-race flow
+        // Race & Sub-race flow
         case "race":
           dispatch({ type: "SET_RESULT", key: "race", value: resultName });
           if (resultName === "Skeleton") {
@@ -493,6 +353,7 @@ export default function CharacterWheel() {
             setCurrentWheel(archetypeWheel);
           }
           break;
+
         case "uma-parent-1":
           dispatch({
             type: "SET_RESULT",
@@ -505,6 +366,7 @@ export default function CharacterWheel() {
             sections: subraceMap["Uma"].filter((s) => s.name !== resultName),
           });
           break;
+
         case "uma-parent-2":
           dispatch({
             type: "SET_RESULT",
@@ -518,11 +380,13 @@ export default function CharacterWheel() {
           });
           setCurrentWheel(archetypeWheel);
           break;
+
         case "skeleton-lineage":
           dispatch({ type: "SET_RESULT", key: "subrace", value: resultName });
           setCurrentWheel(archetypeWheel);
           break;
-        case "subrace": {
+
+        case "subrace":
           dispatch({ type: "SET_RESULT", key: "subrace", value: resultName });
           if (characterState.results.race === "Vampire") {
             setCurrentWheel({
@@ -534,8 +398,8 @@ export default function CharacterWheel() {
             setCurrentWheel(archetypeWheel);
           }
           break;
-        }
-        case "uniqueVampireTrain": {
+
+        case "uniqueVampireTrain":
           dispatch({
             type: "SET_RESULT",
             key: "uniqueVampireTrain",
@@ -551,8 +415,8 @@ export default function CharacterWheel() {
             setCurrentWheel(archetypeWheel);
           }
           break;
-        }
-        case "vampireTaste": {
+
+        case "vampireTaste":
           dispatch({
             type: "SET_RESULT",
             key: "vampireTaste",
@@ -560,14 +424,71 @@ export default function CharacterWheel() {
           });
           setCurrentWheel(archetypeWheel);
           break;
-        }
-        // 2. Archetype
+
+        // Archetype
         case "archetype": {
           const archetype = currentWheel.sections.find(
-            (s) => s.name === resultName
+            // (s) => s.name === resultName
+            (s) => s.name === DEBUG_RESULT || resultName
           )!;
           dispatch({ type: "ADD_ARCHETYPE", archetype });
-          if (resultName === "Trickster") {
+          if (!resultName) {
+            resultName = DEBUG_RESULT;
+          }
+          // Special archetype power assignments
+          if (resultName === "Warrior of Sunlight") {
+            // Add Sacred Fire and Fair Duel powers automatically
+            dispatch({
+              type: "ADD_POWER",
+              power: {
+                id: "55",
+                name: "Sacred Fire",
+                effect: "Nhận +1 all stats nếu đối thủ là Vampire hoặc Demon.",
+                weight: 0.9,
+                color: "",
+              },
+            });
+            dispatch({
+              type: "ADD_POWER",
+              power: {
+                id: "65",
+                name: "Fair Duel",
+                effect:
+                  "Bạn và đối thủ miễn nhiễm với mọi hiệu ứng giảm stat từ nhau.",
+                weight: 0.9,
+                color: "",
+              },
+            });
+          } else if (resultName === "Spy") {
+            setCurrentWheel({
+              ...houseWheel,
+              key: "house-spy-target",
+              title: "Target",
+              onComplete: goToStats,
+            });
+          } else if (resultName === "Knight of Gods") {
+            // Store Holy Symbol temporarily for usability check
+            const holySymbol = {
+              id: "8",
+              name: "Holy Symbol",
+              weight: 2.78,
+              color: "#FF69B4",
+              description:
+                "Khi combat với Demon, Vampire, Spirit, Orc, Skeleton, Goblin: đối thủ -1 all stats. (60%, Magic)",
+              usableRate: 60,
+            };
+
+            dispatch({
+              type: "SET_RESULT",
+              key: "temp-knight-gear",
+              value: JSON.stringify(holySymbol),
+            });
+
+            // Call usability wheel for Holy Symbol
+            setCurrentWheel(
+              usabilityWheel(holySymbol.usableRate, holySymbol.name)
+            );
+          } else if (resultName === "Trickster") {
             const aceWheel = archetypeExtraWheels[resultName];
             if (aceWheel) {
               setCurrentWheel({
@@ -605,7 +526,8 @@ export default function CharacterWheel() {
           }
           break;
         }
-        case "wibu": {
+
+        case "wibu":
           dispatch({
             type: "SET_RESULT",
             key: "wibu-series",
@@ -630,7 +552,7 @@ export default function CharacterWheel() {
             goToStats();
           }
           break;
-        }
+
         // Handle special archetype wheels results
         case "trickster-card":
           dispatch({
@@ -640,6 +562,7 @@ export default function CharacterWheel() {
           });
           if (currentWheel.onComplete) currentWheel.onComplete();
           break;
+
         case "slayer-race":
           dispatch({
             type: "SET_RESULT",
@@ -648,18 +571,19 @@ export default function CharacterWheel() {
           });
           if (currentWheel.onComplete) currentWheel.onComplete();
           break;
-        case "demon-subrace":
+
+        case "house-spy-target":
           dispatch({
             type: "SET_RESULT",
-            key: "demon-subrace",
+            key: "house-spy-target",
             value: resultName,
           });
           if (currentWheel.onComplete) currentWheel.onComplete();
           break;
-        // 3. Stats (Strength, Speed, Durability, IQ, Battle IQ, Martial Arts)
+
+        // Stats (Strength, Speed, Durability, IQ, Battle IQ, Martial Arts)
         case "strength":
         case "speed":
-        case "durability":
         case "battleIQ":
         case "martialArts":
           dispatch({ type: "SET_STAT", key, value: resultName });
@@ -682,10 +606,35 @@ export default function CharacterWheel() {
             });
           }
           break;
+
+        case "durability":
+          dispatch({ type: "SET_STAT", key, value: resultName });
+          const durabilityIndex = STAT_WHEELS.indexOf("durability");
+          const raceOrSubrace = getRaceOrSubrace(results);
+
+          // Check if Skeleton race
+          if (results.race === "Skeleton") {
+            // Skip IQ for Skeleton, set it to 1 automatically
+            dispatch({ type: "SET_STAT", key: "iq", value: "1" });
+            // Go directly to Battle IQ
+            const battleIQWheel = getStatWheel(raceOrSubrace, "battleIQ");
+            if (battleIQWheel) {
+              setCurrentWheel(battleIQWheel);
+              setStatStep(STAT_WHEELS.indexOf("battleIQ") + 1);
+            }
+          } else {
+            // Normal flow - go to IQ
+            const nextWheel = getStatWheel(raceOrSubrace, "iq");
+            if (nextWheel) {
+              setCurrentWheel(nextWheel);
+              setStatStep(durabilityIndex + 2);
+            }
+          }
+          break;
+
         case "iq":
-          // Bỏ qua kết quả quay, luôn set IQ = "1"
-          dispatch({ type: "SET_STAT", key: "iq", value: "1" });
-          // Lấy index của IQ trong STAT_WHEELS
+          // This should only be reached by non-Skeleton races
+          dispatch({ type: "SET_STAT", key: "iq", value: resultName });
           const iqIndex = STAT_WHEELS.indexOf("iq");
           if (iqIndex < STAT_WHEELS.length - 1) {
             const nextStatKey = STAT_WHEELS[iqIndex + 1];
@@ -703,7 +652,8 @@ export default function CharacterWheel() {
             });
           }
           break;
-        // 4. Quirk & House
+
+        // Quirk & House
         case "quirk-count":
           const count = parseInt(resultName, 10);
           setQuirkCount(count);
@@ -714,6 +664,7 @@ export default function CharacterWheel() {
             sections: quirkList,
           });
           break;
+
         case "quirk":
           const quirk = currentWheel.sections.find(
             (s) => s.name === resultName
@@ -729,7 +680,20 @@ export default function CharacterWheel() {
               ),
             });
           } else {
-            if (characterState.results.race === "Uma") {
+            // Check for special archetype house assignments
+            const hasSpecialArchetype = characterState.archetypes.some(
+              (archetype: any) => archetype.name === "Dark Magician"
+            );
+
+            if (hasSpecialArchetype) {
+              // Dark Magician gets Dark Brotherhood automatically
+              dispatch({
+                type: "SET_RESULT",
+                key: "house",
+                value: "Dark Brotherhood",
+              });
+              setCurrentWheel(gearCountWheel);
+            } else if (characterState.results.race === "Uma") {
               // Bỏ qua roll House, set trực tiếp "Tracen Academy"
               dispatch({
                 type: "SET_RESULT",
@@ -742,6 +706,7 @@ export default function CharacterWheel() {
             }
           }
           break;
+
         case "house":
           dispatch({ type: "SET_RESULT", key: "house", value: resultName });
           // House special wheels
@@ -765,12 +730,14 @@ export default function CharacterWheel() {
           };
           setCurrentWheel(houseSpecialWheels[resultName] || gearCountWheel);
           break;
-        // 5. Gear & Legacy Gear
+
+        // Gear & Legacy Gear
         case "gear-count":
           setGearCount(parseInt(resultName, 10));
           setGearStep(0);
           setCurrentWheel(legacyGearCountWheel);
           break;
+
         case "legacy-gear-count":
           setLegacyGearCount(parseInt(resultName, 10));
           setLegacyGearStep(0);
@@ -790,6 +757,7 @@ export default function CharacterWheel() {
             setCurrentWheel(weaponExistWheel);
           }
           break;
+
         case "gear": {
           const gear = currentWheel.sections.find(
             (s) => s.name === resultName
@@ -829,6 +797,7 @@ export default function CharacterWheel() {
           }
           break;
         }
+
         case "legacy-gear": {
           const legacyGear = currentWheel.sections.find(
             (s) => s.name === resultName
@@ -865,7 +834,8 @@ export default function CharacterWheel() {
           }
           break;
         }
-        // 6. Weapon & Enchant
+
+        // Weapon & Enchant
         case "weapon-exist":
           if (resultName === "No Weapon") {
             const raceOrSubrace = getRaceOrSubrace(results);
@@ -874,11 +844,13 @@ export default function CharacterWheel() {
             setCurrentWheel(uniqueWeaponExistWheel);
           }
           break;
+
         case "unique-weapon-exist":
           setCurrentWheel(
             resultName === "No" ? weaponWheel : uniqueWeaponWheel
           );
           break;
+
         case "weapon":
         case "unique-weapon": {
           const weapon = currentWheel.sections.find(
@@ -914,9 +886,24 @@ export default function CharacterWheel() {
           const tempGear = characterState.results["temp-gear"];
           const tempLegacyGear = characterState.results["temp-legacy-gear"];
           const tempWeapon = characterState.results["temp-weapon"];
+          const tempKnightGear = characterState.results["temp-knight-gear"];
           const isUsable = resultName === "Dùng được";
 
-          if (tempGear) {
+          if (tempKnightGear) {
+            // Handle Knight of Gods Holy Symbol usability
+            const holySymbol = JSON.parse(tempKnightGear);
+            dispatch({
+              type: "ADD_GEAR",
+              gear: { ...holySymbol, usable: isUsable },
+            });
+            dispatch({
+              type: "SET_RESULT",
+              key: "temp-knight-gear",
+              value: "",
+            });
+            // Proceed to stats after Holy Symbol is handled
+            goToStats();
+          } else if (tempGear) {
             // Handle gear usability
             const gear = gearWheel.sections.find((s) => s.name === tempGear)!;
             dispatch({ type: "ADD_GEAR", gear: { ...gear, usable: isUsable } });
@@ -1023,6 +1010,7 @@ export default function CharacterWheel() {
             setCurrentWheel(powerCountWheel(raceOrSubrace));
           }
           break;
+
         case "weapon-enchant":
           const enchant = currentWheel.sections.find(
             (s) => s.name === resultName
@@ -1043,7 +1031,7 @@ export default function CharacterWheel() {
           }
           break;
 
-        // 7. Power & Char Dev
+        // Power & Char Dev
         case "power-count":
           setPowerCount(parseInt(resultName, 10));
           setPowerStep(0);
@@ -1053,6 +1041,7 @@ export default function CharacterWheel() {
             sections: PowerWheel.sections,
           });
           break;
+
         case "power":
           const power = currentWheel.sections.find(
             (s) => s.name === resultName
@@ -1078,6 +1067,7 @@ export default function CharacterWheel() {
             setCurrentWheel(charDevWheel);
           }
           break;
+
         case "char-dev":
           const charDevs = currentWheel.sections.find(
             (s) => s.name === resultName
@@ -1097,7 +1087,7 @@ export default function CharacterWheel() {
           }
           break;
 
-        // 8. PvE
+        // PvE
         case "pve":
           dispatch({ type: "SET_RESULT", key: "pve", value: resultName });
           // Flow complete - optionally reset or show completion
@@ -1127,667 +1117,70 @@ export default function CharacterWheel() {
     ]
   );
 
-  const handleCharacterComplete = () => {
+  const handleCharacterComplete = useCallback(() => {
     // 1. Xuất dữ liệu
     exportCharacter(characterState);
 
     // 2. Reset state
-    dispatch({ type: "RESET" }); // bạn cần handle trong reducer
-    setGearStep(0);
-    setLegacyGearStep(0);
-    setEnchantStep(0);
-    setPowerStep(0);
-    setCharDevStep(0);
-    setQuirkStep(0);
-    setStatStep(0);
-    setCurrentWheel(raceWheel); // reset wheel về ban đầu
-    setQuirkCount(0);
-    setGearCount(0);
-    setLegacyGearCount(0);
-    setEnchantCount(0);
-    setPowerCount(0);
-    setCharDevMax(0);
-  };
-
-  // Spin logic - Improved for stability by drawing directly in animation loop without state updates
-  const spin = useCallback(() => {
-    if (isSpinning || !currentWheel) return;
-    setIsSpinning(true);
-    setRolledResult(null);
-
-    const duration = 3500 + Math.random() * 2500;
-    const spins = 4 + Math.random() * 4;
-    const extraDeg = Math.random() * 360;
-    const startAngle = angle;
-    const totalDeg = spins * 360 + extraDeg;
-    const finalAngle = startAngle + totalDeg;
-
-    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
-
-    let startTs: number | null = null;
-    const animate = (ts: number) => {
-      if (!startTs) startTs = ts;
-      const elapsed = ts - startTs;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = easeOutCubic(progress);
-      const currentAngle = startAngle + eased * (finalAngle - startAngle);
-
-      drawWheel(currentAngle); // Draw directly with current angle
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setAngle(finalAngle % 360); // Set final angle for state consistency
-        const finalNormalized = ((finalAngle % 360) + 360) % 360;
-        const pointerDeg = (360 - finalNormalized) % 360;
-        const pointerRad = (pointerDeg * Math.PI) / 180;
-        let landed = cachedSections[0];
-        for (const sec of cachedSections) {
-          if (pointerRad >= sec.startAngle && pointerRad < sec.endAngle) {
-            landed = sec;
-            break;
-          }
-        }
-        setIsSpinning(false);
-        setRolledResult(landed);
-        // Play audio if available
-        if (landed && audioRefs[landed.name]) {
-          audioRefs[landed.name].current?.play().catch(console.warn);
-        }
-      }
-    };
-    requestAnimationFrame(animate);
-  }, [isSpinning, currentWheel, angle, cachedSections, audioRefs, drawWheel]);
-
-  // Next step handler
-  const nextStep = useCallback(() => {
-    if (!rolledResult || !currentWheel) return;
-    handleNextStep(currentWheel.key, rolledResult.name);
-    setRolledResult(null);
-    setAngle(0);
-  }, [rolledResult, currentWheel, handleNextStep]);
+    resetAll();
+  }, [characterState]);
 
   // Reset handler
-  const resetWheels = useCallback(() => {
+  const resetAll = useCallback(() => {
     dispatch({ type: "RESET" });
     setCurrentWheel(raceWheel);
-    setAngle(0);
-    setRolledResult(null);
-    setStatStep(0);
-    setQuirkStep(0);
-    setQuirkCount(0);
     setGearStep(0);
-    setGearCount(0);
     setLegacyGearStep(0);
-    setLegacyGearCount(0);
     setEnchantStep(0);
-    setEnchantCount(0);
     setPowerStep(0);
-    setPowerCount(0);
     setCharDevStep(0);
+    setQuirkStep(0);
+    setStatStep(0);
+    setQuirkCount(0);
+    setGearCount(0);
+    setLegacyGearCount(0);
+    setEnchantCount(0);
+    setPowerCount(0);
     setCharDevMax(1);
   }, []);
 
-  // UI Components
-const LeftPanel = () => {
-  const inputRef = useRef<HTMLInputElement>(null); // Ref cho input
-  const [shouldAutoFocus, setShouldAutoFocus] = useState(true); // State để kiểm soát autofocus
-
-  const handleNameChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch({ type: "SET_CHARACTER_NAME", name: e.target.value });
-    },
-    [] // Không cần dependencies vì dispatch từ useReducer không thay đổi
-  );
-
-  // Xử lý khi input mất focus
-  const handleBlur = useCallback(() => {
-    setShouldAutoFocus(false); // Tắt autofocus
-    if (inputRef.current) {
-      inputRef.current.blur(); // Bỏ focus khỏi input
-    }
+  // Next step handler
+  const nextStep = useCallback(() => {
+    // This will be handled by the animation hook callback
+    // Implementation moved to handleNextStep
   }, []);
 
-  // Xử lý phím Enter
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
-        handleBlur(); // Bỏ focus khi nhấn Enter
-      }
-    },
-    [handleBlur]
-  );
+  return {
+    // State
+    characterState,
+    currentWheel,
+    statStep,
+    showDialog,
+    dialogData,
 
-  return (
-    <div className="w-[22%] flex flex-col gap-4 border-2 border-[#5a2d0c] p-3 rounded-lg shadow-[0_0_20px_rgba(200,50,0,0.6)] bg-black/70">
-      <div className="border-2 border-[#d4af37] bg-black/60 h-52 flex items-center justify-center rounded-md text-amber-200 font-bold text-xl shadow-[0_0_15px_rgba(255,215,0,0.5)]"></div>
-      <div className="border border-[#d4af37] p-2 text-center rounded bg-black/50 text-lg font-bold tracking-wide flex flex-col gap-2">
-        <span>Tên nhân vật</span>
-        <input
-          type="text"
-          ref={inputRef}
-          value={characterState.characterName}
-          onChange={handleNameChange}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          placeholder="Nhập tên nhân vật..."
-          className="text-center bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-amber-400"
-          autoComplete="off"
-          spellCheck="false"
-          autoFocus={shouldAutoFocus} // Chỉ autofocus khi shouldAutoFocus là true
-        />
-      </div>
-      <div className="border border-[#d4af37] p-2 flex items-center gap-2 rounded bg-black/50 text-lg">
-        <label className="font-bold shrink-0">Race</label>
-        <select
-          value={characterState.results.race || ""}
-          onChange={(e) => {
-            const val = e.target.value;
-            dispatch({ type: "SET_RESULT", key: "race", value: val });
-            handleNextStep("race", val);
-            handleBlur(); // Bỏ focus khi chọn Race
-          }}
-          className="bg-black/30 text-amber-200 px-2 py-1 flex-1"
-        >
-          <option value="" disabled>
-            -- Chọn Race --
-          </option>
-          {raceWheel.sections.map((sec) => (
-            <option key={sec.name} value={sec.name}>
-              {sec.name}
-            </option>
-          ))}
-        </select>
-        <button
-          onClick={() => {
-            jumpToWheel("race");
-            handleBlur(); // Bỏ focus khi nhấn Roll
-          }}
-          className="px-2 py-1 bg-[#3a2a18] border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded shadow hover:scale-110 transition"
-        >
-          Roll
-        </button>
-      </div>
-      {characterState.results.race === "Uma" ? (
-        <div className="flex justify-between items-center gap-2 w-full">
-          <select
-            value={characterState.results["uma-parent-1"] || ""}
-            onChange={(e) => {
-              const val = e.target.value;
-              dispatch({
-                type: "SET_RESULT",
-                key: "uma-parent-1",
-                value: val,
-              });
-              if (characterState.results["uma-parent-2"] === val) {
-                dispatch({
-                  type: "SET_RESULT",
-                  key: "uma-parent-2",
-                  value: "",
-                });
-              }
-              handleBlur(); // Bỏ focus khi chọn Parent 1
-            }}
-            className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
-          >
-            <option value="" disabled>
-              -- Parent 1 --
-            </option>
-            {subraceMap["Uma"].map((s) => (
-              <option key={s.name} value={s.name}>
-                {s.name}
-              </option>
-            ))}
-          </select>
-          <span className="text-amber-300 font-bold px-2">+</span>
-          <select
-            value={characterState.results["uma-parent-2"] || ""}
-            onChange={(e) => {
-              const val = e.target.value;
-              dispatch({
-                type: "SET_RESULT",
-                key: "uma-parent-2",
-                value: val,
-              });
-              dispatch({
-                type: "SET_RESULT",
-                key: "subrace",
-                value: `${characterState.results["uma-parent-1"]} - ${val}`,
-              });
-              handleBlur(); // Bỏ focus khi chọn Parent 2
-            }}
-            className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
-          >
-            <option value="" disabled>
-              -- Parent 2 --
-            </option>
-            {subraceMap["Uma"]
-              .filter(
-                (s) => s.name !== characterState.results["uma-parent-1"]
-              )
-              .map((s) => (
-                <option key={s.name} value={s.name}>
-                  {s.name}
-                </option>
-              ))}
-          </select>
-        </div>
-      ) : (
-        <select
-          value={characterState.results.subrace || ""}
-          onChange={(e) => {
-            dispatch({
-              type: "SET_RESULT",
-              key: "subrace",
-              value: e.target.value,
-            });
-            handleBlur(); // Bỏ focus khi chọn Subrace
-          }}
-          className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] w-full"
-        >
-          <option value="" disabled>
-            -- Chọn Subrace --
-          </option>
-          {(subraceMap[characterState.results.race] || []).map((s) => (
-            <option key={s.name} value={s.name}>
-              {s.name}
-            </option>
-          ))}
-        </select>
-      )}
-      <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
-        <span
-          onClick={() => {
-            jumpToWheel("archetype");
-            handleBlur(); // Bỏ focus khi nhấn Archetype
-          }}
-          className="cursor-pointer hover:text-amber-400 hover:underline"
-        >
-          Archetype
-        </span>
-        <span className="text-amber-300">
-          {characterState.archetypes.length > 0
-            ? characterState.archetypes.map((a) => a.name).join(", ")
-            : "???"}
-        </span>
-      </div>
-      <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
-        <span
-          onClick={() => {
-            jumpToWheel("house");
-            handleBlur(); // Bỏ focus khi nhấn House
-          }}
-          className="cursor-pointer hover:text-amber-400 hover:underline"
-        >
-          House
-        </span>
-        <span className="text-amber-300">
-          {characterState.results.house || "???"}
-        </span>
-      </div>
-      <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
-        <span
-          onClick={() => {
-            jumpToWheel("charDev");
-            handleBlur(); // Bỏ focus khi nhấn Char dev
-          }}
-          className="cursor-pointer hover:text-amber-400 hover:underline"
-        >
-          Char dev
-        </span>
-        <span className="text-amber-300">
-          {characterState.charDevs.length > 0
-            ? characterState.charDevs.map((dev) => dev.name).join(", ")
-            : "???"}
-        </span>
-      </div>
-      <div className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
-        <p className="font-bold underline text-[#f5e6d3] text-xl mb-2">
-          Stats
-        </p>
-        <div
-          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-          onClick={() => {
-            jumpToWheel("strength");
-            handleBlur(); // Bỏ focus khi nhấn Strength
-          }}
-        >
-          <span>Strength</span>
-          <span className="text-red-400">
-            {characterState.stats.strength || "x"}
-          </span>
-        </div>
-        <div
-          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-          onClick={() => {
-            jumpToWheel("speed");
-            handleBlur(); // Bỏ focus khi nhấn Speed
-          }}
-        >
-          <span>Speed</span>
-          <span className="text-green-400">
-            {characterState.stats.speed || "x"}
-          </span>
-        </div>
-        <div
-          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-          onClick={() => {
-            jumpToWheel("durability");
-            handleBlur(); // Bỏ focus khi nhấn Durability
-          }}
-        >
-          <span>Durability</span>
-          <span className="text-blue-400">
-            {characterState.stats.durability || "x"}
-          </span>
-        </div>
-        <div
-          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-          onClick={() => {
-            jumpToWheel("iq");
-            handleBlur(); // Bỏ focus khi nhấn IQ
-          }}
-        >
-          <span>IQ</span>
-          <span className="text-purple-300">
-            {characterState.stats.iq || "x"}
-          </span>
-        </div>
-        <div
-          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-          onClick={() => {
-            jumpToWheel("battleIQ");
-            handleBlur(); // Bỏ focus khi nhấn Battle IQ
-          }}
-        >
-          <span>Battle IQ</span>
-          <span className="text-yellow-300">
-            {characterState.stats.battleIQ || "x"}
-          </span>
-        </div>
-        <div
-          className="flex justify-between cursor-pointer hover:text-amber-400 text-lg"
-          onClick={() => {
-            jumpToWheel("martialArts");
-            handleBlur(); // Bỏ focus khi nhấn Martial Arts
-          }}
-        >
-          <span>Martial Arts</span>
-          <span className="text-orange-400">
-            {characterState.stats.martialArts || "x"}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
+    // Actions
+    dispatch,
+    jumpToWheel,
+    handleNextStep,
+    nextStep,
+    resetWheels: resetAll,
+    handleGetData,
+    handleCharacterComplete,
+    setShowDialog,
+    setCurrentWheel,
+
+    // Progress tracking
+    quirkStep,
+    quirkCount,
+    gearStep,
+    gearCount,
+    legacyGearStep,
+    legacyGearCount,
+    enchantStep,
+    enchantCount,
+    powerStep,
+    powerCount,
+    charDevStep,
+    charDevMax,
+  };
 };
-
-  const CenterWheel = () => (
-    <div className="flex-1 flex flex-col items-center justify-center">
-      {/* Nút get data lên trên */}
-      <div className="flex gap-6 ">
-        <button
-          onClick={handleGetData}
-          disabled={isSpinning}
-          className="px-6 py-2 mb-4 min-w-[150px] max-w-[150px] bg-[#3a2a18] border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition disabled:opacity-40"
-        >
-          Get Data
-        </button>
-        {/* Nút Back */}
-        <button
-          onClick={() => (window.location.href = "/")}
-          disabled={isSpinning}
-          className="px-6 py-2 mb-4 min-w-[150px] max-w-[150px] bg-gray-700 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition disabled:opacity-40"
-        >
-          Back
-        </button>
-      </div>
-      <h1 className="text-3xl font-bold mb-2 text-[#d4af37] drop-shadow-[0_0_15px_rgba(255,200,100,0.8)] tracking-widest">
-        {currentWheel.title} Wheel
-      </h1>
-      <div className="mb-4">
-        <div
-          className={`px-6 py-2 rounded-lg text-xl font-bold shadow-[0_0_15px_rgba(255,215,0,0.7)] 
-        border-2 min-h-[48px] min-w-[300px] flex items-center justify-center
-        ${
-          rolledResult
-            ? "border-[#d4af37] bg-black/60 text-amber-300"
-            : "border-[#555] bg-black/30 text-gray-400"
-        }`}
-        >
-          {rolledResult ? rolledResult.name : ""}
-        </div>
-      </div>
-      <div className="relative">
-        <canvas
-          ref={canvasRef}
-          width={CANVAS_SIZE}
-          height={CANVAS_SIZE}
-          className="rounded-full border-4 border-[#8a5b1a] shadow-[0_0_30px_rgba(200,50,50,0.6)] bg-black/40"
-        />
-        <div className="absolute top-1/2 left-1/2 -translate-y-1/2 ml-[-30px] text-red-500 drop-shadow-lg">
-          <img src={arrowImg} alt="arrow" className="w-20 h-24 rotate-90" />
-        </div>
-      </div>
-      <div className="flex gap-6 mt-6">
-        <button
-          onClick={spin}
-          disabled={isSpinning}
-          className="px-8 py-3 bg-[#3a2a18] border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition disabled:opacity-40"
-        >
-          Roll
-        </button>
-        {rolledResult && (
-          <button
-            onClick={() => {
-              if (currentWheel.key === "pve") {
-                handleCharacterComplete();
-              } else {
-                nextStep();
-              }
-            }}
-            className="px-8 py-3 bg-green-700 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition"
-          >
-            Next
-          </button>
-        )}
-
-        <button
-          onClick={resetWheels}
-          disabled={isSpinning}
-          className="px-8 py-3 bg-[#3a2a18] border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition disabled:opacity-40"
-        >
-          Reset
-        </button>
-      </div>
-    </div>
-  );
-
-  const RightPanel = () => (
-    <div className="w-1/4 flex flex-col gap-6 border-4 border-[#5a2d0c] p-4 rounded-xl shadow-[0_0_30px_rgba(200,50,0,0.8)] bg-black/70 h-full overflow-y-auto">
-      {/* Weapons */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl min-h-[200px] max-h-[200px]">
-        <p
-          onClick={() => jumpToWheel("weapon")}
-          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
-        >
-          Weapons
-        </p>
-        <div className="pt-2 grid grid-cols-2 gap-2 min-h-[120px] max-h-[120px]">
-          {Array.from({ length: 2 }).map((_, idx) => {
-            const w = characterState.weapons[idx];
-            return w ? (
-              <div
-                key={idx}
-                className="flex min-h-[120px] max-h-[120px] flex-col items-center border border-[#d4af37] rounded p-2 bg-black/50"
-              >
-                <div className="w-20 h-20 flex items-center justify-center bg-gray-700 text-white mb-2">
-                  {w.image ? (
-                    <img
-                      src={w.image}
-                      alt={w.name}
-                      className="w-20 h-20 object-contain"
-                    />
-                  ) : (
-                    "No Img"
-                  )}
-                </div>
-                <span className="text-amber-300 font-bold text-sm">
-                  {w.name}
-                  {!w.usable && " - không dùng được"}
-                </span>
-              </div>
-            ) : (
-              <div
-                key={idx}
-                className="flex flex-col items-center justify-center border border-gray-500 rounded p-2 bg-black/40 text-gray-400"
-              >
-                Empty
-              </div>
-            );
-          })}
-        </div>
-      </div>
-{/* Enchants - Thêm mới */}
-    <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl flex flex-col">
-      <p
-        onClick={() => jumpToWheel("enchant")}
-        className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
-      >
-        Enchants
-      </p>
-      <ul className="ml-4 space-y-2 text-lg mt-3 overflow-y-auto max-h-[90px] min-h-[90px]">
-        {characterState.enchants.length > 0 ? (
-          characterState.enchants.map((e, i) => (
-            <li key={i} className="text-amber-300">
-              • {e.name}
-            </li>
-          ))
-        ) : (
-          <li className="text-gray-400"></li>
-        )}
-      </ul>
-    </div>
-      {/* Quirks */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl flex flex-col">
-        <p
-          onClick={() => jumpToWheel("quirk")}
-          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
-        >
-          Quirks
-        </p>
-        <ul className="ml-4 space-y-2 text-lg mt-3 overflow-y-auto max-h-[90px] min-h-[90px]">
-          {characterState.quirks.map((q, i) => (
-            <li key={i} className="text-amber-300">
-              • {q.name}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Gear */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl flex flex-col">
-        <div className="flex flex-col min-h-[130px] max-h-[130px] overflow-y-auto">
-          <p
-            onClick={() => jumpToWheel("gear")}
-            className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
-          >
-            Gear
-          </p>
-          <div className="max-h-40 overflow-y-auto pr-2">
-            <ul className="list-disc pl-6 space-y-1">
-              {characterState.gears.map((g, idx) => (
-                <li key={idx} className="text-yellow-300">
-                  {g.name}
-                  {!g.usable && " - Unusable"}
-                </li>
-              ))}
-              {characterState.legacyGears.map((g, idx) => (
-                <li
-                  key={`legacy-${idx}`}
-                  className="text-yellow-300 font-bold animate-pulse drop-shadow-[0_0_6px_gold]"
-                >
-                  {g.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Powers */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl">
-        <div className="flex flex-col">
-          <p
-            onClick={() => jumpToWheel("power")}
-            className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
-          >
-            Powers
-          </p>
-          <div className="max-h-40 overflow-y-auto pr-2">
-            <ul className="list-disc pl-6 space-y-1 min-h-[130px] max-h-[130px] overflow-y-auto">
-              {characterState.powers.map((p, idx) => (
-                <li key={idx} className="text-yellow-300">
-                  {p.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* PvE */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl">
-        <div className="flex flex-col">
-          <p
-            onClick={() => jumpToWheel("pve")}
-            className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
-          >
-            PvE
-          </p>
-          <span className="text-amber-300">
-            {characterState.results.pve || "???"}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="w-screen h-screen relative flex flex-col text-amber-200 font-serif">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('./assets/Backgrounds/wheel-bg.png')" }}
-      />
-      <div className="absolute inset-0 bg-black/70" />
-
-      <div className="flex flex-1 z-10">
-        <LeftPanel />
-        <CenterWheel />
-        <RightPanel />
-      </div>
-
-      {Object.entries(audioSources).map(([house, src]) => (
-        <audio key={house} ref={audioRefs[house]} src={src} preload="auto" />
-      ))}
-      {showDialog && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-          <div className="bg-black/90 border-2 border-[#d4af37] p-6 rounded-lg w-3/4 max-h-[80vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold text-amber-300 mb-4">
-              Character Info
-            </h2>
-            <pre className="text-white text-sm">
-              {JSON.stringify(dialogData, null, 2)}
-            </pre>
-            <button
-              onClick={() => setShowDialog(false)}
-              className="mt-4 px-4 py-2 bg-gray-700 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
