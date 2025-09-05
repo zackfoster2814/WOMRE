@@ -48,6 +48,7 @@ import { powerCountWheel, PowerWheel } from "@/Common/Config/PowerConfig.ts";
 import { charDevWheel } from "@/Common/Config/CharDevConfig.ts";
 import { pveWheel } from "@/Common/Config/PvEConfig.ts";
 import { exportCharacter } from "@/Common/exportCharacter.ts";
+import { playerWheel } from "@/Common/Config/PlayerConfig.ts";
 
 // Types
 interface CharacterState {
@@ -100,7 +101,7 @@ const initialState: CharacterState = {
   characterName: "",
 };
 
-const DEBUG_RESULT = "Guardian of Demons";
+const DEBUG_RESULT = "Cute";
 
 // Reducer
 function characterReducer(
@@ -670,7 +671,13 @@ export const useCharacterWheel = () => {
             (s) => s.name === resultName
           )!;
           dispatch({ type: "ADD_QUIRK", quirk });
-          if (quirkStep + 1 < quirkCount) {
+          if (["q55", "q9", "q6"].includes(quirk.id)) {
+            setCurrentWheel({
+              ...playerWheel,
+              key: "player",
+              title: "Player",
+            });
+          } else if (quirkStep + 1 < quirkCount) {
             setQuirkStep(quirkStep + 1);
             setCurrentWheel({
               key: "quirk",
@@ -707,6 +714,40 @@ export const useCharacterWheel = () => {
           }
           break;
 
+        case "player":
+          dispatch({ type: "SET_RESULT", key: "player", value: resultName });
+          if (quirkStep + 1 < quirkCount) {
+            setQuirkStep(quirkStep + 1);
+            setCurrentWheel({
+              key: "quirk",
+              title: "Quirk",
+              sections: quirkList,
+            });
+          } else {
+            // Check for special archetype house assignments
+            const hasSpecialArchetype = characterState.archetypes.some(
+              (archetype: any) => archetype.name === "Dark Magician"
+            );
+
+            if (hasSpecialArchetype) {
+              dispatch({
+                type: "SET_RESULT",
+                key: "house",
+                value: "Dark Brotherhood",
+              });
+              setCurrentWheel(gearCountWheel);
+            } else if (characterState.results.race === "Uma") {
+              dispatch({
+                type: "SET_RESULT",
+                key: "house",
+                value: "Tracen Academy",
+              });
+              setCurrentWheel(gearCountWheel);
+            } else {
+              setCurrentWheel(houseWheel);
+            }
+          }
+          break;
         case "house":
           dispatch({ type: "SET_RESULT", key: "house", value: resultName });
           // House special wheels
