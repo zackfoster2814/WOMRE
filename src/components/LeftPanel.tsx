@@ -113,6 +113,22 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
     handleBlur();
   }, [jumpToWheel, handleBlur]);
 
+  const generateDescription = () => {
+    const { results, archetypes } = characterState;
+    const race = results.race || "Unknown";
+    const subrace = results.subrace || "";
+    const archetypeNames = archetypes.map((a: any) => a.name).join(", ") || "None";
+    const player = results.player || "";
+
+    let description = `This ${race}${subrace ? ` (${subrace})` : ""} is a ${
+      archetypeNames
+    } from ${results.house || "an unknown house"}. Their unique traits define their journey in this world.`;
+    if (player) {
+      description += ` They are deeply connected to their lover, ${player}.`;
+    }
+    return description;
+  };
+
   return (
     <div className="w-[22%] flex flex-col gap-4 border-2 border-[#5a2d0c] p-3 rounded-lg shadow-[0_0_20px_rgba(200,50,0,0.6)] bg-black/70">
       {/* Character Image Placeholder */}
@@ -296,6 +312,16 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
             </div>
           );
         })}
+      </div>
+
+      {/* Description Section */}
+      <div className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
+        <p className="font-bold underline text-[#f5e6d3] text-xl mb-2">Description</p>
+        <p className="text-amber-200 text-base leading-relaxed">
+          {characterState.results.race
+            ? generateDescription()
+            : "No description available yet. Select a race to view details."}
+        </p>
       </div>
     </div>
   );
