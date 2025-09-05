@@ -171,6 +171,97 @@ export const useCharacterWheel = () => {
       //   resultName = DEBUG_RESULT;
       // }
 
+      const handleArchetypeResult = (result: any) => {
+        if (result?.shouldContinue && result?.message) {
+          switch (result.message) {
+            case "proceed-to-archetype":
+              const archetypeParams = getFlowHandlerParams();
+              flowHandlers.jumpToWheel("archetype", archetypeParams);
+              break;
+          }
+        }
+      };
+
+      // Helper function to handle ItemHandlerResult
+      const handleItemResult = (result: any) => {
+        if (result?.shouldContinue && result?.message) {
+          switch (result.message) {
+            case "proceed-to-weapons":
+              const weaponParams = getFlowHandlerParams();
+              flowHandlers.jumpToWheel("weapon", weaponParams);
+              break;
+            case "proceed-to-stats":
+              goToStats();
+              break;
+            case "finalize-weapon-no-enchants":
+            case "finalize-weapon-with-enchants":
+              const weaponData = JSON.parse(
+                characterState.results["temp-current-weapon"] || "{}"
+              );
+              const isUsable =
+                characterState.results["weapon-usable"] === "true";
+              const enchants =
+                result.message === "finalize-weapon-with-enchants"
+                  ? JSON.parse(
+                      characterState.results["temp-weapon-enchants"] || "[]"
+                    )
+                  : [];
+
+              dispatch({
+                type: "ADD_WEAPON",
+                weapon: {
+                  ...weaponData,
+                  usable: isUsable,
+                  enchants: enchants,
+                },
+              });
+
+              // Clear temp data
+              dispatch({
+                type: "SET_RESULT",
+                key: "temp-current-weapon",
+                value: "",
+              });
+              dispatch({ type: "SET_RESULT", key: "weapon-usable", value: "" });
+              dispatch({
+                type: "SET_RESULT",
+                key: "temp-weapon-enchants",
+                value: "",
+              });
+
+              // Go to power count
+              const powerParams = getFlowHandlerParams();
+              flowHandlers.jumpToWheel("power", powerParams);
+              break;
+            case "finalize-unusable-weapon":
+              const unusableWeaponData = JSON.parse(
+                characterState.results["temp-current-weapon"] || "{}"
+              );
+
+              dispatch({
+                type: "ADD_WEAPON",
+                weapon: {
+                  ...unusableWeaponData,
+                  usable: false,
+                  enchants: [],
+                },
+              });
+
+              // Clear temp data
+              dispatch({
+                type: "SET_RESULT",
+                key: "temp-current-weapon",
+                value: "",
+              });
+              dispatch({ type: "SET_RESULT", key: "weapon-usable", value: "" });
+
+              const unusablePowerParams = getFlowHandlerParams();
+              flowHandlers.jumpToWheel("power", unusablePowerParams);
+              break;
+          }
+        }
+      };
+
       switch (key) {
         // Race & Sub-race flow
         case "race":
@@ -191,12 +282,15 @@ export const useCharacterWheel = () => {
           return raceHandlers.handleSubraceSelection(resultName, handlerParams);
 
         case "uniqueVampireTrain":
-        case "vampireTaste":
-          return archetypeHandlers.handleVampireFlow(
+        case "vampireTaste": {
+          const result = archetypeHandlers.handleVampireFlow(
             key,
             resultName,
             handlerParams
           );
+          handleArchetypeResult(result);
+          break;
+        }
 
         // Archetype flow
         case "archetype": {
@@ -280,62 +374,98 @@ export const useCharacterWheel = () => {
           setLegacyGearStep(0);
           return handleGearCountCompletion();
 
-        case "gear":
-          return itemHandlers.handleGearFlow(
+        case "gear": {
+          const result = itemHandlers.handleGearFlow(
             resultName,
             currentWheel,
             handlerParams
           );
+          handleItemResult(result);
+          break;
+        }
 
-        case "legacy-gear":
-          return itemHandlers.handleLegacyGearFlow(
+        case "legacy-gear": {
+          const result = itemHandlers.handleLegacyGearFlow(
             resultName,
             currentWheel,
             handlerParams
           );
+          handleItemResult(result);
+          break;
+        }
 
         // Noble Swordsman special gear
         case "noble-magic-gear":
-        case "noble-physical-gear":
-          return itemHandlers.handleNobleGearFlow(
+        case "noble-physical-gear": {
+          const result = itemHandlers.handleNobleGearFlow(
             key,
             resultName,
             currentWheel,
             handlerParams
           );
+          handleItemResult(result);
+          break;
+        }
 
         // Weapon flow
-        case "weapon-exist":
-          return itemHandlers.handleWeaponExistFlow(resultName, handlerParams);
-
-        case "unique-weapon-exist":
-          return itemHandlers.handleUniqueWeaponExistFlow(
+        case "weapon-exist": {
+          const result = itemHandlers.handleWeaponExistFlow(
             resultName,
             handlerParams
           );
+          handleItemResult(result);
+          break;
+        }
+
+        case "unique-weapon-exist": {
+          const result = itemHandlers.handleUniqueWeaponExistFlow(
+            resultName,
+            handlerParams
+          );
+          handleItemResult(result);
+          break;
+        }
 
         case "weapon":
-        case "unique-weapon":
-          return itemHandlers.handleWeaponFlow(
+        case "unique-weapon": {
+          const result = itemHandlers.handleWeaponFlow(
             key,
             resultName,
             currentWheel,
             handlerParams
           );
+          handleItemResult(result);
+          break;
+        }
 
-        case "weapon-enchant-count":
-          return itemHandlers.handleEnchantCountFlow(resultName, handlerParams);
+        case "weapon-enchant-count": {
+          const result = itemHandlers.handleEnchantCountFlow(
+            resultName,
+            handlerParams
+          );
+          handleItemResult(result);
+          break;
+        }
 
-        case "weapon-enchant":
-          return itemHandlers.handleEnchantFlow(
+        case "weapon-enchant": {
+          const result = itemHandlers.handleEnchantFlow(
             resultName,
             currentWheel,
             handlerParams
           );
+          handleItemResult(result);
+          break;
+        }
 
         // Usability checks
-        case "usabilityCheck":
-          return itemHandlers.handleUsabilityCheck(resultName, handlerParams);
+        case "usabilityCheck": {
+          const result = itemHandlers.handleUsabilityCheck(
+            resultName,
+            handlerParams
+          );
+          handleItemResult(result);
+          break;
+        }
 
         // Power & Character Development
         case "power-count":
@@ -365,7 +495,9 @@ export const useCharacterWheel = () => {
       raceHandlers,
       archetypeHandlers,
       itemHandlers,
+      flowHandlers,
       getHandlerParams,
+      getFlowHandlerParams,
       goToStats,
     ]
   );
