@@ -1,160 +1,45 @@
 import { useState, useReducer, useCallback } from "react";
-import { Section, WheelStep } from "@/Common/Types/Types.ts";
-import { raceConfig, raceWheel } from "@/Common/Config/RaceConfig.ts";
-import { subraceMap } from "@/Common/Config/SubRaceConfig.ts";
-import {
-  archetypeWheel,
-  bankaiWheel,
-  dojutsuWheel,
-  domainExpansionWheel,
-  hakiWheel,
-  standsWheel,
-  wibuWheel,
-} from "@/Common/Config/ArchetypeConfig.ts";
-import {
-  getStatWheel,
-  getRaceOrSubrace,
-  usabilityWheel,
-  STAT_WHEELS,
-} from "@/utils/wheelUtils.ts";
-import {
-  archetypeExtraWheels,
-  uniqueVampireTrainWheel,
-  vampireTasteWheel,
-} from "@/Common/Config/ArchetypeExtraWheels.ts";
+import { WheelStep } from "@/Common/Types/Types.ts";
+import { raceWheel } from "@/Common/Config/RaceConfig.ts";
 import { quirkCountOptions, quirkList } from "@/Common/Config/QuirkConfig.ts";
-import { houseWheel } from "@/Common/Config/HouseConfig.ts";
-import {
-  ashinaSwordWheel,
-  dessendreSkillWheel,
-  goldenOrderRuneWheel,
-  starkWolfWheel,
-} from "@/Common/Config/HouseExtraWheels.ts";
 import {
   gearCountWheel,
   gearWheel,
   legacyGearCountWheel,
   legacyGearWheel,
 } from "@/Common/Config/GearConfig.ts";
-import {
-  enchantCountWheel,
-  enchantWheel,
-  uniqueWeaponExistWheel,
-  uniqueWeaponWheel,
-  weaponExistWheel,
-  weaponWheel,
-} from "@/Common/Config/WeaponConfig.ts";
-import { powerCountWheel, PowerWheel } from "@/Common/Config/PowerConfig.ts";
+import { enchantCountWheel } from "@/Common/Config/WeaponConfig.ts";
+import { PowerWheel } from "@/Common/Config/PowerConfig.ts";
 import { charDevWheel } from "@/Common/Config/CharDevConfig.ts";
 import { pveWheel } from "@/Common/Config/PvEConfig.ts";
-import { exportCharacter } from "@/Common/exportCharacter.ts";
+import { STAT_WHEELS } from "@/utils/wheelUtils.ts";
 
-// Types
-interface CharacterState {
-  results: Record<string, string>;
-  stats: Record<string, string>;
-  quirks: Section[];
-  gears: Section[];
-  legacyGears: Section[];
-  weapons: Section[];
-  enchants: Section[];
-  powers: Section[];
-  charDevs: any[];
-  archetypes: any[];
-  characterName: string;
-}
+// Import all handlers
+import { useArchetypeHandlers } from "@/hooks/handlers/useArchetypeHandlers.ts";
+import { useItemHandlers } from "@/hooks/handlers/useItemHandlers.ts";
+import { useRaceHandlers } from "@/hooks/handlers/useRaceHandlers.ts";
+import { useFlowHandlers } from "@/hooks/handlers/useFlowHandlers.ts";
+import { useGameMechanics } from "@/hooks/utils/useGameMechanics.ts";
+import { useCharacterHelpers } from "@/hooks/utils/useCharacterHelpers.ts";
 
-type Action =
-  | { type: "SET_RESULT"; key: string; value: string }
-  | { type: "SET_STAT"; key: string; value: string }
-  | { type: "ADD_QUIRK"; quirk: Section }
-  | { type: "ADD_GEAR"; gear: Section }
-  | { type: "ADD_LEGACY_GEAR"; gear: Section }
-  | { type: "ADD_WEAPON"; weapon: Section }
-  | { type: "ADD_ENCHANT"; enchant: Section }
-  | { type: "ADD_POWER"; power: Section }
-  | { type: "SET_CHARACTER_NAME"; name: string }
-  | { type: "ADD_CHARDEV"; charDev: Section }
-  | { type: "ADD_ARCHETYPE"; archetype: Section }
-  | { type: "RESET" };
+// Import reducer and types
+import {
+  characterReducer,
+  initialCharacterState,
+} from "@/reducers/characterReducer.ts";
+import { CharacterState, CharacterAction } from "@/types/characterTypes.ts";
 
-// Initial state
-const initialState: CharacterState = {
-  results: {},
-  stats: {
-    strength: "",
-    speed: "",
-    durability: "",
-    iq: "",
-    battleIQ: "",
-    martialArts: "",
-  },
-  quirks: [],
-  gears: [],
-  legacyGears: [],
-  weapons: [],
-  enchants: [],
-  powers: [],
-  charDevs: [],
-  archetypes: [],
-  characterName: "",
-};
-
-const DEBUG_RESULT = "Guardian of Demons";
-
-// Reducer
-function characterReducer(
-  state: CharacterState,
-  action: Action
-): CharacterState {
-  switch (action.type) {
-    case "SET_RESULT":
-      return {
-        ...state,
-        results: { ...state.results, [action.key]: action.value },
-      };
-    case "SET_STAT":
-      return {
-        ...state,
-        stats: { ...state.stats, [action.key]: action.value },
-      };
-    case "ADD_QUIRK":
-      return { ...state, quirks: [...state.quirks, action.quirk] };
-    case "ADD_GEAR":
-      return { ...state, gears: [...state.gears, action.gear] };
-    case "ADD_LEGACY_GEAR":
-      return { ...state, legacyGears: [...state.legacyGears, action.gear] };
-    case "ADD_WEAPON":
-      return { ...state, weapons: [...state.weapons, action.weapon] };
-    case "ADD_ENCHANT":
-      return { ...state, enchants: [...state.enchants, action.enchant] };
-    case "ADD_POWER":
-      return { ...state, powers: [...state.powers, action.power] };
-    case "SET_CHARACTER_NAME":
-      return { ...state, characterName: action.name };
-    case "ADD_CHARDEV":
-      return {
-        ...state,
-        charDevs: [...state.charDevs, action.charDev],
-      };
-    case "ADD_ARCHETYPE":
-      return {
-        ...state,
-        archetypes: [...state.archetypes, action.archetype],
-      };
-    case "RESET":
-      return initialState;
-    default:
-      return state;
-  }
-}
+// const DEBUG_RESULT = "Bloodclan Berserker";
 
 export const useCharacterWheel = () => {
-  // Core state
-  const [characterState, dispatch] = useReducer(characterReducer, initialState);
+  // Core state management
+  const [characterState, dispatch] = useReducer(
+    characterReducer,
+    initialCharacterState
+  );
   const [currentWheel, setCurrentWheel] = useState<WheelStep>(raceWheel);
 
-  // Progress tracking
+  // Progress tracking states
   const [statStep, setStatStep] = useState(0);
   const [quirkStep, setQuirkStep] = useState(0);
   const [quirkCount, setQuirkCount] = useState(0);
@@ -173,490 +58,202 @@ export const useCharacterWheel = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [dialogData, setDialogData] = useState<any>(null);
 
-  // Navigation function for clicking labels
-  const jumpToWheel = useCallback(
-    (wheelKey: string) => {
-      const { results } = characterState;
-      const raceOrSubrace = getRaceOrSubrace(results);
-      switch (wheelKey) {
-        case "race":
-          setCurrentWheel(raceWheel);
-          break;
-        case "subrace":
-          if (results.race && subraceMap[results.race]) {
-            setCurrentWheel({
-              key: "subrace",
-              title: raceConfig[results.race]?.subrace || "Subrace",
-              sections: subraceMap[results.race],
-            });
-          }
-          break;
-        case "archetype":
-          if (results.race) {
-            setCurrentWheel(archetypeWheel);
-          }
-          break;
-        case "strength":
-        case "speed":
-        case "durability":
-        case "iq":
-        case "battleIQ":
-        case "martialArts":
-          if (raceOrSubrace) {
-            const wheel = getStatWheel(raceOrSubrace, wheelKey);
-            if (wheel) {
-              setCurrentWheel(wheel);
-              setStatStep(STAT_WHEELS.indexOf(wheelKey) + 1);
-            }
-          }
-          break;
-        case "quirk":
-          if (statStep >= STAT_WHEELS.length) {
-            setCurrentWheel({
-              key: "quirk-count",
-              title: "Quirk Count",
-              sections: quirkCountOptions,
-            });
-          }
-          break;
-        case "house":
-          if (
-            characterState.quirks.length > 0 ||
-            statStep >= STAT_WHEELS.length
-          ) {
-            setCurrentWheel(houseWheel);
-          }
-          break;
-        case "gear":
-          setCurrentWheel(gearCountWheel);
-          break;
-        case "weapon":
-          setCurrentWheel(weaponExistWheel);
-          break;
-        case "power":
-          if (raceOrSubrace) {
-            setCurrentWheel(PowerWheel);
-          }
-          break;
-        case "charDev":
-          setCurrentWheel(charDevWheel);
-          break;
-        case "pve":
-          setCurrentWheel(pveWheel);
-          break;
-      }
-    },
-    [characterState, statStep, gearCount]
+  // Initialize all handlers
+  const archetypeHandlers = useArchetypeHandlers();
+  const itemHandlers = useItemHandlers();
+  const raceHandlers = useRaceHandlers();
+  const flowHandlers = useFlowHandlers();
+  const gameMechanics = useGameMechanics();
+  const characterHelpers = useCharacterHelpers();
+
+  const getFlowHandlerParams = useCallback(
+    () => ({
+      characterState,
+      setCurrentWheel,
+      setStatStep,
+      statStep,
+      gearCount,
+    }),
+    [characterState, setCurrentWheel, setStatStep, statStep, gearCount]
   );
 
-  // Helper to get complete character info
-  const getCompleteCharacterInfo = useCallback(() => {
-    return {
-      name: characterState.characterName,
-      race: characterState.results.race,
-      subrace: characterState.results.subrace,
-      archetype: characterState.results.archetype,
-      stats: characterState.stats,
-      quirks: characterState.quirks.map((q) => q.name),
-      house: characterState.results.house,
-      gears: characterState.gears.map((g) => ({
-        name: g.name,
-        usable: g.usable,
-      })),
-      legacyGears: characterState.legacyGears.map((g) => ({
-        name: g.name,
-        usable: g.usable,
-      })),
-      weapons: characterState.weapons.map((w) => ({
-        name: w.name,
-        usable: w.usable,
-      })),
-      enchants: characterState.enchants.map((e) => e.name),
-      powers: characterState.powers.map((p) => p.name),
-      charDevs: characterState.charDevs.map((c) => c.name),
-      pve: characterState.results.pve,
-      // Additional archetype results
-      trickstersCard: characterState.results["trickster-card"],
-      slayerRace: characterState.results["slayer-race"],
-      demonSubrace: characterState.results["demon-subrace"],
-      maraisRace1: characterState.results["marais-race-1"],
-      maraisRace2: characterState.results["marais-race-2"],
-      goldenOrderRune: characterState.results["golden-order-rune"],
-      starkWolf: characterState.results["stark-wolf"],
-      ashinaSword: characterState.results["ashina-sword"],
-      dessendreSkill: characterState.results["dessendre-skill"],
-      houseSpyTarget: characterState.results["house-spy-target"],
-    };
-  }, [characterState]);
+  // Helper to transition to stats - MOVED UP BEFORE USAGE
+  const goToStats = useCallback(() => {
+    const params = getFlowHandlerParams();
+    return flowHandlers.goToStats(params);
+  }, [flowHandlers, getFlowHandlerParams]);
 
-  const handleGetData = useCallback(() => {
-    const data = getCompleteCharacterInfo();
-    setDialogData(data);
-    setShowDialog(true);
-  }, [getCompleteCharacterInfo]);
+  // Wrapper for Noble Swordsman flow to match ItemHandlers interface
+  const handleNobleSwordsmanFlowWrapper = useCallback(
+    (weapon: any) => {
+      const archetypeParams = {
+        dispatch,
+        setCurrentWheel,
+        setEnchantCount,
+        setEnchantStep,
+        characterState,
+        goToStats,
+      };
+      return archetypeHandlers.handleNobleSwordsmanFlow(
+        weapon,
+        archetypeParams
+      );
+    },
+    [
+      dispatch,
+      setCurrentWheel,
+      setEnchantCount,
+      setEnchantStep,
+      characterState,
+      goToStats,
+      archetypeHandlers.handleNobleSwordsmanFlow,
+    ]
+  );
 
-  // Flow management - Main handler for wheel progression
+  // Helper parameters for handlers
+  const getHandlerParams = useCallback(
+    () => ({
+      dispatch,
+      setCurrentWheel,
+      setStatStep,
+      characterState,
+      gearStep,
+      gearCount,
+      setGearStep,
+      legacyGearStep,
+      legacyGearCount,
+      setLegacyGearStep,
+      enchantStep,
+      enchantCount,
+      setEnchantStep,
+      setEnchantCount,
+      statStep,
+      goToStats,
+      handleNobleSwordsmanFlow: handleNobleSwordsmanFlowWrapper,
+    }),
+    [
+      dispatch,
+      setCurrentWheel,
+      setStatStep,
+      characterState,
+      gearStep,
+      gearCount,
+      setGearStep,
+      legacyGearStep,
+      legacyGearCount,
+      setLegacyGearStep,
+      enchantStep,
+      enchantCount,
+      setEnchantStep,
+      setEnchantCount,
+      statStep,
+      goToStats,
+      handleNobleSwordsmanFlowWrapper,
+    ]
+  );
+
+  // Navigation function
+  const jumpToWheel = useCallback(
+    (wheelKey: string) => {
+      const params = getFlowHandlerParams();
+      return flowHandlers.jumpToWheel(wheelKey, params);
+    },
+    [flowHandlers, getFlowHandlerParams]
+  );
+
+  // Main flow dispatcher
   const handleNextStep = useCallback(
     (key: string, resultName: string) => {
-      const { results } = characterState;
+      const handlerParams = getHandlerParams();
 
-      // Helper to transition to stats
-      const goToStats = () => {
-        const raceOrSubrace = getRaceOrSubrace(results);
-        if (!raceOrSubrace) return;
-        const firstWheel = getStatWheel(raceOrSubrace, STAT_WHEELS[0]);
-        if (firstWheel) {
-          setCurrentWheel(firstWheel);
-          setStatStep(1);
-        }
-      };
+      // Use debug result if enabled
+      // if (key === "archetype") {
+      //   resultName = DEBUG_RESULT;
+      // }
 
       switch (key) {
         // Race & Sub-race flow
         case "race":
-          dispatch({ type: "SET_RESULT", key: "race", value: resultName });
-          if (resultName === "Skeleton") {
-            setCurrentWheel({
-              ...raceWheel,
-              key: "skeleton-lineage",
-              title: "Skeleton Lineage",
-              sections: raceWheel.sections.filter((s) => s.name !== "Skeleton"),
-            });
-          } else if (resultName === "Uma") {
-            setCurrentWheel({
-              key: "uma-parent-1",
-              title: "Uma Parent Race 1",
-              sections: subraceMap["Uma"],
-            });
-          } else if (resultName === "Angel") {
-            dispatch({
-              type: "ADD_ARCHETYPE",
-              archetype: {
-                id: "16",
-                name: "Pacifist",
-                weight: 2,
-                color: "#98FB98",
-              },
-            });
-            setCurrentWheel({
-              key: "subrace",
-              title: raceConfig[resultName]?.subrace || "Subrace",
-              sections: subraceMap[resultName],
-            });
-          } else if (subraceMap[resultName]?.length > 0) {
-            setCurrentWheel({
-              key: "subrace",
-              title: raceConfig[resultName]?.subrace || "Subrace",
-              sections: subraceMap[resultName],
-            });
-          } else {
-            setCurrentWheel(archetypeWheel);
-          }
-          break;
+          return raceHandlers.handleRaceSelection(resultName, handlerParams);
 
         case "uma-parent-1":
-          dispatch({
-            type: "SET_RESULT",
-            key: "uma-parent-1",
-            value: resultName,
-          });
-          setCurrentWheel({
-            key: "uma-parent-2",
-            title: "Uma Parent Race 2",
-            sections: subraceMap["Uma"].filter((s) => s.name !== resultName),
-          });
-          break;
-
         case "uma-parent-2":
-          dispatch({
-            type: "SET_RESULT",
-            key: "uma-parent-2",
-            value: resultName,
-          });
-          dispatch({
-            type: "SET_RESULT",
-            key: "subrace",
-            value: `${characterState.results["uma-parent-1"]} - ${resultName}`,
-          });
-          setCurrentWheel(archetypeWheel);
-          break;
+          return raceHandlers.handleUmaParentFlow(
+            key,
+            resultName,
+            handlerParams
+          );
 
         case "skeleton-lineage":
-          dispatch({ type: "SET_RESULT", key: "subrace", value: resultName });
-          setCurrentWheel(archetypeWheel);
-          break;
+          return raceHandlers.handleSkeletonLineage(resultName, handlerParams);
 
         case "subrace":
-          dispatch({ type: "SET_RESULT", key: "subrace", value: resultName });
-          if (characterState.results.race === "Vampire") {
-            setCurrentWheel({
-              ...uniqueVampireTrainWheel,
-              key: "uniqueVampireTrain",
-              title: "Unique Taste Train",
-            });
-          } else {
-            setCurrentWheel(archetypeWheel);
-          }
-          break;
+          return raceHandlers.handleSubraceSelection(resultName, handlerParams);
 
         case "uniqueVampireTrain":
-          dispatch({
-            type: "SET_RESULT",
-            key: "uniqueVampireTrain",
-            value: resultName,
-          });
-          if (resultName === "Có Khẩu vị độc đáo") {
-            setCurrentWheel({
-              ...vampireTasteWheel,
-              key: "vampireTaste",
-              title: "Unique Vampire Taste",
-            });
-          } else {
-            setCurrentWheel(archetypeWheel);
-          }
-          break;
-
         case "vampireTaste":
-          dispatch({
-            type: "SET_RESULT",
-            key: "vampireTaste",
-            value: resultName,
-          });
-          setCurrentWheel(archetypeWheel);
-          break;
+          return archetypeHandlers.handleVampireFlow(
+            key,
+            resultName,
+            handlerParams
+          );
 
-        // Archetype
+        // Archetype flow
         case "archetype": {
           const archetype = currentWheel.sections.find(
-            // (s) => s.name === resultName
-            (s) => s.name === DEBUG_RESULT || resultName
+            (s) => s.name === resultName
           )!;
           dispatch({ type: "ADD_ARCHETYPE", archetype });
-          if (!resultName) {
-            resultName = DEBUG_RESULT;
-          }
-          // Special archetype power assignments
-          if (resultName === "Warrior of Sunlight") {
-            // Add Sacred Fire and Fair Duel powers automatically
-            dispatch({
-              type: "ADD_POWER",
-              power: {
-                id: "55",
-                name: "Sacred Fire",
-                effect: "Nhận +1 all stats nếu đối thủ là Vampire hoặc Demon.",
-                weight: 0.9,
-                color: "",
-              },
-            });
-            dispatch({
-              type: "ADD_POWER",
-              power: {
-                id: "65",
-                name: "Fair Duel",
-                effect:
-                  "Bạn và đối thủ miễn nhiễm với mọi hiệu ứng giảm stat từ nhau.",
-                weight: 0.9,
-                color: "",
-              },
-            });
-          } else if (resultName === "Spy") {
-            setCurrentWheel({
-              ...houseWheel,
-              key: "house-spy-target",
-              title: "Target",
-              onComplete: goToStats,
-            });
-          } else if (resultName === "Knight of Gods") {
-            // Store Holy Symbol temporarily for usability check
-            const holySymbol = {
-              id: "8",
-              name: "Holy Symbol",
-              weight: 2.78,
-              color: "#FF69B4",
-              description:
-                "Khi combat với Demon, Vampire, Spirit, Orc, Skeleton, Goblin: đối thủ -1 all stats. (60%, Magic)",
-              usableRate: 60,
-            };
 
-            dispatch({
-              type: "SET_RESULT",
-              key: "temp-knight-gear",
-              value: JSON.stringify(holySymbol),
-            });
-
-            // Call usability wheel for Holy Symbol
-            setCurrentWheel(
-              usabilityWheel(holySymbol.usableRate, holySymbol.name)
-            );
-          } else if (resultName === "Trickster") {
-            const aceWheel = archetypeExtraWheels[resultName];
-            if (aceWheel) {
-              setCurrentWheel({
-                ...aceWheel,
-                key: "trickster-card",
-                title: "Trickster - Ace of Spades",
-                onComplete: goToStats,
-              });
-            } else {
-              goToStats();
-            }
-          } else if (resultName === "Slayer") {
-            setCurrentWheel({
-              ...raceWheel,
-              key: "slayer-race",
-              title: "Slayer - Choose Race",
-              onComplete: goToStats,
-            });
-          } else if (resultName === "Guardian of Demons") {
-            setCurrentWheel({
-              key: "demon-subrace",
-              title: "Guardian of Demons - Demon Subrace",
-              sections: subraceMap["Demon"],
-              onComplete: goToStats,
-            });
-          } else if (resultName === "Wibu") {
-            setCurrentWheel(wibuWheel);
-          } else {
-            const extraWheel = archetypeExtraWheels[resultName];
-            if (extraWheel) {
-              setCurrentWheel({ ...extraWheel, onComplete: goToStats });
-            } else {
-              goToStats();
-            }
-          }
-          break;
+          const archetypeParams = { ...handlerParams, goToStats };
+          return archetypeHandlers.handleArchetypeResult(
+            resultName,
+            currentWheel,
+            archetypeParams
+          );
         }
 
         case "wibu":
-          dispatch({
-            type: "SET_RESULT",
-            key: "wibu-series",
-            value: resultName,
-          });
-          const wibuWheels: Record<string, WheelStep> = {
-            JJK: domainExpansionWheel,
-            Jojo: standsWheel,
-            Naruto: dojutsuWheel,
-            "One Piece": hakiWheel,
-            Bleach: bankaiWheel,
-          };
-          const nextWheel = wibuWheels[resultName];
-          if (nextWheel) {
-            setCurrentWheel({
-              ...nextWheel,
-              key: `${resultName.toLowerCase()}-extra`,
-              title: `${resultName} Extra Roll`,
-              onComplete: goToStats,
-            });
-          } else {
-            goToStats();
-          }
-          break;
+          const archetypeParams = { ...handlerParams, goToStats };
+          return archetypeHandlers.handleWibuSeriesResult(
+            resultName,
+            archetypeParams
+          );
 
-        // Handle special archetype wheels results
+        // Special archetype wheels
         case "trickster-card":
-          dispatch({
-            type: "SET_RESULT",
-            key: "trickster-card",
-            value: resultName,
-          });
-          if (currentWheel.onComplete) currentWheel.onComplete();
-          break;
-
         case "slayer-race":
-          dispatch({
-            type: "SET_RESULT",
-            key: "slayer-race",
-            value: `${resultName} Slayer`,
-          });
-          if (currentWheel.onComplete) currentWheel.onComplete();
-          break;
-
         case "house-spy-target":
-          dispatch({
-            type: "SET_RESULT",
-            key: "house-spy-target",
-            value: resultName,
-          });
-          if (currentWheel.onComplete) currentWheel.onComplete();
-          break;
+        case "demon-subrace":
+          const specialParams = { ...handlerParams, goToStats };
+          return archetypeHandlers.handleSpecialArchetypeWheelResult(
+            key,
+            resultName,
+            currentWheel,
+            specialParams
+          );
 
-        // Stats (Strength, Speed, Durability, IQ, Battle IQ, Martial Arts)
+        // Stats handling with race-specific logic
         case "strength":
         case "speed":
         case "battleIQ":
         case "martialArts":
           dispatch({ type: "SET_STAT", key, value: resultName });
-          const currentStatIndex = STAT_WHEELS.indexOf(key);
-          if (currentStatIndex < STAT_WHEELS.length - 1) {
-            // Next stat
-            const nextStatKey = STAT_WHEELS[currentStatIndex + 1];
-            const raceOrSubrace = getRaceOrSubrace(results);
-            const nextWheel = getStatWheel(raceOrSubrace, nextStatKey);
-            if (nextWheel) {
-              setCurrentWheel(nextWheel);
-              setStatStep(currentStatIndex + 2);
-            }
-          } else {
-            // Stats complete, go to Quirk Count
-            setCurrentWheel({
-              key: "quirk-count",
-              title: "Quirk Count",
-              sections: quirkCountOptions,
-            });
-          }
-          break;
+          return handleRegularStatProgression(key, resultName);
 
         case "durability":
-          dispatch({ type: "SET_STAT", key, value: resultName });
-          const durabilityIndex = STAT_WHEELS.indexOf("durability");
-          const raceOrSubrace = getRaceOrSubrace(results);
-
-          // Check if Skeleton race
-          if (results.race === "Skeleton") {
-            // Skip IQ for Skeleton, set it to 1 automatically
-            dispatch({ type: "SET_STAT", key: "iq", value: "1" });
-            // Go directly to Battle IQ
-            const battleIQWheel = getStatWheel(raceOrSubrace, "battleIQ");
-            if (battleIQWheel) {
-              setCurrentWheel(battleIQWheel);
-              setStatStep(STAT_WHEELS.indexOf("battleIQ") + 1);
-            }
-          } else {
-            // Normal flow - go to IQ
-            const nextWheel = getStatWheel(raceOrSubrace, "iq");
-            if (nextWheel) {
-              setCurrentWheel(nextWheel);
-              setStatStep(durabilityIndex + 2);
-            }
-          }
-          break;
-
         case "iq":
-          // This should only be reached by non-Skeleton races
-          dispatch({ type: "SET_STAT", key: "iq", value: resultName });
-          const iqIndex = STAT_WHEELS.indexOf("iq");
-          if (iqIndex < STAT_WHEELS.length - 1) {
-            const nextStatKey = STAT_WHEELS[iqIndex + 1];
-            const raceOrSubrace = getRaceOrSubrace(results);
-            const nextWheel = getStatWheel(raceOrSubrace, nextStatKey);
-            if (nextWheel) {
-              setCurrentWheel(nextWheel);
-              setStatStep(iqIndex + 2);
-            }
-          } else {
-            setCurrentWheel({
-              key: "quirk-count",
-              title: "Quirk Count",
-              sections: quirkCountOptions,
-            });
-          }
-          break;
+          return (
+            raceHandlers.handleRaceSpecificStats(
+              key,
+              resultName,
+              handlerParams
+            ) || handleRegularStatProgression(key, resultName)
+          );
 
-        // Quirk & House
+        // Quirk & House flow
         case "quirk-count":
-          const count = parseInt(resultName, 10);
-          setQuirkCount(count);
+          setQuirkCount(parseInt(resultName, 10));
           setQuirkStep(0);
           setCurrentWheel({
             key: "quirk",
@@ -666,72 +263,12 @@ export const useCharacterWheel = () => {
           break;
 
         case "quirk":
-          const quirk = currentWheel.sections.find(
-            (s) => s.name === resultName
-          )!;
-          dispatch({ type: "ADD_QUIRK", quirk });
-          if (quirkStep + 1 < quirkCount) {
-            setQuirkStep(quirkStep + 1);
-            setCurrentWheel({
-              key: "quirk",
-              title: "Quirk",
-              sections: currentWheel.sections.filter(
-                (s) => s.name !== resultName
-              ),
-            });
-          } else {
-            // Check for special archetype house assignments
-            const hasSpecialArchetype = characterState.archetypes.some(
-              (archetype: any) => archetype.name === "Dark Magician"
-            );
-
-            if (hasSpecialArchetype) {
-              // Dark Magician gets Dark Brotherhood automatically
-              dispatch({
-                type: "SET_RESULT",
-                key: "house",
-                value: "Dark Brotherhood",
-              });
-              setCurrentWheel(gearCountWheel);
-            } else if (characterState.results.race === "Uma") {
-              // Bỏ qua roll House, set trực tiếp "Tracen Academy"
-              dispatch({
-                type: "SET_RESULT",
-                key: "house",
-                value: "Tracen Academy",
-              });
-              setCurrentWheel(gearCountWheel);
-            } else {
-              setCurrentWheel(houseWheel);
-            }
-          }
-          break;
+          return handleQuirkFlow(resultName);
 
         case "house":
-          dispatch({ type: "SET_RESULT", key: "house", value: resultName });
-          // House special wheels
-          const houseSpecialWheels: Record<string, WheelStep> = {
-            "House Stark": {
-              ...starkWolfWheel,
-              onComplete: () => setCurrentWheel(gearCountWheel),
-            },
-            "Golden Order": {
-              ...goldenOrderRuneWheel,
-              onComplete: () => setCurrentWheel(gearCountWheel),
-            },
-            "Ashina Clan": {
-              ...ashinaSwordWheel,
-              onComplete: () => setCurrentWheel(gearCountWheel),
-            },
-            "Dessendre Family": {
-              ...dessendreSkillWheel,
-              onComplete: () => setCurrentWheel(gearCountWheel),
-            },
-          };
-          setCurrentWheel(houseSpecialWheels[resultName] || gearCountWheel);
-          break;
+          return handleHouseFlow(resultName);
 
-        // Gear & Legacy Gear
+        // Gear flow
         case "gear-count":
           setGearCount(parseInt(resultName, 10));
           setGearStep(0);
@@ -741,356 +278,78 @@ export const useCharacterWheel = () => {
         case "legacy-gear-count":
           setLegacyGearCount(parseInt(resultName, 10));
           setLegacyGearStep(0);
-          if (gearCount > 0) {
-            setCurrentWheel({
-              key: "gear",
-              title: "Gear",
-              sections: gearWheel.sections,
-            });
-          } else if (legacyGearCount > 0) {
-            setCurrentWheel({
-              key: "legacy-gear",
-              title: "Legacy Gear",
-              sections: legacyGearWheel.sections,
-            });
-          } else {
-            setCurrentWheel(weaponExistWheel);
-          }
-          break;
+          return handleGearCountCompletion();
 
-        case "gear": {
-          const gear = currentWheel.sections.find(
-            (s) => s.name === resultName
-          )!;
+        case "gear":
+          return itemHandlers.handleGearFlow(
+            resultName,
+            currentWheel,
+            handlerParams
+          );
 
-          // Roll usability wheel for gear
-          if (gear.usableRate && gear.usableRate < 100) {
-            // Store the gear temporarily
-            dispatch({
-              type: "SET_RESULT",
-              key: "temp-gear",
-              value: resultName,
-            });
-            setCurrentWheel(usabilityWheel(gear.usableRate, gear.name));
-          } else {
-            // If usableRate is 100 or undefined, always usable
-            dispatch({ type: "ADD_GEAR", gear: { ...gear, usable: true } });
+        case "legacy-gear":
+          return itemHandlers.handleLegacyGearFlow(
+            resultName,
+            currentWheel,
+            handlerParams
+          );
 
-            if (gearStep + 1 < gearCount) {
-              setGearStep(gearStep + 1);
-              setCurrentWheel({
-                key: "gear",
-                title: "Gear",
-                sections: currentWheel.sections.filter(
-                  (s) => s.name !== resultName
-                ),
-              });
-            } else if (legacyGearCount > 0) {
-              setCurrentWheel({
-                key: "legacy-gear",
-                title: "Legacy Gear",
-                sections: legacyGearWheel.sections,
-              });
-            } else {
-              setCurrentWheel(weaponExistWheel);
-            }
-          }
-          break;
-        }
+        // Noble Swordsman special gear
+        case "noble-magic-gear":
+        case "noble-physical-gear":
+          return itemHandlers.handleNobleGearFlow(
+            key,
+            resultName,
+            currentWheel,
+            handlerParams
+          );
 
-        case "legacy-gear": {
-          const legacyGear = currentWheel.sections.find(
-            (s) => s.name === resultName
-          )!;
-
-          // Roll usability wheel for legacy gear
-          if (legacyGear.usableRate && legacyGear.usableRate < 100) {
-            dispatch({
-              type: "SET_RESULT",
-              key: "temp-legacy-gear",
-              value: resultName,
-            });
-            setCurrentWheel(
-              usabilityWheel(legacyGear.usableRate, legacyGear.name)
-            );
-          } else {
-            dispatch({
-              type: "ADD_LEGACY_GEAR",
-              gear: { ...legacyGear, usable: true },
-            });
-
-            if (legacyGearStep + 1 < legacyGearCount) {
-              setLegacyGearStep(legacyGearStep + 1);
-              setCurrentWheel({
-                key: "legacy-gear",
-                title: "Legacy Gear",
-                sections: currentWheel.sections.filter(
-                  (s) => s.name !== resultName
-                ),
-              });
-            } else {
-              setCurrentWheel(weaponExistWheel);
-            }
-          }
-          break;
-        }
-
-        // Weapon & Enchant
+        // Weapon flow
         case "weapon-exist":
-          if (resultName === "No Weapon") {
-            const raceOrSubrace = getRaceOrSubrace(results);
-            setCurrentWheel(powerCountWheel(raceOrSubrace));
-          } else {
-            setCurrentWheel(uniqueWeaponExistWheel);
-          }
-          break;
+          return itemHandlers.handleWeaponExistFlow(resultName, handlerParams);
 
         case "unique-weapon-exist":
-          setCurrentWheel(
-            resultName === "No" ? weaponWheel : uniqueWeaponWheel
+          return itemHandlers.handleUniqueWeaponExistFlow(
+            resultName,
+            handlerParams
           );
-          break;
 
         case "weapon":
-        case "unique-weapon": {
-          const weapon = currentWheel.sections.find(
-            (s) => s.name === resultName
-          )!;
-
-          // Roll usability wheel for weapon
-          if (weapon.usableRate && weapon.usableRate < 100) {
-            dispatch({
-              type: "SET_RESULT",
-              key: "temp-weapon",
-              value: resultName,
-            });
-            dispatch({
-              type: "SET_RESULT",
-              key: "temp-weapon-type",
-              value: key,
-            });
-            setCurrentWheel(usabilityWheel(weapon.usableRate, weapon.name));
-          } else {
-            // If usableRate is 100 or undefined, always usable
-            dispatch({
-              type: "ADD_WEAPON",
-              weapon: { ...weapon, usable: true },
-            });
-            setCurrentWheel(enchantCountWheel);
-          }
-          break;
-        }
-
-        // Handle usability check result
-        case "usabilityCheck": {
-          const tempGear = characterState.results["temp-gear"];
-          const tempLegacyGear = characterState.results["temp-legacy-gear"];
-          const tempWeapon = characterState.results["temp-weapon"];
-          const tempKnightGear = characterState.results["temp-knight-gear"];
-          const isUsable = resultName === "Dùng được";
-
-          if (tempKnightGear) {
-            // Handle Knight of Gods Holy Symbol usability
-            const holySymbol = JSON.parse(tempKnightGear);
-            dispatch({
-              type: "ADD_GEAR",
-              gear: { ...holySymbol, usable: isUsable },
-            });
-            dispatch({
-              type: "SET_RESULT",
-              key: "temp-knight-gear",
-              value: "",
-            });
-            // Proceed to stats after Holy Symbol is handled
-            goToStats();
-          } else if (tempGear) {
-            // Handle gear usability
-            const gear = gearWheel.sections.find((s) => s.name === tempGear)!;
-            dispatch({ type: "ADD_GEAR", gear: { ...gear, usable: isUsable } });
-            dispatch({ type: "SET_RESULT", key: "temp-gear", value: "" });
-
-            if (gearStep + 1 < gearCount) {
-              setGearStep(gearStep + 1);
-              setCurrentWheel({
-                key: "gear",
-                title: "Gear",
-                sections: gearWheel.sections.filter(
-                  (s) =>
-                    !characterState.gears
-                      .concat({ ...gear, usable: isUsable })
-                      .find((g) => g.name === s.name)
-                ),
-              });
-            } else if (legacyGearCount > 0) {
-              setCurrentWheel({
-                key: "legacy-gear",
-                title: "Legacy Gear",
-                sections: legacyGearWheel.sections,
-              });
-            } else {
-              setCurrentWheel(weaponExistWheel);
-            }
-          } else if (tempLegacyGear) {
-            // Handle legacy gear usability
-            const legacyGear = legacyGearWheel.sections.find(
-              (s) => s.name === tempLegacyGear
-            )!;
-            dispatch({
-              type: "ADD_LEGACY_GEAR",
-              gear: { ...legacyGear, usable: isUsable },
-            });
-            dispatch({
-              type: "SET_RESULT",
-              key: "temp-legacy-gear",
-              value: "",
-            });
-
-            if (legacyGearStep + 1 < legacyGearCount) {
-              setLegacyGearStep(legacyGearStep + 1);
-              setCurrentWheel({
-                key: "legacy-gear",
-                title: "Legacy Gear",
-                sections: legacyGearWheel.sections.filter(
-                  (s) =>
-                    !characterState.legacyGears
-                      .concat({ ...legacyGear, usable: isUsable })
-                      .find((g) => g.name === s.name)
-                ),
-              });
-            } else {
-              setCurrentWheel(weaponExistWheel);
-            }
-          } else if (tempWeapon) {
-            // Handle weapon usability
-            const weaponType = characterState.results["temp-weapon-type"];
-            const weaponList =
-              weaponType === "weapon" ? weaponWheel : uniqueWeaponWheel;
-            const weapon = weaponList.sections.find(
-              (s) => s.name === tempWeapon
-            )!;
-
-            if (isUsable) {
-              dispatch({
-                type: "ADD_WEAPON",
-                weapon: { ...weapon, usable: true },
-              });
-              setCurrentWheel(enchantCountWheel);
-            } else {
-              // Not usable - skip enchant and go to power
-              dispatch({
-                type: "ADD_WEAPON",
-                weapon: { ...weapon, usable: false },
-              });
-              const raceOrSubrace = getRaceOrSubrace(results);
-              setCurrentWheel(powerCountWheel(raceOrSubrace));
-            }
-
-            dispatch({ type: "SET_RESULT", key: "temp-weapon", value: "" });
-            dispatch({
-              type: "SET_RESULT",
-              key: "temp-weapon-type",
-              value: "",
-            });
-          }
-          break;
-        }
+        case "unique-weapon":
+          return itemHandlers.handleWeaponFlow(
+            key,
+            resultName,
+            currentWheel,
+            handlerParams
+          );
 
         case "weapon-enchant-count":
-          const eCount = parseInt(resultName, 10);
-          setEnchantCount(eCount);
-          setEnchantStep(0);
-          if (eCount > 0) {
-            setCurrentWheel({
-              key: "weapon-enchant",
-              title: "Weapon Enchant",
-              sections: enchantWheel.sections,
-            });
-          } else {
-            const raceOrSubrace = getRaceOrSubrace(results);
-            setCurrentWheel(powerCountWheel(raceOrSubrace));
-          }
-          break;
+          return itemHandlers.handleEnchantCountFlow(resultName, handlerParams);
 
         case "weapon-enchant":
-          const enchant = currentWheel.sections.find(
-            (s) => s.name === resultName
-          )!;
-          dispatch({ type: "ADD_ENCHANT", enchant });
-          if (enchantStep + 1 < enchantCount) {
-            setEnchantStep(enchantStep + 1);
-            setCurrentWheel({
-              key: "weapon-enchant",
-              title: "Weapon Enchant",
-              sections: currentWheel.sections.filter(
-                (s) => s.name !== resultName
-              ),
-            });
-          } else {
-            const raceOrSubrace = getRaceOrSubrace(results);
-            setCurrentWheel(powerCountWheel(raceOrSubrace));
-          }
-          break;
+          return itemHandlers.handleEnchantFlow(
+            resultName,
+            currentWheel,
+            handlerParams
+          );
 
-        // Power & Char Dev
+        // Usability checks
+        case "usabilityCheck":
+          return itemHandlers.handleUsabilityCheck(resultName, handlerParams);
+
+        // Power & Character Development
         case "power-count":
-          setPowerCount(parseInt(resultName, 10));
-          setPowerStep(0);
-          setCurrentWheel({
-            key: "power",
-            title: "Power",
-            sections: PowerWheel.sections,
-          });
-          break;
+          return handlePowerCountFlow(resultName);
 
         case "power":
-          const power = currentWheel.sections.find(
-            (s) => s.name === resultName
-          )!;
-          dispatch({ type: "ADD_POWER", power });
-          if (powerStep + 1 < powerCount) {
-            setPowerStep(powerStep + 1);
-            setCurrentWheel({
-              key: "power",
-              title: "Power",
-              sections: PowerWheel.sections.filter(
-                (p) =>
-                  !characterState.powers
-                    .concat(power)
-                    .find((pw) => pw.name === p.name)
-              ),
-            });
-          } else {
-            // Xác định số char dev theo race
-            const race = characterState.results.race;
-            setCharDevStep(0);
-            setCharDevMax(race === "Human" ? 2 : 1);
-            setCurrentWheel(charDevWheel);
-          }
-          break;
+          return handlePowerFlow(resultName);
 
         case "char-dev":
-          const charDevs = currentWheel.sections.find(
-            (s) => s.name === resultName
-          )!;
-          dispatch({ type: "ADD_CHARDEV", charDev: charDevs });
-          if (charDevStep + 1 < charDevMax) {
-            setCharDevStep(charDevStep + 1);
-            setCurrentWheel({
-              key: "char-dev",
-              title: "Character Development",
-              sections: currentWheel.sections.filter(
-                (s) => s.name !== resultName
-              ),
-            });
-          } else {
-            setCurrentWheel(pveWheel);
-          }
-          break;
+          return handleCharDevFlow(resultName);
 
         // PvE
         case "pve":
           dispatch({ type: "SET_RESULT", key: "pve", value: resultName });
-          // Flow complete - optionally reset or show completion
           break;
 
         default:
@@ -1101,50 +360,257 @@ export const useCharacterWheel = () => {
     },
     [
       characterState,
-      quirkCount,
-      quirkStep,
-      gearCount,
-      gearStep,
-      legacyGearCount,
-      legacyGearStep,
-      enchantCount,
-      enchantStep,
-      powerCount,
-      powerStep,
       currentWheel,
-      charDevStep,
-      charDevMax,
+      dispatch,
+      raceHandlers,
+      archetypeHandlers,
+      itemHandlers,
+      getHandlerParams,
+      goToStats,
     ]
   );
 
+  // Helper functions for specific flows
+  const handleRegularStatProgression = useCallback(
+    (key: string, resultName: string) => {
+      dispatch({ type: "SET_STAT", key, value: resultName });
+      const currentStatIndex = STAT_WHEELS.indexOf(key);
+
+      if (currentStatIndex < STAT_WHEELS.length - 1) {
+        const nextStatKey = STAT_WHEELS[currentStatIndex + 1];
+        const params = getFlowHandlerParams();
+        const nextResult = flowHandlers.jumpToWheel(nextStatKey, params);
+        if (nextResult.success) {
+          setStatStep(currentStatIndex + 2);
+        }
+      } else {
+        setCurrentWheel({
+          key: "quirk-count",
+          title: "Quirk Count",
+          sections: quirkCountOptions,
+        });
+      }
+    },
+    [dispatch, flowHandlers, getFlowHandlerParams, setStatStep, setCurrentWheel]
+  );
+
+  const handleQuirkFlow = useCallback(
+    (resultName: string) => {
+      const quirk = currentWheel.sections.find((s) => s.name === resultName)!;
+      dispatch({ type: "ADD_QUIRK", quirk });
+
+      if (quirkStep + 1 < quirkCount) {
+        setQuirkStep(quirkStep + 1);
+        setCurrentWheel({
+          key: "quirk",
+          title: "Quirk",
+          sections: currentWheel.sections.filter((s) => s.name !== resultName),
+        });
+      } else {
+        // Check for special house assignments
+        if (
+          archetypeHandlers.hasSpecialHouseAssignment(characterState.archetypes)
+        ) {
+          setCurrentWheel(gearCountWheel);
+        } else {
+          const specialHouse = raceHandlers.hasSpecialRaceHouseAssignment(
+            characterState.results.race
+          );
+          if (specialHouse) {
+            dispatch({ type: "SET_RESULT", key: "house", value: specialHouse });
+            setCurrentWheel(gearCountWheel);
+          } else {
+            const params = getFlowHandlerParams();
+            flowHandlers.jumpToWheel("house", params);
+          }
+        }
+      }
+    },
+    [
+      currentWheel,
+      dispatch,
+      quirkStep,
+      quirkCount,
+      setQuirkStep,
+      setCurrentWheel,
+      characterState,
+      archetypeHandlers,
+      raceHandlers,
+      flowHandlers,
+      getFlowHandlerParams,
+    ]
+  );
+
+  const handleHouseFlow = useCallback(
+    (resultName: string) => {
+      dispatch({ type: "SET_RESULT", key: "house", value: resultName });
+
+      const specialWheel = flowHandlers.getHouseSpecialWheel(resultName, () =>
+        setCurrentWheel(gearCountWheel)
+      );
+      setCurrentWheel(specialWheel || gearCountWheel);
+    },
+    [dispatch, flowHandlers, setCurrentWheel]
+  );
+
+  const handleGearCountCompletion = useCallback(() => {
+    if (gearCount > 0) {
+      setCurrentWheel({
+        key: "gear",
+        title: "Gear",
+        sections: gearWheel.sections,
+      });
+    } else if (legacyGearCount > 0) {
+      setCurrentWheel({
+        key: "legacy-gear",
+        title: "Legacy Gear",
+        sections: legacyGearWheel.sections,
+      });
+    } else {
+      const params = getFlowHandlerParams();
+      flowHandlers.jumpToWheel("weapon", params);
+    }
+  }, [
+    gearCount,
+    legacyGearCount,
+    setCurrentWheel,
+    flowHandlers,
+    getFlowHandlerParams,
+  ]);
+
+  const handlePowerCountFlow = useCallback(
+    (resultName: string) => {
+      const powerCalculation = gameMechanics.calculatePowerCount(
+        parseInt(resultName, 10),
+        characterState
+      );
+
+      setPowerCount(powerCalculation.finalPowerCount);
+      setPowerStep(0);
+      setCurrentWheel({
+        key: "power",
+        title: "Power",
+        sections: PowerWheel.sections,
+      });
+    },
+    [
+      gameMechanics,
+      characterState,
+      setPowerCount,
+      setPowerStep,
+      setCurrentWheel,
+    ]
+  );
+
+  const handlePowerFlow = useCallback(
+    (resultName: string) => {
+      const power = currentWheel.sections.find((s) => s.name === resultName)!;
+      dispatch({ type: "ADD_POWER", power });
+
+      if (powerStep + 1 < powerCount) {
+        setPowerStep(powerStep + 1);
+        setCurrentWheel({
+          key: "power",
+          title: "Power",
+          sections: PowerWheel.sections.filter(
+            (p) =>
+              !characterState.powers
+                .concat(power)
+                .find((pw) => pw.name === p.name)
+          ),
+        });
+      } else {
+        if (
+          archetypeHandlers.shouldSkipCharacterDevelopment(
+            characterState.archetypes
+          )
+        ) {
+          setCharDevStep(0);
+          setCharDevMax(0);
+          setCurrentWheel(pveWheel);
+        } else {
+          const charDevMax = raceHandlers.getRaceCharDevMax(
+            characterState.results.race
+          );
+          setCharDevStep(0);
+          setCharDevMax(charDevMax);
+          setCurrentWheel(charDevWheel);
+        }
+      }
+    },
+    [
+      currentWheel,
+      dispatch,
+      powerStep,
+      powerCount,
+      setPowerStep,
+      setCurrentWheel,
+      characterState,
+      archetypeHandlers,
+      raceHandlers,
+      setCharDevStep,
+      setCharDevMax,
+    ]
+  );
+
+  const handleCharDevFlow = useCallback(
+    (resultName: string) => {
+      const charDev = currentWheel.sections.find((s) => s.name === resultName)!;
+      dispatch({ type: "ADD_CHARDEV", charDev });
+
+      if (charDevStep + 1 < charDevMax) {
+        setCharDevStep(charDevStep + 1);
+        setCurrentWheel({
+          key: "char-dev",
+          title: "Character Development",
+          sections: currentWheel.sections.filter((s) => s.name !== resultName),
+        });
+      } else {
+        setCurrentWheel(pveWheel);
+      }
+    },
+    [
+      currentWheel,
+      dispatch,
+      charDevStep,
+      charDevMax,
+      setCharDevStep,
+      setCurrentWheel,
+    ]
+  );
+
+  // Character completion and data handling
+  const handleGetData = useCallback(() => {
+    const data = characterHelpers.getCompleteCharacterInfo(characterState);
+    setDialogData(data);
+    setShowDialog(true);
+  }, [characterHelpers, characterState, setDialogData, setShowDialog]);
+
   const handleCharacterComplete = useCallback(() => {
-    // 1. Xuất dữ liệu
-    exportCharacter(characterState);
-
-    // 2. Reset state
+    characterHelpers.handleCharacterExport(characterState);
     resetAll();
-  }, [characterState]);
+  }, [characterHelpers, characterState]);
 
-  // Reset handler
+  // Reset all state
   const resetAll = useCallback(() => {
     dispatch({ type: "RESET" });
     setCurrentWheel(raceWheel);
-    setGearStep(0);
-    setLegacyGearStep(0);
-    setEnchantStep(0);
-    setPowerStep(0);
-    setCharDevStep(0);
-    setQuirkStep(0);
     setStatStep(0);
+    setQuirkStep(0);
     setQuirkCount(0);
+    setGearStep(0);
     setGearCount(0);
+    setLegacyGearStep(0);
     setLegacyGearCount(0);
+    setEnchantStep(0);
     setEnchantCount(0);
+    setPowerStep(0);
     setPowerCount(0);
+    setCharDevStep(0);
     setCharDevMax(1);
-  }, []);
+  }, [dispatch, setCurrentWheel]);
 
-  // Next step handler
+  // Next step handler (will be called by animation hook)
   const nextStep = useCallback(() => {
     // This will be handled by the animation hook callback
     // Implementation moved to handleNextStep
@@ -1182,5 +648,11 @@ export const useCharacterWheel = () => {
     powerCount,
     charDevStep,
     charDevMax,
+
+    // Additional utilities from handlers
+    flowStatus: flowHandlers.getFlowStatus(characterState),
+    characterSummary: characterHelpers.generateCharacterSummary(characterState),
+    validation: characterHelpers.validateCharacter(characterState),
+    specialAbilities: gameMechanics.getSpecialAbilities(characterState),
   };
 };
