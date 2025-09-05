@@ -298,6 +298,7 @@ export const useCharacterWheel = () => {
   // Flow management - Main handler for wheel progression
   const handleNextStep = useCallback(
     (key: string, resultName: string) => {
+      console.log("2",rolledResult);
       const { results } = characterState;
 
       // Helper to transition to stats
@@ -1114,6 +1115,7 @@ export const useCharacterWheel = () => {
       currentWheel,
       charDevStep,
       charDevMax,
+      rolledResult
     ]
   );
 
