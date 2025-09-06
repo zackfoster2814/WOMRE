@@ -2,6 +2,7 @@ import React, { useRef, useState, useCallback } from "react";
 import { raceWheel } from "@/Common/Config/RaceConfig.ts";
 import { subraceMap } from "@/Common/Config/SubRaceConfig.ts";
 import { STAT_WHEELS } from "@/utils/wheelUtils.ts";
+import { useRaceHandlers } from "@/hooks/handlers/useRaceHandlers.ts";
 
 interface LeftPanelProps {
   characterState: any;
@@ -9,6 +10,7 @@ interface LeftPanelProps {
   jumpToWheel: (wheelKey: string) => void;
   handleNextStep: (key: string, resultName: string) => void;
   statStep?: number;
+  raceHandlers: ReturnType<typeof useRaceHandlers>;
 }
 
 export const LeftPanel: React.FC<LeftPanelProps> = ({
@@ -17,9 +19,20 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
   jumpToWheel,
   handleNextStep,
   statStep = 0,
+  raceHandlers,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [shouldAutoFocus, setShouldAutoFocus] = useState(true);
+  const [recentlyAdded, setRecentlyAdded] = useState<string[]>([]);
+
+  // Uma ability names mapping
+  const UMA_ABILITY_NAMES = {
+    Maruzensky: "Red Shift/LP1211-M",
+    "Mejiro Ryan": "Let's Pump Some Iron!",
+    "Taiki Shuttle": "Shooting for Victory",
+    "Gold Ship": "Training Restricted",
+    "Agnes Tachyon": "U=ma2",
+  };
 
   const handleNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,17 +90,31 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
         if (characterState.results["uma-parent-2"] === value) {
           dispatch({ type: "SET_RESULT", key: "uma-parent-2", value: "" });
         }
+
+        // Apply parent 1 abilities immediately
+        if (value) {
+          raceHandlers.applyUmaParentAbilities(value, dispatch);
+        }
       } else if (parentKey === "uma-parent-2") {
+        // Apply parent 2 abilities immediately
+        if (value) {
+          raceHandlers.applyUmaParentAbilities(value, dispatch);
+        }
+
         // Set combined subrace
-        dispatch({
-          type: "SET_RESULT",
-          key: "subrace",
-          value: `${characterState.results["uma-parent-1"]} - ${value}`,
-        });
+        const parent1 = characterState.results["uma-parent-1"];
+        if (parent1) {
+          dispatch({
+            type: "SET_RESULT",
+            key: "subrace",
+            value: `${parent1} - ${value}`,
+          });
+        }
       }
+
       handleBlur();
     },
-    [characterState.results, dispatch, handleBlur]
+    [characterState.results, dispatch, handleBlur, raceHandlers]
   );
 
   const handleStatClick = useCallback(
@@ -116,7 +143,7 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
   return (
     <div className="w-[22%] flex flex-col gap-4 border-2 border-[#5a2d0c] p-3 rounded-lg shadow-[0_0_20px_rgba(200,50,0,0.6)] bg-black/70">
       {/* Character Image Placeholder */}
-      <div className="border-2 border-[#d4af37] bg-black/60 h-52 flex items-center justify-center rounded-md text-amber-200 font-bold text-xl shadow-[0_0_15px_rgba(255,215,0,0.5)]"></div>
+      <div className="border-2 border-[#d4af37] bg-black/60 h-35 flex items-center justify-center rounded-md text-amber-200 font-bold text-xl shadow-[0_0_15px_rgba(255,215,0,0.5)]"></div>
 
       {/* Character Name Input */}
       <div className="border border-[#d4af37] p-2 text-center rounded bg-black/50 text-lg font-bold tracking-wide flex flex-col gap-2">
@@ -163,42 +190,60 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
 
       {/* Subrace/Uma Parents Selection */}
       {characterState.results.race === "Uma" ? (
-        <div className="flex justify-between items-center gap-2 w-full">
-          <select
-            value={characterState.results["uma-parent-1"] || ""}
-            onChange={(e) =>
-              handleUmaParentChange("uma-parent-1", e.target.value)
-            }
-            className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
-          >
-            <option value="" disabled>
-              -- Parent 1 --
-            </option>
-            {subraceMap["Uma"].map((s) => (
-              <option key={s.name} value={s.name}>
-                {s.name}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center gap-2 w-full">
+            <select
+              value={characterState.results["uma-parent-1"] || ""}
+              onChange={(e) =>
+                handleUmaParentChange("uma-parent-1", e.target.value)
+              }
+              className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
+            >
+              <option value="" disabled>
+                -- Parent 1 --
               </option>
-            ))}
-          </select>
-          <span className="text-amber-300 font-bold px-2">+</span>
-          <select
-            value={characterState.results["uma-parent-2"] || ""}
-            onChange={(e) =>
-              handleUmaParentChange("uma-parent-2", e.target.value)
-            }
-            className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
-          >
-            <option value="" disabled>
-              -- Parent 2 --
-            </option>
-            {subraceMap["Uma"]
-              .filter((s) => s.name !== characterState.results["uma-parent-1"])
-              .map((s) => (
+              {subraceMap["Uma"].map((s) => (
                 <option key={s.name} value={s.name}>
                   {s.name}
                 </option>
               ))}
-          </select>
+            </select>
+            <span className="text-amber-300 font-bold px-2">+</span>
+            <select
+              value={characterState.results["uma-parent-2"] || ""}
+              onChange={(e) =>
+                handleUmaParentChange("uma-parent-2", e.target.value)
+              }
+              className="bg-black/30 text-amber-200 border border-[#d4af37] rounded px-2 h-[45px] flex-1"
+            >
+              <option value="" disabled>
+                -- Parent 2 --
+              </option>
+              {subraceMap["Uma"]
+                .filter(
+                  (s) => s.name !== characterState.results["uma-parent-1"]
+                )
+                .map((s) => (
+                  <option key={s.name} value={s.name}>
+                    {s.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          {/* Uma Abilities Feedback */}
+          {recentlyAdded.length > 0 && (
+            <div className="bg-green-900/50 border border-green-500 p-2 rounded text-sm">
+              <div className="text-green-300 font-bold mb-1">
+                Abilities Added:
+              </div>
+              {recentlyAdded.map((ability, index) => (
+                <div key={index} className="text-green-200 animate-pulse">
+                  + {ability}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         <select

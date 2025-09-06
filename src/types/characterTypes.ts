@@ -12,6 +12,9 @@ export interface CharacterState {
   powers: Section[];
   charDevs: Section[];
   archetypes: Section[];
+  lovers: Section[];
+  summons: Section[];
+  pveRounds: Section[];
   characterName: string;
 }
 
@@ -38,6 +41,11 @@ export type CharacterAction =
   | { type: "SET_CHARACTER_NAME"; name: string }
   | { type: "ADD_CHARDEV"; charDev: Section }
   | { type: "ADD_ARCHETYPE"; archetype: Section }
+  | { type: "ADD_LOVER"; lovers: Section }
+  | { type: "ADD_SUMMON"; summon: Section }
+  | { type: "ADD_PVE_ROUND"; pveRound: Section }
+  | { type: "RESET_POWERS" }
+  | { type: "RESET_WEAPON" }
   | { type: "RESET" };
 
 // Progress Tracking Interface
@@ -103,7 +111,7 @@ export interface CharacterItem {
 
 // Weapon with Enchants Interface
 export interface WeaponWithEnchants extends Section {
-  enchants: Section[];
+  enchants: string[];
   usable: boolean;
 }
 
