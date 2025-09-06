@@ -38,6 +38,7 @@ interface CompleteCharacterInfo {
   ashinaSword?: string;
   dessendreSkill?: string;
   houseSpyTarget?: string;
+  houseLeviathan?: string[];
   // Uma parents
   umaParent1?: string;
   umaParent2?: string;
@@ -46,6 +47,9 @@ interface CompleteCharacterInfo {
   vampireTaste?: string;
   // Wibu series
   wibuSeries?: string;
+  lover?: any[];
+  x?: string;
+  wibuExtra?: string;
 }
 
 interface CharacterSummary {
@@ -114,6 +118,7 @@ export const useCharacterHelpers = () => {
         ashinaSword: characterState.results["ashina-sword"],
         dessendreSkill: characterState.results["dessendre-skill"],
         houseSpyTarget: characterState.results["house-spy-target"],
+        houseLeviathan: characterState.results["leviathan-house"],
         // Uma parents
         umaParent1: characterState.results["uma-parent-1"],
         umaParent2: characterState.results["uma-parent-2"],
@@ -122,6 +127,9 @@ export const useCharacterHelpers = () => {
         vampireTaste: characterState.results["vampireTaste"],
         // Wibu series
         wibuSeries: characterState.results["wibu-series"],
+        x: characterState.results["x"],
+        wibuExtra: characterState.results["wibu-extra"],
+        lover: characterState.lovers,
       };
     },
     []

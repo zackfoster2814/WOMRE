@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { WheelStep } from "@/Common/Types/Types.ts";
-import { raceWheel } from "@/Common/Config/RaceConfig.ts";
+import { raceWheel, raceWheelBalance } from "@/Common/Config/RaceConfig.ts";
 import { subraceMap } from "@/Common/Config/SubRaceConfig.ts";
 import {
   bankaiWheel,
@@ -12,6 +12,7 @@ import {
 } from "@/Common/Config/ArchetypeConfig.ts";
 import {
   archetypeExtraWheels,
+  heroXWheel,
   uniqueVampireTrainWheel,
   vampireTasteWheel,
 } from "@/Common/Config/ArchetypeExtraWheels.ts";
@@ -22,6 +23,9 @@ import {
 } from "@/Common/Config/WeaponConfig.ts";
 import { gearWheel } from "@/Common/Config/GearConfig.ts";
 import { usabilityWheel } from "@/utils/wheelUtils.ts";
+import { quirkCountOptions } from "@/Common/Config/QuirkConfig.ts";
+import halberd from "@/assets/Weapon/halberd.png";
+import hiddenBlade from "@/assets/Weapon/hidden_blade.png";
 
 // Types for archetype handlers
 interface ArchetypeHandlerParams {
@@ -127,7 +131,6 @@ export const useArchetypeHandlers = () => {
       params: ArchetypeHandlerParams
     ): ArchetypeHandlerResult => {
       const { dispatch, setCurrentWheel, goToStats } = params;
-
       switch (resultName) {
         case "Warrior of Sunlight":
           // Add Sacred Fire and Fair Duel powers automatically
@@ -154,26 +157,6 @@ export const useArchetypeHandlers = () => {
           });
           goToStats();
           return { shouldContinue: false };
-
-        case "Noble Swordsman":
-          // Noble Swordsman - special weapon-gear interaction
-          dispatch({
-            type: "SET_RESULT",
-            key: "noble-swordsman-active",
-            value: "true",
-          });
-          goToStats();
-          return { shouldContinue: false };
-
-        case "Spy":
-          setCurrentWheel({
-            ...houseWheel,
-            key: "house-spy-target",
-            title: "Target",
-            onComplete: goToStats,
-          });
-          return { shouldContinue: false };
-
         case "Knight of Gods":
           // Store Holy Symbol temporarily for usability check
           const holySymbol = {
@@ -188,7 +171,7 @@ export const useArchetypeHandlers = () => {
 
           dispatch({
             type: "SET_RESULT",
-            key: "temp-knight-gear",
+            key: "temp-arc-gear", // Store temporarily
             value: JSON.stringify(holySymbol),
           });
 
@@ -197,7 +180,23 @@ export const useArchetypeHandlers = () => {
             usabilityWheel(holySymbol.usableRate, holySymbol.name)
           );
           return { shouldContinue: false };
-
+        case "Noble Swordsman": // need to check
+          // Noble Swordsman - special weapon-gear interaction
+          dispatch({
+            type: "SET_RESULT",
+            key: "noble-swordsman-active",
+            value: "true",
+          });
+          goToStats();
+          return { shouldContinue: false };
+        case "Spy":
+          setCurrentWheel({
+            ...houseWheel,
+            key: "house-spy-target",
+            title: "Target",
+            onComplete: goToStats,
+          });
+          return { shouldContinue: false };
         case "Dark Magician":
           dispatch({
             type: "SET_RESULT",
@@ -206,7 +205,6 @@ export const useArchetypeHandlers = () => {
           });
           goToStats();
           return { shouldContinue: false };
-
         case "Bloodclan Berserker":
           // Add quirks automatically
           dispatch({
@@ -238,7 +236,6 @@ export const useArchetypeHandlers = () => {
           });
           goToStats();
           return { shouldContinue: false };
-
         case "Trickster":
           const aceWheel = archetypeExtraWheels[resultName];
           if (aceWheel) {
@@ -252,16 +249,21 @@ export const useArchetypeHandlers = () => {
             goToStats();
           }
           return { shouldContinue: false };
-
         case "Slayer":
           setCurrentWheel({
-            ...raceWheel,
+            ...raceWheelBalance,
             key: "slayer-race",
             title: "Slayer - Choose Race",
             onComplete: goToStats,
           });
           return { shouldContinue: false };
-
+        case "X":
+          setCurrentWheel({
+            key: "x",
+            title: "X",
+            sections: heroXWheel.sections,
+          });
+          return { shouldContinue: false };
         case "Guardian of Demons":
           setCurrentWheel({
             key: "demon-subrace",
@@ -270,11 +272,9 @@ export const useArchetypeHandlers = () => {
             onComplete: goToStats,
           });
           return { shouldContinue: false };
-
         case "Wibu":
           setCurrentWheel(wibuWheel);
           return { shouldContinue: false };
-
         case "Bookworm":
           // Store Holy Symbol temporarily for usability check
           const note = {
@@ -289,14 +289,169 @@ export const useArchetypeHandlers = () => {
 
           dispatch({
             type: "SET_RESULT",
-            key: "bookwormGear",
+            key: "temp-arc-gear", // Store temporarily
             value: JSON.stringify(note),
           });
 
           // Call usability wheel for Holy Symbol
           setCurrentWheel(usabilityWheel(note.usableRate, note.name));
           return { shouldContinue: false };
+        case "Bard":
+          // Bard rolls for instrumental (36% chance)
+          setCurrentWheel({
+            key: "bard-instrumental",
+            title: "Bard - Instrumental Check",
+            sections: [
+              {
+                id: "has-instrumental",
+                name: "Có nhạc cụ",
+                weight: 36,
+                color: "#FFD700",
+              },
+              {
+                id: "no-instrumental",
+                name: "Không có nhạc cụ",
+                weight: 64,
+                color: "#696969",
+              },
+            ],
+          });
+          return { shouldContinue: false };
+        case "Paladin":
+          dispatch({
+            type: "ADD_POWER",
+            power: {
+              id: "11",
+              name: "Divine Smite",
+              effect:
+                "Nhận +1 Điểm nếu thắng ở Round MA. Xảy ra sau cùng, sau khi 'Kiếm Phái Ashina'.",
+              weight: 0.9,
+              color: "",
+            },
+          });
+          goToStats();
+          return { shouldContinue: false };
+        case "Lancer":
+          const halb = {
+            id: "19",
+            name: "Halberd",
+            weight: 5,
+            color: "#FFD700",
+            description:
+              "Nếu Str >7: usable+25%. Thắng round Str: +1 BIQ, +1MA. (40%, Physical)",
+            image: halberd,
+            usableRate: 40,
+            tag: "Physical",
+          };
 
+          dispatch({
+            type: "SET_RESULT",
+            key: "temp-arc-weap", // Store temporarily
+            value: JSON.stringify(halb),
+          });
+          // Call usability wheel for Holy Symbol
+          setCurrentWheel(usabilityWheel(halb.usableRate, halb.name));
+          return { shouldContinue: false };
+        case "Assassins":
+          const hb = {
+            id: "14",
+            name: "Hidden Blade",
+            weight: 5,
+            color: "#FFD700",
+            description:
+              "+1 Speed, Power 'Critical Strike'. Nếu Archetype 'Assassins' → always usable. (55%, Physical)",
+            image: hiddenBlade,
+            usableRate: 55,
+            tag: "Physical",
+          };
+
+          dispatch({
+            type: "SET_RESULT",
+            key: "temp-arc-weap", // Store temporarily
+            value: JSON.stringify(hb),
+          });
+
+          // Call usability wheel for Holy Symbol
+          setCurrentWheel(usabilityWheel(hb.usableRate, hb.name));
+          return { shouldContinue: false };
+        case "Mid":
+          // Handle Mid archetype - all stats = 5, skip stat rolling
+          return handleMidArchetypeFlow(params);
+        case "Hero of the Emirate":
+          dispatch({
+            type: "ADD_QUIRK",
+            quirk: {
+              id: "q36",
+              name: "Thích ăn Rau",
+              weight: 1.79,
+              color: "#ADFF2F",
+              description: "Good 🍀",
+            },
+          });
+          dispatch({
+            type: "ADD_POWER",
+            power: {
+              id: "36",
+              name: "Railroad Realm",
+              effect:
+                "Trong Combat: Bạn và đối thủ sẽ nghe tiếng xình xịch của những đoàn tàu xe lửa 🍀",
+              weight: 0.9,
+              color: "",
+            },
+          });
+          goToStats();
+          return { shouldContinue: false };
+        case "Fisher":
+          // Store Holy Symbol temporarily for usability check
+          const fishingRod = {
+            id: "1",
+            name: "Fishing Rod",
+            weight: 2.78,
+            color: "#A2D149",
+            description: "Sau 1 trận PvE, nhận 1 PvP Reward. (80%, Physical)",
+            usableRate: 80,
+            tag: "Physical",
+          };
+
+          dispatch({
+            type: "SET_RESULT",
+            key: "temp-arc-gear", // Store temporarily
+            value: JSON.stringify(fishingRod),
+          });
+
+          // Call usability wheel for Holy Symbol
+          setCurrentWheel(
+            usabilityWheel(fishingRod.usableRate, fishingRod.name)
+          );
+          return { shouldContinue: false };
+        case "Linh Mục":
+          dispatch({
+            type: "ADD_POWER",
+            power: {
+              id: "98",
+              name: "Analysis Sins",
+              effect:
+                "Trong Combat: Khi đối đầu với Demon, Vampire, Spirit, Orc, Skeleton và Goblin, nhận +1 IQ và +1 Strength",
+              weight: 0.9,
+              color: "",
+            },
+          });
+          goToStats();
+          return { shouldContinue: false };
+        case "Cha Xứ":
+          dispatch({
+            type: "ADD_POWER",
+            power: {
+              id: "99",
+              name: "Cleaning Sins",
+              effect:
+                "Trong Combat: Khi đối đầu với Demon, Vampire, Spirit, Orc, Skeleton và Goblin, nhận +1 BIQ và +1 Dura",
+              weight: 0.9,
+              color: "",
+            },
+          });
+          goToStats();
+          return { shouldContinue: false };
         default:
           // Check for other archetype extra wheels
           const extraWheel = archetypeExtraWheels[resultName];
@@ -304,7 +459,6 @@ export const useArchetypeHandlers = () => {
             setCurrentWheel({ ...extraWheel, onComplete: goToStats });
             return { shouldContinue: false };
           }
-
           // No special handling needed
           goToStats();
           return { shouldContinue: false };
@@ -312,7 +466,35 @@ export const useArchetypeHandlers = () => {
     },
     [handleNobleSwordsmanFlow]
   );
+  const handleMidArchetypeFlow = useCallback(
+    (params: ArchetypeHandlerParams): ArchetypeHandlerResult => {
+      const { dispatch, setCurrentWheel, characterState } = params;
 
+      // Set all stats to 5, except for Skeleton race where IQ stays 1
+      const isSkeletonRace = characterState.results.race === "Skeleton";
+
+      dispatch({ type: "SET_STAT", key: "strength", value: "5" });
+      dispatch({ type: "SET_STAT", key: "speed", value: "5" });
+      dispatch({ type: "SET_STAT", key: "durability", value: "5" });
+      dispatch({
+        type: "SET_STAT",
+        key: "iq",
+        value: isSkeletonRace ? "1" : "5",
+      });
+      dispatch({ type: "SET_STAT", key: "battleIQ", value: "5" });
+      dispatch({ type: "SET_STAT", key: "martialArts", value: "5" });
+
+      // Skip stats wheels and go directly to quirks
+      setCurrentWheel({
+        key: "quirk-count",
+        title: "Quirk Count",
+        sections: quirkCountOptions,
+      });
+
+      return { shouldContinue: false };
+    },
+    []
+  );
   // Handle Wibu series selection
   const handleWibuSeriesResult = useCallback(
     (
@@ -464,14 +646,6 @@ export const useArchetypeHandlers = () => {
     []
   );
 
-  // Check if archetype affects power count
-  const getArchetypePowerBonus = useCallback((archetypes: any[]): number => {
-    const hasDarkMagician = archetypes.some(
-      (a: any) => a.name === "Dark Magician"
-    );
-    return hasDarkMagician ? 2 : 0;
-  }, []);
-
   // Check if archetype skips character development
   const shouldSkipCharacterDevelopment = useCallback(
     (archetypes: any[]): boolean => {
@@ -489,7 +663,6 @@ export const useArchetypeHandlers = () => {
     getGearsByTag,
     getWeaponTags,
     hasSpecialHouseAssignment,
-    getArchetypePowerBonus,
     shouldSkipCharacterDevelopment,
   };
 };

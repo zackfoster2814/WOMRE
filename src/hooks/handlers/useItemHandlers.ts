@@ -1,6 +1,10 @@
 import { useCallback } from "react";
 import { WheelStep } from "@/Common/Types/Types.ts";
-import { gearWheel, legacyGearWheel } from "@/Common/Config/GearConfig.ts";
+import {
+  gearCountWheel,
+  gearWheel,
+  legacyGearWheel,
+} from "@/Common/Config/GearConfig.ts";
 import {
   enchantCountWheel,
   enchantWheel,
@@ -64,6 +68,13 @@ export const useItemHandlers = () => {
     []
   );
 
+  // Check if character is Dual Wielder
+  const isDualWielder = useCallback((characterState: any): boolean => {
+    return characterState.archetypes.some(
+      (a: any) => a.name === "Dual Wielder"
+    );
+  }, []);
+
   // Handle gear collection flow
   const handleGearFlow = useCallback(
     (
@@ -94,6 +105,7 @@ export const useItemHandlers = () => {
         setCurrentWheel(usabilityWheel(gear.usableRate, gear.name));
         return { shouldContinue: false };
       } else {
+        // If usableRate is 100 or undefined, always usable
         dispatch({ type: "ADD_GEAR", gear: { ...gear, usable: true } });
 
         if (gearStep + 1 < gearCount) {
@@ -197,11 +209,20 @@ export const useItemHandlers = () => {
         value: JSON.stringify(weapon),
       });
 
+      // Check for special subraces that always have usable weapons
       const isAncientDwarf =
         characterState.results.subrace === "Cổ lùn (Ancient)";
+      const isHephaestus = characterState.results.subrace === "Hephaestus";
+      const isDualWielderArchetype = isDualWielder(characterState);
 
-      // Roll usability wheel for weapon
-      if (!isAncientDwarf && weapon.usableRate && weapon.usableRate < 100) {
+      // Roll usability wheel for weapon (unless special subrace or dual wielder)
+      if (
+        !isAncientDwarf &&
+        !isHephaestus &&
+        !isDualWielderArchetype &&
+        weapon.usableRate &&
+        weapon.usableRate < 100
+      ) {
         dispatch({
           type: "SET_RESULT",
           key: "temp-weapon",
@@ -215,7 +236,7 @@ export const useItemHandlers = () => {
         setCurrentWheel(usabilityWheel(weapon.usableRate, weapon.name));
         return { shouldContinue: false };
       } else {
-        // If usableRate is 100 or undefined, always usable
+        // If special subrace OR Dual Wielder OR usableRate is 100 or undefined, always usable
         dispatch({
           type: "SET_RESULT",
           key: "weapon-usable",
@@ -235,7 +256,7 @@ export const useItemHandlers = () => {
         return { shouldContinue: false };
       }
     },
-    []
+    [isDualWielder]
   );
 
   // Handle weapon enchant count selection
@@ -280,7 +301,7 @@ export const useItemHandlers = () => {
             ...weaponData,
             usable: isUsable,
             enchants: [],
-          } as WeaponWithEnchants,
+          },
         });
 
         // Clear temp data
@@ -354,15 +375,11 @@ export const useItemHandlers = () => {
             ...weaponData,
             usable: isUsable,
             enchants: currentEnchants,
-          } as WeaponWithEnchants,
+          },
         });
 
-        // Clear all temp data
-        dispatch({
-          type: "SET_RESULT",
-          key: "temp-current-weapon",
-          value: "",
-        });
+        // Clear temp data
+        dispatch({ type: "SET_RESULT", key: "temp-current-weapon", value: "" });
         dispatch({ type: "SET_RESULT", key: "weapon-usable", value: "" });
         dispatch({
           type: "SET_RESULT",
@@ -376,6 +393,97 @@ export const useItemHandlers = () => {
       }
     },
     []
+  );
+
+  // Finalize weapon and handle Dual Wielder logic
+  const finalizeCurrentWeapon = useCallback(
+    (params: ItemHandlerParams): ItemHandlerResult => {
+      const { dispatch, setCurrentWheel, characterState } = params;
+
+      const weaponData = JSON.parse(
+        characterState.results["temp-current-weapon"] || "{}"
+      );
+      const isUsable = characterState.results["weapon-usable"] === "true";
+      const enchants = JSON.parse(
+        characterState.results["temp-weapon-enchants"] || "[]"
+      );
+
+      // Add weapon to character
+      dispatch({
+        type: "ADD_WEAPON",
+        weapon: {
+          ...weaponData,
+          usable: isUsable,
+          enchants: enchants,
+        } as WeaponWithEnchants,
+      });
+
+      // Clear temp data
+      dispatch({
+        type: "SET_RESULT",
+        key: "temp-current-weapon",
+        value: "",
+      });
+      dispatch({ type: "SET_RESULT", key: "weapon-usable", value: "" });
+      dispatch({
+        type: "SET_RESULT",
+        key: "temp-weapon-enchants",
+        value: "",
+      });
+
+      // Check if Dual Wielder needs second weapon
+      if (isDualWielder(characterState)) {
+        const currentWeaponCount = characterState.weapons.length + 1; // +1 for weapon just added
+
+        if (currentWeaponCount === 1) {
+          // First weapon done, need second weapon
+          const hasUniqueWeapon =
+            characterState.weapons.some((w: any) =>
+              uniqueWeaponWheel.sections.some((uw) => uw.name === w.name)
+            ) ||
+            uniqueWeaponWheel.sections.some(
+              (uw) => uw.name === weaponData.name
+            );
+
+          if (hasUniqueWeapon) {
+            // Already has unique weapon, second must be normal
+            setCurrentWheel({
+              key: "dual-wielder-weapon-2",
+              title: "Dual Wielder - Weapon 2 (Normal)",
+              sections: weaponWheel.sections.filter(
+                (w) =>
+                  !characterState.weapons.some(
+                    (cw: any) => cw.name === w.name
+                  ) && w.name !== weaponData.name
+              ),
+            });
+          } else {
+            // No unique weapon yet, can choose from both
+            const allWeapons = [
+              ...weaponWheel.sections,
+              ...uniqueWeaponWheel.sections,
+            ].filter(
+              (w) =>
+                !characterState.weapons.some((cw: any) => cw.name === w.name) &&
+                w.name !== weaponData.name
+            );
+
+            setCurrentWheel({
+              key: "dual-wielder-weapon-2",
+              title: "Dual Wielder - Weapon 2",
+              sections: allWeapons,
+            });
+          }
+          return { shouldContinue: false };
+        }
+      }
+
+      // Normal flow - proceed to power
+      const raceOrSubrace = getRaceOrSubrace(characterState.results);
+      setCurrentWheel(powerCountWheel(raceOrSubrace));
+      return { shouldContinue: false };
+    },
+    [isDualWielder]
   );
 
   // Handle Noble Swordsman special gear cases
@@ -428,16 +536,31 @@ export const useItemHandlers = () => {
       const tempGear = characterState.results["temp-gear"];
       const tempLegacyGear = characterState.results["temp-legacy-gear"];
       const tempWeapon = characterState.results["temp-weapon"];
-      const tempKnightGear = characterState.results["temp-knight-gear"];
+      const tempArcGear = characterState.results["temp-arc-gear"];
+      const tempArcWeap = characterState.results["temp-arc-weap"];
       const tempNobleGear = characterState.results["temp-noble-gear"];
       const isUsable = resultName === "Dùng được";
+      const tempAshinaWeapon = characterState.results["temp-ashina-weapon"];
 
-      if (tempKnightGear) {
+      if (tempArcGear) {
         // Handle Knight of Gods Holy Symbol usability
-        const holySymbol = JSON.parse(tempKnightGear);
+        const tgear = JSON.parse(tempArcGear);
         dispatch({
           type: "ADD_GEAR",
-          gear: { ...holySymbol, usable: isUsable },
+          gear: { ...tgear, usable: isUsable },
+        });
+        dispatch({
+          type: "SET_RESULT",
+          key: "temp-knight-gear",
+          value: "",
+        });
+        return { shouldContinue: true, message: "proceed-to-stats" };
+      } else if (tempArcWeap) {
+        // Handle Knight of Gods Holy Symbol usability
+        const weap = JSON.parse(tempArcWeap);
+        dispatch({
+          type: "ADD_WEAPON",
+          weapon: { ...weap, usable: isUsable },
         });
         dispatch({
           type: "SET_RESULT",
@@ -552,80 +675,29 @@ export const useItemHandlers = () => {
           }
           return { shouldContinue: false };
         } else {
-          // Not usable - finalize weapon with no enchants and skip to power
-          dispatch({
-            type: "ADD_WEAPON",
-            weapon: {
-              ...weaponData,
-              usable: false,
-              enchants: [],
-            } as WeaponWithEnchants,
-          });
-
-          // Clear temp data
-          dispatch({
-            type: "SET_RESULT",
-            key: "temp-current-weapon",
-            value: "",
-          });
-          dispatch({ type: "SET_RESULT", key: "weapon-usable", value: "" });
-
-          const raceOrSubrace = getRaceOrSubrace(characterState.results);
-          setCurrentWheel(powerCountWheel(raceOrSubrace));
-          return { shouldContinue: false };
+          // Not usable - finalize weapon with no enchants
+          return finalizeCurrentWeapon(params);
         }
+      } else if (tempAshinaWeapon) {
+        // Handle Ashina Clan Uchigatana usability
+        const uchigatana = JSON.parse(tempAshinaWeapon);
+        dispatch({
+          type: "ADD_WEAPON",
+          weapon: { ...uchigatana, usable: isUsable },
+        });
+        dispatch({
+          type: "SET_RESULT",
+          key: "temp-ashina-weapon",
+          value: "",
+        });
+        // Continue to gear count
+        setCurrentWheel(gearCountWheel);
+        return { shouldContinue: false };
       }
 
       return { shouldContinue: false };
     },
-    []
-  );
-
-  // Finalize weapon with collected enchants
-  const finalizeWeaponWithEnchants = useCallback(
-    (params: ItemHandlerParams, hasEnchants: boolean = true): WheelStep => {
-      const { dispatch, characterState } = params;
-
-      const weaponData = JSON.parse(
-        characterState.results["temp-current-weapon"] || "{}"
-      );
-      const isUsable = characterState.results["weapon-usable"] === "true";
-
-      let enchants: any[] = [];
-      if (hasEnchants) {
-        enchants = JSON.parse(
-          characterState.results["temp-weapon-enchants"] || "[]"
-        );
-      }
-
-      console.log("Finalizing weapon with enchants:", enchants);
-
-      dispatch({
-        type: "ADD_WEAPON",
-        weapon: {
-          ...weaponData,
-          usable: isUsable,
-          enchants: enchants,
-        } as WeaponWithEnchants,
-      });
-
-      // Clear all temp data
-      dispatch({
-        type: "SET_RESULT",
-        key: "temp-current-weapon",
-        value: "",
-      });
-      dispatch({ type: "SET_RESULT", key: "weapon-usable", value: "" });
-      dispatch({
-        type: "SET_RESULT",
-        key: "temp-weapon-enchants",
-        value: "",
-      });
-
-      const raceOrSubrace = getRaceOrSubrace(characterState.results);
-      return powerCountWheel(raceOrSubrace);
-    },
-    []
+    [finalizeCurrentWeapon]
   );
 
   // Handle weapon existence check
@@ -633,24 +705,52 @@ export const useItemHandlers = () => {
     (resultName: string, params: ItemHandlerParams): ItemHandlerResult => {
       const { setCurrentWheel, characterState } = params;
 
-      if (resultName === "No Weapon") {
+      // Check for special cases
+      const isHephaestus = characterState.results.subrace === "Hephaestus";
+      const isDualWielderArchetype = isDualWielder(characterState);
+
+      if (
+        resultName === "No Weapon" &&
+        !isHephaestus &&
+        !isDualWielderArchetype
+      ) {
         const raceOrSubrace = getRaceOrSubrace(characterState.results);
         setCurrentWheel(powerCountWheel(raceOrSubrace));
         return { shouldContinue: false };
       } else {
-        setCurrentWheel(uniqueWeaponExistWheel);
+        if (isHephaestus) {
+          // Hephaestus always gets unique weapon, skip unique weapon exist check
+          setCurrentWheel(uniqueWeaponWheel);
+        } else if (isDualWielderArchetype) {
+          // Dual Wielder gets guaranteed weapons, check for unique weapon first
+          setCurrentWheel({
+            key: "dual-wielder-weapon-1",
+            title: "Dual Wielder - Weapon 1",
+            sections: [...weaponWheel.sections, ...uniqueWeaponWheel.sections],
+          });
+        } else {
+          setCurrentWheel(uniqueWeaponExistWheel);
+        }
         return { shouldContinue: false };
       }
     },
-    []
+    [isDualWielder]
   );
 
   // Handle unique weapon existence check
   const handleUniqueWeaponExistFlow = useCallback(
     (resultName: string, params: ItemHandlerParams): ItemHandlerResult => {
-      const { setCurrentWheel } = params;
+      const { setCurrentWheel, characterState } = params;
 
-      setCurrentWheel(resultName === "No" ? weaponWheel : uniqueWeaponWheel);
+      // Check for Hephaestus subrace - this should not be reached for Hephaestus
+      const isHephaestus = characterState.results.subrace === "Hephaestus";
+
+      if (isHephaestus) {
+        // Safety check - should go directly to unique weapon
+        setCurrentWheel(uniqueWeaponWheel);
+      } else {
+        setCurrentWheel(resultName === "No" ? weaponWheel : uniqueWeaponWheel);
+      }
       return { shouldContinue: false };
     },
     []
@@ -666,7 +766,8 @@ export const useItemHandlers = () => {
     handleUsabilityCheck,
     handleWeaponExistFlow,
     handleUniqueWeaponExistFlow,
-    finalizeWeaponWithEnchants,
+    finalizeCurrentWeapon,
     getEnchantProgress,
+    isDualWielder,
   };
 };

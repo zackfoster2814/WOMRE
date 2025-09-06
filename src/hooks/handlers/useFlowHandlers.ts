@@ -15,6 +15,7 @@ import {
   dessendreSkillWheel,
   goldenOrderRuneWheel,
   starkWolfWheel,
+  targaryenDragonWheel,
 } from "@/Common/Config/HouseExtraWheels.ts";
 import {
   getStatWheel,
@@ -129,14 +130,14 @@ export const useFlowHandlers = () => {
           return { success: false, message: "Stats must be completed first" };
 
         case "house":
-          if (
-            characterState.quirks.length > 0 ||
-            statStep >= STAT_WHEELS.length
-          ) {
-            setCurrentWheel(houseWheel);
-            return { success: true, wheelKey: "house" };
-          }
-          return { success: false, message: "Quirks must be selected first" };
+          // if (
+          //   characterState.quirks.length > 0 ||
+          //   statStep >= STAT_WHEELS.length
+          // ) {
+          setCurrentWheel(houseWheel);
+          return { success: true, wheelKey: "house" };
+        // }
+        // return { success: false, message: "Quirks must be selected first" };
 
         case "gear":
           setCurrentWheel(gearCountWheel);
@@ -332,13 +333,23 @@ export const useFlowHandlers = () => {
           ...dessendreSkillWheel,
           onComplete,
         },
+        "House Targaryen": {
+          ...targaryenDragonWheel,
+          onComplete,
+        },
+        "House Marais": {
+          key: "marais-race-1",
+          title: "House Marais - First Slayer Target",
+          sections: raceWheel.sections, // Use race wheel sections
+          onComplete,
+        },
+        
       };
 
       return houseSpecialWheels[houseName] || null;
     },
     []
   );
-
   // Validate navigation is allowed
   const canNavigateToWheel = useCallback(
     (wheelKey: string, characterState: any): boolean => {

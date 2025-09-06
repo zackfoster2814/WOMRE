@@ -24,6 +24,19 @@ interface PowerCalculation {
   finalPowerCount: number;
   sources: string[];
 }
+interface CharDevCalculation {
+  baseCharDevCount: number;
+  bonus: number;
+  finalPowerCount: number;
+  sources: string[];
+}
+
+interface QuirkCalculation {
+  baseQuirkCount: number;
+  bonus: number;
+  finalPowerCount: number;
+  sources: string[];
+}
 
 interface ItemUsabilityCheck {
   itemName: string;
@@ -43,33 +56,6 @@ interface ExtraGearCalculation {
 }
 
 export const useGameMechanics = () => {
-  // Calculate extra gear bonuses based on character conditions
-  const calculateExtraGear = useCallback(
-    (baseGearCount: number, characterState: any): number => {
-      let extraGearBonus = 0;
-
-      if (
-        characterState.results.race === "Goblin" &&
-        characterState.results.subrace === "Goblin (5000)"
-      ) {
-        extraGearBonus++;
-      }
-
-      const finalGearCount = Math.max(0, baseGearCount + extraGearBonus);
-
-      return finalGearCount;
-    },
-    []
-  );
-
-  // Helper function for the simple interface
-  const extraGear = useCallback(
-    (baseGearCount: number, characterState: any): number => {
-      return calculateExtraGear(baseGearCount, characterState);
-    },
-    [calculateExtraGear]
-  );
-
   // Helper function to get enchant progress info
   const getEnchantProgress = useCallback(
     (
@@ -150,6 +136,45 @@ export const useGameMechanics = () => {
     [getWeaponTags]
   );
 
+  // Calculate extra gear bonuses based on character conditions
+  const calculateExtraGear = useCallback(
+    (baseGearCount: number, characterState: any): number => {
+      let extraGearBonus = 0;
+      console.log(characterState);
+
+      if (
+        characterState.results.race === "Goblin" &&
+        characterState.results.subrace === "Goblin (5000)"
+      ) {
+        extraGearBonus++;
+      }
+      const isBlacksmith = characterState.archetypes.some(
+        (archetype: any) => archetype.name === "Blacksmith"
+      );
+      if (isBlacksmith) {
+        extraGearBonus += 2;
+      }
+
+      const isHouseLannister =
+        characterState.results.house === "House Lannister";
+      if (isHouseLannister) {
+        extraGearBonus += 2;
+      }
+      const finalGearCount = Math.max(0, baseGearCount + extraGearBonus);
+
+      return finalGearCount;
+    },
+    []
+  );
+
+  // Helper function for the simple interface
+  const extraGear = useCallback(
+    (baseGearCount: number, characterState: any): number => {
+      return calculateExtraGear(baseGearCount, characterState);
+    },
+    [calculateExtraGear]
+  );
+
   // Calculate power count with all modifiers
   const calculatePowerCount = useCallback(
     (basePowerCount: number, characterState: any): PowerCalculation => {
@@ -165,26 +190,176 @@ export const useGameMechanics = () => {
         sources.push("Dark Magician: +2");
       }
 
-      const isElf = characterState.archetypes.some(
-        (a: any) =>
-          a.name === "Wood Elf" ||
-          a.name === "Sea Elf" ||
-          a.name === "Moon Elf" ||
-          a.name === "Sun Elf" ||
-          a.name === "Star Elf"
-      );
+      const elfSubraces = [
+        "Wood Elf",
+        "Sea Elf",
+        "Moon Elf",
+        "Sun Elf",
+        "Star Elf",
+      ];
+      const isElf = elfSubraces.includes(characterState.results.subrace);
+
       if (isElf) {
         bonus++;
-        sources.push(`${characterState.archetypes.name}: +1`);
+        sources.push(`${characterState.results.subrace}: +1`);
       }
 
-      // Add future race bonuses here
-      // Currently no race-specific power bonuses implemented
+      const isWeresheep = characterState.results.subrace === "Weresheep";
+      if (isWeresheep) {
+        bonus++;
+        sources.push(`Weresheep: +1`);
+      }
 
-      const finalPowerCount = basePowerCount + bonus;
+      const isAmethystDragon =
+        characterState.results.subrace === "Amethyst Dragon";
+      if (isAmethystDragon) {
+        bonus += 5;
+        sources.push(`Amethyst Dragon: +5`);
+      }
+      const dragonSubraces = [
+        "Wood Elf",
+        "Sea Elf",
+        "Moon Elf",
+        "Sun Elf",
+        "Star Elf",
+      ];
+      const isDragonSub = dragonSubraces.includes(
+        characterState.results.subrace
+      );
+      if (isDragonSub) {
+        bonus++;
+        sources.push(`${characterState.results.subrace}: +1`);
+      }
+
+      const isDominions = characterState.results.subrace === "Dominions";
+      if (isDominions) {
+        bonus += 2;
+        sources.push(`${characterState.results.subrace}: +2`);
+      }
+
+      const isGodArtsandMagic =
+        characterState.results.subrace === "Arts and Magic";
+      if (isGodArtsandMagic) {
+        bonus++;
+        sources.push(`${characterState.results.subrace}: +1`);
+      }
+
+      const isZeus = characterState.results.subrace === "Zeus";
+      if (isZeus) {
+        bonus += 3;
+        sources.push(`${characterState.results.subrace}: +3`);
+      }
+      const isPoseidon = characterState.results.subrace === "Poseidon";
+      if (isPoseidon) {
+        bonus += 2;
+        sources.push(`${characterState.results.subrace}: +2`);
+      }
+      const isDemeter = characterState.results.subrace === "Demeter";
+      if (isDemeter) {
+        bonus += 3;
+        sources.push(`${characterState.results.subrace}: +3`);
+      }
+      const isAres = characterState.results.subrace === "Ares";
+      if (isAres) {
+        bonus += 2;
+        sources.push(`${characterState.results.subrace}: +2`);
+      }
+
+      const isHestia = characterState.results.subrace === "Hestia";
+      if (isHestia) {
+        bonus++;
+        sources.push(`${characterState.results.subrace}: +1`);
+      }
+
+      const isHouseCaria = characterState.results.house === "House Caria";
+      if (isHouseCaria) {
+        bonus += 2;
+        sources.push(`House Caria: +2`);
+      }
+
+      const isGoldenOrder = characterState.results.house === "Golden Order";
+      if (isGoldenOrder) {
+        bonus++;
+        sources.push(`Golden Order: +1`);
+      }
+
+      const isWinterhold =
+        characterState.results.house === "College of Winterhold";
+      if (isWinterhold) {
+        bonus++;
+        sources.push(`Golden Order: +1`);
+      }
+
+      const finalPowerCount = Number(basePowerCount) + Number(bonus);
 
       return {
         basePowerCount,
+        bonus,
+        finalPowerCount,
+        sources,
+      };
+    },
+    []
+  );
+
+  const calculateQuirkCount = useCallback(
+    (baseQuirkCount: number, characterState: any): QuirkCalculation => {
+      let bonus = 0;
+      const sources = [`Base: ${baseQuirkCount}`];
+
+      const isZephyrianDragon =
+        characterState.results.subrace === "Zephyrian Dragon";
+      if (isZephyrianDragon) {
+        bonus++;
+        sources.push(`Zephyrian Dragon: +1`);
+      }
+
+      const isChaosDragon = characterState.results.subrace === "Chaos Dragon";
+      if (isChaosDragon) {
+        bonus += 3;
+        sources.push(`Chaos Dragon: +1`);
+      }
+
+      const finalPowerCount = Number(baseQuirkCount) + Number(bonus);
+
+      return {
+        baseQuirkCount,
+        bonus,
+        finalPowerCount,
+        sources,
+      };
+    },
+    []
+  );
+
+  const calculateChardevCount = useCallback(
+    (baseCharDevCount: number, characterState: any): CharDevCalculation => {
+      let bonus = 0;
+      const sources = [`Base: ${baseCharDevCount}`];
+
+      const ishuman = characterState.results.race === "Human";
+      if (ishuman) {
+        bonus++;
+        sources.push("Human: +1");
+      }
+
+      const isWereseal = characterState.results.subrace === "Wereseal";
+
+      if (isWereseal) {
+        bonus++;
+        sources.push("Wereseal: +1");
+      }
+
+      const isIceDragon = characterState.results.subrace === "Ice Dragon";
+      if (isIceDragon) {
+        bonus++;
+        sources.push("Ice Dragon: +1");
+      }
+
+      const finalPowerCount = Number(baseCharDevCount) + Number(bonus);
+
+      return {
+        baseCharDevCount,
         bonus,
         finalPowerCount,
         sources,
@@ -470,6 +645,8 @@ export const useGameMechanics = () => {
     calculateItemUsability,
     checkRequirements,
     calculateCombatStats,
+    calculateChardevCount,
+    calculateQuirkCount,
     getSpecialAbilities,
     validateCharacterBuild,
     calculateProgressionPoints,

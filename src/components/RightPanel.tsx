@@ -226,14 +226,24 @@ export const RightPanel: React.FC<RightPanelProps> = ({
       <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl">
         <div className="flex flex-col">
           <p
-            onClick={() => handleSectionClick("pve")}
+            onClick={() => jumpToWheel("pve")}
             className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
           >
-            PvE
+            PvE Scenarios
           </p>
-          <span className="text-amber-300 mt-2">
-            {characterState.results.pve || "???"}
-          </span>
+          <div className="max-h-40 overflow-y-auto pr-2">
+            <ul className="list-disc pl-6 space-y-1 min-h-[130px] max-h-[130px] overflow-y-auto">
+              {characterState.pveRounds.length > 0 ? (
+                characterState.pveRounds.map((pve: any, idx: number) => (
+                  <li key={idx} className="text-yellow-300">
+                    {pve.name}
+                  </li>
+                ))
+              ) : (
+                <li className="text-gray-400">No PvE scenarios</li>
+              )}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
