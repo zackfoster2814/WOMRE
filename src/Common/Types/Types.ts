@@ -10,7 +10,9 @@ export type Section = {
   extraWheel?: string | string[];
   image?: string;
   usableRate?: number;
+  enchants?: string[];
   usable?: boolean;
+  tag?: string | string[];
 };
 
 export type WheelStep = {
