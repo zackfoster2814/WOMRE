@@ -21,7 +21,7 @@ import { useRaceHandlers } from "@/hooks/handlers/useRaceHandlers.ts";
 import { useFlowHandlers } from "@/hooks/handlers/useFlowHandlers.ts";
 import { useGameMechanics } from "@/hooks/utils/useGameMechanics.ts";
 import { useCharacterHelpers } from "@/hooks/utils/useCharacterHelpers.ts";
-
+import { playerWheel } from "@/Common/Config/PlayerConfig.ts";
 // Import reducer and types
 import {
   characterReducer,
@@ -685,12 +685,24 @@ export const useCharacterWheel = () => {
     ]
   );
 
-  const handleCharDevFlow = useCallback(
+const handleCharDevFlow = useCallback(
     (resultName: string) => {
-      const charDev = currentWheel.sections.find((s) => s.name === resultName)!;
+      const charDev = currentWheel.sections.find((s) => s.name === "Make love")!;
       dispatch({ type: "ADD_CHARDEV", charDev });
 
-      if (charDevStep + 1 < charDevMax) {
+      if (["03", "20"].includes(charDev.id)) {
+        // For charDev IDs "03" or "20", transition to player wheel
+        setCurrentWheel({
+          ...playerWheel,
+          key: "player",
+          title: "Player",
+        
+        });
+    } else if (currentWheel.key === "player") {
+        // After player wheel is spun and "Next" is clicked, transition to PvP wheel
+        setCurrentWheel(pveWheel)
+      } else if (charDevStep + 1 < charDevMax) {
+        // Continue character development flow
         setCharDevStep(charDevStep + 1);
         setCurrentWheel({
           key: "char-dev",
@@ -698,18 +710,22 @@ export const useCharacterWheel = () => {
           sections: currentWheel.sections.filter((s) => s.name !== resultName),
         });
       } else {
+        // Default transition to PvE wheel
         setCurrentWheel(pveWheel);
       }
     },
     [
       currentWheel,
-      dispatch,
       charDevStep,
       charDevMax,
+      dispatch,
+      playerWheel,
+      pveWheel,
       setCharDevStep,
       setCurrentWheel,
+      handleNextStep,
     ]
-  );
+);
 
   // Character completion and data handling
   const handleGetData = useCallback(() => {

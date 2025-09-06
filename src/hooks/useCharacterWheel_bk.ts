@@ -48,6 +48,7 @@ import { powerCountWheel, PowerWheel } from "@/Common/Config/PowerConfig.ts";
 import { charDevWheel } from "@/Common/Config/CharDevConfig.ts";
 import { pveWheel } from "@/Common/Config/PvEConfig.ts";
 import { exportCharacter } from "@/Common/exportCharacter.ts";
+import { playerWheel } from "@/Common/Config/PlayerConfig.ts";
 
 // New interface for weapons with enchants
 interface WeaponWithEnchants extends Section {
@@ -106,7 +107,7 @@ const initialState: CharacterState = {
   characterName: "",
 };
 
-const DEBUG_RESULT = "Bloodclan Berserker";
+const DEBUG_RESULT = "In Love";
 
 // Reducer
 function characterReducer(
@@ -1379,11 +1380,20 @@ export const useCharacterWheel = () => {
           break;
 
         case "char-dev":
-          const charDevs = currentWheel.sections.find(
-            (s) => s.name === resultName
+          console.log(DEBUG_RESULT);
+          
+        const charDevs = currentWheel.sections.find(
+            (s) => s.name === DEBUG_RESULT  
           )!;
           dispatch({ type: "ADD_CHARDEV", charDev: charDevs });
-          if (charDevStep + 1 < charDevMax) {
+          resultName==DEBUG_RESULT;
+          if (["03","20"].includes(charDevs.id)) {
+            setCurrentWheel({
+              ...playerWheel,
+              key: "player",
+              title: "Player",
+            });
+          } else if (charDevStep + 1 < charDevMax) {
             setCharDevStep(charDevStep + 1);
             setCurrentWheel({
               key: "char-dev",
