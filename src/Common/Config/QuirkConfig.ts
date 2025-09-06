@@ -227,7 +227,7 @@ export const quirkList: Section[] = [
   },
   {
     id: "q26",
-    name: "Trainng Restricted",
+    name: "Training Restricted",
     weight: 1.79,
     color: "#FFE4B5",
     description: "Nhận +1 all stats nhưng sẽ không có vòng đấu PvE.",

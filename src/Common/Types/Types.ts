@@ -13,6 +13,7 @@ export type Section = {
   enchants?: string[];
   usable?: boolean;
   tag?: string | string[];
+  isUnique?: boolean;
 };
 
 export type WheelStep = {

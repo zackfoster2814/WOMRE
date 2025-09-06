@@ -15,13 +15,14 @@ const WeaponTooltip: React.FC<TooltipProps> = ({ weapon, children }) => {
 
   const getTooltipContent = () => {
     const enchantNames =
-      weapon.enchants?.map((e: any) => e.name).join(", ") || "No Enchants";
+      weapon.enchants?.map((e: any) => e.name).join(" ") || "";
     const usabilityText = weapon.usable ? "Dùng được" : "Không dùng được";
 
     return (
       <div className="bg-black/90 text-white p-3 rounded-lg shadow-lg border border-amber-400 max-w-xs">
-        <div className="font-bold text-amber-300 mb-1">{enchantNames}</div>
-        <div className="text-amber-200 mb-2">{weapon.name}</div>
+        <div className="font-bold text-amber-300 mb-1">
+          {`${enchantNames} ${weapon.name}`}
+        </div>
         <div
           className={`text-sm ${
             weapon.usable ? "text-green-400" : "text-red-400"
@@ -41,7 +42,7 @@ const WeaponTooltip: React.FC<TooltipProps> = ({ weapon, children }) => {
     >
       {children}
       {showTooltip && (
-        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 z-50">
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 z-50 min-w-[200px]">
           {getTooltipContent()}
           <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-amber-400"></div>
         </div>
@@ -81,7 +82,7 @@ export const RightPanel: React.FC<RightPanelProps> = ({
   };
 
   return (
-    <div className="w-[20%] flex flex-col gap-6 border-4 border-[#5a2d0c] p-4 rounded-xl shadow-[0_0_30px_rgba(200,50,0,0.8)] bg-black/70 h-full overflow-y-auto">
+    <div className="w-[20%] flex flex-col gap-1 border-4 border-[#5a2d0c] p-4 rounded-xl shadow-[0_0_30px_rgba(200,50,0,0.8)] bg-black/70 h-full overflow-y-auto">
       {/* Weapons Section */}
       <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl min-h-[200px] max-h-[200px]">
         <p

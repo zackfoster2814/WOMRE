@@ -275,6 +275,28 @@ export const useArchetypeHandlers = () => {
           setCurrentWheel(wibuWheel);
           return { shouldContinue: false };
 
+        case "Bookworm":
+          // Store Holy Symbol temporarily for usability check
+          const note = {
+            id: "2",
+            name: "Sổ tay",
+            weight: 2.78,
+            color: "#FFD700",
+            description: "Khi thua IQ, nhận +1 IQ (80%, Physical)",
+            usableRate: 80,
+            tag: "Physical",
+          };
+
+          dispatch({
+            type: "SET_RESULT",
+            key: "bookwormGear",
+            value: JSON.stringify(note),
+          });
+
+          // Call usability wheel for Holy Symbol
+          setCurrentWheel(usabilityWheel(note.usableRate, note.name));
+          return { shouldContinue: false };
+
         default:
           // Check for other archetype extra wheels
           const extraWheel = archetypeExtraWheels[resultName];

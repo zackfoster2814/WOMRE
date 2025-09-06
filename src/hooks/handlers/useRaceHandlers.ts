@@ -28,6 +28,115 @@ interface RaceHandlerResult {
 }
 
 export const useRaceHandlers = () => {
+  // Uma parent abilities mapping
+  const UMA_PARENT_ABILITIES = {
+    Maruzensky: {
+      type: "ADD_POWER",
+      data: {
+        id: "4",
+        name: "Red Shift/LP1211-M",
+        effect:
+          "Trong combat: Nếu bạn thắng ít nhất 1 trong 3 round đầu tiên (Strength/Speed/Durability), nhận +1 IQ, +1 BIQ và +2 MA.",
+        weight: 0.9,
+        color: "",
+      },
+    },
+    "Mejiro Ryan": {
+      type: "ADD_POWER",
+      data: {
+        id: "6",
+        name: "Let's Pump Some Iron!",
+        effect:
+          "Trong combat: Nếu bạn thắng chính xác 1 trong 3 round đầu tiên (Strength/Speed/Durability), nhận +2 IQ, +2 BIQ và +2 MA.",
+        weight: 0.9,
+        color: "",
+      },
+    },
+    "Taiki Shuttle": {
+      type: "ADD_POWER",
+      data: {
+        id: "5",
+        name: "Shooting for Victory",
+        effect:
+          "Trong combat: Nếu bạn thắng ít nhất 1 và thua ít nhất 1 trong 3 round đầu tiên (Strength/Speed/Durability), nhận +1 IQ, +1 BIQ và +2 MA.",
+        weight: 0.9,
+        color: "",
+      },
+    },
+    "Gold Ship": {
+      type: "ADD_QUIRK",
+      data: {
+        id: "q26",
+        name: "Training Restricted",
+        weight: 1.79,
+        color: "#FFE4B5",
+        description: "Nhận +1 all stats nhưng sẽ không có vòng đấu PvE.",
+      },
+    },
+    "Agnes Tachyon": {
+      type: "ADD_POWER",
+      data: {
+        id: "7",
+        name: "U=ma2",
+        effect: "Trong combat: Nhận +5 Durability nếu bạn thua round Speed.",
+        weight: 0.9,
+        color: "",
+      },
+    },
+  };
+
+  // Apply Uma parent abilities
+  const applyUmaParentAbilities = useCallback(
+    (parentName: string, dispatch: React.Dispatch<any>) => {
+      const ability =
+        UMA_PARENT_ABILITIES[parentName as keyof typeof UMA_PARENT_ABILITIES];
+      if (ability) {
+        dispatch({
+          type: ability.type,
+          [ability.type === "ADD_POWER" ? "power" : "quirk"]: ability.data,
+        });
+      }
+    },
+    []
+  );
+
+  // Handle Special Week power selection
+  const handleSpecialWeekFlow = useCallback(
+    (resultName: string, params: RaceHandlerParams): RaceHandlerResult => {
+      const { dispatch, setCurrentWheel } = params;
+
+      const specialWeekPowers = {
+        Gourmand: {
+          id: "101",
+          name: "Gourmand",
+          effect: "Trong Combat: Nhận +4 Durability.",
+          weight: 0.9,
+          color: "",
+        },
+        Hydrate: {
+          id: "100",
+          name: "Hydrate",
+          effect: "Cơ thể bạn được cung cấp đủ nước. 💦💦💦",
+          weight: 0.9,
+          color: "",
+        },
+      };
+
+      const selectedPower =
+        specialWeekPowers[resultName as keyof typeof specialWeekPowers];
+      if (selectedPower) {
+        dispatch({
+          type: "ADD_POWER",
+          power: selectedPower,
+        });
+      }
+
+      setCurrentWheel(archetypeWheel);
+      return { shouldContinue: false };
+    },
+    []
+  );
+
   // Handle main race selection
   const handleRaceSelection = useCallback(
     (resultName: string, params: RaceHandlerParams): RaceHandlerResult => {
@@ -104,6 +213,10 @@ export const useRaceHandlers = () => {
             key: "uma-parent-1",
             value: resultName,
           });
+
+          // Apply parent 1 abilities
+          applyUmaParentAbilities(resultName, dispatch);
+
           setCurrentWheel({
             key: "uma-parent-2",
             title: "Uma Parent Race 2",
@@ -117,19 +230,50 @@ export const useRaceHandlers = () => {
             key: "uma-parent-2",
             value: resultName,
           });
+
+          // Apply parent 2 abilities
+          applyUmaParentAbilities(resultName, dispatch);
+
+          // Set combined subrace
+          const parent1 = characterState.results["uma-parent-1"];
+          const combinedSubrace = `${parent1} - ${resultName}`;
           dispatch({
             type: "SET_RESULT",
             key: "subrace",
-            value: `${characterState.results["uma-parent-1"]} - ${resultName}`,
+            value: combinedSubrace,
           });
-          setCurrentWheel(archetypeWheel);
+
+          // Check for Special Week combination
+          if (combinedSubrace.includes("Special Week")) {
+            setCurrentWheel({
+              key: "special-week-extra",
+              title: "Special Week Power Selection",
+              sections: [
+                {
+                  id: "gourmand",
+                  name: "Gourmand",
+                  weight: 1,
+                  color: "#FFD700",
+                },
+                {
+                  id: "hydrate",
+                  name: "Hydrate",
+                  weight: 1,
+                  color: "#87CEEB",
+                },
+              ],
+            });
+          } else {
+            setCurrentWheel(archetypeWheel);
+          }
+
           return { shouldContinue: false };
 
         default:
           return { shouldContinue: true };
       }
     },
-    []
+    [applyUmaParentAbilities]
   );
 
   // Handle skeleton lineage selection
@@ -148,16 +292,50 @@ export const useRaceHandlers = () => {
   const handleSubraceSelection = useCallback(
     (resultName: string, params: RaceHandlerParams): RaceHandlerResult => {
       const { dispatch, setCurrentWheel, characterState } = params;
-
       dispatch({ type: "SET_RESULT", key: "subrace", value: resultName });
 
-      // Check for Vampire special flow
       if (characterState.results.race === "Vampire") {
         setCurrentWheel({
           ...uniqueVampireTrainWheel,
           key: "uniqueVampireTrain",
           title: "Unique Taste Train",
         });
+        return { shouldContinue: false };
+      } else if (
+        characterState.results.race === "Goblin" &&
+        resultName === "Goblin (1)"
+      ) {
+        dispatch({
+          type: "ADD_ARCHETYPE",
+          archetype: { id: "33", name: "Him", weight: 1, color: "#1E90FF" },
+        });
+        const raceOrSubrace = getRaceOrSubrace(characterState.results);
+        const firstStatWheel = getStatWheel(raceOrSubrace, STAT_WHEELS[0]);
+
+        if (firstStatWheel) {
+          setCurrentWheel(firstStatWheel);
+          return { shouldContinue: false };
+        } else {
+          // Fallback nếu không tìm được stat wheel
+          setCurrentWheel(archetypeWheel);
+          return { shouldContinue: false };
+        }
+      } else if (
+        characterState.results.race === "Elf" &&
+        resultName === "Lythari"
+      ) {
+        dispatch({
+          type: "ADD_QUIRK",
+          quirk: {
+            id: "q41",
+            name: "Raconteur",
+            weight: 1.79,
+            color: "#F08080",
+            description:
+              "Trong combat: Round chiến thắng đầu tiên của bản thân sẽ không được nhận điểm mà khiến đối thủ bị -1 điểm.",
+          },
+        });
+
         return { shouldContinue: false };
       } else {
         setCurrentWheel(archetypeWheel);
@@ -278,7 +456,7 @@ export const useRaceHandlers = () => {
     (race: string): string | null => {
       switch (race) {
         case "Uma":
-          return "Tracen Academy.ts";
+          return "Tracen Academy";
         default:
           return null;
       }
@@ -345,6 +523,8 @@ export const useRaceHandlers = () => {
       case "Uma":
         rules.push("Must select two parent races");
         rules.push("Automatically assigned to Tracen Academy");
+        rules.push("Each parent grants special abilities");
+        rules.push("Special Week combinations grant extra powers");
         break;
       case "Angel":
         rules.push("Automatically gains Pacifist archetype");
@@ -389,6 +569,8 @@ export const useRaceHandlers = () => {
     handleSubraceSelection,
     handleVampireFlow,
     handleRaceSpecificStats,
+    handleSpecialWeekFlow,
+    applyUmaParentAbilities, // Export this function
     hasSpecialRaceHouseAssignment,
     getRaceCharDevMax,
     getRacePowerModifier,

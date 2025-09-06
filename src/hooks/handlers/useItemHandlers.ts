@@ -94,7 +94,6 @@ export const useItemHandlers = () => {
         setCurrentWheel(usabilityWheel(gear.usableRate, gear.name));
         return { shouldContinue: false };
       } else {
-        // If usableRate is 100 or undefined, always usable
         dispatch({ type: "ADD_GEAR", gear: { ...gear, usable: true } });
 
         if (gearStep + 1 < gearCount) {
@@ -198,8 +197,11 @@ export const useItemHandlers = () => {
         value: JSON.stringify(weapon),
       });
 
+      const isAncientDwarf =
+        characterState.results.subrace === "Cổ lùn (Ancient)";
+
       // Roll usability wheel for weapon
-      if (weapon.usableRate && weapon.usableRate < 100) {
+      if (!isAncientDwarf && weapon.usableRate && weapon.usableRate < 100) {
         dispatch({
           type: "SET_RESULT",
           key: "temp-weapon",
@@ -264,12 +266,35 @@ export const useItemHandlers = () => {
           title: `Weapon Enchant (1/${eCount})`,
           sections: enchantWheel.sections,
         });
+        return { shouldContinue: false };
       } else {
-        // No enchants - finalize weapon and continue
-        return { shouldContinue: true, message: "finalize-weapon-no-enchants" };
-      }
+        // No enchants - finalize weapon and continue to power
+        const weaponData = JSON.parse(
+          characterState.results["temp-current-weapon"] || "{}"
+        );
+        const isUsable = characterState.results["weapon-usable"] === "true";
 
-      return { shouldContinue: false };
+        dispatch({
+          type: "ADD_WEAPON",
+          weapon: {
+            ...weaponData,
+            usable: isUsable,
+            enchants: [],
+          } as WeaponWithEnchants,
+        });
+
+        // Clear temp data
+        dispatch({
+          type: "SET_RESULT",
+          key: "temp-current-weapon",
+          value: "",
+        });
+        dispatch({ type: "SET_RESULT", key: "weapon-usable", value: "" });
+
+        const raceOrSubrace = getRaceOrSubrace(characterState.results);
+        setCurrentWheel(powerCountWheel(raceOrSubrace));
+        return { shouldContinue: false };
+      }
     },
     []
   );
@@ -318,10 +343,36 @@ export const useItemHandlers = () => {
         return { shouldContinue: false };
       } else {
         // All enchants collected - finalize weapon
-        return {
-          shouldContinue: true,
-          message: "finalize-weapon-with-enchants",
-        };
+        const weaponData = JSON.parse(
+          characterState.results["temp-current-weapon"] || "{}"
+        );
+        const isUsable = characterState.results["weapon-usable"] === "true";
+
+        dispatch({
+          type: "ADD_WEAPON",
+          weapon: {
+            ...weaponData,
+            usable: isUsable,
+            enchants: currentEnchants,
+          } as WeaponWithEnchants,
+        });
+
+        // Clear all temp data
+        dispatch({
+          type: "SET_RESULT",
+          key: "temp-current-weapon",
+          value: "",
+        });
+        dispatch({ type: "SET_RESULT", key: "weapon-usable", value: "" });
+        dispatch({
+          type: "SET_RESULT",
+          key: "temp-weapon-enchants",
+          value: "",
+        });
+
+        const raceOrSubrace = getRaceOrSubrace(characterState.results);
+        setCurrentWheel(powerCountWheel(raceOrSubrace));
+        return { shouldContinue: false };
       }
     },
     []
@@ -502,7 +553,26 @@ export const useItemHandlers = () => {
           return { shouldContinue: false };
         } else {
           // Not usable - finalize weapon with no enchants and skip to power
-          return { shouldContinue: true, message: "finalize-unusable-weapon" };
+          dispatch({
+            type: "ADD_WEAPON",
+            weapon: {
+              ...weaponData,
+              usable: false,
+              enchants: [],
+            } as WeaponWithEnchants,
+          });
+
+          // Clear temp data
+          dispatch({
+            type: "SET_RESULT",
+            key: "temp-current-weapon",
+            value: "",
+          });
+          dispatch({ type: "SET_RESULT", key: "weapon-usable", value: "" });
+
+          const raceOrSubrace = getRaceOrSubrace(characterState.results);
+          setCurrentWheel(powerCountWheel(raceOrSubrace));
+          return { shouldContinue: false };
         }
       }
 

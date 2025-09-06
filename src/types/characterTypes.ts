@@ -103,7 +103,7 @@ export interface CharacterItem {
 
 // Weapon with Enchants Interface
 export interface WeaponWithEnchants extends Section {
-  enchants: Section[];
+  enchants: string[];
   usable: boolean;
 }
 

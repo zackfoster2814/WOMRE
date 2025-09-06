@@ -23,6 +23,7 @@ export default function CharacterWheel() {
     handleGetData,
     handleCharacterComplete,
     setShowDialog,
+    raceHandlers,
   } = useCharacterWheel();
 
   const { audioRefs, audioSources } = useHouseAudios();
@@ -54,6 +55,7 @@ export default function CharacterWheel() {
           jumpToWheel={jumpToWheel}
           handleNextStep={handleWheelStep}
           statStep={statStep}
+          raceHandlers={raceHandlers}
         />
 
         <CenterWheel

@@ -27,9 +27,8 @@ import {
   characterReducer,
   initialCharacterState,
 } from "@/reducers/characterReducer.ts";
-import { CharacterState, CharacterAction } from "@/types/characterTypes.ts";
 
-// const DEBUG_RESULT = "Bloodclan Berserker";
+const DEBUG_RESULT = "Dark Magician";
 
 export const useCharacterWheel = () => {
   // Core state management
@@ -168,7 +167,6 @@ export const useCharacterWheel = () => {
 
       // Use debug result if enabled
       // if (key === "archetype") {
-      //   resultName = DEBUG_RESULT;
       // }
 
       const handleArchetypeResult = (result: any) => {
@@ -275,6 +273,9 @@ export const useCharacterWheel = () => {
             handlerParams
           );
 
+        case "special-week-extra": // <-- THÊM CASE NÀY
+          return raceHandlers.handleSpecialWeekFlow(resultName, handlerParams);
+
         case "skeleton-lineage":
           return raceHandlers.handleSkeletonLineage(resultName, handlerParams);
 
@@ -294,6 +295,7 @@ export const useCharacterWheel = () => {
 
         // Archetype flow
         case "archetype": {
+          resultName = DEBUG_RESULT;
           const archetype = currentWheel.sections.find(
             (s) => s.name === resultName
           )!;
@@ -364,7 +366,13 @@ export const useCharacterWheel = () => {
 
         // Gear flow
         case "gear-count":
-          setGearCount(parseInt(resultName, 10));
+          let gearCount = gameMechanics.extraGear(
+            parseInt(resultName, 10),
+            characterState
+          );
+          console.log(gearCount);
+
+          setGearCount(gearCount);
           setGearStep(0);
           setCurrentWheel(legacyGearCountWheel);
           break;
@@ -408,54 +416,36 @@ export const useCharacterWheel = () => {
         }
 
         // Weapon flow
-        case "weapon-exist": {
-          const result = itemHandlers.handleWeaponExistFlow(
+        // Weapon existence checks
+        case "weapon-exist":
+          return itemHandlers.handleWeaponExistFlow(resultName, handlerParams);
+
+        case "unique-weapon-exist":
+          return itemHandlers.handleUniqueWeaponExistFlow(
             resultName,
             handlerParams
           );
-          handleItemResult(result);
-          break;
-        }
 
-        case "unique-weapon-exist": {
-          const result = itemHandlers.handleUniqueWeaponExistFlow(
-            resultName,
-            handlerParams
-          );
-          handleItemResult(result);
-          break;
-        }
-
+        // Weapon selection
         case "weapon":
-        case "unique-weapon": {
-          const result = itemHandlers.handleWeaponFlow(
+        case "unique-weapon":
+          return itemHandlers.handleWeaponFlow(
             key,
             resultName,
             currentWheel,
             handlerParams
           );
-          handleItemResult(result);
-          break;
-        }
 
-        case "weapon-enchant-count": {
-          const result = itemHandlers.handleEnchantCountFlow(
-            resultName,
-            handlerParams
-          );
-          handleItemResult(result);
-          break;
-        }
+        // Enchant system
+        case "weapon-enchant-count":
+          return itemHandlers.handleEnchantCountFlow(resultName, handlerParams);
 
-        case "weapon-enchant": {
-          const result = itemHandlers.handleEnchantFlow(
+        case "weapon-enchant":
+          return itemHandlers.handleEnchantFlow(
             resultName,
             currentWheel,
             handlerParams
           );
-          handleItemResult(result);
-          break;
-        }
 
         // Usability checks
         case "usabilityCheck": {
@@ -780,6 +770,7 @@ export const useCharacterWheel = () => {
     powerCount,
     charDevStep,
     charDevMax,
+    raceHandlers,
 
     // Additional utilities from handlers
     flowStatus: flowHandlers.getFlowStatus(characterState),

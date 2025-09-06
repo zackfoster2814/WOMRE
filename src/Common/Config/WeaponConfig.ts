@@ -289,6 +289,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 66,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u2",
@@ -300,6 +301,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 75,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u3",
@@ -310,6 +312,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 80,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u4",
@@ -320,6 +323,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 70,
       tag: "Magic",
+      isUnique: true,
     },
     {
       id: "u5",
@@ -330,6 +334,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 80,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u6",
@@ -341,6 +346,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 50,
       tag: "Physical/Magic",
+      isUnique: true,
     },
     {
       id: "u7",
@@ -351,6 +357,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 65,
       tag: "Magic",
+      isUnique: true,
     },
     {
       id: "u8",
@@ -361,6 +368,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 70,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u9",
@@ -371,6 +379,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 80,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u10",
@@ -381,6 +390,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 90,
       tag: "Physical/Magic",
+      isUnique: true,
     },
     {
       id: "u11",
@@ -392,6 +402,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 90,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u12",
@@ -402,6 +413,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 72,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u13",
@@ -413,6 +425,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 72,
       tag: "Physical/Magic",
+      isUnique: true,
     },
     {
       id: "u14",
@@ -423,6 +436,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 80,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u15",
@@ -433,6 +447,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 66,
       tag: "Magic",
+      isUnique: true,
     },
     {
       id: "u16",
@@ -444,6 +459,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 90,
       tag: "Magic",
+      isUnique: true,
     },
     {
       id: "u17",
@@ -454,6 +470,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 88,
       tag: "Magic",
+      isUnique: true,
     },
     {
       id: "u18",
@@ -464,6 +481,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 90,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u19",
@@ -475,6 +493,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 77,
       tag: "Physical/Magic",
+      isUnique: true,
     },
     {
       id: "u20",
@@ -485,6 +504,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 100,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u21",
@@ -496,6 +516,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 70,
       tag: "Magic",
+      isUnique: true,
     },
     {
       id: "u22",
@@ -506,6 +527,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 80,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u23",
@@ -517,6 +539,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 90,
       tag: "Magic",
+      isUnique: true,
     },
     {
       id: "u24",
@@ -528,6 +551,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 70,
       tag: "Magic",
+      isUnique: true,
     },
     {
       id: "u25",
@@ -538,6 +562,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 88,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u26",
@@ -548,6 +573,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 70,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u27",
@@ -558,6 +584,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 100,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u28",
@@ -569,6 +596,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 100,
       tag: "Magic",
+      isUnique: true,
     },
     {
       id: "u29",
@@ -580,6 +608,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 80,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u30",
@@ -590,6 +619,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 88,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u31",
@@ -600,6 +630,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 95,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u32",
@@ -611,6 +642,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 100,
       tag: "Physical/Magic",
+      isUnique: true,
     },
     {
       id: "u33",
@@ -622,6 +654,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 90,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u34",
@@ -633,6 +666,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 80,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u35",
@@ -643,6 +677,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 80,
       tag: "Physical",
+      isUnique: true,
     },
     {
       id: "u36",
@@ -654,6 +689,7 @@ export const uniqueWeaponWheel: WheelStep = {
       image: saxophone,
       usableRate: 100,
       tag: "Physical",
+      isUnique: true,
     },
   ],
 };

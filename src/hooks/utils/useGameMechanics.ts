@@ -20,8 +20,7 @@ interface WeaponAnalysis {
 
 interface PowerCalculation {
   basePowerCount: number;
-  archetypeBonus: number;
-  raceBonus: number;
+  bonus: number;
   finalPowerCount: number;
   sources: string[];
 }
@@ -37,7 +36,40 @@ interface ItemUsabilityCheck {
   }>;
 }
 
+interface ExtraGearCalculation {
+  baseCount: number;
+  bonusCount: number;
+  finalCount: number;
+}
+
 export const useGameMechanics = () => {
+  // Calculate extra gear bonuses based on character conditions
+  const calculateExtraGear = useCallback(
+    (baseGearCount: number, characterState: any): number => {
+      let extraGearBonus = 0;
+
+      if (
+        characterState.results.race === "Goblin" &&
+        characterState.results.subrace === "Goblin (5000)"
+      ) {
+        extraGearBonus++;
+      }
+
+      const finalGearCount = Math.max(0, baseGearCount + extraGearBonus);
+
+      return finalGearCount;
+    },
+    []
+  );
+
+  // Helper function for the simple interface
+  const extraGear = useCallback(
+    (baseGearCount: number, characterState: any): number => {
+      return calculateExtraGear(baseGearCount, characterState);
+    },
+    [calculateExtraGear]
+  );
+
   // Helper function to get enchant progress info
   const getEnchantProgress = useCallback(
     (
@@ -121,8 +153,7 @@ export const useGameMechanics = () => {
   // Calculate power count with all modifiers
   const calculatePowerCount = useCallback(
     (basePowerCount: number, characterState: any): PowerCalculation => {
-      let archetypeBonus = 0;
-      let raceBonus = 0;
+      let bonus = 0;
       const sources = [`Base: ${basePowerCount}`];
 
       // Check for Dark Magician archetype bonus
@@ -130,19 +161,31 @@ export const useGameMechanics = () => {
         (a: any) => a.name === "Dark Magician"
       );
       if (hasDarkMagician) {
-        archetypeBonus += 2;
+        bonus += 2;
         sources.push("Dark Magician: +2");
+      }
+
+      const isElf = characterState.archetypes.some(
+        (a: any) =>
+          a.name === "Wood Elf" ||
+          a.name === "Sea Elf" ||
+          a.name === "Moon Elf" ||
+          a.name === "Sun Elf" ||
+          a.name === "Star Elf"
+      );
+      if (isElf) {
+        bonus++;
+        sources.push(`${characterState.archetypes.name}: +1`);
       }
 
       // Add future race bonuses here
       // Currently no race-specific power bonuses implemented
 
-      const finalPowerCount = basePowerCount + archetypeBonus + raceBonus;
+      const finalPowerCount = basePowerCount + bonus;
 
       return {
         basePowerCount,
-        archetypeBonus,
-        raceBonus,
+        bonus,
         finalPowerCount,
         sources,
       };
@@ -213,6 +256,9 @@ export const useGameMechanics = () => {
 
         case "npc-skip-chardev":
           return archetypes.some((a: any) => a.name === "NPC 💀");
+
+        case "goblin-5000-extra-gear":
+          return results.subrace === "Goblin (5000)";
 
         default:
           return false;
@@ -319,6 +365,13 @@ export const useGameMechanics = () => {
         break;
     }
 
+    // Check for subrace abilities
+    switch (characterState.results.subrace) {
+      case "Goblin (5000)":
+        abilities.push("Extra gear bonus (+1)");
+        break;
+    }
+
     // Check for quirk abilities
     characterState.quirks.forEach((quirk: any) => {
       if (quirk.description) {
@@ -404,6 +457,11 @@ export const useGameMechanics = () => {
   );
 
   return {
+    // Extra gear functions
+    extraGear,
+    calculateExtraGear,
+
+    // Existing functions
     getEnchantProgress,
     getGearsByTag,
     getWeaponTags,
