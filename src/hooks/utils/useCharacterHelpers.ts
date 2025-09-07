@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { exportCharacter } from "@/Common/exportCharacter.ts";
+import { exportCharacter } from "@/Common/exportCharacter";
 
 // Types for character helpers
 interface CompleteCharacterInfo {

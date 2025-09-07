@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { gearWheel } from "@/Common/Config/GearConfig.ts";
+import { gearWheel } from "@/Common/Config/GearConfig";
 
 // Types for game mechanics
 interface EnchantProgress {

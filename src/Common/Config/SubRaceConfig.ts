@@ -1,4 +1,4 @@
-import { Section } from "../Types/Types.ts";
+import { Section } from "../Types/Types";
 
 export const subraceMap: Record<string, Section[]> = {
   Uma: [

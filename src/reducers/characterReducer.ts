@@ -1,4 +1,4 @@
-import { CharacterState, CharacterAction } from "@/types/characterTypes.ts";
+import { CharacterState, CharacterAction } from "@/types/characterTypes";
 
 // Initial character state
 export const initialCharacterState: CharacterState = {

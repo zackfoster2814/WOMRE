@@ -1,43 +1,43 @@
 import { useState, useReducer, useCallback } from "react";
-import { WheelStep } from "@/Common/Types/Types.ts";
-import { raceWheel } from "@/Common/Config/RaceConfig.ts";
-import { quirkCountOptions, quirkList } from "@/Common/Config/QuirkConfig.ts";
+import { WheelStep } from "@/Common/Types/Types";
+import { raceWheel } from "@/Common/Config/RaceConfig";
+import { quirkCountOptions, quirkList } from "@/Common/Config/QuirkConfig";
 import {
   gearCountWheel,
   gearWheel,
   legacyGearCountWheel,
   legacyGearWheel,
-} from "@/Common/Config/GearConfig.ts";
-import { enchantCountWheel } from "@/Common/Config/WeaponConfig.ts";
-import { powerCountWheel, PowerWheel } from "@/Common/Config/PowerConfig.ts";
-import { charDevWheel } from "@/Common/Config/CharDevConfig.ts";
-import { pveWheel } from "@/Common/Config/PvEConfig.ts";
-import { playerWheel } from "@/Common/Config/PlayerConfig.ts";
+} from "@/Common/Config/GearConfig";
+import { enchantCountWheel } from "@/Common/Config/WeaponConfig";
+import { powerCountWheel, PowerWheel } from "@/Common/Config/PowerConfig";
+import { charDevWheel } from "@/Common/Config/CharDevConfig";
+import { pveWheel } from "@/Common/Config/PvEConfig";
+import { playerWheel } from "@/Common/Config/PlayerConfig";
 import {
   getRaceOrSubrace,
   STAT_WHEELS,
   usabilityWheel,
-} from "@/utils/wheelUtils.ts";
+} from "@/utils/wheelUtils";
 
 // Import all handlers
-import { useArchetypeHandlers } from "@/hooks/handlers/useArchetypeHandlers.ts";
-import { useItemHandlers } from "@/hooks/handlers/useItemHandlers.ts";
-import { useRaceHandlers } from "@/hooks/handlers/useRaceHandlers.ts";
-import { useFlowHandlers } from "@/hooks/handlers/useFlowHandlers.ts";
-import { useGameMechanics } from "@/hooks/utils/useGameMechanics.ts";
-import { useCharacterHelpers } from "@/hooks/utils/useCharacterHelpers.ts";
+import { useArchetypeHandlers } from "@/hooks/handlers/useArchetypeHandlers";
+import { useItemHandlers } from "@/hooks/handlers/useItemHandlers";
+import { useRaceHandlers } from "@/hooks/handlers/useRaceHandlers";
+import { useFlowHandlers } from "@/hooks/handlers/useFlowHandlers";
+import { useGameMechanics } from "@/hooks/utils/useGameMechanics";
+import { useCharacterHelpers } from "@/hooks/utils/useCharacterHelpers";
 import whip from "@/assets/Weapon/whip.png";
 import uchigatana from "@/assets/Weapon/uchigatana.png";
 // Import reducer and types
 import {
   characterReducer,
   initialCharacterState,
-} from "@/reducers/characterReducer.ts";
+} from "@/reducers/characterReducer";
 import {
   archetypeWheel,
   instrumentWheel,
-} from "@/Common/Config/ArchetypeConfig.ts";
-import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig.tsx";
+} from "@/Common/Config/ArchetypeConfig";
+import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig";
 
 // const DEBUG_RESULT = "Dark Magician";
 

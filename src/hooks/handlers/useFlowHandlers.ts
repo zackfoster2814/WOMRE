@@ -1,27 +1,27 @@
 import { useCallback } from "react";
-import { WheelStep } from "@/Common/Types/Types.ts";
-import { raceConfig, raceWheel } from "@/Common/Config/RaceConfig.ts";
-import { subraceMap } from "@/Common/Config/SubRaceConfig.ts";
-import { archetypeWheel } from "@/Common/Config/ArchetypeConfig.ts";
-import { quirkCountOptions } from "@/Common/Config/QuirkConfig.ts";
-import { houseWheel } from "@/Common/Config/HouseConfig.ts";
-import { gearCountWheel } from "@/Common/Config/GearConfig.ts";
-import { weaponExistWheel } from "@/Common/Config/WeaponConfig.ts";
-import { PowerWheel } from "@/Common/Config/PowerConfig.ts";
-import { charDevWheel } from "@/Common/Config/CharDevConfig.ts";
-import { pveWheel } from "@/Common/Config/PvEConfig.ts";
+import { WheelStep } from "@/Common/Types/Types";
+import { raceConfig, raceWheel } from "@/Common/Config/RaceConfig";
+import { subraceMap } from "@/Common/Config/SubRaceConfig";
+import { archetypeWheel } from "@/Common/Config/ArchetypeConfig";
+import { quirkCountOptions } from "@/Common/Config/QuirkConfig";
+import { houseWheel } from "@/Common/Config/HouseConfig";
+import { gearCountWheel } from "@/Common/Config/GearConfig";
+import { weaponExistWheel } from "@/Common/Config/WeaponConfig";
+import { PowerWheel } from "@/Common/Config/PowerConfig";
+import { charDevWheel } from "@/Common/Config/CharDevConfig";
+import { pveWheel } from "@/Common/Config/PvEConfig";
 import {
   ashinaSwordWheel,
   dessendreSkillWheel,
   goldenOrderRuneWheel,
   starkWolfWheel,
   targaryenDragonWheel,
-} from "@/Common/Config/HouseExtraWheels.ts";
+} from "@/Common/Config/HouseExtraWheels";
 import {
   getStatWheel,
   getRaceOrSubrace,
   STAT_WHEELS,
-} from "@/utils/wheelUtils.ts";
+} from "@/utils/wheelUtils";
 
 // Types for flow handlers
 interface FlowHandlerParams {
@@ -343,7 +343,6 @@ export const useFlowHandlers = () => {
           sections: raceWheel.sections, // Use race wheel sections
           onComplete,
         },
-        
       };
 
       return houseSpecialWheels[houseName] || null;
@@ -477,24 +476,24 @@ export const useFlowHandlers = () => {
   const getCurrentStepName = useCallback((characterState: any): string => {
     const { results, stats, quirks, powers, charDevs } = characterState;
 
-    if (!results.race) return "Race Selection.ts";
+    if (!results.race) return "Race Selection";
     if (!results.subrace && subraceMap[results.race]?.length > 0)
-      return "Subrace Selection.ts";
-    if (characterState.archetypes.length === 0) return "Archetype Selection.ts";
+      return "Subrace Selection";
+    if (characterState.archetypes.length === 0) return "Archetype Selection";
     if (Object.values(stats).some((stat: any) => stat === ""))
-      return "Stats Rolling.ts";
-    if (quirks.length === 0) return "Quirk Selection.ts";
-    if (!results.house) return "House Selection.ts";
-    if (powers.length === 0) return "Power Selection.ts";
+      return "Stats Rolling";
+    if (quirks.length === 0) return "Quirk Selection";
+    if (!results.house) return "House Selection";
+    if (powers.length === 0) return "Power Selection";
     if (
       charDevs.length === 0 &&
       !characterState.archetypes.some((a: any) => a.name === "NPC 💀")
     ) {
-      return "Character Development.ts";
+      return "Character Development";
     }
-    if (!results.pve) return "PvE Selection.ts";
+    if (!results.pve) return "PvE Selection";
 
-    return "Complete.ts";
+    return "Complete";
   }, []);
 
   // Helper to get next step name

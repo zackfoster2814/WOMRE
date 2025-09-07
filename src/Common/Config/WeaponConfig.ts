@@ -1,4 +1,4 @@
-import { WheelStep } from "../Types/Types.ts";
+import { WheelStep } from "../Types/Types";
 
 import bananaPeel from "@/assets/Weapon/banana_peel.png";
 import brokenStraightSword from "@/assets/Weapon/broken_straight_sword.png";

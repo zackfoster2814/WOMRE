@@ -1,4 +1,4 @@
-import { Section, WheelStep } from "@/Common/Types/Types.ts";
+import { Section, WheelStep } from "@/Common/Types/Types";
 
 // Character State Interface
 export interface CharacterState {

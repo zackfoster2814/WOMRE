@@ -1,7 +1,7 @@
 import { useCallback } from "react";
-import { WheelStep } from "@/Common/Types/Types.ts";
-import { raceWheel, raceWheelBalance } from "@/Common/Config/RaceConfig.ts";
-import { subraceMap } from "@/Common/Config/SubRaceConfig.ts";
+import { WheelStep } from "@/Common/Types/Types";
+import { raceWheel, raceWheelBalance } from "@/Common/Config/RaceConfig";
+import { subraceMap } from "@/Common/Config/SubRaceConfig";
 import {
   bankaiWheel,
   dojutsuWheel,
@@ -9,21 +9,18 @@ import {
   hakiWheel,
   standsWheel,
   wibuWheel,
-} from "@/Common/Config/ArchetypeConfig.ts";
+} from "@/Common/Config/ArchetypeConfig";
 import {
   archetypeExtraWheels,
   heroXWheel,
   uniqueVampireTrainWheel,
   vampireTasteWheel,
-} from "@/Common/Config/ArchetypeExtraWheels.ts";
-import { houseWheel } from "@/Common/Config/HouseConfig.ts";
-import {
-  enchantCountWheel,
-  enchantWheel,
-} from "@/Common/Config/WeaponConfig.ts";
-import { gearWheel } from "@/Common/Config/GearConfig.ts";
-import { usabilityWheel } from "@/utils/wheelUtils.ts";
-import { quirkCountOptions } from "@/Common/Config/QuirkConfig.ts";
+} from "@/Common/Config/ArchetypeExtraWheels";
+import { houseWheel } from "@/Common/Config/HouseConfig";
+import { enchantCountWheel, enchantWheel } from "@/Common/Config/WeaponConfig";
+import { gearWheel } from "@/Common/Config/GearConfig";
+import { usabilityWheel } from "@/utils/wheelUtils";
+import { quirkCountOptions } from "@/Common/Config/QuirkConfig";
 import halberd from "@/assets/Weapon/halberd.png";
 import hiddenBlade from "@/assets/Weapon/hidden_blade.png";
 
@@ -55,7 +52,7 @@ export const useArchetypeHandlers = () => {
 
   const getWeaponTags = useCallback((weapon: any) => {
     const tags = [];
-    const description = weapon.description?.toLowerCase() || ".ts";
+    const description = weapon.description?.toLowerCase() || "";
     if (description.includes("magic")) tags.push("Magic");
     if (description.includes("physical")) tags.push("Physical");
     return tags;

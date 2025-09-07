@@ -1,10 +1,10 @@
-import { WheelStep, Section } from "@/Common/Types/Types.ts";
-import { getStrengthWheel } from "@/Common/Config/StrengthConfig.ts";
-import { getDurabilityWheel } from "@/Common/Config/DurabilityConfig.ts";
-import { getSpeedWheel } from "@/Common/Config/SpeedConfig.ts";
-import { getBattleIQWheel } from "@/Common/Config/BattleIQConfig.ts";
-import { getIQWheel } from "@/Common/Config/IQConfig.ts";
-import { getMartialArtsWheel } from "@/Common/Config/MartialArtConfig.ts";
+import { WheelStep, Section } from "@/Common/Types/Types";
+import { getStrengthWheel } from "@/Common/Config/StrengthConfig";
+import { getDurabilityWheel } from "@/Common/Config/DurabilityConfig";
+import { getSpeedWheel } from "@/Common/Config/SpeedConfig";
+import { getBattleIQWheel } from "@/Common/Config/BattleIQConfig";
+import { getIQWheel } from "@/Common/Config/IQConfig";
+import { getMartialArtsWheel } from "@/Common/Config/MartialArtConfig";
 
 // Constants
 export const CANVAS_SIZE = 600;

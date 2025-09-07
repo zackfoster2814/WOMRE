@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import menuBg from "../assets/Backgrounds/menu-bg.jpg";
 
 export default function Menu() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function Menu() {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: "url('./assets/Backgrounds/menu-bg.jpg')",
+          backgroundImage: `url(${menuBg})`,
         }}
       />
 

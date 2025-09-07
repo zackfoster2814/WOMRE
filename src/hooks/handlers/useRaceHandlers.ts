@@ -1,22 +1,19 @@
 import { useCallback } from "react";
-import { WheelStep } from "@/Common/Types/Types.ts";
-import { raceConfig, raceWheel } from "@/Common/Config/RaceConfig.ts";
-import { subraceMap } from "@/Common/Config/SubRaceConfig.ts";
-import {
-  archetypeWheel,
-  summonWheel,
-} from "@/Common/Config/ArchetypeConfig.ts";
+import { WheelStep } from "@/Common/Types/Types";
+import { raceConfig, raceWheel } from "@/Common/Config/RaceConfig";
+import { subraceMap } from "@/Common/Config/SubRaceConfig";
+import { archetypeWheel, summonWheel } from "@/Common/Config/ArchetypeConfig";
 import {
   uniqueVampireTrainWheel,
   vampireTasteWheel,
-} from "@/Common/Config/ArchetypeExtraWheels.ts";
+} from "@/Common/Config/ArchetypeExtraWheels";
 import {
   getStatWheel,
   getRaceOrSubrace,
   STAT_WHEELS,
-} from "@/utils/wheelUtils.ts";
-import { playerWheel } from "@/Common/Config/PlayerConfig.ts";
-import { houseWheel } from "@/Common/Config/HouseConfig.ts";
+} from "@/utils/wheelUtils";
+import { playerWheel } from "@/Common/Config/PlayerConfig";
+import { houseWheel } from "@/Common/Config/HouseConfig";
 
 // Types for race handlers
 interface RaceHandlerParams {

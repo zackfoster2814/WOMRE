@@ -1,9 +1,9 @@
-import { contextBridge, ipcRenderer } from "electron";
+const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
   fetchAllPlayers: () => ipcRenderer.invoke("fetch-players"),
-  insertPlayer: async (Playerdata:any) => {
-      return await ipcRenderer.invoke('insert-player', Playerdata);
-    },  
-    //expose cac ham ipc khac tai day
+  insertPlayer: async (Playerdata) => {
+    return await ipcRenderer.invoke("insert-player", Playerdata);
+  },
+  //expose cac ham ipc khac tai day
 });

@@ -15,7 +15,10 @@
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true
   },
-  "include": ["src", "electron", "src/**/*", "src/types/**/*"]
+  "include": ["src", "electron", "src/**/*", "src/types/**/*", "electron/**/*"],
+  "exclude": ["node_modules", "dist", "dist-electron", "release"]
 }

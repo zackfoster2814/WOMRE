@@ -1,4 +1,4 @@
-import { WheelStep } from "../Types/Types.ts";
+import { WheelStep } from "../Types/Types";
 
 export const playerWheel: WheelStep = {
   key: "player",
@@ -26,7 +26,7 @@ export const playerWheel: WheelStep = {
       color: "#3D6B3D",
       description: "",
     },
-    { id: "05", name: "Ar2di", weight: 1, color: "#AAAAAA", description:    "" },
+    { id: "05", name: "Ar2di", weight: 1, color: "#AAAAAA", description: "" },
     { id: "06", name: "Snaffy", weight: 1, color: "#4F772D", description: "" },
     {
       id: "07",

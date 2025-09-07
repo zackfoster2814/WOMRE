@@ -1,19 +1,19 @@
 import { useCallback } from "react";
-import { WheelStep } from "@/Common/Types/Types.ts";
+import { WheelStep } from "@/Common/Types/Types";
 import {
   gearCountWheel,
   gearWheel,
   legacyGearWheel,
-} from "@/Common/Config/GearConfig.ts";
+} from "@/Common/Config/GearConfig";
 import {
   enchantCountWheel,
   enchantWheel,
   weaponWheel,
   uniqueWeaponWheel,
   uniqueWeaponExistWheel,
-} from "@/Common/Config/WeaponConfig.ts";
-import { powerCountWheel } from "@/Common/Config/PowerConfig.ts";
-import { usabilityWheel, getRaceOrSubrace } from "@/utils/wheelUtils.ts";
+} from "@/Common/Config/WeaponConfig";
+import { powerCountWheel } from "@/Common/Config/PowerConfig";
+import { usabilityWheel, getRaceOrSubrace } from "@/utils/wheelUtils";
 
 // Interface for weapons with enchants
 interface WeaponWithEnchants {

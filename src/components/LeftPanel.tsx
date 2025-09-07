@@ -1,8 +1,8 @@
 import React, { useRef, useState, useCallback } from "react";
-import { raceWheel } from "@/Common/Config/RaceConfig.ts";
-import { subraceMap } from "@/Common/Config/SubRaceConfig.ts";
-import { STAT_WHEELS } from "@/utils/wheelUtils.ts";
-import { useRaceHandlers } from "@/hooks/handlers/useRaceHandlers.ts";
+import { raceWheel } from "@/Common/Config/RaceConfig";
+import { subraceMap } from "@/Common/Config/SubRaceConfig";
+import { STAT_WHEELS } from "@/utils/wheelUtils";
+import { useRaceHandlers } from "@/hooks/handlers/useRaceHandlers";
 
 interface LeftPanelProps {
   characterState: any;
