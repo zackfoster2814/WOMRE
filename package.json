@@ -9,6 +9,7 @@
     "build:ts": "tsc -p electron/tsconfig.json",
     "build:web": "vite build",
     "build": "npm run build:ts && npm run build:web",
+    "build-pack": "npm run build && npx electron-builder --win --dir --config.win.signAndEditExecutable=false --config.forceCodeSigning=false",
     "build-electron": "npm run build && electron-builder",
     "dist": "npm run build && electron-builder --publish=never",
     "pack": "npm run build && electron-builder --dir",

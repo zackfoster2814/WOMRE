@@ -1,8 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 import { resolve } from "path";
 
 export default defineConfig({
+  root: "src",
   plugins: [react()],
   base: "./", // Important: relative paths for Electron
   build: {
@@ -21,12 +23,9 @@ export default defineConfig({
       },
     },
   },
-  server: {
-    port: 5173,
-  },
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
 });
