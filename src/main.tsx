@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { HashRouter } from "react-router-dom"; // Use HashRouter instead of BrowserRouter
-import App from "./App.tsx.tsx";
+import App from "./App.tsx";
 import "./styles/index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
