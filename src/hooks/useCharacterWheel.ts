@@ -192,24 +192,24 @@ const getStatAudio = (value: string): void => {
 
   if (statValue >= 1 && statValue <= 2) {
     const randomAudios = [
-      "../../assets/audio/Stats_1-2_random/1.mp3",
-      "../../assets/audio/Stats_1-2_random/2.mp3",
-      "../../assets/audio/Stats_1-2_random/3.mp3",
+      "../assets/audio/Stats_1-2_random/1.mp3",
+      "../assets/audio/Stats_1-2_random/2.mp3",
+      "../assets/audio/Stats_1-2_random/3.mp3",
     ];
     console.log;
     const randomIndex = Math.floor(Math.random() * randomAudios.length);
     audioPath = randomAudios[randomIndex];
   } else if (statValue >= 3 && statValue <= 4) {
-    audioPath = "../../assets/audio/Stats_3-4.mp3";
+    audioPath = "../assets/audio/Stat_3-4.mp3";
     console.log("3");
   } else if (statValue >= 5 && statValue <= 7) {
-    audioPath = "../../assets/audio/Stats_5-7.mp3";
+    audioPath = "../assets/audio/Stat_5-7.mp3";
     console.log("5");
   } else if (statValue >= 8 && statValue <= 9) {
-    audioPath = "../../assets/audio/Stats_8-9.mp3";
+    audioPath = "../assets/audio/Stat_8-9.mp3";
     console.log("8");
   } else if (statValue === 10) {
-    audioPath = "../../assets/audio/Stats_10.mp3";
+    audioPath = "../assets/audio/Stat_10.mp3";
     console.log("10");
   }
 
