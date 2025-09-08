@@ -1,4 +1,4 @@
-import { WheelStep } from "../Types/types.ts";
+import { WheelStep } from "../Types/Types";
 
 export const gearCountWheel: WheelStep = {
   key: "gear-count",
@@ -74,6 +74,7 @@ export const gearWheel: WheelStep = {
       color: "#A2D149",
       description: "Sau 1 trận PvE, nhận 1 PvP Reward. (80%, Physical)",
       usableRate: 80,
+      tag: "Physical",
     },
     {
       id: "2",
@@ -82,6 +83,7 @@ export const gearWheel: WheelStep = {
       color: "#FFD700",
       description: "Khi thua IQ, nhận +1 IQ (80%, Physical)",
       usableRate: 80,
+      tag: "Physical",
     },
     {
       id: "3",
@@ -92,6 +94,7 @@ export const gearWheel: WheelStep = {
         "Nhận -1 All Stats. Nếu bị loại, re-spin stat cao nhất random. (100%, Physical/Magic)",
 
       usableRate: 100,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "4",
@@ -100,6 +103,7 @@ export const gearWheel: WheelStep = {
       color: "#FF69B4",
       description: "+2 Speed. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
     {
       id: "5",
@@ -108,6 +112,7 @@ export const gearWheel: WheelStep = {
       color: "#A2D149",
       description: "+1 Durability. (99%, Physical)",
       usableRate: 99,
+      tag: "Physical",
     },
     {
       id: "6",
@@ -116,6 +121,7 @@ export const gearWheel: WheelStep = {
       color: "#FFD700",
       description: "+1 IQ. (70%, Magic)",
       usableRate: 70,
+      tag: "Magic",
     },
     {
       id: "7",
@@ -125,6 +131,7 @@ export const gearWheel: WheelStep = {
       description:
         "Nếu có 'Lover': +1 all stats, nếu không: vô dụng. (100%, P/M)",
       usableRate: 100,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "8",
@@ -134,6 +141,7 @@ export const gearWheel: WheelStep = {
       description:
         "Khi combat với Demon, Vampire, Spirit, Orc, Skeleton, Goblin: đối thủ -1 all stats. (60%, Magic)",
       usableRate: 60,
+      tag: "Magic",
     },
     {
       id: "9",
@@ -142,6 +150,7 @@ export const gearWheel: WheelStep = {
       color: "#A2D149",
       description: "Nhận 1 Quirk. (90%, P/M)",
       usableRate: 90,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "10",
@@ -150,6 +159,7 @@ export const gearWheel: WheelStep = {
       color: "#FFD700",
       description: "+2 vào Stat thấp nhất khi ở nhánh thua. (100%, P/M)",
       usableRate: 100,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "11",
@@ -158,6 +168,7 @@ export const gearWheel: WheelStep = {
       color: "#87CEEB",
       description: "+2 Durability. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
     {
       id: "12",
@@ -167,6 +178,7 @@ export const gearWheel: WheelStep = {
       description:
         "Nếu đủ bộ công cụ nấu ăn (12,13,14): +1 all stats. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
     {
       id: "13",
@@ -176,6 +188,7 @@ export const gearWheel: WheelStep = {
       description:
         "Nếu đủ bộ công cụ nấu ăn (12,13,14): +1 all stats. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
     {
       id: "14",
@@ -185,6 +198,7 @@ export const gearWheel: WheelStep = {
       description:
         "Nếu đủ bộ công cụ nấu ăn (12,13,14): +1 all stats. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
     {
       id: "15",
@@ -193,6 +207,7 @@ export const gearWheel: WheelStep = {
       color: "#87CEEB",
       description: "+2 BIQ. (80%, P/M)",
       usableRate: 80,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "16",
@@ -201,6 +216,7 @@ export const gearWheel: WheelStep = {
       color: "#FF69B4",
       description: "-2 Speed, +2 Dura, +1 Str. (90%, Physical)",
       usableRate: 90,
+      tag: "Physical",
     },
     {
       id: "17",
@@ -209,6 +225,7 @@ export const gearWheel: WheelStep = {
       color: "#A2D149",
       description: "-1 Speed. (70%, Magic)",
       usableRate: 70,
+      tag: "Magic",
     },
     {
       id: "18",
@@ -218,6 +235,7 @@ export const gearWheel: WheelStep = {
       description:
         "So sánh Quirk/Power sau mỗi PvP Reward → swap random. (80%, P/M)",
       usableRate: 80,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "19",
@@ -226,6 +244,7 @@ export const gearWheel: WheelStep = {
       color: "#87CEEB",
       description: "+1 Speed. (90%, Physical)",
       usableRate: 90,
+      tag: "Physical",
     },
     {
       id: "20",
@@ -234,6 +253,7 @@ export const gearWheel: WheelStep = {
       color: "#FF69B4",
       description: "+1 All Stats, phá hủy sau trận thắng đầu tiên. (90%, P/M)",
       usableRate: 90,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "21",
@@ -242,6 +262,7 @@ export const gearWheel: WheelStep = {
       color: "#A2D149",
       description: "+1 Strength, +1 Dura. (99%, Physical)",
       usableRate: 99,
+      tag: "Physical",
     },
     {
       id: "22",
@@ -250,6 +271,7 @@ export const gearWheel: WheelStep = {
       color: "#FFD700",
       description: "Thơm. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
     {
       id: "23",
@@ -258,6 +280,7 @@ export const gearWheel: WheelStep = {
       color: "#87CEEB",
       description: "+1 IQ và +1 BIQ. (80%, Magic)",
       usableRate: 80,
+      tag: "Magic",
     },
     {
       id: "24",
@@ -266,6 +289,7 @@ export const gearWheel: WheelStep = {
       color: "#FF69B4",
       description: "Khi ở nhánh thua: -2 all Stats. (90%, Magic)",
       usableRate: 90,
+      tag: "Magic",
     },
     {
       id: "25",
@@ -275,6 +299,7 @@ export const gearWheel: WheelStep = {
       description:
         "Thua trận → chuyển cho người thắng. Mỗi cái: -1 stat cao nhất. (80%, Magic)",
       usableRate: 80,
+      tag: "Magic",
     },
     {
       id: "26",
@@ -283,6 +308,7 @@ export const gearWheel: WheelStep = {
       color: "#FFD700",
       description: "Vào vòng 32 → mất item này, nhận 1 Power. (90%, P/M)",
       usableRate: 90,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "27",
@@ -291,6 +317,7 @@ export const gearWheel: WheelStep = {
       color: "#87CEEB",
       description: "+2 Str, +2 Dura. (70%, Physical)",
       usableRate: 70,
+      tag: "Physical",
     },
     {
       id: "28",
@@ -299,6 +326,7 @@ export const gearWheel: WheelStep = {
       color: "#FF69B4",
       description: "Thua trận → mất coin để mua 1 Gear khác. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
     {
       id: "29",
@@ -308,6 +336,7 @@ export const gearWheel: WheelStep = {
       description:
         "Nếu không có Lover: +1 Dura. Nếu có Lover: +1 Speed. (69%, Physical)",
       usableRate: 69,
+      tag: "Physical",
     },
     {
       id: "30",
@@ -316,6 +345,7 @@ export const gearWheel: WheelStep = {
       color: "#FFD700",
       description: "+1 IQ. (70%, Magic)",
       usableRate: 70,
+      tag: "Magic",
     },
     {
       id: "31",
@@ -324,6 +354,7 @@ export const gearWheel: WheelStep = {
       color: "#87CEEB",
       description: "Phát sáng trong đêm. (100%, P/M)",
       usableRate: 100,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "32",
@@ -332,6 +363,7 @@ export const gearWheel: WheelStep = {
       color: "#FF69B4",
       description: "Nhận 1 'Lover'. (90%, Physical)",
       usableRate: 90,
+      tag: "Physical",
     },
     {
       id: "33",
@@ -340,6 +372,7 @@ export const gearWheel: WheelStep = {
       color: "#A2D149",
       description: "Creator tặng thêm 1 Gear khác. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
     {
       id: "34",
@@ -349,6 +382,7 @@ export const gearWheel: WheelStep = {
       description:
         "Nếu không đủ 8 điểm vòng 32 → mất toàn bộ Gear/Weapon, nhận Char Dev. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
     {
       id: "35",
@@ -358,6 +392,7 @@ export const gearWheel: WheelStep = {
       description:
         "Combat: Trước trận quay 50/50 → người thua -1 All Stats. (100%, P/M)",
       usableRate: 100,
+      tag: ["Physical", "Magic"],
     },
     {
       id: "36",
@@ -366,6 +401,7 @@ export const gearWheel: WheelStep = {
       color: "#FF69B4",
       description: "Một cái cốc rỗng. (100%, Physical)",
       usableRate: 100,
+      tag: "Physical",
     },
   ],
 };
@@ -374,110 +410,123 @@ export const legacyGearWheel: WheelStep = {
   key: "legacy-gear",
   title: "Legacy Gear",
   sections: [
-    {
-      id: "l1",
-      name: "The Ancient Ladder: A Journey to the Fullness of Sin with Demon",
-      weight: 4.55,
-      color: "#A2D149",
-      description:
-        "Gấp đôi hiệu ứng Sin nếu là Demon.\nNhận +1 MA, +1 IQ, +1 Speed (100%, Physical/Magic).",
-    },
-    {
-      id: "l2",
-      name: "God of Love's Cooking Recipe",
-      weight: 4.55,
-      color: "#FFD700",
-      description:
-        "Nhận ngẫu nhiên 1 Power của 1 người chơi đã bị loại khi vào vòng 64/16.\n-1 Dura với mỗi lần kích hoạt. (100%, Magic).",
-    },
-    {
-      id: "l3",
-      name: "The Angel's Finger Bone",
-      weight: 4.55,
-      color: "#87CEEB",
-      description:
-        "Đảo ngược tất cả base stat.\nSau đó nhận +2 IQ và 1 Power. (100%, Magic).",
-    },
-    {
-      id: "l4",
-      name: "The Tamer Straight Sword",
-      weight: 4.55,
-      color: "#FF69B4",
-      description:
-        "Nhận 1 Summon.\nĐánh cắp 1 Power ngẫu nhiên của đối thủ sau khi chiến thắng. (100%, Physical/Magic).",
-    },
-    {
-      id: "l5",
-      name: "Soul Sucker",
-      weight: 4.55,
-      color: "#A2D149",
-      description:
-        "Đối thủ bị Re-spin Stat cao nhất sau trận đấu (bất kể mình thắng hay thua). (100%, Magic).",
-    },
-    {
-      id: "l6",
-      name: "Leaf that got Blowed",
-      weight: 4.55,
-      color: "#FFD700",
-      description:
-        'Nhận Power "Blowing Leaves".\nKháng tất cả debuff giảm chỉ số từ đối phương. (100%, Physical/Magic).',
-    },
-    {
-      id: "l7",
-      name: "Dart for the Dwarf Heir",
-      weight: 4.55,
-      color: "#87CEEB",
-      description:
-        "Đối thủ bị -1 all stats và thêm -1 vào Stat cao nhất khi vào trận. (100%, Physical).",
-    },
-    {
-      id: "l8",
-      name: "King Gnome's Banana",
-      weight: 4.55,
-      color: "#FF69B4",
-      description:
-        "Nhận -2 all stats nếu IQ thấp hơn đối phương.\nNhận +2 all stats nếu IQ cao hơn đối phương. (100%, Physical).",
-    },
-    {
-      id: "l9",
-      name: "Human NPC's Axe",
-      weight: 4.55,
-      color: "#A2D149",
-      description:
-        "Nhận 1 Power.\n+1 vào stat cao nhất.\n+2 all stats nếu bạn là NPC. (100%, Physical).",
-    },
-    {
-      id: "l10",
-      name: "Ragnarok's Cobra",
-      weight: 4.55,
-      color: "#FFD700",
-      description:
-        "Giết 1 vị thần ngẫu nhiên sau khi quay đủ player (tính là 1 trận thắng).\nTự động thua ở vòng 64 (1 lần). (100%, Physical/Magic).",
-    },
-    {
-      id: "l11",
-      name: "God of War's Entry Ticket",
-      weight: 4.55,
-      color: "#87CEEB",
-      description:
-        'Biến Base Strength thành 10.\n"Make love" với 1 tộc.\n+2 stat thấp nhất khi đối đầu Demi God/God. (100%, Physical).',
-    },
-    {
-      id: "l12",
-      name: "The First Dragon Scale",
-      weight: 4.55,
-      color: "#FF69B4",
-      description:
-        "Nhận +4 vào Stat thấp nhất.\n+1 all Stat khi đối đầu với chủng tộc thấp kém hơn. (100%, Physical).",
-    },
-    {
-      id: "l13",
-      name: "Artist's Easel",
-      weight: 4.55,
-      color: "#A2D149",
-      description:
-        'Bạn có thêm Power "Artist".\nNhận thêm 1 Power và 1 Quirk. (100%, Magic).',
-    },
+    // {
+    //   id: "l1",
+    //   name: "The Ancient Ladder: A Journey to the Fullness of Sin with Demon",
+    //   weight: 4.55,
+    //   color: "#A2D149",
+    //   description:
+    //     "Gấp đôi hiệu ứng Sin nếu là Demon.\nNhận +1 MA, +1 IQ, +1 Speed (100%, Physical/Magic).",
+    //   tag: ["Physical", "Magic"],
+    // },
+    // {
+    //   id: "l2",
+    //   name: "God of Love's Cooking Recipe",
+    //   weight: 4.55,
+    //   color: "#FFD700",
+    //   description:
+    //     "Nhận ngẫu nhiên 1 Power của 1 người chơi đã bị loại khi vào vòng 64/16.\n-1 Dura với mỗi lần kích hoạt. (100%, Magic).",
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l3",
+    //   name: "The Angel's Finger Bone",
+    //   weight: 4.55,
+    //   color: "#87CEEB",
+    //   description:
+    //     "Đảo ngược tất cả base stat.\nSau đó nhận +2 IQ và 1 Power. (100%, Magic).",
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l4",
+    //   name: "The Tamer Straight Sword",
+    //   weight: 4.55,
+    //   color: "#FF69B4",
+    //   description:
+    //     "Nhận 1 Summon.\nĐánh cắp 1 Power ngẫu nhiên của đối thủ sau khi chiến thắng. (100%, Physical/Magic).",
+    //   tag: ["Physical", "Magic"],
+    // },
+    // {
+    //   id: "l5",
+    //   name: "Soul Sucker",
+    //   weight: 4.55,
+    //   color: "#A2D149",
+    //   description:
+    //     "Đối thủ bị Re-spin Stat cao nhất sau trận đấu (bất kể mình thắng hay thua). (100%, Magic).",
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l6",
+    //   name: "Leaf that got Blowed",
+    //   weight: 4.55,
+    //   color: "#FFD700",
+    //   description:
+    //     'Nhận Power "Blowing Leaves".\nKháng tất cả debuff giảm chỉ số từ đối phương. (100%, Physical/Magic).',
+    //   tag: ["Physical", "Magic"],
+    // },
+    // {
+    //   id: "l7",
+    //   name: "Dart for the Dwarf Heir",
+    //   weight: 4.55,
+    //   color: "#87CEEB",
+    //   description:
+    //     "Đối thủ bị -1 all stats và thêm -1 vào Stat cao nhất khi vào trận. (100%, Physical).",
+    //   tag: "Physical",
+    // },
+    // {
+    //   id: "l8",
+    //   name: "King Gnome's Banana",
+    //   weight: 4.55,
+    //   color: "#FF69B4",
+    //   description:
+    //     "Nhận -2 all stats nếu IQ thấp hơn đối phương.\nNhận +2 all stats nếu IQ cao hơn đối phương. (100%, Physical).",
+    //   tag: "Physical",
+    // },
+    // {
+    //   id: "l9",
+    //   name: "Human NPC's Axe",
+    //   weight: 4.55,
+    //   color: "#A2D149",
+    //   description:
+    //     "Nhận 1 Power.\n+1 vào stat cao nhất.\n+2 all stats nếu bạn là NPC. (100%, Physical).",
+    //   tag: "Physical",
+    // },
+    // {
+    //   id: "l10",
+    //   name: "Ragnarok's Cobra",
+    //   weight: 4.55,
+    //   color: "#FFD700",
+    //   description:
+    //     "Giết 1 vị thần ngẫu nhiên sau khi quay đủ player (tính là 1 trận thắng).\nTự động thua ở vòng 64 (1 lần). (100%, Physical/Magic).",
+    //   tag: ["Physical", "Magic"],
+    // },
+    // {
+    //   id: "l11",
+    //   name: "God of War's Entry Ticket",
+    //   weight: 4.55,
+    //   color: "#87CEEB",
+    //   description:
+    //     'Biến Base Strength thành 10.\n"Make love" với 1 tộc.\n+2 stat thấp nhất khi đối đầu Demi God/God. (100%, Physical).',
+    //   tag: "Physical",
+    // },
+    // {
+    //   id: "l12",
+    //   name: "The First Dragon Scale",
+    //   weight: 4.55,
+    //   color: "#FF69B4",
+    //   description:
+    //     "Nhận +4 vào Stat thấp nhất.\n+1 all Stat khi đối đầu với chủng tộc thấp kém hơn. (100%, Physical).",
+    //   tag: "Physical",
+    // },
+    // {
+    //   id: "l13",
+    //   name: "Artist's Easel",
+    //   weight: 4.55,
+    //   color: "#A2D149",
+    //   description:
+    //     'Bạn có thêm Power "Artist".\nNhận thêm 1 Power và 1 Quirk. (100%, Magic).',
+    //   tag: "Magic",
+    // },
     {
       id: "l14",
       name: "Writer's Quill",
@@ -485,69 +534,78 @@ export const legacyGearWheel: WheelStep = {
       color: "#FFD700",
       description:
         'Bạn có thêm Power "Writer".\nNhận thêm 1 Char Dev, 1 Archetype. (100%, Magic).',
+      tag: "Magic",
     },
-    {
-      id: "l15",
-      name: "IT's Abacus",
-      weight: 4.55,
-      color: "#87CEEB",
-      description:
-        "Base Stat lẻ sẽ được +1, sau đó cộng toàn bộ, chia 6 và làm tròn.\nBiến toàn bộ base stats thành kết quả đó.\nChỉ xảy ra 1 lần khi nhận. (100%, Magic).",
-    },
-    {
-      id: "l16",
-      name: "Creator's Cat Ring",
-      weight: 4.55,
-      color: "#FF69B4",
-      description: "Nhận Creator's Favor 1-3 lần. (100%, Magic).",
-    },
-    {
-      id: "l17",
-      name: "The Dice of the Dead",
-      weight: 4.55,
-      color: "#A2D149",
-      description:
-        'Nhận Archetype "Gambler".\nMặc định thắng khi đối đầu với Gambler khác (yếu hơn auto-win khác). (100%, Magic).',
-    },
-    {
-      id: "l18",
-      name: "Brain of the Rot",
-      weight: 4.55,
-      color: "#FFD700",
-      description:
-        "Nhận các Power: Water Breathing, Rickrolling, Hand Washing, Mewing, The Goat, Blowing Leaves, Capybara, Night Vision, Gotta go Fast, Tick-tock, Fragrant, Ballet Dancing, Baldening, Cold Breeze, Hydrate, The Coast is Clear! (100%, Magic).",
-    },
-    {
-      id: "l19",
-      name: "Wooden Sword of the Mighty Goblin",
-      weight: 4.55,
-      color: "#87CEEB",
-      description:
-        "Đảo ngược tất cả base stat và dẫn dắt 1001 Goblin. (100%, Magic).",
-    },
-    {
-      id: "l20",
-      name: "Heart of the Shaggy Void",
-      weight: 4.55,
-      color: "#FF69B4",
-      description:
-        'Đi tìm 1 "Lover".\nBiến base stat cao nhất + thấp nhất thành 3.\n+1 All Stats. (100%, Magic).',
-    },
-    {
-      id: "l21",
-      name: "Spirit of the Wheel",
-      weight: 4.55,
-      color: "#A2D149",
-      description:
-        'Trận đầu tiên khiến 3 người ngẫu nhiên "Isekai".\n2 trận tiếp theo thua tự động.\n"Người ta đồn Linh hồn Vòng Quay không hứng thú chiến thắng". (100%, Magic).',
-    },
-    {
-      id: "l22",
-      name: "Pebbles of the Stoic Demon",
-      weight: 4.55,
-      color: "#FFD700",
-      description:
-        'Khi đối đầu với "Human": -1 all Stat sau combat. (100%, Magic).',
-    },
+    // {
+    //   id: "l15",
+    //   name: "IT's Abacus",
+    //   weight: 4.55,
+    //   color: "#87CEEB",
+    //   description:
+    //     "Base Stat lẻ sẽ được +1, sau đó cộng toàn bộ, chia 6 và làm tròn.\nBiến toàn bộ base stats thành kết quả đó.\nChỉ xảy ra 1 lần khi nhận. (100%, Magic).",
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l16",
+    //   name: "Creator's Cat Ring",
+    //   weight: 4.55,
+    //   color: "#FF69B4",
+    //   description: "Nhận Creator's Favor 1-3 lần. (100%, Magic).",
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l17",
+    //   name: "The Dice of the Dead",
+    //   weight: 4.55,
+    //   color: "#A2D149",
+    //   description:
+    //     'Nhận Archetype "Gambler".\nMặc định thắng khi đối đầu với Gambler khác (yếu hơn auto-win khác). (100%, Magic).',
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l18",
+    //   name: "Brain of the Rot",
+    //   weight: 4.55,
+    //   color: "#FFD700",
+    //   description:
+    //     "Nhận các Power: Water Breathing, Rickrolling, Hand Washing, Mewing, The Goat, Blowing Leaves, Capybara, Night Vision, Gotta go Fast, Tick-tock, Fragrant, Ballet Dancing, Baldening, Cold Breeze, Hydrate, The Coast is Clear! (100%, Magic).",
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l19",
+    //   name: "Wooden Sword of the Mighty Goblin",
+    //   weight: 4.55,
+    //   color: "#87CEEB",
+    //   description:
+    //     "Đảo ngược tất cả base stat và dẫn dắt 1001 Goblin. (100%, Magic).",
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l20",
+    //   name: "Heart of the Shaggy Void",
+    //   weight: 4.55,
+    //   color: "#FF69B4",
+    //   description:
+    //     'Đi tìm 1 "Lover".\nBiến base stat cao nhất + thấp nhất thành 3.\n+1 All Stats. (100%, Magic).',
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l21",
+    //   name: "Spirit of the Wheel",
+    //   weight: 4.55,
+    //   color: "#A2D149",
+    //   description:
+    //     'Trận đầu tiên khiến 3 người ngẫu nhiên "Isekai".\n2 trận tiếp theo thua tự động.\n"Người ta đồn Linh hồn Vòng Quay không hứng thú chiến thắng". (100%, Magic).',
+    //   tag: "Magic",
+    // },
+    // {
+    //   id: "l22",
+    //   name: "Pebbles of the Stoic Demon",
+    //   weight: 4.55,
+    //   color: "#FFD700",
+    //   description:
+    //     'Khi đối đầu với "Human": -1 all Stat sau combat. (100%, Magic).',
+    //   tag: "Magic",
+    // },
   ],
 };

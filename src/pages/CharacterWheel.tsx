@@ -7,6 +7,8 @@ import { CenterWheel } from "@/components/CenterWheel.tsx";
 import { RightPanel } from "@/components/RightPanel.tsx";
 import { CharacterDataDialog } from "@/components/CharacterDataDialog.tsx";
 
+import wheelBg from "../assets/Backgrounds/wheel-bg.png";
+
 export default function CharacterWheel() {
   // Custom hooks chứa toàn bộ logic
   const {
@@ -23,6 +25,7 @@ export default function CharacterWheel() {
     handleGetData,
     handleCharacterComplete,
     setShowDialog,
+    raceHandlers,
   } = useCharacterWheel();
 
   const { audioRefs, audioSources } = useHouseAudios();
@@ -42,7 +45,7 @@ export default function CharacterWheel() {
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('./assets/Backgrounds/wheel-bg.png')" }}
+        style={{ backgroundImage: `url(${wheelBg})` }}
       />
       <div className="absolute inset-0 bg-black/70" />
 
@@ -54,6 +57,7 @@ export default function CharacterWheel() {
           jumpToWheel={jumpToWheel}
           handleNextStep={handleWheelStep}
           statStep={statStep}
+          raceHandlers={raceHandlers}
         />
 
         <CenterWheel

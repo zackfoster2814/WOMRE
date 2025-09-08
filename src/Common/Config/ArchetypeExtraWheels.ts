@@ -1,5 +1,5 @@
 // ArchetypeExtraWheels.ts
-import { Section, WheelStep } from "@/Common/Types/Types.ts";
+import { Section, WheelStep } from "@/Common/Types/Types";
 
 export const farmerWheel: WheelStep = {
   key: "farmer",

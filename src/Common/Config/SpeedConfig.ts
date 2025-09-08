@@ -1,6 +1,6 @@
 // SpeedConfig.ts
 import { WheelStep } from "@/Common/Types/Types";
-import { COLOR_PALETTE } from "../Constants/ConstantsConfig.tsx";
+import { COLOR_PALETTE } from "../Constants/ConstantsConfig";
 
 // Dữ liệu Speed theo race
 const SPEED_DATA: Record<string, number[]> = {

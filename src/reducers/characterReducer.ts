@@ -1,4 +1,4 @@
-import { CharacterState, CharacterAction } from "@/types/characterTypes.ts";
+import { CharacterState, CharacterAction } from "@/types/characterTypes";
 
 // Initial character state
 export const initialCharacterState: CharacterState = {
@@ -20,6 +20,9 @@ export const initialCharacterState: CharacterState = {
   charDevs: [],
   archetypes: [],
   characterName: "",
+  lovers: [],
+  summons: [],
+  pveRounds: [],
 };
 
 // Character reducer function
@@ -75,7 +78,8 @@ export function characterReducer(
         ...state,
         enchants: [...state.enchants, action.enchant],
       };
-
+    case "ADD_PVE_ROUND":
+      return { ...state, pveRounds: [...state.pveRounds, action.pveRound] };
     case "ADD_POWER":
       // Avoid duplicate powers
       const existingPower = state.powers.find(
@@ -88,6 +92,11 @@ export function characterReducer(
         ...state,
         powers: [...state.powers, action.power],
       };
+    case "RESET_POWERS":
+      return { ...state, powers: [] };
+
+    case "RESET_WEAPON":
+      return { ...state, weapons: [] };
 
     case "ADD_CHARDEV":
       return {
@@ -100,7 +109,8 @@ export function characterReducer(
         ...state,
         archetypes: [...state.archetypes, action.archetype],
       };
-
+    case "ADD_LOVER":
+      return { ...state, lovers: [...state.lovers, action.lovers] };
     case "RESET":
       return initialCharacterState;
 
@@ -274,7 +284,9 @@ export const createAddItemAction = (
     | "ENCHANT"
     | "POWER"
     | "CHARDEV"
-    | "ARCHETYPE",
+    | "ARCHETYPE"
+    | "LOVER"
+    | "RESET_POWERS",
   item: any
 ): CharacterAction => {
   switch (itemType) {
@@ -294,6 +306,8 @@ export const createAddItemAction = (
       return { type: "ADD_CHARDEV", charDev: item };
     case "ARCHETYPE":
       return { type: "ADD_ARCHETYPE", archetype: item };
+    case "LOVER":
+      return { type: "ADD_LOVER", lovers: item };
     default:
       throw new Error(`Unknown item type: ${itemType}`);
   }
