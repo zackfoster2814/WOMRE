@@ -1,0 +1,1 @@
+{"version":3,"file":"archetypes.model.js","sourceRoot":"","sources":["../../../src/db/archetypes.model.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,EAAE,EAAE,MAAM,SAAS,CAAC;AAE7B,OAAO,EAAE,eAAe,EAAE,MAAM,qBAAqB,CAAC;AACtD,OAAO,MAAM,MAAM,QAAQ,CAAC;AAE5B,MAAM,OAAO,GAAG,MAAM,CAAC,OAAO,CAAC;AAC/B,MAAM,UAAU,GAAG,eAAe,CAAC,EAAE,CAAC,SAAS,EAAE,EAAE,CAAC,SAAS,CAAC,CAAC"}

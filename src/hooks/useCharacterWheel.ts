@@ -185,7 +185,42 @@ export const useCharacterWheel = () => {
       setCurrentWheel(pveWheel);
     }
   };
+// Thêm hàm phụ để xử lý âm thanh với logic ngẫu nhiên
+const getStatAudio = (value: string): void => {
+  const statValue = parseInt(value, 10);
+  let audioPath = "";
 
+  if (statValue >= 1 && statValue <= 2) {
+    const randomAudios = [
+      "../../assets/audio/Stats_1-2_random/1.mp3",
+      "../../assets/audio/Stats_1-2_random/2.mp3",
+      "../../assets/audio/Stats_1-2_random/3.mp3",
+    ];
+    console.log;
+    const randomIndex = Math.floor(Math.random() * randomAudios.length);
+    audioPath = randomAudios[randomIndex];
+  } else if (statValue >= 3 && statValue <= 4) {
+    audioPath = "../../assets/audio/Stats_3-4.mp3";
+    console.log("3");
+  } else if (statValue >= 5 && statValue <= 7) {
+    audioPath = "../../assets/audio/Stats_5-7.mp3";
+    console.log("5");
+  } else if (statValue >= 8 && statValue <= 9) {
+    audioPath = "../../assets/audio/Stats_8-9.mp3";
+    console.log("8");
+  } else if (statValue === 10) {
+    audioPath = "../../assets/audio/Stats_10.mp3";
+    console.log("10");
+  }
+
+  if (audioPath) {
+    const audio = new Audio(audioPath);
+    console.log(audio)
+    audio.play().catch((error) => {
+      console.error("Failed to play audio:", error);
+    });
+  }
+};
   // Main flow dispatcher
   const handleNextStep = useCallback(
     (key: string, resultName: string) => {
@@ -547,18 +582,12 @@ export const useCharacterWheel = () => {
         case "speed":
         case "battleIQ":
         case "martialArts":
-          dispatch({ type: "SET_STAT", key, value: resultName });
-          return handleRegularStatProgression(key, resultName);
-
         case "durability":
         case "iq":
-          return (
-            raceHandlers.handleRaceSpecificStats(
-              key,
-              resultName,
-              handlerParams
-            ) || handleRegularStatProgression(key, resultName)
-          );
+          dispatch({ type: "SET_STAT", key, value: resultName });
+          getStatAudio(resultName); // Phát âm thanh trực tiếp
+          handleRegularStatProgression(key, resultName); // Tiếp tục luồng tiến trình
+          return; // Không cần trả về giá trị audio nữa
 
         // Quirk & House flow
         case "quirk-count":
@@ -967,28 +996,31 @@ export const useCharacterWheel = () => {
   );
 
   // Helper functions for specific flows
-  const handleRegularStatProgression = useCallback(
-    (key: string, resultName: string) => {
-      dispatch({ type: "SET_STAT", key, value: resultName });
-      const currentStatIndex = STAT_WHEELS.indexOf(key);
+  const handleRegularStatProgression: (key: string, resultName: string) => { success?: boolean; audio?: string } = useCallback(
+  (key: string, resultName: string) => {
+    dispatch({ type: "SET_STAT", key, value: resultName });
+    const currentStatIndex = STAT_WHEELS.indexOf(key);
 
-      if (currentStatIndex < STAT_WHEELS.length - 1) {
-        const nextStatKey = STAT_WHEELS[currentStatIndex + 1];
-        const params = getFlowHandlerParams();
-        const nextResult = flowHandlers.jumpToWheel(nextStatKey, params);
-        if (nextResult.success) {
-          setStatStep(currentStatIndex + 2);
-        }
-      } else {
-        setCurrentWheel({
-          key: "quirk-count",
-          title: "Quirk Count",
-          sections: quirkCountOptions,
-        });
+    if (currentStatIndex < STAT_WHEELS.length - 1) {
+      const nextStatKey = STAT_WHEELS[currentStatIndex + 1];
+      const params = getFlowHandlerParams();
+      const nextResult = flowHandlers.jumpToWheel(nextStatKey, params);
+      if (nextResult.success) {
+        setStatStep(currentStatIndex + 2);
+        return { success: true };
       }
-    },
-    [dispatch, flowHandlers, getFlowHandlerParams, setStatStep, setCurrentWheel]
-  );
+      return { success: false };
+    } else {
+      setCurrentWheel({
+        key: "quirk-count",
+        title: "Quirk Count",
+        sections: quirkCountOptions,
+      });
+      return { success: true };
+    }
+  },
+  [dispatch, flowHandlers, getFlowHandlerParams, setStatStep, setCurrentWheel]
+);
 
   const handleQuirkFlow = useCallback(
     (resultName: string) => {
