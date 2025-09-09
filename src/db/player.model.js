@@ -1,33 +1,30 @@
 import { db } from "./index";
-import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
+import { QueryTypes } from "sequelize";
 import { PlayerTables } from "./tables/player";
 import lodash from "lodash";
-
 const isEmpty = lodash.isEmpty;
 const Players = PlayerTables(db.sequelize, db.dataTypes);
-
-export const getAllPlayers = async function (): Promise<any> {
-  return new Promise<any>((resolve, reject) => {
+export const getAllPlayers = async function () {
+  return new Promise((resolve, reject) => {
     Players.findAll()
-      .then(function (obj: any) {
+      .then(function (obj) {
         if (!isEmpty(obj)) {
           resolve(obj);
         } else {
           resolve(null);
         }
       })
-      .catch((err: any) => {
+      .catch((err) => {
         reject(err);
       });
   });
 };
 // example raw query
-export const insertPlayer = async function (Playerdata: any) {
+export const insertPlayer = async function (Playerdata) {
   try {
     const { stt, name, note } = Playerdata;
     const query = `INSERT INTO Players (stt, name, note) 
                    VALUES (:stt, :name, :note)`;
-
     const data = await db.sequelize.query(query, {
       replacements: {
         stt: stt,
@@ -62,3 +59,4 @@ export const insertPlayer = async function (Playerdata: any) {
 //         });
 //     });
 // }
+//# sourceMappingURL=player.model.js.map

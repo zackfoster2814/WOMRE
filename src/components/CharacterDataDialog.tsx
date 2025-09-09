@@ -1,5 +1,5 @@
 import React from "react";
-import { CharacterDataDialogProps } from "@/types/characterTypes.ts";
+import { CharacterDataDialogProps } from "@/types/characterTypes";
 
 export const CharacterDataDialog: React.FC<CharacterDataDialogProps> = ({
   showDialog,

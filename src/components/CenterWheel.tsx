@@ -1,7 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import arrowImg from "@/assets/Images/arrow-2.png";
 import { CANVAS_SIZE } from "@/utils/wheelUtils.ts";
 import { Section, WheelStep } from "@/Common/Types/Types.ts";
+import { useNavigate } from "react-router-dom";
+
+interface CenterWheelProps {
+  currentWheel: WheelStep;
+  rolledResult: Section | null;
+  canvasRef: React.RefObject<HTMLCanvasElement | null>;
+  isSpinning: boolean;
+  spin: () => void;
+  nextStep: () => void;
+  resetWheels: () => void;
+  handleGetData: () => void;
+  handleCharacterComplete: () => void;
+}
 
 interface CenterWheelProps {
   currentWheel: WheelStep;
@@ -26,12 +39,28 @@ export const CenterWheel: React.FC<CenterWheelProps> = ({
   handleGetData,
   handleCharacterComplete,
 }) => {
+  const navigate = useNavigate();
+  const [showResetDialog, setShowResetDialog] = useState(false);
+
   const handleNextClick = () => {
     if (currentWheel.key === "pve") {
       handleCharacterComplete();
     } else {
       nextStep();
     }
+  };
+
+  const handleResetClick = () => {
+    setShowResetDialog(true);
+  };
+
+  const handleConfirmReset = () => {
+    resetWheels();
+    setShowResetDialog(false);
+  };
+
+  const handleCancelReset = () => {
+    setShowResetDialog(false);
   };
 
   return (
@@ -46,11 +75,18 @@ export const CenterWheel: React.FC<CenterWheelProps> = ({
           Get Data
         </button>
         <button
-          onClick={() => (window.location.href = "/")}
+          onClick={() => navigate("/")}
           disabled={isSpinning}
           className="px-6 py-2 mb-4 min-w-[150px] max-w-[150px] bg-gray-700 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition disabled:opacity-40"
         >
           Back
+        </button>
+        <button
+          onClick={handleResetClick}
+          disabled={isSpinning}
+          className="px-6 py-2 mb-4 min-w-[150px] max-w-[150px] bg-red-700 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition disabled:opacity-40"
+        >
+          Reset All
         </button>
       </div>
 
@@ -97,29 +133,48 @@ export const CenterWheel: React.FC<CenterWheelProps> = ({
         >
           {isSpinning ? "Spinning..." : "Roll"}
         </button>
-
-        {rolledResult && (
-          <button
-            onClick={handleNextClick}
-            className="px-8 py-3 bg-green-700 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition"
-          >
-            {currentWheel.key === "pve" ? "Complete" : "Next"}
-          </button>
-        )}
-
         <button
-          onClick={resetWheels}
-          disabled={isSpinning}
-          className="px-8 py-3 bg-red-700 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition disabled:opacity-40"
+          disabled={!rolledResult}
+          onClick={handleNextClick}
+          className="px-8 py-3 bg-green-700 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-110 transition disabled:opacity-40"
         >
-          Reset
+          {currentWheel.key === "pve" ? "Complete" : "Next"}
         </button>
       </div>
 
-      {/* Progress Indicator (Optional) */}
+      {/* Progress Indicator */}
       {currentWheel.key && (
         <div className="mt-4 text-sm text-amber-300/70">
           Current: {currentWheel.key}
+        </div>
+      )}
+
+      {/* Reset Confirmation Dialog */}
+      {showResetDialog && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+          <div className="bg-[#2a1810] border-2 border-[#8a5b1a] rounded-lg p-8 max-w-md mx-4 shadow-[0_0_30px_rgba(200,50,50,0.6)]">
+            <h3 className="text-xl font-bold text-[#d4af37] mb-4 text-center">
+              Confirm Reset
+            </h3>
+            <p className="text-[#f5e6d3] mb-6 text-center">
+              Are you sure you want to reset all wheels? This will clear all
+              progress and results.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={handleCancelReset}
+                className="px-6 py-3 bg-gray-600 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-105 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmReset}
+                className="px-6 py-3 bg-red-700 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-105 transition"
+              >
+                Reset All
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

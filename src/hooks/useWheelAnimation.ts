@@ -1,11 +1,11 @@
 import { useRef, useState, useEffect, useCallback, useMemo } from "react";
-import { WheelStep, Section } from "@/Common/Types/Types.ts";
+import { WheelStep, Section } from "@/Common/Types/Types";
 import {
   CANVAS_SIZE,
   WHEEL_RADIUS_OFFSET,
   calculateCachedSections,
   getLandedSection,
-} from "@/utils/wheelUtils.ts";
+} from "@/utils/wheelUtils";
 
 export const useWheelAnimation = (
   currentWheel: WheelStep,

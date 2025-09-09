@@ -1,4 +1,4 @@
-import { Section } from "../Types/Types.ts";
+import { Section } from "../Types/Types";
 
 export const subraceMap: Record<string, Section[]> = {
   Uma: [
@@ -207,28 +207,28 @@ export const subraceMap: Record<string, Section[]> = {
   Dwarf: [
     {
       id: "dt1",
-      name: "Mountain Dwarf",
+      name: "Lùn núi (Mountain)",
       weight: 25,
       color: "#444444",
       description: `+2 Strength.`,
     },
     {
       id: "dt2",
-      name: "Gray Dwarf",
+      name: "Lùn xám (Gray)",
       weight: 20,
       color: "#555577",
       description: `+2 Speed, +1 Durability.`,
     },
     {
       id: "dt3",
-      name: "Ancient Dwarf",
+      name: "Cổ lùn (Ancient)",
       weight: 15,
       color: "#886633",
       description: `Chắc chắn sử dụng được vũ khí đang có.`,
     },
     {
       id: "dt4",
-      name: "Common Dwarf",
+      name: "Lùn thường",
       weight: 40,
       color: "#AAAAAA",
       description: `Không có hiệu ứng đặc biệt.`,

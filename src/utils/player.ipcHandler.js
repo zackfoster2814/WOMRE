@@ -1,6 +1,5 @@
 import { ipcMain } from "electron";
 import { getAllPlayers, insertPlayer } from "../db/player.model";
-
 export function registerPlayerIpcHandlers() {
   ipcMain.handle("fetch-players", async () => {
     try {
@@ -26,3 +25,4 @@ export function registerPlayerIpcHandlers() {
   //   return "pong";
   // });
 }
+//# sourceMappingURL=player.ipcHandler.js.map

@@ -1,11 +1,11 @@
-import { WheelStep } from "../Types/Types.ts";
+import { WheelStep } from "../Types/Types";
 
 import {
   farmerWheel,
   summonWheel,
   tricksterWheel,
   wibuWheel,
-} from "./ArchetypeExtraWheels.ts";
+} from "./ArchetypeExtraWheels";
 
 export const archetypeExtraWheels: Record<string, WheelStep> = {
   Farmer: farmerWheel,

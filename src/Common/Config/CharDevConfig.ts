@@ -1,4 +1,4 @@
-import { WheelStep } from "../Types/Types.ts";
+import { WheelStep } from "../Types/Types";
 
 export const charDevWheel: WheelStep = {
   key: "char-dev",

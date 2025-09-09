@@ -1,5 +1,5 @@
 // HouseExtraWheels.ts
-import { WheelStep } from "@/Common/Types/Types.ts";
+import { WheelStep } from "@/Common/Types/Types";
 
 export const starkWolfWheel: WheelStep = {
   key: "stark-direwolf",

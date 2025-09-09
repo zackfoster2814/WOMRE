@@ -1,4 +1,4 @@
-import { WheelStep } from "../Types/Types.ts";
+import { WheelStep } from "../Types/Types";
 
 export const raceWheel: WheelStep = {
   key: "race",
@@ -207,4 +207,151 @@ export const raceConfig: Record<
   Primordial: { subrace: "Elemental Wheel", trait: "Không có 💀", weight: 3.5 },
   Demon: { subrace: "Sins Wheel", trait: "Không có 💀", weight: 3 },
   God: { subrace: "Which God?", trait: "Không có 💀", weight: 3 },
+};
+
+export const raceWheelBalance: WheelStep = {
+  key: "race",
+  title: "Race",
+  sections: [
+    {
+      id: "01",
+      name: "Goblin",
+      weight: 10.5,
+      color: "#7A1F1F",
+      description: "",
+    },
+    {
+      id: "02",
+      name: "Gnome",
+      weight: 10.5,
+      color: "#B47D35",
+      description: "",
+    },
+    {
+      id: "03",
+      name: "Human",
+      weight: 10.5,
+      color: "#C2B678",
+      description: "",
+    },
+    {
+      id: "04",
+      name: "Dwarf",
+      weight: 10.5,
+      color: "#3D6B3D",
+      description: "",
+    },
+    {
+      id: "05",
+      name: "Skeleton",
+      weight: 10,
+      color: "#AAAAAA",
+      description: "",
+    },
+    {
+      id: "06",
+      name: "Troll",
+      weight: 10,
+      color: "#4F772D",
+      description: "",
+    },
+    {
+      id: "07",
+      name: "Orc",
+      weight: 10,
+      color: "#38761D",
+      description: "",
+    },
+    {
+      id: "08",
+      name: "Dryad",
+      weight: 10,
+      color: "#228B22",
+      description: "",
+    },
+    {
+      id: "09",
+      name: "Elf",
+      weight: 10,
+      color: "#2F7EBB",
+      description: "",
+    },
+    {
+      id: "10",
+      name: "Spirit",
+      weight: 10,
+      color: "#7F7FFF",
+      description: "",
+    },
+    {
+      id: "11",
+      name: "Uma",
+      weight: 10,
+      color: "#CC66CC",
+      description: "",
+    },
+    {
+      id: "12",
+      name: "Werebeast",
+      weight: 10,
+      color: "#8B4513",
+      description: "",
+    },
+    {
+      id: "13",
+      name: "Vampire",
+      weight: 10,
+      color: "#660000",
+      description: "",
+    },
+    {
+      id: "14",
+      name: "Giant",
+      weight: 10,
+      color: "#999933",
+      description: "",
+    },
+    {
+      id: "15",
+      name: "Dragon",
+      weight: 10,
+      color: "#990000",
+      description: "",
+    },
+    {
+      id: "16",
+      name: "Angel",
+      weight: 10,
+      color: "#FFD700",
+      description: "",
+    },
+    {
+      id: "17",
+      name: "Demi-God",
+      weight: 10.5,
+      color: "#FF8C00",
+      description: "",
+    },
+    {
+      id: "18",
+      name: "Primordial Being",
+      weight: 10.5,
+      color: "#8A2BE2",
+      description: "",
+    },
+    {
+      id: "19",
+      name: "Demon",
+      weight: 10,
+      color: "#8B0000",
+      description: "",
+    },
+    {
+      id: "20",
+      name: "God",
+      weight: 10,
+      color: "#FFFFFF",
+      description: "",
+    },
+  ],
 };

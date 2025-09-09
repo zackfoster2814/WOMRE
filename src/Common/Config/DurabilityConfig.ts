@@ -1,6 +1,6 @@
 // DurabilityConfig.ts
 import { WheelStep } from "@/Common/Types/Types";
-import { COLOR_PALETTE } from "../Constants/ConstantsConfig.tsx";
+import { COLOR_PALETTE } from "../Constants/ConstantsConfig";
 
 // Dữ liệu Durability theo race
 const DURABILITY_DATA: Record<string, number[]> = {
