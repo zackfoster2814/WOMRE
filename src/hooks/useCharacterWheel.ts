@@ -38,6 +38,16 @@ import {
   instrumentWheel,
 } from "@/Common/Config/ArchetypeConfig";
 import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig";
+import audio1 from '../assets/audio/Stat_1-2_(1).mp3';
+import audio2 from '../assets/audio/Stat_1-2_(2).mp3';
+import audio3 from '../assets/audio/Stat_1-2_(3).mp3';
+import audio3_4 from '../assets/audio/Stat_3-4.mp3';
+import audio5_7 from '../assets/audio/Stat_5-7.mp3';
+import audio8_9 from '../assets/audio/Stat_8-9.mp3';
+import audio10 from '../assets/audio/Stat_10.mp3';
+import audio_0_pow from '../assets/audio/audio/Power_0.mp3';
+import audio_0_gear from '../assets/audio/audio/Gear_0.mp3';
+
 
 // const DEBUG_RESULT = "Dark Magician";
 
@@ -188,25 +198,32 @@ export const useCharacterWheel = () => {
 // Thêm hàm phụ để xử lý âm thanh với logic ngẫu nhiên
 const getStatAudio = (value: string): void => {
   const statValue = parseInt(value, 10);
-  let audioPath = "";
+
+  let audioPath: string = '';
 
   if (statValue >= 1 && statValue <= 2) {
-    const randomAudios = [
-      "../assets/audio/Stats_1-2_random/1.mp3",
-      "../assets/audio/Stats_1-2_random/2.mp3",
-      "../assets/audio/Stats_1-2_random/3.mp3",
-    ];
-    const randomIndex = Math.floor(Math.random() * randomAudios.length);
-    audioPath = randomAudios[randomIndex];
+      const randomAudios = [audio1, audio2, audio3];
+      const randomIndex = Math.floor(Math.random() * randomAudios.length); // Đảm bảo chỉ khai báo randomIndex một lần
+      audioPath = randomAudios[randomIndex];
   } else if (statValue >= 3 && statValue <= 4) {
-    audioPath = "../assets/audio/Stat_3-4.mp3";
+      audioPath = audio3_4;
   } else if (statValue >= 5 && statValue <= 7) {
-    audioPath = "../assets/audio/Stat_5-7.mp3";
+      audioPath = audio5_7;
   } else if (statValue >= 8 && statValue <= 9) {
-    audioPath = "../assets/audio/Stat_8-9.mp3";
+      audioPath = audio8_9;
   } else if (statValue === 10) {
-    audioPath = "../assets/audio/Stat_10.mp3";
+      audioPath = audio10;
   }
+
+// Phát âm thanh với xử lý lỗi
+try {
+    const audio = new Audio(audioPath);
+    audio.play().catch((error) => {
+        console.error(`Lỗi phát âm thanh tại ${audioPath}:`, error);
+    });
+} catch (error) {
+    console.error('Lỗi khi khởi tạo âm thanh:', error);
+}
 
   if (audioPath) {
     const audio = new Audio(audioPath);
@@ -688,7 +705,7 @@ const getStatAudio = (value: string): void => {
             lgc++;
           }
           console.log(lgc);
-
+          
           setLegacyGearCount(lgc);
           setLegacyGearStep(0);
           return handleGearCountCompletion();
@@ -1181,6 +1198,7 @@ const getStatAudio = (value: string): void => {
         title: "Legacy Gear",
         sections: legacyGearWheel.sections,
       });
+
     } else {
       const params = getFlowHandlerParams();
       flowHandlers.jumpToWheel("weapon", params);
@@ -1195,27 +1213,31 @@ const getStatAudio = (value: string): void => {
 
   const handlePowerCountFlow = useCallback(
     (resultName: string) => {
-      const powerCalculation = gameMechanics.calculatePowerCount(
-        parseInt(resultName, 10),
-        characterState
-      );
+        const powerCalculation = gameMechanics.calculatePowerCount(
+            parseInt(resultName, 10),
+            characterState
+        );
 
-      setPowerCount(powerCalculation.finalPowerCount);
-      setPowerStep(0);
-      setCurrentWheel({
-        key: "power",
-        title: "Power",
-        sections: PowerWheel.sections,
-      });
+        // Cập nhật state
+        setPowerCount(powerCalculation.finalPowerCount);
+        setPowerStep(0);
+        setCurrentWheel({
+            key: "power",
+            title: "Power",
+            sections: PowerWheel.sections,
+        });
+
+        // Trả về audioPath dựa trên finalPowerCount
     },
     [
-      gameMechanics,
-      characterState,
-      setPowerCount,
-      setPowerStep,
-      setCurrentWheel,
+        gameMechanics,
+        characterState,
+        setPowerCount,
+        setPowerStep,
+        setCurrentWheel,
     ]
-  );
+);
+
 
   const handlePowerFlow = useCallback(
     (resultName: string) => {
