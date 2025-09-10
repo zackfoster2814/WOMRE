@@ -6,6 +6,7 @@ import {
   calculateCachedSections,
   getLandedSection,
 } from "@/utils/wheelUtils";
+import { useZackie } from "@/components/setResult";
 
 export const useWheelAnimation = (
   currentWheel: WheelStep,
@@ -18,7 +19,7 @@ export const useWheelAnimation = (
   // State
   const [angle, setAngle] = useState(0);
   const [isSpinning, setIsSpinning] = useState(false);
-  const [rolledResult, setRolledResult] = useState<Section | null>(null);
+  const {rolledResult,setRolledResult} =useZackie();
 
   // Memoized calculations
   const cachedSections = useMemo(() => {
@@ -128,8 +129,10 @@ export const useWheelAnimation = (
         setAngle(normalizedAngle);
 
         const landed = getLandedSection(normalizedAngle, cachedSections);
+        console.log(currentWheel);
         setIsSpinning(false);
-        setRolledResult(landed);
+        const mergeResult = {...currentWheel,...landed};
+        setRolledResult(mergeResult);
 
         // Play audio if available
         if (landed && audioRefs?.[landed.name]) {

@@ -38,6 +38,7 @@ import {
   instrumentWheel,
 } from "@/Common/Config/ArchetypeConfig";
 import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig";
+import { useZackie } from "@/components/setResult";
 
 // const DEBUG_RESULT = "Dark Magician";
 
@@ -48,7 +49,7 @@ export const useCharacterWheel = () => {
     initialCharacterState
   );
   const [currentWheel, setCurrentWheel] = useState<WheelStep>(raceWheel);
-
+  const {rolledResult} = useZackie();
   // Progress tracking states
   const [statStep, setStatStep] = useState(0);
   const [quirkStep, setQuirkStep] = useState(0);
@@ -289,7 +290,7 @@ export const useCharacterWheel = () => {
       switch (key) {
         // Race & Sub-race flow
         case "race":
-          return raceHandlers.handleRaceSelection(resultName, handlerParams);
+          return raceHandlers.handleRaceSelection(resultName, handlerParams,rolledResult);
 
         case "uma-parent-1":
         case "uma-parent-2":

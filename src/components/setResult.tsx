@@ -28,7 +28,6 @@ export const ZackieProvider = ({ children }: ZackieProviderProps) => {
   );
 };
 
-// Custom hook for using the context (recommended)
 export const useZackie = (): ZackieContextType => {
   const context = useContext(ZackieContext);
   

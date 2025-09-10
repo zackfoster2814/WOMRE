@@ -14,6 +14,7 @@ import {
 } from "@/utils/wheelUtils";
 import { playerWheel } from "@/Common/Config/PlayerConfig";
 import { houseWheel } from "@/Common/Config/HouseConfig";
+import { useZackie } from "@/components/setResult";
 
 // Types for race handlers
 interface RaceHandlerParams {
@@ -29,7 +30,11 @@ interface RaceHandlerResult {
   message?: string;
 }
 
+
 export const useRaceHandlers = () => {
+  const {rolledResult} = useZackie();
+  console.log(rolledResult);
+
   // Uma parent abilities mapping
   const UMA_PARENT_ABILITIES = {
     Maruzensky: {
@@ -141,10 +146,11 @@ export const useRaceHandlers = () => {
 
   // Handle main race selection
   const handleRaceSelection = useCallback(
-    (resultName: string, params: RaceHandlerParams): RaceHandlerResult => {
+    (resultName: string, params: RaceHandlerParams,rolledResult:any): RaceHandlerResult => {
+      console.log(rolledResult);
       const { dispatch, setCurrentWheel } = params;
-
       dispatch({ type: "SET_RESULT", key: "race", value: resultName });
+
 
       switch (resultName) {
         case "Skeleton":
