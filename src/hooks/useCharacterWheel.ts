@@ -47,7 +47,8 @@ import audio8_9 from '../assets/audio/Stat_8-9.mp3';
 import audio10 from '../assets/audio/Stat_10.mp3';
 import audio_0_pow from '../assets/audio/audio/Power_0.mp3';
 import audio_0_gear from '../assets/audio/audio/Gear_0.mp3';
-
+import audio_total_base_lower_25 from '../assets/audio/Total_Base_Lower_25.mp3';
+import audio_total_base_higher_41 from '../assets/audio/Total_Base_Higher_41.mp3';
 
 // const DEBUG_RESULT = "Dark Magician";
 
@@ -196,42 +197,54 @@ export const useCharacterWheel = () => {
     }
   };
 // Thêm hàm phụ để xử lý âm thanh với logic ngẫu nhiên
-const getStatAudio = (value: string): void => {
-  const statValue = parseInt(value, 10);
+const getStatAudio = (key: string, value: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      let audioPath: string = '';
 
-  let audioPath: string = '';
+      if (key === "totalBaseStat") {
+        const totalStatValue = parseInt(value, 10);
+        if (totalStatValue <= 25) {
+          audioPath = audio_total_base_lower_25;
+          console.log(`Playing audio for totalBaseStat <= 25: ${audioPath}`);
+        } else if (totalStatValue >= 41) {
+          audioPath = audio_total_base_higher_41;
+          console.log(`Playing audio for totalBaseStat >= 41: ${audioPath}`);
+        }
+      } else {
+        const statValue = parseInt(value, 10);
+        if (statValue >= 1 && statValue <= 2) {
+          const randomAudios = [audio1, audio2, audio3];
+          const randomIndex = Math.floor(Math.random() * randomAudios.length);
+          audioPath = randomAudios[randomIndex];
+        } else if (statValue >= 3 && statValue <= 4) {
+          audioPath = audio3_4;
+        } else if (statValue >= 5 && statValue <= 7) {
+          audioPath = audio5_7;
+        } else if (statValue >= 8 && statValue <= 9) {
+          audioPath = audio8_9;
+        } else if (statValue === 10) {
+          audioPath = audio10;
+        }
+      }
 
-  if (statValue >= 1 && statValue <= 2) {
-      const randomAudios = [audio1, audio2, audio3];
-      const randomIndex = Math.floor(Math.random() * randomAudios.length); // Đảm bảo chỉ khai báo randomIndex một lần
-      audioPath = randomAudios[randomIndex];
-  } else if (statValue >= 3 && statValue <= 4) {
-      audioPath = audio3_4;
-  } else if (statValue >= 5 && statValue <= 7) {
-      audioPath = audio5_7;
-  } else if (statValue >= 8 && statValue <= 9) {
-      audioPath = audio8_9;
-  } else if (statValue === 10) {
-      audioPath = audio10;
-  }
-
-// Phát âm thanh với xử lý lỗi
-try {
-    const audio = new Audio(audioPath);
-    audio.play().catch((error) => {
-        console.error(`Lỗi phát âm thanh tại ${audioPath}:`, error);
+      // Play audio with error handling
+      if (audioPath) {
+        try {
+          const audio = new Audio(audioPath);
+          audio.onended = () => resolve(); // Resolve when audio ends
+          audio.play().catch((error) => {
+            console.error(`Error playing audio at ${audioPath}:`, error);
+            reject(error); // Reject on error
+          });
+        } catch (error) {
+          console.error('Error initializing audio:', error);
+          reject(error);
+        }
+      } else {
+        resolve(); // Resolve immediately if no audio to play
+      }
     });
-} catch (error) {
-    console.error('Lỗi khi khởi tạo âm thanh:', error);
-}
-
-  if (audioPath) {
-    const audio = new Audio(audioPath);
-    audio.play().catch((error) => {
-      console.error("Failed to play audio:", error);
-    });
-  }
-};
+  };
   // Main flow dispatcher
   const handleNextStep = useCallback(
     (key: string, resultName: string) => {
@@ -596,10 +609,18 @@ try {
         case "durability":
         case "iq":
           dispatch({ type: "SET_STAT", key, value: resultName });
-          getStatAudio(resultName); // Phát âm thanh trực tiếp
-          handleRegularStatProgression(key, resultName); // Tiếp tục luồng tiến trình
-          return; // Không cần trả về giá trị audio nữa
-
+          getStatAudio(key, resultName);
+          handleRegularStatProgression(key, resultName);
+          return;
+        case "totalBaseStat":
+          dispatch({ type: "SET_STAT", key, value: resultName });
+          getStatAudio(key, resultName);
+          setCurrentWheel({
+            key: "quirk-count",
+            title: "Quirk Count",
+            sections: quirkCountOptions,
+          });
+          return;
         // Quirk & House flow
         case "quirk-count":
           const totalQuirk = gameMechanics.calculateQuirkCount(

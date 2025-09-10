@@ -124,6 +124,11 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
     },
     [jumpToWheel, handleBlur]
   );
+  // Calculate total base stat
+  const totalBaseStat = STAT_WHEELS.reduce((sum, statKey) => {
+    const statValue = parseInt(characterState.stats[statKey], 10);
+    return sum + (isNaN(statValue) ? 0 : statValue);
+  }, 0);
 
   const handleArchetypeClick = useCallback(() => {
     jumpToWheel("archetype");
@@ -317,6 +322,7 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
             iq: "text-purple-300",
             battleIQ: "text-yellow-300",
             martialArts: "text-orange-400",
+            
           };
 
           const displayNames: Record<string, string> = {
@@ -341,6 +347,12 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
             </div>
           );
         })}
+
+        {/* Total Base Stat */}
+        <div className="flex justify-between text-lg mt-2 pt-2 border-t border-[#d4af37]">
+          <span className="font-bold">Total Base Stat</span>
+          <span className="text-amber-300">{totalBaseStat}</span>
+        </div>
       </div>
     </div>
   );
