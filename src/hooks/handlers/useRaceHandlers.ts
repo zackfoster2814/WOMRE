@@ -15,6 +15,7 @@ import {
 import { playerWheel } from "@/Common/Config/PlayerConfig";
 import { houseWheel } from "@/Common/Config/HouseConfig";
 import { useZackie } from "@/components/setResult";
+import { raceSelectionMap } from "../map/raceSelectionMap";
 
 // Types for race handlers
 interface RaceHandlerParams {
@@ -30,6 +31,7 @@ interface RaceHandlerResult {
   message?: string;
 }
 
+type RaceHandler = (params: RaceHandlerParams,rolledResult:any,resultName:any) => RaceHandlerResult;
 
 export const useRaceHandlers = () => {
   const {rolledResult} = useZackie();
@@ -143,54 +145,19 @@ export const useRaceHandlers = () => {
     },
     []
   );
-
+  
   // Handle main race selection
   const handleRaceSelection = useCallback(
     (resultName: string, params: RaceHandlerParams,rolledResult:any): RaceHandlerResult => {
-      console.log(rolledResult);
       const { dispatch, setCurrentWheel } = params;
       dispatch({ type: "SET_RESULT", key: "race", value: resultName });
-
-
-      switch (resultName) {
-        case "Skeleton":
-          setCurrentWheel({
-            ...raceWheel,
-            key: "skeleton-lineage",
-            title: "Skeleton Lineage",
-            sections: raceWheel.sections.filter((s) => s.name !== "Skeleton"),
-          });
-          return { shouldContinue: false };
-
-        case "Uma":
-          setCurrentWheel({
-            key: "uma-parent-1",
-            title: "Uma Parent Race 1",
-            sections: subraceMap["Uma"],
-          });
-          return { shouldContinue: false };
-
-        case "Angel":
-          // Auto-add Pacifist archetype for Angel
-          dispatch({
-            type: "ADD_ARCHETYPE",
-            archetype: {
-              id: "16",
-              name: "Pacifist",
-              weight: 2,
-              color: "#98FB98",
-            },
-          });
-          setCurrentWheel({
-            key: "subrace",
-            title: raceConfig[resultName]?.subrace || "Subrace",
-            sections: subraceMap[resultName],
-          });
-          return { shouldContinue: false };
-
-        default:
-          // Check if race has subraces
-          if (subraceMap[resultName]?.length > 0) {
+      const handler:any = raceSelectionMap[resultName];
+      console.log(handler);
+      if(handler){
+        console.log(handler(params,rolledResult));
+        return handler(params,rolledResult,resultName);
+      }
+      if (subraceMap[resultName]?.length > 0) {
             setCurrentWheel({
               key: "subrace",
               title: raceConfig[resultName]?.subrace || "Subrace",
@@ -199,8 +166,7 @@ export const useRaceHandlers = () => {
           } else {
             setCurrentWheel(archetypeWheel);
           }
-          return { shouldContinue: false };
-      }
+      return { shouldContinue: false}
     },
     []
   );
