@@ -3,7 +3,6 @@ import { WheelStep } from "@/Common/Types/Types";
 import { raceConfig, raceWheel } from "@/Common/Config/RaceConfig";
 import { subraceMap } from "@/Common/Config/SubRaceConfig";
 
-
 interface RaceHandlerParams {
   dispatch: React.Dispatch<any>;
   setCurrentWheel: (wheel: WheelStep) => void;
@@ -39,9 +38,9 @@ export const raceSelectionMap : Record<string,RaceHandler> = {
     Uma:(params,rolledResult)=>{
       const {setCurrentWheel} = params;
       setCurrentWheel({
-         key: "uma-parent-1",
-            title: "Uma Parent Race 1",
-            sections: subraceMap["Uma"],
+        key: "uma-parent-1",
+        title: "Uma Parent Race 1",
+        sections: subraceMap["Uma"],
       });
       return {
         shouldContinue: false,

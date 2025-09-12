@@ -15,7 +15,9 @@ import {
 import { playerWheel } from "@/Common/Config/PlayerConfig";
 import { houseWheel } from "@/Common/Config/HouseConfig";
 import { useZackie } from "@/components/setResult";
-import { raceSelectionMap } from "../map/raceSelectionMap";
+import { raceSelectionMap } from "../contents/Race-ist/raceSelectionMap";
+import { UmaParentMap } from "../contents/Race-ist/UmaParentMap";
+
 
 // Types for race handlers
 interface RaceHandlerParams {
@@ -35,7 +37,6 @@ type RaceHandler = (params: RaceHandlerParams,rolledResult:any,resultName:any) =
 
 export const useRaceHandlers = () => {
   const {rolledResult} = useZackie();
-  console.log(rolledResult);
 
   // Uma parent abilities mapping
   const UMA_PARENT_ABILITIES = {
@@ -152,9 +153,8 @@ export const useRaceHandlers = () => {
       const { dispatch, setCurrentWheel } = params;
       dispatch({ type: "SET_RESULT", key: "race", value: resultName });
       const handler:any = raceSelectionMap[resultName];
-      console.log(handler);
+
       if(handler){
-        console.log(handler(params,rolledResult));
         return handler(params,rolledResult,resultName);
       }
       if (subraceMap[resultName]?.length > 0) {
@@ -179,73 +179,15 @@ export const useRaceHandlers = () => {
       params: RaceHandlerParams
     ): RaceHandlerResult => {
       const { dispatch, setCurrentWheel, characterState } = params;
+      const handler:any = UmaParentMap[wheelKey];
+      if(handler){
+        return handler({
+              ...params,
+              applyUmaParentAbilities
+            }, rolledResult, resultName);
+          }   
 
-      switch (wheelKey) {
-        case "uma-parent-1":
-          dispatch({
-            type: "SET_RESULT",
-            key: "uma-parent-1",
-            value: resultName,
-          });
-
-          // Apply parent 1 abilities
-          applyUmaParentAbilities(resultName, dispatch);
-
-          setCurrentWheel({
-            key: "uma-parent-2",
-            title: "Uma Parent Race 2",
-            sections: subraceMap["Uma"].filter((s) => s.name !== resultName),
-          });
-          return { shouldContinue: false };
-
-        case "uma-parent-2":
-          dispatch({
-            type: "SET_RESULT",
-            key: "uma-parent-2",
-            value: resultName,
-          });
-
-          // Apply parent 2 abilities
-          applyUmaParentAbilities(resultName, dispatch);
-
-          // Set combined subrace
-          const parent1 = characterState.results["uma-parent-1"];
-          const combinedSubrace = `${parent1} - ${resultName}`;
-          dispatch({
-            type: "SET_RESULT",
-            key: "subrace",
-            value: combinedSubrace,
-          });
-
-          // Check for Special Week combination
-          if (combinedSubrace.includes("Special Week")) {
-            setCurrentWheel({
-              key: "special-week-extra",
-              title: "Special Week Power Selection",
-              sections: [
-                {
-                  id: "gourmand",
-                  name: "Gourmand",
-                  weight: 1,
-                  color: "#FFD700",
-                },
-                {
-                  id: "hydrate",
-                  name: "Hydrate",
-                  weight: 1,
-                  color: "#87CEEB",
-                },
-              ],
-            });
-          } else {
-            setCurrentWheel(archetypeWheel);
-          }
-
-          return { shouldContinue: false };
-
-        default:
-          return { shouldContinue: true };
-      }
+      return { shouldContinue: true}
     },
     [applyUmaParentAbilities]
   );
