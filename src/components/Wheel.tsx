@@ -289,11 +289,10 @@ const Wheel: React.FC<WheelProps> = React.memo(
         {isSpined && !isSpinning && isResultValid && (
           <div className="absolute top-1/12 whitespace-pre-line items-center flex flex-col max-w-[800px] z-50 border-2 border-[#d4af37] bg-black/80 rounded-md text-amber-200 font-bold p-4">
             <p>Xin chúc mừng, bạn nhận được:</p>
-            <h1 className="text-4xl my-4">{items[result]?.name}</h1>
-            {(items[result]?.description || items[result]?.effect) && (
-              <p className="">
-                {items[result]?.description ?? items[result]?.effect}
-              </p>
+            <h1 className="text-4xl my-4">{items[result].name}</h1>
+            {items[result].description && <p>{items[result].description}</p>}
+            {items[result].effect && (
+              <p className="space-y-2 text-amber-200">{items[result].effect}</p>
             )}
           </div>
         )}
