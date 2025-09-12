@@ -112,21 +112,23 @@ export default function CharacterWheel() {
       </div>
 
       {/* Tooltip */}
-      {hoverIndex != null && (
-        <div className="absolute space-y-4 top-8 left-0 whitespace-pre-line flex flex-col size-fit max-w-[600px] z-50 border-2 border-[#d4af37] bg-black/80 rounded-md p-4">
-          <h1 className="text-4xl text-wrap wrap-break-word mb-4 font-bold text-amber-200">
-            {currentWheel.sections[hoverIndex].name}
-          </h1>
-          {currentWheel.sections[hoverIndex].description && (
-            <p>{currentWheel.sections[hoverIndex].description}</p>
-          )}
-          {currentWheel.sections[hoverIndex].effect && (
-            <p className="space-y-2 text-amber-200">
-              {currentWheel.sections[hoverIndex].effect}
-            </p>
-          )}
-        </div>
-      )}
+      {hoverIndex != null &&
+        (currentWheel.sections[hoverIndex].effect ||
+          currentWheel.sections[hoverIndex].description) && (
+          <div className="absolute space-y-4 top-8 left-0 whitespace-pre-line flex flex-col size-fit max-w-[600px] z-50 border-2 border-[#d4af37] bg-black/80 rounded-md p-4">
+            <h1 className="text-4xl text-wrap wrap-break-word mb-4 font-bold text-amber-200">
+              {currentWheel.sections[hoverIndex].name}
+            </h1>
+            {currentWheel.sections[hoverIndex].description && (
+              <p>{currentWheel.sections[hoverIndex].description}</p>
+            )}
+            {currentWheel.sections[hoverIndex].effect && (
+              <p className="space-y-2 text-amber-200">
+                {currentWheel.sections[hoverIndex].effect}
+              </p>
+            )}
+          </div>
+        )}
 
       {/* Main Layout */}
       <div className="flex flex-1 z-10 justify-between">
