@@ -700,7 +700,7 @@ export const useRaceHandlers = () => {
             type: "ADD_POWER",
             power: {
               id: "HP02",
-              name: "Healing Factor",
+              name: "Hunter's Rewards",
               effect:
                 "Sau khi thắng 1 combat PvP, nhận 2 phần thưởng PvP thay vì 1.",
               weight: 0.0,
