@@ -1,39 +1,39 @@
-import { useState, createContext, ReactNode,useContext } from "react";
+import { useState, createContext, ReactNode, useContext } from "react";
 import { Section } from "../Common/Types/Types.ts";
 
-interface ZackieContextType {
+interface ResultContextType {
   rolledResult: Section | null;
   setRolledResult: (result: Section | null) => void;
 }
 
-export const ZackieContext = createContext<ZackieContextType | undefined>(undefined);
+export const ResultContext = createContext<ResultContextType | undefined>(
+  undefined
+);
 
 // Define props interface for the provider
-interface ZackieProviderProps {
+interface ResultProviderProps {
   children: ReactNode;
 }
 
-export const ZackieProvider = ({ children }: ZackieProviderProps) => {  
+export const ResultProvider = ({ children }: ResultProviderProps) => {
   const [rolledResult, setRolledResult] = useState<Section | null>(null);
-  
-  const value: ZackieContextType = {
+
+  const value: ResultContextType = {
     rolledResult,
-    setRolledResult
+    setRolledResult,
   };
-  
+
   return (
-    <ZackieContext.Provider value={value}>
-      {children}
-    </ZackieContext.Provider>
+    <ResultContext.Provider value={value}>{children}</ResultContext.Provider>
   );
 };
 
-export const useZackie = (): ZackieContextType => {
-  const context = useContext(ZackieContext);
-  
+export const useResult = (): ResultContextType => {
+  const context = useContext(ResultContext);
+
   if (context === undefined) {
-    throw new Error('Zackie must be used within a Child');
+    throw new Error("Result must be used within a Child");
   }
-  
+
   return context;
 };

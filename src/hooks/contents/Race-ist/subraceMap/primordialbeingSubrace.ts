@@ -14,8 +14,7 @@ import {
 } from "@/utils/wheelUtils";
 import { playerWheel } from "@/Common/Config/PlayerConfig";
 import { houseWheel } from "@/Common/Config/HouseConfig";
-import { useZackie } from "@/components/setResult";
-
+import { useResult } from "@/components/setResult";
 
 interface RaceHandlerParams {
   dispatch: React.Dispatch<any>;

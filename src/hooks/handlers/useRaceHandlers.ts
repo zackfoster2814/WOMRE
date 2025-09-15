@@ -14,7 +14,7 @@ import {
 } from "@/utils/wheelUtils";
 import { playerWheel } from "@/Common/Config/PlayerConfig";
 import { houseWheel } from "@/Common/Config/HouseConfig";
-import { useZackie } from "@/components/setResult";
+import { useResult } from "@/components/setResult";
 import { raceSelectionMap } from "../contents/Race-ist/raceSelectionMap";
 import { UmaParentMap } from "../contents/Race-ist/umaParentMap";
 import { subraceSelectionMap } from "../contents/Race-ist/subraceMap/subraceSelectionMap";
@@ -40,7 +40,7 @@ type RaceHandler = (
 ) => RaceHandlerResult;
 
 export const useRaceHandlers = () => {
-  const { rolledResult } = useZackie();
+  const { rolledResult } = useResult();
 
   // Uma parent abilities mapping
   const UMA_PARENT_ABILITIES = {
@@ -243,8 +243,8 @@ export const useRaceHandlers = () => {
       );
       if (handler) {
         return handler(params, rolledResult, resultName);
-      }else{
-        setCurrentWheel(archetypeWheel)
+      } else {
+        setCurrentWheel(archetypeWheel);
       }
 
       return { shouldContinue: true };
