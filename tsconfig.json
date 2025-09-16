@@ -16,6 +16,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "outDir": "dist-electron",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
   },

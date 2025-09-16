@@ -14,6 +14,10 @@ import {
 } from "@/utils/wheelUtils";
 import { playerWheel } from "@/Common/Config/PlayerConfig";
 import { houseWheel } from "@/Common/Config/HouseConfig";
+import { useResult } from "@/components/setResult";
+import { raceSelectionMap } from "../contents/Race-ist/raceSelectionMap";
+import { UmaParentMap } from "../contents/Race-ist/umaParentMap";
+import { subraceSelectionMap } from "../contents/Race-ist/subraceMap/subraceSelectionMap";
 
 // Types for race handlers
 interface RaceHandlerParams {
@@ -29,7 +33,15 @@ interface RaceHandlerResult {
   message?: string;
 }
 
+type RaceHandler = (
+  params: RaceHandlerParams,
+  rolledResult: any,
+  resultName: any
+) => RaceHandlerResult;
+
 export const useRaceHandlers = () => {
+  const { rolledResult } = useResult();
+
   // Uma parent abilities mapping
   const UMA_PARENT_ABILITIES = {
     Maruzensky: {
@@ -141,60 +153,28 @@ export const useRaceHandlers = () => {
 
   // Handle main race selection
   const handleRaceSelection = useCallback(
-    (resultName: string, params: RaceHandlerParams): RaceHandlerResult => {
+    (
+      resultName: string,
+      params: RaceHandlerParams,
+      rolledResult: any
+    ): RaceHandlerResult => {
       const { dispatch, setCurrentWheel } = params;
-
       dispatch({ type: "SET_RESULT", key: "race", value: resultName });
+      const handler: any = raceSelectionMap[resultName];
 
-      switch (resultName) {
-        case "Skeleton":
-          setCurrentWheel({
-            ...raceWheel,
-            key: "skeleton-lineage",
-            title: "Skeleton Lineage",
-            sections: raceWheel.sections.filter((s) => s.name !== "Skeleton"),
-          });
-          return { shouldContinue: false };
-
-        case "Uma":
-          setCurrentWheel({
-            key: "uma-parent-1",
-            title: "Uma Parent Race 1",
-            sections: subraceMap["Uma"],
-          });
-          return { shouldContinue: false };
-
-        case "Angel":
-          // Auto-add Pacifist archetype for Angel
-          dispatch({
-            type: "ADD_ARCHETYPE",
-            archetype: {
-              id: "16",
-              name: "Pacifist",
-              weight: 2,
-              color: "#98FB98",
-            },
-          });
-          setCurrentWheel({
-            key: "subrace",
-            title: raceConfig[resultName]?.subrace || "Subrace",
-            sections: subraceMap[resultName],
-          });
-          return { shouldContinue: false };
-
-        default:
-          // Check if race has subraces
-          if (subraceMap[resultName]?.length > 0) {
-            setCurrentWheel({
-              key: "subrace",
-              title: raceConfig[resultName]?.subrace || "Subrace",
-              sections: subraceMap[resultName],
-            });
-          } else {
-            setCurrentWheel(archetypeWheel);
-          }
-          return { shouldContinue: false };
+      if (handler) {
+        return handler(params, rolledResult, resultName);
       }
+      if (subraceMap[resultName]?.length > 0) {
+        setCurrentWheel({
+          key: "subrace",
+          title: raceConfig[resultName]?.subrace || "Subrace",
+          sections: subraceMap[resultName],
+        });
+      } else {
+        setCurrentWheel(archetypeWheel);
+      }
+      return { shouldContinue: false };
     },
     []
   );
@@ -207,73 +187,19 @@ export const useRaceHandlers = () => {
       params: RaceHandlerParams
     ): RaceHandlerResult => {
       const { dispatch, setCurrentWheel, characterState } = params;
-
-      switch (wheelKey) {
-        case "uma-parent-1":
-          dispatch({
-            type: "SET_RESULT",
-            key: "uma-parent-1",
-            value: resultName,
-          });
-
-          // Apply parent 1 abilities
-          applyUmaParentAbilities(resultName, dispatch);
-
-          setCurrentWheel({
-            key: "uma-parent-2",
-            title: "Uma Parent Race 2",
-            sections: subraceMap["Uma"].filter((s) => s.name !== resultName),
-          });
-          return { shouldContinue: false };
-
-        case "uma-parent-2":
-          dispatch({
-            type: "SET_RESULT",
-            key: "uma-parent-2",
-            value: resultName,
-          });
-
-          // Apply parent 2 abilities
-          applyUmaParentAbilities(resultName, dispatch);
-
-          // Set combined subrace
-          const parent1 = characterState.results["uma-parent-1"];
-          const combinedSubrace = `${parent1} - ${resultName}`;
-          dispatch({
-            type: "SET_RESULT",
-            key: "subrace",
-            value: combinedSubrace,
-          });
-
-          // Check for Special Week combination
-          if (combinedSubrace.includes("Special Week")) {
-            setCurrentWheel({
-              key: "special-week-extra",
-              title: "Special Week Power Selection",
-              sections: [
-                {
-                  id: "gourmand",
-                  name: "Gourmand",
-                  weight: 1,
-                  color: "#FFD700",
-                },
-                {
-                  id: "hydrate",
-                  name: "Hydrate",
-                  weight: 1,
-                  color: "#87CEEB",
-                },
-              ],
-            });
-          } else {
-            setCurrentWheel(archetypeWheel);
-          }
-
-          return { shouldContinue: false };
-
-        default:
-          return { shouldContinue: true };
+      const handler: any = UmaParentMap[wheelKey];
+      if (handler) {
+        return handler(
+          {
+            ...params,
+            applyUmaParentAbilities,
+          },
+          rolledResult,
+          resultName
+        );
       }
+
+      return { shouldContinue: true };
     },
     [applyUmaParentAbilities]
   );
@@ -290,479 +216,38 @@ export const useRaceHandlers = () => {
     []
   );
 
+  //func nhu ten
+  function findSubraceHandler(race: string, resultName: string) {
+    const subraceMapForRace = subraceSelectionMap[race];
+
+    if (!subraceMapForRace) {
+      return undefined;
+    }
+
+    let handler = subraceMapForRace[resultName];
+
+    if (!handler) {
+      return undefined;
+    }
+
+    return handler;
+  }
   // Handle subrace selection
   const handleSubraceSelection = useCallback(
     (resultName: string, params: RaceHandlerParams): RaceHandlerResult => {
       const { dispatch, setCurrentWheel, characterState } = params;
       dispatch({ type: "SET_RESULT", key: "subrace", value: resultName });
-
-      if (characterState.results.race === "Vampire") {
-        setCurrentWheel({
-          ...uniqueVampireTrainWheel,
-          key: "uniqueVampireTrain",
-          title: "Unique Taste Train",
-        });
-        return { shouldContinue: false };
-      } else if (
-        characterState.results.race === "Goblin" &&
-        resultName === "Goblin (1)"
-      ) {
-        dispatch({
-          type: "ADD_ARCHETYPE",
-          archetype: { id: "33", name: "Him", weight: 1, color: "#1E90FF" },
-        });
-        const raceOrSubrace = getRaceOrSubrace(characterState.results);
-        const firstStatWheel = getStatWheel(raceOrSubrace, STAT_WHEELS[0]);
-
-        if (firstStatWheel) {
-          setCurrentWheel(firstStatWheel);
-          return { shouldContinue: false };
-        } else {
-          // Fallback nếu không tìm được stat wheel
-          setCurrentWheel(archetypeWheel);
-          return { shouldContinue: false };
-        }
-      } else if (characterState.results.race === "Elf") {
-        if (resultName === "Lythari") {
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q41",
-              name: "Raconteur",
-              weight: 1.79,
-              color: "#F08080",
-              description:
-                "Trong combat: Round chiến thắng đầu tiên của bản thân sẽ không được nhận điểm mà khiến đối thủ bị -1 điểm.",
-            },
-          });
-        } else if (resultName === "Moon Elf") {
-          setCurrentWheel({
-            ...playerWheel,
-            key: "lover",
-            title: "Moon Elf - Lover Selection",
-          });
-        }
-
-        setCurrentWheel(archetypeWheel);
-        return { shouldContinue: false };
-      } else if (characterState.results.race === "Werebeast") {
-        if (resultName === "Wererat") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "9",
-              name: "Crimson Poison",
-              effect:
-                "Đối thủ -1 Durability, giảm thêm 1 với mỗi 2 Power sở hữu.",
-              weight: 0.9,
-              color: "",
-            },
-          });
-        } else if (resultName === "Wereboar") {
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q53",
-              name: "Relentless",
-              weight: 1.79,
-              color: "#FF4500",
-              description:
-                "Sau khi chiến thắng, Đối thủ sẽ bị -3 vào 1 stat ngẫu nhiên.",
-            },
-          });
-        } else if (resultName === "Werebat") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "10",
-              name: "Bloody Strike",
-              effect:
-                "Nhận -1 All Stats. Với mỗi Round thắng,+1 vào Stat đó (Áp dụng sau combat)",
-              weight: 0.9,
-              color: "",
-            },
-          });
-        } else if (resultName === "Werecapybara") {
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q9",
-              name: "Cute",
-              weight: 1.79,
-              color: "#FF69B4",
-              description: 'Quay 1 player để làm "Lover". Nhận +1 IQ',
-            },
-          });
-          setCurrentWheel({
-            ...playerWheel,
-            key: "lover",
-            title: "Werecapybara - Cute Lover Selection",
-          });
-        }
-
-        setCurrentWheel(archetypeWheel);
-        return { shouldContinue: false };
-      } else if (characterState.results.race === "Dragon") {
-        if (resultName === "Ancient Dragon") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "11",
-              name: "Divine Smite",
-              effect:
-                "Nhận +1 Điểm nếu thắng ở Round MA. Xảy ra sau cùng, sau khi 'Kiếm Phái Ashina'.",
-              weight: 0.9,
-              color: "",
-            },
-          });
-        } else if (resultName === "Undead Dragon") {
-          setCurrentWheel({
-            key: "summon",
-            title: "Undead Dragon - Summon Selection",
-            sections: summonWheel.sections,
-          });
-          return { shouldContinue: false };
-        } else if (resultName === "Thunder Dragon") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "13",
-              name: "Thunder Orb",
-              effect: "Đối thủ giảm 2 Durability.",
-              weight: 0.9,
-              color: "",
-            },
-          });
-        }
-
-        setCurrentWheel(archetypeWheel);
-        return { shouldContinue: false };
-      } else if (characterState.results.race === "Angel") {
-        if (resultName === "Powers") {
-          dispatch({
-            type: "ADD_ARCHETYPE",
-            archetype: {
-              id: "31",
-              name: "Paladin",
-              weight: 2,
-              color: "#DAA520",
-            },
-          });
-        }
-        setCurrentWheel(archetypeWheel);
-        return { shouldContinue: false };
-      } else if (characterState.results.race === "Demi-God") {
-        if (resultName === "Love") {
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q55",
-              name: "Beauty",
-              weight: 1.79,
-              color: "#FF69B4",
-              description: 'Quay 1 player để làm "Lover". Nhận +1 BIQ',
-            },
-          });
-          setCurrentWheel({
-            ...playerWheel,
-            key: "lover",
-            title: "God's gift - Lover Selection",
-          });
-          setCurrentWheel(archetypeWheel);
-        }
-        setCurrentWheel(archetypeWheel);
-        return { shouldContinue: false };
-      } else if (characterState.results.race === "Demon") {
-        if (resultName === "Beelzebub") {
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q54",
-              name: "Tham ăn",
-              weight: 1.79,
-              color: "#8FBC8F",
-              description: "Với mỗi 2 Base Dura, nhận -1 Speed",
-            },
-          });
-          return { shouldContinue: false };
-        } else if (resultName === "Leviathan") {
-          setCurrentWheel({
-            key: "leviathan-house",
-            title: "Leviathan house",
-            sections: houseWheel.sections,
-          });
-          return { shouldContinue: false };
-        } else if (resultName === "Behemoth") {
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q8",
-              name: "Cay/Tri",
-              weight: 1.79,
-              color: "#9370DB",
-              description:
-                "Nhận -1 IQ và 1 BIQ. Khi thua trận, -1 IQ và -1 BIQ",
-            },
-          });
-        } else if (resultName === "Mammon") {
-          dispatch({
-            type: "ADD_ARCHETYPE",
-            archetype: {
-              id: "45",
-              name: "Gambler Bloodline",
-              weight: 1.5,
-              color: "#8B008B",
-            },
-          });
-        } else if (resultName === "Belphegor") {
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "ds6",
-              name: "Belphegor",
-              weight: 14,
-              color: "#444466",
-              description: `Quirk "Lazy", -2 Durability.`,
-            },
-          });
-        } else if (resultName === "Asmodeus") {
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q6",
-              name: "High Finger Skill",
-              weight: 1.79,
-              color: "#FFD700",
-              description: 'Quay 1 player để làm "Lover". Nhận +1 Speed.',
-            },
-          });
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q9",
-              name: "Cute",
-              weight: 1.79,
-              color: "#FF69B4",
-              description: 'Quay 1 player để làm "Lover". Nhận +1 IQ',
-            },
-          });
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q55",
-              name: "Beauty",
-              weight: 1.79,
-              color: "#FF69B4",
-              description: 'Quay 1 player để làm "Lover". Nhận +1 BIQ',
-            },
-          });
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q49",
-              name: "Thích Liên Hoan Xác Thịt",
-              weight: 1.79,
-              color: "#FF1493",
-              description:
-                "80% Sẽ Make love với đối thủ sau trận đấu nếu thắng cuộc.",
-            },
-          });
-          dispatch({
-            type: "SET_RESULT",
-            key: "asmodeus-lovers-remaining",
-            value: "4",
-          });
-          setCurrentWheel({
-            key: "asmodeus-lover",
-            title: "Lover Selection",
-            sections: playerWheel.sections,
-          });
-          return { shouldContinue: false };
-        } else if (resultName === "Sinful King") {
-          // Sinful King does all previous actions
-          // Add Tham ăn from Beelzebub
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q54",
-              name: "Tham ăn",
-              weight: 1.79,
-              color: "#8FBC8F",
-              description: "Với mỗi 2 Base Dura, nhận -1 Speed",
-            },
-          });
-
-          // Add Cay/Tri from Behemoth
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q8",
-              name: "Cay/Tri",
-              weight: 1.79,
-              color: "#9370DB",
-              description:
-                "Nhận -1 IQ và 1 BIQ. Khi thua trận, -1 IQ và -1 BIQ",
-            },
-          });
-
-          // Add Gambler Bloodline from Mammon
-          dispatch({
-            type: "ADD_ARCHETYPE",
-            archetype: {
-              id: "45",
-              name: "Gambler Bloodline",
-              weight: 1.5,
-              color: "#8B008B",
-            },
-          });
-
-          // Add Belphegor quirk
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "ds6",
-              name: "Belphegor",
-              weight: 14,
-              color: "#444466",
-              description: `Quirk "Lazy", -2 Durability.`,
-            },
-          });
-
-          // Add Asmodeus quirks
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q6",
-              name: "High Finger Skill",
-              weight: 1.79,
-              color: "#FFD700",
-              description: 'Quay 1 player để làm "Lover". Nhận +1 Speed.',
-            },
-          });
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q9",
-              name: "Cute",
-              weight: 1.79,
-              color: "#FF69B4",
-              description: 'Quay 1 player để làm "Lover". Nhận +1 IQ',
-            },
-          });
-          dispatch({
-            type: "ADD_QUIRK",
-            quirk: {
-              id: "q55",
-              name: "Beauty",
-              weight: 1.79,
-              color: "#FF69B4",
-              description: 'Quay 1 player để làm "Lover". Nhận +1 BIQ',
-            },
-          });
-
-          // Set up for Leviathan house selection first
-          setCurrentWheel({
-            key: "sinful-king-house",
-            title: "Sinful King - Gia tộc Selection",
-            sections: houseWheel.sections,
-          });
-          return { shouldContinue: false };
-        }
-
-        setCurrentWheel(archetypeWheel);
-        return { shouldContinue: false };
-      } else if (characterState.results.race === "God") {
-        if (resultName === "Apollo") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "11",
-              name: "Divine Smite",
-              effect:
-                "Nhận +1 Điểm nếu thắng ở Round MA. Xảy ra sau cùng, sau khi 'Kiếm Phái Ashina'.",
-              weight: 0.9,
-              color: "",
-            },
-          });
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "HP01",
-              name: "Healing Factor",
-              effect:
-                "Nhận +1 Durability. Với mỗi 2 round thua trong 1 combat, nhận +1 Durability. (áp dụng sau combat)",
-              weight: 0.0,
-              color: "",
-            },
-          });
-        } else if (resultName === "Artemis") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "HP02",
-              name: "Hunter's Rewards",
-              effect:
-                "Sau khi thắng 1 combat PvP, nhận 2 phần thưởng PvP thay vì 1.",
-              weight: 0.0,
-              color: "",
-            },
-          });
-        }
-        setCurrentWheel(archetypeWheel);
-        return { shouldContinue: false };
-      } else if (characterState.results.race === "Primordial Being") {
-        if (resultName === "Air") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "49",
-              name: "Blowing Leaves",
-              effect: "Thổi lá bay đi 💀",
-              weight: 0.9,
-              color: "",
-            },
-          });
-        } else if (resultName === "Water") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "14",
-              name: "Water Breathing",
-              effect: "Thở dưới nước.",
-              weight: 0.9,
-              color: "",
-            },
-          });
-        } else if (resultName === "Fire") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "12",
-              name: "Fire Control",
-              effect:
-                "Có thể điều khiển được một ngọn lửa bật hoặc tắt. Ngoài ra không tác dụng 💀",
-              weight: 0.9,
-              color: "",
-            },
-          });
-        } else if (resultName === "Earth") {
-          dispatch({
-            type: "ADD_POWER",
-            power: {
-              id: "60",
-              name: "Earth-Shaking",
-              effect: "Đất đá rung chuyển.",
-              weight: 0.9,
-              color: "",
-            },
-          });
-        }
-        setCurrentWheel(archetypeWheel);
-        return { shouldContinue: false };
+      const handler: any = findSubraceHandler(
+        characterState.results.race,
+        resultName
+      );
+      if (handler) {
+        return handler(params, rolledResult, resultName);
       } else {
         setCurrentWheel(archetypeWheel);
-        return { shouldContinue: false };
       }
+
+      return { shouldContinue: true };
     },
     []
   );
