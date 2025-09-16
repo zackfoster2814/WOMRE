@@ -49,7 +49,7 @@ export const WereBeastSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   "WereBeast|Werecapybara": (params, rolledResult, resultName) => {
@@ -73,7 +73,7 @@ export const WereBeastSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
 };

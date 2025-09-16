@@ -35,36 +35,36 @@ type RaceHandler = (
 export const ElfSubrace: Record<string, RaceHandler> = {
   Lythari: (params, rolledResult, resultName) => {
     const { setCurrentWheel, dispatch } = params;
-      dispatch({
-        type: "ADD_QUIRK",
-        quirk: {
-          id: "q41",
-          name: "Raconteur",
-          weight: 1.79,
-          color: "#F08080",
-          description:
-            "Trong combat: Round chiến thắng đầu tiên của bản thân sẽ không được nhận điểm mà khiến đối thủ bị -1 điểm.",
-        },
-      });
+    dispatch({
+      type: "ADD_QUIRK",
+      quirk: {
+        id: "q41",
+        name: "Raconteur",
+        weight: 1.79,
+        color: "#F08080",
+        description:
+          "Trong combat: Round chiến thắng đầu tiên của bản thân sẽ không được nhận điểm mà khiến đối thủ bị -1 điểm.",
+      },
+    });
     setCurrentWheel(archetypeWheel);
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
-  "Moon Elf":(params, rolledResult, resultName) => {
+  "Moon Elf": (params, rolledResult, resultName) => {
     const { setCurrentWheel, dispatch } = params;
-      setCurrentWheel({
-        ...playerWheel,
-        key: "lover",
-        title: "Moon Elf - Lover Selection",
-      });
+    setCurrentWheel({
+      ...playerWheel,
+      key: "lover",
+      title: "Moon Elf - Lover Selection",
+    });
     setCurrentWheel(archetypeWheel);
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   //....

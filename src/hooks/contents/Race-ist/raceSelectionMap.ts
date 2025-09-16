@@ -16,58 +16,61 @@ interface RaceHandlerResult {
   message?: string;
 }
 
-type RaceHandler = (params: RaceHandlerParams,rolledResult:any,resultName:any) => RaceHandlerResult;
+type RaceHandler = (
+  params: RaceHandlerParams,
+  rolledResult: any,
+  resultName: any
+) => RaceHandlerResult;
 
-
-export const raceSelectionMap : Record<string,RaceHandler> = {
-    Skeleton:(params,rolledResult) =>{
-      const {setCurrentWheel} = params;
-      if(!raceWheel) return {shouldContinue: false}
-      setCurrentWheel({
-        ...raceWheel,
-        key: "skeleton-lineage",
-        title: "Skeleton Lineage",
-        sections: raceWheel.sections.filter((s) => s.name !== "Skeleton"),
-      });
-      return {
-        shouldContinue: false,
-        nextWheel: undefined,
-        message:"gay",
-      }
-    },
-    Uma:(params,rolledResult)=>{
-      const {setCurrentWheel} = params;
-      setCurrentWheel({
-        key: "uma-parent-1",
-        title: "Uma Parent Race 1",
-        sections: subraceMap["Uma"],
-      });
-      return {
-        shouldContinue: false,
-        nextWheel: undefined,
-        message:"gay",
-      }
-    },
-    Angel:(params,rolledResult,resultName)=>{
-      const {dispatch,setCurrentWheel} = params;
-      dispatch({
-            type: "ADD_ARCHETYPE",
-            archetype: {
-              id: "16",
-              name: "Pacifist",
-              weight: 2,
-              color: "#98FB98",
-            },
-          });
-          setCurrentWheel({
-            key: "subrace",
-            title: raceConfig[resultName]?.subrace || "Subrace",
-            sections: subraceMap[resultName],
-          });
-      return {
-        shouldContinue: false,
-        nextWheel: undefined,
-        message:"gay",
-      }
-    },
-  }
+export const raceSelectionMap: Record<string, RaceHandler> = {
+  Skeleton: (params, rolledResult) => {
+    const { setCurrentWheel } = params;
+    if (!raceWheel) return { shouldContinue: false };
+    setCurrentWheel({
+      ...raceWheel,
+      key: "skeleton-lineage",
+      title: "Skeleton Lineage",
+      sections: raceWheel.sections.filter((s) => s.name !== "Skeleton"),
+    });
+    return {
+      shouldContinue: false,
+      nextWheel: undefined,
+      message: "PlaceHolder",
+    };
+  },
+  Uma: (params, rolledResult) => {
+    const { setCurrentWheel } = params;
+    setCurrentWheel({
+      key: "uma-parent-1",
+      title: "Uma Parent Race 1",
+      sections: subraceMap["Uma"],
+    });
+    return {
+      shouldContinue: false,
+      nextWheel: undefined,
+      message: "PlaceHolder",
+    };
+  },
+  Angel: (params, rolledResult, resultName) => {
+    const { dispatch, setCurrentWheel } = params;
+    dispatch({
+      type: "ADD_ARCHETYPE",
+      archetype: {
+        id: "16",
+        name: "Pacifist",
+        weight: 2,
+        color: "#98FB98",
+      },
+    });
+    setCurrentWheel({
+      key: "subrace",
+      title: raceConfig[resultName]?.subrace || "Subrace",
+      sections: subraceMap[resultName],
+    });
+    return {
+      shouldContinue: false,
+      nextWheel: undefined,
+      message: "PlaceHolder",
+    };
+  },
+};

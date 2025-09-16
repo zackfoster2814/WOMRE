@@ -61,7 +61,7 @@ export const GodSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   Artemis: (params, rolledResult, resultName) => {
@@ -80,7 +80,7 @@ export const GodSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
 };

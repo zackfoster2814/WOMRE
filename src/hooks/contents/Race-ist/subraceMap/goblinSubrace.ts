@@ -47,7 +47,7 @@ export const GoblinSubrace: Record<string, RaceHandler> = {
       return {
         shouldContinue: false,
         nextWheel: undefined,
-        message: "gay",
+        message: "PlaceHolder",
       };
     } else {
       // Fallback nếu không tìm được stat wheel
@@ -55,9 +55,8 @@ export const GoblinSubrace: Record<string, RaceHandler> = {
       return {
         shouldContinue: false,
         nextWheel: undefined,
-        message: "gay",
+        message: "PlaceHolder",
       };
     }
   },
-  
 };

@@ -54,7 +54,7 @@ export const DemigodSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
 };

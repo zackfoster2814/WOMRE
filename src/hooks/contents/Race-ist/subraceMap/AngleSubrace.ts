@@ -48,7 +48,7 @@ export const AngleSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
 };

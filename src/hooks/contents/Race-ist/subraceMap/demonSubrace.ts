@@ -50,7 +50,7 @@ export const DemonSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   Leviathan: (params, rolledResult, resultName) => {
@@ -64,7 +64,7 @@ export const DemonSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   Behemoth: (params, rolledResult, resultName) => {
@@ -83,7 +83,7 @@ export const DemonSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   Mammon: (params, rolledResult, resultName) => {
@@ -101,7 +101,7 @@ export const DemonSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   Belphegor: (params, rolledResult, resultName) => {
@@ -120,7 +120,7 @@ export const DemonSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   Asmodeus: (params, rolledResult, resultName) => {
@@ -180,7 +180,7 @@ export const DemonSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   "Sinful King": (params, rolledResult, resultName) => {
@@ -275,7 +275,7 @@ export const DemonSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
 };

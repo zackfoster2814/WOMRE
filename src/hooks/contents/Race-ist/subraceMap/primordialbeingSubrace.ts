@@ -52,7 +52,7 @@ export const PrimordialBeingSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   Water: (params, rolledResult, resultName) => {
@@ -71,7 +71,7 @@ export const PrimordialBeingSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   Fire: (params, rolledResult, resultName) => {
@@ -91,7 +91,7 @@ export const PrimordialBeingSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
   Earth: (params, rolledResult, resultName) => {
@@ -110,7 +110,7 @@ export const PrimordialBeingSubrace: Record<string, RaceHandler> = {
     return {
       shouldContinue: false,
       nextWheel: undefined,
-      message: "gay",
+      message: "PlaceHolder",
     };
   },
 };
