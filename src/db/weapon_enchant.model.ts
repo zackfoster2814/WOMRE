@@ -1,14 +1,14 @@
 import { db } from "./index";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { ArchetypeTables } from "./tables/archetypes"; 
+import { WeaponEnchantTables } from "./tables/weapon_enchants"; 
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;
-const Archetypes = ArchetypeTables(db.sequelize, db.dataTypes);
+const WeaponEnchants = WeaponEnchantTables(db.sequelize, db.dataTypes);
 
-export const getAllArchetypes = async function (): Promise<any> {
+export const getAllWeaponEnchants = async function (): Promise<any> {
   return new Promise<any>((resolve, reject) => {
-    Archetypes.findAll()
+    WeaponEnchants.findAll()
       .then(function (obj: any) {
         if (!isEmpty(obj)) {
           resolve(obj);

@@ -1,14 +1,14 @@
 import { db } from "./index";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { ArchetypeTables } from "./tables/archetypes"; 
+import { PowerTables } from "./tables/power"; 
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;
-const Archetypes = ArchetypeTables(db.sequelize, db.dataTypes);
+const Powers = PowerTables(db.sequelize, db.dataTypes);
 
-export const getAllArchetypes = async function (): Promise<any> {
+export const getAllPowers = async function (): Promise<any> {
   return new Promise<any>((resolve, reject) => {
-    Archetypes.findAll()
+    Powers.findAll()
       .then(function (obj: any) {
         if (!isEmpty(obj)) {
           resolve(obj);

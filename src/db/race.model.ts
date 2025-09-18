@@ -1,14 +1,14 @@
 import { db } from "./index";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { ArchetypeTables } from "./tables/archetypes"; 
+import { RaceTables } from "./tables/races"; 
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;
-const Archetypes = ArchetypeTables(db.sequelize, db.dataTypes);
+const Races = RaceTables(db.sequelize, db.dataTypes);
 
-export const getAllArchetypes = async function (): Promise<any> {
+export const getAllRaces = async function (): Promise<any> {
   return new Promise<any>((resolve, reject) => {
-    Archetypes.findAll()
+    Races.findAll()
       .then(function (obj: any) {
         if (!isEmpty(obj)) {
           resolve(obj);

@@ -1,5 +1,32 @@
+import { registerArchetypeIpcHandlers } from "@/utils/archetype.ipcHandler";
+import { registerCharacterDevelopmentIpcHandlers } from "@/utils/character-development.ipcHandler";
+import { registerEnchantIpcHandlers } from "@/utils/enchant.ipcHandler";
+import { registerEventIpcHandlers } from "@/utils/event.ipcHandler";
+import { registerGearIpcHandlers } from "@/utils/gear.ipcHandler";
+import { registerHouseIpcHandlers } from "@/utils/house.ipcHandler";
+import { registerMatchEventIpcHandlers } from "@/utils/match-event.ipcHandler";
+import { registerMatchRewardIpcHandlers } from "@/utils/match-reward.ipcHandler";
+import { registerMatchIpcHandlers } from "@/utils/match.ipcHandler";
+import { registerPlayerArchetypesIpcHandlers } from "@/utils/player-archetypes.ipcHandler";
+import { registerPlayerCharDevIpcHandlers } from "@/utils/player-chardev.ipcHandler";
+import { registerPlayerGearIpcHandlers } from "@/utils/player-gear.ipcHandler";
+import { registerPlayerPowerIpcHandlers } from "@/utils/player-power.ipcHandler";
+import { registerPlayerQuirksIpcHandlers } from "@/utils/player-quirks.ipcHandler";
+import { registerPlayerWeaponIpcHandlers } from "@/utils/player-weapon.ipcHandler";
+import { registerPowerIpcHandlers } from "@/utils/power.ipcHandler";
+import { registerPveIpcHandlers } from "@/utils/pve.ipcHandler";
+import { registerQuirkIpcHandlers } from "@/utils/quirk.ipcHandler";
+import { registerRaceIpcHandlers } from "@/utils/race.ipcHandler";
+import { registerRewardIpcHandlers } from "@/utils/reward.ipcHandler";
+import { registerSubraceIpcHandlers } from "@/utils/subrace.ipcHandler";
+import { registerTournamentPhaseIpcHandlers } from "@/utils/tournament-phase.ipcHandler";
+import { registerWeaponEnchantIpcHandlers } from "@/utils/weapon-enchant.ipcHandler";
+import { registerWeaponIpcHandlers } from "@/utils/weapon.ipcHandler";
+import { BrowserView } from "electron";
+
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+
 
 let win;
 
@@ -36,9 +63,52 @@ app.whenReady().then(async () => {
       show: false, // Start hidden
     });
 
-    if (registerPlayerIpcHandlers) {
-      registerPlayerIpcHandlers();
-    }
+  
+    registerPlayerIpcHandlers();
+
+    registerRaceIpcHandlers();
+    registerSubraceIpcHandlers();
+
+    registerArchetypeIpcHandlers();
+    registerPlayerArchetypesIpcHandlers
+
+    registerQuirkIpcHandlers();
+    registerPlayerQuirksIpcHandlers();
+
+    registerGearIpcHandlers();
+    registerPlayerGearIpcHandlers;
+
+    registerWeaponIpcHandlers();
+    registerPlayerWeaponIpcHandlers();
+
+    registerEnchantIpcHandlers();
+    registerWeaponEnchantIpcHandlers();
+    
+    registerHouseIpcHandlers()
+
+    registerPlayerGearIpcHandlers();
+
+    registerPowerIpcHandlers();
+    registerPlayerPowerIpcHandlers();
+
+    
+
+    registerCharacterDevelopmentIpcHandlers();
+    registerPlayerCharDevIpcHandlers();
+
+    registerPveIpcHandlers();
+
+    registerMatchIpcHandlers();
+    registerMatchEventIpcHandlers();
+    registerEventIpcHandlers();
+    registerMatchRewardIpcHandlers();
+    registerTournamentPhaseIpcHandlers();
+
+    
+    
+
+    
+   
 
     // Force window to appear
     win.once("ready-to-show", () => {
