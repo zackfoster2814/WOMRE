@@ -13,7 +13,8 @@ import { registerPlayerGearIpcHandlers } from "@/utils/player-gear.ipcHandler";
 import { registerPlayerPowerIpcHandlers } from "@/utils/player-power.ipcHandler";
 import { registerPlayerQuirksIpcHandlers } from "@/utils/player-quirks.ipcHandler";
 import { registerPlayerWeaponIpcHandlers } from "@/utils/player-weapon.ipcHandler";
-import { registerPowerIpcHandlers } from "@/utils/power.ipcHandler";
+import { registerPlayerIpcHandlers } from "@/utils/player.ipcHandler";
+import { registerPowerIpcHandlers } from "@/utils/power.ipcHandler"; //this-----------------
 import { registerPveIpcHandlers } from "@/utils/pve.ipcHandler";
 import { registerQuirkIpcHandlers } from "@/utils/quirk.ipcHandler";
 import { registerRaceIpcHandlers } from "@/utils/race.ipcHandler";
@@ -27,20 +28,45 @@ import { BrowserView } from "electron";
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
-
 let win;
 
 app.whenReady().then(async () => {
+      console.log("--------------------------------------------------------------------------------");
+      registerPlayerIpcHandlers();
+      registerRaceIpcHandlers();
+      registerSubraceIpcHandlers();
+      registerArchetypeIpcHandlers();
+      registerPlayerArchetypesIpcHandlers;
+      registerQuirkIpcHandlers();
+      registerPlayerQuirksIpcHandlers();
+      registerGearIpcHandlers();
+      registerPlayerGearIpcHandlers;
+      registerWeaponIpcHandlers();
+      registerPlayerWeaponIpcHandlers();
+      registerEnchantIpcHandlers();
+      registerWeaponEnchantIpcHandlers();
+      registerHouseIpcHandlers();
+      registerPlayerGearIpcHandlers();
+      registerPowerIpcHandlers();
+      registerPlayerPowerIpcHandlers();
+      registerCharacterDevelopmentIpcHandlers();
+      registerPlayerCharDevIpcHandlers();
+      registerPveIpcHandlers();
+      registerMatchIpcHandlers();
+      registerMatchEventIpcHandlers();
+      registerEventIpcHandlers();
+      registerMatchRewardIpcHandlers();
+      registerTournamentPhaseIpcHandlers();
   try {
     // Import modules dynamically since we're in production
-    let initDb, registerPlayerIpcHandlers;
+    let initDb;
 
     try {
       const dbModule = require("../src/db/index.js");
       initDb = dbModule.default || dbModule;
 
-      const ipcModule = require("../src/utils/player.ipcHandler.js");
-      registerPlayerIpcHandlers = ipcModule.registerPlayerIpcHandlers;
+      // const ipcModule = require("../src/utils/player.ipcHandler.js");
+      // registerPlayerIpcHandlers = ipcModule.registerPlayerIpcHandlers;
     } catch (error) {
       console.log("Could not load modules:", error.message);
       // Continue without modules for now
@@ -62,53 +88,6 @@ app.whenReady().then(async () => {
       },
       show: false, // Start hidden
     });
-
-  
-    registerPlayerIpcHandlers();
-
-    registerRaceIpcHandlers();
-    registerSubraceIpcHandlers();
-
-    registerArchetypeIpcHandlers();
-    registerPlayerArchetypesIpcHandlers
-
-    registerQuirkIpcHandlers();
-    registerPlayerQuirksIpcHandlers();
-
-    registerGearIpcHandlers();
-    registerPlayerGearIpcHandlers;
-
-    registerWeaponIpcHandlers();
-    registerPlayerWeaponIpcHandlers();
-
-    registerEnchantIpcHandlers();
-    registerWeaponEnchantIpcHandlers();
-    
-    registerHouseIpcHandlers()
-
-    registerPlayerGearIpcHandlers();
-
-    registerPowerIpcHandlers();
-    registerPlayerPowerIpcHandlers();
-
-    
-
-    registerCharacterDevelopmentIpcHandlers();
-    registerPlayerCharDevIpcHandlers();
-
-    registerPveIpcHandlers();
-
-    registerMatchIpcHandlers();
-    registerMatchEventIpcHandlers();
-    registerEventIpcHandlers();
-    registerMatchRewardIpcHandlers();
-    registerTournamentPhaseIpcHandlers();
-
-    
-    
-
-    
-   
 
     // Force window to appear
     win.once("ready-to-show", () => {

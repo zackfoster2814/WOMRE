@@ -1,6 +1,6 @@
 import { db } from "./index";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { PlayerArchetypeTables } from "./tables/player-archetypes"; 
+import { PlayerArchetypeTables } from "./tables/player_archetypes.ts"; 
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;

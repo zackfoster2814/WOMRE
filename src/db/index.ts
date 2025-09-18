@@ -62,47 +62,6 @@ export default async function initDb() {
 }
 
 
-
-export const Players = PlayerTables(db.sequelize, db.dataTypes);
-
-export const Races = RaceTables(db.sequelize, db.dataTypes);
-export const Subrace = SubRaceTables(db.sequelize, db.dataTypes);
-
-export const Archetype = ArchetypeTables(db.sequelize, db.dataTypes);
-export const Player_Archetypes = PlayerArchetypeTables(db.sequelize, db.dataTypes);
-
-export const Quirks = QuirkTables(db.sequelize, db.dataTypes);
-export const Player_Quirks = PlayerQuirkTables(db.sequelize, db.dataTypes);
-
-export const Gears = GearTables(db.sequelize, db.dataTypes);
-export const Player_Gear = PlayerGearTables(db.sequelize, db.dataTypes);
-
-export const Weapons = WeaponTables(db.sequelize, db.dataTypes);
-export const Player_Weapon = PlayerWeaponTables(db.sequelize, db.dataTypes);
-
-export const Enchant = EnchantTables(db.sequelize, db.dataTypes);
-export const Weapon_Enchant = WeaponEnchantTables(db.sequelize, db.dataTypes);
-
-export const Powers = PowerTables(db.sequelize, db.dataTypes);
-export const Player_Power = PlayerPowerTables(db.sequelize, db.dataTypes);
-
-export const House = HouseTables(db.sequelize, db.dataTypes);
-
-export const CharDev = CharDevTables(db.sequelize, db.dataTypes);
-export const PlayerCharĐev = PlayerCharDevTables(db.sequelize,db.dataTypes);
-
-export const PvE = PveEnemiesTables(db.sequelize, db.dataTypes);
-
-export const TournamentPhase = TournamentPhaseTables(db.sequelize, db.dataTypes);
-
-export const Match = MatchTables(db.sequelize, db.dataTypes);
-export const Match_Event = MatchEventsTables(db.sequelize, db.dataTypes);
-export const Match_Reward = MatchRewardTables(db.sequelize, db.dataTypes);
-
-export const Event = EventTables(db.sequelize, db.dataTypes);
-
-export const Reward = RewardTables(db.sequelize, db.dataTypes);
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 db.dataTypes = DataTypes;

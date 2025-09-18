@@ -316,7 +316,7 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
       </div>
 
       {/* Stats Section */}
-      <fieldset className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
+     <fieldset className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
         <legend className="font-bold underline text-[#f5e6d3] text-xl mb-2">
           Stats
         </legend>
@@ -329,7 +329,6 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
             iq: "text-purple-300",
             battleIQ: "text-yellow-300",
             martialArts: "text-orange-400",
-            
           };
 
           const displayNames: Record<string, string> = {
@@ -354,13 +353,7 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
             </div>
           );
         })}
-
-        {/* Total Base Stat */}
-        <div className="flex justify-between text-lg mt-2 pt-2 border-t border-[#d4af37]">
-          <span className="font-bold">Total Base Stat</span>
-          <span className="text-amber-300">{totalBaseStat}</span>
-        </div>
-      </div>
+      </fieldset>
     </div>
   );
 };

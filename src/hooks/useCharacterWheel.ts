@@ -18,7 +18,7 @@ import {
   STAT_WHEELS,
   usabilityWheel,
 } from "@/utils/wheelUtils";
-
+import { useResult } from "@/components/setResult";
 // Import all handlers
 import { useArchetypeHandlers } from "@/hooks/handlers/useArchetypeHandlers";
 import { useItemHandlers } from "@/hooks/handlers/useItemHandlers";
