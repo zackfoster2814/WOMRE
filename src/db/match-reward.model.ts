@@ -1,6 +1,6 @@
-import { db } from "./index";
+import { db } from "./index.js";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { MatchRewardTables } from "./tables/match_reward"; 
+import { MatchRewardTables } from "./tables/match_reward.js";
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;

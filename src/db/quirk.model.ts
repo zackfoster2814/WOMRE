@@ -1,6 +1,6 @@
-import { db } from "./index";
+import { db } from "./index.js";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { QuirkTables } from "./tables/quirks"; 
+import { QuirkTables } from "./tables/quirks.js";
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;

@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllTournamentPhases } from "@/db/tournament_phase.model"; 
+import { getAllTournamentPhases } from "../db/tournament_phase.model.js"; 
 
 export function registerTournamentPhaseIpcHandlers() {
   ipcMain.handle("fetch-tournament-phases", async () => {

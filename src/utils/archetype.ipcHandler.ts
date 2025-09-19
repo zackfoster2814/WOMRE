@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllArchetypes } from "@/db/archetypes.model"; 
+import { getAllArchetypes } from "../db/archetypes.model.js"; 
 
 export function registerArchetypeIpcHandlers() {
   ipcMain.handle("fetch-archetypes", async () => {

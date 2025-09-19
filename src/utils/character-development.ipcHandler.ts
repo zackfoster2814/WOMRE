@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllCharacterDevelopments } from "@/db/chardev.model"; 
+import { getAllCharacterDevelopments } from "../db/chardev.model.js"; 
 
 export function registerCharacterDevelopmentIpcHandlers() {
   ipcMain.handle("fetch-character-developments", async () => {

@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllPlayerQuirks } from "@/db/player_quirk.model";
+import { getAllPlayerQuirks } from "../db/player_quirk.model.js";
 
 export function registerPlayerQuirksIpcHandlers() {
   ipcMain.handle("fetch-player-quirks", async () => {

@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllMatchEvents } from "@/db/match-event.model";
+import { getAllMatchEvents } from "../db/match-event.model.js";
 
 export function registerMatchEventIpcHandlers() {
   ipcMain.handle("fetch-match-events", async () => {

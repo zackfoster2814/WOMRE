@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllEnchants } from "../db/enchant.model";
+import { getAllEnchants } from "../db/enchant.model.js";
 
 export function registerEnchantIpcHandlers() {
   ipcMain.handle("fetch-enchants", async () => {

@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllWeapons } from "../db/weapon.model";
+import { getAllWeapons } from "../db/weapon.model.js";
 
 export function registerWeaponIpcHandlers() {
   ipcMain.handle("fetch-weapons", async () => {

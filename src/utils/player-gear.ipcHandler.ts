@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllPlayerGears } from "@/db/player_gear.model";
+import { getAllPlayerGears } from "../db/player_gear.model.js";
 
 export function registerPlayerGearIpcHandlers() {
   ipcMain.handle("fetch-player-gears", async () => {

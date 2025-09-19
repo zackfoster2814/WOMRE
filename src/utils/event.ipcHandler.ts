@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllEvents } from "../db/event.model";
+import { getAllEvents } from "../db/event.model.js";
 
 export function registerEventIpcHandlers() {
   ipcMain.handle("fetch-events", async () => {

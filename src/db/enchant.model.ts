@@ -1,6 +1,6 @@
-import { db } from "./index";
+import { db } from "./index.js";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { EnchantTables } from "./tables/enchants"; 
+import { EnchantTables } from "./tables/enchants.js";
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;

@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllWeaponEnchants } from "../db/weapon_enchant.model";
+import { getAllWeaponEnchants } from "../db/weapon_enchant.model.js";
 
 export function registerWeaponEnchantIpcHandlers() {
   ipcMain.handle("fetch-weapon-enchants", async () => {

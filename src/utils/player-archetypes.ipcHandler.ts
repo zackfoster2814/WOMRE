@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllPlayerArchetypes } from "@/db/player_archetype.model";
+import { getAllPlayerArchetypes } from "../db/player_archetype.model.js";
 
 export function registerPlayerArchetypesIpcHandlers() {
   ipcMain.handle("fetch-player-archetypes", async () => {

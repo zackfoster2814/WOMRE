@@ -1,6 +1,6 @@
-import { db } from "./index";
+import { db } from "./index.js";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { PlayerGearTables } from "./tables/player_gears"; 
+import { PlayerGearTables } from "./tables/player_gears.js";
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;

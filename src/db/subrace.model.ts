@@ -1,6 +1,6 @@
-import { db } from "./index";
+import { db } from "./index.js";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { SubRaceTables } from "./tables/sub_race"; 
+import { SubRaceTables } from "./tables/sub_race.js";
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;

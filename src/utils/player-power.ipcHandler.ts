@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllPlayerPowers } from "@/db/player_power.model";
+import { getAllPlayerPowers } from "../db/player_power.model.js";
 
 export function registerPlayerPowerIpcHandlers() {
   ipcMain.handle("fetch-player-powers", async () => {

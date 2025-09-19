@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllQuirks } from "../db/quirk.model";
+import { getAllQuirks } from "../db/quirk.model.js";
 
 export function registerQuirkIpcHandlers() {
   ipcMain.handle("fetch-quirks", async () => {

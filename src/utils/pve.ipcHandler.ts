@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllPves } from "../db/pve.model";
+import { getAllPves } from "../db/pve.model.js";
 
 export function registerPveIpcHandlers() {
   ipcMain.handle("fetch-pves", async () => {

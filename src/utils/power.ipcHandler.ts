@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllPowers } from "../db/power.model";
+import { getAllPowers } from "../db/power.model.js";
 
 export function registerPowerIpcHandlers() {
   ipcMain.handle("fetch-powers", async () => {

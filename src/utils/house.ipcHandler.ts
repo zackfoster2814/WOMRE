@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllHouses } from "../db/house.model";
+import { getAllHouses } from "../db/house.model.js";
 
 export function registerHouseIpcHandlers() {
   ipcMain.handle("fetch-houses", async () => {
