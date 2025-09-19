@@ -82,16 +82,16 @@ export const RightPanel: React.FC<RightPanelProps> = ({
   };
 
   return (
-    <div className="w-[20%] flex flex-col gap-1 border-4 border-[#5a2d0c] p-4 rounded-xl shadow-[0_0_30px_rgba(200,50,0,0.8)] bg-black/70 h-full overflow-y-auto">
+    <div className="flex flex-col gap-1 border-4 border-[#5a2d0c] p-4 rounded-xl shadow-[0_0_30px_rgba(200,50,0,0.8)] bg-black/70 h-full overflow-y-auto">
       {/* Weapons Section */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl min-h-[200px] max-h-[200px]">
-        <p
+      <fieldset className="border-2 border-[#d4af37] py-2 px-4 rounded-md bg-black/50 text-xl">
+        <legend
           onClick={() => handleSectionClick("weapon")}
           className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
         >
           Weapons
-        </p>
-        <div className="pt-2 grid grid-cols-2 gap-2 min-h-[120px] max-h-[120px]">
+        </legend>
+        <div className="grid grid-cols-2 gap-2 min-h-[120px] max-h-[120px]">
           {Array.from({ length: 2 }).map((_, idx) => {
             const weapon = characterState.weapons[idx];
             return weapon ? (
@@ -101,7 +101,7 @@ export const RightPanel: React.FC<RightPanelProps> = ({
                     weapon
                   )}`}
                 >
-                  <div className="w-20 h-20 flex items-center justify-center text-white mb-2 rounded">
+                  <div className="w-20 h-20 flex items-center justify-center text-white rounded">
                     {weapon.image ? (
                       <img
                         src={weapon.image}
@@ -137,17 +137,17 @@ export const RightPanel: React.FC<RightPanelProps> = ({
             );
           })}
         </div>
-      </div>
+      </fieldset>
 
       {/* Quirks Section */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl flex flex-col">
-        <p
+      <fieldset className="border-2 border-[#d4af37] py-2 px-4 rounded-md bg-black/50 text-xl flex flex-col">
+        <legend
           onClick={() => handleSectionClick("quirk")}
           className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
         >
           Quirks
-        </p>
-        <ul className="ml-4 space-y-2 text-lg mt-3 overflow-y-auto max-h-[90px] min-h-[90px]">
+        </legend>
+        <ul className="ml-4 space-y-2 text-lg overflow-y-auto max-h-[90px] min-h-[90px]">
           {characterState.quirks.length > 0 ? (
             characterState.quirks.map((quirk: any, i: number) => (
               <li key={i} className="text-amber-300">
@@ -158,94 +158,88 @@ export const RightPanel: React.FC<RightPanelProps> = ({
             <li className="text-gray-400">No quirks</li>
           )}
         </ul>
-      </div>
+      </fieldset>
 
       {/* Gear Section */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl flex flex-col">
-        <div className="flex flex-col min-h-[130px] max-h-[130px] overflow-y-auto">
-          <p
-            onClick={() => handleSectionClick("gear")}
-            className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
-          >
-            Gear
-          </p>
-          <div className="max-h-40 overflow-y-auto pr-2">
-            <ul className="list-disc pl-6 space-y-1">
-              {/* Regular Gears */}
-              {characterState.gears.map((gear: any, idx: number) => (
-                <li key={idx} className="text-yellow-300">
-                  {gear.name}
-                  {!gear.usable && " - Unusable"}
-                </li>
-              ))}
-              {/* Legacy Gears */}
-              {characterState.legacyGears.map((gear: any, idx: number) => (
-                <li
-                  key={`legacy-${idx}`}
-                  className="text-yellow-300 font-bold animate-pulse drop-shadow-[0_0_6px_gold]"
-                >
-                  {gear.name}
-                  {!gear.usable && " - Unusable"}
-                </li>
-              ))}
-              {characterState.gears.length === 0 &&
-                characterState.legacyGears.length === 0 && (
-                  <li className="text-gray-400">No gear</li>
-                )}
-            </ul>
-          </div>
+      <fieldset className="flex flex-col min-h-[180px] max-h-[180px] overflow-y-auto border-2 border-[#d4af37] py-2 px-4 rounded-md bg-black/50 text-xl">
+        <legend
+          onClick={() => handleSectionClick("gear")}
+          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+        >
+          Gear
+        </legend>
+        <div className="max-h-40 overflow-y-auto pr-2">
+          <ul className="list-disc pl-6 space-y-1">
+            {/* Regular Gears */}
+            {characterState.gears.map((gear: any, idx: number) => (
+              <li key={idx} className="text-yellow-300">
+                {gear.name}
+                {!gear.usable && " - Unusable"}
+              </li>
+            ))}
+            {/* Legacy Gears */}
+            {characterState.legacyGears.map((gear: any, idx: number) => (
+              <li
+                key={`legacy-${idx}`}
+                className="text-yellow-300 font-bold animate-pulse drop-shadow-[0_0_6px_gold]"
+              >
+                {gear.name}
+                {!gear.usable && " - Unusable"}
+              </li>
+            ))}
+            {characterState.gears.length === 0 &&
+              characterState.legacyGears.length === 0 && (
+                <li className="text-gray-400">No gear</li>
+              )}
+          </ul>
         </div>
-      </div>
+      </fieldset>
 
       {/* Powers Section */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl">
-        <div className="flex flex-col">
-          <p
-            onClick={() => handleSectionClick("power")}
-            className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
-          >
-            Powers ({characterState.powers?.length || 0})
-          </p>
-          <div className="max-h-40 overflow-y-auto pr-2">
-            <ul className="list-disc pl-6 space-y-1 min-h-[130px] max-h-[130px] overflow-y-auto">
-              {characterState.powers && characterState.powers.length > 0 ? (
-                characterState.powers.map((power: any, idx: number) => (
-                  <li key={idx} className="text-yellow-300">
-                    {power.name}
-                  </li>
-                ))
-              ) : (
-                <li className="text-gray-400">No powers</li>
-              )}
-            </ul>
-          </div>
+      <fieldset className="flex flex-col border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl">
+        <legend
+          onClick={() => handleSectionClick("power")}
+          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+        >
+          Powers ({characterState.powers?.length || 0})
+        </legend>
+        <div className="max-h-40 overflow-y-auto pr-2">
+          <ul className="list-disc pl-6 space-y-1 min-h-[130px] max-h-[130px] overflow-y-auto">
+            {characterState.powers && characterState.powers.length > 0 ? (
+              characterState.powers.map((power: any, idx: number) => (
+                <li key={idx} className="text-yellow-300">
+                  {power.name}
+                </li>
+              ))
+            ) : (
+              <li className="text-gray-400">No powers</li>
+            )}
+          </ul>
         </div>
-      </div>
+      </fieldset>
 
       {/* PvE Section */}
-      <div className="border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl">
-        <div className="flex flex-col">
-          <p
-            onClick={() => jumpToWheel("pve")}
-            className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
-          >
-            PvE Scenarios
-          </p>
-          <div className="max-h-40 overflow-y-auto pr-2">
-            <ul className="list-disc pl-6 space-y-1 min-h-[130px] max-h-[130px] overflow-y-auto">
-              {characterState.pveRounds.length > 0 ? (
-                characterState.pveRounds.map((pve: any, idx: number) => (
-                  <li key={idx} className="text-yellow-300">
-                    {pve.name}
-                  </li>
-                ))
-              ) : (
-                <li className="text-gray-400">No PvE scenarios</li>
-              )}
-            </ul>
-          </div>
+      <fieldset className="flex flex-col border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl">
+        <legend
+          onClick={() => jumpToWheel("pve")}
+          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+        >
+          PvE Scenarios
+        </legend>
+        <div className="max-h-40 overflow-y-auto pr-2">
+          <ul className="list-disc pl-6 space-y-1 min-h-[130px] max-h-[130px] overflow-y-auto">
+            {characterState.pveRounds.length > 0 ? (
+              characterState.pveRounds.map((pve: any, idx: number) => (
+                <li key={idx} className="text-yellow-300">
+                  {pve.name}
+                </li>
+              ))
+            ) : (
+              <li className="text-gray-400">No PvE scenarios</li>
+            )}
+          </ul>
         </div>
-      </div>
+      </fieldset>
     </div>
   );
 };

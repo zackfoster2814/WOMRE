@@ -8,6 +8,10 @@ build/
 dist-app/
 dist-electron/
 
+dist-app/
+dist-electron/
+src/dist/
+
 #db
 .sqlite
 
@@ -20,6 +24,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+
 # OS files
 .DS_Store
 Thumbs.db
@@ -27,11 +32,11 @@ Thumbs.db
 # Editor folders
 .idea/
 .vscode/
-
 # Electron
 electron/*.js.map
 
 # Environment files
+.gitignore
 .env
 .env.local
 .env.*.local
