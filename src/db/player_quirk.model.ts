@@ -1,6 +1,6 @@
 import { db } from "./index";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { PlayerQuirkTables } from "./tables/player-quirks"; 
+import { PlayerQuirkTables } from "./tables/player_quirks"; 
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;

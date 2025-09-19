@@ -1,6 +1,6 @@
 import { db } from "./index";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { PlayerWeaponTables } from "./tables/player-weapons"; 
+import { PlayerWeaponTables } from "./tables/player_weapons"; 
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;

@@ -1,6 +1,6 @@
 import { db } from "./index";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { PlayerPowerTables } from "./tables/player-powers"; 
+import { PlayerPowerTables } from "./tables/player_power"; 
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;

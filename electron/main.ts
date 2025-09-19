@@ -1,79 +1,62 @@
-import { registerArchetypeIpcHandlers } from "@/utils/archetype.ipcHandler";
-import { registerCharacterDevelopmentIpcHandlers } from "@/utils/character-development.ipcHandler";
-import { registerEnchantIpcHandlers } from "@/utils/enchant.ipcHandler";
-import { registerEventIpcHandlers } from "@/utils/event.ipcHandler";
-import { registerGearIpcHandlers } from "@/utils/gear.ipcHandler";
-import { registerHouseIpcHandlers } from "@/utils/house.ipcHandler";
-import { registerMatchEventIpcHandlers } from "@/utils/match-event.ipcHandler";
-import { registerMatchRewardIpcHandlers } from "@/utils/match-reward.ipcHandler";
-import { registerMatchIpcHandlers } from "@/utils/match.ipcHandler";
-import { registerPlayerArchetypesIpcHandlers } from "@/utils/player-archetypes.ipcHandler";
-import { registerPlayerCharDevIpcHandlers } from "@/utils/player-chardev.ipcHandler";
-import { registerPlayerGearIpcHandlers } from "@/utils/player-gear.ipcHandler";
-import { registerPlayerPowerIpcHandlers } from "@/utils/player-power.ipcHandler";
-import { registerPlayerQuirksIpcHandlers } from "@/utils/player-quirks.ipcHandler";
-import { registerPlayerWeaponIpcHandlers } from "@/utils/player-weapon.ipcHandler";
-import { registerPlayerIpcHandlers } from "@/utils/player.ipcHandler";
-import { registerPowerIpcHandlers } from "@/utils/power.ipcHandler"; //this-----------------
-import { registerPveIpcHandlers } from "@/utils/pve.ipcHandler";
-import { registerQuirkIpcHandlers } from "@/utils/quirk.ipcHandler";
-import { registerRaceIpcHandlers } from "@/utils/race.ipcHandler";
-import { registerRewardIpcHandlers } from "@/utils/reward.ipcHandler";
-import { registerSubraceIpcHandlers } from "@/utils/subrace.ipcHandler";
-import { registerTournamentPhaseIpcHandlers } from "@/utils/tournament-phase.ipcHandler";
-import { registerWeaponEnchantIpcHandlers } from "@/utils/weapon-enchant.ipcHandler";
-import { registerWeaponIpcHandlers } from "@/utils/weapon.ipcHandler";
-import { BrowserView } from "electron";
+// import { registerArchetypeIpcHandlers } from "@/utils/archetype.ipcHandler";
+// import { registerCharacterDevelopmentIpcHandlers } from "@/utils/character-development.ipcHandler";
+// import { registerEnchantIpcHandlers } from "@/utils/enchant.ipcHandler";
+// import { registerEventIpcHandlers } from "@/utils/event.ipcHandler";
+// import { registerGearIpcHandlers } from "@/utils/gear.ipcHandler";
+// import { registerHouseIpcHandlers } from "@/utils/house.ipcHandler";
+// import { registerMatchEventIpcHandlers } from "@/utils/match-event.ipcHandler";
+// import { registerMatchRewardIpcHandlers } from "@/utils/match-reward.ipcHandler";
+// import { registerMatchIpcHandlers } from "@/utils/match.ipcHandler";
+// import { registerPlayerArchetypesIpcHandlers } from "@/utils/player-archetypes.ipcHandler";
+// import { registerPlayerCharDevIpcHandlers } from "@/utils/player-chardev.ipcHandler";
+// import { registerPlayerGearIpcHandlers } from "@/utils/player-gear.ipcHandler";
+// import { registerPlayerPowerIpcHandlers } from "@/utils/player-power.ipcHandler";
+// import { registerPlayerQuirksIpcHandlers } from "@/utils/player-quirks.ipcHandler";
+// import { registerPlayerWeaponIpcHandlers } from "@/utils/player-weapon.ipcHandler";
+// import { registerPowerIpcHandlers } from "@/utils/power.ipcHandler";
+// import { registerPveIpcHandlers } from "@/utils/pve.ipcHandler";
+// import { registerQuirkIpcHandlers } from "@/utils/quirk.ipcHandler";
+// import { registerRaceIpcHandlers } from "@/utils/race.ipcHandler";
+// import { registerRewardIpcHandlers } from "@/utils/reward.ipcHandler";
+// import { registerSubraceIpcHandlers } from "@/utils/subrace.ipcHandler";
+// import { registerTournamentPhaseIpcHandlers } from "@/utils/tournament-phase.ipcHandler";
+// import { registerWeaponEnchantIpcHandlers } from "@/utils/weapon-enchant.ipcHandler";
+// import { registerWeaponIpcHandlers } from "@/utils/weapon.ipcHandler";
+// import { registerPlayerIpcHandlers } from "../src/utils/player.ipcHandler"; //this-----------------
+import { registerPlayerIpcHandlers } from "../src/utils/player.ipcHandler.js";
+import { BrowserView, app, BrowserWindow } from "electron";
+import path from "path";
+import { fileURLToPath } from 'url';
+import fs from 'fs';
 
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
+// Get __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let win;
 
 app.whenReady().then(async () => {
-      console.log("--------------------------------------------------------------------------------");
-      registerPlayerIpcHandlers();
-      registerRaceIpcHandlers();
-      registerSubraceIpcHandlers();
-      registerArchetypeIpcHandlers();
-      registerPlayerArchetypesIpcHandlers;
-      registerQuirkIpcHandlers();
-      registerPlayerQuirksIpcHandlers();
-      registerGearIpcHandlers();
-      registerPlayerGearIpcHandlers;
-      registerWeaponIpcHandlers();
-      registerPlayerWeaponIpcHandlers();
-      registerEnchantIpcHandlers();
-      registerWeaponEnchantIpcHandlers();
-      registerHouseIpcHandlers();
-      registerPlayerGearIpcHandlers();
-      registerPowerIpcHandlers();
-      registerPlayerPowerIpcHandlers();
-      registerCharacterDevelopmentIpcHandlers();
-      registerPlayerCharDevIpcHandlers();
-      registerPveIpcHandlers();
-      registerMatchIpcHandlers();
-      registerMatchEventIpcHandlers();
-      registerEventIpcHandlers();
-      registerMatchRewardIpcHandlers();
-      registerTournamentPhaseIpcHandlers();
   try {
     // Import modules dynamically since we're in production
     let initDb;
-
     try {
-      const dbModule = require("../src/db/index.js");
+      const dbModule = await import("../src/db/index.js");
       initDb = dbModule.default || dbModule;
-
-      // const ipcModule = require("../src/utils/player.ipcHandler.js");
-      // registerPlayerIpcHandlers = ipcModule.registerPlayerIpcHandlers;
     } catch (error) {
-      console.log("Could not load modules:", error.message);
-      // Continue without modules for now
+      console.log("Could not load database module:", error.message);
     }
 
+    // Initialize database first
     if (initDb) {
       await initDb();
+    }
+
+    // Register IPC handlers
+    try {
+      registerPlayerIpcHandlers();
+      console.log("IPC handlers registered successfully");
+    } catch (error) {
+      console.error("Failed to register IPC handlers:", error.message);
     }
 
     win = new BrowserWindow({
@@ -81,7 +64,7 @@ app.whenReady().then(async () => {
       height: 1080,
       // fullscreen: true,
       webPreferences: {
-        preload: path.join(__dirname, "preload.js"),
+        preload: path.join(__dirname, "preload.js"), // Changed from .ts to .js
         nodeIntegration: true,
         contextIsolation: true,
         webSecurity: false, // Allow loading local files
@@ -109,7 +92,6 @@ app.whenReady().then(async () => {
       console.log("__dirname:", __dirname);
 
       // Check if file exists
-      const fs = require("fs");
       if (fs.existsSync(htmlPath)) {
         console.log("HTML file exists, loading...");
         win.loadFile(htmlPath);
