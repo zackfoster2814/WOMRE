@@ -10,8 +10,6 @@ import arrow from "@/assets/Images/arrow-2.png";
 import indexChangeSoundEffect from "@/assets/audio/slot-machine.mp3";
 import { Section } from "@/Common/Types/Types";
 import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig";
-import { getAllPlayers } from "@/db/player.model";
-import { getAllGears } from "@/db/gear.model";
 
 interface WheelProps {
   items: Section[];
@@ -48,8 +46,6 @@ const Wheel: React.FC<WheelProps> = React.memo(
     const [duration, setDuration] = useState<number>(0);
     const [showResetDialog, setShowResetDialog] = useState(false);
 
-    const [apiresult, setapiResult] = useState();
-
     const wheelRef = useRef<SVGSVGElement | null>(null);
     const animationFrameRef = useRef<number | null>(null);
     const lastSegmentIndexRef = useRef<number | null>(null);
@@ -83,10 +79,6 @@ const Wheel: React.FC<WheelProps> = React.memo(
       setResult(null);
     };
 
-    useEffect(() => {
-      window.api.fetchAllPlayers().then(setapiResult);
-      console.log(apiresult);
-    });
 
     useEffect(() => {
       console.log("useEffect reset fire");
