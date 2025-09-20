@@ -1,15 +1,17 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface Weapons_EnchantsAttributes  {
+interface Weapons_EnchantsAttributes {
     weapon_id: number;
     enchant_id: number;
+    player_id: number;
 }
 
 interface Weapons_EnchantsCreationAttributes extends Weapons_EnchantsAttributes {}
 
 class Weapons_Enchants extends Model<Weapons_EnchantsAttributes, Weapons_EnchantsCreationAttributes> implements Weapons_EnchantsAttributes {
-    declare weapon_id: number
+    declare weapon_id: number;
     declare enchant_id: number;
+    declare player_id: number;
 }
 
 export function WeaponEnchantTables(sequelize: Sequelize, dataTypes: typeof DataTypes): typeof Weapons_Enchants {
@@ -19,6 +21,10 @@ export function WeaponEnchantTables(sequelize: Sequelize, dataTypes: typeof Data
             primaryKey: true,
         },
         enchant_id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+        },
+        player_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
         },

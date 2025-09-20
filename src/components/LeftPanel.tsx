@@ -124,6 +124,11 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
     },
     [jumpToWheel, handleBlur]
   );
+  // Calculate total base stat
+  const totalBaseStat = STAT_WHEELS.reduce((sum, statKey) => {
+    const statValue = parseInt(characterState.stats[statKey], 10);
+    return sum + (isNaN(statValue) ? 0 : statValue);
+  }, 0);
 
   const handleArchetypeClick = useCallback(() => {
     jumpToWheel("archetype");
@@ -311,7 +316,7 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
       </div>
 
       {/* Stats Section */}
-      <fieldset className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
+     <fieldset className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
         <legend className="font-bold underline text-[#f5e6d3] text-xl mb-2">
           Stats
         </legend>

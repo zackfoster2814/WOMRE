@@ -4,6 +4,7 @@ import { CANVAS_SIZE } from "@/utils/wheelUtils.ts";
 import { Section, WheelStep } from "@/Common/Types/Types.ts";
 import { useNavigate } from "react-router-dom";
 
+
 interface CenterWheelProps {
   currentWheel: WheelStep;
   rolledResult: Section | null;

@@ -26,6 +26,8 @@ export interface CharacterStats {
   iq: string;
   battleIQ: string;
   martialArts: string;
+  totalBaseStat: string;
+
 }
 
 // Character Reducer Actions
