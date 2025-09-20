@@ -1,12 +1,13 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface GearsAttributes  {
+interface GearsAttributes {
     id?: number;
     name: string;
     effect: string;
     type: string;
     is_special: number;
     note: string;
+    usage_percentage: number;
 }
 
 interface GearsCreationAttributes extends Omit<GearsAttributes, 'id'> {
@@ -20,6 +21,7 @@ class Gears extends Model<GearsAttributes, GearsCreationAttributes> implements G
     declare type: string;
     declare is_special: number;
     declare note: string;
+    declare usage_percentage: number;
 }
 
 export function GearTables(sequelize: Sequelize, dataTypes: typeof DataTypes): typeof Gears {
@@ -53,6 +55,11 @@ export function GearTables(sequelize: Sequelize, dataTypes: typeof DataTypes): t
             type: DataTypes.TEXT,
             allowNull: false,
             defaultValue: '',
+        },
+        usage_percentage: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 0.0,
         },
     }, {
         sequelize,
