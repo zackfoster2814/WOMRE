@@ -3,8 +3,7 @@ import { Sequelize, DataTypes, Model } from "sequelize";
 interface Players_WeaponsAttributes {
     player_id: number;
     weapon_id: number;
-    mastery_level: number;
-    is_primary: number;
+    is_useable: number;
 }
 
 interface Players_WeaponsCreationAttributes extends Players_WeaponsAttributes {}
@@ -12,8 +11,7 @@ interface Players_WeaponsCreationAttributes extends Players_WeaponsAttributes {}
 class Players_Weapons extends Model<Players_WeaponsAttributes, Players_WeaponsCreationAttributes> implements Players_WeaponsAttributes {
     declare player_id: number;
     declare weapon_id: number;
-    declare mastery_level: number;
-    declare is_primary: number;
+    declare is_useable: number;
 }
 
 export function PlayerWeaponTables(sequelize: Sequelize, dataTypes: typeof DataTypes): typeof Players_Weapons {
@@ -26,12 +24,7 @@ export function PlayerWeaponTables(sequelize: Sequelize, dataTypes: typeof DataT
             type: DataTypes.INTEGER,
             primaryKey: true,
         },
-        mastery_level: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 1,
-        },
-        is_primary: {
+        is_useable: {
             type: DataTypes.TINYINT,
             allowNull: false,
             defaultValue: 0,

@@ -124,6 +124,11 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
     },
     [jumpToWheel, handleBlur]
   );
+  // Calculate total base stat
+  const totalBaseStat = STAT_WHEELS.reduce((sum, statKey) => {
+    const statValue = parseInt(characterState.stats[statKey], 10);
+    return sum + (isNaN(statValue) ? 0 : statValue);
+  }, 0);
 
   const handleArchetypeClick = useCallback(() => {
     jumpToWheel("archetype");
@@ -141,7 +146,7 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
   }, [jumpToWheel, handleBlur]);
 
   return (
-    <div className="w-[22%] flex flex-col gap-4 border-2 border-[#5a2d0c] p-3 rounded-lg shadow-[0_0_20px_rgba(200,50,0,0.6)] bg-black/70">
+    <div className="flex flex-col gap-4 border-2 border-[#5a2d0c] p-3 rounded-lg shadow-[0_0_20px_rgba(200,50,0,0.6)] bg-black/70">
       {/* Character Image Placeholder */}
       <div className="border-2 border-[#d4af37] bg-black/60 h-35 flex items-center justify-center rounded-md text-amber-200 font-bold text-xl shadow-[0_0_15px_rgba(255,215,0,0.5)]"></div>
 
@@ -165,11 +170,16 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
 
       {/* Race Selection */}
       <div className="border border-[#d4af37] p-2 flex items-center gap-2 rounded bg-black/50 text-lg">
-        <label className="font-bold shrink-0">Race</label>
+        <label
+          className="font-bold shrink-0 cursor-pointer hover:underline"
+          onClick={handleRaceRoll}
+        >
+          Race
+        </label>
         <select
           value={characterState.results.race || ""}
           onChange={(e) => handleRaceChange(e.target.value)}
-          className="bg-black/30 text-amber-200 px-2 py-1 flex-1"
+          className="bg-black/30 text-amber-200 px-2 py-1 flex-1 "
         >
           <option value="" disabled>
             -- Chọn Race --
@@ -180,12 +190,12 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
             </option>
           ))}
         </select>
-        <button
+        {/* <button
           onClick={handleRaceRoll}
           className="px-2 py-1 bg-[#3a2a18] border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded shadow hover:scale-110 transition"
         >
           Roll
-        </button>
+        </button> */}
       </div>
 
       {/* Subrace/Uma Parents Selection */}
@@ -306,8 +316,10 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
       </div>
 
       {/* Stats Section */}
-      <div className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
-        <p className="font-bold underline text-[#f5e6d3] text-xl mb-2">Stats</p>
+     <fieldset className="border border-[#d4af37] p-4 flex flex-col gap-3 rounded bg-black/50 text-lg">
+        <legend className="font-bold underline text-[#f5e6d3] text-xl mb-2">
+          Stats
+        </legend>
 
         {STAT_WHEELS.map((statKey) => {
           const colors: Record<string, string> = {
@@ -341,7 +353,7 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
             </div>
           );
         })}
-      </div>
+      </fieldset>
     </div>
   );
 };

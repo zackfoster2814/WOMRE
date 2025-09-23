@@ -18,7 +18,7 @@ import {
   STAT_WHEELS,
   usabilityWheel,
 } from "@/utils/wheelUtils";
-
+import { useResult } from "@/components/setResult";
 // Import all handlers
 import { useArchetypeHandlers } from "@/hooks/handlers/useArchetypeHandlers";
 import { useItemHandlers } from "@/hooks/handlers/useItemHandlers";
@@ -38,8 +38,17 @@ import {
   instrumentWheel,
 } from "@/Common/Config/ArchetypeConfig";
 import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig";
-
-// const DEBUG_RESULT = "Dark Magician";
+import audio1 from '../assets/audio/Stat_1-2_(1).mp3';
+import audio2 from '../assets/audio/Stat_1-2_(2).mp3';
+import audio3 from '../assets/audio/Stat_1-2_(3).mp3';
+import audio3_4 from '../assets/audio/Stat_3-4.mp3';
+import audio5_7 from '../assets/audio/Stat_5-7.mp3';
+import audio8_9 from '../assets/audio/Stat_8-9.mp3';
+import audio10 from '../assets/audio/Stat_10.mp3';
+import audio_0_pow from '../assets/audio/0_Power.mp3';
+import audio_0_gear from '../assets/audio/0_Gear.mp3';
+import audio_total_base_lower_25 from '../assets/audio/Total_Base_Lower_25.mp3';
+import audio_total_base_higher_41 from '../assets/audio/Total_Base_Higher_41.mp3';
 
 export const useCharacterWheel = () => {
   // Core state management
@@ -48,7 +57,7 @@ export const useCharacterWheel = () => {
     initialCharacterState
   );
   const [currentWheel, setCurrentWheel] = useState<WheelStep>(raceWheel);
-
+  const { rolledResult } = useResult();
   // Progress tracking states
   const [statStep, setStatStep] = useState(0);
   const [quirkStep, setQuirkStep] = useState(0);
@@ -87,7 +96,7 @@ export const useCharacterWheel = () => {
     [characterState, setCurrentWheel, setStatStep, statStep, gearCount]
   );
 
-  // Helper to transition to stats - MOVED UP BEFORE USAGE
+  // Helper to transition to stats
   const goToStats = useCallback(() => {
     const params = getFlowHandlerParams();
     return flowHandlers.goToStats(params);
@@ -186,14 +195,121 @@ export const useCharacterWheel = () => {
     }
   };
 
+  // Hàm audio với console.log để debug
+  const audio = useCallback(
+    (key: string, resultName: string): Promise<void> => {
+      console.log(`[Audio] Called with key: ${key}, resultName: ${resultName}`);
+      return new Promise((resolve, reject) => {
+        let audioPath: string = '';
+
+        switch (key) {
+          // Xử lý âm thanh cho các chỉ số (stats)
+          case 'strength':
+          case 'speed':
+          case 'battleIQ':
+          case 'martialArts':
+          case 'durability':
+          case 'iq':
+          case 'totalBaseStat': {
+            const statValue = parseInt(resultName, 10);
+            if (key === 'totalBaseStat') {
+              if (statValue <= 25) {
+                audioPath = audio_total_base_lower_25;
+                console.log(`[Audio] Playing for totalBaseStat <= 25: ${audioPath}`);
+              } else if (statValue >= 41) {
+                audioPath = audio_total_base_higher_41;
+                console.log(`[Audio] Playing for totalBaseStat >= 41: ${audioPath}`);
+              }
+            } else {
+              if (statValue >= 1 && statValue <= 2) {
+                const randomAudios = [audio1, audio2, audio3];
+                const randomIndex = Math.floor(Math.random() * randomAudios.length);
+                audioPath = randomAudios[randomIndex];
+                console.log(`[Audio] Playing for stat 1-2: ${audioPath}`);
+              } else if (statValue >= 3 && statValue <= 4) {
+                audioPath = audio3_4;
+                console.log(`[Audio] Playing for stat 3-4: ${audioPath}`);
+              } else if (statValue >= 5 && statValue <= 7) {
+                audioPath = audio5_7;
+                console.log(`[Audio] Playing for stat 5-7: ${audioPath}`);
+              } else if (statValue >= 8 && statValue <= 9) {
+                audioPath = audio8_9;
+                console.log(`[Audio] Playing for stat 8-9: ${audioPath}`);
+              } else if (statValue === 10) {
+                audioPath = audio10;
+                console.log(`[Audio] Playing for stat 10: ${audioPath}`);
+              }
+            }
+            break;
+          }
+
+          // Xử lý âm thanh cho power-count
+          case 'power-count': {
+            if (resultName === "0") {
+              audioPath = audio_0_pow;
+              console.log(`[Audio] Playing for power-count = 0: ${audioPath}`);
+            }
+            break;
+          }
+
+          // Xử lý âm thanh cho gear-count
+          case 'gear-count': {
+            if (resultName === "0") {
+              audioPath = audio_0_gear;
+              console.log(`[Audio] Playing for gear-count = 0: ${audioPath}`);
+            }
+            break;
+          }
+          case 'power': 
+          case 'gear': 
+
+          default:
+            console.log(`[Audio] No audio defined for key: ${key}`);
+            resolve();
+            return;
+        }
+
+        // Phát âm thanh với xử lý lỗi
+        if (audioPath) {
+          try {
+            console.log(`[Audio] Starting playback: ${audioPath}`);
+            const audio = new Audio(audioPath);
+            audio.onended = () => {
+              console.log(`[Audio] Playback completed: ${audioPath}`);
+              resolve();
+            };
+            audio.play().catch((error) => {
+              console.error(`[Audio] Error playing audio at ${audioPath}:`, error);
+              reject(error);
+            });
+          } catch (error) {
+            console.error(`[Audio] Error initializing audio at ${audioPath}:`, error);
+            reject(error);
+          }
+        } else {
+          console.log(`[Audio] No audio path selected for key: ${key}`);
+          resolve();
+        }
+      });
+    },
+    [audio1, audio2, audio3, audio3_4, audio5_7, audio8_9, audio10, audio_total_base_lower_25, audio_total_base_higher_41, audio_0_pow, audio_0_gear]
+  );
+
+  // Cập nhật handleStatResult
+  const handleStatResult = useCallback(
+    (key: string, resultName: string) => {
+      console.log(`[handleStatResult] Setting stat: ${key} = ${resultName}`);
+      dispatch({ type: "SET_STAT", key, value: resultName });
+      return audio(key, resultName);
+    },
+    [dispatch, audio]
+  );
+
   // Main flow dispatcher
   const handleNextStep = useCallback(
     (key: string, resultName: string) => {
+      console.log(`[handleNextStep] Processing key: ${key}, resultName: ${resultName}`);
       const handlerParams = getHandlerParams();
-
-      // Use debug result if enabled
-      // if (key === "archetype") {
-      // }
 
       const handleArchetypeResult = (result: any) => {
         if (result?.shouldContinue && result?.message) {
@@ -206,7 +322,6 @@ export const useCharacterWheel = () => {
         }
       };
 
-      // Helper function to handle ItemHandlerResult
       const handleItemResult = (result: any) => {
         if (result?.shouldContinue && result?.message) {
           switch (result.message) {
@@ -240,7 +355,6 @@ export const useCharacterWheel = () => {
                 },
               });
 
-              // Clear temp data
               dispatch({
                 type: "SET_RESULT",
                 key: "temp-current-weapon",
@@ -253,7 +367,6 @@ export const useCharacterWheel = () => {
                 value: "",
               });
 
-              // Go to power count
               const powerParams = getFlowHandlerParams();
               flowHandlers.jumpToWheel("power", powerParams);
               break;
@@ -271,7 +384,6 @@ export const useCharacterWheel = () => {
                 },
               });
 
-              // Clear temp data
               dispatch({
                 type: "SET_RESULT",
                 key: "temp-current-weapon",
@@ -289,7 +401,11 @@ export const useCharacterWheel = () => {
       switch (key) {
         // Race & Sub-race flow
         case "race":
-          return raceHandlers.handleRaceSelection(resultName, handlerParams);
+          return raceHandlers.handleRaceSelection(
+            resultName,
+            handlerParams,
+            rolledResult
+          );
 
         case "uma-parent-1":
         case "uma-parent-2":
@@ -299,7 +415,7 @@ export const useCharacterWheel = () => {
             handlerParams
           );
 
-        case "special-week-extra": // <-- THÊM CASE NÀY
+        case "special-week-extra":
           return raceHandlers.handleSpecialWeekFlow(resultName, handlerParams);
 
         case "skeleton-lineage":
@@ -341,7 +457,6 @@ export const useCharacterWheel = () => {
             archetypeParams
           );
 
-        // Special archetype wheels
         case "trickster-card":
         case "slayer-race":
         case "house-spy-target":
@@ -428,7 +543,6 @@ export const useCharacterWheel = () => {
           )!;
           dispatch({ type: "ADD_LOVER", lovers });
 
-          // Get current remaining count
           const remainingKey =
             currentWheel.key === "asmodeus-lover"
               ? "asmodeus-lovers-remaining"
@@ -439,7 +553,6 @@ export const useCharacterWheel = () => {
           );
 
           if (remaining > 1) {
-            // Continue rolling lovers
             const newRemaining = remaining - 1;
             dispatch({
               type: "SET_RESULT",
@@ -452,10 +565,9 @@ export const useCharacterWheel = () => {
               title: "Lover Selection",
               sections: currentWheel.sections.filter(
                 (s) => s.name !== resultName
-              ), // Remove selected lover
+              ),
             });
           } else {
-            // All lovers collected, proceed to archetype
             dispatch({
               type: "SET_RESULT",
               key: remainingKey,
@@ -466,14 +578,12 @@ export const useCharacterWheel = () => {
           break;
         }
         case "sinful-king-house": {
-          // Save house then proceed to lovers
           dispatch({
             type: "SET_RESULT",
             key: "leviathan-house",
             value: resultName,
           });
 
-          // Set up for 4 lover rolls
           dispatch({
             type: "SET_RESULT",
             key: "sinful-king-lovers-remaining",
@@ -488,7 +598,6 @@ export const useCharacterWheel = () => {
           break;
         }
         case "Bard":
-          // Bard rolls for instrumental (36% chance)
           setCurrentWheel({
             key: "bard-instrumental-check",
             title: "Bard - Có nhạc cụ không?",
@@ -511,14 +620,12 @@ export const useCharacterWheel = () => {
 
         case "bard-instrumental-check":
           if (resultName === "Có nhạc cụ") {
-            // Roll specific instrumental wheel
             setCurrentWheel({
               key: "bard-instrumental-selection",
               title: "Bard - Chọn nhạc cụ",
               sections: instrumentWheel.sections,
             });
           } else {
-            // No instrumental - skip weapons and go to power
             const raceOrSubrace = getRaceOrSubrace(characterState.results);
             setCurrentWheel(powerCountWheel(raceOrSubrace));
           }
@@ -537,7 +644,6 @@ export const useCharacterWheel = () => {
             },
           });
 
-          // Skip weapons - go directly to power
           const raceOrSubrace = getRaceOrSubrace(characterState.results);
           setCurrentWheel(powerCountWheel(raceOrSubrace));
           break;
@@ -547,33 +653,39 @@ export const useCharacterWheel = () => {
         case "speed":
         case "battleIQ":
         case "martialArts":
-          dispatch({ type: "SET_STAT", key, value: resultName });
-          return handleRegularStatProgression(key, resultName);
-
         case "durability":
         case "iq":
-          return (
-            raceHandlers.handleRaceSpecificStats(
-              key,
-              resultName,
-              handlerParams
-            ) || handleRegularStatProgression(key, resultName)
-          );
+          return handleStatResult(key, resultName).then(() => {
+            console.log(`[handleNextStep] Stat ${key} processed, proceeding to next step`);
+            handleRegularStatProgression(key, resultName);
+          });
+
+        case "totalBaseStat":
+          return handleStatResult(key, resultName).then(() => {
+            console.log(`[handleNextStep] totalBaseStat processed, moving to quirk-count`);
+            setCurrentWheel({
+              key: "quirk-count",
+              title: "Quirk Count",
+              sections: quirkCountOptions,
+            });
+          });
 
         // Quirk & House flow
         case "quirk-count":
-          const totalQuirk = gameMechanics.calculateQuirkCount(
-            parseInt(resultName, 10),
-            characterState
-          );
-          setQuirkCount(totalQuirk.finalPowerCount);
-          setQuirkStep(0);
-          setCurrentWheel({
-            key: "quirk",
-            title: "Quirk",
-            sections: quirkList,
+          return audio(key, resultName).then(() => {
+            console.log(`[handleNextStep] Quirk count processed: ${resultName}`);
+            const totalQuirk = gameMechanics.calculateQuirkCount(
+              parseInt(resultName, 10),
+              characterState
+            );
+            setQuirkCount(totalQuirk.finalPowerCount);
+            setQuirkStep(0);
+            setCurrentWheel({
+              key: "quirk",
+              title: "Quirk",
+              sections: quirkList,
+            });
           });
-          break;
 
         case "quirk":
           if (resultName === "Sanguine") {
@@ -602,7 +714,6 @@ export const useCharacterWheel = () => {
             value: resultName,
           });
 
-          // Add first Slayer archetype
           dispatch({
             type: "ADD_ARCHETYPE",
             archetype: {
@@ -613,11 +724,10 @@ export const useCharacterWheel = () => {
             },
           });
 
-          // Go to second race selection
           setCurrentWheel({
             key: "marais-race-2",
             title: "House Marais - Second Slayer Target",
-            sections: raceWheel.sections.filter((s) => s.name !== resultName), // Exclude first race
+            sections: raceWheel.sections.filter((s) => s.name !== resultName),
           });
           break;
 
@@ -628,7 +738,6 @@ export const useCharacterWheel = () => {
             value: resultName,
           });
 
-          // Add second Slayer archetype
           dispatch({
             type: "ADD_ARCHETYPE",
             archetype: {
@@ -639,36 +748,39 @@ export const useCharacterWheel = () => {
             },
           });
 
-          // Continue to gear count wheel
           setCurrentWheel(gearCountWheel);
           break;
+
         // Gear flow
         case "gear-count":
-          let gearCount = gameMechanics.extraGear(
-            parseInt(resultName, 10),
-            characterState
-          );
-          console.log(gearCount);
-
-          setGearCount(gearCount);
-          setGearStep(0);
-          setCurrentWheel(legacyGearCountWheel);
-          break;
+          return audio(key, resultName).then(() => {
+            console.log(`[handleNextStep] Gear count processed: ${resultName}`);
+            let gearCount = gameMechanics.extraGear(
+              parseInt(resultName, 10),
+              characterState
+            );
+            console.log(`[handleNextStep] Calculated gear count: ${gearCount}`);
+            setGearCount(gearCount);
+            setGearStep(0);
+            setCurrentWheel(legacyGearCountWheel);
+          });
 
         case "legacy-gear-count":
-          let lgc = parseInt(resultName, 10);
-          if (
-            characterState.archetypes.some(
-              (a: any) => a.name === "House's Noble"
-            )
-          ) {
-            lgc++;
-          }
-          console.log(lgc);
-
-          setLegacyGearCount(lgc);
-          setLegacyGearStep(0);
-          return handleGearCountCompletion();
+          return audio(key, resultName).then(() => {
+            console.log(`[handleNextStep] Legacy gear count processed: ${resultName}`);
+            let lgc = parseInt(resultName, 10);
+            if (
+              characterState.archetypes.some(
+                (a: any) => a.name === "House's Noble"
+              )
+            ) {
+              lgc++;
+            }
+            console.log(`[handleNextStep] Adjusted legacy gear count: ${lgc}`);
+            setLegacyGearCount(lgc);
+            setLegacyGearStep(0);
+            return handleGearCountCompletion();
+          });
 
         case "gear": {
           const result = itemHandlers.handleGearFlow(
@@ -694,7 +806,6 @@ export const useCharacterWheel = () => {
             (s) => s.name === resultName
           )!;
 
-          // Check usability for legacy gear
           if (legacyGear.usableRate && legacyGear.usableRate < 100) {
             dispatch({
               type: "SET_RESULT",
@@ -710,7 +821,6 @@ export const useCharacterWheel = () => {
               gear: { ...legacyGear, usable: true },
             });
 
-            // Continue char dev flow
             if (charDevStep + 1 < charDevMax) {
               setCharDevStep(charDevStep + 1);
               setCurrentWheel({
@@ -726,6 +836,7 @@ export const useCharacterWheel = () => {
             }
           }
           break;
+
         // Noble Swordsman special gear
         case "noble-magic-gear":
         case "noble-physical-gear": {
@@ -740,7 +851,6 @@ export const useCharacterWheel = () => {
         }
 
         // Weapon flow
-        // Weapon existence checks
         case "weapon-exist":
           return itemHandlers.handleWeaponExistFlow(resultName, handlerParams);
 
@@ -750,7 +860,6 @@ export const useCharacterWheel = () => {
             handlerParams
           );
 
-        // Weapon selection
         case "dual-wielder-weapon-1":
         case "dual-wielder-weapon-2":
         case "weapon":
@@ -785,7 +894,10 @@ export const useCharacterWheel = () => {
 
         // Power & Character Development
         case "power-count":
-          return handlePowerCountFlow(resultName);
+          return audio(key, resultName).then(() => {
+            console.log(`[handleNextStep] Power count processed: ${resultName}`);
+            return handlePowerCountFlow(resultName);
+          });
 
         case "power":
           return handlePowerFlow(resultName);
@@ -794,7 +906,6 @@ export const useCharacterWheel = () => {
           return handleCharDevFlow(resultName);
 
         case "confession-archetype":
-          // Handle Nghe Bài thú tội archetype selection
           const confessionArchetype = {
             id:
               resultName === "Braindead"
@@ -807,7 +918,6 @@ export const useCharacterWheel = () => {
 
           dispatch({ type: "ADD_ARCHETYPE", archetype: confessionArchetype });
 
-          // Continue char dev flow
           if (charDevStep + 1 < charDevMax) {
             setCharDevStep(charDevStep + 1);
             setCurrentWheel({
@@ -828,7 +938,6 @@ export const useCharacterWheel = () => {
           )!;
           dispatch({ type: "ADD_LOVER", lovers: player });
 
-          // Continue char dev flow
           if (charDevStep + 1 < charDevMax) {
             setCharDevStep(charDevStep + 1);
             setCurrentWheel({
@@ -872,7 +981,6 @@ export const useCharacterWheel = () => {
             (s) => s.name === resultName
           )!;
 
-          // Handle gear usability
           if (selectedGear.usableRate && selectedGear.usableRate < 100) {
             dispatch({
               type: "SET_RESULT",
@@ -888,7 +996,6 @@ export const useCharacterWheel = () => {
               gear: { ...selectedGear, usable: true },
             });
 
-            // Continue to next gear or finish
             if (gearNumber < 3) {
               setCurrentWheel({
                 key: `armed-teeth-gear-${gearNumber + 1}`,
@@ -899,7 +1006,6 @@ export const useCharacterWheel = () => {
                 ),
               });
             } else {
-              // All 3 gears collected, continue char dev
               continueCharDevFlow();
             }
           }
@@ -926,7 +1032,6 @@ export const useCharacterWheel = () => {
               ),
             });
           } else {
-            // Both powers collected, continue char dev
             continueCharDevFlow();
           }
           break;
@@ -943,7 +1048,6 @@ export const useCharacterWheel = () => {
             (s) => s.name === resultName
           )!;
           dispatch({ type: "ADD_PVE_ROUND", pveRound });
-          // Character creation complete
           break;
 
         default:
@@ -963,12 +1067,15 @@ export const useCharacterWheel = () => {
       getHandlerParams,
       getFlowHandlerParams,
       goToStats,
+      handleStatResult,
+      audio,
     ]
   );
 
   // Helper functions for specific flows
-  const handleRegularStatProgression = useCallback(
+  const handleRegularStatProgression: (key: string, resultName: string) => { success?: boolean } = useCallback(
     (key: string, resultName: string) => {
+      console.log(`[handleRegularStatProgression] Processing stat: ${key} = ${resultName}`);
       dispatch({ type: "SET_STAT", key, value: resultName });
       const currentStatIndex = STAT_WHEELS.indexOf(key);
 
@@ -978,13 +1085,19 @@ export const useCharacterWheel = () => {
         const nextResult = flowHandlers.jumpToWheel(nextStatKey, params);
         if (nextResult.success) {
           setStatStep(currentStatIndex + 2);
+          console.log(`[handleRegularStatProgression] Moving to next stat: ${nextStatKey}`);
+          return { success: true };
         }
+        console.log(`[handleRegularStatProgression] Failed to move to next stat: ${nextStatKey}`);
+        return { success: false };
       } else {
         setCurrentWheel({
           key: "quirk-count",
           title: "Quirk Count",
           sections: quirkCountOptions,
         });
+        console.log(`[handleRegularStatProgression] All stats processed, moving to quirk-count`);
+        return { success: true };
       }
     },
     [dispatch, flowHandlers, getFlowHandlerParams, setStatStep, setCurrentWheel]
@@ -1003,7 +1116,6 @@ export const useCharacterWheel = () => {
           sections: currentWheel.sections.filter((s) => s.name !== resultName),
         });
       } else {
-        // Check for special house assignments
         if (
           archetypeHandlers.hasSpecialHouseAssignment(characterState.archetypes)
         ) {
@@ -1075,8 +1187,8 @@ export const useCharacterWheel = () => {
           image: uchigatana,
           usableRate: 85,
           tag: "Physical",
-          enchants: [], // Add for WeaponWithEnchants interface
-          usable: true, // Will be overridden by usability check
+          enchants: [],
+          usable: true,
         };
 
         dispatch({
@@ -1085,7 +1197,6 @@ export const useCharacterWheel = () => {
           value: JSON.stringify(ucgtn),
         });
 
-        // Call usability wheel for Uchigatana
         setCurrentWheel(usabilityWheel(ucgtn.usableRate, ucgtn.name));
         return;
       } else if (resultName === "Dark Brotherhood") {
@@ -1249,7 +1360,6 @@ export const useCharacterWheel = () => {
       dispatch({ type: "ADD_CHARDEV", charDev });
       if (resultName === "Inversion") {
         const currentStats = characterState.stats;
-        const invertedStats = {};
 
         Object.entries(currentStats).forEach(([statKey, statValue]) => {
           const currentStat = parseInt(statValue) || 1;
@@ -1281,7 +1391,6 @@ export const useCharacterWheel = () => {
       } else if (resultName === "It is what it is") {
         dispatch({ type: "RESET_WEAPON" });
       } else if (resultName === "A Big Gift!") {
-        // A Big Gift!: Roll legacy gear
         setCurrentWheel({
           key: "big-gift-legacy-gear",
           title: "A Big Gift! - Legacy Gear",
@@ -1308,7 +1417,6 @@ export const useCharacterWheel = () => {
           },
         });
       } else if (resultName === "Trở thành Linh Mục") {
-        // Add Linh Mục archetype
         dispatch({
           type: "ADD_ARCHETYPE",
           archetype: {
@@ -1319,7 +1427,6 @@ export const useCharacterWheel = () => {
           },
         });
       } else if (resultName === "Trở Thành Cha Xứ") {
-        // Add Cha Xứ archetype
         dispatch({
           type: "ADD_ARCHETYPE",
           archetype: {
@@ -1330,7 +1437,6 @@ export const useCharacterWheel = () => {
           },
         });
       } else if (resultName === "Trở thành Quỷ Nhà Thờ") {
-        // Add Quỷ Nhà Thờ archetype
         dispatch({
           type: "ADD_ARCHETYPE",
           archetype: {
@@ -1341,7 +1447,6 @@ export const useCharacterWheel = () => {
           },
         });
       } else if (resultName === "Nghe Bài thú tội") {
-        // Roll 50/50 for two archetypes
         setCurrentWheel({
           key: "confession-archetype",
           title: "Nghe Bài thú tội - Archetype Selection",
@@ -1361,7 +1466,6 @@ export const useCharacterWheel = () => {
           ],
         });
       } else if (resultName === "Armed to the Teeth") {
-        // Armed to the Teeth: Roll 3 normal gears
         dispatch({
           type: "SET_RESULT",
           key: "armed-teeth-gear-count",
@@ -1379,7 +1483,6 @@ export const useCharacterWheel = () => {
           sections: gearWheel.sections,
         });
       } else if (resultName === "No more family") {
-        // No more family: Roll 2 additional powers
         dispatch({
           type: "SET_RESULT",
           key: "no-family-power-count",
@@ -1444,9 +1547,9 @@ export const useCharacterWheel = () => {
     setCharDevMax(1);
   }, [dispatch, setCurrentWheel]);
 
-  // Next step handler (will be called by animation hook)
+  // Next step handler
   const nextStep = useCallback(() => {
-    // This will be handled by the animation hook callback
+    console.log(`[nextStep] Triggered`);
     // Implementation moved to handleNextStep
   }, []);
 
@@ -1491,5 +1594,7 @@ export const useCharacterWheel = () => {
     characterSummary: characterHelpers.generateCharacterSummary(characterState),
     validation: characterHelpers.validateCharacter(characterState),
     specialAbilities: gameMechanics.getSpecialAbilities(characterState),
+    handleStatResult,
+    audio,
   };
 };
