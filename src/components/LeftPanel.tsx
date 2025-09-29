@@ -354,6 +354,13 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
           );
         })}
       </fieldset>
+      
+{/* Total Base Stat */}
+      <div className="border border-[#d4af37] p-2 flex justify-between rounded bg-black/50 text-lg">
+        <span className="font-bold">Total Base Stat</span>
+        <span className="text-amber-300">{totalBaseStat}</span>
+      </div>
     </div>
   );
-};
+};;
+

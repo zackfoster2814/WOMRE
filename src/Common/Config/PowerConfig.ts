@@ -26,20 +26,19 @@ const POWER_CONFIG: Record<string, number[]> = {
 };
 
 export const powerCountWheel = (race: string): WheelStep => {
-  const values = POWER_CONFIG[race] || Array(5).fill(10);
+  const values = POWER_CONFIG[race] || [20, 20, 20, 20, 20]; // Mặc định: phân bố đều cho 0, 1, 2, 3, 4
   return {
     key: "power-count",
     title: "Power count",
     sections: values.map((val, idx) => ({
-      id: `pw${idx + 1}`,
-      name: `${idx + 1}`,
+      id: `pw${idx}`,
+      name: `${idx}`, // power count từ 0 đến 4
       weight: val,
       color: COLOR_PALETTE[idx % COLOR_PALETTE.length],
-      description: `Power level: ${val}`,
+      description: `Power level: ${idx}`, // Hiển thị power level từ 0 đến 4
     })),
   };
 };
-
 export const PowerWheel: WheelStep = {
   key: "power",
   title: "Power",

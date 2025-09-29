@@ -19,7 +19,6 @@ import {
   usabilityWheel,
 } from "@/utils/wheelUtils";
 import { useResult } from "@/components/setResult";
-// Import all handlers
 import { useArchetypeHandlers } from "@/hooks/handlers/useArchetypeHandlers";
 import { useItemHandlers } from "@/hooks/handlers/useItemHandlers";
 import { useRaceHandlers } from "@/hooks/handlers/useRaceHandlers";
@@ -28,7 +27,6 @@ import { useGameMechanics } from "@/hooks/utils/useGameMechanics";
 import { useCharacterHelpers } from "@/hooks/utils/useCharacterHelpers";
 import whip from "@/assets/Weapon/whip.png";
 import uchigatana from "@/assets/Weapon/uchigatana.png";
-// Import reducer and types
 import {
   characterReducer,
   initialCharacterState,
@@ -51,14 +49,12 @@ import audio_total_base_lower_25 from '../assets/audio/Total_Base_Lower_25.mp3';
 import audio_total_base_higher_41 from '../assets/audio/Total_Base_Higher_41.mp3';
 
 export const useCharacterWheel = () => {
-  // Core state management
   const [characterState, dispatch] = useReducer(
     characterReducer,
     initialCharacterState
   );
   const [currentWheel, setCurrentWheel] = useState<WheelStep>(raceWheel);
   const { rolledResult } = useResult();
-  // Progress tracking states
   const [statStep, setStatStep] = useState(0);
   const [quirkStep, setQuirkStep] = useState(0);
   const [quirkCount, setQuirkCount] = useState(0);
@@ -72,12 +68,10 @@ export const useCharacterWheel = () => {
   const [powerCount, setPowerCount] = useState(0);
   const [charDevStep, setCharDevStep] = useState(0);
   const [charDevMax, setCharDevMax] = useState(1);
-
-  // Dialog state
   const [showDialog, setShowDialog] = useState(false);
   const [dialogData, setDialogData] = useState<any>(null);
+  // ĐÃ XÓA: Xóa trạng thái showTotalStatPopup và totalStatMessage
 
-  // Initialize all handlers
   const archetypeHandlers = useArchetypeHandlers();
   const itemHandlers = useItemHandlers();
   const raceHandlers = useRaceHandlers();
@@ -96,13 +90,14 @@ export const useCharacterWheel = () => {
     [characterState, setCurrentWheel, setStatStep, statStep, gearCount]
   );
 
-  // Helper to transition to stats
-  const goToStats = useCallback(() => {
-    const params = getFlowHandlerParams();
-    return flowHandlers.goToStats(params);
-  }, [flowHandlers, getFlowHandlerParams]);
+  const goToStats = useCallback(
+    () => {
+      const params = getFlowHandlerParams();
+      return flowHandlers.goToStats(params);
+    },
+    [flowHandlers, getFlowHandlerParams]
+  );
 
-  // Wrapper for Noble Swordsman flow to match ItemHandlers interface
   const handleNobleSwordsmanFlowWrapper = useCallback(
     (weapon: any) => {
       const archetypeParams = {
@@ -129,7 +124,6 @@ export const useCharacterWheel = () => {
     ]
   );
 
-  // Helper parameters for handlers
   const getHandlerParams = useCallback(
     () => ({
       dispatch,
@@ -171,7 +165,6 @@ export const useCharacterWheel = () => {
     ]
   );
 
-  // Navigation function
   const jumpToWheel = useCallback(
     (wheelKey: string) => {
       const params = getFlowHandlerParams();
@@ -195,7 +188,6 @@ export const useCharacterWheel = () => {
     }
   };
 
-  // Hàm audio với console.log để debug
   const audio = useCallback(
     (key: string, resultName: string): Promise<void> => {
       console.log(`[Audio] Called with key: ${key}, resultName: ${resultName}`);
@@ -203,47 +195,46 @@ export const useCharacterWheel = () => {
         let audioPath: string = '';
 
         switch (key) {
-          // Xử lý âm thanh cho các chỉ số (stats)
           case 'strength':
           case 'speed':
           case 'battleIQ':
           case 'martialArts':
           case 'durability':
-          case 'iq':
-          case 'totalBaseStat': {
+          case 'iq': {
             const statValue = parseInt(resultName, 10);
-            if (key === 'totalBaseStat') {
-              if (statValue <= 25) {
-                audioPath = audio_total_base_lower_25;
-                console.log(`[Audio] Playing for totalBaseStat <= 25: ${audioPath}`);
-              } else if (statValue >= 41) {
-                audioPath = audio_total_base_higher_41;
-                console.log(`[Audio] Playing for totalBaseStat >= 41: ${audioPath}`);
-              }
-            } else {
-              if (statValue >= 1 && statValue <= 2) {
-                const randomAudios = [audio1, audio2, audio3];
-                const randomIndex = Math.floor(Math.random() * randomAudios.length);
-                audioPath = randomAudios[randomIndex];
-                console.log(`[Audio] Playing for stat 1-2: ${audioPath}`);
-              } else if (statValue >= 3 && statValue <= 4) {
-                audioPath = audio3_4;
-                console.log(`[Audio] Playing for stat 3-4: ${audioPath}`);
-              } else if (statValue >= 5 && statValue <= 7) {
-                audioPath = audio5_7;
-                console.log(`[Audio] Playing for stat 5-7: ${audioPath}`);
-              } else if (statValue >= 8 && statValue <= 9) {
-                audioPath = audio8_9;
-                console.log(`[Audio] Playing for stat 8-9: ${audioPath}`);
-              } else if (statValue === 10) {
-                audioPath = audio10;
-                console.log(`[Audio] Playing for stat 10: ${audioPath}`);
-              }
+            if (statValue >= 1 && statValue <= 2) {
+              const randomAudios = [audio1, audio2, audio3];
+              const randomIndex = Math.floor(Math.random() * randomAudios.length);
+              audioPath = randomAudios[randomIndex];
+              console.log(`[Audio] Playing for stat 1-2: ${audioPath}`);
+            } else if (statValue >= 3 && statValue <= 4) {
+              audioPath = audio3_4;
+              console.log(`[Audio] Playing for stat 3-4: ${audioPath}`);
+            } else if (statValue >= 5 && statValue <= 7) {
+              audioPath = audio5_7;
+              console.log(`[Audio] Playing for stat 5-7: ${audioPath}`);
+            } else if (statValue >= 8 && statValue <= 9) {
+              audioPath = audio8_9;
+              console.log(`[Audio] Playing for stat 8-9: ${audioPath}`);
+            } else if (statValue === 10) {
+              audioPath = audio10;
+              console.log(`[Audio] Playing for stat 10: ${audioPath}`);
             }
             break;
           }
 
-          // Xử lý âm thanh cho power-count
+          case 'totalBaseStat': {
+            const statValue = parseInt(resultName, 10);
+            if (statValue <= 25) {
+              audioPath = audio_total_base_lower_25;
+              console.log(`[Audio] Playing for totalBaseStat <= 25: ${audioPath}`);
+            } else if (statValue >= 41) {
+              audioPath = audio_total_base_higher_41;
+              console.log(`[Audio] Playing for totalBaseStat >= 41: ${audioPath}`);
+            }
+            break;
+          }
+
           case 'power-count': {
             if (resultName === "0") {
               audioPath = audio_0_pow;
@@ -252,7 +243,6 @@ export const useCharacterWheel = () => {
             break;
           }
 
-          // Xử lý âm thanh cho gear-count
           case 'gear-count': {
             if (resultName === "0") {
               audioPath = audio_0_gear;
@@ -260,8 +250,6 @@ export const useCharacterWheel = () => {
             }
             break;
           }
-          case 'power': 
-          case 'gear': 
 
           default:
             console.log(`[Audio] No audio defined for key: ${key}`);
@@ -269,7 +257,6 @@ export const useCharacterWheel = () => {
             return;
         }
 
-        // Phát âm thanh với xử lý lỗi
         if (audioPath) {
           try {
             console.log(`[Audio] Starting playback: ${audioPath}`);
@@ -295,7 +282,6 @@ export const useCharacterWheel = () => {
     [audio1, audio2, audio3, audio3_4, audio5_7, audio8_9, audio10, audio_total_base_lower_25, audio_total_base_higher_41, audio_0_pow, audio_0_gear]
   );
 
-  // Cập nhật handleStatResult
   const handleStatResult = useCallback(
     (key: string, resultName: string) => {
       console.log(`[handleStatResult] Setting stat: ${key} = ${resultName}`);
@@ -305,7 +291,6 @@ export const useCharacterWheel = () => {
     [dispatch, audio]
   );
 
-  // Main flow dispatcher
   const handleNextStep = useCallback(
     (key: string, resultName: string) => {
       console.log(`[handleNextStep] Processing key: ${key}, resultName: ${resultName}`);
@@ -399,7 +384,6 @@ export const useCharacterWheel = () => {
       };
 
       switch (key) {
-        // Race & Sub-race flow
         case "race":
           return raceHandlers.handleRaceSelection(
             resultName,
@@ -435,7 +419,6 @@ export const useCharacterWheel = () => {
           break;
         }
 
-        // Archetype flow
         case "archetype": {
           const archetype = currentWheel.sections.find(
             (s) => s.name === resultName
@@ -648,7 +631,6 @@ export const useCharacterWheel = () => {
           setCurrentWheel(powerCountWheel(raceOrSubrace));
           break;
 
-        // Stats handling with race-specific logic
         case "strength":
         case "speed":
         case "battleIQ":
@@ -660,17 +642,6 @@ export const useCharacterWheel = () => {
             handleRegularStatProgression(key, resultName);
           });
 
-        case "totalBaseStat":
-          return handleStatResult(key, resultName).then(() => {
-            console.log(`[handleNextStep] totalBaseStat processed, moving to quirk-count`);
-            setCurrentWheel({
-              key: "quirk-count",
-              title: "Quirk Count",
-              sections: quirkCountOptions,
-            });
-          });
-
-        // Quirk & House flow
         case "quirk-count":
           return audio(key, resultName).then(() => {
             console.log(`[handleNextStep] Quirk count processed: ${resultName}`);
@@ -751,7 +722,6 @@ export const useCharacterWheel = () => {
           setCurrentWheel(gearCountWheel);
           break;
 
-        // Gear flow
         case "gear-count":
           return audio(key, resultName).then(() => {
             console.log(`[handleNextStep] Gear count processed: ${resultName}`);
@@ -837,7 +807,6 @@ export const useCharacterWheel = () => {
           }
           break;
 
-        // Noble Swordsman special gear
         case "noble-magic-gear":
         case "noble-physical-gear": {
           const result = itemHandlers.handleNobleGearFlow(
@@ -850,7 +819,6 @@ export const useCharacterWheel = () => {
           break;
         }
 
-        // Weapon flow
         case "weapon-exist":
           return itemHandlers.handleWeaponExistFlow(resultName, handlerParams);
 
@@ -871,7 +839,6 @@ export const useCharacterWheel = () => {
             handlerParams
           );
 
-        // Enchant system
         case "weapon-enchant-count":
           return itemHandlers.handleEnchantCountFlow(resultName, handlerParams);
 
@@ -882,7 +849,6 @@ export const useCharacterWheel = () => {
             handlerParams
           );
 
-        // Usability checks
         case "usabilityCheck": {
           const result = itemHandlers.handleUsabilityCheck(
             resultName,
@@ -892,7 +858,6 @@ export const useCharacterWheel = () => {
           break;
         }
 
-        // Power & Character Development
         case "power-count":
           return audio(key, resultName).then(() => {
             console.log(`[handleNextStep] Power count processed: ${resultName}`);
@@ -985,7 +950,7 @@ export const useCharacterWheel = () => {
             dispatch({
               type: "SET_RESULT",
               key: `temp-armed-gear-${gearNumber}`,
-              value: JSON.stringify(selectedGear),
+              value: JSON.stringify(selectedGear), // SỬA ĐỔI: Từ selectedGap thành selectedGear
             });
             setCurrentWheel(
               usabilityWheel(selectedGear.usableRate, selectedGear.name)
@@ -1042,7 +1007,7 @@ export const useCharacterWheel = () => {
           dispatch({ type: "ADD_LOVER", lovers });
           setCurrentWheel(archetypeWheel);
           break;
-        // PvE
+
         case "pve":
           const pveRound = currentWheel.sections.find(
             (s) => s.name === resultName
@@ -1072,7 +1037,6 @@ export const useCharacterWheel = () => {
     ]
   );
 
-  // Helper functions for specific flows
   const handleRegularStatProgression: (key: string, resultName: string) => { success?: boolean } = useCallback(
     (key: string, resultName: string) => {
       console.log(`[handleRegularStatProgression] Processing stat: ${key} = ${resultName}`);
@@ -1091,16 +1055,26 @@ export const useCharacterWheel = () => {
         console.log(`[handleRegularStatProgression] Failed to move to next stat: ${nextStatKey}`);
         return { success: false };
       } else {
-        setCurrentWheel({
-          key: "quirk-count",
-          title: "Quirk Count",
-          sections: quirkCountOptions,
+        // SỬA ĐỔI: Tính totalBaseStat và phát âm thanh, nhưng không hiển thị pop-up
+        const totalBaseStat = STAT_WHEELS.reduce((sum, statKey) => {
+          const statValue = parseInt(characterState.stats[statKey], 10);
+          return sum + (isNaN(statValue) ? 0 : statValue);
+        }, 0);
+        console.log(`[handleRegularStatProgression] All stats processed, totalBaseStat: ${totalBaseStat}`);
+
+        // GIỮ NGUYÊN: Phát âm thanh cho totalBaseStat và chuyển sang quirk-count
+        return audio("totalBaseStat", totalBaseStat.toString()).then(() => {
+          setCurrentWheel({
+            key: "quirk-count",
+            title: "Quirk Count",
+            sections: quirkCountOptions,
+          });
+          console.log(`[handleRegularStatProgression] Moving to quirk-count`);
+          return { success: true };
         });
-        console.log(`[handleRegularStatProgression] All stats processed, moving to quirk-count`);
-        return { success: true };
       }
     },
-    [dispatch, flowHandlers, getFlowHandlerParams, setStatStep, setCurrentWheel]
+    [dispatch, flowHandlers, getFlowHandlerParams, setStatStep, setCurrentWheel, characterState, audio] // ĐÃ XÓA: Xóa setShowTotalStatPopup, setTotalStatMessage khỏi dependencies
   );
 
   const handleQuirkFlow = useCallback(
@@ -1516,7 +1490,6 @@ export const useCharacterWheel = () => {
     ]
   );
 
-  // Character completion and data handling
   const handleGetData = useCallback(() => {
     const data = characterHelpers.getCompleteCharacterInfo(characterState);
     setDialogData(data);
@@ -1528,7 +1501,6 @@ export const useCharacterWheel = () => {
     resetAll();
   }, [characterHelpers, characterState]);
 
-  // Reset all state
   const resetAll = useCallback(() => {
     dispatch({ type: "RESET" });
     setCurrentWheel(raceWheel);
@@ -1545,23 +1517,19 @@ export const useCharacterWheel = () => {
     setPowerCount(0);
     setCharDevStep(0);
     setCharDevMax(1);
+    // ĐÃ XÓA: Xóa setShowTotalStatPopup và setTotalStatMessage
   }, [dispatch, setCurrentWheel]);
 
-  // Next step handler
   const nextStep = useCallback(() => {
     console.log(`[nextStep] Triggered`);
-    // Implementation moved to handleNextStep
   }, []);
 
   return {
-    // State
     characterState,
     currentWheel,
     statStep,
     showDialog,
     dialogData,
-
-    // Actions
     dispatch,
     jumpToWheel,
     handleNextStep,
@@ -1571,8 +1539,7 @@ export const useCharacterWheel = () => {
     handleCharacterComplete,
     setShowDialog,
     setCurrentWheel,
-
-    // Progress tracking
+    // ĐÃ XÓA: Xóa showTotalStatPopup, totalStatMessage, closeTotalStatPopup
     quirkStep,
     quirkCount,
     gearStep,
@@ -1588,8 +1555,6 @@ export const useCharacterWheel = () => {
     raceHandlers,
     playerWheel,
     pveWheel,
-
-    // Additional utilities from handlers
     flowStatus: flowHandlers.getFlowStatus(characterState),
     characterSummary: characterHelpers.generateCharacterSummary(characterState),
     validation: characterHelpers.validateCharacter(characterState),
