@@ -1,17 +1,9 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useMemo,
-  ButtonHTMLAttributes,
-} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import wheelBorder from "@/assets/images/wheel-border.png";
 import arrow from "@/assets/Images/arrow-2.png";
 import indexChangeSoundEffect from "@/assets/audio/slot-machine.mp3";
 import { Section } from "@/Common/Types/Types";
 import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig";
-import { getAllPlayers } from "@/db/player.model";
-import { getAllGears } from "@/db/gear.model";
 
 interface WheelProps {
   items: Section[];
@@ -86,10 +78,9 @@ const Wheel: React.FC<WheelProps> = React.memo(
     useEffect(() => {
       window.api.fetchAllPlayers().then(setapiResult);
       console.log(apiresult);
-    });
+    }, []);
 
     useEffect(() => {
-      console.log("useEffect reset fire");
       resetWheel();
 
       const dur =
@@ -99,7 +90,6 @@ const Wheel: React.FC<WheelProps> = React.memo(
     }, [items]);
 
     useEffect(() => {
-      console.log("useEffect spin fire");
       if (!isSpinning) {
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
@@ -122,10 +112,8 @@ const Wheel: React.FC<WheelProps> = React.memo(
         const curIndex = calculateIndex(spinPointDegree);
 
         if (curIndex !== lastSegmentIndexRef.current) {
-          console.log(curIndex);
-          console.log(lastSegmentIndexRef.current);
-
           lastSegmentIndexRef.current = curIndex;
+
           const soundEff = new Audio(indexChangeSoundEffect);
           soundEff.volume = 0.6;
           soundEff.play();
@@ -223,7 +211,7 @@ const Wheel: React.FC<WheelProps> = React.memo(
 
         return (
           <g
-            key={index}
+            key={item.id}
             transform={`translate(${width / 2}, ${height / 2})`}
             className={`transition-transform duration-200`}
           >
@@ -259,18 +247,18 @@ const Wheel: React.FC<WheelProps> = React.memo(
       });
     };
 
+    function getSpinButtonLabel() {
+      if (isSpinning) return "Spinning...";
+
+      return isSpined ? "Reroll" : "Spin";
+    }
+
     return (
       <div className="flex flex-col items-center justify-center">
         <h1 className="relative text-3xl font-bold text-[#d4af37] drop-shadow-[0_0_15px_rgba(255,200,100,0.8)] tracking-widest">
           {title}
         </h1>
-        <div
-          className="relative flex flex-col items-center justify-center overflow-hidden"
-          onMouseLeave={() => {
-            if (isSpinning) return;
-            if (onMouseLeave) onMouseLeave();
-          }}
-        >
+        <div className="relative flex flex-col items-center justify-center overflow-hidden">
           <svg
             className={`relative transform ease-[cubic-bezier(0.61, 1, 0.88, 1)] flex m-0.5`}
             style={{
@@ -280,6 +268,10 @@ const Wheel: React.FC<WheelProps> = React.memo(
               width: width,
             }}
             ref={wheelRef}
+            onMouseLeave={() => {
+              if (isSpinning) return;
+              if (onMouseLeave) onMouseLeave();
+            }}
           >
             {renderSegments()}
           </svg>
@@ -311,7 +303,7 @@ const Wheel: React.FC<WheelProps> = React.memo(
             disabled={isSpinning}
             className="relative px-6 py-1 bg-gray-600 border border-[#8a5b1a] text-[#f5e6d3] font-bold rounded-lg shadow hover:scale-105 transition"
           >
-            {isSpinning ? "Spinning..." : isSpined ? "Reroll" : "Spin"}
+            {getSpinButtonLabel()}
           </button>
           {!isSpinning && result != null && (
             <button
