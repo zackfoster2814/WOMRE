@@ -38,17 +38,17 @@ import {
   instrumentWheel,
 } from "@/Common/Config/ArchetypeConfig";
 import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig";
-import audio1 from '../assets/audio/Stat_1-2_(1).mp3';
-import audio2 from '../assets/audio/Stat_1-2_(2).mp3';
-import audio3 from '../assets/audio/Stat_1-2_(3).mp3';
-import audio3_4 from '../assets/audio/Stat_3-4.mp3';
-import audio5_7 from '../assets/audio/Stat_5-7.mp3';
-import audio8_9 from '../assets/audio/Stat_8-9.mp3';
-import audio10 from '../assets/audio/Stat_10.mp3';
-import audio_0_pow from '../assets/audio/0_Power.mp3';
-import audio_0_gear from '../assets/audio/0_Gear.mp3';
-import audio_total_base_lower_25 from '../assets/audio/Total_Base_Lower_25.mp3';
-import audio_total_base_higher_41 from '../assets/audio/Total_Base_Higher_41.mp3';
+import audio1 from "../assets/audio/Stat_1-2_(1).mp3";
+import audio2 from "../assets/audio/Stat_1-2_(2).mp3";
+import audio3 from "../assets/audio/Stat_1-2_(3).mp3";
+import audio3_4 from "../assets/audio/Stat_3-4.mp3";
+import audio5_7 from "../assets/audio/Stat_5-7.mp3";
+import audio8_9 from "../assets/audio/Stat_8-9.mp3";
+import audio10 from "../assets/audio/Stat_10.mp3";
+import audio_0_pow from "../assets/audio/0_Power.mp3";
+import audio_0_gear from "../assets/audio/0_Gear.mp3";
+import audio_total_base_lower_25 from "../assets/audio/Total_Base_Lower_25.mp3";
+import audio_total_base_higher_41 from "../assets/audio/Total_Base_Higher_41.mp3";
 
 export const useCharacterWheel = () => {
   // Core state management
@@ -200,30 +200,36 @@ export const useCharacterWheel = () => {
     (key: string, resultName: string): Promise<void> => {
       console.log(`[Audio] Called with key: ${key}, resultName: ${resultName}`);
       return new Promise((resolve, reject) => {
-        let audioPath: string = '';
+        let audioPath: string = "";
 
         switch (key) {
           // Xử lý âm thanh cho các chỉ số (stats)
-          case 'strength':
-          case 'speed':
-          case 'battleIQ':
-          case 'martialArts':
-          case 'durability':
-          case 'iq':
-          case 'totalBaseStat': {
+          case "strength":
+          case "speed":
+          case "battleIQ":
+          case "martialArts":
+          case "durability":
+          case "iq":
+          case "totalBaseStat": {
             const statValue = parseInt(resultName, 10);
-            if (key === 'totalBaseStat') {
+            if (key === "totalBaseStat") {
               if (statValue <= 25) {
                 audioPath = audio_total_base_lower_25;
-                console.log(`[Audio] Playing for totalBaseStat <= 25: ${audioPath}`);
+                console.log(
+                  `[Audio] Playing for totalBaseStat <= 25: ${audioPath}`
+                );
               } else if (statValue >= 41) {
                 audioPath = audio_total_base_higher_41;
-                console.log(`[Audio] Playing for totalBaseStat >= 41: ${audioPath}`);
+                console.log(
+                  `[Audio] Playing for totalBaseStat >= 41: ${audioPath}`
+                );
               }
             } else {
               if (statValue >= 1 && statValue <= 2) {
                 const randomAudios = [audio1, audio2, audio3];
-                const randomIndex = Math.floor(Math.random() * randomAudios.length);
+                const randomIndex = Math.floor(
+                  Math.random() * randomAudios.length
+                );
                 audioPath = randomAudios[randomIndex];
                 console.log(`[Audio] Playing for stat 1-2: ${audioPath}`);
               } else if (statValue >= 3 && statValue <= 4) {
@@ -244,7 +250,7 @@ export const useCharacterWheel = () => {
           }
 
           // Xử lý âm thanh cho power-count
-          case 'power-count': {
+          case "power-count": {
             if (resultName === "0") {
               audioPath = audio_0_pow;
               console.log(`[Audio] Playing for power-count = 0: ${audioPath}`);
@@ -253,15 +259,15 @@ export const useCharacterWheel = () => {
           }
 
           // Xử lý âm thanh cho gear-count
-          case 'gear-count': {
+          case "gear-count": {
             if (resultName === "0") {
               audioPath = audio_0_gear;
               console.log(`[Audio] Playing for gear-count = 0: ${audioPath}`);
             }
             break;
           }
-          case 'power': 
-          case 'gear': 
+          case "power":
+          case "gear":
 
           default:
             console.log(`[Audio] No audio defined for key: ${key}`);
@@ -279,11 +285,17 @@ export const useCharacterWheel = () => {
               resolve();
             };
             audio.play().catch((error) => {
-              console.error(`[Audio] Error playing audio at ${audioPath}:`, error);
+              console.error(
+                `[Audio] Error playing audio at ${audioPath}:`,
+                error
+              );
               reject(error);
             });
           } catch (error) {
-            console.error(`[Audio] Error initializing audio at ${audioPath}:`, error);
+            console.error(
+              `[Audio] Error initializing audio at ${audioPath}:`,
+              error
+            );
             reject(error);
           }
         } else {
@@ -292,7 +304,19 @@ export const useCharacterWheel = () => {
         }
       });
     },
-    [audio1, audio2, audio3, audio3_4, audio5_7, audio8_9, audio10, audio_total_base_lower_25, audio_total_base_higher_41, audio_0_pow, audio_0_gear]
+    [
+      audio1,
+      audio2,
+      audio3,
+      audio3_4,
+      audio5_7,
+      audio8_9,
+      audio10,
+      audio_total_base_lower_25,
+      audio_total_base_higher_41,
+      audio_0_pow,
+      audio_0_gear,
+    ]
   );
 
   // Cập nhật handleStatResult
@@ -300,15 +324,18 @@ export const useCharacterWheel = () => {
     (key: string, resultName: string) => {
       console.log(`[handleStatResult] Setting stat: ${key} = ${resultName}`);
       dispatch({ type: "SET_STAT", key, value: resultName });
-      return audio(key, resultName);
+      // return audio(key, resultName);
     },
-    [dispatch, audio]
+    // [dispatch, audio]
+    [dispatch]
   );
 
   // Main flow dispatcher
   const handleNextStep = useCallback(
     (key: string, resultName: string) => {
-      console.log(`[handleNextStep] Processing key: ${key}, resultName: ${resultName}`);
+      console.log(
+        `[handleNextStep] Processing key: ${key}, resultName: ${resultName}`
+      );
       const handlerParams = getHandlerParams();
 
       const handleArchetypeResult = (result: any) => {
@@ -655,25 +682,39 @@ export const useCharacterWheel = () => {
         case "martialArts":
         case "durability":
         case "iq":
-          return handleStatResult(key, resultName).then(() => {
-            console.log(`[handleNextStep] Stat ${key} processed, proceeding to next step`);
-            handleRegularStatProgression(key, resultName);
-          });
-
+          // return handleStatResult(key, resultName).then(() => {
+          //   console.log(
+          //     `[handleNextStep] Stat ${key} processed, proceeding to next step`
+          //   );
+          //   handleRegularStatProgression(key, resultName);
+          // });
+          handleStatResult(key, resultName);
+          handleRegularStatProgression(key, resultName);
+          break;
         case "totalBaseStat":
-          return handleStatResult(key, resultName).then(() => {
-            console.log(`[handleNextStep] totalBaseStat processed, moving to quirk-count`);
-            setCurrentWheel({
-              key: "quirk-count",
-              title: "Quirk Count",
-              sections: quirkCountOptions,
-            });
+          // return handleStatResult(key, resultName).then(() => {
+          //   console.log(
+          //     `[handleNextStep] totalBaseStat processed, moving to quirk-count`
+          //   );
+          //   setCurrentWheel({
+          //     key: "quirk-count",
+          //     title: "Quirk Count",
+          //     sections: quirkCountOptions,
+          //   });
+          // });
+          handleStatResult(key, resultName);
+          setCurrentWheel({
+            key: "quirk-count",
+            title: "Quirk Count",
+            sections: quirkCountOptions,
           });
-
+          break;
         // Quirk & House flow
         case "quirk-count":
           return audio(key, resultName).then(() => {
-            console.log(`[handleNextStep] Quirk count processed: ${resultName}`);
+            console.log(
+              `[handleNextStep] Quirk count processed: ${resultName}`
+            );
             const totalQuirk = gameMechanics.calculateQuirkCount(
               parseInt(resultName, 10),
               characterState
@@ -767,7 +808,9 @@ export const useCharacterWheel = () => {
 
         case "legacy-gear-count":
           return audio(key, resultName).then(() => {
-            console.log(`[handleNextStep] Legacy gear count processed: ${resultName}`);
+            console.log(
+              `[handleNextStep] Legacy gear count processed: ${resultName}`
+            );
             let lgc = parseInt(resultName, 10);
             if (
               characterState.archetypes.some(
@@ -895,7 +938,9 @@ export const useCharacterWheel = () => {
         // Power & Character Development
         case "power-count":
           return audio(key, resultName).then(() => {
-            console.log(`[handleNextStep] Power count processed: ${resultName}`);
+            console.log(
+              `[handleNextStep] Power count processed: ${resultName}`
+            );
             return handlePowerCountFlow(resultName);
           });
 
@@ -1073,9 +1118,14 @@ export const useCharacterWheel = () => {
   );
 
   // Helper functions for specific flows
-  const handleRegularStatProgression: (key: string, resultName: string) => { success?: boolean } = useCallback(
+  const handleRegularStatProgression: (
+    key: string,
+    resultName: string
+  ) => { success?: boolean } = useCallback(
     (key: string, resultName: string) => {
-      console.log(`[handleRegularStatProgression] Processing stat: ${key} = ${resultName}`);
+      console.log(
+        `[handleRegularStatProgression] Processing stat: ${key} = ${resultName}`
+      );
       dispatch({ type: "SET_STAT", key, value: resultName });
       const currentStatIndex = STAT_WHEELS.indexOf(key);
 
@@ -1085,10 +1135,14 @@ export const useCharacterWheel = () => {
         const nextResult = flowHandlers.jumpToWheel(nextStatKey, params);
         if (nextResult.success) {
           setStatStep(currentStatIndex + 2);
-          console.log(`[handleRegularStatProgression] Moving to next stat: ${nextStatKey}`);
+          console.log(
+            `[handleRegularStatProgression] Moving to next stat: ${nextStatKey}`
+          );
           return { success: true };
         }
-        console.log(`[handleRegularStatProgression] Failed to move to next stat: ${nextStatKey}`);
+        console.log(
+          `[handleRegularStatProgression] Failed to move to next stat: ${nextStatKey}`
+        );
         return { success: false };
       } else {
         setCurrentWheel({
@@ -1096,7 +1150,9 @@ export const useCharacterWheel = () => {
           title: "Quirk Count",
           sections: quirkCountOptions,
         });
-        console.log(`[handleRegularStatProgression] All stats processed, moving to quirk-count`);
+        console.log(
+          `[handleRegularStatProgression] All stats processed, moving to quirk-count`
+        );
         return { success: true };
       }
     },
