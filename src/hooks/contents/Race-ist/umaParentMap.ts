@@ -35,7 +35,6 @@ export const UmaParentMap: Record<string, RaceHandler> = {
       value: resultName,
     });
     applyUmaParentAbilities(resultName, dispatch);
-    console.log("b");
     setCurrentWheel({
       key: "uma-parent-2",
       title: "Uma Parent Race 2",

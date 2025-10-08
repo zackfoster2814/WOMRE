@@ -4,7 +4,6 @@ interface QuirksAttributes  {
     id?: number;
     name: string;
     effect: string;
-    tags :JSON;
     note: string;
 }
 
@@ -16,7 +15,6 @@ class Quirks extends Model<QuirksAttributes, QuirksCreationAttributes> implement
     declare id: number;
     declare name: string
     declare effect: string;
-    declare tags :JSON;
     declare note: string;
 }
 
@@ -36,11 +34,6 @@ export function QuirkTables(sequelize: Sequelize, dataTypes: typeof DataTypes): 
             type: DataTypes.STRING,
             allowNull: false,
             defaultValue: '',
-        },
-        tags: {
-            type: DataTypes.JSON,
-            allowNull: false,
-            defaultValue: {},
         },
         note: {
             type: DataTypes.TEXT,

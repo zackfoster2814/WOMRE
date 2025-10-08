@@ -5,13 +5,12 @@ node_modules/
 dist/
 out/
 build/
+dist-app/
+dist-electron/
 
 dist-app/
 dist-electron/
 src/dist/
-
-#db
-.sqlite
 
 #Vite cache
 .vite/
@@ -39,7 +38,6 @@ electron/.js.map
 .env..local
 
 #SQLite
-*.sqlite
 *.db
 
 #Tailwind generated files

@@ -2,7 +2,6 @@ import { ipcMain } from "electron";
 import { getAllRaces } from "../db/race.model.js";
 
 export function registerRaceIpcHandlers() {
-  console.log("a")
   ipcMain.handle("fetch-races", async () => {
     try {
       const races = await getAllRaces();

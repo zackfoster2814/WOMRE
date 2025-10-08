@@ -5,6 +5,7 @@ import indexChangeSoundEffect from "@/assets/audio/slot-machine.mp3";
 import { Section } from "@/Common/Types/Types";
 import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig";
 
+
 interface WheelProps {
   items: Section[];
   width: number;
