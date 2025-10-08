@@ -1,5 +1,6 @@
-import { Sequelize,Op,DataTypes,QueryTypes } from "sequelize";
+import { Sequelize, Op, DataTypes, QueryTypes } from "sequelize";
 import path from "path";
+import { RelationsConfig } from "./relations/relationsConfig.js";
 
 interface DbConnection {
   sequelize: Sequelize;
@@ -16,24 +17,24 @@ const sequelize = new Sequelize({
   storage: path.join(process.cwd(), "womre.sqlite"),
   dialectOptions: {
     dateStrings: true,
-    typeCast: true
+    typeCast: true,
   },
   // logging: false,
   logging: false,
   benchmark: true,
   define: {
     timestamps: false,
-    underscored: true
+    underscored: true,
   },
 });
 
+RelationsConfig(sequelize);
 
 export default async function initDb() {
   await sequelize.authenticate();
-  await sequelize.sync();
+  await sequelize.sync({ force: true });
   console.log("✅ Database synced");
 }
-
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
