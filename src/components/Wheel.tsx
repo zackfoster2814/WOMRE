@@ -10,8 +10,7 @@ import arrow from "@/assets/Images/arrow-2.png";
 import indexChangeSoundEffect from "@/assets/audio/slot-machine.mp3";
 import { Section } from "@/Common/Types/Types";
 import { COLOR_PALETTE } from "@/Common/Constants/ConstantsConfig";
-import { getAllPlayers } from "@/db/player.model";
-import { getAllGears } from "@/db/gear.model";
+
 
 interface WheelProps {
   items: Section[];

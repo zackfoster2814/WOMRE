@@ -4,7 +4,6 @@ interface PowersAttributes {
     id?: number;
     name: string;
     effect: string;
-    tags :JSON;
     note: string;
 }
 
@@ -16,7 +15,6 @@ class Powers extends Model<PowersAttributes, PowersCreationAttributes> implement
     declare id: number;
     declare name: string;
     declare effect: string;
-    declare tags :JSON;
     declare note: string;
 }
 
@@ -34,11 +32,6 @@ export function PowerTables(sequelize: Sequelize, dataTypes: typeof DataTypes): 
         effect: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        tags: {
-            type: DataTypes.JSON,
-            allowNull: false,
-            defaultValue: {},
         },
         note: {
             type: DataTypes.TEXT,

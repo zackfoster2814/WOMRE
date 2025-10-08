@@ -9,7 +9,7 @@ interface pve_enemies_Attributes {
     biq: number;
     durability: number;
     martial_arts: number;
-    power: JSON;
+    power: string;
     reward: string;
     pusnishment: string;
     weight: number;
@@ -28,7 +28,7 @@ class Pve_Enemies extends Model<pve_enemies_Attributes, pve_enemies_CreationAttr
     declare biq: number;
     declare durability: number;
     declare martial_arts: number;
-    declare power: JSON;
+    declare power: string;
     declare reward: string
     declare pusnishment: string;
     declare weight: number;
@@ -77,9 +77,9 @@ export function PveEnemiesTables(sequelize: Sequelize, dataTypes: typeof DataTyp
             defaultValue: 0,
         },
         power: {
-            type: DataTypes.JSON,
+            type: DataTypes.TEXT,
             allowNull: false,
-            defaultValue: {},
+            defaultValue: '',
         },
         reward: {
             type: DataTypes.STRING,

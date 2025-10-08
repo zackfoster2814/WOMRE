@@ -6,6 +6,8 @@ import lodash from "lodash";
 const isEmpty = lodash.isEmpty;
 const Players = PlayerTables(db.sequelize, db.dataTypes);
 
+
+
 export const getAllPlayers = async function (): Promise<any> {
   return new Promise<any>((resolve, reject) => {
     Players.findAll()
