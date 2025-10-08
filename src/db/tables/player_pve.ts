@@ -12,7 +12,7 @@ class Player_Pve extends Model<Players_Pve_Attributes, Players_PveCreationAttrib
     declare pve_enemies: number;
 }
 
-export function PlayerWeaponTables(sequelize: Sequelize, dataTypes: typeof DataTypes): typeof Player_Pve {
+export function Player_PveTables(sequelize: Sequelize, dataTypes: typeof DataTypes): typeof Player_Pve {
     Player_Pve.init({
         player_id: {
             type: DataTypes.INTEGER,

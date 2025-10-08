@@ -1,7 +1,35 @@
 import { Sequelize } from "sequelize";
 
 export function RelationsConfig(sequelize: Sequelize) {
-  // Define associations here if needed in the future
+  // DEBUG: Kiểm tra các model nào bị thiếu
+  const requiredModels = [
+    "Players",
+    "Powers",
+    "Weapons",
+    "Gears",
+    "Quirks",
+    "char_dev",
+    "Archetypes",
+    "Enchants",
+    "Matches",
+    "Events",
+    "Reward",
+    "Matches_Events",
+    "Matches_Reward",
+    "Players_Power",
+    "Players_Weapons",
+    "Players_Quirks",
+    "Player_char_dev",
+    "Players_Archetypes",
+    "Pve_Enemies",
+    "Players_Gears",
+    "Weapons_Enchants",
+    "Races",
+    "Sub_Race",
+    "Player_Pve",
+    "tournament_phase",
+  ];
+
   const {
     Players,
     Powers,
@@ -29,7 +57,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     Player_Pve,
     tournament_phase,
   } = sequelize.models;
-  //powers
+
+  // Players <-> Powers
   Players.belongsToMany(Powers, {
     through: Players_Power,
     foreignKey: "player_id",
@@ -42,7 +71,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     otherKey: "player_id",
     as: "players",
   });
-  //weapons
+
+  // Players <-> Weapons
   Players.belongsToMany(Weapons, {
     through: Players_Weapons,
     foreignKey: "player_id",
@@ -55,7 +85,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     otherKey: "player_id",
     as: "players",
   });
-  //gears
+
+  // Players <-> Gears
   Players.belongsToMany(Gears, {
     through: Players_Gears,
     foreignKey: "player_id",
@@ -68,7 +99,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     otherKey: "player_id",
     as: "players",
   });
-  //quirks
+
+  // Players <-> Quirks
   Players.belongsToMany(Quirks, {
     through: Players_Quirks,
     foreignKey: "player_id",
@@ -81,7 +113,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     otherKey: "player_id",
     as: "players",
   });
-  //char_dev
+
+  // Players <-> char_dev
   Players.belongsToMany(char_dev, {
     through: Player_char_dev,
     foreignKey: "player_id",
@@ -95,7 +128,7 @@ export function RelationsConfig(sequelize: Sequelize) {
     as: "players",
   });
 
-  //archetypes
+  // Players <-> Archetypes
   Players.belongsToMany(Archetypes, {
     through: Players_Archetypes,
     foreignKey: "player_id",
@@ -108,7 +141,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     otherKey: "player_id",
     as: "players",
   });
-  //enchants
+
+  // Weapons <-> Enchants
   Weapons.belongsToMany(Enchants, {
     through: Weapons_Enchants,
     foreignKey: "weapon_id",
@@ -121,7 +155,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     otherKey: "weapon_id",
     as: "weapons",
   });
-  //pve_enemies
+
+  // Players <-> Pve_Enemies
   Players.belongsToMany(Pve_Enemies, {
     through: Player_Pve,
     foreignKey: "player_id",
@@ -134,6 +169,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     otherKey: "player_id",
     as: "players",
   });
+
+  // Races -> Sub_Race (One-to-Many)
   Races.hasMany(Sub_Race, {
     foreignKey: "race_id",
     as: "sub_race",
@@ -142,6 +179,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     foreignKey: "race_id",
     as: "race",
   });
+
+  // Matches <-> Events
   Matches.belongsToMany(Events, {
     through: Matches_Events,
     foreignKey: "match_id",
@@ -154,6 +193,8 @@ export function RelationsConfig(sequelize: Sequelize) {
     otherKey: "match_id",
     as: "matches",
   });
+
+  // Matches <-> Reward
   Matches.belongsToMany(Reward, {
     through: Matches_Reward,
     foreignKey: "match_id",
@@ -166,22 +207,22 @@ export function RelationsConfig(sequelize: Sequelize) {
     otherKey: "match_id",
     as: "matches",
   });
+
+  // Matches -> Pve_Enemies (Many-to-One)
   Matches.belongsTo(Pve_Enemies, {
     foreignKey: "pve_enemy_id",
     as: "pveEnemy",
   });
-
   Pve_Enemies.hasMany(Matches, {
     foreignKey: "pve_enemy_id",
     as: "matches",
   });
 
-  // Match belongs to TournamentPhase
+  // Matches -> tournament_phase (Many-to-One)
   Matches.belongsTo(tournament_phase, {
     foreignKey: "phase_id",
     as: "phase",
   });
-
   tournament_phase.hasMany(Matches, {
     foreignKey: "phase_id",
     as: "matches",
