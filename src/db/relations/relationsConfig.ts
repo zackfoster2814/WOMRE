@@ -1,35 +1,6 @@
 import { Sequelize } from "sequelize";
 
 export function RelationsConfig(sequelize: Sequelize) {
-  // DEBUG: Kiểm tra các model nào bị thiếu
-  const requiredModels = [
-    "Players",
-    "Powers",
-    "Weapons",
-    "Gears",
-    "Quirks",
-    "char_dev",
-    "Archetypes",
-    "Enchants",
-    "Matches",
-    "Events",
-    "Reward",
-    "Matches_Events",
-    "Matches_Reward",
-    "Players_Power",
-    "Players_Weapons",
-    "Players_Quirks",
-    "Player_char_dev",
-    "Players_Archetypes",
-    "Pve_Enemies",
-    "Players_Gears",
-    "Weapons_Enchants",
-    "Races",
-    "Sub_Race",
-    "Player_Pve",
-    "tournament_phase",
-  ];
-
   const {
     Players,
     Powers,
