@@ -87,7 +87,7 @@ RelationsConfig(sequelize);
 
 export default async function initDb() {
   await sequelize.authenticate();
-  await sequelize.sync({ force: true });
+  await sequelize.sync();
   console.log("✅ Database synced");
 }
 
