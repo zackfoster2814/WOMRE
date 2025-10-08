@@ -31,6 +31,7 @@ export default function CharacterWheel() {
     handleCharacterComplete,
     setShowDialog,
     raceHandlers,
+    audio,
   } = useCharacterWheel();
 
   const { audioRefs, audioSources } = useHouseAudios();
@@ -61,6 +62,7 @@ export default function CharacterWheel() {
   }, [rolledResult, currentWheel, handleWheelStep]);
 
   const handleWheelRest = (result: number) => {
+    audio(currentWheel.key, currentWheel.sections[result].name);
     setIsSpinning(false);
     setRolledResult(currentWheel.sections[result]);
   };
