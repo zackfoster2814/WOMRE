@@ -1,168 +1,191 @@
-import { WheelStep } from "../Types/Types";
+import { WheelStep } from "../Types/Types.js";
 
+const getRandomColor = () => {
+  return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+}
+const racedata = await window.api.fetchAllRaces();
+console.log(racedata);
+console.log("First item structure:", racedata[0])
 export const raceWheel: WheelStep = {
   key: "race",
   title: "Race",
-  sections: [
-    {
-      id: "01",
-      name: "Goblin",
-      weight: 6.5,
-      color: "#7A1F1F",
-      description: "Quay Goblin Horde",
-    },
-    {
-      id: "02",
-      name: "Gnome",
-      weight: 6.5,
-      color: "#B47D35",
-      description: "Không có 💀",
-    },
-    {
-      id: "03",
-      name: "Human",
-      weight: 6.5,
-      color: "#C2B678",
-      description: "Quay Skin Color",
-    },
-    {
-      id: "04",
-      name: "Dwarf",
-      weight: 6.5,
-      color: "#3D6B3D",
-      description: "Quay Dwarf's Type",
-    },
-    {
-      id: "05",
-      name: "Skeleton",
-      weight: 5,
-      color: "#AAAAAA",
-      description: "Quay Bone Lineage",
-      effect: "Ở trong nhánh thua, nhận +4 Durability",
-    },
-    {
-      id: "06",
-      name: "Troll",
-      weight: 5,
-      color: "#4F772D",
-      description: "Quay Troll's Type",
-    },
-    {
-      id: "07",
-      name: "Orc",
-      weight: 5,
-      color: "#38761D",
-      description: "",
-      effect:
-        "Nhận +1 vào chỉ số thấp nhất khi thắng và -2 vào chỉ số cao nhất khi thua.",
-    },
-    {
-      id: "08",
-      name: "Dryad",
-      weight: 5,
-      color: "#228B22",
-      description: "",
-      effect:
-        "Ở nhánh thắng. nhận +1 Durability sau mỗi trận.\nỞ nhánh thua, nhận -1 Durability sau mỗi trận.",
-    },
-    {
-      id: "09",
-      name: "Elf",
-      weight: 6,
-      color: "#2F7EBB",
-      description: "Quay Elf's Type",
-    },
-    {
-      id: "10",
-      name: "Spirit",
-      weight: 5,
-      color: "#7F7FFF",
-      description: "",
-      effect:
-        "Khi có bằng hoặc hơn 13 Spirit trong mùa, tất cả Spirit nhận +1 all stats. (Hiệu ứng này vẫn có hiệu lực ngay cả khi các spirit đó chết đi.)",
-    },
-    {
-      id: "11",
-      name: "Uma",
-      weight: 6,
-      color: "#CC66CC",
-      description: "Quay 2 Uma Parents",
-      effect:
-        'Người chơi thuộc về House "Tracen Academy" và không có vòng quay House.',
-    },
-    {
-      id: "12",
-      name: "Werebeast",
-      weight: 5,
-      color: "#8B4513",
-      description: "Quay Beast's Type",
-    },
-    {
-      id: "13",
-      name: "Vampire",
-      weight: 5,
-      color: "#660000",
-      description: "Quay Body Count",
-      effect: '36% nhận vòng quay "Khẩu Vị Độc Đáo"',
-    },
-    {
-      id: "14",
-      name: "Giant",
-      weight: 5,
-      color: "#999933",
-      description: "",
-      effect:
-        "Nhận +5 IQ nếu sau vòng quay base stats IQ > Strength. (Và -5 Strength)\nNhận +5 Strength nếu sau vòng quay base stats Strength > IQ. (Và -5 IQ)\nNếu cả hai bằng nhau sau vòng quay base stats, nhận +3 Strength và IQ.",
-    },
-    {
-      id: "15",
-      name: "Dragon",
-      weight: 5,
-      color: "#990000",
-      description: "Quay Dragon's Type",
-    },
-    {
-      id: "16",
-      name: "Angel",
-      weight: 4,
-      color: "#FFD700",
-      description: "Quay Angel Rank",
-      effect:
-        'Nhận Archetype "Pacifist" từ đầu (sẽ nhận thêm một Archetype nữa)',
-    },
-    {
-      id: "17",
-      name: "Demi-God",
-      weight: 3.5,
-      color: "#FF8C00",
-      description: "Quay God's Gifts",
-      effect:
-        "Nhận +1 all stats khi đối đầu với Human và -1 all stats khi đối đầu với God.",
-    },
-    {
-      id: "18",
-      name: "Primordial Being",
-      weight: 3.5,
-      color: "#8A2BE2",
-      description: "Quay Elemental Wheel",
-    },
-    {
-      id: "19",
-      name: "Demon",
-      weight: 3,
-      color: "#8B0000",
-      description: "Quay Sins Wheel",
-    },
-    {
-      id: "20",
-      name: "God",
-      weight: 3,
-      color: "#FFFFFF",
-      description: "Quay Which God? (12)",
-    },
-  ],
+  sections: racedata.map((race: any) => {
+    const raceData = race._dataValues || race.dataValues || race;
+    
+    return {
+      id: raceData.id,
+      name: raceData.name,
+      subrace_wheel: raceData.subrace_wheel,
+      color: getRandomColor(),
+      trait: raceData.trait,
+      weight: raceData.weight,
+      note: raceData.note,
+    };
+  })
 };
-
+console.log(raceWheel);
+// export const raceWheel: WheelStep = {
+//   key: "race",
+//   title: "Race",
+//   sections: [
+//     {
+//       id: "01",
+//       name: "Goblin",
+//       weight: 6.5,
+//       color: "#7A1F1F",
+//       description: "Quay Goblin Horde",
+//     },
+//     {
+//       id: "02",
+//       name: "Gnome",
+//       weight: 6.5,
+//       color: "#B47D35",
+//       description: "Không có 💀",
+//     },
+//     {
+//       id: "03",
+//       name: "Human",
+//       weight: 6.5,
+//       color: "#C2B678",
+//       description: "Quay Skin Color",
+//     },
+//     {
+//       id: "04",
+//       name: "Dwarf",
+//       weight: 6.5,
+//       color: "#3D6B3D",
+//       description: "Quay Dwarf's Type",
+//     },
+//     {
+//       id: "05",
+//       name: "Skeleton",
+//       weight: 5,
+//       color: "#AAAAAA",
+//       description: "Quay Bone Lineage",
+//       effect: "Ở trong nhánh thua, nhận +4 Durability",
+//     },
+//     {
+//       id: "06",
+//       name: "Troll",
+//       weight: 5,
+//       color: "#4F772D",
+//       description: "Quay Troll's Type",
+//     },
+//     {
+//       id: "07",
+//       name: "Orc",
+//       weight: 5,
+//       color: "#38761D",
+//       description: "",
+//       effect:
+//         "Nhận +1 vào chỉ số thấp nhất khi thắng và -2 vào chỉ số cao nhất khi thua.",
+//     },
+//     {
+//       id: "08",
+//       name: "Dryad",
+//       weight: 5,
+//       color: "#228B22",
+//       description: "",
+//       effect:
+//         "Ở nhánh thắng. nhận +1 Durability sau mỗi trận.\nỞ nhánh thua, nhận -1 Durability sau mỗi trận.",
+//     },
+//     {
+//       id: "09",
+//       name: "Elf",
+//       weight: 6,
+//       color: "#2F7EBB",
+//       description: "Quay Elf's Type",
+//     },
+//     {
+//       id: "10",
+//       name: "Spirit",
+//       weight: 5,
+//       color: "#7F7FFF",
+//       description: "",
+//       effect:
+//         "Khi có bằng hoặc hơn 13 Spirit trong mùa, tất cả Spirit nhận +1 all stats. (Hiệu ứng này vẫn có hiệu lực ngay cả khi các spirit đó chết đi.)",
+//     },
+//     {
+//       id: "11",
+//       name: "Uma",
+//       weight: 6,
+//       color: "#CC66CC",
+//       description: "Quay 2 Uma Parents",
+//       effect:
+//         'Người chơi thuộc về House "Tracen Academy" và không có vòng quay House.',
+//     },
+//     {
+//       id: "12",
+//       name: "Werebeast",
+//       weight: 5,
+//       color: "#8B4513",
+//       description: "Quay Beast's Type",
+//     },
+//     {
+//       id: "13",
+//       name: "Vampire",
+//       weight: 5,
+//       color: "#660000",
+//       description: "Quay Body Count",
+//       effect: '36% nhận vòng quay "Khẩu Vị Độc Đáo"',
+//     },
+//     {
+//       id: "14",
+//       name: "Giant",
+//       weight: 5,
+//       color: "#999933",
+//       description: "",
+//       effect:
+//         "Nhận +5 IQ nếu sau vòng quay base stats IQ > Strength. (Và -5 Strength)\nNhận +5 Strength nếu sau vòng quay base stats Strength > IQ. (Và -5 IQ)\nNếu cả hai bằng nhau sau vòng quay base stats, nhận +3 Strength và IQ.",
+//     },
+//     {
+//       id: "15",
+//       name: "Dragon",
+//       weight: 5,
+//       color: "#990000",
+//       description: "Quay Dragon's Type",
+//     },
+//     {
+//       id: "16",
+//       name: "Angel",
+//       weight: 4,
+//       color: "#FFD700",
+//       description: "Quay Angel Rank",
+//       effect:
+//         'Nhận Archetype "Pacifist" từ đầu (sẽ nhận thêm một Archetype nữa)',
+//     },
+//     {
+//       id: "17",
+//       name: "Demi-God",
+//       weight: 3.5,
+//       color: "#FF8C00",
+//       description: "Quay God's Gifts",
+//       effect:
+//         "Nhận +1 all stats khi đối đầu với Human và -1 all stats khi đối đầu với God.",
+//     },
+//     {
+//       id: "18",
+//       name: "Primordial Being",
+//       weight: 3.5,
+//       color: "#8A2BE2",
+//       description: "Quay Elemental Wheel",
+//     },
+//     {
+//       id: "19",
+//       name: "Demon",
+//       weight: 3,
+//       color: "#8B0000",
+//       description: "Quay Sins Wheel",
+//     },
+//     {
+//       id: "20",
+//       name: "God",
+//       weight: 3,
+//       color: "#FFFFFF",
+//       description: "Quay Which God? (12)",
+//     },
+//   ],
+// };
 export const raceConfig: Record<
   string,
   { subrace?: string; trait?: string; weight: number }
