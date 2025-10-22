@@ -5,7 +5,7 @@ import { registerEventIpcHandlers } from "../src/utils/event.ipcHandler.js";
 import { registerGearIpcHandlers } from "../src/utils/gear.ipcHandler.js";
 import { registerHouseIpcHandlers } from "../src/utils/house.ipcHandler.js";
 import { registerMatchEventIpcHandlers } from "../src/utils/match-event.ipcHandler.js";
-import { registerMatchRewardIpcHandlers } from "../src/utils/match-reward.ipcHandler.js";
+import { registerMatchRewardIpcHandlers } from "../src/utils/match_reward.ipcHandler.ts";
 import { registerMatchIpcHandlers } from "../src/utils/match.ipcHandler.js";
 import { registerPlayerArchetypesIpcHandlers } from "../src/utils/player-archetypes.ipcHandler.js";
 import { registerPlayerCharDevIpcHandlers } from "../src/utils/player-chardev.ipcHandler.js";

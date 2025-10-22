@@ -21,3 +21,22 @@ export const getAllSubraces = async function (): Promise<any> {
       });
   });
 };
+export const getSubracesByRaceId = async function (race_id: number): Promise<any> {
+  return new Promise<any>((resolve, reject) => {
+    Subraces.findAll({
+      where: {
+        race_id: race_id
+      }
+    })
+      .then(function (obj: any) {
+        if (!isEmpty(obj)) {
+          resolve(obj);
+        } else {
+          resolve(null);
+        }
+      })  
+      .catch((err: any) => {
+        reject(err);
+      });
+  });
+};

@@ -1,6 +1,6 @@
-import { db } from "./index.js";
+import { db } from "./index.ts";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { MatchEventsTables } from "./tables/match_events.js";
+import { MatchEventsTables } from "./tables/match_events.ts";
 import lodash from "lodash";
 
 const isEmpty = lodash.isEmpty;
