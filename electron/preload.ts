@@ -1,78 +1,81 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
+  // -------------------Players--------------------
   fetchAllPlayers: () => ipcRenderer.invoke('fetch-players'),
   insertPlayer: async (playerData) => await ipcRenderer.invoke('insert-player', playerData),
 
+  // -------------------Races--------------------
   fetchAllRaces: () => ipcRenderer.invoke('fetch-races'),
-  insertRace: async (raceData) => await ipcRenderer.invoke('insert-race', raceData),
 
+  // ------------------Subraces--------------------
   fetchAllSubraces: () => ipcRenderer.invoke('fetch-subraces'),
-  insertSubrace: async (subraceData) => await ipcRenderer.invoke('insert-subrace', subraceData),
 
+  fetchAllSubracesByRaceId: async (raceId) => await ipcRenderer.invoke('fetch-subrace-by-id', raceId),
+
+  // ------------------Archetypes------------------
   fetchAllArchetypes: () => ipcRenderer.invoke('fetch-archetypes'),
-  insertArchetype: async (archetypeData) => await ipcRenderer.invoke('insert-archetype', archetypeData),
 
+  // ------------------Player Archetypes------------------
   fetchAllPlayerArchetypes: () => ipcRenderer.invoke('fetch-player-archetypes'),
-  insertPlayerArchetype: async (playerArchetypeData) => await ipcRenderer.invoke('insert-player-archetype', playerArchetypeData),
 
+  // ----------------------Quirks-------------------------
   fetchAllQuirks: () => ipcRenderer.invoke('fetch-quirks'),
-  insertQuirk: async (quirkData) => await ipcRenderer.invoke('insert-quirk', quirkData),
 
+  // -------------------Player Quirks---------------------
   fetchAllPlayerQuirks: () => ipcRenderer.invoke('fetch-player-quirks'),
-  insertPlayerQuirk: async (playerQuirkData) => await ipcRenderer.invoke('insert-player-quirk', playerQuirkData),
 
+  // ----------------------Gears-------------------------
   fetchAllGears: () => ipcRenderer.invoke('fetch-gears'),
-  insertGear: async (gearData) => await ipcRenderer.invoke('insert-gear', gearData),
 
+  // -------------------Player Gears---------------------
   fetchAllPlayerGears: () => ipcRenderer.invoke('fetch-player-gears'),
-  insertPlayerGear: async (playerGearData) => await ipcRenderer.invoke('insert-player-gear', playerGearData),
 
+  // ---------------------Weapons------------------------
   fetchAllWeapons: () => ipcRenderer.invoke('fetch-weapons'),
-  insertWeapon: async (weaponData) => await ipcRenderer.invoke('insert-weapon', weaponData),
 
+  // ------------------Player Weapons--------------------
   fetchAllPlayerWeapons: () => ipcRenderer.invoke('fetch-player-weapons'),
-  insertPlayerWeapon: async (playerWeaponData) => await ipcRenderer.invoke('insert-player-weapon', playerWeaponData),
 
+  // --------------------Enchants-----------------------
   fetchAllEnchants: () => ipcRenderer.invoke('fetch-enchants'),
-  insertEnchant: async (enchantData) => await ipcRenderer.invoke('insert-enchant', enchantData),
 
+  // ------------------Weapon Enchants--------------------
   fetchAllWeaponEnchants: () => ipcRenderer.invoke('fetch-weapon-enchants'),
-  insertWeaponEnchant: async (weaponEnchantData) => await ipcRenderer.invoke('insert-weapon-enchant', weaponEnchantData),
 
+  // ----------------------Powers---------------------
   fetchAllPowers: () => ipcRenderer.invoke('fetch-powers'),
-  insertPower: async (powerData) => await ipcRenderer.invoke('insert-power', powerData),
 
+  // ----------------------Player Powers----------------------
   fetchAllPlayerPowers: () => ipcRenderer.invoke('fetch-player-powers'),
-  insertPlayerPower: async (playerPowerData) => await ipcRenderer.invoke('insert-player-power', playerPowerData),
 
+  // ----------------------Houses----------------------
   fetchAllHouses: () => ipcRenderer.invoke('fetch-houses'),
-  insertHouse: async (houseData) => await ipcRenderer.invoke('insert-house', houseData),
 
+  // ----------------------Character Developments----------------------
   fetchAllCharacterDevelopments: () => ipcRenderer.invoke('fetch-character-developments'),
-  insertCharacterDevelopment: async (charDevData) => await ipcRenderer.invoke('insert-character-development', charDevData),
 
+  // ----------------------PVE----------------------
   fetchAllPves: () => ipcRenderer.invoke('fetch-pves'),
-  insertPve: async (pveData) => await ipcRenderer.invoke('insert-pve', pveData),
 
+  // ----------------------Tournaments----------------------
   fetchAllTournamentPhases: () => ipcRenderer.invoke('fetch-tournament-phases'),
-  insertTournamentPhase: async (tournamentPhaseData) => await ipcRenderer.invoke('insert-tournament-phase', tournamentPhaseData),
 
+  // ----------------------Matches----------------------
   fetchAllMatches: () => ipcRenderer.invoke('fetch-matches'),
-  insertMatch: async (matchData) => await ipcRenderer.invoke('insert-match', matchData),
 
+  // ----------------------Match Events----------------------
   fetchAllMatchEvents: () => ipcRenderer.invoke('fetch-match-events'),
-  insertMatchEvent: async (matchEventData) => await ipcRenderer.invoke('insert-match-event', matchEventData),
 
+  // ----------------------Match Rewards----------------------
   fetchAllMatchRewards: () => ipcRenderer.invoke('fetch-match-rewards'),
-  insertMatchReward: async (matchRewardData) => await ipcRenderer.invoke('insert-match-reward', matchRewardData),
 
+  // ----------------------Events----------------------
   fetchAllEvents: () => ipcRenderer.invoke('fetch-events'),
-  insertEvent: async (eventData) => await ipcRenderer.invoke('insert-event', eventData),
 
+  // ----------------------Rewards----------------------
   fetchAllRewards: () => ipcRenderer.invoke('fetch-rewards'),
-  insertReward: async (rewardData) => await ipcRenderer.invoke('insert-reward', rewardData),
 
+  // ----------------------Character Developments for Players----------------------
   fetchAllPlayerCharDevs: () => ipcRenderer.invoke('fetch-player-chardevs'),
-  insertPlayerCharDev: async (playerCharDevData) => await ipcRenderer.invoke('insert-player-chardev', playerCharDevData),
 });

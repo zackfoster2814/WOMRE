@@ -3,6 +3,7 @@ export type Section = {
   name: string;
   weight: number;
   color: string;
+  trait?: string;
   description?: string;
   word?: string;
   effect?: string;
