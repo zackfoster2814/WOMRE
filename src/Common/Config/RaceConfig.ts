@@ -3,6 +3,7 @@ import { WheelStep } from "../Types/Types.js";
 const getRandomColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 }
+//get all race data
 const racedata = await window.api.fetchAllRaces();
 export const raceWheel: WheelStep = {
   key: "race",
@@ -16,7 +17,7 @@ export const raceWheel: WheelStep = {
       weight: raceData.weight,
       color: getRandomColor(),
       trait: raceData.trait,
-      subrace_wheel: raceData.subrace_wheel,
+      subrace: raceData.subrace_wheel,
       note: raceData.note,
     };
   })
@@ -82,7 +83,24 @@ export const raceWheel: WheelStep = {
 //   Demon: { subrace: "Sins Wheel", trait: "Không có 💀", weight: 3 },
 //   God: { subrace: "Which God?", trait: "Không có 💀", weight: 3 },
 // };
-
+//get all race that have subrace wheel
+const raceWheelBalancedata = await window.api.fetchRacesWithSubraceWheel();
+export const raceWheelBalance:WheelStep ={
+  key: "race",
+  title: "Race",
+  sections: raceWheelBalancedata.map((race: any) => {
+    const raceData = race._dataValues || race.dataValues || race;
+    return {
+      id: raceData.id,
+      name: raceData.name,
+      weight: raceData.weight,
+      color: getRandomColor(),
+      trait: raceData.trait,
+      subrace: raceData.subrace_wheel,
+      note: raceData.note,
+    };
+  })
+}
 // export const raceWheelBalance: WheelStep = {
 //   key: "race",
 //   title: "Race",

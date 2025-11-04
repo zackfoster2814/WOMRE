@@ -7,11 +7,11 @@ contextBridge.exposeInMainWorld('api', {
 
   // -------------------Races--------------------
   fetchAllRaces: () => ipcRenderer.invoke('fetch-races'),
-
+  fetchRacesWithSubraceWheel: () => ipcRenderer.invoke('fetch-races-with-subrace-wheel'),
   // ------------------Subraces--------------------
   fetchAllSubraces: () => ipcRenderer.invoke('fetch-subraces'),
 
-  fetchAllSubracesByRaceId: async (raceId) => await ipcRenderer.invoke('fetch-subrace-by-id', raceId),
+  fetchSubraceById: async (raceId) => await ipcRenderer.invoke('fetch-subrace-by-id', raceId),
 
   // ------------------Archetypes------------------
   fetchAllArchetypes: () => ipcRenderer.invoke('fetch-archetypes'),

@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllMatchRewards } from "../db/match-reward.model.js";
+import { getAllMatchRewards } from "../db/match_reward.model.js";
 
 export function registerMatchRewardIpcHandlers() {
   ipcMain.handle("fetch-match-rewards", async () => {

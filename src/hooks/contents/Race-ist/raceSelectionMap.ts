@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { WheelStep } from "@/Common/Types/Types";
-import { raceConfig, raceWheel } from "@/Common/Config/RaceConfig";
+import { raceWheel } from "@/Common/Config/RaceConfig";
 import { subraceMap } from "@/Common/Config/SubRaceConfig";
 
 interface RaceHandlerParams {
@@ -64,7 +64,7 @@ export const raceSelectionMap: Record<string, RaceHandler> = {
     });
     setCurrentWheel({
       key: "subrace",
-      title: raceConfig[resultName]?.subrace || "Subrace",
+      title: raceWheel[resultName]?.subrace || "Subrace",
       sections: subraceMap[resultName],
     });
     return {

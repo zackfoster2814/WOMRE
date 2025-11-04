@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { WheelStep } from "@/Common/Types/Types";
-import { raceConfig, raceWheel } from "@/Common/Config/RaceConfig";
+import { raceWheel } from "@/Common/Config/RaceConfig";
 import { subraceMap } from "@/Common/Config/SubRaceConfig";
 import { archetypeWheel } from "@/Common/Config/ArchetypeConfig";
 import { quirkCountOptions } from "@/Common/Config/QuirkConfig";
@@ -78,7 +78,7 @@ export const useFlowHandlers = () => {
           if (results.race && subraceMap[results.race]) {
             setCurrentWheel({
               key: "subrace",
-              title: raceConfig[results.race]?.subrace || "Subrace",
+              title: raceWheel[results.race]?.subrace || "Subrace",
               sections: subraceMap[results.race],
             });
             return { success: true, wheelKey: "subrace" };
@@ -215,7 +215,7 @@ export const useFlowHandlers = () => {
           if (results.race && subraceMap[results.race]?.length > 0) {
             return {
               key: "subrace",
-              title: raceConfig[results.race]?.subrace || "Subrace",
+              title: raceWheel[results.race]?.subrace || "Subrace",
               sections: subraceMap[results.race],
             };
           }
