@@ -87,16 +87,28 @@ export function PlayerTables(
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
+        references: {
+            model: 'Races',
+            key: 'id',
+          }
       },
       sub_race_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
+        references: {
+            model: 'Sub_Race',
+            key: 'id',
+        }
       },
       house_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
+        references: {
+            model: 'Houses',
+            key: 'id',
+        }
       },
       base_strength: {
         type: DataTypes.INTEGER,

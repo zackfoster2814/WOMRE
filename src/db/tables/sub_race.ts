@@ -31,6 +31,10 @@ export function SubRaceTables(sequelize: Sequelize, dataTypes: typeof DataTypes)
             type:DataTypes.INTEGER,
             allowNull:false,
             defaultValue:0,
+            references: {
+                model: 'Races',
+                key: 'id',
+            }
         },
         name:{
             type:DataTypes.STRING,

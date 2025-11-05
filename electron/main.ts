@@ -23,6 +23,8 @@ import { registerTournamentPhaseIpcHandlers } from "../src/utils/tournament_phas
 import { registerWeaponEnchantIpcHandlers } from "../src/utils/weapon_enchant.ipcHandler.js";
 import { registerWeaponIpcHandlers } from "../src/utils/weapon.ipcHandler.js";
 import { registerPlayerIpcHandlers } from "../src/utils/player.ipcHandler.js";
+import {registerExtraArchetypesHandlers} from "../src/utils/extra_archetypes.ipcHandler.js";
+import {registerExtraHousesHandlers} from "../src/utils/extra_house.ipcHandler.js";
 import { BrowserView, app, BrowserWindow } from "electron";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -77,6 +79,8 @@ app.whenReady().then(async () => {
       registerQuirkIpcHandlers();
       registerRewardIpcHandlers();
       registerSubraceIpcHandlers();
+      registerExtraArchetypesHandlers();
+      registerExtraHousesHandlers();
       console.log("IPC handlers registered successfully");
     } catch (error) {
       console.error("Failed to register IPC handlers:", error.message);

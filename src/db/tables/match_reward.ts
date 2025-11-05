@@ -15,10 +15,18 @@ export function MatchRewardTables(sequelize: Sequelize, dataTypes: typeof DataTy
         match_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Matches',
+                key: 'id',
+            },
         },
         reward_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Rewards',
+                key: 'id',
+            },
         },
     }, {
         sequelize,

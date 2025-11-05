@@ -17,10 +17,18 @@ export function PlayerPowerTables(sequelize: Sequelize, dataTypes: typeof DataTy
         player_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Players',
+                key: 'id',
+            }
         },
         power_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references:{
+                model:'Powers',
+                key:'id'
+            }
         },
     }, {
         sequelize,

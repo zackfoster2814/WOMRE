@@ -17,10 +17,18 @@ export function PlayerArchetypeTables(sequelize: Sequelize, dataTypes: typeof Da
         player_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Players',
+                key: 'id',
+            },
         },
         archetype_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Archetypes',
+                key: 'id',
+            },
         },
     }, {
         sequelize,

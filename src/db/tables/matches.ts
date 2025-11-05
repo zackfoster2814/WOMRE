@@ -41,6 +41,10 @@ export function MatchTables(sequelize: Sequelize, dataTypes: typeof DataTypes): 
             type: DataTypes.INTEGER,
             allowNull: false,
             defaultValue: 0,
+            references: {
+                model: 'tournament_phase',
+                key: 'id',
+            },
         },
 
         player_a_id: {

@@ -27,6 +27,9 @@ export function RelationsConfig(sequelize: Sequelize) {
     Sub_Race,
     Player_Pve,
     tournament_phase,
+    ExtraHouse,
+    ExtraArchetypes,
+    Houses,
   } = sequelize.models;
 
   // Players <-> Powers
@@ -197,5 +200,24 @@ export function RelationsConfig(sequelize: Sequelize) {
   tournament_phase.hasMany(Matches, {
     foreignKey: "phase_id",
     as: "matches",
+  });
+  // ExtraArchetypes -> Archetypes (Many-to-One)
+  ExtraArchetypes.belongsTo(Archetypes, {
+    foreignKey: "archetype_id",
+    as: "archetype",
+  });
+  Archetypes.hasMany(ExtraArchetypes, {
+    foreignKey: "archetype_id",
+    as: "extra_archetypes",
+  });
+
+  // ExtraHouse -> Houses (Many-to-One)
+  ExtraHouse.belongsTo(Houses, {
+    foreignKey: "house_id",
+    as: "house",
+  });
+  Houses.hasMany(ExtraHouse, {
+    foreignKey: "house_id",
+    as: "extra_houses",
   });
 }

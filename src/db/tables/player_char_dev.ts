@@ -16,10 +16,18 @@ export function PlayerCharDevTables(sequelize: Sequelize, dataTypes: typeof Data
         player_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Players',
+                key: 'id',
+            }
         },
         char_dev_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'char_dev',
+                key: 'id',
+            }
         },
     }, {
         sequelize,

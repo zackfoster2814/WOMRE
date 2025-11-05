@@ -28,6 +28,8 @@ import { TournamentPhaseTables } from "./tables/tournament_phase.js";
 import { WeaponEnchantTables } from "./tables/weapon_enchants.js";
 import { WeaponTables } from "./tables/weapons.js";
 import { Player_PveTables } from "./tables/player_pve.js";
+import { ExtraArchetypeTables } from "./tables/extra_archetypes.js";
+import { ExtraHouseTables } from "./tables/extra_house.js";
 
 interface DbConnection {
   sequelize: Sequelize;
@@ -82,12 +84,15 @@ TournamentPhaseTables(sequelize, DataTypes);
 WeaponEnchantTables(sequelize, DataTypes);
 WeaponTables(sequelize, DataTypes);
 Player_PveTables(sequelize, DataTypes);
+ExtraArchetypeTables(sequelize, DataTypes);
+ExtraHouseTables(sequelize, DataTypes);
 
 RelationsConfig(sequelize);
 
 export default async function initDb() {
+  await sequelize.query('PRAGMA foreign_keys = ON;');
   await sequelize.authenticate();
-  await sequelize.sync();
+  await sequelize.sync({force:true});
   console.log("✅ Database synced");
 }
 
