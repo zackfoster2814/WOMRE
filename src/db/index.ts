@@ -90,9 +90,9 @@ ExtraHouseTables(sequelize, DataTypes);
 RelationsConfig(sequelize);
 
 export default async function initDb() {
-  await sequelize.query('PRAGMA foreign_keys = ON;');
+  // await sequelize.query('PRAGMA foreign_keys = ON;');
   await sequelize.authenticate();
-  await sequelize.sync({force:true});
+  await sequelize.sync();
   console.log("✅ Database synced");
 }
 

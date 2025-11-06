@@ -30,7 +30,7 @@ contextBridge.exposeInMainWorld('api', {
 
   // -------------------Player Gears---------------------
   fetchAllPlayerGears: () => ipcRenderer.invoke('fetch-player-gears'),
-
+  fetchGearByLegacy: async (id) => await ipcRenderer.invoke('fetch-gear-by-legacy', id),
   // ---------------------Weapons------------------------
   fetchAllWeapons: () => ipcRenderer.invoke('fetch-weapons'),
 
@@ -82,14 +82,9 @@ contextBridge.exposeInMainWorld('api', {
   // ----------------------Extra Houses----------------------
   fetchAllExtraHouses: () => ipcRenderer.invoke('get-all-extra-houses'),
   fetchExtraHouseById: async (id) => await ipcRenderer.invoke('get-extra-house-by-id', id),
-  createExtraHouse: async (data) => await ipcRenderer.invoke('create-extra-house', data),
-  updateExtraHouse: async (id, data) => await ipcRenderer.invoke('update-extra-house', { id, data }),
-  deleteExtraHouse: async (id) => await ipcRenderer.invoke('delete-extra-house', id),
+  
 
   // ----------------------Extra Archetypes----------------------
   fetchAllExtraArchetypes: () => ipcRenderer.invoke('get-all-extra-archetypes'),
   fetchExtraArchetypeById: async (id) => await ipcRenderer.invoke('get-extra-archetype-by-id', id),
-  createExtraArchetype: async (data) => await ipcRenderer.invoke('create-extra-archetype', data),
-  updateExtraArchetype: async (id, data) => await ipcRenderer.invoke('update-extra-archetype', { id, data }),
-  deleteExtraArchetype: async (id) => await ipcRenderer.invoke('delete-extra-archetype', id),
 });

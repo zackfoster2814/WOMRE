@@ -293,8 +293,8 @@ INSERT INTO pve_enemies VALUES(1,'White Walker',10,8,6,4,2,0,'Với một Round 
 INSERT INTO pve_enemies VALUES(2,'Sir Vilhelm',6,7,3,5,8,7,'0','Nhận Archetype "Devotee"','Không có gì xảy ra.','2,78');
 INSERT INTO pve_enemies VALUES(3,'Sister Friede',5,9,4,7,9,6,'Với một Round thua, Stat tiếp theo của Sister Friede sẽ được +1','Nhận Archetype "Paladin"','Không có gì xảy ra.','2,78');
 INSERT INTO pve_enemies VALUES(4,'Darkeater Midir',9,6,10,7,8,7,'Đối thủ nhận -3 Dura','Nhận vòng quay Dragon Sub-race và nhận hiệu ứng từ đó.','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(5,'Slave Knight Gael',10,7,11,8,9,8,0,'Nhận Archetype "Gigachad"','Không có gì xảy ra.','2',78');
-INSERT INTO pve_enemies VALUES(6,'Lesser Devils',5,5,5,4,4,4,'0,'Nhận +1 Strength và +1 Durability.','Mất ngẫu nhiên 1 Power.','2,78');
+INSERT INTO pve_enemies VALUES(5,'Slave Knight Gael',10,7,11,8,9,8,0,'Nhận Archetype "Gigachad"','Không có gì xảy ra.','2','78');
+INSERT INTO pve_enemies VALUES(6,'Lesser Devils',5,5,5,4,4,4,0,'Nhận +1 Strength và +1 Durability.','Mất ngẫu nhiên 1 Power.','2,78');
 INSERT INTO pve_enemies VALUES(7,'Pack of Wolves',5,5,4,4,5,1,'Critical Strike','Nhận power "Critical Strike". Nếu đã có power này, nhận +1 Vào Stat cao nhất','Nhận -1 Strength.','2,78');
 INSERT INTO pve_enemies VALUES(8,'Elusive Elf',3,7,2,6,4,4,'Mỗi round thua trong combat, "Elusive Elf" có 20% nhận được 1 điểm','Nhận power "Evasion".','Nhận -1 Speed.','2,78');
 INSERT INTO pve_enemies VALUES(9,'Treasure Goblin',1,9,9,5,1,1,'"Treasure Goblin" Khởi đầu với 1 điểm.','Nhận 1 PvP Rewards.','Không có gì xảy ra.','2,78');
