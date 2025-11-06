@@ -1,6 +1,5 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
-
 INSERT INTO Players VALUES(1,1,'Hinaso1','',18,112,15,1,7,6,8,5,6,6,0,0,0,0,0,'','',0);
 INSERT INTO Players VALUES(2,2,'@Gilgamesh2202','',15,83,6,7,6,6,6,8,8,8,0,0,0,0,0,'','',0);
 INSERT INTO Players VALUES(3,3,'Gyro Zeppeli','',14,14,1,6,6,6,5,10,7,7,0,0,0,0,0,'','',0);
@@ -16,12 +15,11 @@ INSERT INTO Players VALUES(12,12,'Nagi','',17,110,13,6,6,6,4,4,10,10,0,0,0,0,0,'
 INSERT INTO Players VALUES(13,13,'jcl2808','',2,12,5,6,9,6,6,7,7,7,0,0,0,0,0,'','',0);
 INSERT INTO Players VALUES(14,14,'Seki','',19,117,12,4,8,10,5,4,7,7,0,0,0,0,0,'','',0);
 INSERT INTO Players VALUES(15,15,'Lười (lazbu2501)','',10,10,14,8,8,4,10,7,9,9,0,0,0,0,0,'','',0);
-
 INSERT INTO archetypes VALUES(1,'Warrior of Sunlight','Nhận Power "Sacred Fire" và "Fair Duel"','1,5','');
 INSERT INTO archetypes VALUES(2,'Spy','Quay 1 Gia tộc để "lấy tình báo", nhận +1 all stat khi bắt đầu trận đánh với người đến từ Gia tộc đó.',2,'');
 INSERT INTO archetypes VALUES(3,'Knight of Gods','Nhận +1 all Stats và Gear "Holy Symbol"','1,5','');
 INSERT INTO archetypes VALUES(4,'Guardian of Demons','Nhận +4 vào stat thấp nhất và +3 vào stat cao nhất. Nhận "Demon''s Sin" Wheel.','1,5','');
-INSERT INTO archetypes VALUES(5,'NPC 💀','-1 all stats và không thể có "Character Development". Bất kể những vòng quay sau có Char Dev cũng không được nhận.','3,4','');
+INSERT INTO archetypes VALUES(5,'NPC ','-1 all stats và không thể có "Character Development". Bất kể những vòng quay sau có Char Dev cũng không được nhận.','3,4','');
 INSERT INTO archetypes VALUES(6,'Slayer','Chọn 1 tộc để Slay. Khi đối đầu với tộc đó, nhận +2 Strength, +2 BIQ và +1 Martial Arts.','2,4','');
 INSERT INTO archetypes VALUES(7,'Gigachad','Nhận +1 all stats khi đối đầu với tộc có thứ hạng cao hơn và -1 all stats khi đối đầu với tộc có thứ hạng thấp hơn trong vòng quay Race.','2,4','');
 INSERT INTO archetypes VALUES(8,'Dark Magician','Nhận 2 Power và bạn thuộc về House "Dark Brotherhood". Không nhận vòng quay House nữa.','1,3','');
@@ -65,7 +63,6 @@ INSERT INTO archetypes VALUES(45,'Gambler Bloodline',unistr('Ở những vòng q
 INSERT INTO archetypes VALUES(46,'Linh Mục','Nhận Power "Analysis Sins" và +1 IQ',3,'');
 INSERT INTO archetypes VALUES(47,'Cha Xứ','Nhận Power "Cleaning Sins" và +1 BIQ',3,'');
 INSERT INTO archetypes VALUES(48,'Quỷ Nhà Thờ','Trong Combat: Round Thứ 3(Dura) sẽ được +3',3,'');
-
 INSERT INTO char_dev VALUES(1,'Armed to the Teeth','Nhận 3 Normal Gear ngẫu nhiên.','1,7','');
 INSERT INTO char_dev VALUES(2,'Training Arc','Nhận +1 all stats.',2,'');
 INSERT INTO char_dev VALUES(3,'In Love','Quay một player làm "Lover" và nhận +1 vào Stat mà người đó cao nhất.',2,'');
@@ -74,9 +71,9 @@ INSERT INTO char_dev VALUES(5,'No more family','Nhận thêm 2 Power.','1,2','')
 INSERT INTO char_dev VALUES(6,'Depression','Nhận -3 vào chỉ số cao nhất khi nhận Char Dev này.','2,4','');
 INSERT INTO char_dev VALUES(7,'Seeking Wisdom','Nhận +4 IQ.','2,2','');
 INSERT INTO char_dev VALUES(8,'Inversion','Đảo ngược tất cả base stat. (10<->1, 9<->2, 8<->3, 7<->4,6<->5,...)','0,9','');
-INSERT INTO char_dev VALUES(9,'Isekai','Quay lại từ đầu 💀','0,9','');
+INSERT INTO char_dev VALUES(9,'Isekai','Quay lại từ đầu ','0,9','');
 INSERT INTO char_dev VALUES(10,'Final Reserves','Khi ở nhánh thua, +1 all stats. Khi đến vòng 16 người nhánh thua, loại bỏ hiệu ứng này và nhận 2 random Power.','1,6','');
-INSERT INTO char_dev VALUES(11,'Lose Control','Mất tất cả Power. 💀','1,7','');
+INSERT INTO char_dev VALUES(11,'Lose Control','Mất tất cả Power. ','1,7','');
 INSERT INTO char_dev VALUES(12,'Prime time','Nhận +2 all stats. Vô hiệu hóa khi xuống nhánh thua và chung kết.','1,5','');
 INSERT INTO char_dev VALUES(13,'Fate''s Trick','Có 50% khả năng nhân đôi stat thấp nhất và 50% khả năng chia đôi stat cao nhất. (làm tròn lên)','3,3','');
 INSERT INTO char_dev VALUES(14,'Old Age','Nhận +3 IQ và -1 mọi chỉ số còn lại.','2,8','');
@@ -84,20 +81,20 @@ INSERT INTO char_dev VALUES(15,'Creator''s Favor','"Đấng Sáng Tạo" tùy ý
 INSERT INTO char_dev VALUES(16,'Become Woke','Nhận -3 IQ, +1 Strength và +1 Durability. ',3,'');
 INSERT INTO char_dev VALUES(17,'Demonic Pact','Hiến tế 1 base stat ngẫu nhiên (giảm xuống 0) để nhận 3 Power.','2,2','');
 INSERT INTO char_dev VALUES(18,'Mentor','Nhận thêm 1 Power từ 1 Player ngẫu nhiên. (Mục tiêu được chọn phải còn sống và mục tiêu đó sẽ mất power được chọn)','2,8','');
-INSERT INTO char_dev VALUES(19,'It is what it is','Mất hết toàn bộ vũ khí của mình. 💀','1,5','');
+INSERT INTO char_dev VALUES(19,'It is what it is','Mất hết toàn bộ vũ khí của mình. ','1,5','');
 INSERT INTO char_dev VALUES(20,'Make love','Quay 1 wheel bao gồm toàn bộ player hiện tại để chọn ra người tình. Có khả năng tạo ra Race mới ở mùa sau.','1,8','');
 INSERT INTO char_dev VALUES(21,'Pessimistic','Khi xuống nhánh thua, -1 all stats.','1,6','');
-INSERT INTO char_dev VALUES(22,'Finality','Race của bạn tuyệt chủng trong mùa này. 💀','0,8','');
+INSERT INTO char_dev VALUES(22,'Finality','Race của bạn tuyệt chủng trong mùa này. ','0,8','');
 INSERT INTO char_dev VALUES(23,'Last Standing','Khi là người duy nhất còn lại của "Gia tộc" (House), +2 all stats.','1,3','');
 INSERT INTO char_dev VALUES(24,'Furry',unistr('(1).Trong Combat: Nhận +1 all stats khi đấu với Werebeast\u000a(2).Nếu thua Werebeast, nhận -1 All Stats.'),'1,9','');
 INSERT INTO char_dev VALUES(25,'Abused','Nhận -1 IQ, +3 Durability. ','3,1','');
 INSERT INTO char_dev VALUES(26,'A Big Gift!','Nhận 1 random Legacy Gear.','1,4','');
 INSERT INTO char_dev VALUES(27,'Become Vegetarian','Nhận -2 Durability.',4,'');
 INSERT INTO char_dev VALUES(28,'Creator''s Limitation','"Đấng Sáng Tạo" tùy ý nerf cho nhân vật. (Không thay đổi quá 2 chỉ số). (Sẽ có danh sách các hành động có thể thực hiện)',2,'');
-INSERT INTO char_dev VALUES(29,'Braindead','Nhận -4 IQ. 💀',3,'');
+INSERT INTO char_dev VALUES(29,'Braindead','Nhận -4 IQ. ',3,'');
 INSERT INTO char_dev VALUES(30,'Blessed by Chaos','Kéo base stat của chỉ số cao nhất xuống 1, sau đó nhận thêm 2 Character Development.',3,'');
-INSERT INTO char_dev VALUES(31,'Lost an Arm','Nhận -4 Martial Arts 💀',3,'');
-INSERT INTO char_dev VALUES(32,'Lost a Leg','Nhận -4 Speed 💀',3,'');
+INSERT INTO char_dev VALUES(31,'Lost an Arm','Nhận -4 Martial Arts ',3,'');
+INSERT INTO char_dev VALUES(32,'Lost a Leg','Nhận -4 Speed ',3,'');
 INSERT INTO char_dev VALUES(33,'Obtain a Cultivation Technique','Nhận +2 BIQ, +3 Martial Arts.','1,9','');
 INSERT INTO char_dev VALUES(34,'Become King Slayer',unistr('(1).Nhận Archetype "Slayer". Nếu bạn đang là một "Slayer", chọn thêm 1 tộc nữa.\u000a(2).Trong Combat: Nếu đối thủ có Char Dev "King''s Landing", nhận +1 All Stats.'),1,'');
 INSERT INTO char_dev VALUES(35,'King''s Landing',unistr('(1).Khi bạn bị loại, tất cả mọi người còn sống trong "Gia tộc" của bạn sẽ được nhận 1 Power.\u000a(2).Trong Combat: Nếu bạn không có Archetype "Devotee", Không thuộc race "God" hoặc "Demi God", nhận -2 điểm khởi đầu và -10 IQ'),'0,5','');
@@ -113,7 +110,6 @@ INSERT INTO char_dev VALUES(44,'Nghe Bài thú tội','50% Nhận Char Dev "Brai
 INSERT INTO char_dev VALUES(45,'Trở thành Linh Mục','Nhận Archetype "Linh Mục"',3,'');
 INSERT INTO char_dev VALUES(46,'Trở Thành Cha Xứ','Nhận Archetype "Cha Xứ"',3,'');
 INSERT INTO char_dev VALUES(47,'Trở thành Quỷ Nhà Thờ','Nhận Archetype "Quỷ Nhà Thờ"',3,'');
-
 INSERT INTO enchants VALUES(1,'Powerful','Nhận thêm +1 vào Str','5,9');
 INSERT INTO enchants VALUES(2,'Swifty','Nhận thêm +1 vào Spd','5,9');
 INSERT INTO enchants VALUES(3,'Sturdy','Nhận thêm +1 vào Dura','5,9');
@@ -145,7 +141,6 @@ INSERT INTO houses VALUES(13,'College of Winterhold','You know, if you have the 
 INSERT INTO houses VALUES(14,'Dessendre Family',unistr('"For those who come after."\u000a"When one falls, we continue."'),unistr('Nhận Power "Artist"\u000a50% Nhận Clair, 50% Nhận Obscur'),'','Người của Gia Đình Dessendre khi đến vòng 16 sẽ nhận "Clair" hoặc "Obscur" tùy vào cái mà họ còn thiếu.');
 INSERT INTO houses VALUES(15,'Painted World of Ariandel','The cold and gentle painted world of Ariandel.',unistr('Nhận 2 Round PvE là "Sir Vilhelm" và "Sister Friede"\u000aVới mỗi trận thua PvE, nhận +1 Dura và +1 BIQ'),'','Người của Bức Họa Ariandel khi tới vòng 16 sẽ lần nữa nhận 2 Round PvE là "Darkeater Midir" và "Slave Knight Gael."');
 INSERT INTO houses VALUES(16,'Tracen Academy','Eclipse first, the rest nowhere',unistr('Học Viện chỉ nhận Uma.\u000aNhận ngẫu nhiên từ 1->3 Strength, 1->3 Speed và 1->3 Durability.'),'','Học viên của Học Viện Tracen tới vòng 16 sẽ được nhận ngẫu nhiên từ 1->3 Strength, 1->3 Speed và 1->2 Power.');
-
 INSERT INTO players_archetypes VALUES(1,36);
 INSERT INTO players_archetypes VALUES(2,36);
 INSERT INTO players_archetypes VALUES(3,26);
@@ -162,7 +157,6 @@ INSERT INTO players_archetypes VALUES(12,43);
 INSERT INTO players_archetypes VALUES(13,24);
 INSERT INTO players_archetypes VALUES(14,48);
 INSERT INTO players_archetypes VALUES(15,25);
-
 INSERT INTO player_char_dev VALUES(1,36);
 INSERT INTO player_char_dev VALUES(2,36);
 INSERT INTO player_char_dev VALUES(3,26);
@@ -179,7 +173,6 @@ INSERT INTO player_char_dev VALUES(13,26);
 INSERT INTO player_char_dev VALUES(13,24);
 INSERT INTO player_char_dev VALUES(14,31);
 INSERT INTO player_char_dev VALUES(15,8);
-
 INSERT INTO powers VALUES(1,'Artist','Khi xuống nhánh thua, Stat lẻ của bạn được +1. (Tính theo chỉ số quay được từ đầu - Base Stats)','');
 INSERT INTO powers VALUES(2,'Writer','Khi xuống nhánh thua, Stat chẵn của bạn được +1. (Tính theo chỉ số quay được từ đầu - Base Stats)','');
 INSERT INTO powers VALUES(3,'Critical Strike',unistr('Với mỗi round thắng, bạn có 20% nhận thêm 1 điểm.\u000aThứ tự ưu tiên: Ashina Skill - Crit - Gambler'),'');
@@ -187,11 +180,11 @@ INSERT INTO powers VALUES(4,'Red Shift/LP1211-M','Trong combat: Nếu bạn th�
 INSERT INTO powers VALUES(5,'Shooting for Victory','Trong combat: Nếu bạn thắng ít nhất 1 và thua ít nhất 1 trong 3 round đầu tiên (Strength/Speed/Durability), nhận +1 IQ, +1 BIQ và +2 MA.','');
 INSERT INTO powers VALUES(6,'Let''s Pump Some Iron!','Trong combat: Nếu bạn thắng chính xác 1 trong 3 round đầu tiên (Strength/Speed/Durability), nhận +2 IQ, +2 BIQ và +2 MA.','');
 INSERT INTO powers VALUES(7,'U=ma2','Trong combat: Nhận +5 Durability nếu bạn thua round Speed.','');
-INSERT INTO powers VALUES(8,'Ice Liquefactors','Hóa lỏng băng 💀???','');
+INSERT INTO powers VALUES(8,'Ice Liquefactors','Hóa lỏng băng ???','');
 INSERT INTO powers VALUES(9,'Crimson Poison','Đối thủ -1 Durability, giảm thêm 1 với mỗi 2 Power sở hữu.','');
 INSERT INTO powers VALUES(10,'Bloody Strike','Nhận -1 All Stats. Với mỗi Round thắng,+1 vào Stat đó (Áp dụng sau combat)','');
 INSERT INTO powers VALUES(11,'Divine Smite','Nhận +1 Điểm nếu thắng ở Round MA. Xảy ra sau cùng, sau khi "Kiếm Phái Ashina".','');
-INSERT INTO powers VALUES(12,'Fire Control','Có thể điều khiển được một ngọn lửa bật hoặc tắt. Ngoài ra không tác dụng 💀','');
+INSERT INTO powers VALUES(12,'Fire Control','Có thể điều khiển được một ngọn lửa bật hoặc tắt. Ngoài ra không tác dụng ','');
 INSERT INTO powers VALUES(13,'Thunder Orb','Đối thủ giảm 2 Durability.','');
 INSERT INTO powers VALUES(14,'Water Breathing','Thở dưới nước.','');
 INSERT INTO powers VALUES(15,'Golden Vow','Bản thân khởi đầu trận đấu với +1 điểm.','');
@@ -201,7 +194,7 @@ INSERT INTO powers VALUES(18,'Mind Control','Nhận +1 all stats khi đối đ�
 INSERT INTO powers VALUES(19,'Blood Manipulation','Nhận +1 strength khi đối đầu với tất cả kẻ địch trừ "Skeleton" và "Spirit".','');
 INSERT INTO powers VALUES(20,'Sonic Scream','Đối thủ nhận -1 Durability.','');
 INSERT INTO powers VALUES(21,'Drunken Boxing','Nhận -1 IQ, -1 Speed và +3 MA.','');
-INSERT INTO powers VALUES(22,'Hey Ya!','Bạn được cổ vũ tinh thần 💀.','x');
+INSERT INTO powers VALUES(22,'Hey Ya!','Bạn được cổ vũ tinh thần .','x');
 INSERT INTO powers VALUES(23,'Time Travel','Re-spin lại chỉ số thấp nhất 1 lần.','');
 INSERT INTO powers VALUES(24,'Cursed','Re-spin lại chỉ số cao nhất 1 lần.','');
 INSERT INTO powers VALUES(25,'Divine Lightning','Nhận +1 Strength, +1 Speed và +1 MA, tăng lên +2 nếu chiến đấu với Demon.','');
@@ -211,9 +204,9 @@ INSERT INTO powers VALUES(28,'Evasion','Mỗi round thua trong combat, có khả
 INSERT INTO powers VALUES(29,'Enhanced Hearing','Nhận +2 MA, -1 all stats nếu đối thủ dùng nhạc cụ và -2 nếu đối thủ có Power liên quan tới âm thanh.','');
 INSERT INTO powers VALUES(30,'Rampage','Sau mỗi trận thắng, có 25% khả năng nhận +1 all stats.','');
 INSERT INTO powers VALUES(31,'Bloodlust','Sau mỗi trận thắng, nhận -1 IQ, -1 MA và +1 Strength, +1 Speed, +1 Durability.','');
-INSERT INTO powers VALUES(32,'Rickrolling','Chắc không cần giải thích đâu nhỉ 💀','');
+INSERT INTO powers VALUES(32,'Rickrolling','Chắc không cần giải thích đâu nhỉ ','');
 INSERT INTO powers VALUES(33,'Power Absorption','Sau mỗi trận thắng, hấp thụ 1 Power ngẫu nhiên của đối thủ.','');
-INSERT INTO powers VALUES(34,'Hand Washing','Tay sạch 💀','');
+INSERT INTO powers VALUES(34,'Hand Washing','Tay sạch ','');
 INSERT INTO powers VALUES(35,'Power Negation','Trong Combat: Vô hiệu hóa 1 Power ngẫu nhiên của đối thủ.','');
 INSERT INTO powers VALUES(36,'Stat Absorption','Sau mỗi trận thắng, +1 cho bản thân vào chỉ số mà đối thủ có cao nhất.','');
 INSERT INTO powers VALUES(37,'Invulnerability','Nhận +2 Durability.','');
@@ -226,13 +219,13 @@ INSERT INTO powers VALUES(43,'Age Manipulation','Đối thủ +1 IQ, -1 mọi st
 INSERT INTO powers VALUES(44,'Enlarging','Nhận +2 Strength, +2 Durability, -4 Speed.','');
 INSERT INTO powers VALUES(45,'Shrinking','Nhận +4 Speed, -2 Strength, -2 Durability.','');
 INSERT INTO powers VALUES(46,'Garlic Breath','Nhận +1 all stats nếu đối thủ là Vampire. ','');
-INSERT INTO powers VALUES(47,'The Goat','Bạn là dê! 💀','');
+INSERT INTO powers VALUES(47,'The Goat','Bạn là dê! ','');
 INSERT INTO powers VALUES(48,'Fancy Feet','Nhận -1 Durability nhưng vô hiệu hóa vũ khí của đối phương.','');
 INSERT INTO powers VALUES(49,'Weapon Enhancing','Thêm +1 vào mỗi buff tăng stat ở vũ khí, thêm -1 vào mỗi debuff giảm stat.','');
 INSERT INTO powers VALUES(50,'Body Enhancing','Nhận +1 Strength, +1 Speed, +1 Durability.','');
 INSERT INTO powers VALUES(51,'Clear Mind','Nhận +2 IQ.','');
 INSERT INTO powers VALUES(52,'Petrification','Đối thủ nhận -3 Speed.','');
-INSERT INTO powers VALUES(53,'Blowing Leaves','Thổi lá bay đi 💀','');
+INSERT INTO powers VALUES(53,'Blowing Leaves','Thổi lá bay đi ','');
 INSERT INTO powers VALUES(54,'Force Field','Đối thủ nhận -1 Speed, -1 MA.','');
 INSERT INTO powers VALUES(55,'Anti-Magic Barrier','Trong combat: Vô hiệu hóa 2 Power của đối thủ, nhận -1 Durability.','');
 INSERT INTO powers VALUES(56,'Black Magic','Trong combat: Đối thủ nhận -2 vào một stat ngẫu nhiên.','');
@@ -245,13 +238,13 @@ INSERT INTO powers VALUES(62,'Rising tide','Nhận +1 MA','');
 INSERT INTO powers VALUES(63,'Seismic',' Đối thủ -1 MA','');
 INSERT INTO powers VALUES(64,'Earth-Shaking','Đất đá rung chuyển.','');
 INSERT INTO powers VALUES(65,'Disarmament','Trong combat: Vô hiệu hóa vũ khí đối thủ ','');
-INSERT INTO powers VALUES(66,'Night Vision','Có thể nhìn trong bóng tối. 💀','');
+INSERT INTO powers VALUES(66,'Night Vision','Có thể nhìn trong bóng tối. ','');
 INSERT INTO powers VALUES(67,'Unstoppable','Miễn nhiễm với mọi debuff giảm stat từ đối thủ.','');
-INSERT INTO powers VALUES(68,'Gotta go Fast','Bạn là Sonic 💀','');
+INSERT INTO powers VALUES(68,'Gotta go Fast','Bạn là Sonic ','');
 INSERT INTO powers VALUES(69,'Fair Duel','Bạn và đối thủ miễn nhiễm với mọi hiệu ứng giảm stat từ nhau.','');
 INSERT INTO powers VALUES(70,'Uno Reverse Card','Trong Combat: Mọi debuff giảm stat từ đối thủ sẽ chuyển sang áp dụng lên chính hắn.','');
 INSERT INTO powers VALUES(71,'Burning Hand','Nhận +1 Strength. ','');
-INSERT INTO powers VALUES(72,'Tick-tock','Cơ thể bạn phát ra tiếng của đồng hồ. 💀','');
+INSERT INTO powers VALUES(72,'Tick-tock','Cơ thể bạn phát ra tiếng của đồng hồ. ','');
 INSERT INTO powers VALUES(73,'Frost Armor','Nhận +1 Durability.','');
 INSERT INTO powers VALUES(74,'Acid-Throated','Cổ họng đầy Axit, khi thua trận khiến -2 Durability cho đối thủ.','');
 INSERT INTO powers VALUES(75,'Lightning Enchant','Nhận +2 Speed','');
@@ -270,7 +263,7 @@ INSERT INTO powers VALUES(87,'Ballet Dancing','Múa dẻo 💃','');
 INSERT INTO powers VALUES(88,'Luck Manipulation','Trong Combat: Từ vòng 64, trước mỗi trận combat, có 15% khả năng nhận +1 all stats và 5% khả năng nhận +2 all stats.','');
 INSERT INTO powers VALUES(89,'Tree Bound','Bị -1 All Stat không phải Durability, +5 vào Durability','');
 INSERT INTO powers VALUES(90,'Scrying','Trong Combat: Đối thủ có 10% bị -4 Stat mạnh nhất.','');
-INSERT INTO powers VALUES(91,'Baldening','Khiến đối thủ bị rụng hết tóc. 💀','');
+INSERT INTO powers VALUES(91,'Baldening','Khiến đối thủ bị rụng hết tóc. ','');
 INSERT INTO powers VALUES(92,'Cold Breeze','Mát lạnh!','');
 INSERT INTO powers VALUES(93,'Return to Sender','Sau Combat thua, -2 stat cao nhất của đối thủ. ','');
 INSERT INTO powers VALUES(94,'Bucking Bronco','Round Martial Arts thắng và thắng trận sẽ nhận +1 Martial Arts. (Stack)','');
@@ -296,44 +289,42 @@ INSERT INTO powers VALUES(113,'Quay tay ra bài','Sau khi combat với người 
 INSERT INTO powers VALUES(114,'Ice Spike','Đối thủ nhận -2 Durability.','');
 INSERT INTO powers VALUES(115,'Bash','Trong combat: Sau mỗi round thắng, đối thủ có 35% bị -3 vào chỉ số ở round kế tiếp.','');
 INSERT INTO powers VALUES(116,'Devour','Sau khi chiến thắng 1 trận PvP ở NHÁNH THUA, cướp 1 Power từ người thua cuộc.','');
-
 INSERT INTO pve_enemies VALUES(1,'White Walker',10,8,6,4,2,0,'Với một Round thắng, Stat tiếp theo của White Walker sẽ được +2','Nhận Archetype "Knight of Gods"','Mất hết toàn bộ Power','2,78');
-INSERT INTO pve_enemies VALUES(2,'Sir Vilhelm',6,7,3,5,8,7,'Không có','Nhận Archetype "Devotee"','Không có gì xảy ra.','2,78');
+INSERT INTO pve_enemies VALUES(2,'Sir Vilhelm',6,7,3,5,8,7,'0','Nhận Archetype "Devotee"','Không có gì xảy ra.','2,78');
 INSERT INTO pve_enemies VALUES(3,'Sister Friede',5,9,4,7,9,6,'Với một Round thua, Stat tiếp theo của Sister Friede sẽ được +1','Nhận Archetype "Paladin"','Không có gì xảy ra.','2,78');
 INSERT INTO pve_enemies VALUES(4,'Darkeater Midir',9,6,10,7,8,7,'Đối thủ nhận -3 Dura','Nhận vòng quay Dragon Sub-race và nhận hiệu ứng từ đó.','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(5,'Slave Knight Gael',10,7,11,8,9,8,'Không có','Nhận Archetype "Gigachad"','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(6,'Lesser Devils',5,5,5,4,4,4,'Không có','Nhận +1 Strength và +1 Durability.','Mất ngẫu nhiên 1 Power.','2,78');
+INSERT INTO pve_enemies VALUES(5,'Slave Knight Gael',10,7,11,8,9,8,0,'Nhận Archetype "Gigachad"','Không có gì xảy ra.','2','78');
+INSERT INTO pve_enemies VALUES(6,'Lesser Devils',5,5,5,4,4,4,0,'Nhận +1 Strength và +1 Durability.','Mất ngẫu nhiên 1 Power.','2,78');
 INSERT INTO pve_enemies VALUES(7,'Pack of Wolves',5,5,4,4,5,1,'Critical Strike','Nhận power "Critical Strike". Nếu đã có power này, nhận +1 Vào Stat cao nhất','Nhận -1 Strength.','2,78');
 INSERT INTO pve_enemies VALUES(8,'Elusive Elf',3,7,2,6,4,4,'Mỗi round thua trong combat, "Elusive Elf" có 20% nhận được 1 điểm','Nhận power "Evasion".','Nhận -1 Speed.','2,78');
 INSERT INTO pve_enemies VALUES(9,'Treasure Goblin',1,9,9,5,1,1,'"Treasure Goblin" Khởi đầu với 1 điểm.','Nhận 1 PvP Rewards.','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(10,'Red Buff',6,2,6,3,6,6,'Không có','Nhận +1 Strength và +1 Martial Arts.','Nhận -1 Martial Arts.','2,78');
-INSERT INTO pve_enemies VALUES(11,'Blue Buff',6,2,6,3,6,6,'Không có','Nhận +1 IQ và +1 BIQ.','Nhận -1 IQ.','2,78');
-INSERT INTO pve_enemies VALUES(12,'One-eyed Orge',7,3,7,3,7,3,'Không có','Nhận +2 Strength.','Nhận -1 Strength.','2,78');
+INSERT INTO pve_enemies VALUES(10,'Red Buff',6,2,6,3,6,6,0,'Nhận +1 Strength và +1 Martial Arts.','Nhận -1 Martial Arts.','2,78');
+INSERT INTO pve_enemies VALUES(11,'Blue Buff',6,2,6,3,6,6,0,'Nhận +1 IQ và +1 BIQ.','Nhận -1 IQ.','2,78');
+INSERT INTO pve_enemies VALUES(12,'One-eyed Orge',7,3,7,3,7,3,0,'Nhận +2 Strength.','Nhận -1 Strength.','2,78');
 INSERT INTO pve_enemies VALUES(13,'Mimic Tear','?','?','?','?','?','?','100% giống y hệt người đánh (bao gồm cả archetype, power, char dev...).','Nhận 1 Legacy Gear.','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(14,'Jiangshi',5,5,5,5,5,5,'Không có','Mất 1 random power, sau đó nhận 2 random power.','Mất ngẫu nhiên 1 Power.','2,78');
-INSERT INTO pve_enemies VALUES(15,'Ghouls',7,5,6,0,1,7,'Không có','Nhận Power "Blood Frenzy".','Nhận -2 stat cao nhất.','2,78');
-INSERT INTO pve_enemies VALUES(16,'Odd Todd',1,3,9,5,7,7,'Không có','Nhận +1 các stat có chỉ số lẻ.','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(17,'Even Steven',2,4,6,6,8,8,'Không có','Nhận +1 các stat có chỉ số chẵn.','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(18,'Baron Nashor',10,1,10,10,10,1,'Không có','Nhận +2 all stats cho tới vòng 32.','Không có gì xảy ra.','2,78');
+INSERT INTO pve_enemies VALUES(14,'Jiangshi',5,5,5,5,5,5,0,'Mất 1 random power, sau đó nhận 2 random power.','Mất ngẫu nhiên 1 Power.','2,78');
+INSERT INTO pve_enemies VALUES(15,'Ghouls',7,5,6,0,1,7,0,'Nhận Power "Blood Frenzy".','Nhận -2 stat cao nhất.','2,78');
+INSERT INTO pve_enemies VALUES(16,'Odd Todd',1,3,9,5,7,7,0,'Nhận +1 các stat có chỉ số lẻ.','Không có gì xảy ra.','2,78');
+INSERT INTO pve_enemies VALUES(17,'Even Steven',2,4,6,6,8,8,0,'Nhận +1 các stat có chỉ số chẵn.','Không có gì xảy ra.','2,78');
+INSERT INTO pve_enemies VALUES(18,'Baron Nashor',10,1,10,10,10,1,0,'Nhận +2 all stats cho tới vòng 32.','Không có gì xảy ra.','2,78');
 INSERT INTO pve_enemies VALUES(19,'Elden Beast',9,8,8,9,8,5,'"Elden Beast" Khởi đầu với 1 điểm.','Nhận power "Golden Vow" và 1 random Power.','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(20,'Training Dummy',3,3,3,3,3,3,'Không có','Nhận +1 all stats nếu chiến thắng với cách biệt 6 điểm trở lên.','-1 all stats nếu không đạt đủ 4 điểm trở lên.','2,78');
-INSERT INTO pve_enemies VALUES(21,'Trained Orc',6,4,6,3,6,5,'Không có','Nhận +1 Strength, +1 BIQ và +1 Durability.','Nhận -1 Speed.','2,78');
+INSERT INTO pve_enemies VALUES(20,'Training Dummy',3,3,3,3,3,3,0,'Nhận +1 all stats nếu chiến thắng với cách biệt 6 điểm trở lên.','-1 all stats nếu không đạt đủ 4 điểm trở lên.','2,78');
+INSERT INTO pve_enemies VALUES(21,'Trained Orc',6,4,6,3,6,5,0,'Nhận +1 Strength, +1 BIQ và +1 Durability.','Nhận -1 Speed.','2,78');
 INSERT INTO pve_enemies VALUES(22,'Violet Vessel',14,14,14,14,14,14,'Người đối đầu với quái này sẽ thắng khi ghi được 2 điểm trở lên.','Nhận 2 random Normal Gear, 2 random Power và +2 vào 1 chỉ số ngẫu nhiên.','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(23,'Skeleton Army',5,3,5,1,5,4,'Không có','Nhận 1 Summoning.','Mất ngẫu nhiên 1 Power.','2,78');
-INSERT INTO pve_enemies VALUES(24,'Useless Slime',1,1,1,1,1,1,'Không có','Nhận 1 random Power','Nhận -5 All stats.','2,78');
-INSERT INTO pve_enemies VALUES(25,'Pontiff Sulyvahn',6,6,6,6,9,9,'Không có',unistr('Nhận Archetype "Dual Wielder" và 1 weapon để đủ 2 Weapon. \u000aNếu đã có sẵn Archetype này, nhận +1 All Stats'),'Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(26,'Lady Maria',7,8,5,7,8,9,'Không có','Nhận Power "Bloody Strike" và "Bloodlust".','Mất ngẫu nhiên 1 Power','2,78');
-INSERT INTO pve_enemies VALUES(27,'Isshin the Sword Saint',7,8,7,8,9,7,'Không có','Nhận +1 all stats.','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(28,'Tung Tung Tung Sahur',7,2,7,3,5,5,'Không có','Nhận +2 Strength và +1 Durability.','Nhận -1 IQ.','2,78');
-INSERT INTO pve_enemies VALUES(29,'A Wild Werebeast',6,5,5,3,5,5,'Không có','Nhận Char Dev "Furry"','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(30,'Odin, The All-Father',8,8,10,10,10,5,'Không có','Nhận ngẫu nhiên 2 Power.','Không có gì xảy ra.','2,78');
+INSERT INTO pve_enemies VALUES(23,'Skeleton Army',5,3,5,1,5,4,0,'Nhận 1 Summoning.','Mất ngẫu nhiên 1 Power.','2,78');
+INSERT INTO pve_enemies VALUES(24,'Useless Slime',1,1,1,1,1,1,0,'Nhận 1 random Power','Nhận -5 All stats.','2,78');
+INSERT INTO pve_enemies VALUES(25,'Pontiff Sulyvahn',6,6,6,6,9,9,0,unistr('Nhận Archetype "Dual Wielder" và 1 weapon để đủ 2 Weapon. \u000aNếu đã có sẵn Archetype này, nhận +1 All Stats'),'Không có gì xảy ra.','2,78');
+INSERT INTO pve_enemies VALUES(26,'Lady Maria',7,8,5,7,8,9,0,'Nhận Power "Bloody Strike" và "Bloodlust".','Mất ngẫu nhiên 1 Power','2,78');
+INSERT INTO pve_enemies VALUES(27,'Isshin the Sword Saint',7,8,7,8,9,7,0,'Nhận +1 all stats.','Không có gì xảy ra.','2,78');
+INSERT INTO pve_enemies VALUES(28,'Tung Tung Tung Sahur',7,2,7,3,5,5,0,'Nhận +2 Strength và +1 Durability.','Nhận -1 IQ.','2,78');
+INSERT INTO pve_enemies VALUES(29,'A Wild Werebeast',6,5,5,3,5,5,0,'Nhận Char Dev "Furry"','Không có gì xảy ra.','2,78');
+INSERT INTO pve_enemies VALUES(30,'Odin, The All-Father',8,8,10,10,10,5,0,'Nhận ngẫu nhiên 2 Power.','Không có gì xảy ra.','2,78');
 INSERT INTO pve_enemies VALUES(31,'Stellaron Hunter Kafka',6,6,6,8,8,8,'Đối thủ nhận -2 IQ và BIQ','Nhận Power Mind Control và Clear Mind','Không có gì xảy ra.','2,78');
-INSERT INTO pve_enemies VALUES(32,'Hungry Hounds',7,6,4,2,4,4,'Không có','Nhận +1 Strength và +1 Martial Arts.','Nhận -1 Strength và -1 Martial Arts.','2,78');
-INSERT INTO pve_enemies VALUES(33,'Cursed Mage',3,3,4,7,6,2,'Không có','Nhận +1 IQ.','Nhận -1 IQ.','2,78');
-INSERT INTO pve_enemies VALUES(34,'Lothric Knight',6,4,5,3,5,4,'Không có','Nhận +1 Martial Arts','Nhận -1 Martial Arts','2,78');
-INSERT INTO pve_enemies VALUES(35,'Mine-tide''s Son',4,4,5,3,5,9,'Không có','Nhận Power "Fist Fighting".','Nhận -1 Martial Arts.','2,78');
+INSERT INTO pve_enemies VALUES(32,'Hungry Hounds',7,6,4,2,4,4,0,'Nhận +1 Strength và +1 Martial Arts.','Nhận -1 Strength và -1 Martial Arts.','2,78');
+INSERT INTO pve_enemies VALUES(33,'Cursed Mage',3,3,4,7,6,2,0,'Nhận +1 IQ.','Nhận -1 IQ.','2,78');
+INSERT INTO pve_enemies VALUES(34,'Lothric Knight',6,4,5,3,5,4,0,'Nhận +1 Martial Arts','Nhận -1 Martial Arts','2,78');
+INSERT INTO pve_enemies VALUES(35,'Mine-tide''s Son',4,4,5,3,5,9,0,'Nhận Power "Fist Fighting".','Nhận -1 Martial Arts.','2,78');
 INSERT INTO pve_enemies VALUES(36,'Old Lineages of the Emirate',3,6,36,3,6,36,'Đối thủ bị -2 Speed và -2 BIQ',unistr('Nhận Char-Dev số 36\u000aNhận Archetype số 36'),'Không có gì xảy ra.','2,78');
-
 INSERT INTO quirks VALUES(1,'Sợ Nắng',' Nhận -1 Dura','');
 INSERT INTO quirks VALUES(2,'Sợ Chết','Sau khi combat, đối thủ bạn bị "Sợ Chết".','');
 INSERT INTO quirks VALUES(3,'Fear the Powerless','Nếu bạn không có Power, bạn sẽ bị -1 All Stats.','');
@@ -390,31 +381,29 @@ INSERT INTO quirks VALUES(53,'Relentless','Sau khi chiến thắng, Đối thủ
 INSERT INTO quirks VALUES(54,'Tham ăn','Với mỗi 2 Base Dura, nhận -1 Speed','');
 INSERT INTO quirks VALUES(55,'Beauty',unistr('Quay 1 player để làm "Lover". \u000aNhận +1 BIQ'),'');
 INSERT INTO quirks VALUES(56,'Cruelty','Trong combat: Khi 1 round hòa, quyết định người nhận được 1 điểm bằng vòng quay 50/50 thay vì cả 2 không nhận được điểm.','');
-
-INSERT INTO races VALUES(1,'Goblin','Goblin Horde','Không có 💀','6,5','');
-INSERT INTO races VALUES(2,'Gnome','Không có 💀','Không có 💀','6,5','');
-INSERT INTO races VALUES(3,'Human','Skin Color','Không có 💀','6,5','');
-INSERT INTO races VALUES(4,'Dwarf','Dwarf''s Type','Không có 💀','6,5','');
+INSERT INTO races VALUES(1,'Goblin','Goblin Horde','Không có ','6,5','');
+INSERT INTO races VALUES(2,'Gnome','Không có ','Không có ','6,5','');
+INSERT INTO races VALUES(3,'Human','Skin Color','Không có ','6,5','');
+INSERT INTO races VALUES(4,'Dwarf','Dwarf''s Type','Không có ','6,5','');
 INSERT INTO races VALUES(5,'Skeleton','Bone Lineage','Ở trong nhánh thua, nhận +4 Durability. ',5,'');
-INSERT INTO races VALUES(6,'Troll','Troll''s Type','Không có 💀',5,'');
-INSERT INTO races VALUES(7,'Orc','Không có 💀','Nhận +1 vào chỉ số thấp nhất khi thắng và -2 vào chỉ số cao nhất khi thua.',5,'');
-INSERT INTO races VALUES(8,'Dryad','Không có 💀',unistr('Ở nhánh thắng. nhận +1 Durability sau mỗi trận.\u000aỞ nhánh thua, nhận -1 Durability sau mỗi trận.'),5,'');
-INSERT INTO races VALUES(9,'Elf','Elf''s Type','Không có 💀',6,'');
-INSERT INTO races VALUES(10,'Spirit','Không có 💀','Khi có bằng hoặc hơn 13 Spirit trong mùa, tất cả Spirit nhận +1 all stats. (Hiệu ứng này vẫn có hiệu lực ngay cả khi các spirit đó chết đi.)',5,'');
+INSERT INTO races VALUES(6,'Troll','Troll''s Type','Không có ',5,'');
+INSERT INTO races VALUES(7,'Orc','Không có ','Nhận +1 vào chỉ số thấp nhất khi thắng và -2 vào chỉ số cao nhất khi thua.',5,'');
+INSERT INTO races VALUES(8,'Dryad','Không có ',unistr('Ở nhánh thắng. nhận +1 Durability sau mỗi trận.\u000aỞ nhánh thua, nhận -1 Durability sau mỗi trận.'),5,'');
+INSERT INTO races VALUES(9,'Elf','Elf''s Type','Không có ',6,'');
+INSERT INTO races VALUES(10,'Spirit','Không có ','Khi có bằng hoặc hơn 13 Spirit trong mùa, tất cả Spirit nhận +1 all stats. (Hiệu ứng này vẫn có hiệu lực ngay cả khi các spirit đó chết đi.)',5,'');
 INSERT INTO races VALUES(11,'Uma','Uma Parents.','Người chơi thuộc về House "Tracen Academy" và không có vòng quay House.',6,'');
-INSERT INTO races VALUES(12,'Werebeast','Beast''s Type','Không có 💀',5,'');
+INSERT INTO races VALUES(12,'Werebeast','Beast''s Type','Không có ',5,'');
 INSERT INTO races VALUES(13,'Vampire','Body Count','36% nhận vòng quay "Khẩu Vị Độc Đáo"',5,'');
-INSERT INTO races VALUES(14,'Giant','Không có 💀',unistr('Nhận +5 IQ nếu sau vòng quay base stats IQ > Strength. (Và -5 Strength)\u000aNhận +5 Strength nếu sau vòng quay base stats Strength > IQ. (Và -5 IQ)\u000aNếu cả hai bằng nhau sau vòng quay base stats, nhận +3 Strength và IQ.'),5,'');
-INSERT INTO races VALUES(15,'Dragon','Dragon''s Type','Không có 💀',5,'');
+INSERT INTO races VALUES(14,'Giant','Không có ',unistr('Nhận +5 IQ nếu sau vòng quay base stats IQ > Strength. (Và -5 Strength)\u000aNhận +5 Strength nếu sau vòng quay base stats Strength > IQ. (Và -5 IQ)\u000aNếu cả hai bằng nhau sau vòng quay base stats, nhận +3 Strength và IQ.'),5,'');
+INSERT INTO races VALUES(15,'Dragon','Dragon''s Type','Không có ',5,'');
 INSERT INTO races VALUES(16,'Angel','Angel Rank','Nhận Archetype "Pacifist" từ đầu (sẽ nhận thêm một Archetype nữa).',4,'');
 INSERT INTO races VALUES(17,'Demi-God','God''s Gifts','Nhận +1 all stats khi đối đầu với Human và -1 all stats khi đối đầu với God.','3,5','');
-INSERT INTO races VALUES(18,'Primordial Being','Elemental Wheel','Không có 💀','3,5','');
-INSERT INTO races VALUES(19,'Demon','Sins Wheel','Không có 💀',3,'');
-INSERT INTO races VALUES(20,'God','Which God? (12)','Không có 💀',3,'');
-
+INSERT INTO races VALUES(18,'Primordial Being','Elemental Wheel','Không có ','3,5','');
+INSERT INTO races VALUES(19,'Demon','Sins Wheel','Không có ',3,'');
+INSERT INTO races VALUES(20,'God','Which God? (12)','Không có ',3,'');
 INSERT INTO Sub_race VALUES(1,1,'1 (Goblin)','Nhận Archetype "Him".',2);
 INSERT INTO Sub_race VALUES(2,1,'36 (Goblin)','Nhận -1 All Stats',20);
-INSERT INTO Sub_race VALUES(3,1,'1001 (Goblin)','Bro là 1 con Goblin 💀',40);
+INSERT INTO Sub_race VALUES(3,1,'1001 (Goblin)','Bro là 1 con Goblin ',40);
 INSERT INTO Sub_race VALUES(4,1,'5000 (Goblin)','Nhận 1 Gear',20);
 INSERT INTO Sub_race VALUES(5,1,'10000 (Goblin)','Nhận +1 Strength, +1 Durability và +1 Martial Arts.',10);
 INSERT INTO Sub_race VALUES(6,1,'50000 (Goblin)','Nhận +2 Strength, +2 Durability và +1 Martial Arts',5);
@@ -446,7 +435,7 @@ INSERT INTO Sub_race VALUES(31,5,'Demi-God (Skeleton)','','3,5');
 INSERT INTO Sub_race VALUES(32,5,'Primordial Being (Skeleton)','','3,5');
 INSERT INTO Sub_race VALUES(33,5,'Demon (Skeleton)','',3);
 INSERT INTO Sub_race VALUES(34,5,'God (Skeleton)','',3);
-INSERT INTO Sub_race VALUES(35,6,'Regular Troll','Một con Troll thường 💀',42);
+INSERT INTO Sub_race VALUES(35,6,'Regular Troll','Một con Troll thường ',42);
 INSERT INTO Sub_race VALUES(36,6,'Ice Troll','Trong combat: Đối thủ -1 Spd',30);
 INSERT INTO Sub_race VALUES(37,6,'Mountain Troll','Nhận +1 Dura',25);
 INSERT INTO Sub_race VALUES(38,6,'Lich Troll','Nhận 1 Power của player đã chết sau mỗi trận đấu.',3);
@@ -503,7 +492,7 @@ INSERT INTO Sub_race VALUES(88,15,'Thunder Dragon','Nhận Power "Thunder Orb"',
 INSERT INTO Sub_race VALUES(89,15,'Flame Dragon','Nhận 1 Power và +1 vào Stat thấp nhất',12);
 INSERT INTO Sub_race VALUES(90,15,'Ice Dragon','Nhận +1 Char Dev và +1 vào Stat thấp nhất',10);
 INSERT INTO Sub_race VALUES(91,15,'Chaos Dragon','Nhận 3 Quirk',5);
-INSERT INTO Sub_race VALUES(92,16,'Angels','Không có gì đặc biệt 💀',49);
+INSERT INTO Sub_race VALUES(92,16,'Angels','Không có gì đặc biệt ',49);
 INSERT INTO Sub_race VALUES(93,16,'Archangels','Nhận +1 Speed và +1 Martial Arts.',18);
 INSERT INTO Sub_race VALUES(94,16,'Principalities','Sau mỗi combat, +2 Vào stat thấp nhất.',8);
 INSERT INTO Sub_race VALUES(95,16,'Powers','Nhận Archetype "Paladin", +1 MA',7);
@@ -546,7 +535,6 @@ INSERT INTO Sub_race VALUES(131,20,'Hephaestus',unistr('(1).Chắc chắn dùng 
 INSERT INTO Sub_race VALUES(132,20,'Aphrodite',' Sau mỗi combat, Hút 2 điểm ở chỉ số cao nhất của đối phương.','11,11');
 INSERT INTO Sub_race VALUES(133,20,'Hermes','Mặc định thắng Round Speed.','11,11');
 INSERT INTO Sub_race VALUES(134,20,'Hestia','Nhận 1 Power. Sau mỗi combat (tính cả PvP và PvE), nhận thêm 1 Power và +1 Stat bất kì.','11,11');
-
 INSERT INTO weapons VALUES(1,'Banana Peel','Physical',0,unistr('Trong Combat:\u000aNhận -1 all stats nếu có IQ thấp hơn đối phương.\u000aNhận +1 all stats nếu có IQ cao hơn đối phương.'),100,'');
 INSERT INTO weapons VALUES(2,'Broken Straight Sword','Physical',0,'Nhận -1 all stats.',50,'');
 INSERT INTO weapons VALUES(3,'Ukulele','Physical/Magic',0,'Đối thủ nhận -1 IQ và -1 BIQ.',75,'');
@@ -603,7 +591,16 @@ INSERT INTO weapons VALUES(53,'Misericorde','Physical',1,'Mỗi khi thua 1 round
 INSERT INTO weapons VALUES(54,'Andúril','Physical',1,unistr('Nhận Summon Wheel sau mỗi combat.\u000aKhi combat với Demon, +1 điểm khởi đầu với mỗi Summon hiện có.'),80,'');
 INSERT INTO weapons VALUES(55,'Needle','Physical',1,unistr('Nhận +2 Speed.\u000aRound Speed và MA sẽ cho thêm 1 điểm nếu thắng.'),80,'');
 INSERT INTO weapons VALUES(56,'12 đôi dép 🍀','Physical',1,unistr('(1). Khi thua combat, nhận +3 và +6 vào 2 stat bất kì.\u000a(2).Chuyển sang đối thủ sau trận chiến nếu thua combat. Trước đó, loại bỏ vũ khí hiện tại của đối thủ.'),100,'');
-
+CREATE TABLE IF NOT EXISTS "gears" (
+	"id"	INTEGER,
+	"name"	VARCHAR(255) NOT NULL DEFAULT '',
+	"effect"	VARCHAR(255) NOT NULL DEFAULT '',
+	"type"	VARCHAR(255) NOT NULL DEFAULT '',
+	"is_special"	TINYINT NOT NULL DEFAULT 0,
+	"note"	TEXT NOT NULL DEFAULT '',
+	"usage_percentage"	INTEGER NOT NULL DEFAULT '',
+	PRIMARY KEY("id")
+);
 INSERT INTO gears VALUES(1,'Fishing Rod','Sau 1 trận PvE, nhận 1 PvP Reward.','Physical',0,'',80);
 INSERT INTO gears VALUES(2,'Sổ tay','Khi thua IQ, nhận +1 IQ (Áp dụng sau combat)','Physical',0,'',80);
 INSERT INTO gears VALUES(3,'Văn tế',unistr('Nhận -1 All Stats.\u000aKhi bạn bị loại mà có Văn Tế trong người, Re-spin lại stat cao nhất của một người còn sống ngẫu nhiên.'),'Physical/Magic',0,'',100);
@@ -662,7 +659,11 @@ INSERT INTO gears VALUES(55,'Wooden Sword of the Mighty Goblin','Đảo ngược
 INSERT INTO gears VALUES(56,'Heart of the Shaggy Void','Đi tìm 1 "Lover", Biến Base Stat cao nhất và thấp nhất thành 3 sau đó nhận +1 All Stats','Magic',1,'',100);
 INSERT INTO gears VALUES(57,'Spirit of the Wheel',unistr('Trận đầu tiên của bạn khi biết kết quả sẽ khiến 3 người ngẫu nhiên "Isekai", 2 trận tiếp theo của bạn sẽ thua.\u000a"Người ta đã đồn, Linh hồn của Vòng Quay không bao giờ hứng thú với chiến thắng, nó muốn tìm ra người nắm lấy Vinh Kwan"'),'Magic',1,'',100);
 INSERT INTO gears VALUES(58,'Pebbles of the Stoic Demon','Khi đối đầu với "Human", nhận -1 all Stat sau khi kết thúc trận đấu (Áp dụng sau Combat.)','Magic',1,'',100);
-
+CREATE TABLE IF NOT EXISTS "players_power" (
+	"player_id"	INTEGER NOT NULL,
+	"power_id"	INTEGER NOT NULL,
+	PRIMARY KEY("player_id","power_id")
+);
 INSERT INTO players_power VALUES(1,14);
 INSERT INTO players_power VALUES(2,69);
 INSERT INTO players_power VALUES(2,95);
@@ -726,7 +727,12 @@ INSERT INTO players_power VALUES(15,57);
 INSERT INTO players_power VALUES(15,42);
 INSERT INTO players_power VALUES(15,75);
 INSERT INTO players_power VALUES(15,66);
-
+CREATE TABLE IF NOT EXISTS "players_quirks" (
+	"player_id"	INTEGER NOT NULL,
+	"quirk_id"	INTEGER NOT NULL,
+	"is_usable"	INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY("player_id","quirk_id")
+);
 INSERT INTO players_quirks VALUES(1,7);
 INSERT INTO players_quirks VALUES(2,24);
 INSERT INTO players_quirks VALUES(3,26);
@@ -753,7 +759,12 @@ INSERT INTO players_quirks VALUES(14,51);
 INSERT INTO players_quirks VALUES(15,1);
 INSERT INTO players_quirks VALUES(15,11);
 INSERT INTO players_quirks VALUES(15,49);
-
+CREATE TABLE IF NOT EXISTS "players_gears" (
+	"player_id"	INTEGER NOT NULL,
+	"gear_id"	INTEGER NOT NULL,
+	"is_usable"	INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY("player_id","gear_id")
+);
 INSERT INTO players_gears VALUES(1,22,1);
 INSERT INTO players_gears VALUES(1,12,1);
 INSERT INTO players_gears VALUES(1,26,1);
@@ -792,7 +803,12 @@ INSERT INTO players_gears VALUES(13,54,1);
 INSERT INTO players_gears VALUES(14,8,0);
 INSERT INTO players_gears VALUES(14,36,1);
 INSERT INTO players_gears VALUES(14,5,1);
-
+CREATE TABLE IF NOT EXISTS "players_weapons" (
+	"player_id"	INTEGER NOT NULL,
+	"weapon_id"	INTEGER NOT NULL,
+	"is_useable"	TINYINT NOT NULL DEFAULT 0,
+	PRIMARY KEY("player_id","weapon_id")
+);
 INSERT INTO players_weapons VALUES(2,13,1);
 INSERT INTO players_weapons VALUES(3,17,1);
 INSERT INTO players_weapons VALUES(5,41,0);
@@ -805,7 +821,12 @@ INSERT INTO players_weapons VALUES(12,25,1);
 INSERT INTO players_weapons VALUES(13,50,1);
 INSERT INTO players_weapons VALUES(14,2,1);
 INSERT INTO players_weapons VALUES(15,19,0);
-
+CREATE TABLE IF NOT EXISTS "weapons_enchants" (
+	"player_id"	INTEGER NOT NULL,
+	"weapon_id"	INTEGER NOT NULL,
+	"enchant_id"	INTEGER NOT NULL,
+	PRIMARY KEY("weapon_id","enchant_id","player_id")
+);
 INSERT INTO weapons_enchants VALUES(2,1,'NULL');
 INSERT INTO weapons_enchants VALUES(6,2,14);
 INSERT INTO weapons_enchants VALUES(6,2,9);

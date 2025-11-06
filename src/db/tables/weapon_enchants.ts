@@ -19,10 +19,18 @@ export function WeaponEnchantTables(sequelize: Sequelize, dataTypes: typeof Data
         weapon_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Weapons',
+                key: 'id',
+            }
         },
         enchant_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Enchants',
+                key: 'id',
+            }
         },
         player_id: {
             type: DataTypes.INTEGER,

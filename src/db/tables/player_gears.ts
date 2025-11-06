@@ -19,10 +19,18 @@ export function PlayerGearTables(sequelize: Sequelize, dataTypes: typeof DataTyp
         player_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Players',
+                key: 'id',
+            }
         },
         gear_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Gears',
+                key: 'id',
+            }
         },
         is_usable: {
             type: DataTypes.INTEGER,

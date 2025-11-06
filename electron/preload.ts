@@ -7,11 +7,11 @@ contextBridge.exposeInMainWorld('api', {
 
   // -------------------Races--------------------
   fetchAllRaces: () => ipcRenderer.invoke('fetch-races'),
-
+  fetchRacesWithSubraceWheel: () => ipcRenderer.invoke('fetch-races-with-subrace-wheel'),
   // ------------------Subraces--------------------
   fetchAllSubraces: () => ipcRenderer.invoke('fetch-subraces'),
 
-  fetchAllSubracesByRaceId: async (raceId) => await ipcRenderer.invoke('fetch-subrace-by-id', raceId),
+  fetchSubraceById: async (raceId) => await ipcRenderer.invoke('fetch-subrace-by-id', raceId),
 
   // ------------------Archetypes------------------
   fetchAllArchetypes: () => ipcRenderer.invoke('fetch-archetypes'),
@@ -30,7 +30,7 @@ contextBridge.exposeInMainWorld('api', {
 
   // -------------------Player Gears---------------------
   fetchAllPlayerGears: () => ipcRenderer.invoke('fetch-player-gears'),
-
+  fetchGearByLegacy: async (id) => await ipcRenderer.invoke('fetch-gear-by-legacy', id),
   // ---------------------Weapons------------------------
   fetchAllWeapons: () => ipcRenderer.invoke('fetch-weapons'),
 
@@ -78,4 +78,13 @@ contextBridge.exposeInMainWorld('api', {
 
   // ----------------------Character Developments for Players----------------------
   fetchAllPlayerCharDevs: () => ipcRenderer.invoke('fetch-player-chardevs'),
+
+  // ----------------------Extra Houses----------------------
+  fetchAllExtraHouses: () => ipcRenderer.invoke('get-all-extra-houses'),
+  fetchExtraHouseById: async (id) => await ipcRenderer.invoke('get-extra-house-by-id', id),
+  
+
+  // ----------------------Extra Archetypes----------------------
+  fetchAllExtraArchetypes: () => ipcRenderer.invoke('get-all-extra-archetypes'),
+  fetchExtraArchetypeById: async (id) => await ipcRenderer.invoke('get-extra-archetype-by-id', id),
 });

@@ -16,10 +16,18 @@ export function MatchEventsTables(sequelize: Sequelize, dataTypes: typeof DataTy
         match_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Matches',
+                key: 'id',
+            },
         },
         event_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Events',
+                key: 'id',
+            },
         },
     }, {
         sequelize,

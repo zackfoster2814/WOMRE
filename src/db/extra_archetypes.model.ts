@@ -1,14 +1,14 @@
 import { db } from "./index.js";
 import { fn, col, Op, Sequelize, QueryTypes } from "sequelize";
-import { RaceTables } from "./tables/races.js";
 import lodash from "lodash";
+import { ExtraArchetypeTables } from "./tables/extra_archetypes.js";
 
 const isEmpty = lodash.isEmpty;
-const Races = RaceTables(db.sequelize, db.dataTypes);
+const ExtraArchetypes = ExtraArchetypeTables(db.sequelize, db.dataTypes);
 
-export const getAllRaces = async function (): Promise<any> {
+export const getAllExtraArchetypes = async function (): Promise<any> {
   return new Promise<any>((resolve, reject) => {
-    Races.findAll()
+    ExtraArchetypes.findAll()
       .then(function (obj: any) {
         if (!isEmpty(obj)) {
           resolve(obj);
@@ -22,18 +22,12 @@ export const getAllRaces = async function (): Promise<any> {
   });
 };
 
-export const getRacesWithSubraceWheel = async function (): Promise<any> {
+export const getExtraArchetypeById = async function (id: number): Promise<any> {
   return new Promise<any>((resolve, reject) => {
-    Races.findAll({
-      where: {
-        subrace_wheel: {
-          [Op.and]: [
-            {[Op.ne]: 0},
-          ]
-        },
-      },
+    ExtraArchetypes.findOne({
+      where: { id: id }
     })
-      .then(function (obj: any) { 
+      .then(function (obj: any) {
         if (!isEmpty(obj)) {
           resolve(obj);
         } else {

@@ -1,3 +1,4 @@
+import { get } from "lodash";
 import { Section } from "../Types/Types.js";
 
 const getRandomColor = () => {
@@ -23,8 +24,13 @@ export const subraceMap: any = {
 
 export async function getSubraceByRaceId(race_id: number): Promise<Section | null> {
   const subrace_data_by_id = await window.api.fetchSubraceById(race_id);
-  if (subrace_data_by_id) {
-    const SubraceData = subrace_data_by_id._dataValues || subrace_data_by_id.dataValues || subrace_data_by_id;
+  
+  if (!subrace_data_by_id) {
+    return null;
+  }
+  
+  return subrace_data_by_id.map((data: any) => {
+    const SubraceData = data.dataValues;
     return {
       id: SubraceData.id,
       name: SubraceData.name,
@@ -32,6 +38,5 @@ export async function getSubraceByRaceId(race_id: number): Promise<Section | nul
       weight: SubraceData.weight,
       color: getRandomColor(),
     };
-  }
-  return null;
+  });
 }

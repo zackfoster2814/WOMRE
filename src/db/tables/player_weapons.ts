@@ -19,10 +19,18 @@ export function PlayerWeaponTables(sequelize: Sequelize, dataTypes: typeof DataT
         player_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Players',
+                key: 'id',
+            }
         },
         weapon_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Weapons',
+                key: 'id',
+            }
         },
         is_useable: {
             type: DataTypes.TINYINT,

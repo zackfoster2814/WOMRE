@@ -29,8 +29,6 @@ Thumbs.db
 #Editor folders
 .idea/
 .vscode/
-Electron
-electron/.js.map
 
 #Environment files
 .env

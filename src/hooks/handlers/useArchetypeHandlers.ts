@@ -3,14 +3,6 @@ import { WheelStep } from "@/Common/Types/Types";
 import { raceWheel, raceWheelBalance } from "@/Common/Config/RaceConfig";
 import { subraceMap } from "@/Common/Config/SubRaceConfig";
 import {
-  bankaiWheel,
-  dojutsuWheel,
-  domainExpansionWheel,
-  hakiWheel,
-  standsWheel,
-  wibuWheel,
-} from "@/Common/Config/ArchetypeConfig";
-import {
   archetypeExtraWheels,
   heroXWheel,
   uniqueVampireTrainWheel,
@@ -270,7 +262,7 @@ export const useArchetypeHandlers = () => {
           });
           return { shouldContinue: false };
         case "Wibu":
-          setCurrentWheel(wibuWheel);
+          setCurrentWheel(archetypeExtraWheels.wibuWheel);
           return { shouldContinue: false };
         case "Bookworm":
           // Store Holy Symbol temporarily for usability check
@@ -507,11 +499,11 @@ export const useArchetypeHandlers = () => {
       });
 
       const wibuWheels: Record<string, WheelStep> = {
-        JJK: domainExpansionWheel,
-        Jojo: standsWheel,
-        Naruto: dojutsuWheel,
-        "One Piece": hakiWheel,
-        Bleach: bankaiWheel,
+        JJK: archetypeExtraWheels.domainExpansionWheel,
+        Jojo: archetypeExtraWheels.standsWheel,
+        Naruto: archetypeExtraWheels.dojutsuWheel,
+        "One Piece": archetypeExtraWheels.hakiWheel,
+        Bleach: archetypeExtraWheels.bankaiWheel,
       };
 
       const nextWheel = wibuWheels[resultName];

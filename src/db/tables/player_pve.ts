@@ -17,10 +17,18 @@ export function Player_PveTables(sequelize: Sequelize, dataTypes: typeof DataTyp
         player_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Players',
+                key: 'id',
+            }
         },
         pve_enemies: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references:{
+                model:'Pve_Enemies',
+                key:'id'
+            }
         },
     }, {
         sequelize,

@@ -17,10 +17,18 @@ export function PlayerQuirkTables(sequelize: Sequelize, dataTypes: typeof DataTy
         player_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Players',
+                key: 'id',
+            }
         },
         quirk_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
+            references: {
+                model: 'Quirks',
+                key: 'id',
+            }
         },
     }, {
         sequelize,

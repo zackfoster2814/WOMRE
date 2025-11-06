@@ -41,7 +41,6 @@ const Wheel: React.FC<WheelProps> = React.memo(
     const [duration, setDuration] = useState<number>(0);
     const [showResetDialog, setShowResetDialog] = useState(false);
 
-    const [apiresult, setapiResult] = useState();
 
     const wheelRef = useRef<SVGSVGElement | null>(null);
     const animationFrameRef = useRef<number | null>(null);
@@ -75,11 +74,6 @@ const Wheel: React.FC<WheelProps> = React.memo(
       setIsSpined(false);
       setResult(null);
     };
-
-    useEffect(() => {
-      window.api.fetchAllPlayers().then(setapiResult);
-      console.log(apiresult);
-    }, []);
 
     useEffect(() => {
       resetWheel();
