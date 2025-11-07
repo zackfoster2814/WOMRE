@@ -6,12 +6,12 @@ const getRandomColor = () => {
 }
 
 // Extra Archetypes by Id Wheel
-export async function getExtraArchetypeById(id: number): Promise<Section | null> {
-  const  ExtraArchetype = await window.api.fetchExtraArchetypeById(id);
+export async function getExtraArchetypeById(id: number): Promise<Section[]> {
+  const  ExtraArchetype = window.api ? await window.api.fetchExtraArchetypeById(id) : [];
   if (!ExtraArchetype) {
-    return null;
+    return [];
   }
-  
+
   return ExtraArchetype.map((data: any) => {
     const ExtraArchetypeData = data.dataValues;
     return {
@@ -25,7 +25,27 @@ export async function getExtraArchetypeById(id: number): Promise<Section | null>
   });
 }
 
-export const archetypeExtraWheels: Record<string, WheelStep> = {
+// Export individual wheels as placeholders
+// These will be populated dynamically at runtime
+export const heroXWheel: WheelStep = {
+  key: "hero_x",
+  title: "Hero X",
+  sections: []
+};
+
+export const vampireTasteWheel: WheelStep = {
+  key: "vampire_taste",
+  title: "Vampire Taste",
+  sections: []
+};
+
+export const uniqueVampireTrainWheel: WheelStep = {
+  key: "unique_vampire_train",
+  title: "Unique Vampire Train",
+  sections: []
+};
+
+export const archetypeExtraWheels: Record<string, Promise<Section[]>> = {
   Farmer:   getExtraArchetypeById(1),
   Trickster: getExtraArchetypeById(2),
   Wibu:   getExtraArchetypeById(3),
@@ -40,3 +60,10 @@ export const archetypeExtraWheels: Record<string, WheelStep> = {
   Sentence:   getExtraArchetypeById(12),
   Bankai:   getExtraArchetypeById(13),
 };
+
+// Helper function to initialize wheels dynamically
+export async function initializeExtraWheels() {
+  heroXWheel.sections = await getExtraArchetypeById(6);
+  vampireTasteWheel.sections = await getExtraArchetypeById(11);
+  // uniqueVampireTrainWheel can be populated if needed
+}

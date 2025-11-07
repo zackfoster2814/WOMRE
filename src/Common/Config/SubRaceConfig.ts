@@ -4,7 +4,7 @@ import { Section } from "../Types/Types.js";
 const getRandomColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 }
-const subrace_data = await window.api.fetchAllSubraces();
+const subrace_data = window.api ? await window.api.fetchAllSubraces() : [];
 export const subraceMap: any = {
   key: "Subrace",
   title: "Subrace",
@@ -23,7 +23,7 @@ export const subraceMap: any = {
 };
 
 export async function getSubraceByRaceId(race_id: number): Promise<Section | null> {
-  const subrace_data_by_id = await window.api.fetchSubraceById(race_id);
+  const subrace_data_by_id = window.api ? await window.api.fetchSubraceById(race_id) : [];
   
   if (!subrace_data_by_id) {
     return null;
