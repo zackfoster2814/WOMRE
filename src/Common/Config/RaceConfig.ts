@@ -3,8 +3,8 @@ import { WheelStep } from "../Types/Types.js";
 const getRandomColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 }
-//get all race data
-const racedata = await window.api.fetchAllRaces();
+// Get all race data
+const racedata = window.api ? await window.api.fetchAllRaces() : [];
 export const raceWheel: WheelStep = {
   key: "race",
   title: "Race",
@@ -24,7 +24,7 @@ export const raceWheel: WheelStep = {
 };
 
 //get all race that have subrace wheel
-const raceWheelBalancedata = await window.api.fetchRacesWithSubraceWheel();
+const raceWheelBalancedata = window.api ? await window.api.fetchRacesWithSubraceWheel() : [];
 export const raceWheelBalance:WheelStep ={
   key: "race",
   title: "Race",

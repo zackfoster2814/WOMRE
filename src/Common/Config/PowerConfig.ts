@@ -43,7 +43,7 @@ export const powerCountWheel = (race: string): WheelStep => {
 const getRandomColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 }
-const powerdata  = await window.api.fetchAllPowers();
+const powerdata  = window.api ? await window.api.fetchAllPowers() : [];
 export const PowerWheel: WheelStep = {
   key: "power",
   title: "Power",
@@ -55,6 +55,7 @@ export const PowerWheel: WheelStep = {
       effect: Data.effect,
       color: getRandomColor(),
       note: Data.note,
+      weight: Data.weight || 1,
     };
   })
 };

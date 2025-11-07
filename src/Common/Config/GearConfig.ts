@@ -68,7 +68,7 @@ const getRandomColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 }
 export async function getGearsbyLegacy(id: number): Promise<WheelStep | null> {
-  const Gears = await window.api.fetchGearByLegacy(id);
+  const Gears = window.api ? await window.api.fetchGearByLegacy(id) : [];
   
   if (!Gears) {
     return null;
@@ -85,6 +85,7 @@ export async function getGearsbyLegacy(id: number): Promise<WheelStep | null> {
       note: gearsData.note,
       usage_percentage: gearsData.usage_percentage,
       color: getRandomColor(),
+      weight: gearsData.weight || 1,
     };
   });
 }

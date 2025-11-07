@@ -3,7 +3,7 @@ import { WheelStep } from "../Types/Types";
 const getRandomColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 }
-const player_data = await window.api.fetchAllPlayers();
+const player_data = window.api ? await window.api.fetchAllPlayers() : [];
 export const playerWheel: WheelStep = {
   key: "player",
   title: "Player",
@@ -15,6 +15,7 @@ export const playerWheel: WheelStep = {
       name: playerData.name,
       note: playerData.note,
       color: getRandomColor(),
+      weight: 1,
       race_id: playerData.race_id,
       sub_race_id: playerData.sub_race_id,
       house_id: playerData.house_id,

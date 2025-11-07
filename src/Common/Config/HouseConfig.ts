@@ -9,7 +9,7 @@ import { describe } from "node:test";
 const getRandomColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 }
-const housedata = await window.api.fetchAllHouses();
+const housedata = window.api ? await window.api.fetchAllHouses() : [];
 export const houseWheel: WheelStep = {
   key: "house",
   title: "House",
@@ -21,6 +21,7 @@ export const houseWheel: WheelStep = {
       description: houseData.description,
       effect: houseData.effect,
       note: houseData.note,
+      weight: houseData.weight || 1,
       quest: houseData.quest,
       color: getRandomColor(),
     };

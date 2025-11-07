@@ -48,7 +48,8 @@ const Wheel: React.FC<WheelProps> = React.memo(
 
     const radius = Math.min(width, height) / 2;
 
-    const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+    const totalWeight = items.reduce((sum, item) => sum + (Number(item.weight) || 1), 0);
+    console.log("Wheel debug:", { itemsCount: items.length, totalWeight, items: items.slice(0, 3) });
 
     const isResultValid = result !== null && result < items.length;
 
@@ -59,7 +60,7 @@ const Wheel: React.FC<WheelProps> = React.memo(
       let cumulativeWeight = 0;
 
       for (let i = 0; i < items.length; i++) {
-        const segmentDegree = (items[i].weight / totalWeight) * 360;
+        const segmentDegree = ((Number(items[i].weight) || 1) / totalWeight) * 360;
         cumulativeWeight += segmentDegree;
         if (spinPointDegree < cumulativeWeight) {
           return i;
@@ -179,11 +180,12 @@ const Wheel: React.FC<WheelProps> = React.memo(
     };
 
     const renderSegments = () => {
+      if (items.length === 0 || totalWeight === 0) return null;
       let cumulativeAngle = 0;
       const textRadius = radius * 0.88;
 
       return items.map((item, index) => {
-        const segmentAngle = (item.weight / totalWeight) * 360;
+        const segmentAngle = ((Number(item.weight) || 1) / totalWeight) * 360;
 
         const startAngle = cumulativeAngle;
         const endAngle = startAngle + segmentAngle;

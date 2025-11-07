@@ -4,7 +4,7 @@ const getRandomColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 }
 //get all char dev data
-const chardevdata = await window.api.fetchAllCharacterDevelopments();
+const chardevdata = window.api ? await window.api.fetchAllCharacterDevelopments() : [];
 export const charDevWheel: WheelStep = {
   key: "character_development",
   title: "Character Development",
@@ -18,4 +18,5 @@ export const charDevWheel: WheelStep = {
       color: getRandomColor(),
       note: charDevData.note,
     };
-  }
+  }),
+};
