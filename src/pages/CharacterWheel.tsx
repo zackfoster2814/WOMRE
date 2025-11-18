@@ -177,8 +177,8 @@ export default function CharacterWheel() {
         /> */}
         <div className="flex justify-center relative w-full">
           <Wheel
-            width={850}
-            height={850}
+            width={600}
+            height={600}
             title={currentWheel.title}
             items={currentWheel.sections}
             onStartSpin={() => {
