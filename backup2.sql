@@ -1,0 +1,16 @@
+INSERT INTO player_pve VALUES(1, 'Sir Vilhelm', 2);
+INSERT INTO player_pve VALUES(12, 'Lothric Knight', 34);
+INSERT INTO player_pve VALUES(8, 'Lesser Devils', 6);
+INSERT INTO player_pve VALUES(13, 'Jiangshi', 14);
+INSERT INTO player_pve VALUES(1, 'Sister Friede', 3);
+INSERT INTO player_pve VALUES(15, 'Sister Friede', 3);
+INSERT INTO player_pve VALUES(9, 'White Walker', 1);
+INSERT INTO player_pve VALUES(14, 'Cursed Mage', 33);
+INSERT INTO player_pve VALUES(10, 'Lothric Knight', 34);
+INSERT INTO player_pve VALUES(5, 'Blue Buff', 11);
+INSERT INTO player_pve VALUES(11, 'Sister Friede', 3);
+INSERT INTO player_pve VALUES(7, 'Baron Nashor', 18);
+INSERT INTO player_pve VALUES(6, 'Baron Nashor', 18);
+INSERT INTO player_pve VALUES(2, 'Ghouls', 15);
+INSERT INTO player_pve VALUES(12, 'Old Lineages of the Emirate', 36);
+COMMIT;

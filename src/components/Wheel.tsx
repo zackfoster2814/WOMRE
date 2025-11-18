@@ -235,7 +235,7 @@ const Wheel: React.FC<WheelProps> = React.memo(
               textAnchor="end"
               dominantBaseline="middle"
               transform={`rotate(${angle}, ${textX}, ${textY})`}
-              className="pointer-events-none text-2xl"
+              className="pointer-events-none text-sm"
             >
               {item.name}
             </text>
