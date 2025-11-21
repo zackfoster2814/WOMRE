@@ -16,6 +16,9 @@ export default function Menu() {
     if (action === "start") {
       navigate("/wheel");
     }
+    if (action === "data") {
+      navigate("/data");
+    }
   };
 
   const btnStyle =
@@ -51,8 +54,8 @@ export default function Menu() {
           SETTING
         </button>
         <button
-          onClick={() => handleClick("data", true)}
-          className={`${btnStyle} ${disabledStyle}`}
+          onClick={() => handleClick("data")}
+          className={btnStyle}
         >
           DATA
         </button>
