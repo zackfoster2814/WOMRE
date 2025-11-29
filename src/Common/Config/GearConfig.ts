@@ -67,15 +67,19 @@ export const legacyGearCountWheel: WheelStep = {
 const getRandomColor = () => {
   return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 }
-export async function getGearsbyLegacy(id: number): Promise<WheelStep | null> {
+export async function getGearsbyLegacy(id: number): Promise<WheelStep> {
   const Gears = window.api ? await window.api.fetchGearByLegacy(id) : [];
-  
-  if (!Gears) {
-    return null;
+
+  if (!Gears || Gears.length === 0) {
+    return {
+      key: id === 0 ? 'gear' : 'legacy-gear',
+      title: id === 0 ? 'Gear' : 'Legacy Gear',
+      sections: []
+    };
   }
-  
-  return Gears.map((data: any) => {
-    const gearsData = data.dataValues;
+
+  const sections = Gears.map((data: any) => {
+    const gearsData = data.dataValues || data;
     return {
       id: gearsData.id,
       name: gearsData.name,
@@ -88,6 +92,29 @@ export async function getGearsbyLegacy(id: number): Promise<WheelStep | null> {
       weight: gearsData.weight || 1,
     };
   });
+
+  return {
+    key: id === 0 ? 'gear' : 'legacy-gear',
+    title: id === 0 ? 'Gear' : 'Legacy Gear',
+    sections
+  };
 }
-export const gearWheel = getGearsbyLegacy(0);
-export const legacyGearWheel = getGearsbyLegacy(1);
+
+// Initialize as empty wheels - will be populated when needed
+export let gearWheel: WheelStep = {
+  key: 'gear',
+  title: 'Gear',
+  sections: []
+};
+
+export let legacyGearWheel: WheelStep = {
+  key: 'legacy-gear',
+  title: 'Legacy Gear',
+  sections: []
+};
+
+// Initialize gears on module load
+(async () => {
+  gearWheel = await getGearsbyLegacy(0);
+  legacyGearWheel = await getGearsbyLegacy(1);
+})();

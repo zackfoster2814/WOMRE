@@ -64,8 +64,8 @@ export const raceSelectionMap: Record<string, RaceHandler> = {
     });
     setCurrentWheel({
       key: "subrace",
-      title: raceWheel[resultName]?.subrace || "Subrace",
-      sections: subraceMap[resultName],
+      title: `${resultName} Subrace`,
+      sections: subraceMap[resultName] || [],
     });
     return {
       shouldContinue: false,

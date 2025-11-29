@@ -3,15 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 
 interface PlayerData {
   id: number;
-  stt: number;
   name: string;
   note: string;
-  race_id: number;
-  race_name?: string;
-  sub_race_id: number;
-  subrace_name?: string;
-  house_id: number;
-  house_name?: string;
+  race_name: string;
+  subrace_name: string;
+  house_name: string;
   base_strength: number;
   base_speed: number;
   base_iq: number;
@@ -81,11 +77,29 @@ export default function PlayerInfo() {
         return houseData.id === cleanPlayer.house_id;
       });
 
+      // Create clean player object with only necessary fields
       setPlayer({
-        ...cleanPlayer,
+        id: cleanPlayer.id,
+        name: cleanPlayer.name,
+        note: cleanPlayer.note,
         race_name: race ? (race._dataValues || race.dataValues || race).name : "Unknown",
         subrace_name: subrace ? (subrace._dataValues || subrace.dataValues || subrace).name : "Unknown",
         house_name: house ? (house._dataValues || house.dataValues || house).name : "Unknown",
+        base_strength: cleanPlayer.base_strength,
+        base_speed: cleanPlayer.base_speed,
+        base_iq: cleanPlayer.base_iq,
+        base_biq: cleanPlayer.base_biq,
+        base_durability: cleanPlayer.base_durability,
+        base_martial_arts: cleanPlayer.base_martial_arts,
+        current_strength: cleanPlayer.current_strength,
+        current_speed: cleanPlayer.current_speed,
+        current_iq: cleanPlayer.current_iq,
+        current_biq: cleanPlayer.current_biq,
+        current_durability: cleanPlayer.current_durability,
+        current_martial_arts: cleanPlayer.current_martial_arts,
+        pvp_reward: cleanPlayer.pvp_reward,
+        tailored_reward: cleanPlayer.tailored_reward,
+        tournament_status: cleanPlayer.tournament_status,
       });
     } catch (error) {
       console.error("Error fetching player data:", error);
@@ -138,7 +152,7 @@ export default function PlayerInfo() {
   return (
     <div className="w-screen h-screen bg-gradient-to-br from-[#1a1029] to-[#2b1d42] flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b border-[#8a5b1a]">
+      <div className="flex items-center justify-between p-4 border-b border-[#8a5b1a]">
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate("/data")}
@@ -146,8 +160,8 @@ export default function PlayerInfo() {
           >
             ← Back
           </button>
-          <h1 className="text-4xl font-bold text-[#d4af37] drop-shadow-[0_0_15px_rgba(255,200,100,0.8)]">
-            Player #{player.stt}: {player.name}
+          <h1 className="text-3xl font-bold text-[#d4af37] drop-shadow-[0_0_15px_rgba(255,200,100,0.8)]">
+            {player.name}
           </h1>
         </div>
       </div>
@@ -155,30 +169,29 @@ export default function PlayerInfo() {
       <div className="flex-1 overflow-auto p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Basic Info Card */}
-          <div className="bg-[#2b1d42] rounded-lg p-6 border border-[#8a5b1a]">
-            <h2 className="text-2xl font-bold text-[#d4af37] mb-4">Basic Information</h2>
-            <div className="grid grid-cols-2 gap-4">
+          <div className="bg-[#2b1d42] rounded-lg p-4 border border-[#8a5b1a]">
+            <div className="flex items-center gap-8 flex-wrap">
               <div>
-                <span className="text-gray-400">Race:</span>
+                <span className="text-gray-400 text-sm">Race:</span>
                 <span className="text-white ml-2 font-semibold">{player.race_name}</span>
               </div>
               <div>
-                <span className="text-gray-400">Subrace:</span>
+                <span className="text-gray-400 text-sm">Subrace:</span>
                 <span className="text-white ml-2 font-semibold">{player.subrace_name}</span>
               </div>
               <div>
-                <span className="text-gray-400">House:</span>
+                <span className="text-gray-400 text-sm">House:</span>
                 <span className="text-white ml-2 font-semibold">{player.house_name}</span>
               </div>
               <div>
-                <span className="text-gray-400">Tournament Status:</span>
+                <span className="text-gray-400 text-sm">Tournament Status:</span>
                 <span className="text-white ml-2 font-semibold">{player.tournament_status}</span>
               </div>
             </div>
             {player.note && (
-              <div className="mt-4 pt-4 border-t border-[#8a5b1a]/30">
-                <span className="text-gray-400">Note:</span>
-                <p className="text-white mt-2">{player.note}</p>
+              <div className="mt-3 pt-3 border-t border-[#8a5b1a]/30">
+                <span className="text-gray-400 text-sm">Note:</span>
+                <p className="text-white text-sm mt-1">{player.note}</p>
               </div>
             )}
           </div>

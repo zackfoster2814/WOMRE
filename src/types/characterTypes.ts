@@ -18,8 +18,36 @@ export interface CharacterState {
   characterName: string;
 }
 
+// Stat Modifier Types
+export type StatModifierType = 'buff' | 'debuff' | 'set_base';
+export type StatModifierSource =
+  | 'race'
+  | 'subrace'
+  | 'quirk'
+  | 'power'
+  | 'gear'
+  | 'weapon'
+  | 'archetype'
+  | 'house'
+  | 'chardev'
+  | 'combat'
+  | 'temporary';
+
+export interface StatModifier {
+  id: string;
+  source: StatModifierSource;
+  sourceName: string;
+  type: StatModifierType;
+  stat: string; // 'strength' | 'speed' | 'durability' | 'iq' | 'battleIQ' | 'martialArts' | 'all'
+  value: number; // For buff/debuff: +/- amount, For set_base: new value
+  condition?: string; // Optional condition (e.g., "in combat", "vs Vampire", etc.)
+  isPermanent: boolean; // true for permanent, false for combat-only
+  description: string;
+}
+
 // Character Stats Interface
 export interface CharacterStats {
+  // Base stats (from wheel rolls)
   strength: string;
   speed: string;
   durability: string;
@@ -28,12 +56,17 @@ export interface CharacterStats {
   martialArts: string;
   totalBaseStat: string;
 
+  // Stat modifiers array
+  modifiers?: StatModifier[];
 }
 
 // Character Reducer Actions
 export type CharacterAction =
   | { type: "SET_RESULT"; key: string; value: string }
   | { type: "SET_STAT"; key: string; value: string }
+  | { type: "ADD_STAT_MODIFIER"; modifier: StatModifier }
+  | { type: "REMOVE_STAT_MODIFIER"; modifierId: string }
+  | { type: "APPLY_STAT_MODIFIERS" } // Calculate and apply all modifiers to base stats
   | { type: "ADD_QUIRK"; quirk: Section }
   | { type: "ADD_GEAR"; gear: Section }
   | { type: "ADD_LEGACY_GEAR"; gear: Section }

@@ -36,6 +36,7 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
 
   const handleNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log("Name change:", e.target.value); // Debug log
       dispatch({ type: "SET_CHARACTER_NAME", name: e.target.value });
     },
     [dispatch]
@@ -43,20 +44,18 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({
 
   // Xử lý khi input mất focus
   const handleBlur = useCallback(() => {
+    console.log("Input blur"); // Debug log
     setShouldAutoFocus(false);
-    if (inputRef.current) {
-      inputRef.current.blur();
-    }
   }, []);
 
   // Xử lý phím Enter
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
-        handleBlur();
+        e.currentTarget.blur();
       }
     },
-    [handleBlur]
+    []
   );
 
   const handleRaceChange = useCallback(

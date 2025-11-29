@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld('api', {
   fetchRacesWithSubraceWheel: () => ipcRenderer.invoke('fetch-races-with-subrace-wheel'),
   // ------------------Subraces--------------------
   fetchAllSubraces: () => ipcRenderer.invoke('fetch-subraces'),
+  fetchAllSubracesWithRace: () => ipcRenderer.invoke('fetch-subraces-with-race'),
 
   fetchSubraceById: async (raceId) => await ipcRenderer.invoke('fetch-subrace-by-id', raceId),
 
@@ -82,9 +83,19 @@ contextBridge.exposeInMainWorld('api', {
   // ----------------------Extra Houses----------------------
   fetchAllExtraHouses: () => ipcRenderer.invoke('get-all-extra-houses'),
   fetchExtraHouseById: async (id) => await ipcRenderer.invoke('get-extra-house-by-id', id),
-  
+
 
   // ----------------------Extra Archetypes----------------------
   fetchAllExtraArchetypes: () => ipcRenderer.invoke('get-all-extra-archetypes'),
   fetchExtraArchetypeById: async (id) => await ipcRenderer.invoke('get-extra-archetype-by-id', id),
+
+  // ----------------------Import Character----------------------
+  importCharacterFromJSON: (characterData: any) => ipcRenderer.invoke('import-character-from-json', characterData),
+});
+
+// Expose electron API for battle pages
+contextBridge.exposeInMainWorld('electron', {
+  ipcRenderer: {
+    invoke: (channel: string, ...args: any[]) => ipcRenderer.invoke(channel, ...args),
+  }
 });

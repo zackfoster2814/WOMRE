@@ -10,6 +10,8 @@ export const initialCharacterState: CharacterState = {
     iq: "",
     battleIQ: "",
     martialArts: "",
+    totalBaseStat: "",
+    modifiers: [],
   },
   quirks: [],
   gears: [],
@@ -42,6 +44,38 @@ export function characterReducer(
         ...state,
         stats: { ...state.stats, [action.key]: action.value },
       };
+
+    case "ADD_STAT_MODIFIER": {
+      const currentModifiers = state.stats.modifiers || [];
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          modifiers: [...currentModifiers, action.modifier],
+        },
+      };
+    }
+
+    case "REMOVE_STAT_MODIFIER": {
+      const currentModifiers = state.stats.modifiers || [];
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          modifiers: currentModifiers.filter(m => m.id !== action.modifierId),
+        },
+      };
+    }
+
+    case "APPLY_STAT_MODIFIERS": {
+      // Import at runtime to avoid circular dependencies
+      const { applyPermanentModifiers } = require("@/utils/statCalculator");
+      const updatedStats = applyPermanentModifiers(state.stats);
+      return {
+        ...state,
+        stats: updatedStats,
+      };
+    }
 
     case "SET_CHARACTER_NAME":
       return {

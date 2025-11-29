@@ -76,6 +76,12 @@ export default function DataManager() {
           };
         }
 
+        // If this is player data, remove stt field
+        if (tableName === "players") {
+          const { stt, ...rest } = baseData;
+          return rest;
+        }
+
         return baseData;
       });
 
@@ -104,11 +110,6 @@ export default function DataManager() {
               {key}
             </th>
           ))}
-          {selectedTable === "players" && (
-            <th className="px-4 py-3 text-left text-sm font-semibold text-[#d4af37] border-b border-[#8a5b1a]">
-              Actions
-            </th>
-          )}
         </tr>
       </thead>
     );
@@ -119,35 +120,43 @@ export default function DataManager() {
 
     return (
       <tbody>
-        {tableData.map((row, rowIndex) => (
-          <tr
-            key={rowIndex}
-            className="hover:bg-[#3a2a52] transition-colors border-b border-[#8a5b1a]/30"
-          >
-            {Object.values(row).map((value: any, colIndex) => (
-              <td
-                key={colIndex}
-                className="px-4 py-2 text-sm text-gray-200"
-              >
-                {value !== null && value !== undefined
-                  ? typeof value === 'object'
-                    ? JSON.stringify(value)
-                    : String(value)
-                  : '-'}
-              </td>
-            ))}
-            {selectedTable === "players" && (
-              <td className="px-4 py-2 text-sm">
-                <button
-                  onClick={() => navigate(`/player/${row.id}`)}
-                  className="px-3 py-1 bg-[#d4af37] hover:bg-[#c9a532] text-[#1a1029] rounded font-semibold transition-colors"
-                >
-                  View
-                </button>
-              </td>
-            )}
-          </tr>
-        ))}
+        {tableData.map((row, rowIndex) => {
+          const keys = Object.keys(row);
+
+          return (
+            <tr
+              key={rowIndex}
+              className="hover:bg-[#3a2a52] transition-colors border-b border-[#8a5b1a]/30"
+            >
+              {keys.map((key, colIndex) => {
+                const value = row[key];
+                const isPlayerName = selectedTable === "players" && key === "name";
+
+                return (
+                  <td
+                    key={colIndex}
+                    className={`px-4 py-2 text-sm ${
+                      isPlayerName
+                        ? "text-[#d4af37] font-semibold cursor-pointer hover:text-[#c9a532] hover:underline"
+                        : "text-gray-200"
+                    }`}
+                    onClick={() => {
+                      if (isPlayerName) {
+                        navigate(`/player/${row.id}`);
+                      }
+                    }}
+                  >
+                    {value !== null && value !== undefined
+                      ? typeof value === 'object'
+                        ? JSON.stringify(value)
+                        : String(value)
+                      : '-'}
+                  </td>
+                );
+              })}
+            </tr>
+          );
+        })}
       </tbody>
     );
   };
@@ -159,12 +168,20 @@ export default function DataManager() {
         <h1 className="text-4xl font-bold text-[#d4af37] drop-shadow-[0_0_15px_rgba(255,200,100,0.8)]">
           Database Manager
         </h1>
-        <button
-          onClick={() => navigate("/")}
-          className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors border border-[#8a5b1a]"
-        >
-          Back to Menu
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={() => navigate("/player-editor")}
+            className="px-6 py-2 bg-purple-700 hover:bg-purple-600 text-white rounded-lg font-semibold transition-colors border border-purple-500"
+          >
+            ✏️ Edit Players
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors border border-[#8a5b1a]"
+          >
+            Back to Menu
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-1 overflow-hidden">

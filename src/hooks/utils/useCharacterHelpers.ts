@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { exportCharacter } from "@/Common/exportCharacter";
+import { saveCharacterToDatabase } from "@/Common/exportCharacter";
 
 // Types for character helpers
 interface CompleteCharacterInfo {
@@ -497,9 +497,19 @@ export const useCharacterHelpers = () => {
     }
   }, []);
 
-  // Handle character export
-  const handleCharacterExport = useCallback((characterState: any): void => {
-    exportCharacter(characterState);
+  // Handle character export - now saves to database
+  const handleCharacterExport = useCallback(async (characterState: any): Promise<void> => {
+    const completeInfo = getCompleteCharacterInfo(characterState);
+
+    await saveCharacterToDatabase(
+      completeInfo,
+      (playerId) => {
+        alert(`✅ Đã lưu nhân vật "${completeInfo.name}" vào database thành công!\n\nPlayer ID: ${playerId}`);
+      },
+      (error) => {
+        alert(`❌ Lỗi khi lưu vào database:\n\n${error}`);
+      }
+    );
   }, []);
 
   // Generate shareable character URL/code

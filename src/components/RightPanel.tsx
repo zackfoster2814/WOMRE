@@ -5,6 +5,13 @@ interface RightPanelProps {
   jumpToWheel: (wheelKey: string) => void;
 }
 
+// Helper function to extract number from gear count result
+const extractGearCount = (result: string | undefined): number => {
+  if (!result) return 0;
+  const match = result.match(/\d+/);
+  return match ? parseInt(match[0]) : 0;
+};
+
 interface TooltipProps {
   weapon: any;
   children: React.ReactNode;
@@ -143,9 +150,12 @@ export const RightPanel: React.FC<RightPanelProps> = ({
       <fieldset className="border-2 border-[#d4af37] py-2 px-4 rounded-md bg-black/50 text-xl flex flex-col">
         <legend
           onClick={() => handleSectionClick("quirk")}
-          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400 flex items-center justify-between w-full"
         >
-          Quirks
+          <span>Quirks</span>
+          <span className="text-sm text-[#d4af37] font-normal">
+            ({characterState.quirks.length}/{extractGearCount(characterState.results["quirk-count"])})
+          </span>
         </legend>
         <ul className="ml-4 space-y-2 text-lg overflow-y-auto max-h-[90px] min-h-[90px]">
           {characterState.quirks.length > 0 ? (
@@ -164,9 +174,12 @@ export const RightPanel: React.FC<RightPanelProps> = ({
       <fieldset className="flex flex-col min-h-[180px] max-h-[180px] overflow-y-auto border-2 border-[#d4af37] py-2 px-4 rounded-md bg-black/50 text-xl">
         <legend
           onClick={() => handleSectionClick("gear")}
-          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400 flex items-center justify-between w-full"
         >
-          Gear
+          <span>Gear</span>
+          <span className="text-sm text-[#d4af37] font-normal">
+            ({characterState.gears.length + characterState.legacyGears.length}/{extractGearCount(characterState.results["gear-count"]) + extractGearCount(characterState.results["legacy-gear-count"])})
+          </span>
         </legend>
         <div className="max-h-40 overflow-y-auto pr-2">
           <ul className="list-disc pl-6 space-y-1">
@@ -199,9 +212,12 @@ export const RightPanel: React.FC<RightPanelProps> = ({
       <fieldset className="flex flex-col border-2 border-[#d4af37] p-4 rounded-md bg-black/50 text-xl">
         <legend
           onClick={() => handleSectionClick("power")}
-          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400 flex items-center justify-between w-full"
         >
-          Powers ({characterState.powers?.length || 0})
+          <span>Powers</span>
+          <span className="text-sm text-[#d4af37] font-normal">
+            ({characterState.powers?.length || 0}/{extractGearCount(characterState.results["power-count"])})
+          </span>
         </legend>
         <div className="max-h-40 overflow-y-auto pr-2">
           <ul className="list-disc pl-6 space-y-1 min-h-[130px] max-h-[130px] overflow-y-auto">
