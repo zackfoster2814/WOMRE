@@ -2,8 +2,8 @@
  * Power Configuration (REFACTORED)
  */
 
-import { WheelFactory } from '@/services/WheelFactory';
-import { COLOR_PALETTE } from '@/Common/Constants/ConstantsConfig';
+import { WheelFactory } from '@/services/WheelFactory.js';
+import { COLOR_PALETTE } from '@/Common/Constants/ConstantsConfig.js';
 
 // Power count configuration by race
 const POWER_CONFIG: Record<string, number[]> = {

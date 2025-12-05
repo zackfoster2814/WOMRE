@@ -2,7 +2,7 @@
  * Player Configuration (REFACTORED)
  */
 
-import { WheelFactory } from '@/services/WheelFactory';
+import { WheelFactory } from '@/services/WheelFactory.js';
 
 /**
  * Get player wheel (lazy loaded)

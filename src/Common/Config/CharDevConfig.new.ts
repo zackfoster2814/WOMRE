@@ -2,7 +2,7 @@
  * Character Development Configuration (REFACTORED)
  */
 
-import { WheelFactory } from '@/services/WheelFactory';
+import { WheelFactory } from '@/services/WheelFactory.js';
 
 /**
  * Get character development wheel (lazy loaded)

@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface EnchantsAttributes  {
+export interface EnchantsAttributes  {
     id?: number;
     name: string;
     effect: string;

@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface RewardAttributes{
+export interface RewardAttributes{
     id?: number;
     type: string;
     description: string;

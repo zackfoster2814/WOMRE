@@ -3,7 +3,7 @@ import winterIsComing from "@/assets/audio/WinterInComing.mp3";
 import hearMeRoar from "@/assets/audio/HearMeRoar.mp3";
 import oursIsTheFury from "@/assets/audio/OursIsTheFury.mp3";
 import { useRef } from "react";
-import { WheelStep } from "../Types/Types";
+import { WheelStep } from "../Types/Types.js";
 import { describe } from "node:test";
 
 const getRandomColor = () => {

@@ -1,5 +1,5 @@
 import { get } from "lodash";
-import { WheelStep } from "../Types/Types";
+import { WheelStep } from "../Types/Types.js";
 
 export const gearCountWheel: WheelStep = {
   key: "gear-count",

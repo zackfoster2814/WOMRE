@@ -3,7 +3,7 @@
  * Uses WheelFactory for lazy loading
  */
 
-import { WheelFactory } from '@/services/WheelFactory';
+import { WheelFactory } from '@/services/WheelFactory.js';
 
 /**
  * Get race wheel (lazy loaded)

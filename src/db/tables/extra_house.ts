@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
-interface ExtraArchetypesAttributes {
+export interface ExtraHouseAttributes {
     id: number;
     house_id: number;
     name: string;
@@ -7,10 +7,10 @@ interface ExtraArchetypesAttributes {
     weight: number;
     note: string;
 }
-interface ExtraArchetypesCreationAttributes extends Omit<ExtraArchetypesAttributes, 'id'> {
+interface ExtraHouseCreationAttributes extends Omit<ExtraHouseAttributes, 'id'> {
     id?: number;
 }
-class ExtraHouse extends Model<ExtraArchetypesAttributes, ExtraArchetypesCreationAttributes> implements ExtraArchetypesAttributes {
+class ExtraHouse extends Model<ExtraHouseAttributes, ExtraHouseCreationAttributes> implements ExtraHouseAttributes {
     declare id: number
     declare house_id: number;
     declare name: string;

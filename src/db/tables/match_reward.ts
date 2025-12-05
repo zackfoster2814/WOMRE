@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface Matches_RewardAttributes {
+export interface Matches_RewardAttributes {
     match_id: number;
     reward_id: number;
 }

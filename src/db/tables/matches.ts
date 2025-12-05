@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface MatchesAttributes {
+export interface MatchesAttributes {
     id?: number;
     phase_id: number;
     player_a_id: number;

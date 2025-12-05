@@ -1,9 +1,22 @@
+/// <reference lib="dom" />
 /**
  * API Service Layer
  * Abstraction over window.api (Electron IPC) with fallback support
  */
-
-import { dataLoader } from './DataLoader';
+import {
+  ArchetypesAttributes,
+  char_devAttributes,
+  EnchantsAttributes,
+  HousesAttributes,
+  PlayersAttributes,
+  PowersAttributes,
+  pve_enemies_Attributes,
+  QuirksAttributes,
+  RacesAttributes,
+  Sub_race_Attributes,
+  WeaponsAttributes,
+} from '../types/models.js';
+import { dataLoader } from './DataLoader.js';
 
 type ApiMethod = 'fetchAllRaces' | 'fetchAllSubraces' | 'fetchAllArchetypes' |
   'fetchAllPowers' | 'fetchGearByLegacy' | 'fetchAllHouses' |
@@ -17,7 +30,7 @@ interface ApiService {
 
 class ElectronApiService implements ApiService {
   isAvailable(): boolean {
-    return typeof window !== 'undefined' && !!window.api;
+    return typeof window !== 'undefined' && !!(window as any).api;
   }
 
   async call<T>(method: ApiMethod, ...args: any[]): Promise<T> {
@@ -48,33 +61,33 @@ const apiService = new ElectronApiService();
  * Fetch functions with caching
  */
 
-export async function fetchRaces() {
+export async function fetchRaces(): Promise<RacesAttributes[]> {
   return dataLoader.load('races', async () => {
-    const data = await apiService.call('fetchAllRaces');
+    const data:any = await apiService.call('fetchAllRaces');
     console.log('[ApiService] Fetched races:', data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchSubraces() {
+export async function fetchSubraces(): Promise<Sub_race_Attributes[]> {
   return dataLoader.load('subraces', async () => {
-    const data = await apiService.call('fetchAllSubraces');
+    const data:any = await apiService.call('fetchAllSubraces');
     console.log('[ApiService] Fetched subraces:', data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchArchetypes() {
+export async function fetchArchetypes() : Promise<ArchetypesAttributes[]> {
   return dataLoader.load('archetypes', async () => {
-    const data = await apiService.call('fetchAllArchetypes');
+    const data:any = await apiService.call('fetchAllArchetypes');
     console.log('[ApiService] Fetched archetypes:', data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchPowers() {
+export async function fetchPowers() : Promise<PowersAttributes[]> {
   return dataLoader.load('powers', async () => {
-    const data = await apiService.call('fetchAllPowers');
+    const data:any = await apiService.call('fetchAllPowers');
     console.log('[ApiService] Fetched powers:', data?.length || 0);
     return data || [];
   });
@@ -82,63 +95,63 @@ export async function fetchPowers() {
 
 export async function fetchGearsByLegacy(isLegacy: number) {
   return dataLoader.load(`gears-legacy-${isLegacy}`, async () => {
-    const data = await apiService.call('fetchGearByLegacy', isLegacy);
+    const data:any = await apiService.call('fetchGearByLegacy', isLegacy);
     console.log(`[ApiService] Fetched gears (legacy=${isLegacy}):`, data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchHouses() {
+export async function fetchHouses(): Promise<HousesAttributes[]> {
   return dataLoader.load('houses', async () => {
-    const data = await apiService.call('fetchAllHouses');
+    const data:any = await apiService.call('fetchAllHouses');
     console.log('[ApiService] Fetched houses:', data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchWeapons() {
+export async function fetchWeapons(): Promise<WeaponsAttributes[]> {
   return dataLoader.load('weapons', async () => {
-    const data = await apiService.call('fetchAllWeapons');
+    const data:any = await apiService.call('fetchAllWeapons');
     console.log('[ApiService] Fetched weapons:', data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchEnchants() {
+export async function fetchEnchants(): Promise<EnchantsAttributes[]> {
   return dataLoader.load('enchants', async () => {
-    const data = await apiService.call('fetchAllEnchants');
+    const data:any = await apiService.call('fetchAllEnchants');
     console.log('[ApiService] Fetched enchants:', data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchQuirks() {
+export async function fetchQuirks(): Promise<QuirksAttributes[]> {
   return dataLoader.load('quirks', async () => {
-    const data = await apiService.call('fetchAllQuirks');
+    const data:any = await apiService.call('fetchAllQuirks');
     console.log('[ApiService] Fetched quirks:', data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchCharDevs() {
+export async function fetchCharDevs(): Promise<char_devAttributes[]> {
   return dataLoader.load('charDevs', async () => {
-    const data = await apiService.call('fetchAllCharDevs');
+    const data:any = await apiService.call('fetchAllCharDevs');
     console.log('[ApiService] Fetched charDevs:', data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchPvE() {
+export async function fetchPvE(): Promise<pve_enemies_Attributes[]> {
   return dataLoader.load('pve', async () => {
-    const data = await apiService.call('fetchAllPvE');
+    const data:any = await apiService.call('fetchAllPvE');
     console.log('[ApiService] Fetched PvE:', data?.length || 0);
     return data || [];
   });
 }
 
-export async function fetchPlayers() {
+export async function fetchPlayers(): Promise<PlayersAttributes[]> {
   return dataLoader.load('players', async () => {
-    const data = await apiService.call('fetchAllPlayers');
+    const data:any = await apiService.call('fetchAllPlayers');
     console.log('[ApiService] Fetched players:', data?.length || 0);
     return data || [];
   });

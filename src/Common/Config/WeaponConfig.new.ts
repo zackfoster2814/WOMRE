@@ -2,7 +2,7 @@
  * Weapon Configuration (REFACTORED)
  */
 
-import { WheelFactory } from '@/services/WheelFactory';
+import { WheelFactory } from '@/services/WheelFactory.js';
 
 /**
  * Weapon exist wheel (static)

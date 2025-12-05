@@ -2,7 +2,7 @@
  * Gear Configuration (REFACTORED)
  */
 
-import { WheelFactory } from '@/services/WheelFactory';
+import { WheelFactory } from '@/services/WheelFactory.js';
 
 /**
  * Gear count wheel (static configuration)

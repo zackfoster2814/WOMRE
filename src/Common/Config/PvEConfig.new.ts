@@ -2,7 +2,7 @@
  * PvE Configuration (REFACTORED)
  */
 
-import { WheelFactory } from '@/services/WheelFactory';
+import { WheelFactory } from '@/services/WheelFactory.js';
 
 /**
  * Get PvE wheel (lazy loaded)

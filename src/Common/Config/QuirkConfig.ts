@@ -1,4 +1,4 @@
-import { Section } from "../Types/Types";
+import { Section } from "../Types/Types.js";
 
 export const quirkCountOptions: Section[] = [
   {

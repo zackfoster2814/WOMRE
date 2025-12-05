@@ -2,7 +2,7 @@
  * Archetype Configuration (REFACTORED)
  */
 
-import { WheelFactory } from '@/services/WheelFactory';
+import { WheelFactory } from '@/services/WheelFactory.js';
 
 /**
  * Get archetype wheel (lazy loaded)

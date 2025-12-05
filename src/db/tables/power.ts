@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface PowersAttributes {
+export interface PowersAttributes {
     id?: number;
     name: string;
     effect: string;

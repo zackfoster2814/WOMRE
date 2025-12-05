@@ -1,4 +1,4 @@
-import { WheelStep } from "../Types/Types";
+import { WheelStep } from "../Types/Types.js";
 
 export const pveWheel: WheelStep = {
   key: "pve",

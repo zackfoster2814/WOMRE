@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface Matches_Events_Attributes {
+export interface Matches_Events_Attributes {
     match_id: number;
     event_id: number;
 }

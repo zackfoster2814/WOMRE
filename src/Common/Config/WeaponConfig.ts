@@ -1,26 +1,10 @@
-import { WheelStep } from "../Types/Types";
-
-import bananaPeel from "@/assets/Weapon/banana_peel.png";
-import brokenStraightSword from "@/assets/Weapon/broken_straight_sword.png";
-import ukulele from "@/assets/Weapon/ukulele.png";
-import uchigatana from "@/assets/Weapon/uchigatana.png";
-import kunai from "@/assets/Weapon/kunai.png";
-import drums from "@/assets/Weapon/drums.png";
-import magicalStaff from "@/assets/Weapon/magical_staff.png";
-import glassBottle from "@/assets/Weapon/glass_bottle.png";
-import woodenSword from "@/assets/Weapon/wooden_sword.png";
-import cursedPennywort from "@/assets/Weapon/cursed_pennywort.png";
-import slingshot from "@/assets/Weapon/slingshot.png";
-import bfSword from "@/assets/Weapon/b.f._sword.png";
-import longBow from "@/assets/Weapon/longbow.png";
-import hiddenBlade from "@/assets/Weapon/hidden_blade.png";
-import summoningScroll from "@/assets/Weapon/summoning_scroll.png";
-import nunchuck from "@/assets/Weapon/nunchuck.png";
-import grimoire from "@/assets/Weapon/grimoire.png";
-import whip from "@/assets/Weapon/whip.png";
-import halberd from "@/assets/Weapon/halberd.png";
+import { WheelStep } from "../Types/Types.js";
 import saxophone from "@/assets/Weapon/saxophone.png";
 
+const getRandomColor = () => {
+  return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+}
+const weapon_data = window.api ? await window.api.fetchAllWeapons() : [];
 export const weaponExistWheel: WheelStep = {
   key: "weapon-exist",
   title: "Weapon?",
@@ -64,215 +48,22 @@ export const uniqueWeaponExistWheel: WheelStep = {
 };
 
 export const weaponWheel: WheelStep = {
-  key: "weapon",
-  title: "Weapon",
-  sections: [
-    {
-      id: "1",
-      name: "Banana Peel",
-      weight: 5,
-      color: "#FFD700",
-      description:
-        "Trong Combat: -1 all stats nếu IQ < đối phương, +1 all stats nếu IQ > đối phương. (100%, Physical)",
-      image: bananaPeel,
-      usableRate: 100,
-      tag: "Physical",
-    },
-    {
-      id: "2",
-      name: "Broken Straight Sword",
-      weight: 5,
-      color: "#CCCCCC",
-      description: "Nhận -1 all stats. (50%, Physical)",
-      image: brokenStraightSword,
-      usableRate: 50,
-      tag: "Physical",
-    },
-    {
-      id: "3",
-      name: "Ukulele",
-      weight: 5,
-      color: "#87CEEB",
-      description: "Đối thủ nhận -1 IQ và -1 BIQ. (75%, P/M)",
-      image: ukulele,
-      usableRate: 75,
-      tag: ["Physical", "Magic"],
-    },
-    {
-      id: "4",
-      name: "Uchigatana",
-      weight: 5,
-      color: "#A2D149",
-      description: "+2 BIQ và +1 Martial Arts. (85%, Physical)",
-      image: uchigatana,
-      usableRate: 85,
-      tag: "Physical",
-    },
-    {
-      id: "5",
-      name: "Kunai",
-      weight: 5,
-      color: "#FFD700",
-      description: "+2 Speed. (99%, Physical)",
-      image: kunai,
-      usableRate: 99,
-      tag: "Physical",
-    },
-    {
-      id: "6",
-      name: "Drums",
-      weight: 5,
-      color: "#87CEEB",
-      description: "Mỗi PvP win: nhận thêm 1 combat reward. (33%, P/M)",
-      image: drums,
-      usableRate: 33,
-      tag: ["Physical", "Magic"],
-    },
-    {
-      id: "7",
-      name: "Magical Staff",
-      weight: 5,
-      color: "#FF69B4",
-      description: "+3 IQ. (66%, Magic)",
-      image: magicalStaff,
-      usableRate: 66,
-      tag: "Magic",
-    },
-    {
-      id: "8",
-      name: "Glass Bottle",
-      weight: 5,
-      color: "#CCCCCC",
-      description: "+2 all stats, biến mất sau 1 combat. (15%, Physical)",
-      image: glassBottle,
-      usableRate: 15,
-      tag: "Physical",
-    },
-    {
-      id: "9",
-      name: "Wooden Sword",
-      weight: 5,
-      color: "#A2D149",
-      description: "+1 Strength. (100%, Physical)",
-      image: woodenSword,
-      usableRate: 100,
-      tag: "Physical",
-    },
-    {
-      id: "10",
-      name: "Cursed Pennywort",
-      weight: 5,
-      color: "#FFD700",
-      description: "36%: vô hiệu hóa 3 power random của địch. (36%, P/M)",
-      image: cursedPennywort,
-      usableRate: 36,
-      tag: ["Physical", "Magic"],
-    },
-    {
-      id: "11",
-      name: "Slingshot",
-      weight: 5,
-      color: "#87CEEB",
-      description: "+1 Str, +1 BIQ. (70%, Physical)",
-      image: slingshot,
-      usableRate: 70,
-      tag: "Physical",
-    },
-    {
-      id: "12",
-      name: "B.F Sword",
-      weight: 5,
-      color: "#FF69B4",
-      description: "+3 Str. (66%, Physical)",
-      image: bfSword,
-      usableRate: 66,
-      tag: "Physical",
-    },
-    {
-      id: "13",
-      name: "Long Bow",
-      weight: 5,
-      color: "#A2D149",
-      description: "+2 BIQ. (90%, Physical)",
-      image: longBow,
-      usableRate: 90,
-      tag: "Physical",
-    },
-    {
-      id: "14",
-      name: "Hidden Blade",
-      weight: 5,
-      color: "#FFD700",
-      description:
-        "+1 Speed, Power 'Critical Strike'. Nếu Archetype 'Assassins' → always usable. (55%, Physical)",
-      image: hiddenBlade,
-      usableRate: 55,
-      tag: "Physical",
-    },
-    {
-      id: "15",
-      name: "Summoning Scroll",
-      weight: 5,
-      color: "#87CEEB",
-      description:
-        "Combat: Summon random (Summon Wheel), biến mất sau trận. (60%, Magic)",
-      image: summoningScroll,
-      usableRate: 60,
-      tag: "Magic",
-    },
-    {
-      id: "16",
-      name: "Nunchuck",
-      weight: 5,
-      color: "#FF69B4",
-      description: "+3 Martial Arts. (66%, Physical)",
-      image: nunchuck,
-      usableRate: 66,
-      tag: "Physical",
-    },
-    {
-      id: "17",
-      name: "Grimoire",
-      weight: 5,
-      color: "#CCCCCC",
-      description: "+1 IQ. (100%, Magic)",
-      image: grimoire,
-      usableRate: 100,
-      tag: "Magic",
-    },
-    {
-      id: "18",
-      name: "Whip",
-      weight: 5,
-      color: "#A2D149",
-      description:
-        "+1 Speed, +1 MA. Luôn usable nếu House Hoslow. (40%, Physical)",
-      image: whip,
-      usableRate: 40,
-      tag: "Physical",
-    },
-    {
-      id: "19",
-      name: "Halberd",
-      weight: 5,
-      color: "#FFD700",
-      description:
-        "Nếu Str >7: usable+25%. Thắng round Str: +1 BIQ, +1MA. (40%, Physical)",
-      image: halberd,
-      usableRate: 40,
-      tag: "Physical",
-    },
-    {
-      id: "20",
-      name: "Saxophone",
-      weight: 5,
-      color: "#87CEEB",
-      description: "+1 IQ, +1 BIQ. (60%, P/M)",
-      image: saxophone,
-      usableRate: 60,
-      tag: "Physical",
-    },
-  ],
+  key: "weapon-wheel",
+  title: "Weapon Wheel",
+  sections: weapon_data.map((weapon: any) => {
+    const WeaponData = weapon._dataValues || weapon.dataValues || weapon;
+    return {
+      id: WeaponData.id,
+      name: WeaponData.name,
+      weight: WeaponData.weight,
+      color: getRandomColor(),
+      description: WeaponData.description,
+      usableRate: WeaponData.usableRate,
+      tag: WeaponData.tag,
+      isUnique: WeaponData.isUnique,
+    };
+  }
+  ),
 };
 
 export const uniqueWeaponWheel: WheelStep = {

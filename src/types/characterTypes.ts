@@ -1,4 +1,5 @@
 import { Section, WheelStep } from "@/Common/Types/Types";
+import React from "react";
 
 // Character State Interface
 export interface CharacterState {

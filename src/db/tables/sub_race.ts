@@ -1,7 +1,7 @@
 import { timeStamp } from "console";
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface Sub_race_Attributes {
+export interface Sub_race_Attributes {
     id?: number;
     race_id: number;
     name: string;
