@@ -1,6 +1,6 @@
 // StrengthConfig.ts
-import { WheelStep } from "@/Common/Types/Types";
-import { COLOR_PALETTE } from "../Constants/ConstantsConfig";
+import { WheelStep } from "@/Common/Types/Types.js";
+import { COLOR_PALETTE } from "../Constants/ConstantsConfig.js";
 
 // Dữ liệu strength theo race
 const STRENGTH_DATA: Record<string, number[]> = {

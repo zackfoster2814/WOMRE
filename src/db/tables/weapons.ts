@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface WeaponsAttributes  {
+export interface WeaponsAttributes  {
     id?: number;
     name: string;
     type: string;

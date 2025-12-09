@@ -1,5 +1,5 @@
-import { COLOR_PALETTE } from "../Constants/ConstantsConfig";
-import { WheelStep } from "../Types/types";
+import { COLOR_PALETTE } from "../Constants/ConstantsConfig.js";
+import { WheelStep } from "../Types/Types.js";
 
 // Dữ liệu Martial Arts theo race
 const MARTIAL_ARTS_DATA: Record<string, number[]> = {

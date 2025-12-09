@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface ArchetypesAttributes {
+export interface ArchetypesAttributes {
     id: number;
     name: string;
     effect: string;

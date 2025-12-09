@@ -48,15 +48,19 @@ const Wheel: React.FC<WheelProps> = React.memo(
 
     const radius = Math.min(width, height) / 2;
 
-    const totalWeight = items.reduce((sum, item) => sum + (Number(item.weight) || 1), 0);
-    console.log("Wheel debug:", { itemsCount: items.length, totalWeight, items: items.slice(0, 3) });
+    // Calculate values safely, handling empty items
+    const totalWeight = items && Array.isArray(items) && items.length > 0
+      ? items.reduce((sum, item) => sum + (Number(item.weight) || 1), 0)
+      : 0;
 
-    const isResultValid = result !== null && result < items.length;
+    const isResultValid = result !== null && items && result < items.length;
 
     const minDuration = 6;
     const maxDuration = 12;
 
     const calculateIndex = (spinPointDegree: number): number => {
+      if (!items || items.length === 0 || totalWeight === 0) return -1;
+
       let cumulativeWeight = 0;
 
       for (let i = 0; i < items.length; i++) {
@@ -178,6 +182,17 @@ const Wheel: React.FC<WheelProps> = React.memo(
     const handleCancelReroll = () => {
       setShowResetDialog(false);
     };
+
+    // Guard clause AFTER all hooks: check if items exists and is an array
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-gray-400">No items available for wheel</p>
+        </div>
+      );
+    }
+
+    console.log("Wheel debug:", { itemsCount: items.length, totalWeight, items: items.slice(0, 3) });
 
     const renderSegments = () => {
       if (items.length === 0 || totalWeight === 0) return null;

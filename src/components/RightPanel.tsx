@@ -84,6 +84,13 @@ interface RightPanelProps {
   setCharacterInfo: (info: string) => void;
 }
 
+// Helper function to extract number from gear count result
+const extractGearCount = (result: string | undefined): number => {
+  if (!result) return 0;
+  const match = result.match(/\d+/);
+  return match ? parseInt(match[0]) : 0;
+};
+
 interface TooltipProps {
   weapon: any;
   children: React.ReactNode;
@@ -220,9 +227,12 @@ export const RightPanel: React.FC<RightPanelProps> = ({
       <fieldset className={`${SIZES.legend.border} border-[#d4af37] ${SIZES.legend.padding} rounded-md bg-black/50 ${SIZES.legend.fontSize} flex flex-col`}>
         <legend
           onClick={() => handleSectionClick("quirk")}
-          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400 flex items-center justify-between w-full"
         >
-          Quirks
+          <span>Quirks</span>
+          <span className="text-sm text-[#d4af37] font-normal">
+            ({characterState.quirks.length}/{extractGearCount(characterState.results["quirk-count"])})
+          </span>
         </legend>
         <ul className={`${SIZES.quirks.padding} ${SIZES.quirks.gap} ${SIZES.quirks.fontSize} overflow-y-auto ${SIZES.quirks.maxHeight} ${SIZES.quirks.minHeight}`}>
           {characterState.quirks.length > 0 ? (
@@ -241,9 +251,12 @@ export const RightPanel: React.FC<RightPanelProps> = ({
       <fieldset className={`flex flex-col ${SIZES.gears.minHeight} ${SIZES.gears.maxHeight} overflow-y-auto ${SIZES.legend.border} border-[#d4af37] ${SIZES.legend.padding} rounded-md bg-black/50 ${SIZES.legend.fontSize}`}>
         <legend
           onClick={() => handleSectionClick("gear")}
-          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400 flex items-center justify-between w-full"
         >
-          Gear
+          <span>Gear</span>
+          <span className="text-sm text-[#d4af37] font-normal">
+            ({characterState.gears.length + characterState.legacyGears.length}/{extractGearCount(characterState.results["gear-count"]) + extractGearCount(characterState.results["legacy-gear-count"])})
+          </span>
         </legend>
         <div className="max-h-40 overflow-y-auto pr-2">
           <ul className={`list-disc ${SIZES.gears.padding} ${SIZES.gears.gap}`}>
@@ -274,9 +287,12 @@ export const RightPanel: React.FC<RightPanelProps> = ({
       <fieldset className={`flex flex-col ${SIZES.legend.border} border-[#d4af37] ${SIZES.legend.padding} rounded-md bg-black/50 ${SIZES.legend.fontSize}`}>
         <legend
           onClick={() => handleSectionClick("power")}
-          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400"
+          className="font-bold underline text-[#f5e6d3] cursor-pointer hover:text-amber-400 flex items-center justify-between w-full"
         >
-          Powers ({characterState.powers?.length || 0})
+          <span>Powers</span>
+          <span className="text-sm text-[#d4af37] font-normal">
+            ({characterState.powers?.length || 0}/{extractGearCount(characterState.results["power-count"])})
+          </span>
         </legend>
         <div className="max-h-40 overflow-y-auto pr-2">
           <ul className={`list-disc ${SIZES.powers.padding} ${SIZES.powers.gap} ${SIZES.powers.minHeight} ${SIZES.powers.maxHeight} overflow-y-auto`}>

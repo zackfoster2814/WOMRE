@@ -845,11 +845,15 @@ export const useCharacterWheel = () => {
           break;
         }
         case "big-gift-legacy-gear":
+          console.log('[handleNextStep] Big Gift legacy gear selected:', resultName);
+          console.log('[handleNextStep] charDevStep:', charDevStep, 'charDevMax:', charDevMax);
+
           const legacyGear = currentWheel.sections.find(
             (s) => s.name === resultName
           )!;
 
           if (legacyGear.usableRate && legacyGear.usableRate < 100) {
+            console.log('[handleNextStep] Legacy gear needs usability check');
             dispatch({
               type: "SET_RESULT",
               key: "temp-big-gift-gear",
@@ -865,6 +869,7 @@ export const useCharacterWheel = () => {
             });
 
             if (charDevStep + 1 < charDevMax) {
+              console.log('[handleNextStep] More char dev needed - going back to char-dev');
               setCharDevStep(charDevStep + 1);
               setCurrentWheel({
                 key: "char-dev",
@@ -875,6 +880,7 @@ export const useCharacterWheel = () => {
                 ),
               });
             } else {
+              console.log('[handleNextStep] Char dev complete - going to PvE');
               setCurrentWheel(pveWheel);
             }
           }
@@ -948,9 +954,14 @@ export const useCharacterWheel = () => {
           return handlePowerFlow(resultName);
 
         case "char-dev":
+        case "character_development":
+          console.log('[handleNextStep] Matched char-dev/character_development case');
           return handleCharDevFlow(resultName);
 
         case "confession-archetype":
+          console.log('[handleNextStep] Confession archetype selected:', resultName);
+          console.log('[handleNextStep] charDevStep:', charDevStep, 'charDevMax:', charDevMax);
+
           const confessionArchetype = {
             id:
               resultName === "Braindead"
@@ -964,15 +975,15 @@ export const useCharacterWheel = () => {
           dispatch({ type: "ADD_ARCHETYPE", archetype: confessionArchetype });
 
           if (charDevStep + 1 < charDevMax) {
+            console.log('[handleNextStep] More char dev needed - going back to char-dev wheel');
             setCharDevStep(charDevStep + 1);
             setCurrentWheel({
               key: "char-dev",
               title: "Character Development",
-              sections: currentWheel.sections.filter(
-                (s) => s.name !== "Nghe Bài thú tội"
-              ),
+              sections: charDevWheel.sections,
             });
           } else {
+            console.log('[handleNextStep] Char dev complete - going to PvE');
             setCurrentWheel(pveWheel);
           }
           break;
@@ -1412,6 +1423,13 @@ export const useCharacterWheel = () => {
 
   const handleCharDevFlow = useCallback(
     (resultName: string) => {
+      console.log('[handleCharDevFlow] Called with:', {
+        resultName,
+        charDevStep,
+        charDevMax,
+        currentWheelKey: currentWheel.key
+      });
+
       const charDev = currentWheel.sections.find((s) => s.name === resultName)!;
       dispatch({ type: "ADD_CHARDEV", charDev });
       if (resultName === "Inversion") {
@@ -1430,12 +1448,14 @@ export const useCharacterWheel = () => {
       }
 
       if (["03", "20"].includes(charDev.id)) {
+        console.log('[handleCharDevFlow] Special charDev IDs 03/20 - Going to Player Selection');
         setCurrentWheel({
           ...playerWheel,
           key: "player",
           title: "Player Selection",
         });
       } else if (charDevStep + 1 < charDevMax) {
+        console.log('[handleCharDevFlow] More charDev rounds needed - Continuing charDev wheel');
         setCharDevStep(charDevStep + 1);
         setCurrentWheel({
           key: "char-dev",
@@ -1443,16 +1463,24 @@ export const useCharacterWheel = () => {
           sections: currentWheel.sections.filter((s) => s.name !== resultName),
         });
       } else if (resultName === "Lose Control") {
+        console.log('[handleCharDevFlow] Lose Control - resetting powers and continuing');
         dispatch({ type: "RESET_POWERS" });
+        continueCharDevFlow();
+        return; // Don't fall through to else
       } else if (resultName === "It is what it is") {
+        console.log('[handleCharDevFlow] It is what it is - resetting weapon and continuing');
         dispatch({ type: "RESET_WEAPON" });
+        continueCharDevFlow();
+        return; // Don't fall through to else
       } else if (resultName === "A Big Gift!") {
+        console.log('[handleCharDevFlow] A Big Gift! - going to legacy gear wheel');
         setCurrentWheel({
           key: "big-gift-legacy-gear",
           title: "A Big Gift! - Legacy Gear",
           sections: legacyGearWheel.sections,
         });
       } else if (resultName === "Become Perfectionist") {
+        console.log('[handleCharDevFlow] Become Perfectionist - adding archetype and continuing');
         dispatch({
           type: "ADD_ARCHETYPE",
           archetype: {
@@ -1462,7 +1490,10 @@ export const useCharacterWheel = () => {
             color: "#4169E1",
           },
         });
+        continueCharDevFlow();
+        return; // Don't fall through to else
       } else if (resultName === "Too Edgy") {
+        console.log('[handleCharDevFlow] Too Edgy - adding archetype and continuing');
         dispatch({
           type: "ADD_ARCHETYPE",
           archetype: {
@@ -1472,7 +1503,10 @@ export const useCharacterWheel = () => {
             color: "#2F2F2F",
           },
         });
+        continueCharDevFlow();
+        return; // Don't fall through to else
       } else if (resultName === "Trở thành Linh Mục") {
+        console.log('[handleCharDevFlow] Trở thành Linh Mục - adding archetype and continuing');
         dispatch({
           type: "ADD_ARCHETYPE",
           archetype: {
@@ -1482,7 +1516,10 @@ export const useCharacterWheel = () => {
             color: "#FFD700",
           },
         });
+        continueCharDevFlow();
+        return; // Don't fall through to else
       } else if (resultName === "Trở Thành Cha Xứ") {
+        console.log('[handleCharDevFlow] Trở Thành Cha Xứ - adding archetype and continuing');
         dispatch({
           type: "ADD_ARCHETYPE",
           archetype: {
@@ -1492,7 +1529,10 @@ export const useCharacterWheel = () => {
             color: "#FFFFFF",
           },
         });
+        continueCharDevFlow();
+        return; // Don't fall through to else
       } else if (resultName === "Trở thành Quỷ Nhà Thờ") {
+        console.log('[handleCharDevFlow] Trở thành Quỷ Nhà Thờ - adding archetype and continuing');
         dispatch({
           type: "ADD_ARCHETYPE",
           archetype: {
@@ -1502,7 +1542,10 @@ export const useCharacterWheel = () => {
             color: "#8B0000",
           },
         });
+        continueCharDevFlow();
+        return; // Don't fall through to else
       } else if (resultName === "Nghe Bài thú tội") {
+        console.log('[handleCharDevFlow] Special event: Nghe Bài thú tội - Going to confession wheel');
         setCurrentWheel({
           key: "confession-archetype",
           title: "Nghe Bài thú tội - Archetype Selection",
@@ -1522,6 +1565,7 @@ export const useCharacterWheel = () => {
           ],
         });
       } else if (resultName === "Armed to the Teeth") {
+        console.log('[handleCharDevFlow] Special event: Armed to the Teeth - Going to gear wheel 1/3');
         dispatch({
           type: "SET_RESULT",
           key: "armed-teeth-gear-count",
@@ -1539,6 +1583,7 @@ export const useCharacterWheel = () => {
           sections: gearWheel.sections,
         });
       } else if (resultName === "No more family") {
+        console.log('[handleCharDevFlow] Special event: No more family - Going to power wheel 1/2');
         dispatch({
           type: "SET_RESULT",
           key: "no-family-power-count",
@@ -1558,9 +1603,11 @@ export const useCharacterWheel = () => {
           ),
         });
       } else {
+        console.log('[handleCharDevFlow] Default case - Going to PvE wheel');
         setCurrentWheel(pveWheel);
       }
-      setCurrentWheel(pveWheel);
+
+      console.log('[handleCharDevFlow] Completed');
     },
     [
       currentWheel,

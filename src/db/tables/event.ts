@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface EventsAttributes {
+export interface EventsAttributes {
     id?: number;
     target: string;
     amount: number;

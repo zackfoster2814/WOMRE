@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface Players_Pve_Attributes {
+export interface Players_Pve_Attributes {
     player_id: number;
     pve_enemies: number;
 }

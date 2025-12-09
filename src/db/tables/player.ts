@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface PlayersAttributes {
+export interface PlayersAttributes {
   id?: number;
   stt: number;
   name: string;

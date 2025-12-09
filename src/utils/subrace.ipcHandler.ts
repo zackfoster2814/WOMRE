@@ -1,5 +1,5 @@
 import { ipcMain } from "electron";
-import { getAllSubraces , getSubracesByRaceId} from "../db/subrace.model.js";
+import { getAllSubraces , getSubracesByRaceId, getAllSubracesWithRace} from "../db/subrace.model.js";
 
 export function registerSubraceIpcHandlers() {
   ipcMain.handle("fetch-subraces", async () => {
@@ -8,6 +8,15 @@ export function registerSubraceIpcHandlers() {
       return subraces;
     } catch (error) {
       console.error("Error fetching subraces:", error);
+      throw error;
+    }
+  });
+  ipcMain.handle("fetch-subraces-with-race", async () => {
+    try {
+      const subraces = await getAllSubracesWithRace();
+      return subraces;
+    } catch (error) {
+      console.error("Error fetching subraces with race:", error);
       throw error;
     }
   });

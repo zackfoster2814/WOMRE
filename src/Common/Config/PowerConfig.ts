@@ -1,5 +1,5 @@
-import { COLOR_PALETTE } from "../Constants/ConstantsConfig";
-import { WheelStep } from "../Types/Types";
+import { COLOR_PALETTE } from "../Constants/ConstantsConfig.js";
+import { WheelStep } from "../Types/Types.js";
 
 // Power theo hệ Martial Arts (5 hệ)
 const POWER_CONFIG: Record<string, number[]> = {

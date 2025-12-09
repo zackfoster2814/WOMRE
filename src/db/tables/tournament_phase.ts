@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface tournament_phaseAttributes {
+export interface tournament_phaseAttributes {
     id?: number;
     name: string;
     description: string;

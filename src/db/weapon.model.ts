@@ -21,3 +21,21 @@ export const getAllWeapons = async function (): Promise<any> {
       });
   });
 };
+export const getWeaponByUnique = async function (id: number): Promise<any> {
+  return new Promise<any>((resolve, reject) => {
+    Weapons.findAll({
+      where: {
+        is_unique: id,
+      },
+    })
+      .then(function (obj: any) {
+        if (!isEmpty(obj)) {
+          resolve(obj);
+        }else {
+          resolve(null);
+        }
+      }).catch((err: any) => {
+        reject(err);
+      });
+  });
+}

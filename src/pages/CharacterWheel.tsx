@@ -52,14 +52,26 @@ export default function CharacterWheel() {
   // }, [rolledResult, currentWheel, handleWheelStep, resetAnimation]);
 
   const handleNextAfterSpin = React.useCallback(() => {
-    if (!rolledResult || !currentWheel) return;
+    console.log('[handleNextAfterSpin] Called');
+    console.log('[handleNextAfterSpin] rolledResult:', rolledResult);
+    console.log('[handleNextAfterSpin] currentWheel.key:', currentWheel?.key);
+
+    if (!rolledResult || !currentWheel) {
+      console.log('[handleNextAfterSpin] Missing rolledResult or currentWheel, exiting');
+      return;
+    }
 
     if (currentWheel.key === "pve") {
+      console.log('[handleNextAfterSpin] PvE wheel - completing character');
       handleCharacterComplete();
     } else {
+      console.log('[handleNextAfterSpin] Calling handleWheelStep with:', {
+        key: currentWheel.key,
+        resultName: rolledResult.name
+      });
       handleWheelStep(currentWheel.key, rolledResult.name);
     }
-  }, [rolledResult, currentWheel, handleWheelStep]);
+  }, [rolledResult, currentWheel, handleWheelStep, handleCharacterComplete]);
 
   const handleWheelRest = (result: number) => {
     audio(currentWheel.key, currentWheel.sections[result].name);

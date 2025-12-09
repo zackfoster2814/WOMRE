@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface HousesAttributes {
+export interface HousesAttributes {
     id?: number;
     name: string;
     description: string;
