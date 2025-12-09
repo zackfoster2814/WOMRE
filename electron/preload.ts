@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld('api', {
   fetchGearByLegacy: async (id) => await ipcRenderer.invoke('fetch-gear-by-legacy', id),
   // ---------------------Weapons------------------------
   fetchAllWeapons: () => ipcRenderer.invoke('fetch-weapons'),
+  fetchUniqueWeapons: async (id) => await ipcRenderer.invoke('fetch-unique-weapons', id),
 
   // ------------------Player Weapons--------------------
   fetchAllPlayerWeapons: () => ipcRenderer.invoke('fetch-player-weapons'),

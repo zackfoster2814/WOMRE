@@ -9,7 +9,11 @@ type TableName =
   | "houses"
   | "powers"
   | "gears"
-  | "players";
+  | "players"
+  | "weapons"
+  | "quirks"
+  | "House"
+  | "PVE";
 
 export default function DataManager() {
   const navigate = useNavigate();
@@ -26,6 +30,10 @@ export default function DataManager() {
     { name: "powers", label: "Powers" },
     { name: "gears", label: "Gears" },
     { name: "players", label: "Players" },
+    { name: "weapons", label: "Weapons" },
+    { name: "quirks", label: "Quirks" },
+    { name: "House", label: "House" },
+    { name: "PVE", label: "PVE" },
   ];
 
   const fetchTableData = async (tableName: TableName) => {
@@ -59,6 +67,18 @@ export default function DataManager() {
           break;
         case "players":
           data = window.api ? await window.api.fetchAllPlayers() : [];
+          break;
+        case "weapons":
+          data = window.api ? await window.api.fetchAllWeapons() : [];
+          break;
+        case "quirks":
+          data = window.api ? await window.api.fetchAllQuirks() : [];
+          break;
+        case "House":
+          data = window.api ? await window.api.fetchAllHouses() : [];
+          break;
+        case "PVE":
+          data = window.api ? await window.api.fetchAllPves() : [];
           break;
       }
 
