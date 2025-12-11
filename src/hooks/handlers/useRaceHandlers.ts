@@ -17,7 +17,7 @@ import { houseWheel } from "@/Common/Config/HouseConfig";
 import { useResult } from "@/components/setResult";
 import { raceSelectionMap } from "../contents/Race-ist/raceSelectionMap";
 import { UmaParentMap } from "../contents/Race-ist/umaParentMap";
-import { subraceSelectionMap } from "../contents/Race-ist/subraceMap/subraceSelectionMap";
+import { subraceSelectionMap } from "../contents/Race-ist/subraceMap/subraceSelectionMap_index.ts";
 
 // Types for race handlers
 interface RaceHandlerParams {

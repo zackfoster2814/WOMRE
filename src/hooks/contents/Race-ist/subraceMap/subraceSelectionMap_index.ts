@@ -14,16 +14,16 @@ import {
 import { playerWheel } from "@/Common/Config/PlayerConfig";
 import { houseWheel } from "@/Common/Config/HouseConfig";
 import { archetypeWheel, summonWheel } from "@/Common/Config/ArchetypeConfig";
-import { WereBeastSubrace } from "./wereBeastSubraceMap";
-import { VampireSubrace } from "./vampireSubrace";
-import { GoblinSubrace } from "./goblinSubrace";
-import { ElfSubrace } from "./elfSubrace";
-import { DragonSubrace } from "./dragonSubrace";
-import { AngleSubrace } from "./AngleSubrace";
-import { DemigodSubrace } from "./DemigodSubrace";
-import { DemonSubrace } from "./demonSubrace";
-import { GodSubrace } from "./godSubrace";
-import { PrimordialBeingSubrace } from "./primordialbeingSubrace";
+import { WereBeastSubrace } from "./wereBeastSubraceMap.ts";
+import { VampireSubrace } from "./vampireSubrace.ts";
+import { GoblinSubrace } from "./goblinSubrace.ts";
+import { ElfSubrace } from "./elfSubrace.ts";
+import { DragonSubrace } from "./dragonSubrace.ts";
+import { AngleSubrace } from "./AngleSubrace.ts";
+import { DemigodSubrace } from "./DemigodSubrace.ts";
+import { DemonSubrace } from "./demonSubrace.ts";
+import { GodSubrace } from "./godSubrace.ts";
+import { PrimordialBeingSubrace } from "./primordialbeingSubrace.ts";
 
 
 export const subraceSelectionMap:any = {
