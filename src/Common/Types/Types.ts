@@ -5,6 +5,7 @@ export type Section = {
   color: string;
   trait?: string;
   description?: string;
+  archetype_id?: number;
   word?: string;
   effect?: string;
   quest?: string;

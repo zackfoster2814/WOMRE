@@ -37,14 +37,12 @@ export const dessendreSkillWheel: WheelStep = {
 
 export async function getHouseExtra(id: number): Promise<Section[]> {
   const house_extra = window.api ? await window.api.fetchSubraceById(id) : [];
-  
   if (!house_extra || house_extra.length === 0) {
     return [];
   }
-  
   return house_extra.map((data: any) => ({
     id: data.dataValues.id,
-    house_is: data.dataValues.house_is,
+    house_id: data.dataValues.house_id,
     name: data.dataValues.name,
     effect: data.dataValues.effect,
     weight: data.dataValues.weight,

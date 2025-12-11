@@ -7,23 +7,22 @@ const getRandomColor = () => {
 
 // Extra Archetypes by Id Wheel
 export async function getExtraArchetypeById(id: number): Promise<Section[]> {
-  const  ExtraArchetype = window.api ? await window.api.fetchExtraArchetypeById(id) : [];
-  if (!ExtraArchetype) {
+  const ExtraArchetype = window.api ? await window.api.fetchExtraArchetypeById(id) : [];
+
+  if (!ExtraArchetype || ExtraArchetype.length === 0) {
     return [];
   }
-
-  return ExtraArchetype.map((data: any) => {
-    const ExtraArchetypeData = data.dataValues;
-    return {
-      id: ExtraArchetypeData.id,
-      name: ExtraArchetypeData.name,
-      archetype_id: ExtraArchetypeData.archetype_id,
-      weight: ExtraArchetypeData.weight,
-      effect: ExtraArchetypeData.effect,
+  
+    return [{
+      id: ExtraArchetype.dataValues.id,
+      name: ExtraArchetype.dataValues.name,
+      archetype_id: ExtraArchetype.dataValues.archetype_id,
+      weight: ExtraArchetype.dataValues.weight,
+      effect: ExtraArchetype.dataValues.effect,
       color: getRandomColor(),
-    };
-  });
-}
+  }];
+} 
+
 
 // Export individual wheels as placeholders
 // These will be populated dynamically at runtime
