@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface Players_PowerAttributes {
+export interface Players_PowerAttributes {
     player_id: number;
     power_id: number;
 }

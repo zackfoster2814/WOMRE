@@ -165,11 +165,14 @@ export const useRaceHandlers = () => {
       if (handler) {
         return handler(params, rolledResult, resultName);
       }
-      if (subraceMap[resultName]?.length > 0) {
+
+      // Check if race has subraces
+      const subraces = subraceMap[resultName];
+      if (subraces && Array.isArray(subraces) && subraces.length > 0) {
         setCurrentWheel({
           key: "subrace",
-          title: raceWheel[resultName]?.subrace || "Subrace",
-          sections: subraceMap[resultName],
+          title: `${resultName} Subrace`,
+          sections: subraces,
         });
       } else {
         setCurrentWheel(archetypeWheel);

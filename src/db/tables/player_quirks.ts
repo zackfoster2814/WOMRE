@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface Players_QuirksAttributes {
+export interface Players_QuirksAttributes {
     player_id: number;
     quirk_id: number;
 }

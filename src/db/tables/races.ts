@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface RacesAttributes {
+export interface RacesAttributes {
     id: number;
     name: string;
     subrace_wheel: number;

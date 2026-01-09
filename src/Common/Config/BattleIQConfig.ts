@@ -1,6 +1,6 @@
 // BattleIQConfig.ts
-import { WheelStep } from "@/Common/Types/Types";
-import { COLOR_PALETTE } from "../Constants/ConstantsConfig";
+import { WheelStep } from "@/Common/Types/Types.js";
+import { COLOR_PALETTE } from "../Constants/ConstantsConfig.js";
 
 // Dữ liệu Battle IQ theo race
 const BATTLE_IQ_DATA: Record<string, number[]> = {

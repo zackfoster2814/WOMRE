@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface char_devAttributes {
+export interface char_devAttributes {
     id: number;
     name: string;
     effect : string;

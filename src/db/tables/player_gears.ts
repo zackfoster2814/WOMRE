@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface Players_GearsAttributes {
+export interface Players_GearsAttributes {
     player_id: number;
     gear_id: number;
     is_usable: number;

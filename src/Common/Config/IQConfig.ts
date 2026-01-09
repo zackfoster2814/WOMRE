@@ -1,6 +1,6 @@
 // IQConfig.ts
-import { WheelStep } from "@/Common/Types/Types";
-import { COLOR_PALETTE } from "../Constants/ConstantsConfig";
+import { WheelStep } from "@/Common/Types/Types.js";
+import { COLOR_PALETTE } from "../Constants/ConstantsConfig.js";
 
 // Dữ liệu IQ theo race
 const IQ_DATA: Record<string, number[]> = {

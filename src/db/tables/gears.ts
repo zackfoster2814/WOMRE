@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 
-interface GearsAttributes {
+export interface GearsAttributes {
     id?: number;
     name: string;
     effect: string;
