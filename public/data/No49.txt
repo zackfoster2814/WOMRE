@@ -1,0 +1,79 @@
+No.49
+Name: KK (harry.hm)
+
+```
+Ký Sinh:
++
+```
+
+```
+Race: Troll
+Sub-race: Ice Troll
+```
+
+```
+Archetype:
++ Mid
+```
+
+```
+3 Quirk:
++ Let me solo her
++ Patient
++ Artisan
+```
+
+```
+Str: 5
+Spd: 5
+Dur: 5
+IQ: 5
+BIQ: 5
+MA: 5
+```
+
+```
+Houses:
++ Houase Baratheon
+```
+
+```
+1 Gear:
+ + 0 Normal gear:
+  - Cursed Charm
+  - Wooden Shield (Artisan)
+  - Empty Stein (Artisan)
+ + 0 Legacy gear:
+  -
+```
+
+```
+1 Normal Weapon
++ Magical Staff
+```
+
+```
+2 Rune:
++ Tir
++ Tir
+Runeword: The Twin
+```
+
+```
+0 Power:
++
+```
+
+```
+Char dev:
++ Chuyện bộ tộc
+```
+
+```
+Team: 21
+```
+
+```
+Lover:
++
+```

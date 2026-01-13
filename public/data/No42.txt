@@ -1,0 +1,77 @@
+No.42
+Name: Kaori (khanhnguyen1703)
+
+```
+Ký Sinh:
++
+```
+
+```
+Race: Orc
+Sub-race:
+```
+
+```
+Archetype:
++ Conquerer
+```
+
+```
+1 Quirk:
++ Fit
+```
+
+```
+Str: 5
+Spd: 4
+Dur: 1
+IQ: 5
+BIQ: 9
+MA: 10
+```
+
+```
+Houses:
++ Winterhome
+```
+
+```
+2 Gear:
+ + 1 Normal gear:
+  - Empty Stein
+  - Leather Jacket (Winterhome)
+  - Sổ tay (Winterhome)
+ + 1 Legacy gear:
+  - The Ancient Ladder: A Journey to the Fullness of Sin with Demon
+```
+
+```
+1 Normal Weapon
++ Grimoire
+```
+
+```
+2 Rune:
++ Sol
++ El
+Runeword: Undying Rage
+```
+
+```
+1 Power:
++ Sonic Scream
+```
+
+```
+Char dev:
++ Last Standing
+```
+
+```
+Team: 30
+```
+
+```
+Lover:
++
+```

@@ -1,0 +1,171 @@
+[
+  {
+    "id": "race",
+    "name": "Race Preset",
+    "description": "Race Wheel (23 races)",
+    "wheelName": "Race",
+    "items": [
+      { "name": "Symbiosis", "weight": 1.5 },
+      { "name": "Goblin", "weight": 6.5 },
+      { "name": "Gnome", "weight": 6.5 },
+      { "name": "Human", "weight": 6.5 },
+      { "name": "Dwarf", "weight": 6.5 },
+      { "name": "Skeleton", "weight": 5.25 },
+      { "name": "Troll", "weight": 5.25 },
+      { "name": "Orc", "weight": 5.25 },
+      { "name": "Merfolk", "weight": 5.25 },
+      { "name": "Dryad", "weight": 4.5 },
+      { "name": "Elf", "weight": 4.5 },
+      { "name": "Spirit", "weight": 4.5, "disabled": true },
+      { "name": "Uma", "weight": 4.5 },
+      { "name": "Werebeast", "weight": 4 },
+      { "name": "Vampire", "weight": 4, "disabled": true },
+      { "name": "Giant", "weight": 4 },
+      { "name": "Dragon", "weight": 4 },
+      { "name": "Reincarnator", "weight": 2 },
+      { "name": "Angel", "weight": 3.5 },
+      { "name": "Demi-God", "weight": 3.5 },
+      { "name": "Primordial Being", "weight": 3.5 },
+      { "name": "Demon", "weight": 2.5, "disabled": true },
+      { "name": "God", "weight": 2.5 }
+    ]
+  },
+  {
+    "id": "yesno",
+    "name": "Yes/No",
+    "description": "50/50 decision maker",
+    "wheelName": "Yes or No",
+    "customSfxUrl": "/sounds/wheel-spin.mp3",
+    "items": [
+      {
+        "name": "Yes",
+        "weight": 1,
+        "customSound": "/sounds/yes.mp3"
+      },
+      {
+        "name": "No",
+        "weight": 1,
+        "customSound": "/sounds/no.mp3"
+      }
+    ]
+  },
+  {
+    "id": "quirk",
+    "name": "Số Quirk",
+    "description": "Quirk distribution (1-3)",
+    "wheelName": "Số Quirk",
+    "items": [
+      { "name": "1 Quirk", "weight": 60 },
+      { "name": "2 Quirk", "weight": 30 },
+      { "name": "3 Quirk", "weight": 10 }
+    ]
+  },
+  {
+    "id": "gear-normal",
+    "name": "Số Gear Thường",
+    "description": "Normal Gear distribution (0-3)",
+    "wheelName": "Số Gear Thường",
+    "items": [
+      { "name": "0 Gear", "weight": 20 },
+      { "name": "1 Gear", "weight": 35 },
+      { "name": "2 Gear", "weight": 30 },
+      { "name": "3 Gear", "weight": 15 }
+    ]
+  },
+  {
+    "id": "gear-legacy",
+    "name": "Số Gear Legacy",
+    "description": "Legacy Gear distribution (0-1)",
+    "wheelName": "Số Gear Legacy",
+    "items": [
+      { "name": "0 Legacy", "weight": 92 },
+      { "name": "1 Legacy", "weight": 8 }
+    ]
+  },
+  {
+    "id": "has-weapon",
+    "name": "Có Vũ Khí",
+    "description": "Weapon availability (70/30)",
+    "wheelName": "Có vũ khí hay không?",
+    "items": [
+      { "name": "Có", "weight": 70 },
+      { "name": "Không", "weight": 30 }
+    ]
+  },
+  {
+    "id": "weapon-unique",
+    "name": "Vũ Khí Unique",
+    "description": "Unique weapon chance (30/70)",
+    "wheelName": "Vũ khí có Unique hay không?",
+    "items": [
+      { "name": "Có", "weight": 30 },
+      { "name": "Không", "weight": 70 }
+    ]
+  },
+  {
+    "id": "houses",
+    "name": "Houses",
+    "description": "Gia tộc/Vùng đất (18 houses)",
+    "wheelName": "Houses: Gia tộc/Vùng đất mà bạn sinh ra",
+    "items": [
+      { "name": "The Shire", "weight": 5.55 },
+      { "name": "New London", "weight": 5.55 },
+      { "name": "Winterhome", "weight": 5.55 },
+      { "name": "Atreides", "weight": 5.55 },
+      { "name": "House Lannister", "weight": 5.55 },
+      { "name": "House Stark", "weight": 5.55 },
+      { "name": "House Targaryen", "weight": 5.55 },
+      { "name": "House Baratheon", "weight": 5.55 },
+      { "name": "Dothraki", "weight": 5.55 },
+      { "name": "House Tyrell", "weight": 5.55 },
+      { "name": "Kazuya Kinoshita's House", "weight": 5.55 },
+      { "name": "Shurima", "weight": 5.55 },
+      { "name": "Hallownest", "weight": 5.55 },
+      { "name": "Coven Council", "weight": 5.55 },
+      { "name": "Golden Order", "weight": 5.55 },
+      { "name": "Roundtable Hold", "weight": 5.55 },
+      { "name": "Uchiha", "weight": 5.55 },
+      { "name": "Ban Nhạc Ngọt Đoàn Kết", "weight": 5.55 }
+    ]
+  },
+  {
+    "id": "teams",
+    "name": "Teams",
+    "description": "Teams 1-32 (Equal weight)",
+    "wheelName": "Team",
+    "items": [
+      { "name": "Team 1", "weight": 1 },
+      { "name": "Team 2", "weight": 1 },
+      { "name": "Team 3", "weight": 1 },
+      { "name": "Team 4", "weight": 1 },
+      { "name": "Team 5", "weight": 1 },
+      { "name": "Team 6", "weight": 1 },
+      { "name": "Team 7", "weight": 1 },
+      { "name": "Team 8", "weight": 1 },
+      { "name": "Team 9", "weight": 1 },
+      { "name": "Team 10", "weight": 1 },
+      { "name": "Team 11", "weight": 1 },
+      { "name": "Team 12", "weight": 1 },
+      { "name": "Team 13", "weight": 1 },
+      { "name": "Team 14", "weight": 1 },
+      { "name": "Team 15", "weight": 1 },
+      { "name": "Team 16", "weight": 1 },
+      { "name": "Team 17", "weight": 1 },
+      { "name": "Team 18", "weight": 1 },
+      { "name": "Team 19", "weight": 1 },
+      { "name": "Team 20", "weight": 1 },
+      { "name": "Team 21", "weight": 1 },
+      { "name": "Team 22", "weight": 1 },
+      { "name": "Team 23", "weight": 1 },
+      { "name": "Team 24", "weight": 1 },
+      { "name": "Team 25", "weight": 1 },
+      { "name": "Team 26", "weight": 1 },
+      { "name": "Team 27", "weight": 1 },
+      { "name": "Team 28", "weight": 1 },
+      { "name": "Team 29", "weight": 1 },
+      { "name": "Team 30", "weight": 1 },
+      { "name": "Team 31", "weight": 1 },
+      { "name": "Team 32", "weight": 1 }
+    ]
+  }
+]

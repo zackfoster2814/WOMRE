@@ -1,0 +1,85 @@
+No.43
+Name: Swem (.swem)
+
+```
+Ký Sinh:
++
+```
+
+```
+Race: Elf
+Sub-race: Moon Elf
+```
+
+```
+Archetype:
++ Femboy
+```
+
+```
+2 Quirk:
++ Artistic
++ Raumanian
+```
+
+```
+Str: 9
+Spd: 6
+Dur: 2
+IQ: 6
+BIQ: 3
+MA: 8
+```
+
+```
+Houses:
++ House Lannister
+```
+
+```
+2 Gear:
+ + 0 Normal gear:
+  - Ancient Protector
+  - Knight's Armor
+  - Ba hoa trắng (House Lannister)
+  - Magical Scroll (House Lannister)
+  - Golden coin (House Lannister)
+  - Golden coin (House Lannister)
+  - Golden coin (House Lannister)
+ + 0 Legacy gear:
+  -
+```
+
+```
+1 Normal Weapon
++ Blood Sword
+```
+
+```
+1 Rune:
++ Ral
+Runeword: Không
+```
+
+```
+4 Power:
++ Burning Hand
++ Uno Reverse Card
++ Mind control
++ Master of war
++ Quas (Moon Elf)
+```
+
+```
+Char dev:
++ King's Landing
+```
+
+```
+Team: 2
+```
+
+```
+Lover:
++ OddMan (thaioturan)
+```

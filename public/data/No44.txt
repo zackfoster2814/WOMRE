@@ -1,0 +1,85 @@
+No.44
+Name: MasMerterserker (azzapp36)
+
+```
+Ký Sinh:
++
+```
+
+```
+Race: Merfolk
+Sub-race:
+```
+
+```
+Archetype:
++ Slayer - Giant
+```
+
+```
+3 Quirk:
++ Cluttered Mind
++ Impatient
++ Night Owl
+```
+
+```
+Str: 2
+Spd: 8
+Dur: 6
+IQ: 7
+BIQ: 3
+MA: 1
+```
+
+```
+Houses:
++ Naga
+```
+
+```
+2 Gear:
+ + 0 Normal gear:
+  - Wooden Shield
+  - Cursed Charm
+ + 0 Legacy gear:
+  -
+```
+
+```
+1 Normal Weapon
++ Rapier
+```
+
+```
+1 Rune:
++ Ral
+Runeword: Không
+```
+
+```
+3 Power:
++ Overdrive
++ Cold Breeze
++ Clear Mind
+```
+
+```
+Char dev:
++ Too Horny
+```
+
+```
+Team: 3
+```
+
+```
+Lover:
++
+```
+
+```
+PvP Rewards:
+- +1 IQ
+- +1 Strength
+```

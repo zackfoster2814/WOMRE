@@ -1,0 +1,65 @@
+No.35
+Name: ...?? (\_1469)
+Ký Sinh:
+
+-
+
+Race: Goblin
+Sub-race: 100
+
+Archetype:
+
+- Dual Wielder
+
+1 Quirk:
+
+- Graceful (Lover: Lunacy (lunacy6545))
+
+Str:4
+Spd:1
+Dur:5
+IQ:3
+BIQ:2
+MA:4
+
+Houses:Lannister
+
+-
+
+1 Gear:
+
+- 1 Normal gear:
+
+* Mì Tôm (Từ House)
+* Beer (Từ House)
+* Golden Coinx3
+* Love Letter
+
+- 0 Legacy gear:
+
+*
+
+1 Normal Weapon và 1 Unique Weapon:
+
+- Saxophone (không dùng được)
+- Andúril (Dùng được)
+
+0 Rune:
+
+- Runeword: Không
+
+3 Power:
+
+- Lone Wolf
+- Misty Step Ahead
+- Blood Manipulation
+
+Char dev:
+
+- "Chuyện Bộ Tộc"
+
+Team:6
+
+Lover:
+
+- Lunacy (lunacy6545)

@@ -1,0 +1,74 @@
+No.45
+Name: CúNga (minh1mui)
+
+```
+Ký Sinh:
++
+```
+
+```
+Race: Dwarf
+Sub-race: Lùn Xám (Gray)
+```
+
+```
+Archetype:
++ Bookworm
+```
+
+```
+1 Quirk:
+-
+```
+
+```
+Str: 5
+Spd: 6
+Dur: 6
+IQ: 5
+BIQ: 6
+MA: 8
+```
+
+```
+Houses:
++ Uchiha
+```
+
+```
+1 Gear:
+ + 0 Normal gear:
+  - Fingerthing
+ + 0 Legacy gear:
+  - Ragnarok's Cobra
+```
+
+```
+0 Normal Weapon
++ Long bow
+```
+
+```
+1 Rune:
++ Tal
+Runeword: Không
+```
+
+```
+1 Power:
++ Quirkless
+```
+
+```
+Char dev:
++ A Big Gift!
+```
+
+```
+Team: 2
+```
+
+```
+Lover:
++
+```

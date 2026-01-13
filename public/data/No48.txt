@@ -1,0 +1,80 @@
+No.48
+Name: llaW (llaw3344)
+
+```
+Ký Sinh:
++
+```
+
+```
+Race: Dwarf
+Sub-race: Lùn thường
+```
+
+```
+Archetype:
++ Gigachad
+```
+
+```
+1 Quirk:
++ Open-minded
+```
+
+```
+Str: 6
+Spd: 4
+Dur: 5
+IQ: 1
+BIQ: 4
+MA: 4
+```
+
+```
+Houses:
++
+```
+
+```
+1 Gear:
+ + 0 Normal gear:
+  - Giấy nợ gia truyền
+ + 0 Legacy gear:
+  -
+```
+
+```
+0 Normal Weapon
++ B.F Sword
+```
+
+```
+2 Rune:
++ Tir
++ Tal
+Runeword: Không
+```
+
+```
+4 Power:
++ Poison Breath
++ Mind Control
++ Invulnerability
++ Acclerating Sorcery
+```
+
+```
+Char dev:
++ No More Family
++ Baldening
++ Bonk bonk bonk
+```
+
+```
+Team: 22
+```
+
+```
+Lover:
++
+```
