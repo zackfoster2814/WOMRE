@@ -1,6 +1,6 @@
 # Hướng Dẫn Cài Đặt - Wheel of Name
 
-## 📋 Yêu Cầu Hệ Thống
+## Yêu Cầu Hệ Thống
 
 ### Phần mềm cần cài đặt:
 
@@ -39,7 +39,7 @@
 
 ---
 
-## 🚀 Cài Đặt Dự Án
+## Cài Đặt Dự Án
 
 ### Bước 1: Clone repository
 
@@ -59,7 +59,7 @@ Lệnh này sẽ tải về tất cả các thư viện cần thiết được l
 
 ---
 
-## 🛠️ Các Lệnh Sử Dụng
+## Các Lệnh Sử Dụng
 
 ### Chế độ Development (Phát triển)
 
@@ -109,7 +109,7 @@ npm run tauri build
 
 ---
 
-## 📦 Cấu Trúc Thư Viện Sử Dụng
+## Cấu Trúc Thư Viện Sử Dụng
 
 ### Frontend Core:
 - **React 18** - UI framework
@@ -128,7 +128,7 @@ npm run tauri build
 
 ---
 
-## 🔧 Cấu Hình Môi Trường
+## Cấu Hình Môi Trường
 
 ### Cấu hình ports (nếu cần):
 
@@ -157,7 +157,7 @@ File `src-tauri/tauri.conf.json`:
 
 ---
 
-## 🐛 Xử Lý Lỗi Thường Gặp
+## Xử Lý Lỗi Thường Gặp
 
 ### Lỗi: "npm: command not found"
 **Nguyên nhân:** Chưa cài Node.js hoặc chưa thêm vào PATH
@@ -221,7 +221,7 @@ sudo chmod -R 755 .
 
 ---
 
-## 📁 Cấu Trúc Thư Mục
+## Cấu Trúc Thư Mục
 
 ```
 wheelofname/
@@ -249,7 +249,7 @@ wheelofname/
 
 ---
 
-## 🎯 Workflow Phát Triển
+## Workflow Phát Triển
 
 ### 1. Tạo nhánh mới:
 ```bash
@@ -281,7 +281,7 @@ git push origin feature/ten-tinh-nang-moi
 
 ---
 
-## 📚 Tài Liệu Tham Khảo
+## Tài Liệu Tham Khảo
 
 - **React:** https://react.dev/
 - **TypeScript:** https://www.typescriptlang.org/docs/
@@ -292,7 +292,7 @@ git push origin feature/ten-tinh-nang-moi
 
 ---
 
-## 💡 Tips & Tricks
+## Tips & Tricks
 
 ### Tăng tốc độ cài đặt:
 ```bash
@@ -324,25 +324,3 @@ npm install
 - **Error Lens:** Hiển thị lỗi inline trong VSCode
 
 ---
-
-## 🆘 Cần Trợ Giúp?
-
-- **Issues:** https://github.com/zackfoster2814/WOMRE/issues
-- **Discord:** [Link server Discord nếu có]
-- **Email:** tuankhoi240202@gmail.com
-
----
-
-## ✅ Checklist Cài Đặt
-
-- [ ] Đã cài Node.js (v18+)
-- [ ] Đã cài Git
-- [ ] Đã clone repository
-- [ ] Đã chạy `npm install` thành công
-- [ ] Đã chạy `npm run dev` và mở được http://localhost:5173
-- [ ] (Optional) Đã cài Rust nếu cần build Tauri
-- [ ] (Optional) Đã chạy `npm run tauri dev` thành công
-
----
-
-**Chúc bạn code vui vẻ! 🎉**
