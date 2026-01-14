@@ -2,6 +2,7 @@ export interface WheelItem {
   id: string;
   name: string;
   weight: number;
+  effectDescription?: string;
   color?: string;
   customSound?: string; // Base64 data URL for custom sound effect
   customSoundName?: string; // Original filename
