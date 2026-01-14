@@ -9,6 +9,7 @@ import {
 import { playSpecialSound } from "../utils/specialSounds";
 import arrowImg from "../assets/img/arrow.png";
 import borderImg from "../assets/img/border.png";
+import MouseTracker from "./MouseTracker";
 
 interface WheelCanvasProps {
   items: WheelItem[];
@@ -36,6 +37,8 @@ export const WheelCanvas = ({
   const wheelCacheRef = useRef<HTMLCanvasElement | null>(null);
   const lastItemsHashRef = useRef<string>("");
   const previousWinningItemRef = useRef<string | null>(null); // Track previous winning item name
+  const [isWheelHovered, setIsWheelHovered] = useState<boolean>(false);
+  const [hoveredItemIndex, setHoveredItemIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -138,51 +141,48 @@ export const WheelCanvas = ({
     });
 
     // Draw text
-    if (items.length < 100) {
-      currentAngle = 0;
 
-      let fontSize = 16;
-      if (activeItems.length > 20) fontSize = 14;
-      if (activeItems.length > 40) fontSize = 12;
-      if (activeItems.length > 60) fontSize = 10;
+    let fontSize = 16;
+    if (activeItems.length > 20) fontSize = 14;
+    if (activeItems.length > 40) fontSize = 12;
+    if (activeItems.length > 60) fontSize = 10;
 
-      ctx.font = `bold ${fontSize}px Arial`;
-      ctx.textAlign = "right";
-      ctx.textBaseline = "middle";
+    ctx.font = `bold ${fontSize}px Arial`;
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
 
-      reversedItems.forEach((item) => {
-        const sliceAngle = (item.weight / totalWeight) * Math.PI * 2;
-        const sliceWidthAtEdge = radius * sliceAngle;
+    reversedItems.forEach((item) => {
+      const sliceAngle = (item.weight / totalWeight) * Math.PI * 2;
+      const sliceWidthAtEdge = radius * sliceAngle;
 
-        if (sliceWidthAtEdge > 30) {
-          ctx.save();
-          ctx.translate(centerX, centerY);
-          ctx.rotate(currentAngle + sliceAngle / 2);
+      if (sliceWidthAtEdge > 15) {
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(currentAngle + sliceAngle / 2);
 
-          const maxTextWidth = radius - 30;
-          let displayText = item.name;
-          let textWidth = ctx.measureText(displayText).width;
+        const maxTextWidth = radius - 30;
+        let displayText = item.name;
+        let textWidth = ctx.measureText(displayText).width;
 
-          if (textWidth > maxTextWidth) {
-            while (textWidth > maxTextWidth - 10 && displayText.length > 3) {
-              displayText = displayText.slice(0, -1);
-              textWidth = ctx.measureText(displayText + "...").width;
-            }
-            displayText = displayText + "...";
+        if (textWidth > maxTextWidth) {
+          while (textWidth > maxTextWidth - 10 && displayText.length > 3) {
+            displayText = displayText.slice(0, -1);
+            textWidth = ctx.measureText(displayText + "...").width;
           }
-
-          // Simplified text drawing - no stroke for better performance
-          ctx.fillStyle = "#ffffff";
-          ctx.shadowColor = "#000000";
-          ctx.shadowBlur = 4;
-          ctx.fillText(displayText, radius - 20, 0);
-          ctx.shadowBlur = 0;
-          ctx.restore();
+          displayText = displayText + "...";
         }
 
-        currentAngle += sliceAngle;
-      });
-    }
+        // Simplified text drawing - no stroke for better performance
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "#000000";
+        ctx.shadowBlur = 4;
+        ctx.fillText(displayText, radius - 20, 0);
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      }
+
+      currentAngle += sliceAngle;
+    });
   };
 
   const drawWheel = () => {
@@ -342,6 +342,54 @@ export const WheelCanvas = ({
     return activeItems[index] || activeItems[0];
   };
 
+  const isPosInWheel = (x: number, y: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return false;
+
+    const rect = canvas.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const deltaX = x - centerX;
+    const deltaY = y - centerY;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    const radius = rect.width / 2;
+
+    return distance <= radius;
+  };
+
+  const calculateAngleFromPos = (x: number, y: number) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return 0;
+
+    const rect = canvas.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const deltaX = x - centerX;
+    const deltaY = y - centerY;
+
+    let angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+    angle = ((angle + 360 + 90 - startAngle - rotation) % 360) * -1;
+
+    return angle;
+  };
+
+  const handleCanvasMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!isPosInWheel(e.clientX, e.clientY)) {
+      setIsWheelHovered(false);
+      setHoveredItemIndex(null);
+      return;
+    }
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const index = getCurrentItemIndex(
+      calculateAngleFromPos(e.clientX, e.clientY)
+    );
+    setHoveredItemIndex(index);
+    setIsWheelHovered(true);
+  };
+
   const activeItems = items.filter((item) => !item.disabled && item.weight > 0);
   const canSpin = activeItems.length > 0 && !isSpinning;
 
@@ -369,7 +417,20 @@ export const WheelCanvas = ({
           height={700}
           className="w-full block"
           style={{ backgroundColor: "transparent" }}
+          onMouseMove={handleCanvasMouseMove}
+          onMouseLeave={() => setIsWheelHovered(false)}
         />
+        {!isSpinning &&
+          isWheelHovered &&
+          hoveredItemIndex !== null &&
+          activeItems[hoveredItemIndex] &&
+          activeItems[hoveredItemIndex].effectDescription && (
+            <MouseTracker offset={{ x: 15, y: 15 }}>
+              <div className="bg-black bg-opacity-75 text-white text-xl rounded-md px-4 py-2 pointer-events-auto max-w-md whitespace-pre-line">
+                {activeItems[hoveredItemIndex].effectDescription}
+              </div>
+            </MouseTracker>
+          )}
 
         {/* Arrow Pointer - rotates around wheel center (skull center) */}
         <img
