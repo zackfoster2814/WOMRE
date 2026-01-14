@@ -8,6 +8,7 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
+import Papa from "papaparse";
 
 interface ItemListProps {
   items: WheelItem[];
@@ -126,52 +127,47 @@ export const ItemList = ({
   };
 
   const bulkAdd = (text: string) => {
-    const lines = text.split("\n").filter((line) => line.trim());
-    const newItems: WheelItem[] = lines.map((line) => {
-      let trimmedLine = line.trim();
+    let newItems: WheelItem[] = [];
 
-      // Normalize multiple spaces to single tab (for cases like "Có		70" or "Có  70")
-      // This handles both multiple spaces and multiple tabs
-      trimmedLine = trimmedLine.replace(/\s{2,}/g, "\t");
-
-      // Try to parse "Name:Weight" or "Name\tWeight" (tab-separated) format
-      let name = trimmedLine;
-      let weight = 1;
-
-      // Check for tab separator (Excel copy-paste or normalized spaces)
-      if (trimmedLine.includes("\t")) {
-        const parts = trimmedLine.split("\t");
-        if (parts.length >= 2) {
-          // Replace comma with dot for decimal numbers
-          const weightStr = parts[1].trim().replace(",", ".");
-          const parsedWeight = parseFloat(weightStr);
-          if (!isNaN(parsedWeight) && parsedWeight > 0) {
-            name = parts[0].trim();
-            weight = parsedWeight;
-          }
-        } else if (parts.length === 1) {
-          name = parts[0].trim();
+    Papa.parse<[string, string?, string?, string?]>(text, {
+      header: false,
+      skipEmptyLines: "greedy",
+      newline: "\n",
+      delimitersToGuess: ["\t", ":"],
+      transform: (value, columnIndex) => {
+        if (columnIndex === 1 && typeof value === "string") {
+          return value.replace(",", ".");
         }
-      }
-      // Check for colon separator
-      else if (trimmedLine.includes(":")) {
-        const parts = trimmedLine.split(":");
-        if (parts.length === 2) {
-          // Replace comma with dot for decimal numbers
-          const weightStr = parts[1].trim().replace(",", ".");
-          const parsedWeight = parseFloat(weightStr);
-          if (!isNaN(parsedWeight) && parsedWeight > 0) {
-            name = parts[0].trim();
-            weight = parsedWeight;
-          }
-        }
-      }
+        return value;
+      },
+      complete(results) {
+        results.data.map((e) => {
+          let weight = 1;
 
-      return {
-        id: crypto.randomUUID(),
-        name: name,
-        weight: weight,
-      };
+          if (e[1] && !isNaN(parseFloat(e[1]))) {
+            weight = Number(e[1]);
+          }
+
+          let des = "";
+
+          if (e[2]?.length) des = e[2];
+          if (e[3]?.length) {
+            // Usable
+            if (
+              e[3].includes("%", -1) &&
+              !isNaN(parseInt(e[3].replace("%", "")))
+            ) {
+              des = `${e[2]}\nUsable: ${e[3]}`;
+            }
+          }
+          newItems.push({
+            id: crypto.randomUUID(),
+            name: e[0],
+            weight: weight,
+            effectDescription: des,
+          });
+        });
+      },
     });
 
     onItemsChange([...items, ...newItems]);
