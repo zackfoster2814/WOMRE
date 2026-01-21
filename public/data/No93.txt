@@ -1,0 +1,76 @@
+No.93
+Name: Wohlhabend (wohlhabend_)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Goblin
+Sub-race: 100
+```
+
+```
+Archetype: 
++ Zealot
++ Frostlanders (Từ House)
+```
+``` 
+1 Quirk:  
++ Shining Brightly
+```
+```
+Str: 5
+Spd: 3
+Dur: 2 (Ban đầu là 1, +1 từ Frostlanders)
+IQ: 4
+BIQ: 6
+MA: 8
+```
+
+```
+Houses: 
++ New London
++ Frostlanders
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Shot Glass
+  - Swift Boots
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Yoriichi's Black Nichirin (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+4 Power: 
++ Fancy Feet
++ Gaze of the Abyss
++ Ice Liquefactors
++ Memory Freeze
+```
+
+```
+Char dev: 
++ True Heir of the Emirate\uD83C\uDF40
+```
+
+```
+Team: 29
+```
+
+```
+Lover:
++ 
+```

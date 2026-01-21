@@ -1,0 +1,72 @@
+No.12
+Name: ar2di
+```
+Ký Sinh:
++ 
+```
+```
+Race: Werebeast
+Sub-race: Werebat
+```
+
+```
+Archetype: 
++ Follower of the Two Fingers
+```
+``` 
+1 Quirk:  
++ Impatient
+```
+```
+Str: 2
+Spd: 1
+Dur: 1
+IQ: 6
+BIQ: 6
+MA: 4
+```
+
+```
+Houses: 
++ Coven Council
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Bò Khô
+  - Lover's Glover (Lover: Quý Trần Tường (wyug1234))
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+2 Power: 
++ Red Shift/LP1211-M
++ Shooting for Victory
+```
+
+```
+Char dev: 
++ Kungfu Training
+```
+
+```
+Team: 5
+```
+
+```
+Lover:
++ Quý Trần Tường (wyug1234)
+```

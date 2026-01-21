@@ -1,0 +1,70 @@
+No.88
+Name: Lowns (.lowns)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Merfolk
+Sub-race: 
+```
+
+```
+Archetype: 
++ Herald
+```
+``` 
+1 Quirk:  
++ Cluttered Mind
+```
+```
+Str: 2
+Spd: 11 (Ban đầu là 8, +3 từ Herald)
+Dur: 7
+IQ: 3
+BIQ: 3
+MA: 8
+```
+
+```
+Houses: 
++ Naga
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Buckler
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Obtain a Cultivation Technique
+```
+
+```
+Team: 4
+```
+
+```
+Lover:
++ 
+```

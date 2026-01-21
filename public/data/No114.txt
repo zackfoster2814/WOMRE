@@ -1,0 +1,77 @@
+No.114
+Name: tuancon (.tuancon)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Giant
+Sub-race: 
+```
+
+```
+Archetype: 
++ Hero of the Emirate\uD83C\uDF40
+```
+``` 
+3 Quirk:  
++ Raumanian\uD83C\uDF40 (Hero of the Emirate\uD83C\uDF40)
++ Let me Solo Her
++ Brainrot (Từ Braindead)
+```
+```
+Str: 7
+Spd: 6
+Dur: 5
+IQ: 8
+BIQ: 2
+MA: 7
+```
+
+```
+Houses: 
++ Targaryen
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Cuộn khăn giấy
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+5 Power: 
++ Railroad Realm \uD83C\uDF40 (Hero of the Emirate\uD83C\uDF40)
++ The Sand of Time
++ Spell Flux
++ Garlic Breath
++ Encroaching Shadow
+```
+
+```
+Char dev: 
++ Cretor's Limitation (Braindead)
++ Braindead
+```
+
+```
+Team: 19
+```
+
+```
+Lover:
++ 
+```

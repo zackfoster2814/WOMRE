@@ -1,0 +1,76 @@
+No.103
+Name: Kẹo Con (su167)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Uma
+Sub-race: Silence Suzuka + Haru Urara
+```
+
+```
+Archetype: 
++ X
++ The Johnnies
+```
+``` 
+2 Quirk:  
++ Shining Brightly
++ Training Restricted
+```
+```
+Str: 6
+Spd: 8
+Dur: 6
+IQ: 1
+BIQ: 5
+MA: 10
+```
+
+```
+Houses: 
++ Tracen Academy
++ Nhận +1 Str
++ Nhận +1 Spd
++ Nhận +1 Dura
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Uchigatana (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Sol
++ Sol
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ True Heir of the Emirate
+```
+
+```
+Team: 
+```
+
+```
+Lover:
++ 
+```

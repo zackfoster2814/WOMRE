@@ -1,0 +1,73 @@
+No.72
+Name: 0reki (0rekihoutarou)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Demi-god
+Sub-race: Creation (Favor: Roll lại 3 chỉ số Str, Dura và MA )
+```
+
+```
+Archetype: 
++ Paladin
+```
+``` 
+1 Quirk:  
++ Impatient (PvP Reward: 1 Gear, 1 IQ)
+```
+```
+Str: 5 (Ban đầu là 3, Reroll thành 5)
+Spd: 7
+Dur: 4 (Ban đầu là 1, Reroll thành 4)
+IQ: 4
+BIQ: 8
+MA: 3 (Ban đầu là 3, Reroll thành 1, +2 từ Paladin)
+```
+
+```
+Houses: 
++ Roundtable Hold
+```
+
+```
+4 Gear: 
+ + 4 Normal gear:
+  - Beer (Từ Quirk)
+  - Buckler
+  - Knight's Armor
+  - Thuốc Tráng Dương.
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Eclipse Shotel (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Divine Smite (Từ Paladin)
+```
+
+```
+Char dev: 
++ Last Standing
+```
+
+```
+Team: 19
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,71 @@
+No.3
+Name: Nagi (nagi_2208)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Giant
+Sub-race: 
+```
+
+```
+Archetype: 
++ Philosopher
+```
+``` 
+1 Quirk:  
++ Dextrous
+```
+```
+Str: 7
+Spd: 4
+Dur: 5
+IQ: 10 (Ban đầu là 7, được +3 từ Archetype)
+BIQ: 9
+MA: 1
+```
+
+```
+Houses: 
++ Dothraki
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Radio
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Wand (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Tir
++ Tal
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Final Reserves
+```
+
+```
+Team: 2
+```
+
+```
+Lover:
++ 
+```

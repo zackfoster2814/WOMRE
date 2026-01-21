@@ -1,0 +1,70 @@
+No.
+Name: Yami (yami2233)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Dryad
+Sub-race: 
+```
+
+```
+Archetype: 
++ Devotee
+```
+``` 
+1 Quirk:  
++ Lucky (Max: không có)
+```
+```
+Str: 9
+Spd: 7
+Dur: 10
+IQ: 10
+BIQ: 2
+MA: 1
+```
+
+```
+Houses: 
++ Uchiha (Đã bị đá)
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Saxophone (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ No More Home
+```
+
+```
+Team: 10
+```
+
+```
+Lover:
++ 
+```

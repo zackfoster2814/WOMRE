@@ -1,27 +1,23 @@
 No.43
 Name: Swem (.swem)
-
 ```
 Ký Sinh:
-+
++ 
 ```
-
 ```
 Race: Elf
 Sub-race: Moon Elf
 ```
 
 ```
-Archetype:
+Archetype: 
 + Femboy
 ```
-
-```
-2 Quirk:
+``` 
+2 Quirk:  
 + Artistic
 + Raumanian
 ```
-
 ```
 Str: 9
 Spd: 6
@@ -32,13 +28,13 @@ MA: 8
 ```
 
 ```
-Houses:
+Houses: 
 + House Lannister
 ```
 
 ```
-2 Gear:
- + 0 Normal gear:
+7 Gear: 
+ + 7 Normal gear:
   - Ancient Protector
   - Knight's Armor
   - Ba hoa trắng (House Lannister)
@@ -47,7 +43,7 @@ Houses:
   - Golden coin (House Lannister)
   - Golden coin (House Lannister)
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
@@ -55,14 +51,14 @@ Houses:
 + Blood Sword
 ```
 
-```
-1 Rune:
+``` 
+1 Rune: 
 + Ral
 Runeword: Không
 ```
 
 ```
-4 Power:
+5 Power: 
 + Burning Hand
 + Uno Reverse Card
 + Mind control
@@ -71,7 +67,7 @@ Runeword: Không
 ```
 
 ```
-Char dev:
+Char dev: 
 + King's Landing
 ```
 

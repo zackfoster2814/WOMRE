@@ -1,0 +1,74 @@
+No.91
+Name: naughtyboy1 (naughtyboy1)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Angel
+Sub-race: Ophanim
+```
+
+```
+Archetype: 
++ Pacifist (Từ Race)
++ Blacksmith
+```
+``` 
+1 Quirk:  
++ Cluttered Mind
+```
+```
+Str: 5
+Spd: 2
+Dur: 7
+IQ: 2
+BIQ: 8
+MA: 3
+```
+
+```
+Houses: 
++ Ban Nhạc Ngọt Đoàn Kết
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Kẹo (Từ House)
+  - Xương sống lưỡi
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Bass (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Ort
++ Sol
+Runeword: Không
+```
+
+```
+2 Power: 
++ Voidwalking
++ Baldening
+```
+
+```
+Char dev: 
++ Final Reserves
+```
+
+```
+Team: 4
+```
+
+```
+Lover:
++ 
+```

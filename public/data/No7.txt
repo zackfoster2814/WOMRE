@@ -1,0 +1,73 @@
+No.7
+Name: Hero X (enatc0)
+```
+Ký Sinh:
++ Diablo
+```
+```
+Race: Elf
+Sub-race: Dark Elf
+```
+
+```
+Archetype: 
++ Perfectionist
+```
+``` 
+1 Quirk:  
++ Raumanian
+```
+```
+Str: 7
+Spd: 5
+Dur: 6
+IQ: 7
+BIQ: 5 (ban đầu là 3, được +2 từ Sub-race)
+MA: 10 (ban đầu là 8, được +2 từ House)
+```
+
+```
+Houses: 
++ Atreides
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Kuro's Charm
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+4 Power: 
++ Invulnerability
++ Quirkful
++ Voidwalking (Từ Quirkful)
++ Luck Manipulation (Đã tặng cho Con dê)
+```
+
+```
+Char dev: 
++ Become Woke
+```
+
+```
+Team: 14
+```
+
+```
+Lover:
++ 
+```

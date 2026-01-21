@@ -1,0 +1,81 @@
+No.26
+Name: Đóm con (pinz2223)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Angel
+Sub-race: Dominions
+```
+
+```
+Archetype: 
++ Pacifist (Từ Race)
++ Invoker
+```
+``` 
+2 Quirk:  
++ Let me solo her
++ One Trick Pony (Từ Fingerthing)
+```
+```
+Str: 1
+Spd: 6
+Dur: 8
+IQ: 3
+BIQ: 2
+MA: 9
+```
+
+```
+Houses: 
++ Lannister
+```
+
+```
+5 Gear: 
+ + 5 Normal gear:
+  - Kuro's Charm (Từ House)
+  - Buckler (Từ House)
+  - Golden Coin x3(Từ House)
+  - Knight's Armor
+  - Fingerthing
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Drums (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Ral
+Runeword: Không
+```
+
+```
+6 Power: 
++ Acid Breath(Từ Sub-race)
++ Mind Control(Từ Sub-race)
++ Quas
++ Wex
++ Exort
++ Fair Duel
+```
+
+```
+Char dev: 
++ Don't say it
+```
+
+```
+Team: 14
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,72 @@
+No.11
+Name: Pine (pinemon)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Dwarf
+Sub-race: Lùn thường
+```
+
+```
+Archetype: 
++ Summoner
+```
+``` 
+1 Quirk:  
++ Artistic
+```
+```
+Str: 7
+Spd: 5
+Dur: 2
+IQ: 6
+BIQ: 5
+MA: 6
+```
+
+```
+Houses: 
++ Stark
++ Grey Wind
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Kuro's Charm
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Glass Bottle
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+2 Power: 
++ Borrowed Time
++ Fragrant
+```
+
+```
+Char dev: 
++ Put the fries in the bag
+```
+
+```
+Team: 25
+```
+
+```
+Lover:
++ 
+```

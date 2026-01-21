@@ -1,0 +1,72 @@
+No.17
+Name: Farm Mạnh Quỳnh (phuongan1704)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Orc
+Sub-race: 
+```
+
+```
+Archetype: 
++ Hero Grave Keeper
+```
+``` 
+1 Quirk:  
++ Independent
+```
+```
+Str: 3
+Spd: 6
+Dur: 7
+IQ: 5
+BIQ: 0 (ban đầu là 8 do Blessed by Chaos kéo xuống)
+MA: 7
+```
+
+```
+Houses: 
++ 
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Đá
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Blessed by Chaos
++ Become Woke
++ True Heir of the Emirate\uD83C\uDF40
+```
+
+```
+Team: 6
+```
+
+```
+Lover:
++ 
+```

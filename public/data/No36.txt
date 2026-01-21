@@ -1,0 +1,71 @@
+No.36
+Name: Lovepcdolls (lovepcdolls)
+```
+Ký Sinh:
++ 
+```
+```
+Race: God
+Sub-race: Eir
+```
+
+```
+Archetype: 
++ Devotee
+```
+``` 
+2 Quirk:  
++ Patient
++ Training Restricted
+```
+```
+Str: 9
+Spd: 7
+Dur: 4
+IQ: 5
+BIQ: 7
+MA: 10
+```
+
+```
+Houses: 
++ Coven Council
+```
+
+```
+2 Gear: 
+ + 1 Normal gear:
+  - Văn tế
+ + 1 Legacy gear:
+  - The Tamer Straight Sword (Summon: Imp)
+```
+
+```
+1 Normal Weapon
++ Wand (Dùng được) (Từ Creator's Reforge)
+```
+
+``` 
+1 Rune: 
++ Zod (Từ Creator's Reforge)
+Runeword: Không
+```
+
+```
+1 Power: 
++ Imp (Summon, từ Legacy Gear)
+```
+
+```
+Char dev: 
++ Creator's Reforge
+```
+
+```
+Team: 
+```
+
+```
+Lover:
++ 
+```

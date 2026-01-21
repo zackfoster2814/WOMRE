@@ -1,0 +1,78 @@
+No.
+Name: 1037 (.huy._)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Dragon
+Sub-race: Chaos Dragon
+```
+
+```
+Archetype: 
++ Herald
+```
+``` 
+5 Quirk:  
++ Artistic (Từ Sub-race)
++ Generous (Từ Sub-race)
++ Impatient (Từ Sub-race)
++ Brainrot
++ Progressive (Từ Baguette)
+```
+```
+Str: 7
+Spd: 7 (Ban đầu là 4, +3 từ Archetype)
+Dur: 9
+IQ: 4
+BIQ: 7
+MA: 10
+```
+
+```
+Houses: 
++ Winterhome
+```
+
+```
+4 Gear: 
+ + 4 Normal gear:
+  - Đá (Từ House)
+  - Baguette (Từ House)
+  - Silver Steed
+  - Knight's Armor
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Guitar (Dùng được) (Đã mất)
+```
+
+``` 
+1 Rune: 
++ Shael
+Runeword: Không
+```
+
+```
+2 Power: 
++ Voidwalking
++ Seismic
+```
+
+```
+Char dev: 
++ It is what it is
+```
+
+```
+Team: 11
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,74 @@
+No.115
+Name: Son WuKong (maidinhhongson)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Elf
+Sub-race: Lythari
+```
+
+```
+Archetype: 
++ Philosopher
++ Perfectionist (Từ Char Dev)
+```
+``` 
+3 Quirk:  
++ Brave
++ Resilient
++ Blind
+```
+```
+Str: 7
+Spd: 4 (Ban đầu là 1, +3 từ Sub-race Lythari)
+Dur: 7
+IQ: 12 (Ban đầu là 9, +3 từ Archetype Philosopher)
+BIQ: 9
+MA: 6
+```
+
+```
+Houses: 
++ Stark
++ Lady
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Lover's Glover (Lover: Ako Darling (mikukhang))
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Bloodlust
+```
+
+```
+Char dev: 
++ Become Perfectionist
+```
+
+```
+Team: 24
+```
+
+```
+Lover:
++ Ako Darling (mikukhang)
+```

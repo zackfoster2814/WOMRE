@@ -1,0 +1,72 @@
+No.70
+Name: Con dê (doibacnhusilver)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Gnome
+Sub-race: 
+```
+
+```
+Archetype: 
++ Stargazer
+```
+``` 
+1 Quirk:  
++ Charming (Lover: Hero X (enatc0) )
+```
+```
+Str: 8
+Spd: 2
+Dur: 5
+IQ: 2
+BIQ: 2 (Ban đầu là 1, nhân đôi nhờ Fate's Trick)
+MA: 3
+```
+
+```
+Houses: 
++ Coven Council
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Cursed Coin
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+3 Power: 
++ Spell Flux (Từ Archetype)
++ Mystifying Murmur (Từ Archetype)
++ Luck Manipulation (Từ Hero X (enatc0))
+```
+
+```
+Char dev: 
++ Fate's Trick (nhân)
+```
+
+```
+Team: 25
+```
+
+```
+Lover:
++ Hero X (enatc0)
+```

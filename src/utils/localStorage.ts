@@ -439,6 +439,35 @@ export const getHistoryDir = async (): Promise<string> => {
   return `${normalizedPath}/history`;
 };
 
+// Get data directory path (public/data folder in dev, or app resource in production)
+export const getDataDir = async (): Promise<string> => {
+  if (!isTauri()) {
+    throw new Error('This function only works in Tauri environment');
+  }
+
+  const { resourceDir } = await import('@tauri-apps/api/path');
+  const resource = await resourceDir();
+  const normalizedPath = resource.replace(/[\/\\]$/, '');
+  return `${normalizedPath}/data`;
+};
+
+// Save character to data directory
+export const saveCharacterToLocal = async (content: string, filename: string): Promise<void> => {
+  if (!isTauri()) {
+    throw new Error('This function only works in Tauri environment');
+  }
+
+  try {
+    const dataDir = await getDataDir();
+    const filePath = await join(dataDir, filename);
+    await writeTextFile(filePath, content);
+    console.log(`Character saved to: ${filePath}`);
+  } catch (error) {
+    console.error('Failed to save character:', error);
+    throw error;
+  }
+};
+
 // Export history to local file system
 export const exportHistoryToLocal = async (csvContent: string, filename: string): Promise<string> => {
   if (!isTauri()) {

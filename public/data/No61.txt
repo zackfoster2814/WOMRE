@@ -1,0 +1,74 @@
+No.61
+Name: Khogadetem (font_bard)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Troll
+Sub-race: Băng
+```
+
+```
+Archetype: 
++ Invoker
++ Conquerer (Từ Spatula)
+```
+``` 
+2 Quirk:  
++ Herbalist
++ Open-Minded (Từ Fingerthing)
+```
+```
+Str: 3
+Spd: 5
+Dur: 5
+IQ: 1
+BIQ: 2
+MA: 8
+```
+
+```
+Houses: 
++ Kazuya Kinoshita's House
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Fingerthing
+  - Storage Room Key (Tặng Spatula)
+  - Spatula
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Ice Hammer
+```
+
+```
+Char dev: 
++ Training Arc
+```
+
+```
+Team: 11
+```
+
+```
+Lover:
++ 
+```

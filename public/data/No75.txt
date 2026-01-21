@@ -1,0 +1,72 @@
+No.75
+Name: Wakamo Lunatic (nguyuyen)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Goblin
+Sub-race: 100
+```
+
+```
+Archetype: 
++ Loyal (Lover: Swem (.swem))
+```
+``` 
+1 Quirk:  
++ Independent
+```
+```
+Str: 2
+Spd: 3
+Dur: 1
+IQ: 0 (Từ Char Dev, ban đầu là 5)
+BIQ: 5
+MA: 2
+```
+
+```
+Houses: 
++ 
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Dark Lanthorn
+  - Wooden Shield
+  - Kẹo
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Clawmark Seal (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Ral
+Runeword: Không
+```
+
+```
+1 Power: 
++ Arcana Blast
+```
+
+```
+Char dev: 
++ Too Horny
+```
+
+```
+Team: 31
+```
+
+```
+Lover:
++ Swem (.swem)
+```

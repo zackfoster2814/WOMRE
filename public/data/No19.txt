@@ -1,0 +1,75 @@
+No.19
+Name: GoonNaga (goonaga)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Elf
+Sub-race: Lythari
+```
+
+```
+Archetype: 
++ Hero of the Emirate
+```
+``` 
+2 Quirk:  
++ Raumanian\uD83C\uDF40 (Từ Hero of the Emirate)
++ Pure (Không có Gear)
+```
+```
+Str: 5
+Spd: 5 (9 chia đôi do Fate's Trick)(Ban đầu là 6, +3 từ Sub-race)
+Dur: 6
+IQ: 6
+BIQ: 9
+MA: 5
+```
+
+```
+Houses: 
++ Dothraki
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Sổ tay
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Summoning Scroll (dùng được)
+```
+
+``` 
+1 Rune: 
++ Ral
+Runeword: Không
+```
+
+```
+4 Power: 
++ Railroad Realm \uD83C\uDF40(Từ Hero of the Emirate)
++ Mystifying Murmur
++ Healing Factor
++ Guidance
+```
+
+```
+Char dev: 
++ SVKS (Chưa có)
++ Fate's Trick
+```
+
+```
+Team: 30
+```
+
+```
+Lover:
++ 
+```

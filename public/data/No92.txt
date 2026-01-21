@@ -1,0 +1,73 @@
+No.92
+Name: PYBB113 (quang03022)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Orc
+Sub-race: 
+```
+
+```
+Archetype: 
++ Loyal (Lover: Johnny Joestar (newtransocial))
+```
+``` 
+1 Quirk:  
++ Lucky (Max: Dura)
+```
+```
+Str: 6
+Spd: 5
+Dur: 10 (Quirk Lucky)
+IQ: 3
+BIQ: 6
+MA: 7
+```
+
+```
+Houses: 
++ The Shire
++ Cộng 4 Speed
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+3 Power: 
++ Gotta go Fast
++ Spirit Link
++ Armor Piercing
+```
+
+```
+Char dev: 
++ Become Hand of The King
+```
+
+```
+Team: 1
+```
+
+```
+Lover:
++ Johnny Joestar (newtransocial)
+```

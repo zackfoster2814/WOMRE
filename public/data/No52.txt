@@ -1,0 +1,82 @@
+No.52
+Name: Sâm bổ lượng Châu Đốc (ginkka)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Elf
+Sub-race: Wood elf
+```
+
+```
+Archetype: 
++ Slayer - Uma
++ Edgelord
+```
+``` 
+2 Quirk:  
++ Clumsy
++ Impatient
+```
+```
+Str: 6
+Spd: 7
+Dur: 7
+IQ: 1
+BIQ: 1
+MA: 6
+```
+
+```
+Houses: 
++ The Shire (+4 Dura)
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Ớt
+  - Soap
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Rapier
+```
+
+``` 
+1 Rune: 
++ Ort
+Runeword: Không
+```
+
+```
+4 Power: 
++ Fragrant
++ Analysis Sins
++ Power Negation
++ Quas (Wood elf)
+```
+
+```
+Char dev: 
++ Too Edgy
+```
+
+```
+Team: 23
+```
+
+```
+Lover:
++ 
+```
+
+```
+PvP Reward:
+- +1 Dura
+- +1 Str
+```

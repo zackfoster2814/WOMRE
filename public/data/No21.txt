@@ -1,0 +1,76 @@
+No.21
+Name: Ako Darling (mikukhang)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Werebeast
+Sub-race: Werebat
+```
+
+```
+Archetype: 
++ Farmer
++ Normal
+```
+``` 
+1 Quirk:  
++ Weak-Knee
+```
+```
+Str: 5
+Spd: 8
+Dur: 5
+IQ: 5
+BIQ: 5
+MA: 7
+```
+
+```
+Houses: 
++ Baratheon
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Đá
+  - Ba hoa trắng
+  - Golden Coin
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Long Sword (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Tir
++ Tir
+Runeword: Không
+```
+
+```
+3 Power: 
++ Master of War
++ Metamagic
++ Adapt
+```
+
+```
+Char dev: 
++ Mahoraga!
+```
+
+```
+Team: 24
+```
+
+```
+Lover:
++ 
+```

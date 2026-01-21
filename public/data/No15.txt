@@ -1,0 +1,73 @@
+No.15
+Name: Hung Nguyen (hung_nguyen98)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Reincarnator (Nagi) -> Uma
+Sub-race: Mejiro McQueen + Haru Urara
+```
+
+```
+Archetype: 
++ NPC
+```
+``` 
+1 Quirk:  
++ Blind
+```
+```
+Str: 6
+Spd: 6
+Dur: 4
+IQ: 6
+BIQ: 4
+MA: 1
+```
+
+```
+Houses: 
++ Tracen Academy
++ 3 Strength
++ 3 Speed
++ 3 Dura
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Dominator
+```
+
+```
+Char dev: 
++ 
+```
+
+```
+Team: 18
+```
+
+```
+Lover:
++ 
+```

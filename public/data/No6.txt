@@ -1,0 +1,75 @@
+No.6
+Name: Yamakun (yamakunson)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Elf
+Sub-race: High Elf
+```
+
+```
+Archetype: 
++ Trickster
+```
+``` 
+1 Quirk:  
++ Under the Weather
+```
+```
+Str: 4
+Spd: 3
+Dur: 10
+IQ: 9 (Ban đầu là 7, được +2 từ Sub-race)
+BIQ: 3
+MA: 3
+```
+
+```
+Houses: 
++ Roundtable Hold
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Cuộn khăn giấy
+  - Thuốc Tráng Dương
+  - Mì Tôm
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Broken Straight Sword (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+4 Power: 
++ Bloody Strike
++ EscAPADe
++ Black Magic
++ AIDS (Từ Char Dev)
+```
+
+```
+Char dev: 
++ Metamorphosis (+1 BIQ)
+```
+
+```
+Team: 27
+```
+
+```
+Lover:
++ 
+```

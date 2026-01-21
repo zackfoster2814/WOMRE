@@ -1,0 +1,70 @@
+No.27
+Name: Etsu (relkya)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Skeleton
+Sub-race: (Human)
+```
+
+```
+Archetype: 
++ Bookworm
+```
+``` 
+1 Quirk:  
++ One Trick Pony
+```
+```
+Str: 6 ban đầu là 5
+Spd: 6 ban đầu là 5
+Dur: 10 ban đầu 1
+IQ: 1
+BIQ: 4 ban đầu là 7
+MA: 7 ban đầu là 4
+```
+
+```
+Houses: 
++ Uchiha
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Sổ tay (Từ Archetype)
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Clawmark Seal (không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Divine Lightning
+```
+
+```
+Char dev: 
++ Inversion
+```
+
+```
+Team: 15
+```
+
+```
+Lover:
++ 
+```

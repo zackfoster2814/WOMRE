@@ -1,0 +1,72 @@
+No.85
+Name: Tyrunny (anomaly.exe)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Dwarf
+Sub-race: Lùn Núi
+```
+
+```
+Archetype: 
++ Gambler Bloodline
+```
+``` 
+0 Quirk:  
++ 
+```
+```
+Str: 6 (Được quay)
+Spd: 1 (Không được quay)
+Dur: 3 (Được quay)
+IQ: 1 (Không được quay)
+BIQ: 7 (Được quay)
+MA: 7 (Được quay)
+```
+
+```
+Houses: 
++ Roundtable Hold (Được quay)
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+3 Power: 
++ Master of War
++ Stat Absorption
++ Frost Fingers
+```
+
+```
+Char dev: 
++ Kungfu Training (Được quay)
+```
+
+```
+Team: 
+```
+
+```
+Lover:
++ 
+```

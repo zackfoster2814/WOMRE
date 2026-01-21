@@ -118,13 +118,15 @@ export const CharacterList: React.FC = () => {
             <p className="text-sm text-gray-600 mb-3">@{char.username}</p>
 
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
                   {char.race}
                 </span>
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                  {char.archetype}
-                </span>
+                {char.archetypes && char.archetypes.map((archetype, i) => (
+                  <span key={i} className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                    {archetype}
+                  </span>
+                ))}
               </div>
 
               {char.house && (

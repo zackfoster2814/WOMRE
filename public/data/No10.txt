@@ -1,0 +1,71 @@
+No.10
+Name: Trapcon (trapcon)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Merfolk
+Sub-race: 
+```
+
+```
+Archetype: 
++ Conquerer
+```
+``` 
+1 Quirk:  
++ Lazy
+```
+```
+Str: 5
+Spd: 8 (Ban đầu là 5, +3 từ Archetype)
+Dur: 2
+IQ: 4
+BIQ: 4
+MA: 5
+```
+
+```
+Houses: 
++ Naga
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Healing Flasks
+  - Golden Coin
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Long Sword (dùng được)
+```
+
+``` 
+1 Rune: 
++ Zod
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Lose Control
+```
+
+```
+Team: 15
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,71 @@
+No.5
+Name: Duckie2369
+```
+Ký Sinh:
++ 
+```
+```
+Race: Orc
+Sub-race: 
+```
+
+```
+Archetype: 
++ Power Ranger - Blue
+```
+``` 
+1 Quirk:  
++ Fast Learner
+```
+```
+Str: 5
+Spd: 10
+Dur: 6
+IQ: 5
+BIQ: 8
+MA: 6
+```
+
+```
+Houses: 
++ Hallownest
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Ancient Protector
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Astrologer's Staff (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Thul
++ Shael
+Runeword: Không
+```
+
+```
+1 Power: 
++ Critical Strike
+```
+
+```
+Char dev: 
++ Become Hand of The King
+```
+
+```
+Team: 4
+```
+
+```
+Lover:
++ 
+```

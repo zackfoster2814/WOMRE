@@ -1,0 +1,75 @@
+No.94
+Name: act engage draw engage(gnasuwu)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Skeleton
+Sub-race: (Dwarf)
+```
+
+```
+Archetype: 
++ Hero Grave Keeper
+```
+``` 
+2 Quirk:  
++ Cautious
++ Cheater (từ Fingerthing)
+```
+```
+Str: 6 ban đầu là 5 (Inversion)
+Spd: 9 ban đầu là 2 (Inversion)
+Dur: 4 ban đầu là 7 (Inversion)
+IQ: 1
+BIQ: 5 ban đầu là 6 (Inversion)
+MA: 4 ban đầu là 7 (Inversion)
+```
+
+```
+Houses: 
++ Lannister
+```
+
+```
+4 Gear: 
+ + 4 Normal gear:
+  - Fingerthing(Từ House)
+  - Frying Pan(Từ House)
+  - Golden Coin x3 (Từ House)
+  - Soap
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Frostmourne (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+2 Power: 
++ 67(từ Frying Pan)
++ Drunken Boxing
+```
+
+```
+Char dev: 
++ Inversion
+```
+
+```
+Team: 21
+```
+
+```
+Lover:
++ 
+```

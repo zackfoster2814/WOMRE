@@ -1,0 +1,75 @@
+No.60
+Name: nat296 (anhtai8340)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Angel
+Sub-race: Angels
+```
+
+```
+Archetype: 
++ Pacifist
++ Dual Wielder
+```
+``` 
+2 Quirk:  
++ Night Owl
++ Progessive
+```
+```
+Str: 6
+Spd: 1
+Dur: 5
+IQ: 2
+BIQ: 10
+MA: 4
+```
+
+```
+Houses: 
++ Targaryen
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Healing Flasks
+ + 0 Legacy gear:
+  - 
+```
+
+```
+2 Normal Weapon
++ Broken Straight Sword (Không dùng được)
++ Whip (không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+3 Power: 
++ Blood Frenzy
++ The Coast is Clear
++ Adapt
+```
+
+```
+Char dev: 
++ Mahoraga!
+```
+
+```
+Team: 16
+```
+
+```
+Lover:
++ 
+```

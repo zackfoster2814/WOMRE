@@ -1,0 +1,71 @@
+No.24
+Name: OddMan (thaioturan)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Dryad
+Sub-race: 
+```
+
+```
+Archetype: 
++ Hand Fighter
+```
+``` 
+1 Quirk:  
++ Dextrous
+```
+```
+Str: 10
+Spd: 1
+Dur: 4
+IQ: 7
+BIQ: 2
+MA: 10
+```
+
+```
+Houses: 
++ Baratheon (Đã bị đá vì Char Dev)
++ Nhận +1 Str, +1 BIQ, +1 MA, Base Stat thấp nhất sẽ được +2
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Kinda Homeless
+```
+
+```
+Team: 8
+```
+
+```
+Lover:
++ 
+```

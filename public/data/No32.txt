@@ -1,0 +1,76 @@
+No.32
+Name: Lệch rate Jingliu 2 lần (nguyentk24hlk)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Skeleton
+Sub-race: (Elf)
+```
+
+```
+Archetype: 
++ Chokevy
+```
+``` 
+2 Quirk:  
++ Artisan
++ Cowardly
+```
+```
+Str: 6
+Spd: 5
+Dur: 10
+IQ: 1
+BIQ: 3
+MA: 7
+```
+
+```
+Houses: 
++ Targarryen
+```
+
+```
+5 Gear: 
+ + 5 Normal gear:
+  - Đá (Từ Quirk)
+  - Frying Pan(Từ Quirk)
+  - Giấy Nợ Gia Truyền
+  - Radio
+  - Lover's Glover (Lover: idontloveyou (iloveyou1233406))
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Uchigatana (dùng được)
+```
+
+``` 
+1 Rune: 
++ Ort
+Runeword: Không
+```
+
+```
+2 Power: 
++ Lightning Enchant (Từ Frying Pan)
++ Healing Factor
+```
+
+```
+Char dev: 
++ Prime Time
+```
+
+```
+Team: 11
+```
+
+```
+Lover:
++ idontloveyou (iloveyou1233406)
+```

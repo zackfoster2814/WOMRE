@@ -1,26 +1,22 @@
 No.41
 Name: Nicre (.jan_01)
-
 ```
 Ký Sinh:
-+
++ 
 ```
-
 ```
 Race: Merfolk
 Sub-race: -
 ```
 
 ```
-Archetype:
+Archetype: 
 + Summoner
 ```
-
+``` 
+0 Quirk:  
++ 
 ```
-1 Quirk:
-+
-```
-
 ```
 Str: 8
 Spd: 6
@@ -31,14 +27,14 @@ MA: 3
 ```
 
 ```
-Houses:
+Houses: 
 + Naga
 ```
 
 ```
-0 Gear:
+1 Gear: 
  + 0 Normal gear:
-  -
+  - 
  + 1 Legacy gear:
   - Book of a small dog
 ```
@@ -48,15 +44,15 @@ Houses:
 + Rapier
 ```
 
-```
-2 Rune:
+``` 
+2 Rune: 
 + El
 + Tir
-Runeword: Razorsharp
+Runeword: Không
 ```
 
 ```
-4 Power:
+4 Power: 
 + Bash
 + Quirkless
 + Frost Armor
@@ -64,7 +60,7 @@ Runeword: Razorsharp
 ```
 
 ```
-Char dev:
+Char dev: 
 + A big Gift!
 ```
 
@@ -74,5 +70,5 @@ Team: 19
 
 ```
 Lover:
-+
++ 
 ```

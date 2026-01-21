@@ -1,0 +1,76 @@
+No.1
+Name: Đừng Nhờn với Two Fingers
+```
+Ký Sinh:
++ 
+```
+```
+Race: Uma
+Sub-race: Rice Shower + Agnes Tachyon
+```
+
+```
+Archetype: 
++ Egoist
+```
+``` 
+1 Quirk:  
++ Resilient
+```
+```
+Str: 6
+Spd: 10
+Dur: 3
+IQ: 5
+BIQ: 6
+MA: 5
+```
+
+```
+Houses: 
++ Tracen Academy
+ => + 1 Str
+ => + 3 Spd
+ => + 2 Dura
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Battlefury
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+4 Power: 
++ U=ma2 (Từ Sub-Race)
++ Baldening
++ Memory Freeze
++ Metamagic
+```
+
+```
+Char dev: 
++ Become Woke
+```
+
+```
+Team: 23
+```
+
+```
+Lover:
++ 
+```

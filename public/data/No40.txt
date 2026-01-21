@@ -1,0 +1,73 @@
+No.40
+Name: Fami (Catos)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Gnome
+Sub-race: 
+```
+
+```
+Archetype: 
++ Edgelord
++ Edgelord (Too Edgy)
+```
+``` 
+2 Quirk:  
++ Mute
++ Artistic
+```
+```
+Str: 4
+Spd: 6
+Dur: 5
+IQ: 2
+BIQ: 2
+MA: 4
+```
+
+```
+Houses: 
++ Atreides
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Shot Glass
+  - Knight's Armor
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Too Edgy
+```
+
+```
+Team: 23
+```
+
+```
+Lover:
++ 
+```

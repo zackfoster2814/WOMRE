@@ -1,0 +1,74 @@
+No.99
+Name: vietbuon (kotorukondou)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Gnome
+Sub-race: 
+```
+
+```
+Archetype: 
++ Superhero (Batman)
+```
+``` 
+2 Quirk:  
++ Night Owl
++ Weak-Knee
+```
+```
+Str: 6
+Spd: 6
+Dur: 5
+IQ: 2
+BIQ: 6
+MA: 1
+```
+
+```
+Houses: 
++ Ban Nhạc Ngọt Đoàn Kết
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Kẹo (Từ House)
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Morningstar (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Ort
++ Tal
+Runeword: Không
+```
+
+```
+3 Power: 
++ Age Manipulation
++ Thunder Orb
++ Ice Liquefactors
+```
+
+```
+Char dev: 
++ Old Age
+```
+
+```
+Team: 18
+```
+
+```
+Lover:
++ 
+```

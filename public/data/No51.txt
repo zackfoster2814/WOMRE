@@ -1,0 +1,72 @@
+No.51
+Name: Ngũ hổ vồ xôi (uchihahahaha_)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Gnome
+Sub-race: 
+```
+
+```
+Archetype: 
++ Conquerer
++ Slayer - Dwarf
+```
+``` 
+1 Quirk:  
++ Lucky
+```
+```
+Str: 5
+Spd: 7
+Dur: 6
+IQ: 10
+BIQ: 3
+MA: 1
+```
+
+```
+Houses: 
++ Uchiha
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Shot Glass
+  - Ancient Protector
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Enlarging
+```
+
+```
+Char dev: 
++ Become King Slayer
+```
+
+```
+Team: 12
+```
+
+```
+Lover:
++ 
+```

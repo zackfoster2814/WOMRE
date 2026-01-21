@@ -1,0 +1,77 @@
+No.81
+Name: KayWai (kaywai81)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Goblin
+Sub-race: 100
+```
+
+```
+Archetype: 
++ Masochist
+```
+``` 
+2 Quirk:  
++ Slow Metabolism
++ Dextrous (Từ Fingerthing)
+```
+```
+Str: 4
+Spd: 1
+Dur: 5
+IQ: 3
+BIQ: 4
+MA: 1
+```
+
+```
+Houses: 
++ Lannister
+```
+
+```
+5 Gear: 
+ + 5 Normal gear:
+  - Fingerthing(Từ House)
+  - Fishing Rod (Từ House)
+  - Golden Coin x3(Từ House)
+  - Đá
+  - Healing Flasks
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Zweihander (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+3 Power: 
++ Capybara
++ Luck Manipulation (Từ char dev)
++ Lightning Enchant (Từ char dev)
+```
+
+```
+Char dev: 
++ No more Family
+```
+
+```
+Team: 19
+```
+
+```
+Lover:
++ 
+```

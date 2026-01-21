@@ -1,0 +1,73 @@
+No.113
+Name: iodern (iodern)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Skeleton
+Sub-race: (Dwarf)
+```
+
+```
+Archetype: 
++ Perfectionist
+```
+``` 
+3 Quirk:  
++ Athletic
++ Cruelty
++ Deaf
+```
+```
+Str: 6
+Spd: 8
+Dur: 10
+IQ: 1 (Cố định)
+BIQ: 7
+MA: 7
+```
+
+```
+Houses: 
++ Kazuya Kinoshita's House
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Sarastro's Flute (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+2 Power: 
++ Analysis Sins
++ Garlic Breath
+```
+
+```
+Char dev: 
++ Become a Power Ranger (Pink)
+```
+
+```
+Team: 22
+```
+
+```
+Lover:
++ 
+```

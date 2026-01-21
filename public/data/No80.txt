@@ -1,0 +1,72 @@
+No.80
+Name: Hà (huanghe11)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Goblin
+Sub-race: 1000
+```
+
+```
+Archetype: 
++ Stargazer
+```
+``` 
+1 Quirk:  
++ Independent
+```
+```
+Str: 10
+Spd: 6
+Dur: 5
+IQ: 6
+BIQ: 5
+MA: 1
+```
+
+```
+Houses: 
++ 
+```
+
+```
+2 Gear: 
+ + 1 Normal gear:
+  - Đá
+ + 1 Legacy gear:
+  - Cursed Gnome's Doll (Từ Cha rdev)
+```
+
+```
+1 Normal Weapon
++ Wooden Sword
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+3 Power: 
++ Spell Flux (Từ Stargazer)
++ U=ma2 (Từ Stargazer)
++ Dream Manipulation
+```
+
+```
+Char dev: 
++ A Big Gift!
+```
+
+```
+Team: 24
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,71 @@
+No.97
+Name: Nasume (nasume04590)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Werebeast
+Sub-race: Wereraven
+```
+
+```
+Archetype: 
++ Loyal (Lover: Nega (thxwngs))
+```
+``` 
+1 Quirk:  
++ Blind
+```
+```
+Str: 3
+Spd: 2
+Dur: 7
+IQ: 9
+BIQ: 5
+MA: 5
+```
+
+```
+Houses: 
++ Winterhome
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Fishing Rod (Từ House)
+  - Holy Symbol (Từ House)
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Guitar (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Tal
+Runeword: Không
+```
+
+```
+1 Power: 
++ Gaze of the Abyss
+```
+
+```
+Char dev: 
++ Cơ cấu (Team 2)
+```
+
+```
+Team: 2
+```
+
+```
+Lover:
++ Nega (thxwngs)
+```

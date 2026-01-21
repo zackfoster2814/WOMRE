@@ -1,0 +1,71 @@
+No.106
+Name: trthesloth (_trthesloth)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Elf
+Sub-race: Dark Elf
+```
+
+```
+Archetype: 
++ Infirmarian
+```
+``` 
+1 Quirk:  
++ Artistic
+```
+```
+Str: 6
+Spd: 1
+Dur: 2
+IQ: 8
+BIQ: 10 (Ban đầu là 8, +2 từ Sub-race)
+MA: 1
+```
+
+```
+Houses: 
++ Coven Council
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Flute (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Sol
+Runeword: Không
+```
+
+```
+2 Power: 
++ Odin Blessing
++ Ice Hammer
+```
+
+```
+Char dev: 
++ Training Arc
+```
+
+```
+Team: 27
+```
+
+```
+Lover:
++ 
+```

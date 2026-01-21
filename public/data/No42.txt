@@ -1,26 +1,22 @@
 No.42
 Name: Kaori (khanhnguyen1703)
-
 ```
 Ký Sinh:
-+
++ 
 ```
-
 ```
 Race: Orc
-Sub-race:
+Sub-race: 
 ```
 
 ```
-Archetype:
+Archetype: 
 + Conquerer
 ```
-
-```
-1 Quirk:
+``` 
+1 Quirk:  
 + Fit
 ```
-
 ```
 Str: 5
 Spd: 4
@@ -31,13 +27,13 @@ MA: 10
 ```
 
 ```
-Houses:
+Houses: 
 + Winterhome
 ```
 
 ```
-2 Gear:
- + 1 Normal gear:
+4 Gear: 
+ + 3 Normal gear:
   - Empty Stein
   - Leather Jacket (Winterhome)
   - Sổ tay (Winterhome)
@@ -50,20 +46,20 @@ Houses:
 + Grimoire
 ```
 
-```
-2 Rune:
+``` 
+2 Rune: 
 + Sol
 + El
-Runeword: Undying Rage
+Runeword: Không
 ```
 
 ```
-1 Power:
+1 Power: 
 + Sonic Scream
 ```
 
 ```
-Char dev:
+Char dev: 
 + Last Standing
 ```
 
@@ -73,5 +69,5 @@ Team: 30
 
 ```
 Lover:
-+
++ 
 ```

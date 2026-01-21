@@ -9,29 +9,71 @@ export class CharacterParser {
 
     const character: Partial<Character> = {};
 
-    // Parse No and Name
-    const noMatch = lines[0].match(/No\.(\d+)/);
+    // Parse No and Name - handle multiple formats
+    // Format 1: "No.X" on line 0, "Name: ..." on line 1
+    // Format 2: "Name: ..." on line 0 (No extracted from filename or Name line)
+    const noMatch = lines[0].match(/No\.?(\d+)/);
     if (noMatch) {
       character.no = parseInt(noMatch[1]);
     }
 
-    const nameMatch = lines[1]?.match(/Name:\s*(.+?)\s*\((.+?)\)/);
-    if (nameMatch) {
-      character.name = nameMatch[1].trim();
-      character.username = nameMatch[2].trim();
+    // Try to find Name line (could be line 0 or line 1)
+    let nameLineIndex = -1;
+    for (let i = 0; i < Math.min(3, lines.length); i++) {
+      if (lines[i].startsWith('Name:')) {
+        nameLineIndex = i;
+        break;
+      }
     }
 
-    // Parse Ký Sinh (Parasite)
+    if (nameLineIndex >= 0) {
+      const nameLine = lines[nameLineIndex];
+      // Match "Name: PlayerName (.username)" or "Name: PlayerName (username)"
+      const nameMatch = nameLine.match(/Name:\s*(.+?)\s*\(\.?([^)]+)\)/);
+      if (nameMatch) {
+        character.name = nameMatch[1].trim();
+        character.username = nameMatch[2].trim();
+      } else {
+        // Try simpler format "Name: PlayerName"
+        const simpleMatch = nameLine.match(/Name:\s*(.+)/);
+        if (simpleMatch) {
+          character.name = simpleMatch[1].trim();
+        }
+      }
+    }
+
+    // Parse Ký Sinh (Parasite) - check if this is a Symbiosis character or a host
     const kyShinhIndex = this.findSectionIndex(lines, 'Ký Sinh:');
-    character.isParasite = this.checkBooleanValue(lines, kyShinhIndex);
+    const parasiteResult = this.parseParasiteInfo(lines, kyShinhIndex);
 
-    // Parse Race
+    // Check if this character IS a Symbiosis (has "Ký Sinh: Yes" and no Race section)
     const raceIndex = this.findSectionIndex(lines, 'Race:');
-    character.race = this.parseRace(lines, raceIndex);
+    const isSymbiosisChar = parasiteResult.isSymbiosis;
 
-    // Parse Archetype
+    if (isSymbiosisChar) {
+      // This is a Symbiosis character
+      character.isSymbiosis = true;
+      character.symbiosisType = parasiteResult.symbiosisType;
+      character.symbiosisHost = parasiteResult.symbiosisHost;
+      character.isParasite = false;
+      character.parasiteInfo = [];
+      // Set race as Symbiosis
+      character.race = { race: 'Symbiosis', subRace: parasiteResult.symbiosisType };
+    } else {
+      // This is a regular character (may or may not have a parasite)
+      character.isParasite = parasiteResult.isParasite;
+      character.parasiteInfo = parasiteResult.info;
+      character.isSymbiosis = false;
+    }
+
+    // Parse Race (skip if already set for Symbiosis)
+    if (!isSymbiosisChar) {
+      character.race = this.parseRace(lines, raceIndex);
+    }
+
+    // Parse Archetypes (support multiple)
     const archetypeIndex = this.findSectionIndex(lines, 'Archetype:');
-    character.archetype = this.parseListValue(lines, archetypeIndex)[0] || '';
+    character.archetypes = this.parseListValue(lines, archetypeIndex);
 
     // Parse Quirks
     const quirkIndex = this.findSectionIndex(lines, 'Quirk:');
@@ -58,10 +100,9 @@ export class CharacterParser {
     const powerIndex = this.findSectionIndex(lines, 'Power:');
     character.powers = this.parseListValue(lines, powerIndex);
 
-    // Parse Character Development
+    // Parse Character Development (support multiple)
     const charDevIndex = this.findSectionIndex(lines, 'Char dev:');
-    const charDevs = this.parseListValue(lines, charDevIndex);
-    character.charDev = charDevs[0];
+    character.charDevs = this.parseListValue(lines, charDevIndex);
 
     // Parse Team
     const teamIndex = this.findSectionIndex(lines, 'Team:');
@@ -87,13 +128,58 @@ export class CharacterParser {
     return lines.findIndex(line => line.includes(keyword));
   }
 
-  private static checkBooleanValue(lines: string[], startIndex: number): boolean {
-    if (startIndex < 0) return false;
-    for (let i = startIndex + 1; i < Math.min(startIndex + 5, lines.length); i++) {
-      if (lines[i] === '+' || lines[i].startsWith('+')) return true;
-      if (lines[i] === '-' || lines[i].startsWith('-')) return false;
+  private static parseParasiteInfo(lines: string[], startIndex: number): {
+    isParasite: boolean;
+    info: string[];
+    isSymbiosis: boolean;
+    symbiosisType?: string;
+    symbiosisHost?: string;
+  } {
+    if (startIndex < 0) return { isParasite: false, info: [], isSymbiosis: false };
+
+    const info: string[] = [];
+    let hasContent = false;
+    let isSymbiosis = false;
+    let symbiosisType: string | undefined;
+    let symbiosisHost: string | undefined;
+
+    // Check if this line contains "Yes" indicating this IS a Symbiosis character
+    const kyShinhLine = lines[startIndex];
+    if (kyShinhLine && kyShinhLine.toLowerCase().includes('yes')) {
+      isSymbiosis = true;
     }
-    return false;
+
+    for (let i = startIndex + 1; i < Math.min(startIndex + 10, lines.length); i++) {
+      const line = lines[i];
+
+      // Stop at next section or code block end
+      if (line.startsWith('```') && i > startIndex + 1) break;
+      if (!line || line === '```') continue;
+
+      // Parse list items starting with + or -
+      const match = line.match(/^[+\-*]\s*(.+)/);
+      if (match) {
+        const value = match[1].trim();
+        if (value) {
+          info.push(value);
+          hasContent = true;
+
+          // For Symbiosis characters, first item is type, second is host
+          if (isSymbiosis) {
+            if (!symbiosisType) {
+              symbiosisType = value;
+            } else if (!symbiosisHost) {
+              symbiosisHost = value;
+            }
+          }
+        }
+      } else if (line === '+' || line === '-') {
+        // Just a + or - without content means placeholder
+        continue;
+      }
+    }
+
+    return { isParasite: hasContent && !isSymbiosis, info, isSymbiosis, symbiosisType, symbiosisHost };
   }
 
   private static parseRace(lines: string[], startIndex: number): CharacterRace {
@@ -166,7 +252,7 @@ export class CharacterParser {
       const durMatch = line.match(/Dur:\s*(\d+)/i);
       if (durMatch) stats.dur = parseInt(durMatch[1]);
 
-      const iqMatch = line.match(/IQ:\s*(\d+)/i);
+      const iqMatch = line.match(/^IQ:\s*(\d+)/i);
       if (iqMatch) stats.iq = parseInt(iqMatch[1]);
 
       const biqMatch = line.match(/BIQ:\s*(\d+)/i);
@@ -318,6 +404,150 @@ export class CharacterParser {
     }
 
     return rewards;
+  }
+
+  /**
+   * Serialize Character object back to text file format
+   */
+  static serializeCharacter(character: Character): string {
+    const lines: string[] = [];
+
+    // Header
+    lines.push(`No.${character.no}`);
+    lines.push(`Name: ${character.name} (${character.username})`);
+    lines.push('');
+
+    // Ký Sinh
+    lines.push('```');
+    lines.push('Ký Sinh:');
+    lines.push(character.isParasite ? '+' : '+');
+    lines.push('```');
+
+    // Race
+    lines.push('```');
+    lines.push(`Race: ${character.race.race || ''}`);
+    lines.push(`Sub-race: ${character.race.subRace || '-'}`);
+    lines.push('```');
+    lines.push('');
+
+    // Archetypes
+    lines.push('```');
+    lines.push(`${character.archetypes?.length || 0} Archetype:`);
+    if (character.archetypes && character.archetypes.length > 0) {
+      character.archetypes.forEach(a => lines.push(`+ ${a}`));
+    } else {
+      lines.push('+');
+    }
+    lines.push('```');
+
+    // Quirks
+    lines.push('```');
+    lines.push(`${character.quirks.length} Quirk:`);
+    if (character.quirks.length > 0) {
+      character.quirks.forEach(q => lines.push(`+ ${q}`));
+    } else {
+      lines.push('+');
+    }
+    lines.push('```');
+
+    // Stats
+    lines.push('```');
+    lines.push(`Str: ${character.stats.str || ''}`);
+    lines.push(`Spd: ${character.stats.spd || ''}`);
+    lines.push(`Dur: ${character.stats.dur || ''}`);
+    lines.push(`IQ: ${character.stats.iq || ''}`);
+    lines.push(`BIQ: ${character.stats.biq || ''}`);
+    lines.push(`MA: ${character.stats.ma || ''}`);
+    lines.push('```');
+    lines.push('');
+
+    // Houses
+    lines.push('```');
+    lines.push('Houses:');
+    lines.push(`+ ${character.house || ''}`);
+    lines.push('```');
+    lines.push('');
+
+    // Gear
+    const totalGear = character.gear.normalGear.length + character.gear.legacyGear.length;
+    lines.push('```');
+    lines.push(`${totalGear} Gear:`);
+    lines.push(` + ${character.gear.normalGear.length} Normal gear:`);
+    if (character.gear.normalGear.length > 0) {
+      character.gear.normalGear.forEach(g => lines.push(`  - ${g}`));
+    } else {
+      lines.push('  -');
+    }
+    lines.push(` + ${character.gear.legacyGear.length} Legacy gear:`);
+    if (character.gear.legacyGear.length > 0) {
+      character.gear.legacyGear.forEach(g => lines.push(`  - ${g}`));
+    } else {
+      lines.push('  -');
+    }
+    lines.push('```');
+    lines.push('');
+
+    // Weapons
+    lines.push('```');
+    lines.push(`${character.weapons.length} Normal Weapon`);
+    if (character.weapons.length > 0) {
+      character.weapons.forEach(w => {
+        const usableText = w.usable === false ? ' (không dùng được)' : w.usable === true ? ' (Dùng được)' : '';
+        lines.push(`+ ${w.name}${usableText}`);
+      });
+    } else {
+      lines.push('+');
+    }
+    lines.push('```');
+    lines.push('');
+
+    // Runes
+    lines.push('```');
+    lines.push(`${character.runes.runes.length} Rune:`);
+    if (character.runes.runes.length > 0) {
+      character.runes.runes.forEach(r => lines.push(`+ ${r}`));
+    } else {
+      lines.push('+');
+    }
+    lines.push(`Runeword: ${character.runes.runeword || 'Không'}`);
+    lines.push('```');
+    lines.push('');
+
+    // Powers
+    lines.push('```');
+    lines.push(`${character.powers.length} Power:`);
+    if (character.powers.length > 0) {
+      character.powers.forEach(p => lines.push(`+ ${p}`));
+    } else {
+      lines.push('+');
+    }
+    lines.push('```');
+    lines.push('');
+
+    // Char devs
+    lines.push('```');
+    lines.push(`${character.charDevs?.length || 0} Char dev:`);
+    if (character.charDevs && character.charDevs.length > 0) {
+      character.charDevs.forEach(c => lines.push(`+ ${c}`));
+    } else {
+      lines.push('+');
+    }
+    lines.push('```');
+    lines.push('');
+
+    // Team
+    lines.push('```');
+    lines.push(`Team: ${character.team || ''}`);
+    lines.push('```');
+    lines.push('');
+
+    // Lover
+    lines.push('```');
+    lines.push('Lover:');
+    lines.push(`+ ${character.lover || ''}`);
+    lines.push('```');
+
+    return lines.join('\n');
   }
 
   /**

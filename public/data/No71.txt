@@ -1,0 +1,80 @@
+No.71
+Name: GiCi (gic.)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Orc
+Sub-race: 
+```
+
+```
+Archetype: 
++ Infirmarian
++ Paladin (Từ Spatula)
+```
+``` 
+3 Quirk:  
++ Impatient (PvP reward: +1 Dura, +1 Speed)
++ Deaf
++ Clumsy
+```
+```
+Str: 6
+Spd: 8
+Dur: 8
+IQ: 3
+BIQ: 8
+MA: 7 (Ban đầu là 5, nhận +2 từ Paladin)
+```
+
+```
+Houses: 
++ Lannister
+```
+
+```
+5 Gear: 
+ + 5 Normal gear:
+  - Cursed Charm (Từ House)
+  - Ancient Protector(Từ House)
+  - Golden Coinx3
+  - Spatula
+  - Beer
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Yamato Blade (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+4 Power: 
++ Divine Smite (Từ Sub-race)
++ Black Magic
++ Borrowed Time
++ Magma Strike
+```
+
+```
+Char dev: 
++ Make Love (Nicre (.jan_01))
+```
+
+```
+Team: 4
+```
+
+```
+Lover:
++ 
+```

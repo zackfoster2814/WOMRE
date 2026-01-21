@@ -87,7 +87,7 @@ export class CharacterManager {
       name: char.name,
       username: char.username,
       race: char.race.race,
-      archetype: char.archetype,
+      archetypes: char.archetypes,
       team: char.team,
       house: char.house
     }));
@@ -113,7 +113,7 @@ export class CharacterManager {
 
     if (filters.archetype) {
       results = results.filter(char =>
-        char.archetype.toLowerCase().includes(filters.archetype!.toLowerCase())
+        char.archetypes.some(a => a.toLowerCase().includes(filters.archetype!.toLowerCase()))
       );
     }
 
@@ -192,7 +192,7 @@ export class CharacterManager {
     return {
       totalCharacters: characters.length,
       races: this.getUniqueValues(characters.map(c => c.race.race)),
-      archetypes: this.getUniqueValues(characters.map(c => c.archetype)),
+      archetypes: this.getUniqueValues(characters.flatMap(c => c.archetypes)),
       houses: this.getUniqueValues(characters.map(c => c.house).filter(Boolean) as string[]),
       teams: this.getUniqueValues(characters.map(c => c.team).filter(Boolean) as number[]),
       withLovers: characters.filter(c => c.lover).length,

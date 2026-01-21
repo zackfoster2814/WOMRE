@@ -1,0 +1,74 @@
+No.62
+Name: _paower (baoissleepy)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Giant
+Sub-race: 
+```
+
+```
+Archetype: 
++ Follower of the Two Fingers
+```
+``` 
+2 Quirk:  
++ Slow Metabolism
++ Cautious
+```
+```
+Str: 7 ban đầu là 4 (-5)
+Spd: 10 ban đầu là 1
+Dur: 7 ban đầu là 4
+IQ: 2 ban đầu là 9 (+5)
+BIQ: 8 ban đầu là 3
+MA: 5 ban đầu là 6
+```
+
+```
+Houses: 
++ Golden Order
++ Malenia
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Empty Stein
+  - Silver Steed
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Grimoire (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Tir
+Runeword: Không
+```
+
+```
+2 Power: 
++ Luck Manipulation(Từ House)
++ Hydrate(Từ House)
+```
+
+```
+Char dev: 
++ Inversion
+```
+
+```
+Team: 8
+```
+
+```
+Lover:
++ 
+```

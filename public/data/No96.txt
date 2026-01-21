@@ -1,0 +1,75 @@
+No.96
+Name: tophate (d233tvu)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Giant
+Sub-race: 
+```
+
+```
+Archetype: 
++ Trickster
+```
+``` 
+1 Quirk:  
++ Fast Learner
+```
+```
+Str: 6
+Spd: 5
+Dur: 7
+IQ: 5
+BIQ: 5
+MA: 2
+```
+
+```
+Houses: 
++ Lannister
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Cursed Coin (Từ House)
+  - Kẹo (Từ House)
+  - Golden Coin x3 (Từ House)
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+4 Power: 
++ Clear Mind
++ Black Magic
++ Fancy Feet
++ Fragant
+```
+
+```
+Char dev: 
++ King's Landing
+```
+
+```
+Team: 10
+```
+
+```
+Lover:
++ 
+```

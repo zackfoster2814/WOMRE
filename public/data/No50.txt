@@ -1,27 +1,23 @@
 No.50
 Name: LocK (lock485)
-
 ```
 Ký Sinh:
-+
++ 
 ```
-
 ```
 Race: Giant
-Sub-race:
+Sub-race: 
 ```
 
 ```
-Archetype: Egoist
-+
+Archetype: 
++ Egoist
 ```
-
-```
-1 Quirk:
+``` 
+2 Quirk:  
 + Raumanian
 + Impatient
 ```
-
 ```
 Str: 1
 Spd: 1
@@ -32,35 +28,35 @@ MA: 1
 ```
 
 ```
-Houses:
+Houses: 
 + House Lannister
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
+5 Gear: 
+ + 5 Normal gear:
   - Thuốc Tráng dương (Lannister)
   - Fingerthing (Lannister)
   - Golden Coin (Lannister)
   - Golden Coin (Lannister)
   - Golden Coin (Lannister)
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
 ```
 
 ```
-2 Rune:
-
-Runeword:
-```
-
-```
-4 Power:
+4 Power: 
 + Fragant
 + Cursed
 + AIDS
@@ -68,7 +64,7 @@ Runeword:
 ```
 
 ```
-Char dev:
+Char dev: 
 + Kungfu Training
 ```
 
@@ -78,7 +74,7 @@ Team: 16
 
 ```
 Lover:
-+
++ 
 ```
 
 ```

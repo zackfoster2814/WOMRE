@@ -1,0 +1,72 @@
+No.59
+Name: Johnny Walkaways (johnnywalkaways)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Human
+Sub-race: Da Trắng
+```
+
+```
+Archetype: 
++ Mid
+```
+``` 
+2 Quirk:  
++ Shining Brightly
++ Cruelty
+```
+```
+Str: 5
+Spd: 5
+Dur: 5
+IQ: 5
+BIQ: 5
+MA: 5
+```
+
+```
+Houses: 
++ Kazuya Kinoshita's House (Bay khỏi nhà từ Char Dev)
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Sổ tay
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Claymore (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+2 Power: 
++ The Coast is Clear
++ Golden Vow
+```
+
+```
+Char dev: 
++ No more Home
+```
+
+```
+Team: 29
+```
+
+```
+Lover:
++ 
+```

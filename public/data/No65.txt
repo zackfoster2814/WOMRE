@@ -1,0 +1,74 @@
+No.65
+Name: Seefish (seefish._80347)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Merfolk
+Sub-race: 
+```
+
+```
+Archetype: 
++ 2 Ngón
+```
+``` 
+2 Quirk:  
++ Fit
++ Deaf
+```
+```
+Str: 6
+Spd: 10
+Dur: 5
+IQ: 8
+BIQ: 3
+MA: 3
+```
+
+```
+Houses: 
++ Naga
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Buckler
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+4 Power: 
++ Water Breathing
++ No Stopping Me
++ 67
++ AIDS (Từ Char Dev)
+```
+
+```
+Char dev: 
++ Metamorphosis (7 Spd)
+```
+
+```
+Team: 14
+```
+
+```
+Lover:
++ 
+```

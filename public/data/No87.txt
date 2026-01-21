@@ -1,0 +1,73 @@
+No.87
+Name: KaTsumi - ChillWithCafe (katsumi3000)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Skeleton
+Sub-race: (Dwarf)
+```
+
+```
+Archetype: 
++ Dual Wielder
+```
+``` 
+1 Quirk:  
++ Open-minded
+```
+```
+Str: 8
+Spd: 4
+Dur: 1
+IQ: 1
+BIQ: 6
+MA: 7
+```
+
+```
+Houses: 
++ The Shire
++ Cộng 4 IQ
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Leather Jacket
+  - Kuro's Charm
+ + 0 Legacy gear:
+  - 
+```
+
+```
+2 Unique Weapon
++ Backhand Blade (dùng được)
++ Diamond Sword (dùng được)
+```
+
+``` 
+1 Rune: 
++ Tir
+Runeword: Không
+```
+
+```
+1 Power: 
++ Detect Thoughts
+```
+
+```
+Char dev: 
++ In Love (Lover: Zackie (zackfoster___)) (+2 IQ)
+```
+
+```
+Team: 1
+```
+
+```
+Lover:
++ Zackie (zackfoster___)
+```

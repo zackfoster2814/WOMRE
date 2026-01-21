@@ -1,0 +1,76 @@
+No.
+Name: Kain ヅ (greed101101)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Gnome
+Sub-race: 
+```
+
+```
+Archetype: 
++ Perfectionist
++ Time Traveller (Từ Gear Spatula)
+```
+``` 
+2 Quirk:  
++ Impatient (PvP Reward: 1 Gear, 1 IQ) (đã mất)
++ Fast Learner (đã mất)
+```
+```
+Str: 2
+Spd: 3
+Dur: 7
+IQ: 10
+BIQ: 2
+MA: 3
+```
+
+```
+Houses: 
++ The Shire
++ Cộng 4 vào MA
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Spatula (Từ Quirk)
+  - Radio
+  - Đá
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Flute (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Tir
++ Thul
+Runeword: Không
+```
+
+```
+1 Power: 
++ Quirkless (đã mất)
+```
+
+```
+Char dev: 
++ Lose Control
+```
+
+```
+Team: 15
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,76 @@
+No.18
+Name: Lunacy (lunacy6545)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Reincarnator (Zed) -> Vampire (Khẩu vị: Bắp Cải)
+Sub-race: Body Count: 500+
+```
+
+```
+Archetype: 
++ Paladin
+```
+``` 
+3 Quirk:  
++ Artisan
++ Pure
++ Independent (Từ Fingerthing)
+```
+```
+Str: 5
+Spd: 5
+Dur: 5
+IQ: 5
+BIQ: 1
+MA: 7 (Ban đầu là 5, +2 từ Paladin)
+```
+
+```
+Houses: 
++ Hallownest (Đã bị đuổi)
+```
+
+```
+5 Gear: 
+ + 5 Normal gear:
+  - Cursed Coin (Từ Artisan)
+  - Fingerthing (Từ Artisan)
+  - Holy Symbol
+  - Cursed Charm
+  - Wooden Shield
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ War Axe (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Shael
+Runeword: Không
+```
+
+```
+1 Power: 
++ Divine Smite (Từ Archetype)
+```
+
+```
+Char dev: 
++ Finality
+```
+
+```
+Team: 18
+```
+
+```
+Lover:
++ 
+```

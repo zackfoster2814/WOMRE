@@ -1,0 +1,79 @@
+No.13
+Name: zed (zed9179)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Spirit
+Sub-race: 
+```
+
+```
+Archetype: 
++ Wibu
++ Jojo
++ The World
+```
+``` 
+3 Quirk:  
++ One Trick Pony
++ Fast Leaner (Từ House)
++ Night Owl (Từ House)
+```
+```
+Str: 6
+Spd: 9
+Dur: 6
+IQ: 7
+BIQ: 10
+MA: 1
+```
+
+```
+Houses: 
++ New London
++ Thinkers
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Dark Lanthorn
+  - Văn Tế
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Giant Slayer
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+4 Power: 
++ Night Vision
++ Spell Flux
++ Angling and Scheming (Từ Char dev)
++ Wex (Từ Char dev)
+```
+
+```
+Char dev: 
++ No more Family
+```
+
+```
+Team: 8
+```
+
+```
+Lover:
++ 
+```

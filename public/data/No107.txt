@@ -1,0 +1,73 @@
+No.107
+Name: dlwlrma (aem2804)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Demi-god
+Sub-race: Creation (Favor: Tặng Hidden Blade)
+```
+
+```
+Archetype: 
++ Summoner
+```
+``` 
+1 Quirk:  
++ Cheater
+```
+```
+Str: 10
+Spd: 5
+Dur: 10
+IQ: 7
+BIQ: 10
+MA: 1
+```
+
+```
+Houses: 
++ Coven Council
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Bò Khô
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Hidden Blade (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Shael
+Runeword: Không
+```
+
+```
+4 Power: 
++ Invulnerability
++ Red Shift/LP1211-M
++ Misty Step Ahead
++ Critical Strike (Từ )
+```
+
+```
+Char dev: 
++ Old Age
+```
+
+```
+Team: 8
+```
+
+```
+Lover:
++ 
+```

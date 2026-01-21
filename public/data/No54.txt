@@ -1,0 +1,71 @@
+No.54
+Name: Anh Mèo (meowtea)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Gnome
+Sub-race: 
+```
+
+```
+Archetype: 
++ Hero Grave Keeper
+```
+``` 
+2 Quirk:  
++ Athletic
++ Resilient
+```
+```
+Str: 4
+Spd: 7
+Dur: 7
+IQ: 10 (ban đầu là 8, +2 từ House)
+BIQ: 1
+MA: 3
+```
+
+```
+Houses: 
++ Atreides
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Evasion
+```
+
+```
+Char dev: 
++ Cơ Cấu
+```
+
+```
+Team: 2
+```
+
+```
+Lover:
++ 
+```

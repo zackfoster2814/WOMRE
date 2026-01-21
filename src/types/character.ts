@@ -41,12 +41,18 @@ export interface Character {
   name: string;
   username: string;
 
-  // Parasitic Status
+  // Parasitic Status (for hosts who have a symbiote)
   isParasite: boolean;
+  parasiteInfo?: string[];
+
+  // Symbiosis Status (for the symbiote itself)
+  isSymbiosis?: boolean;
+  symbiosisType?: string;  // e.g., "Mephisto", "Diablo"
+  symbiosisHost?: string;  // e.g., "2.Quý Trần Tường (wyug1234)"
 
   // Race & Class
   race: CharacterRace;
-  archetype: string;
+  archetypes: string[];  // Support multiple archetypes
 
   // Quirks
   quirks: string[];
@@ -68,7 +74,7 @@ export interface Character {
   powers: string[];
 
   // Character Development
-  charDev?: string;
+  charDevs: string[];  // Support multiple char devs
 
   // Social
   team?: number;
@@ -83,7 +89,7 @@ export interface CharacterSummary {
   name: string;
   username: string;
   race: string;
-  archetype: string;
+  archetypes: string[];
   team?: number;
   house?: string;
 }

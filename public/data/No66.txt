@@ -1,0 +1,74 @@
+No.66
+Name: SoloWingPixy (s0l0wingpixy)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Lùn
+Sub-race: Lùn Núi
+```
+
+```
+Archetype: 
++ NPC
+```
+``` 
+4 Quirk:  
++ Progessive
++ Pure (Từ Sybaurafarming ) (Không Đai)
++ Raumanian (Từ Sybaurafarming)
++ Let me solo her (Từ Sybaurafarming)
+```
+```
+Str: 5
+Spd: 4
+Dur: 4
+IQ: 5 ban đầu là 9
+BIQ: 5ban đầu là 6
+MA: 5 ban đầu là 8
+```
+
+```
+Houses: 
++ Ban Nhạc Ngọt Đoàn Kết
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Bò khô (từ House)
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Claymore (Dùng Được)
+```
+
+``` 
+2 Rune: 
++ Tir
++ Ith
+Runeword: Không
+```
+
+```
+1 Power: 
++ Sybaurafarming
+```
+
+```
+Char dev: 
++ 
+```
+
+```
+Team: 13
+```
+
+```
+Lover:
++ 
+```

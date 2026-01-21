@@ -1,0 +1,83 @@
+No.112
+Name: cá hồi chấm mắm tôm (hoangsun274)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Troll
+Sub-race: Regular Troll
+```
+
+```
+Archetype: 
++ Wibu My Hero Academia
++ IQ
++ Fisher
+```
+``` 
+1 Quirk:  
++ Raumanian\uD83C\uDF40
+```
+```
+Str: 1
+Spd: 3
+Dur: 1
+IQ: 5
+BIQ: 5
+MA: 9
+```
+
+```
+Houses: 
++ Stark
++ Nymeria
+```
+
+```
+8 Gear: 
+ + 8 Normal gear:
+  - Storage Room Key (Tặng Spatula)
+  - Spatula (Từ Storage Room Key)
+  - Đai Trinh Tiết
+  - Giấy Nợ Gia Truyền
+  - Fishing Rod (Từ Archetype Fisher)
+  - Cursed Charm (Từ Armed to the Teeth)
+  - Golden Coin (Từ Armed to the Teeth)
+  - Love Letter (Từ Armed to the Teeth)
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Wooden Sword
+```
+
+``` 
+1 Rune: 
++ Thul
+Runeword: Không
+```
+
+```
+4 Power: 
++ Cold Breeze
++ Drunken Boxing
++ Gaze of the Abyss
++ The Sand of Time
+```
+
+```
+Char dev: 
++ Armed to the Teeth
+```
+
+```
+Team: 2
+```
+
+```
+Lover:
++ 
+```

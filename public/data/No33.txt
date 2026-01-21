@@ -1,0 +1,71 @@
+No.33
+Name: Inglorious (ingloriousv)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Human (Đen)
+Sub-race: 
+```
+
+```
+Archetype: 
++ Invoker
+```
+``` 
+1 Quirk:  
++ Fit
+```
+```
+Str: 3
+Spd: 9
+Dur: 7
+IQ: 7
+BIQ: 6
+MA: 1
+```
+
+```
+Houses: 
++ Roundtable Hold
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Cursed Coin
+  - Silver Steed
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Backhand Blade (Dùng được) (Đã mất do Cha rdev)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Clear Mind
+```
+
+```
+Char dev: 
++ It is what it is
+```
+
+```
+Team: 12
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,72 @@
+No.34
+Name: Moonice (muroku_18)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Dwarf
+Sub-race: Lùn thường
+```
+
+```
+Archetype: 
++ Bookworm.
+```
+``` 
+2 Quirk:  
++ Under the Weather
++ Weak-Knee
+```
+```
+Str: 3
+Spd: 3
+Dur: 2
+IQ: 5
+BIQ: 1
+MA: 2
+```
+
+```
+Houses: 
++ Uchiha
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Sổ Tay (Từ Archetype)
+  - Mì Tôm
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Long Sword (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Amn
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Kungfu Training
+```
+
+```
+Team: 18
+```
+
+```
+Lover:
++ 
+```

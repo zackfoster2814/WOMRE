@@ -1,0 +1,76 @@
+No.95
+Name: AtKo (ame_tako)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Werebeast
+Sub-race: Werebat
+```
+
+```
+Archetype: 
++ Edgelord
+```
+``` 
+3 Quirk:  
++ Weak-Knee
++ Patient(Từ House)
++ Charming (Lover: LTL (ltl.jr)) (Từ Baguette )
+```
+```
+Str: 9
+Spd: 5
+Dur: 8
+IQ: 7
+BIQ: 4
+MA: 1
+```
+
+```
+Houses: 
++ Stark
++ Ghost
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Baguette
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+2 Power: 
++ Poison Breath(Từ House)
++ Luck Manipulation(Từ House)
+```
+
+```
+Char dev: 
++ Pessimistic (Từ House)
++ SVKS (Quay lại)
++ Lost a Leg
+```
+
+```
+Team: 8
+```
+
+```
+Lover:
++ LTL (ltl.jr)
+```

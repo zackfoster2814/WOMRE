@@ -1,0 +1,78 @@
+No.69
+Name: Nốt Ruồi Lệch Pha (cooku_35645)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Merfolk
+Sub-race: 
+```
+
+```
+Archetype: 
++ 2 ngón
+```
+``` 
+3 Quirk:  
++ Brave
++ Artisan
++ Shining Brightly
+```
+```
+Str: 5
+Spd: 10
+Dur: 4
+IQ: 6
+BIQ: 6
+MA: 10
+```
+
+```
+Houses: 
++ Naga
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Soap (Từ Quirk)
+  - Ớt
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Shadow Killer (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+6 Power: 
++ Critical Strike
++ 67
++ Enlarging
++ Frost Armor
++ Mewing (Từ Cha rdev)
++ Evasion (Từ Cha rdev)
+```
+
+```
+Char dev: 
++ No more family
+```
+
+```
+Team: 4
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,76 @@
+No.39
+Name: Euoid (euoid)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Dwarf
+Sub-race: Lùn Núi (Mountain)
+```
+
+```
+Archetype: 
++ Masochist
+```
+``` 
+1 Quirk:  
++ Slow Healer
+```
+```
+Str: 3
+Spd: 5
+Dur: 5
+IQ: 8
+BIQ: 6
+MA: 2
+```
+
+```
+Houses: 
++ Shurima
+```
+
+```
+3 Gear: 
+ + 2 Normal gear:
+  - Đai Trinh Tiết
+  - Empty Stein
+ + 1 Legacy gear:
+  - Lockalock Skill Book
+```
+
+```
+1 Unique Weapon
++ Rhitta - dùng được
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+6 Power: 
++ Let's Pump Some Iron!
++ The Sand of Time (Shurima)
++ Stat Absorption (Shurima)
++ Mewing (Lockalock Skill Book)
++ Gotta go Fast (Lockalock Skill Book)
++ The Coast is Clear! (Lockalock Skill Book)
+```
+
+```
+Char dev: 
++ In love
+```
+
+```
+Team: 19
+```
+
+```
+Lover:
++ Quý Trần Tường (wyug1234)
+```

@@ -1,0 +1,73 @@
+No.100
+Name: CkTrangNhung (baophan)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Uma
+Sub-race: Maruzensky + Mihono Bourbon
+```
+
+```
+Archetype: 
++ Gambler
+```
+``` 
+1 Quirk:  
++ Patient
+```
+```
+Str: 6
+Spd: 7
+Dur: 4
+IQ: 5
+BIQ: 6
+MA: 1
+```
+
+```
+Houses: 
++ Tracen Academy
+ => +1 Strength
+ => Nhận +1 Speed
+ => Nhận +3 Dura
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Wand (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Amn
+Runeword: Không
+```
+
+```
+1 Power: 
++ Red Shift/LP1211-M (Từ Sub-race)
+```
+
+```
+Char dev: 
++ Lost an Arm
+```
+
+```
+Team: 26
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,75 @@
+No.57
+Name: NPC (npc867)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Werebeast
+Sub-race: Werebat
+```
+
+```
+Archetype: 
++ Time Traveller
+```
+``` 
+1 Quirk:  
++ Independent
+```
+```
+Str: 4
+Spd: 6
+Dur: 5
+IQ: 7
+BIQ: 10
+MA: 7
+```
+
+```
+Houses: 
++ 
+```
+
+```
+4 Gear: 
+ + 4 Normal gear:
+  - Radio
+  - Văn Tế
+  - Storage Room Key (Tặng Đai Trinh Tiết)
+  - Đai Trinh Tiết
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+3 Power: 
++ Exort
++ Hunter's Mark
++ Ice Liquefactors
+```
+
+```
+Char dev: 
++ MrBeast
+```
+
+```
+Team: 25
+```
+
+```
+Lover:
++ 
+```

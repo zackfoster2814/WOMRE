@@ -1,0 +1,74 @@
+No.111
+Name: TheViet (c9ru5)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Reincarnator (Ar2di) -> Goblin
+Sub-race: 100000
+```
+
+```
+Archetype: 
++ Anti-Social
+```
+``` 
+1 Quirk:  
++ Lazy
+```
+```
+Str: 1
+Spd: 1
+Dur: 1
+IQ: 5
+BIQ: 1
+MA: 9
+```
+
+```
+Houses: 
++ Shurima
+```
+
+```
+4 Gear: 
+ + 3 Normal gear:
+  - Đá (Từ Sub-race)
+  - Beer
+  - Swift Boots
+ + 1 Legacy gear:
+  - Staff of the Fallen One (Từ House)
+```
+
+```
+1 Unique Weapon
++ Instruments of the Sirens (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+3 Power: 
++ Master of War(Từ House)
++ Luck Manipulation(Từ House)
++ Cold Breeze
+```
+
+```
+Char dev: 
++ Put the fries in the bag
+```
+
+```
+Team: 7
+```
+
+```
+Lover:
++ 
+```

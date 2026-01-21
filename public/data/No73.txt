@@ -1,0 +1,73 @@
+No.73
+Name: Em Phốc Trắng (dick8704)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Orc
+Sub-race: 
+```
+
+```
+Archetype: 
++ Fisher
+```
+``` 
+1 Quirk:  
++ Lucky (Max: MA)
+```
+```
+Str: 8
+Spd: 8 (ban đầu là 4, Fate's Trick nhân đôi là 8)
+Dur: 4
+IQ: 8
+BIQ: 10
+MA: 10 (Lucky)
+```
+
+```
+Houses: 
++ Dothraki
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Fishing Rod (Từ Archetype)
+  - Thuốc tráng dương
+  - Ớt
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Halberd (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ SVKS (không ra gì, quay lại)
++ Fate's Trick (nhân)
+```
+
+```
+Team: 11
+```
+
+```
+Lover:
++ 
+```

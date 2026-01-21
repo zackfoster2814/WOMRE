@@ -1,0 +1,71 @@
+No.198
+Name: Silver Chariot (galangal)
+
+```
+Ký Sinh:
++
+```
+```
+Race:
+Sub-race:
+```
+
+```
+Archetype:
++
+```
+```
+2 Quirk:
++
+```
+```
+Str:
+Spd:
+Dur:
+IQ:
+BIQ:
+MA:
+```
+
+```
+Houses:
++
+```
+
+```
+0 Gear:
+ + 0 Normal gear:
+  -
+ + 0 Legacy gear:
+  -
+```
+
+```
+0 Normal Weapon
++
+```
+
+```
+0 Rune:
++
+Runeword: Không
+```
+
+```
+0 Power:
++
+```
+
+```
+Char dev:
++
+```
+
+```
+Team:
+```
+
+```
+Lover:
++
+```

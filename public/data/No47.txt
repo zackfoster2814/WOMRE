@@ -1,26 +1,22 @@
 No.47
 Name: handoivodoi (handoivodoi)
-
 ```
 Ký Sinh:
-+
++ 
 ```
-
 ```
 Race: Giant
-Sub-race:
+Sub-race: 
 ```
 
 ```
-Archetype:
+Archetype: 
 + Hand fighter
 ```
-
-```
-1 Quirk:
+``` 
+1 Quirk:  
 + Brave
 ```
-
 ```
 Str: 6
 Spd: 1
@@ -31,37 +27,37 @@ MA: 7
 ```
 
 ```
-Houses:
+Houses: 
 + Atreides
 ```
 
 ```
-2 Gear:
+2 Gear: 
  + 2 Normal gear:
   - Thuốc tráng dương
   - Ớt
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
 ```
 
-```
-0 Rune:
-+
+``` 
+0 Rune: 
++ 
 Runeword: Không
 ```
 
 ```
-1 Power:
+1 Power: 
 + Weapon Enhancing
 ```
 
 ```
-Char dev:
+Char dev: 
 + Cơ cấu
 ```
 
@@ -71,5 +67,5 @@ Team: 2
 
 ```
 Lover:
-+
++ 
 ```

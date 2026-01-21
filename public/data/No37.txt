@@ -1,0 +1,70 @@
+No.37
+Name: LamBeii (lambeii)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Gnome
+Sub-race: -
+```
+
+```
+Archetype: 
++ Gambler Bloodline
+```
+``` 
+1 Quirk:  
++ Graceful
+```
+```
+Str: 5
+Spd: 5
+Dur: 4
+IQ: 1
+BIQ: 1
+MA: 1
+```
+
+```
+Houses: 
++ Không có :krn:
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Magma Strike
+```
+
+```
+Char dev: 
++ 
+```
+
+```
+Team: 
+```
+
+```
+Lover:
++ Cá Trê vượt thác nhé hehe (huypui) (từ Graceful)
+```

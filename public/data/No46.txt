@@ -1,27 +1,23 @@
 No.46
 Name: Yui (duyanh_57789)
-
 ```
 Ký Sinh:
-+
++ 
 ```
-
 ```
 Race: Demon
 Sub-race: Asmodeus
 ```
 
 ```
-Archetype:
+Archetype: 
 + Edgelord
 + Merchants
 ```
-
-```
-1 Quirk:
+``` 
+1 Quirk:  
 + Open-minded
 ```
-
 ```
 Str: 1
 Spd: 9
@@ -32,32 +28,32 @@ MA: 5
 ```
 
 ```
-Houses:
+Houses: 
 + New London
 ```
 
 ```
-1 Gear:
- + 1 Normal gear:
+2 Gear: 
+ + 2 Normal gear:
   - Thuốc tráng dương
   - Golden coin (Merchants)
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-1 Normal Weapon
-+
+0 Normal Weapon
++ 
 ```
 
-```
-1 Rune:
+``` 
+1 Rune: 
 + Ith
 Runeword: Không
 ```
 
 ```
-3 Power:
+4 Power: 
 + AIDS (Asmodeus)
 + Groundwork
 + Fist Fighting
@@ -65,7 +61,7 @@ Runeword: Không
 ```
 
 ```
-Char dev:
+Char dev: 
 + Finality
 ```
 
@@ -75,5 +71,5 @@ Team: 4
 
 ```
 Lover:
-+
++ 
 ```

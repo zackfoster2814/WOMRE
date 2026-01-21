@@ -1,0 +1,73 @@
+No.29
+Name: Cloudian (_dragluon_)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Demi-God
+Sub-race: Cursed Sword
+```
+
+```
+Archetype: 
++ Conquerer
+```
+``` 
+3 Quirk:  
++ Herbalist
++ Training Restricted
++ Fast Learner (Từ Cha rdev)
+```
+```
+Str: 2
+Spd: 10
+Dur: 2
+IQ: 4
+BIQ: 6
+MA: 10
+```
+
+```
+Houses: 
++ Dothraki
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Nghe Bài Thú Tội
++ Seeking Wisdom (Từ Nghe Bài Thú Tội )
+```
+
+```
+Team: 
+```
+
+```
+Lover:
++ 
+```

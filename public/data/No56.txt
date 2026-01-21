@@ -1,0 +1,74 @@
+No.56
+Name: baonine (baonine)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Gnome
+Sub-race: 
+```
+
+```
+Archetype: 
++ Loyal (Lover: cá trê vượt thác nhé hehe (huypui))
+```
+``` 
+1 Quirk:  
++ Patient
+```
+```
+Str: 5
+Spd: 2
+Dur: 5
+IQ: 3
+BIQ: 1 (Ban đầu là 1, quay lại vì House)
+MA: 2
+```
+
+```
+Houses: 
++ Golden Order
++ Unborn (Quay lại BIQ từ 1 thành 1)
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Holy Symbol
+  - Thuốc Tráng Dương
+  - Đai Trinh Tiết
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Guitar (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+2 Power: 
++ Hand Washing
++ Let Pump Some Iron
+```
+
+```
+Char dev: 
++ MrBeast
+```
+
+```
+Team: 30
+```
+
+```
+Lover:
++ cá trê vượt thác nhé hehe (huypui)
+```

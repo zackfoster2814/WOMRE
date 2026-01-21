@@ -1,0 +1,78 @@
+No.63
+Name: V1ncc (vinhbang)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Lùn
+Sub-race: Lùn Núi
+```
+
+```
+Archetype: 
++ Npc
+```
+``` 
+4 Quirk:  
++ Artisan
++ Independent
++ Patient (từ Sybaurafarming)
++ Cautious (từ Sybaurafarming)
+```
+```
+Str: 5 (Ban đầu là 7)
+Spd: 5
+Dur: 5
+IQ: 5 (Ban đầu là 9)
+BIQ: 4
+MA: 2
+```
+
+```
+Houses: 
++ 
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Mì Tôm(Từ Quỉrk)
+  - Đai Trinh Tiết(Từ Quỉrk)
+  - Golden Coin
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Desolator (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+4 Power: 
++ Artist
++ Red Shift/LP
++ Sybaurafarming
++ The Coast is Clear!
+```
+
+```
+Char dev: 
++ 
+```
+
+```
+Team: 17
+```
+
+```
+Lover:
++ 
+```

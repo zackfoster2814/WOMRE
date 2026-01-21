@@ -93,7 +93,7 @@
     ]
   },
   {
-    "id": "weapon-unique",
+    "id": "weapon-unique-chance",
     "name": "Vũ Khí Unique",
     "description": "Unique weapon chance (30/70)",
     "wheelName": "Vũ khí có Unique hay không?",

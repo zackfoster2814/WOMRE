@@ -1,0 +1,73 @@
+No.105
+Name: LDL (longle_59366)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Werebeast
+Sub-race: Werebat
+```
+
+```
+Archetype: 
++ Trickster
++ Lords (Từ House)
+```
+``` 
+1 Quirk:  
++ Cluttered Mind
+```
+```
+Str: 8
+Spd: 5
+Dur: 8
+IQ: 5
+BIQ: 11 (Ban đầu là 10, +1 từ Lords)
+MA: 1
+```
+
+```
+Houses: 
++ New London
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Wooden Shield
+  - Thuốc tráng dương
+  - Wine
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Death's Scythe (Dùng Được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+1 Power: 
++ Cold Breeze
+```
+
+```
+Char dev: 
++ Old Age
+```
+
+```
+Team: 11
+```
+
+```
+Lover:
++ 
+```

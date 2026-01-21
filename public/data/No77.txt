@@ -1,0 +1,74 @@
+No.77
+Name: Yoh Hai Kiếm (yoh711)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Werebeast
+Sub-race: Weresheep
+```
+
+```
+Archetype: 
++ Fisher
+```
+``` 
+1 Quirk:  
++ Pure (Không nhận đai)
+```
+```
+Str: 7
+Spd: 5 (Respin thành 5 từ Greatrune, ban đầu là 1)
+Dur: 5
+IQ: 6
+BIQ: 1
+MA: 8
+```
+
+```
+Houses: 
++ Golden Order
++ Unborn (Re spin spd)
+```
+
+```
+2 Gear: 
+ + 1 Normal gear:
+  - Leather Jacket
+ + 1 Legacy gear:
+  - Skull of the Balance Dragon
+```
+
+```
+1 Normal Weapon
++ Magical Staff (dùng được)
+```
+
+``` 
+1 Rune: 
++ Thul
+Runeword: Không
+```
+
+```
+4 Power: 
++ Fragrant (Từ House)
++ Critical Strike(Từ House)
++ AIDS
++ Healing Factor
+```
+
+```
+Char dev: 
++ True Heir of the Emirate
+```
+
+```
+Team: 13
+```
+
+```
+Lover:
++ 
+```

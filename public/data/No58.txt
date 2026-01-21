@@ -1,0 +1,75 @@
+No.58
+Name: Boy lắc đầu (huntervu)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Human
+Sub-race: Da Vàng
+```
+
+```
+Archetype: 
++ Gigachad
++ Người Trong Ban Nhạc
+```
+``` 
+2 Quirk:  
++ Brave
++ Night Owl
+```
+```
+Str: 1
+Spd: 1
+Dur: 5
+IQ: 7
+BIQ: 7
+MA: 1
+```
+
+```
+Houses: 
++ Dothraki (Đã đi)
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Spatula (Người Trong Ban Nhạc)
+  - Wine
+  - Ớt (Từ House)
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+1 Rune: 
++ Ral
+Runeword: Không
+```
+
+```
+2 Power: 
++ Odin Blessing (Mất do Char Dev)
++ Magma Strike (Mất do Char Dev)
+```
+
+```
+Char dev: 
++ Lose Control
+```
+
+```
+Team: 12
+```
+
+```
+Lover:
++ 
+```

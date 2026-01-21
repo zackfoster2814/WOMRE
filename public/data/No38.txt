@@ -1,0 +1,73 @@
+No.38
+Name: Lười (lazbu2501)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Orc
+Sub-race: -
+```
+
+```
+Archetype: 
++ Hero Grave Keeper
+```
+``` 
+2 Quirk:  
++ Brainrot
++ Fast Learner
+```
+```
+Str: 6
+Spd: 5
+Dur: 7
+IQ: 6
+BIQ: 6
+MA: 5
+```
+
+```
+Houses: 
++ 
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+3 Power: 
++ Magma Strike
++ Encroaching Shadow
++ Enhanced Hearing
+```
+
+```
+Char dev: 
++ No more home
+```
+
+```
+Team: 13
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,80 @@
+No.78
+Name: HolyOne (holyone78)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Orc
+Sub-race: 
+```
+
+```
+Archetype: 
++ Farmer
++ thường
+```
+``` 
+1 Quirk:  
++ Cautious
+```
+```
+Str: 0 (ban đầu là 6, Demonic Pact thành 0)
+Spd: 3
+Dur: 3
+IQ: 1
+BIQ: 9
+MA: 6
+```
+
+```
+Houses: 
++ Golden Order
++ Morgott
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Unique Weapon
++ Medusa's Head
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+9 Power: 
++ Invulnerability (Từ House)
++ Rampage (Từ House)
++ Red Shift/LP1211-M
++ Capybara
++ U=ma2
++ Water Breathing
++ Healing Factor (Từ Demonic Pact)
++ Anti-Magic Barrier(Từ Demonic Pact)
++ Odin Blessing (Từ Demonic Pact)
+```
+
+```
+Char dev: 
++ Demonic Pact (Hiến tế Str)
+```
+
+```
+Team: 15
+```
+
+```
+Lover:
++ 
+```

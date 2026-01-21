@@ -1,0 +1,76 @@
+No.110
+Name: Memento Duelist (memento_duelist)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Skeleton
+Sub-race: (Human)
+```
+
+```
+Archetype: 
++ Hero of the Emirate\uD83C\uDF40
+```
+``` 
+2 Quirk:  
++ Raumanian\uD83C\uDF40 (Từ Archetype)
++ Night Owl
+```
+```
+Str: 2
+Spd: 3
+Dur: 6 (Ban đầu là 7, Cursed)
+IQ: 1 (Cố định)
+BIQ: 7
+MA: 7
+```
+
+```
+Houses: 
++ Coven Council (Đã bị đuổi do Từ Cha rdev)
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Buckler
+  - Gold Pine Resin
+  - Kuro's Charm
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Whip (dùng được)
+```
+
+``` 
+1 Rune: 
++ Shael
+Runeword: Không
+```
+
+```
+4 Power: 
++ Railroad Realm \uD83C\uDF40 (Từ Archetype)
++ Voidwalking
++ Overdrive
++ Cursed (Quay lại Dura)
+```
+
+```
+Char dev: 
++ No more Home
+```
+
+```
+Team: 9
+```
+
+```
+Lover:
++ 
+```

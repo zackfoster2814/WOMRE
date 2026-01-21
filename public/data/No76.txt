@@ -1,0 +1,72 @@
+No.76
+Name: NDP (ndp1792)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Human
+Sub-race: Da Vàng
+```
+
+```
+Archetype: 
++ NPC
+```
+``` 
+1 Quirk:  
++ Graceful (Lover: Ako Darling (mikukhang))
+```
+```
+Str: 1
+Spd: 7
+Dur: 5
+IQ: 5
+BIQ: 9
+MA: 2
+```
+
+```
+Houses: 
++ Dothraki
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Fishing Rod
+  - Magical Scroll
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+2 Power: 
++ Let's Pump some iron
++ Sonic Scream
+```
+
+```
+Char dev: 
++ 
+```
+
+```
+Team: 18
+```
+
+```
+Lover:
++ Ako Darling (mikukhang)
+```

@@ -1,0 +1,75 @@
+No.102
+Name: Korokiri
+```
+Ký Sinh:
++ 
+```
+```
+Race: Demi-God
+Sub-race: Cursed Sword
+```
+
+```
+Archetype: 
++ Dual Wielder
+```
+``` 
+1 Quirk:  
++ Resilient
+```
+```
+Str: 5 ban đầu là 6 (The Angel's Finger Bone)
+Spd: 1 ban đầu là 10 (The Angel's Finger Bone)
+Dur: 6 ban đầu là 5 (The Angel's Finger Bone)
+IQ: 10 ban đầu là 1 (The Angel's Finger Bone)
+BIQ: 5 ban đầu là 6 (The Angel's Finger Bone)
+MA: 3 ban đầu là 8 (The Angel's Finger Bone)
+```
+
+```
+Houses: 
++ Winterhome
+```
+
+```
+3 Gear: 
+ + 2 Normal gear:
+  - Cursed Charm(Từ House)
+  - Frying Pan(Từ House)
+ + 1 Legacy gear:
+  - The Angel's Finger Bone
+```
+
+```
+2 Normal Weapon
++ Kunai (Dùng Được)
++ Backhand Blade (Dùng Được)
+```
+
+``` 
+1 Rune: 
++ Zod
+Runeword: Không
+```
+
+```
+4 Power: 
++ Power Negation(Từ Frying Pan)
++ Armor Piercing (Từ The Angel's Finger Bone)
++ Wex
++ Dominator
+```
+
+```
+Char dev: 
++ True Heir of the Emirate
+```
+
+```
+Team: 11
+```
+
+```
+Lover:
++ 
+```

@@ -1,0 +1,74 @@
+No.9
+Name: caubetuky._. (haruhanasaki)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Dryad
+Sub-race: 
+```
+
+```
+Archetype: 
++ Time Traveller
+```
+``` 
+1 Quirk:  
++ Deaf
+```
+```
+Str: 9
+Spd: 5
+Dur: 9
+IQ: 10
+BIQ: 8
+MA: 9
+```
+
+```
+Houses: 
++ Kazuya Kinoshita's House
+```
+
+```
+4 Gear: 
+ + 4 Normal gear:
+  - Knight's Armor
+  - Xương sống lưỡi(Từ Cha rdev)
+  - Radio(Từ Cha rdev)
+  - Wooden Shield (Từ Cha rdev)
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Summoning Scroll (dùng được)
+```
+
+``` 
+2 Rune: 
++ Ort
++ Tal
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Armed to the Teeth (Tặng 3 Gear)
+```
+
+```
+Team: 26
+```
+
+```
+Lover:
++ 
+```

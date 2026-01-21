@@ -1,0 +1,71 @@
+No.31
+Name: cá trê vượt thác nhé hehe (huypui)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Human
+Sub-race: Da Vàng
+```
+
+```
+Archetype: 
++ Herald
+```
+``` 
+1 Quirk:  
++ Cheater
+```
+```
+Str: 5
+Spd: 4(ban đầu là 1, +3 từ Archetype)
+Dur: 1
+IQ: 7
+BIQ: 8
+MA: 1
+```
+
+```
+Houses: 
++ Hallownest
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Frying Pan
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ B.F Sword (không dùng được)
+```
+
+``` 
+2 Rune: 
++ Zod
++ Tir
+Runeword: Không
+```
+
+```
+1 Power: 
++ Cleaning Sins (Từ Gear) (Dạy lại cho Rentarou (viet3657))
+```
+
+```
+Char dev: 
++ Mad Scientist
+```
+
+```
+Team: 15
+```
+
+```
+Lover:
++ 
+```

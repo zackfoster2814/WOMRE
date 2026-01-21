@@ -1,0 +1,72 @@
+No.84
+Name: Muon liem chan Seed qua (tandepzai3282101)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Troll
+Sub-race: Ice Troll
+```
+
+```
+Archetype: 
++ NPC
+```
+``` 
+1 Quirk:  
++ Cheater
+```
+```
+Str: 3
+Spd: 7
+Dur: 6
+IQ: 3
+BIQ: 8
+MA: 1
+```
+
+```
+Houses: 
++ Baratheon
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Beer
+  - Cursed Charm
+  - Giấy Nợ Gia Truyền
+ + 0 Legacy gear:
+  - 
+```
+
+```
+0 Normal Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ 
+```
+
+```
+Team: 
+```
+
+```
+Lover:
++ 
+```

@@ -1,26 +1,22 @@
 No.45
 Name: CúNga (minh1mui)
-
 ```
 Ký Sinh:
-+
++ 
 ```
-
 ```
 Race: Dwarf
 Sub-race: Lùn Xám (Gray)
 ```
 
 ```
-Archetype:
+Archetype: 
 + Bookworm
 ```
-
+``` 
+0 Quirk:  
++ 
 ```
-1 Quirk:
--
-```
-
 ```
 Str: 5
 Spd: 6
@@ -31,36 +27,36 @@ MA: 8
 ```
 
 ```
-Houses:
+Houses: 
 + Uchiha
 ```
 
 ```
-1 Gear:
- + 0 Normal gear:
+2 Gear: 
+ + 1 Normal gear:
   - Fingerthing
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - Ragnarok's Cobra
 ```
 
 ```
-0 Normal Weapon
+1 Normal Weapon
 + Long bow
 ```
 
-```
-1 Rune:
+``` 
+1 Rune: 
 + Tal
 Runeword: Không
 ```
 
 ```
-1 Power:
+1 Power: 
 + Quirkless
 ```
 
 ```
-Char dev:
+Char dev: 
 + A Big Gift!
 ```
 
@@ -70,5 +66,5 @@ Team: 2
 
 ```
 Lover:
-+
++ 
 ```

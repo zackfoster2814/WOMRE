@@ -1,0 +1,71 @@
+No.20
+Name: LTL (ltl.jr)
+```
+Ký Sinh:
++ 
+```
+```
+Race: Troll
+Sub-race: Mountain Troll
+```
+
+```
+Archetype: 
++ Infirmarian
+```
+``` 
+1 Quirk:  
++ Graceful (Lover: ar2di)
+```
+```
+Str: 1
+Spd: 1
+Dur: 6
+IQ: 3
+BIQ: 9 (Ban đầu là 7,+2 từ House)
+MA: 5
+```
+
+```
+Houses: 
++ Atreides
+```
+
+```
+0 Gear: 
+ + 0 Normal gear:
+  - 
+ + 0 Legacy gear:
+  - 
+```
+
+```
+1 Normal Weapon
++ Ukulele (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Tir
++ Amn
+Runeword: Không
+```
+
+```
+0 Power: 
++ 
+```
+
+```
+Char dev: 
++ Lost an Arm
+```
+
+```
+Team: 2
+```
+
+```
+Lover:
++ ar2di
+```
