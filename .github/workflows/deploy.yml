@@ -2,9 +2,9 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Chạy khi push vào main branch
+  # Chạy khi push vào Feature/Wheel-Of-Name branch
   push:
-    branches: ['main']
+    branches: ['Feature/Wheel-Of-Name']
   # Cho phép chạy thủ công từ Actions tab
   workflow_dispatch:
 
