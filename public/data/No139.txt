@@ -6,63 +6,69 @@ Ký Sinh:
 +
 ```
 ```
-Race:
-Sub-race:
+Race: God
+Sub-race: Frigg
 ```
 
 ```
 Archetype:
-+
++ Herald
 ```
 ```
-2 Quirk:
-+
+1 Quirk:
++ Slow Metabolism
++ Dextrous (từ SybauAuraFarming)
++ Cruelty (từ SybauAuraFarming)
++ Mute (từ SybauAuraFarming)
 ```
 ```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Str: 5 (ban đầu 10)
+Spd: 5 (ban đầu 10 - đã +3 base)
+Dur: 4
+IQ: 5 (ban đầu 10)
+BIQ: 1
+MA: 5
 ```
 
 ```
 Houses:
-+
++ Ban nhạc Ngọt đoàn kết 
 ```
 
 ```
-0 Gear:
+1 Gear:
  + 0 Normal gear:
-  -
+  - Ancient Protector 
+  - Kẹo (từ Ban nhạc Ngọt đoàn kết )
  + 0 Legacy gear:
   -
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Banana Peel
 ```
 
 ```
-0 Rune:
-+
+1 Rune:
++ Ral
 Runeword: Không
 ```
 
 ```
-0 Power:
-+
+3 Power:
++ SybauAuraFarming
++ Gaze of the Abyss 
++ Magma Strike
 ```
 
 ```
 Char dev:
-+
++ Become Hand of the King
 ```
 
 ```
-Team:
+Team: 11
 ```
 
 ```

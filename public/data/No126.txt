@@ -6,63 +6,64 @@ Ký Sinh:
 +
 ```
 ```
-Race:
-Sub-race:
+Race: Primordial Being
+Sub-race: Fire
 ```
 
 ```
 Archetype:
-+
++ Trickster
 ```
 ```
-2 Quirk:
-+
+1 Quirk:
++ Deaf
 ```
 ```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Str: 10
+Spd: 6
+Dur: 6
+IQ: 10
+BIQ: 5
+MA: 5
 ```
 
 ```
 Houses:
-+
++ House Targaryen
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+3 Gear:
+ + 3 Normal gear:
+  - Đai trinh tiết
+  - Ancient Protector
+  - Holy symbol
  + 0 Legacy gear:
   -
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Morningstar
 ```
 
 ```
-0 Rune:
-+
+1 Rune:
++ El
 Runeword: Không
 ```
 
 ```
-0 Power:
-+
+0 Power: 
 ```
 
 ```
 Char dev:
-+
++ Lose Control 
 ```
 
 ```
-Team:
+Team: 27
 ```
 
 ```

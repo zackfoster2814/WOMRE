@@ -6,25 +6,25 @@ Ký Sinh:
 +
 ```
 ```
-Race:
-Sub-race:
+Race: Human
+Sub-race: Trắng
 ```
 
 ```
 Archetype:
-+
++ Infirmarian
 ```
 ```
-2 Quirk:
-+
+1 Quirk:
++ Independent
 ```
 ```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Str: 3
+Spd: 1
+Dur: 6
+IQ: 9
+BIQ: 6
+MA: 7
 ```
 
 ```
@@ -33,21 +33,22 @@ Houses:
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+1 Gear:
+ + 1 Normal gear:
+  - Wizard hat
  + 0 Legacy gear:
   -
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Magical Staff
 ```
 
 ```
-0 Rune:
-+
+2 Rune:
++ Shael
++ Ith
 Runeword: Không
 ```
 
@@ -58,14 +59,14 @@ Runeword: Không
 
 ```
 Char dev:
-+
++ Make love (KaTsumi - ChillWithCafe (katsumi3000))
 ```
 
 ```
-Team:
+Team: 13
 ```
 
 ```
 Lover:
-+
++ KaTsumi - ChillWithCafe (katsumi3000)
 ```

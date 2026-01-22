@@ -6,63 +6,69 @@ Ký Sinh:
 +
 ```
 ```
-Race:
+Race: Giant
 Sub-race:
 ```
 
 ```
 Archetype:
-+
++ Blacksmith
 ```
 ```
 2 Quirk:
-+
++ Mute
++ Blind
++ Generous (từ Baguette)
 ```
 ```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Str: 8 (thành 13 do +5)
+Spd: 5 
+Dur: 7
+IQ: 7 (thành 2 do -5)
+BIQ: 7
+MA: 10
 ```
 
 ```
 Houses:
-+
++ House Tyrell
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+3 Gear:
+ + 1 Normal gear:
+  - Ancient Protector
+  - Đai trinh tiết 
+  - Baguette
  + 0 Legacy gear:
   -
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Magical Staff
 ```
 
 ```
 0 Rune:
-+
-Runeword: Không
++ Tal
++ Ral
+Runeword: Extraordinary
 ```
 
 ```
-0 Power:
-+
+2 Power:
++ Anti-Magic Barrier
++ Rickrolling
 ```
 
 ```
 Char dev:
-+
++ MrBeast
 ```
 
 ```
-Team:
+Team: 25
 ```
 
 ```

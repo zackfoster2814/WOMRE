@@ -6,63 +6,68 @@ Ký Sinh:
 +
 ```
 ```
-Race:
-Sub-race:
+Race: Angel
+Sub-race: Archangles
 ```
 
 ```
 Archetype:
-+
++ Pacifist
++ Chokevy
++ Thinkers
 ```
 ```
-2 Quirk:
-+
+1 Quirk:
++ Cruelty
++ Fast Leaner
++ Night Owl 
 ```
 ```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Str: 9
+Spd: 7
+Dur: 9
+IQ: 5
+BIQ: 6
+MA: 5
 ```
 
 ```
 Houses:
-+
++ New London
 ```
 
 ```
-0 Gear:
+1 Gear:
  + 0 Normal gear:
-  -
+  - Fishing's Rod
  + 0 Legacy gear:
   -
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Backhand Blade
 ```
 
 ```
-0 Rune:
-+
+1 Rune:
++ Shael
 Runeword: Không
 ```
 
 ```
-0 Power:
-+
+2 Power:
++ Metamagic
++ Fancy Feet
 ```
 
 ```
 Char dev:
-+
++ Mad Scientist
 ```
 
 ```
-Team:
+Team: 16
 ```
 
 ```

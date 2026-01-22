@@ -71,6 +71,7 @@ export const PlayerListPage = () => {
   >("no");
   const [selectedRaces, setSelectedRaces] = useState<string[]>([]);
   const [showRaceFilter, setShowRaceFilter] = useState(false);
+  const [showRaceStats, setShowRaceStats] = useState(false);
 
   // Load all players on mount
   useEffect(() => {
@@ -198,6 +199,19 @@ export const PlayerListPage = () => {
       sortedRaces.push("Unknown");
     }
     return sortedRaces;
+  }, [players]);
+
+  // Calculate race statistics
+  const raceStats = useMemo(() => {
+    const stats: Record<string, number> = {};
+    players.forEach((p) => {
+      const race = p.race || "Unknown";
+      stats[race] = (stats[race] || 0) + 1;
+    });
+    // Sort by count descending
+    return Object.entries(stats)
+      .sort((a, b) => b[1] - a[1])
+      .map(([race, count]) => ({ race, count, percentage: (count / players.length) * 100 }));
   }, [players]);
 
   // Toggle race selection
@@ -380,6 +394,12 @@ export const PlayerListPage = () => {
                 </div>
               )}
             </div>
+            <button
+              onClick={() => setShowRaceStats(true)}
+              className="px-4 py-2 bg-amber-600/80 hover:bg-amber-700/80 border border-amber-500 rounded-lg text-white font-medium transition-colors flex items-center gap-2"
+            >
+              <span>📊</span> Race Stats
+            </button>
             <span className="text-gray-400">
               {filteredPlayers.length} players found
             </span>
@@ -433,6 +453,127 @@ export const PlayerListPage = () => {
           onClose={() => setSelectedPlayer(null)}
         />
       )}
+
+      {/* Race Statistics Dialog */}
+      {showRaceStats && (
+        <RaceStatsDialog
+          raceStats={raceStats}
+          totalPlayers={players.length}
+          onClose={() => setShowRaceStats(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+// Race Statistics Dialog Component
+interface RaceStatsDialogProps {
+  raceStats: { race: string; count: number; percentage: number }[];
+  totalPlayers: number;
+  onClose: () => void;
+}
+
+const RaceStatsDialog = ({ raceStats, totalPlayers, onClose }: RaceStatsDialogProps) => {
+  const topRace = raceStats[0];
+  const maxCount = topRace?.count || 1;
+
+  // Color palette for bars
+  const getBarColor = (index: number) => {
+    const colors = [
+      'bg-amber-500',
+      'bg-teal-500',
+      'bg-purple-500',
+      'bg-pink-500',
+      'bg-blue-500',
+      'bg-green-500',
+      'bg-red-500',
+      'bg-orange-500',
+      'bg-cyan-500',
+      'bg-indigo-500',
+    ];
+    return colors[index % colors.length];
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-xl max-w-lg w-full max-h-[80vh] overflow-hidden shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="bg-gradient-to-r from-amber-600 to-orange-600 px-6 py-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <span>📊</span> Race Statistics
+            </h2>
+            <p className="text-white/70 text-sm">Total: {totalPlayers} players</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-white/70 hover:text-white text-3xl font-light transition-colors"
+          >
+            &times;
+          </button>
+        </div>
+
+        {/* Top Race Highlight */}
+        {topRace && (
+          <div className="px-6 py-4 bg-amber-500/20 border-b border-amber-500/30">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-amber-400 text-sm font-medium">Most Popular Race</p>
+                <p className="text-2xl font-bold text-white">{topRace.race}</p>
+              </div>
+              <div className="text-right">
+                <p className="text-3xl font-bold text-amber-400">{topRace.count}</p>
+                <p className="text-sm text-gray-400">{topRace.percentage.toFixed(1)}%</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Race List */}
+        <div className="p-4 overflow-y-auto max-h-[50vh]">
+          <div className="space-y-2">
+            {raceStats.map((stat, index) => (
+              <div key={stat.race} className="flex items-center gap-3">
+                <span className="w-6 text-gray-500 text-sm text-right">#{index + 1}</span>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-white text-sm font-medium">{stat.race}</span>
+                    <span className="text-gray-400 text-xs">
+                      {stat.count} ({stat.percentage.toFixed(1)}%)
+                    </span>
+                  </div>
+                  <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full ${getBarColor(index)} transition-all duration-500`}
+                      style={{ width: `${(stat.count / maxCount) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Summary */}
+          <div className="mt-4 pt-4 border-t border-gray-600">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-400">Total Races</span>
+              <span className="text-white font-medium">{raceStats.length}</span>
+            </div>
+            <div className="flex justify-between text-sm mt-1">
+              <span className="text-gray-400">Average per Race</span>
+              <span className="text-white font-medium">
+                {(totalPlayers / raceStats.length).toFixed(1)} players
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

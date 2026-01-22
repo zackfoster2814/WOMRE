@@ -6,43 +6,46 @@ Ký Sinh:
 +
 ```
 ```
-Race:
-Sub-race:
+Race: Merfolk
+Sub-race: 
 ```
 
 ```
 Archetype:
-+
++ Farmer - thường
++ Edgelord
 ```
 ```
-2 Quirk:
-+
+3 Quirk:
++ Cautions
++ Independent
++ Slow Healer
 ```
 ```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Str: 4
+Spd: 4
+Dur: 6
+IQ: 5
+BIQ: 6
+MA: 2
 ```
 
 ```
 Houses:
-+
++ Naga
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+1 Gear:
+ + 1 Normal gear:
+  - Frying Pan
  + 0 Legacy gear:
   -
 ```
 
 ```
-0 Normal Weapon
-+
+1 Unique Weapon
++ Flower of Fire (dùng được)
 ```
 
 ```
@@ -52,17 +55,21 @@ Runeword: Không
 ```
 
 ```
-0 Power:
-+
+4 Power:
++ Cold Breeze 
++ Writer
++ Sacred Fire
++ Arcana Blast
++ Hunter's Rewards 
 ```
 
 ```
 Char dev:
-+
++ Too Edgy
 ```
 
 ```
-Team:
+Team: 28
 ```
 
 ```

@@ -6,43 +6,44 @@ Ký Sinh:
 +
 ```
 ```
-Race:
-Sub-race:
+Race: Troll
+Sub-race: Ice Troll
 ```
 
 ```
 Archetype:
-+
++ Hero Grave Keeper
 ```
 ```
-2 Quirk:
-+
+1 Quirk:
+- Fast Learner
 ```
 ```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Str: 1 (từ 8, do Blessed of Chaos)
+Spd: 5
+Dur: 6
+IQ: 5
+BIQ: 4
+MA: 7
 ```
 
 ```
 Houses:
-+
++ Roundtable Hold
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+2 Gear:
+ + 2 Normal gear:
+  - Thuốc tráng dương
+  - Văn tế
  + 0 Legacy gear:
   -
 ```
 
 ```
 0 Normal Weapon
-+
++ 
 ```
 
 ```
@@ -52,17 +53,19 @@ Runeword: Không
 ```
 
 ```
-0 Power:
-+
+1 Power:
++ Quirkless
 ```
 
 ```
 Char dev:
-+
++ Blessed by Chaos
++ MrBeast
++ Seeking Wisdom
 ```
 
 ```
-Team:
+Team: 28
 ```
 
 ```
