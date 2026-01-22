@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import {
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route,
   useNavigate,
@@ -93,7 +93,7 @@ const Navigation = () => {
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Navigation />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -101,7 +101,7 @@ function App() {
         <Route path="/players" element={<PlayerListPage />} />
         <Route path="/battle" element={<BattleZonePage />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
