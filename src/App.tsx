@@ -5,11 +5,16 @@ import {
   Route,
   useNavigate,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import { LandingPage } from "./pages/LandingPage";
 import { WheelPage } from "./pages/WheelPage";
 import { PlayerListPage } from "./pages/PlayerListPage";
 import { BattleZonePage } from "./pages/BattleZonePage";
+import { isTauri } from "./utils/localStorage";
+
+// Check if running in web-only mode (not Tauri)
+const isWebOnly = !isTauri();
 
 const navItems = [
   { path: "/", label: "Home", icon: "", color: "bg-gray-600" },
@@ -94,12 +99,24 @@ const Navigation = () => {
 function App() {
   return (
     <HashRouter>
-      <Navigation />
+      {/* Hide navigation in web-only mode */}
+      {!isWebOnly && <Navigation />}
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/wheel" element={<WheelPage />} />
-        <Route path="/players" element={<PlayerListPage />} />
-        <Route path="/battle" element={<BattleZonePage />} />
+        {isWebOnly ? (
+          <>
+            {/* Web-only mode: only allow /players, redirect everything else */}
+            <Route path="/players" element={<PlayerListPage />} />
+            <Route path="*" element={<Navigate to="/players" replace />} />
+          </>
+        ) : (
+          <>
+            {/* Full Tauri app: all routes available */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/wheel" element={<WheelPage />} />
+            <Route path="/players" element={<PlayerListPage />} />
+            <Route path="/battle" element={<BattleZonePage />} />
+          </>
+        )}
       </Routes>
     </HashRouter>
   );
