@@ -4,6 +4,7 @@ import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
 import type { CharacterEffects, CharacterStats as EffectStats, EffectSourceType } from "../effects/types";
+import { getAssetPath } from "../utils/basePath";
 
 // Initialize effect data once
 let effectsInitialized = false;
@@ -75,7 +76,7 @@ export const PlayerInfoPanel = ({
 
       try {
         // Fetch player index from JSON file
-        const indexResponse = await fetch("/data/player-index.json");
+        const indexResponse = await fetch(getAssetPath("/data/player-index.json"));
         let playerNumbers: number[] = [];
 
         if (indexResponse.ok) {
@@ -93,7 +94,7 @@ export const PlayerInfoPanel = ({
         const fetchPromises = playerNumbers.map(
           async (no): Promise<PlayerSummary | null> => {
             try {
-              const response = await fetch(`/data/No${no}.txt`);
+              const response = await fetch(getAssetPath(`/data/No${no}.txt`));
               if (response.ok) {
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);

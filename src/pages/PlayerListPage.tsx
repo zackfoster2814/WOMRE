@@ -6,6 +6,7 @@ import { EffectResolver, type EffectSourceBreakdown } from "../effects/resolver"
 import { initializeEffectData } from "../effects/data";
 import type { CharacterStats as EffectStats, EffectSourceType } from "../effects/types";
 import wheelBgImage from "../assets/img/wheel-bg.png";
+import { getAssetPath } from "../utils/basePath";
 
 // Initialize effect data once
 let effectsInitialized = false;
@@ -84,7 +85,7 @@ export const PlayerListPage = () => {
 
       for (let i = 1; i <= 256; i++) {
         fetchPromises.push(
-          fetch(`/data/No${i}.txt`)
+          fetch(getAssetPath(`/data/No${i}.txt`))
             .then(async (response) => {
               if (response.ok) {
                 const content = await response.text();
@@ -134,7 +135,7 @@ export const PlayerListPage = () => {
 
       for (let i = 1; i <= 256; i++) {
         fetchPromises.push(
-          fetch(`/data/No${i}.txt`, { cache: "no-store" })
+          fetch(getAssetPath(`/data/No${i}.txt`), { cache: "no-store" })
             .then(async (response) => {
               if (response.ok) {
                 const content = await response.text();
@@ -174,7 +175,7 @@ export const PlayerListPage = () => {
   const handleSelectPlayer = async (playerNo: number) => {
     setIsLoadingDetail(true);
     try {
-      const response = await fetch(`/data/No${playerNo}.txt`);
+      const response = await fetch(getAssetPath(`/data/No${playerNo}.txt`));
       if (response.ok) {
         const content = await response.text();
         const character = CharacterParser.parseCharacterFile(content);

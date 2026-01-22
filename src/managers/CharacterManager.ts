@@ -1,5 +1,6 @@
 import type { Character, CharacterSummary, CharacterDatabase } from '../types/character';
 import { CharacterParser } from '../utils/characterParser';
+import { getAssetPath } from '../utils/basePath';
 
 export class CharacterManager {
   private characters: Map<number, Character> = new Map();
@@ -49,7 +50,7 @@ export class CharacterManager {
   private async getCharacterFiles(): Promise<string[]> {
     // In production, these files should be in public/data/
     const characterNumbers = [35, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50];
-    return characterNumbers.map(no => `/data/No${no}.txt`);
+    return characterNumbers.map(no => getAssetPath(`/data/No${no}.txt`));
   }
 
   /**

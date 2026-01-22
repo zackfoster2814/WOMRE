@@ -20,6 +20,7 @@ import {
   saveCharacterToLocal,
 } from "../utils/localStorage";
 import wheelBgImage from "../assets/img/wheel-bg.png";
+import { getAssetPath } from "../utils/basePath";
 
 export const WheelPage = () => {
   const [items, setItems] = useState<WheelItem[]>([
@@ -67,7 +68,7 @@ export const WheelPage = () => {
     setIsLoadingCharacter(true);
 
     try {
-      const response = await fetch(`/data/No${characterNo}.txt`);
+      const response = await fetch(getAssetPath(`/data/No${characterNo}.txt`));
       if (!response.ok) {
         setSelectedCharacter(null);
         return;
@@ -89,7 +90,7 @@ export const WheelPage = () => {
     setIsLoadingCharacter(true);
 
     try {
-      const response = await fetch(`/data/No${playerNo}.txt`);
+      const response = await fetch(getAssetPath(`/data/No${playerNo}.txt`));
       if (!response.ok) {
         setSelectedCharacter(null);
         return;
@@ -299,7 +300,7 @@ export const WheelPage = () => {
 
       try {
         // Load default presets
-        const response = await fetch("/data/default-presets.json");
+        const response = await fetch(getAssetPath("/data/default-presets.json"));
         if (!response.ok) return;
 
         const presets = await response.json();

@@ -1,4 +1,5 @@
 import { WheelItem } from "../types";
+import { getAssetPath } from "../utils/basePath";
 
 export interface DefaultPreset {
   id: string;
@@ -19,7 +20,7 @@ export const fetchDefaultPresets = async (): Promise<DefaultPreset[]> => {
   }
 
   try {
-    const response = await fetch('/data/default-presets.json');
+    const response = await fetch(getAssetPath('/data/default-presets.json'));
     if (!response.ok) {
       throw new Error('Failed to fetch default presets');
     }
