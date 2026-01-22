@@ -1,14 +1,3 @@
-import {
-  exists,
-  mkdir,
-  readTextFile,
-  writeTextFile,
-  readDir,
-  remove,
-  writeFile,
-  readFile
-} from '@tauri-apps/plugin-fs';
-import { join } from '@tauri-apps/api/path';
 import type { WheelPreset, WheelItem } from '../types';
 
 const PRESETS_FOLDER = 'presets';
@@ -18,6 +7,18 @@ export const isTauri = (): boolean => {
   // Check for Tauri v2 internals
   return typeof window !== 'undefined' &&
          (('__TAURI_INTERNALS__' in window) || ('__TAURI__' in window));
+};
+
+// Lazy load Tauri FS module
+const getTauriFs = async () => {
+  if (!isTauri()) throw new Error('Not in Tauri environment');
+  return await import('@tauri-apps/plugin-fs');
+};
+
+// Lazy load Tauri path module
+const getTauriPath = async () => {
+  if (!isTauri()) throw new Error('Not in Tauri environment');
+  return await import('@tauri-apps/api/path');
 };
 
 // Convert Uint8Array to base64
@@ -48,7 +49,7 @@ const base64ToUint8Array = (base64: string): Uint8Array => {
 
 // Get presets directory path (in APPDATA for proper permissions)
 export const getLocalPresetsDir = async (): Promise<string> => {
-  const { appDataDir } = await import('@tauri-apps/api/path');
+  const { appDataDir } = await getTauriPath();
 
   try {
     // Save to APPDATA to avoid permission issues
@@ -67,6 +68,7 @@ export const initLocalPresetsDirectory = async (): Promise<void> => {
   if (!isTauri()) return;
 
   try {
+    const { exists, mkdir } = await getTauriFs();
     const presetsDir = await getLocalPresetsDir();
     const dirExists = await exists(presetsDir);
     if (!dirExists) {
@@ -85,6 +87,9 @@ export const savePresetToLocal = async (preset: WheelPreset): Promise<void> => {
   }
 
   try {
+    const { mkdir, writeFile, readFile, writeTextFile } = await getTauriFs();
+    const { join } = await getTauriPath();
+
     console.log('[savePresetToLocal] Starting save for preset:', preset.name);
     await initLocalPresetsDirectory();
 
@@ -175,6 +180,9 @@ export const getPresetsFromLocal = async (): Promise<WheelPreset[]> => {
   }
 
   try {
+    const { readDir, readTextFile } = await getTauriFs();
+    const { join } = await getTauriPath();
+
     await initLocalPresetsDirectory();
 
     const presetsDir = await getLocalPresetsDir();
@@ -208,6 +216,9 @@ export const loadPresetFromLocal = async (presetId: string): Promise<WheelPreset
   }
 
   try {
+    const { readTextFile, readFile } = await getTauriFs();
+    const { join } = await getTauriPath();
+
     const presetsDir = await getLocalPresetsDir();
     const configPath = await join(presetsDir, presetId, 'preset.json');
     const content = await readTextFile(configPath);
@@ -255,6 +266,9 @@ export const deletePresetFromLocal = async (presetId: string): Promise<void> => 
   }
 
   try {
+    const { remove } = await getTauriFs();
+    const { join } = await getTauriPath();
+
     const presetsDir = await getLocalPresetsDir();
     const presetFolder = await join(presetsDir, presetId);
     await remove(presetFolder, { recursive: true });
@@ -271,6 +285,9 @@ export const exportPresetToShared = async (presetId: string): Promise<string> =>
   }
 
   try {
+    const { exists, mkdir, readDir, readFile, writeFile, readTextFile } = await getTauriFs();
+    const { join, appDataDir } = await getTauriPath();
+
     const presetsDir = await getLocalPresetsDir();
     const sourceFolder = await join(presetsDir, presetId);
 
@@ -280,7 +297,6 @@ export const exportPresetToShared = async (presetId: string): Promise<string> =>
     const preset = JSON.parse(content);
 
     // Create shared_presets folder in app data
-    const { appDataDir } = await import('@tauri-apps/api/path');
     const appData = await appDataDir();
     const normalizedPath = appData.replace(/[\/\\]$/, '');
     const sharedDir = `${normalizedPath}/shared_presets`;
@@ -322,6 +338,8 @@ export const importPreset = async (): Promise<WheelPreset | null> => {
   }
 
   try {
+    const { mkdir, readFile, writeFile, readTextFile, writeTextFile } = await getTauriFs();
+    const { join } = await getTauriPath();
     const { open } = await import('@tauri-apps/plugin-dialog');
 
     // Let user choose preset.json file
@@ -433,7 +451,7 @@ export const getHistoryDir = async (): Promise<string> => {
     throw new Error('This function only works in Tauri environment');
   }
 
-  const { appDataDir } = await import('@tauri-apps/api/path');
+  const { appDataDir } = await getTauriPath();
   const appData = await appDataDir();
   const normalizedPath = appData.replace(/[\/\\]$/, '');
   return `${normalizedPath}/history`;
@@ -445,7 +463,7 @@ export const getDataDir = async (): Promise<string> => {
     throw new Error('This function only works in Tauri environment');
   }
 
-  const { resourceDir } = await import('@tauri-apps/api/path');
+  const { resourceDir } = await getTauriPath();
   const resource = await resourceDir();
   const normalizedPath = resource.replace(/[\/\\]$/, '');
   return `${normalizedPath}/data`;
@@ -458,6 +476,9 @@ export const saveCharacterToLocal = async (content: string, filename: string): P
   }
 
   try {
+    const { writeTextFile } = await getTauriFs();
+    const { join } = await getTauriPath();
+
     const dataDir = await getDataDir();
     const filePath = await join(dataDir, filename);
     await writeTextFile(filePath, content);
@@ -473,6 +494,9 @@ export const exportHistoryToLocal = async (csvContent: string, filename: string)
   if (!isTauri()) {
     throw new Error('This function only works in Tauri environment');
   }
+
+  const { exists, mkdir, writeTextFile } = await getTauriFs();
+  const { join } = await getTauriPath();
 
   const historyDir = await getHistoryDir();
 
