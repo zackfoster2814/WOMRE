@@ -656,7 +656,7 @@ export const WheelPage = () => {
                         }}
                       />
                       <div
-                        className="flex-1 flex flex-col items-center justify-center min-h-[3rem] bg-gray-800 relative group"
+                        className="flex-1 flex flex-col items-center justify-center min-h-[3rem] relative group"
                         onWheel={handleWheel}
                         onMouseEnter={() => setIsCurrentItemResultHover(true)}
                         onMouseLeave={() => setIsCurrentItemResultHover(false)}
