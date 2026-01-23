@@ -54,7 +54,6 @@ export const WheelPage = () => {
   const [showPlayerPanel, setShowPlayerPanel] = useState(false);
   const [isSavingCharacter, setIsSavingCharacter] = useState(false);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
-  const currentItemNameDivRef = useRef<HTMLDivElement | null>(null);
   const [isCurrentItemResultHover, setIsCurrentItemResultHover] =
     useState(false);
 
@@ -651,29 +650,31 @@ export const WheelPage = () => {
                         RESULT
                       </p>
                       <div
-                        ref={currentItemNameDivRef}
-                        className="flex-1 flex flex-col items-center justify-center w-full rounded mb-4 flex-shrink-0 relative group"
+                        className="w-full h-6 rounded mb-4 flex-shrink-0"
                         style={{
                           backgroundColor: getCurrentItemColor(),
                         }}
+                      />
+                      <div
+                        className="flex-1 flex flex-col items-center justify-center min-h-[3rem] bg-gray-800 relative group"
                         onWheel={handleWheel}
                         onMouseEnter={() => setIsCurrentItemResultHover(true)}
                         onMouseLeave={() => setIsCurrentItemResultHover(false)}
                       >
+                        <p className="text-lg sm:text-xl font-bold text-white text-center break-words px-2">
+                          {currentItem.name}
+                        </p>
                         {!isSpinning &&
                           isCurrentItemResultHover &&
                           description && (
                             <RemoveScroll
                               ref={tooltipRef}
                               removeScrollBar={false}
-                              className="justify-center min-w-[140%] w-fit max-h-96 absolute bottom-full z-50 hidden group-hover:flex mb-4 px-4 py-2 bg-black border-yellow-500 border-solid border-4 text-white text-xl rounded-md overflow-y-auto custom-scrollbar whitespace-pre-line overscroll-none"
+                              className="min-w-[140%] w-fit max-h-96 absolute z-50 bottom-full hidden group-hover:flex mb-2 px-4 py-2 justify-center bg-black border-yellow-500 border-solid border-4 text-white text-xl rounded-md overflow-y-auto custom-scrollbar whitespace-pre-line overscroll-none"
                             >
                               {description}
                             </RemoveScroll>
                           )}
-                        <p className="text-lg sm:text-xl font-bold text-white text-center break-words">
-                          {currentItem.name}
-                        </p>
                       </div>
                       <div className="flex-shrink-0 mt-4">
                         <p className="text-sm sm:text-base text-gray-400">
