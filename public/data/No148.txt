@@ -1,71 +1,74 @@
 No.148
 Name: Đào viên họa gia (long2222sla)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Skeleton (Angel)
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ NPC
+```
+``` 
+2 Quirk:  
++ Progressive
++ Cowardly
+```
+```
+Str:10
+Spd:5
+Dur:5
+IQ:1 (Cố định)
+BIQ:7
+MA:7
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ Ban Nhạc Ngọt Đoàn Kết
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Kẹo (Từ House)
+  - Ba Hoa Trắng
+  - Đai Trinh Tiết
+  - Silver Steed
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Wand (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Tir
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Angling and Scheming 
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ 
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:14
 ```
 
 ```
 Lover:
-+
++ 
 ```

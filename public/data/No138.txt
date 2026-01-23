@@ -1,71 +1,75 @@
 No.138
 Name: Kami Tsuna (kamitsuna)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Skeleton (Orc)
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Fisher
+```
+``` 
+1 Quirk:  
++ Artisan
+```
+```
+Str:6
+Spd:5
+Dur:10
+IQ:1 (Cố định)
+BIQ:6
+MA:2
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ Targaryen
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Fishing Rod (Từ Fisher)
+  - Frying Pan(Từ Artisan)
+  - Đá (Từ Artisan)
+  - Knight's Armor
+  - Shot Glass
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Magical Staff (Không dùng được) (Đã mất do Creator's Reforge)
++ Backhand Blade (Dùng được) (Từ Creator's Reforge)
+```
+
+``` 
+1 Rune: (Từ Creator's Reforge)
++ Shael
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+0 Power: 
++ The Sand of Time(Từ Frying Pan)
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Creator's Reforge (Tặng Backhand Blade)
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:6
 ```
 
 ```
 Lover:
-+
++ 
 ```

@@ -1,71 +1,72 @@
 No.134
 Name: Chovy Golden Roader (moimoi6820)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Giant
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: Atheist
++ Perfectionist (Từ Char dev)
+```
+``` 
+1 Quirk:  
++ Pure (Không Đai) (đã mất trinh)
+```
+```
+Str:6 (-5)
+Spd:3
+Dur:5
+IQ:7 (+5)
+BIQ:9 
+MA:7
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ Kazuya Kinoshita's House
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Lover's Glover 
+  - Cursed Coin
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Flute (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Ort
++ El
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+0 Power: 
++ 
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++Become Perfectionist
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:28
 ```
 
 ```
 Lover:
-+
++ Yamakun (yamakunson)
 ```

@@ -1,71 +1,73 @@
 No.144
 Name: Hayato (hayatoo_o)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Dwarf
+Sub-race: Lùn Xám
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Loyal
+```
+``` 
+2 Quirk:  
++ Deaf
++ Brainrot
++ Fast Learner (Từ Cha rdev)
+```
+```
+Str:7
+Spd:7
+Dur:6
+IQ:5
+BIQ:5
+MA:1
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ Ban Nhạc Ngọt Đoàn Kết
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Bò khô (Từ House)
+  - Sổ tay
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Anti-Magic Barrier
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Seeking Wisdom
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:8
 ```
 
 ```
 Lover:
-+
++ TheViet (c9ru5)
 ```

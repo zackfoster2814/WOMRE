@@ -1,71 +1,74 @@
 No.149
 Name: Sparxie đã bán nước chưa (god19879725)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Dwarf
+Sub-race: Lùn núi
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Pacifist
+```
+``` 
+1 Quirk:  
++ Pure (nhận Đai)
+```
+```
+Str:4
+Spd:7
+Dur:5
+IQ:5
+BIQ:8
+MA:7
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ Baratheon
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Đai Trinh Tiết (Từ Quirk)
+  - Ancient Protector
+  - Gold Pine Resin
+  - Radio
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Flute (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Shael
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+2 Power: 
++ Acid Breath
++ Groundwork
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Obtain a Cultivation Technique
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team: 27
 ```
 
 ```
 Lover:
-+
++ 
 ```

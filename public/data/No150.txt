@@ -1,71 +1,77 @@
 No.150
 Name: Myue (_fallen_myue)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Lùn
+Sub-race: Lùn Xám
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Conquerer
+```
+``` 
+2 Quirk:  
++ Shining Brightly
++ Fast Learner
++ Cautious (Từ Rykard)
++ Generous (Từ Rykard)
++ Herbalist (Từ Rykard)
++ Independent (Từ Rykard)
+```
+```
+Str:6
+Spd:7 (Ban đầu là 4, +3 từ Conquerer)
+Dur:10
+IQ:7
+BIQ:8
+MA:7
 ```
 
 ```
-0 Gear:
+Houses: 
++ Golden Order (Đã bị đuổi+ Rykard Vẫn giữ)
+
+```
+
+```
+0 Gear: 
  + 0 Normal gear:
-  -
+  - 
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Backhand Blade (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+0 Power: 
++ 
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ SVKS (Quay lại)
++ Lost a Leg
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:12
 ```
 
 ```
 Lover:
-+
++ 
 ```

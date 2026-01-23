@@ -1,71 +1,72 @@
 No.142
 Name: litelonglon (littotalk)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Primordial Being
+Sub-race: Water
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ NPC
+```
+``` 
+1 Quirk:  
++ One Trick Pony
+```
+```
+Str:7
+Spd:5
+Dur:6
+IQ:10
+BIQ:3
+MA:5
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Stark
++ Summer
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Mì tôm
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Morningstar (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Zod 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+4 Power: 
++ Water Breathing (Từ Sub-race)
++ Magma Strike(Từ House)
++ Dominator (Từ House)
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ 
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team: 17
 ```
 
 ```
 Lover:
-+
++ 
 ```

@@ -1,71 +1,80 @@
 No.135
 Name: ltq (tcltq)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Skeleton (Goblin)
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Cursed of 36k
++ Invoker
++ Blacksmith (Từ Spatula)
+```
+``` 
+2 Quirk:  
++ Slow Metabolism
++ Artisan
+```
+```
+Str:3 (Ban đầu là 4, -1 từ Cursed of 36k)
+Spd:2 (Ban đầu là 3,-1 từ Cursed of 36k)
+Dur:2 (Ban đầu là 3,-1 từ Cursed of 36k)
+IQ:1 (Cố định)
+BIQ:4 (Ban đầu là 5,-1 từ Cursed of 36k)
+MA:6 (Ban đầu là 7,-1 từ Cursed of 36k)
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ Uchiha
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Xương sống lưỡi(Từ Artisan)
+  - Leather Jacket(Từ Artisan)
+  - Storage Room Key (Tặng Spatula)
+  - Spatula (Từ Storage Room Key)
+  - Ancient Protector
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon (Từ Blacksmith)
++ Bass (Dùng được)
+```
+
+``` 
+2 Rune: (Từ Blacksmith)
++ Ith
++ Amn
+Runeword: Unbreakable
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+0 Power: 
++ Quas (Từ Invoker)
++ Wex (Từ Invoker)
++ Exort (Từ Invoker)
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Don't say it
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:11
 ```
 
 ```
 Lover:
-+
++ 
 ```

@@ -1,71 +1,75 @@
 No.143
 Name: mystery pham (mysterypham)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Dragon
+Sub-race: Flame Dragon
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Hand Fighter
+```
+``` 
+1 Quirk:  
++ Slow Metabolism
++ Under the Weather (Sybauaurafarming)
++ Raumanian (Sybauaurafarming)
++ Herbalist (Sybauaurafarming)
+```
+```
+Str:5 (ban đầu là 10, Sybauaurafarming)
+Spd:5 (ban đầu là 7, Sybauaurafarming)
+Dur:4
+IQ:4
+BIQ:5 (ban đầu là 7, Sybauaurafarming)
+MA:1
 ```
 
 ```
-0 Gear:
+Houses: 
++ Stark ( +Grey Wind (Đã mất, No more Home ))
+```
+
+```
+0 Gear: 
  + 0 Normal gear:
-  -
+  - 
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+2 Power: 
++ Sybauaurafarming (Từ Sub-race)
++ Odin Blessing
++ Fair Duel
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ No more Home 
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:22
 ```
 
 ```
 Lover:
-+
++ 
 ```

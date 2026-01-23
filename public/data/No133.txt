@@ -1,71 +1,74 @@
 No.133
 Name: boomaiweed (boomaiweed)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
+Race: Dragon
+Sub-race: Undead Dragon (Numby)
 ```
 
 ```
-Archetype:
-+
+Archetype: 
++ NPC
+```
+``` 
+1 Quirk:  
++ Cluttered Mind
 ```
 ```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Str:7
+Spd:7
+Dur:7
+IQ:3
+BIQ:2
+MA:1
 ```
 
 ```
 Houses:
-+
++ Baratheon
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+3 Gear: 
+ + 3 Normal gear:
+  - Đá
+  - Fishing Rod
+  - Mì Tôm
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Flute (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+2 Power: 
++ Numby (Từ Sub-race)
++ The Goat
++ Fire Control
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ 
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team: 6
 ```
 
 ```
 Lover:
-+
++ 
 ```

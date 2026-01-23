@@ -1,71 +1,72 @@
 No.147
 Name: bưởi béo (ntd2020)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Goblin
+Sub-race: 1000
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Follower of the Two Fingers 
+```
+``` 
+1 Quirk:  
++ Artistic
+```
+```
+Str:5
+Spd:4
+Dur:7
+IQ:3
+BIQ:6
+MA:4
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ Uchiha
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Văn tế
+  - Soap
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+2 Power: 
++ Hunter's Mark (đã mất)
++ Critical Strike (đã mất)
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Lose Control
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:27
 ```
 
 ```
 Lover:
-+
++ 
 ```

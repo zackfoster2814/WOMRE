@@ -1,71 +1,70 @@
 No.136
 Name: CatShark (catshark0903)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Dwarf
+Sub-race: Lùn Xám
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Follower of the Two Fingers
+```
+``` 
+1 Quirk:  
++ Mute
+```
+```
+Str:9
+Spd:1
+Dur:7
+IQ:6
+BIQ:6
+MA:6
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ House Targaryen 
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Thuốc tráng dương
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Flute (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Wex
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Lost a Leg
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team: 15
 ```
 
 ```
 Lover:
-+
++ 
 ```

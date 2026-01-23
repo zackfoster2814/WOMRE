@@ -1,71 +1,74 @@
 No.137
 Name: Sizaky (sizaky)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Angel
+Sub-race: Archeangels
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Pacifist
++ Trickster
+```
+``` 
+1 Quirk:  
++ Blind
+```
+```
+Str:2
+Spd:10
+Dur:2
+IQ:8
+BIQ:3
+MA:10
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ The Shire (+4 Spd)
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Radio 
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Drums (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+4 Power: 
++ Body Enhancing
++ Accelerating Sorcery
++ Swinging Maestro
++ EscAPADe
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Become a Power Ranger (Yellow)
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:24
 ```
 
 ```
 Lover:
-+
++ 
 ```

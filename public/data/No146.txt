@@ -1,71 +1,75 @@
 No.146
 Name: Illya (chunchunmaru26)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Giant
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Slayer (Dwarf Slayer)
+```
+``` 
+2 Quirk:  
++ Let me solo her
++ Artisan
+```
+```
+Str:7 (-5)
+Spd:4
+Dur:10
+IQ:10 (+5)
+BIQ:1
+MA:1
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ Stark (Shaggydog)
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Kuro's Charm (Từ Quirk)
+  - Thuốc Tráng Dương (Từ Quirk)
+  - Shot Glass
+  - Dark Lanthorn
+  - Wooden Shield
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Drums (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+0 Power: 
++ 
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ True Heir of the Emirate🍀
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team: 12
 ```
 
 ```
 Lover:
-+
++ 
 ```
