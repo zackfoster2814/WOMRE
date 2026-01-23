@@ -32,7 +32,7 @@ export const ResultDialog = ({
             {item.name}
           </p>
           {item.effectDescription && (
-            <RemoveScroll className="bg-gray-800 max-h-[8lh] whitespace-pre-line text-white overflow-y-auto my-2 break-words custom-scrollbar">
+            <RemoveScroll className="bg-gray-800 max-h-[8lh] whitespace-pre-line text-white overflow-y-auto py-4 my-2 break-words custom-scrollbar">
               {item.effectDescription}
             </RemoveScroll>
           )}
