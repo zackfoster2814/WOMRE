@@ -1,3 +1,4 @@
+import { RemoveScroll } from "react-remove-scroll";
 import { WheelItem } from "../types";
 
 interface ResultDialogProps {
@@ -8,7 +9,13 @@ interface ResultDialogProps {
   onDisable: () => void;
 }
 
-export const ResultDialog = ({ item, itemColor, onClose, onRemove, onDisable }: ResultDialogProps) => {
+export const ResultDialog = ({
+  item,
+  itemColor,
+  onClose,
+  onRemove,
+  onDisable,
+}: ResultDialogProps) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-gray-800 rounded-lg shadow-2xl p-6 max-w-md w-full mx-4 border-2 border-yellow-500 animate-pulse-slow">
@@ -24,6 +31,11 @@ export const ResultDialog = ({ item, itemColor, onClose, onRemove, onDisable }: 
           <p className="text-3xl font-bold text-white text-center break-words">
             {item.name}
           </p>
+          {item.effectDescription && (
+            <RemoveScroll className="bg-gray-800 max-h-[8lh] whitespace-pre-line text-white overflow-y-auto my-2 break-words custom-scrollbar">
+              {item.effectDescription}
+            </RemoveScroll>
+          )}
           <p className="text-sm text-gray-400 text-center mt-2">
             Weight: {item.weight}
           </p>
