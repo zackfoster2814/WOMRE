@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { WheelItem, WheelPreset, SpinHistoryEntry } from "../types";
 import { Character } from "../types/character";
 import { WheelCanvas } from "../components/WheelCanvas";
@@ -20,7 +20,10 @@ import {
   saveCharacterToLocal,
 } from "../utils/localStorage";
 import wheelBgImage from "../assets/img/wheel-bg.png";
+import { initializeEffectData } from "../effects/data";
+import { EffectRegistry } from "../effects";
 import { getAssetPath } from "../utils/basePath";
+import { RemoveScroll } from "react-remove-scroll";
 
 export const WheelPage = () => {
   const [items, setItems] = useState<WheelItem[]>([
@@ -40,19 +43,29 @@ export const WheelPage = () => {
   const [wheelName, setWheelName] = useState("");
   const [showExportSuccess, setShowExportSuccess] = useState(false);
   const [backgroundMusicUrl, setBackgroundMusicUrl] = useState<string | null>(
-    null
+    null,
   );
   const [startAngle, setStartAngle] = useState(0);
   const [angleInputValue, setAngleInputValue] = useState("0");
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
+    null,
+  );
   const [isLoadingCharacter, setIsLoadingCharacter] = useState(false);
   const [showPlayerPanel, setShowPlayerPanel] = useState(false);
   const [isSavingCharacter, setIsSavingCharacter] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement | null>(null);
+  const currentItemNameDivRef = useRef<HTMLDivElement | null>(null);
+  const [isCurrentItemResultHover, setIsCurrentItemResultHover] =
+    useState(false);
+
+  useEffect(() => {
+    initializeEffectData();
+  }, []);
 
   // Generate colors for items that don't have custom colors
   const generatedColors = useMemo(
     () => generateColors(items.length),
-    [items.length]
+    [items.length],
   );
 
   // Fetch character data based on item name
@@ -146,11 +159,17 @@ export const WheelPage = () => {
 
       switch (spinningAttribute.type) {
         case "race":
-          updatedCharacter.race = { ...updatedCharacter.race, race: resultValue };
+          updatedCharacter.race = {
+            ...updatedCharacter.race,
+            race: resultValue,
+          };
           break;
         case "archetype":
           if (!updatedCharacter.archetypes.includes(resultValue)) {
-            updatedCharacter.archetypes = [...updatedCharacter.archetypes, resultValue];
+            updatedCharacter.archetypes = [
+              ...updatedCharacter.archetypes,
+              resultValue,
+            ];
           }
           break;
         case "house":
@@ -159,7 +178,9 @@ export const WheelPage = () => {
         case "team":
           // Extract team number from result (e.g., "Team 1" -> 1)
           const teamMatch = resultValue.match(/\d+/);
-          updatedCharacter.team = teamMatch ? parseInt(teamMatch[0]) : undefined;
+          updatedCharacter.team = teamMatch
+            ? parseInt(teamMatch[0])
+            : undefined;
           break;
         case "quirk":
           if (!updatedCharacter.quirks.includes(resultValue)) {
@@ -172,12 +193,19 @@ export const WheelPage = () => {
           }
           break;
         case "weapon":
-          const newWeapon = { name: resultValue, type: "Normal" as const, usable: true };
+          const newWeapon = {
+            name: resultValue,
+            type: "Normal" as const,
+            usable: true,
+          };
           updatedCharacter.weapons = [...updatedCharacter.weapons, newWeapon];
           break;
         case "chardev":
           if (!updatedCharacter.charDevs.includes(resultValue)) {
-            updatedCharacter.charDevs = [...updatedCharacter.charDevs, resultValue];
+            updatedCharacter.charDevs = [
+              ...updatedCharacter.charDevs,
+              resultValue,
+            ];
           }
           break;
       }
@@ -236,8 +264,8 @@ export const WheelPage = () => {
     if (winningItem) {
       setItems(
         items.map((item) =>
-          item.id === winningItem.id ? { ...item, disabled: true } : item
-        )
+          item.id === winningItem.id ? { ...item, disabled: true } : item,
+        ),
       );
       setWinningItem(null);
     }
@@ -246,8 +274,8 @@ export const WheelPage = () => {
   const handleDisableItem = (itemId: string) => {
     setItems(
       items.map((item) =>
-        item.id === itemId ? { ...item, disabled: !item.disabled } : item
-      )
+        item.id === itemId ? { ...item, disabled: !item.disabled } : item,
+      ),
     );
   };
 
@@ -300,7 +328,9 @@ export const WheelPage = () => {
 
       try {
         // Load default presets
-        const response = await fetch(getAssetPath("/data/default-presets.json"));
+        const response = await fetch(
+          getAssetPath("/data/default-presets.json"),
+        );
         if (!response.ok) return;
 
         const presets = await response.json();
@@ -308,10 +338,12 @@ export const WheelPage = () => {
 
         if (preset) {
           // Load the preset items with IDs
-          const itemsWithIds = preset.items.map((item: { name: string; weight: number; disabled?: boolean }) => ({
-            ...item,
-            id: crypto.randomUUID(),
-          }));
+          const itemsWithIds = preset.items.map(
+            (item: { name: string; weight: number; disabled?: boolean }) => ({
+              ...item,
+              id: crypto.randomUUID(),
+            }),
+          );
 
           setItems(itemsWithIds);
           setWheelName(preset.wheelName || preset.name);
@@ -330,7 +362,7 @@ export const WheelPage = () => {
         console.error("Failed to load preset:", error);
       }
     },
-    []
+    [],
   );
 
   // Handle save character to file
@@ -457,6 +489,20 @@ export const WheelPage = () => {
     }
   };
 
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (!tooltipRef.current) return;
+    tooltipRef.current.scrollTop += e.deltaY;
+  };
+
+  const description = useMemo(() => {
+    if (currentItem === null) return null;
+
+    const searchResults = EffectRegistry.search(currentItem.name);
+    if (searchResults.length) return searchResults[0].description;
+
+    return currentItem.effectDescription;
+  }, [currentItem]);
+
   return (
     <div
       className="min-h-screen py-2 px-4"
@@ -487,7 +533,9 @@ export const WheelPage = () => {
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-              <p className="text-gray-400 text-xs sm:text-sm whitespace-nowrap">V3.0 Lite Edition</p>
+              <p className="text-gray-400 text-xs sm:text-sm whitespace-nowrap">
+                V3.0 Lite Edition
+              </p>
               <span className="text-gray-600 hidden sm:inline">•</span>
               <input
                 type="text"
@@ -603,13 +651,27 @@ export const WheelPage = () => {
                         RESULT
                       </p>
                       <div
-                        className="w-full h-6 rounded mb-4 flex-shrink-0"
+                        ref={currentItemNameDivRef}
+                        className="flex-1 flex flex-col items-center justify-center w-full rounded mb-4 flex-shrink-0 relative group"
                         style={{
                           backgroundColor: getCurrentItemColor(),
                         }}
-                      />
-                      <div className="flex-1 flex items-center justify-center overflow-hidden min-h-[3rem]">
-                        <p className="text-lg sm:text-xl font-bold text-white text-center break-words px-2">
+                        onWheel={handleWheel}
+                        onMouseEnter={() => setIsCurrentItemResultHover(true)}
+                        onMouseLeave={() => setIsCurrentItemResultHover(false)}
+                      >
+                        {!isSpinning &&
+                          isCurrentItemResultHover &&
+                          description && (
+                            <RemoveScroll
+                              ref={tooltipRef}
+                              removeScrollBar={false}
+                              className="justify-center min-w-[140%] w-fit max-h-96 absolute bottom-full z-50 hidden group-hover:flex mb-4 px-4 py-2 bg-black border-yellow-500 border-solid border-4 text-white text-xl rounded-md overflow-y-auto custom-scrollbar whitespace-pre-line overscroll-none"
+                            >
+                              {description}
+                            </RemoveScroll>
+                          )}
+                        <p className="text-lg sm:text-xl font-bold text-white text-center break-words">
                           {currentItem.name}
                         </p>
                       </div>
@@ -624,7 +686,9 @@ export const WheelPage = () => {
                     </div>
                   ) : (
                     <div className="bg-gray-700 p-4 sm:p-6 rounded-lg border-4 border-gray-600 shadow-lg h-auto md:h-64 flex items-center justify-center min-h-[12rem]">
-                      <p className="text-base sm:text-lg text-gray-500">No selection</p>
+                      <p className="text-base sm:text-lg text-gray-500">
+                        No selection
+                      </p>
                     </div>
                   )}
                 </div>

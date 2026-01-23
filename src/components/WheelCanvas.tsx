@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { WheelItem } from "../types";
 import { generateColors } from "../utils/colors";
 import {
@@ -10,6 +10,7 @@ import { playSpecialSound } from "../utils/specialSounds";
 import arrowImg from "../assets/img/arrow.png";
 import borderImg from "../assets/img/border.png";
 import MouseTracker from "./MouseTracker";
+import { EffectRegistry } from "../effects";
 
 interface WheelCanvasProps {
   items: WheelItem[];
@@ -37,8 +38,11 @@ export const WheelCanvas = ({
   const wheelCacheRef = useRef<HTMLCanvasElement | null>(null);
   const lastItemsHashRef = useRef<string>("");
   const previousWinningItemRef = useRef<string | null>(null); // Track previous winning item name
-  const [isWheelHovered, setIsWheelHovered] = useState<boolean>(false);
   const [hoveredItemIndex, setHoveredItemIndex] = useState<number | null>(null);
+  const [isMouseInWheelIdle, setIsMouseInWheelIdle] = useState(false);
+  const minMouseIdleTimeShowTooltipRef = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -71,7 +75,7 @@ export const WheelCanvas = ({
     ctx.clearRect(0, 0, targetCanvas.width, targetCanvas.height);
 
     const activeItems = items.filter(
-      (item) => !item.disabled && item.weight > 0
+      (item) => !item.disabled && item.weight > 0,
     );
 
     if (activeItems.length === 0) {
@@ -88,7 +92,7 @@ export const WheelCanvas = ({
           ? "Add items to start"
           : "All items disabled or weight = 0",
         centerX,
-        centerY
+        centerY,
       );
       return;
     }
@@ -112,7 +116,7 @@ export const WheelCanvas = ({
         centerY,
         radius,
         currentAngle,
-        currentAngle + sliceAngle
+        currentAngle + sliceAngle,
       );
       ctx.closePath();
       ctx.fill();
@@ -133,7 +137,7 @@ export const WheelCanvas = ({
         centerY,
         radius,
         currentAngle,
-        currentAngle + sliceAngle
+        currentAngle + sliceAngle,
       );
       ctx.closePath();
       ctx.stroke();
@@ -203,7 +207,7 @@ export const WheelCanvas = ({
         weight: i.weight,
         color: i.color,
         disabled: i.disabled,
-      }))
+      })),
     );
 
     // Recreate cache if items changed
@@ -278,7 +282,7 @@ export const WheelCanvas = ({
         const hasSpecialSound = playSpecialSound(
           winningItem.name,
           items.length,
-          previousWinningItemRef.current
+          previousWinningItemRef.current,
         );
 
         if (!hasSpecialSound) {
@@ -307,7 +311,7 @@ export const WheelCanvas = ({
 
   const getCurrentItemIndex = (angle: number): number => {
     const activeItems = items.filter(
-      (item) => !item.disabled && item.weight > 0
+      (item) => !item.disabled && item.weight > 0,
     );
     if (activeItems.length === 0) return -1;
 
@@ -336,7 +340,7 @@ export const WheelCanvas = ({
 
   const getItemAtAngle = (angle: number): WheelItem => {
     const activeItems = items.filter(
-      (item) => !item.disabled && item.weight > 0
+      (item) => !item.disabled && item.weight > 0,
     );
     const index = getCurrentItemIndex(angle);
     return activeItems[index] || activeItems[0];
@@ -375,7 +379,6 @@ export const WheelCanvas = ({
 
   const handleCanvasMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isPosInWheel(e.clientX, e.clientY)) {
-      setIsWheelHovered(false);
       setHoveredItemIndex(null);
       return;
     }
@@ -384,14 +387,35 @@ export const WheelCanvas = ({
     if (!canvas) return;
 
     const index = getCurrentItemIndex(
-      calculateAngleFromPos(e.clientX, e.clientY)
+      calculateAngleFromPos(e.clientX, e.clientY),
     );
+
     setHoveredItemIndex(index);
-    setIsWheelHovered(true);
+
+    setIsMouseInWheelIdle(false);
+
+    if (minMouseIdleTimeShowTooltipRef.current)
+      clearTimeout(minMouseIdleTimeShowTooltipRef.current);
+
+    minMouseIdleTimeShowTooltipRef.current = setTimeout(() => {
+      setIsMouseInWheelIdle(true);
+    }, 500);
   };
 
   const activeItems = items.filter((item) => !item.disabled && item.weight > 0);
   const canSpin = activeItems.length > 0 && !isSpinning;
+
+  const description = useMemo(() => {
+    if (hoveredItemIndex === null) return null;
+
+    const item = activeItems[hoveredItemIndex];
+
+    const searchResults = EffectRegistry.search(item.name);
+
+    if (searchResults.length) return searchResults[0].description;
+
+    return item.effectDescription;
+  }, [hoveredItemIndex]);
 
   return (
     <div className="relative inline-block w-full" style={{ padding: "3%" }}>
@@ -410,7 +434,7 @@ export const WheelCanvas = ({
       />
 
       {/* Canvas container with relative positioning */}
-      <div className="relative" style={{ margin: "0 auto" }}>
+      <div className="relative group" style={{ margin: "0 auto" }}>
         <canvas
           ref={canvasRef}
           width={700}
@@ -418,19 +442,41 @@ export const WheelCanvas = ({
           className="w-full block"
           style={{ backgroundColor: "transparent" }}
           onMouseMove={handleCanvasMouseMove}
-          onMouseLeave={() => setIsWheelHovered(false)}
+          onMouseLeave={() => setHoveredItemIndex(null)}
         />
-        {!isSpinning &&
-          isWheelHovered &&
-          hoveredItemIndex !== null &&
-          activeItems[hoveredItemIndex] &&
-          activeItems[hoveredItemIndex].effectDescription && (
-            <MouseTracker offset={{ x: 15, y: 15 }}>
-              <div className="bg-black bg-opacity-75 text-white text-xl rounded-md px-4 py-2 pointer-events-auto max-w-md whitespace-pre-line">
-                {activeItems[hoveredItemIndex].effectDescription}
+        {!isSpinning && hoveredItemIndex !== null && description && (
+          <MouseTracker offset={{ x: 15, y: 15 }}>
+            <svg
+              className={`w-6 h-6 -rotate-90 ${isMouseInWheelIdle ? "animate-[fade-out_1s_forwards]" : "hidden"}`}
+              viewBox="0 0 120 120"
+            >
+              <circle
+                className="text-gray-300 stroke-current"
+                strokeWidth="24"
+                cx="60"
+                cy="60"
+                r="48"
+                fill="transparent"
+              />
+              <circle
+                className="text-blue-600 stroke-current animate-[draw-circle_1.5s]"
+                strokeWidth="24"
+                strokeDasharray="360"
+                strokeDashoffset="0"
+                strokeLinecap="round"
+                cx="60"
+                cy="60"
+                r="48"
+                fill="transparent"
+              />
+            </svg>
+            {isMouseInWheelIdle && (
+              <div className="bg-black bg-opacity-75 text-white text-xl rounded-md px-4 py-2 pointer-events-auto max-w-lg whitespace-pre-line opacity-0 animate-[fade-in_0s_1s_forwards]">
+                {description}
               </div>
-            </MouseTracker>
-          )}
+            )}
+          </MouseTracker>
+        )}
 
         {/* Arrow Pointer - rotates around wheel center (skull center) */}
         <img
