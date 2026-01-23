@@ -7,6 +7,10 @@ import { initializeEffectData } from "../effects/data";
 import type { CharacterStats as EffectStats, EffectSourceType } from "../effects/types";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { getAssetPath } from "../utils/basePath";
+import { isTauri } from "../utils/localStorage";
+
+// Check if running in web-only mode
+const isWebOnly = !isTauri();
 
 // Initialize effect data once
 let effectsInitialized = false;
@@ -287,12 +291,17 @@ export const PlayerListPage = () => {
       <header className="flex-shrink-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 py-3 overflow-visible relative z-[100]">
         <div className="max-w-7xl mx-auto overflow-visible">
           <div className="flex items-center justify-between mb-3">
-            <button
-              onClick={() => navigate("/")}
-              className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-medium transition-colors flex items-center gap-2"
-            >
-              <span>&larr;</span> Back to Home
-            </button>
+            {/* Hide Back to Home button in web-only mode */}
+            {!isWebOnly ? (
+              <button
+                onClick={() => navigate("/")}
+                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-medium transition-colors flex items-center gap-2"
+              >
+                <span>&larr;</span> Back to Home
+              </button>
+            ) : (
+              <div /> /* Empty div for flex spacing */
+            )}
             <h1 className="text-2xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-teal-400 to-cyan-400 italic">
               Player List
             </h1>
