@@ -1,71 +1,72 @@
 No.153
 Name: catfish (catfish0140)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Dryad
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Mason
+```
+``` 
+2 Quirk:  
++ Under the Weather
++ Generous
+```
+```
+Str:10
+Spd:6
+Dur:7
+IQ:6
+BIQ:1
+MA:1
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
- + 0 Legacy gear:
-  -
+Houses: The Shire
++ Nhận +6 vào MA
 ```
 
 ```
-0 Normal Weapon
-+
+3 Gear: 
+ + 2 Normal gear:
+  - Mì Tôm
+  - Ớt
+ + 1 Legacy gear:
+  - King Gnome's Banana
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Normal Weapon
++ Caestus (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Power:
-+
+0 Power: 
++ 
 ```
 
 ```
-Char dev:
-+
+Char dev: 
++ Lose Control
 ```
 
 ```
-Team:
+Team: 23
 ```
 
 ```
 Lover:
-+
++ 
 ```

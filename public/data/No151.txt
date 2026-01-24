@@ -1,71 +1,69 @@
 No.151
 Name: Mork (mork2104)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Angel
+Sub-race: Angels
 ```
 
 ```
-Houses:
-+
+Archetype: Pacifist
++ Gambler
+```
+``` 
+1 Quirk:  
++ Cheater
+```
+```
+Str:3
+Spd:10
+Dur:5
+IQ:7
+BIQ:10
+MA:10
 ```
 
 ```
-0 Gear:
+Houses: Dothraki
+```
+
+```
+0 Gear: 
  + 0 Normal gear:
-  -
+  - 
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+0 Power: 
++ AIDS (từ Cha rdev)
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Metamorphosis (+1 BIQ)
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:31
 ```
 
 ```
 Lover:
-+
++ 
 ```

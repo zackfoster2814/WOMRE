@@ -1,71 +1,68 @@
 No.119
 Name: Ethan (sang_44301)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Orc
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: Gambler Bloodline
+```
+``` 
+2 Quirk:  (Được quay)
++ Training Restricted
++ Pure (không được quay vòng nhận đai)
+```
+```
+Str:1 (Không được quay)
+Spd:5 (Được quay)
+Dur:1 (Không được quay)
+IQ:1 (Không được quay)
+BIQ:7 (Được quay)
+MA:6 (Được quay)
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: (Không được quay)
+```
+
+```
+1 Gear: (Được quay)
+ + 1 Normal gear:
+  - Healing Flask
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon (Được quay)
++ Morningstar (Không dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+4 Power: (Không được quay)
 ```
 
 ```
-0 Power:
-+
+Char dev: (Không được quay)
++ 
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team: 
 ```
 
 ```
 Lover:
-+
++ 
 ```

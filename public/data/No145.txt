@@ -1,8 +1,9 @@
 No.145
 Name: Nikki (huyhuhhuh)
 ```
-Ký Sinh:
-+ 
+Ký Sinh: Yes
++ 67
++ Shian (italianpenguin2003)
 ```
 ```
 Race: Goblin
@@ -10,8 +11,7 @@ Sub-race: 1000
 ```
 
 ```
-Archetype: 
-+ Perfectionist
+Archetype: Perfectionist
 + Foragers (Từ New London)
 ```
 ``` 
@@ -30,8 +30,7 @@ MA:7 (Ban đầu là 6, +1 từ Foragers)
 ```
 
 ```
-Houses: 
-+ New London
+Houses: New London
 ```
 
 ```

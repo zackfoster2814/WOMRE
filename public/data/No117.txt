@@ -1,71 +1,76 @@
 No.117
 Name: AsuK (asuk214)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Dryad
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Hero of the Emirate🍀
++ Conquerer (Từ Spatula)
+```
+``` 
+1 Quirk:  
++ Raumanian🍀 (Từ Archetype)
++ Fit
+```
+```
+Str:7
+Spd:5 (Ban đầu là 2, +3 từ Conquerer)
+Dur:1
+IQ:5
+BIQ:7
+MA:1
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Lannister
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Empty Stein (Từ House)
+  - Spatula(Từ House)
+  - Golden Coin x3 (Từ House)
+  - Radio
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Banana Peel
+```
+
+``` 
+1 Rune: 
++ Thul
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+2 Power: 
++ Railroad Realm 🍀(Từ Archetype)
++ Bloody Strike
++ Odin Blessing
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Put the fries in the bag
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:26
 ```
 
 ```
 Lover:
-+
++ 
 ```

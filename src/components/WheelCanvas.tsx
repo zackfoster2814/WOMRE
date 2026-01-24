@@ -434,11 +434,11 @@ export const WheelCanvas = ({
       />
 
       {/* Canvas container with relative positioning */}
-      <div className="relative group" style={{ margin: "0 auto" }}>
+      <div className="relative group" style={{ margin: "0 auto", maxWidth: "800px" }}>
         <canvas
           ref={canvasRef}
-          width={700}
-          height={700}
+          width={800}
+          height={800}
           className="w-full block"
           style={{ backgroundColor: "transparent" }}
           onMouseMove={handleCanvasMouseMove}

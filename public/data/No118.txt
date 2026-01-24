@@ -1,71 +1,68 @@
 No.118
 Name: Warmbunny (warmbunny)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Merfolk
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: Chokevy
+```
+``` 
+2 Quirk:  
++ Raumanian🍀
++ Progressive
+```
+```
+Str:2
+Spd:6
+Dur:4
+IQ:10
+BIQ:1
+MA:3
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Naga
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Thuốc Tráng Dương
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+0 Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Wex
 ```
 
 ```
-0 Power:
-+
+Char dev: Kungfu Training
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:17
 ```
 
 ```
 Lover:
-+
++ 
 ```

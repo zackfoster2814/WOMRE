@@ -1,71 +1,71 @@
 No.124
 Name: Lonely boy (zombieman7477)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Goblin
+Sub-race: 1
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Người Trong Ban Nhạc
+```
+``` 
+2 Quirk:  
++ Raumanian🍀
++ Bloodthirsty
+```
+```
+Str:3
+Spd:3
+Dur:4
+IQ:5
+BIQ:9
+MA:1
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Ban Nhạc Ngọt Đoàn Kết
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Ớt (Từ House)
+  - Mì Tôm
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Acid Breath
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Overcome the Habits
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:28
 ```
 
 ```
 Lover:
-+
++ 
 ```

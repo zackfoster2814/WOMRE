@@ -1,71 +1,72 @@
 No.122
 Name: Dương Quá Quá (duongquaqua)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Gnome 
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Conquerer
++ Merchants (Từ New London)
+```
+``` 
+1 Quirk:  
++ Fit
+```
+```
+Str:5
+Spd:5 (ban đầu là 2,+3 từ Conquerer)
+Dur:4
+IQ:5
+BIQ:5
+MA:6
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: New London
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Golden Coin (Từ Merchants)
+  - Kẹo
+  - Knight's Armor
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Unique Weapon
++ Bloodthrist Dagger (dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+0 Power: 
++ Critical Strike (+16%) (Từ Bloodthrist Dagger)
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Furry 
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:7
 ```
 
 ```
 Lover:
-+
++ 
 ```

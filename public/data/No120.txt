@@ -1,71 +1,71 @@
 No.120
 Name: Mr. C.B. (dogefear)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Skeleton (Elf)
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ NPC
+```
+``` 
+1 Quirk:
++ Patient
+```
+```
+Str:6
+Spd:9
+Dur:3
+IQ:1 (Cố định)
+BIQ:7
+MA:6
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Coven Council 
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Sổ tay
+  - Giấy nợ truyền tay
+  - Wine
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Unique Weapon 
++ Blade of Chaos (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ 
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ 
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:10
 ```
 
 ```
 Lover:
-+
++ 
 ```

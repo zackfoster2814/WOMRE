@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { Character, CharacterStats } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver, type EffectSourceBreakdown } from "../effects/resolver";
@@ -94,7 +93,6 @@ interface TeamJson {
 }
 
 export const PlayerListPage = () => {
-  const navigate = useNavigate();
   const [players, setPlayers] = useState<PlayerSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPlayer, setSelectedPlayer] = useState<Character | null>(null);
@@ -407,22 +405,11 @@ export const PlayerListPage = () => {
         backgroundAttachment: "fixed",
       }}
     >
-      {/* Fixed Header */}
-      <header className="flex-shrink-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 py-3 overflow-visible relative z-[100]">
+      {/* Fixed Header - add left padding for menu button in app mode */}
+      <header className={`flex-shrink-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 py-3 overflow-visible relative z-[50] ${!isWebOnly ? "pl-40" : ""}`}>
         <div className="max-w-7xl mx-auto overflow-visible">
-          <div className="flex items-center justify-between mb-3">
-            {/* Hide Back to Home button in web-only mode */}
-            {!isWebOnly ? (
-              <button
-                onClick={() => navigate("/")}
-                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-medium transition-colors flex items-center gap-2"
-              >
-                <span>&larr;</span> Back to Home
-              </button>
-            ) : (
-              <div /> /* Empty div for flex spacing */
-            )}
-{/* View Mode Toggle */}
+          <div className="flex items-center justify-center gap-6 mb-3">
+            {/* View Mode Toggle */}
             <div className="flex bg-gray-800 rounded-lg p-1">
               <button
                 onClick={() => setViewMode("players")}

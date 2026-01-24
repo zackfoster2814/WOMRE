@@ -1,71 +1,69 @@
 No.125
 Name: Em Minh (minhloptruong)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Troll
+Sub-race: Ice Troll
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Hero Grave Keeper
+```
+``` 
+1 Quirk:  
++ Brainrot
+```
+```
+Str:5
+Spd:3
+Dur:2
+IQ:5
+BIQ:6
+MA:2
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Ban Nhạc Ngọt Đoàn Kết
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Kẹo (Từ House)
+  - Thuốc Tráng Dương
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Unique Weapon
++ Bolt of Gransax (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Memory Freeze
 ```
 
 ```
-0 Power:
-+
+Char dev: Seeking Wisdom
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:30
 ```
 
 ```
 Lover:
-+
++ 
 ```

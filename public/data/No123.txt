@@ -1,64 +1,67 @@
 No.123
 Name: Hoàng Tuyền Không Trấn (franx9816)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Dragon
+Sub-race: Thunder Dragon
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Infirmarian
+```
+``` 
+1 Quirk:  
++ Shining Brightly
+```
+```
+Str:6
+Spd:6
+Dur:6
+IQ:9
+BIQ:9
+MA:5
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Winterhome
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Holy Symbol(Từ House)
+  - Buckler (Từ House)
+  - Ancient Protector
+  - Shot Glass
+  - Magical Scroll
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+2 Power: 
++ Frost Fingers
++ Ballet Dancing
 ```
 
 ```
-0 Power:
-+
-```
-
-```
-Char dev:
-+
+Char dev: 
++ Make Love (Ar2di)
 ```
 
 ```
@@ -67,5 +70,5 @@ Team:
 
 ```
 Lover:
-+
++ 
 ```

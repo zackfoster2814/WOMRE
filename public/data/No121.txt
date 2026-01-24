@@ -1,71 +1,69 @@
 No.121
 Name: Dopamine (surviveathust)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Troll
+Sub-race: Ice Troll
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Gambler
++ Machinists (Từ New London)
+```
+``` 
+1 Quirk:  
++ Cautious
+```
+```
+Str:2
+Spd:6
+Dur:7
+IQ:3
+BIQ:7
+MA:3
 ```
 
 ```
-0 Gear:
+Houses: New London
+```
+
+```
+0 Gear: 
  + 0 Normal gear:
-  -
+  - Đá (Từ Machinists)
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+0 Power: 
++ AIDS (Từ Metamorphosis)
 ```
 
 ```
-0 Power:
-+
+Char dev: Metamorphosis (+0IQ)
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:15
 ```
 
 ```
 Lover:
-+
++ 
 ```

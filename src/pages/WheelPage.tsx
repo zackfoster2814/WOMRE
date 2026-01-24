@@ -1,6 +1,7 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { WheelItem, WheelPreset, SpinHistoryEntry } from "../types";
-import { Character } from "../types/character";
+// Temporarily commented out - PlayerInfoPanel is hidden for release
+// import { Character } from "../types/character";
 import { WheelCanvas } from "../components/WheelCanvas";
 import { ItemList } from "../components/ItemList";
 import { PresetManager } from "../components/PresetManager";
@@ -9,20 +10,21 @@ import { AudioControls } from "../components/AudioControls";
 import { HistoryModal } from "../components/HistoryModal";
 import { BackgroundMusicPlayer } from "../components/BackgroundMusicPlayer";
 import { QuickPresetSelector } from "../components/QuickPresetSelector";
-import { PlayerInfoPanel } from "../components/PlayerInfoPanel";
-import { CharacterParser } from "../utils/characterParser";
+// Temporarily commented out - PlayerInfoPanel is hidden for release
+// import { PlayerInfoPanel } from "../components/PlayerInfoPanel";
+// import { CharacterParser } from "../utils/characterParser";
 import { setAudioMuted, stopCurrentAudio } from "../utils/audio";
 import { generateColors } from "../utils/colors";
 import {
   isTauri,
   exportHistoryToLocal,
   openFolder,
-  saveCharacterToLocal,
+  // saveCharacterToLocal,
 } from "../utils/localStorage";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { initializeEffectData } from "../effects/data";
 import { EffectRegistry } from "../effects";
-import { getAssetPath } from "../utils/basePath";
+// import { getAssetPath } from "../utils/basePath";
 import { RemoveScroll } from "react-remove-scroll";
 
 export const WheelPage = () => {
@@ -47,12 +49,14 @@ export const WheelPage = () => {
   );
   const [startAngle, setStartAngle] = useState(0);
   const [angleInputValue, setAngleInputValue] = useState("0");
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
-    null,
-  );
-  const [isLoadingCharacter, setIsLoadingCharacter] = useState(false);
-  const [showPlayerPanel, setShowPlayerPanel] = useState(false);
-  const [isSavingCharacter, setIsSavingCharacter] = useState(false);
+  // Temporarily commented out - PlayerInfoPanel is hidden for release
+  // const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
+  //   null,
+  // );
+  // Temporarily commented out - PlayerInfoPanel is hidden for release
+  // const [isLoadingCharacter, setIsLoadingCharacter] = useState(false);
+  // const [showPlayerPanel, setShowPlayerPanel] = useState(false);
+  // const [isSavingCharacter, setIsSavingCharacter] = useState(false);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
   const [isCurrentItemResultHover, setIsCurrentItemResultHover] =
     useState(false);
@@ -67,57 +71,59 @@ export const WheelPage = () => {
     [items.length],
   );
 
+  // Temporarily commented out - PlayerInfoPanel is hidden for release
   // Fetch character data based on item name
-  const fetchCharacterData = useCallback(async (itemName: string) => {
-    // Try to extract No. from item name (e.g., "No.35" or just "35" or "No35")
-    const noMatch = itemName.match(/No\.?(\d+)/i) || itemName.match(/^(\d+)$/);
-    if (!noMatch) {
-      setSelectedCharacter(null);
-      return;
-    }
-
-    const characterNo = noMatch[1];
-    setIsLoadingCharacter(true);
-
-    try {
-      const response = await fetch(getAssetPath(`/data/No${characterNo}.txt`));
-      if (!response.ok) {
-        setSelectedCharacter(null);
-        return;
-      }
-
-      const content = await response.text();
-      const character = CharacterParser.parseCharacterFile(content);
-      setSelectedCharacter(character);
-    } catch (error) {
-      console.error("Failed to fetch character data:", error);
-      setSelectedCharacter(null);
-    } finally {
-      setIsLoadingCharacter(false);
-    }
-  }, []);
+  // const fetchCharacterData = useCallback(async (itemName: string) => {
+  //   // Try to extract No. from item name (e.g., "No.35" or just "35" or "No35")
+  //   const noMatch = itemName.match(/No\.?(\d+)/i) || itemName.match(/^(\d+)$/);
+  //   if (!noMatch) {
+  //     setSelectedCharacter(null);
+  //     return;
+  //   }
+  //
+  //   const characterNo = noMatch[1];
+  //   setIsLoadingCharacter(true);
+  //
+  //   try {
+  //     const response = await fetch(getAssetPath(`/data/No${characterNo}.txt`));
+  //     if (!response.ok) {
+  //       setSelectedCharacter(null);
+  //       return;
+  //     }
+  //
+  //     const content = await response.text();
+  //     const character = CharacterParser.parseCharacterFile(content);
+  //     setSelectedCharacter(character);
+  //   } catch (error) {
+  //     console.error("Failed to fetch character data:", error);
+  //     setSelectedCharacter(null);
+  //   } finally {
+  //     setIsLoadingCharacter(false);
+  //   }
+  // }, []);
 
   // Handle selecting a player from the list
-  const handleSelectPlayer = useCallback(async (playerNo: number) => {
-    setIsLoadingCharacter(true);
-
-    try {
-      const response = await fetch(getAssetPath(`/data/No${playerNo}.txt`));
-      if (!response.ok) {
-        setSelectedCharacter(null);
-        return;
-      }
-
-      const content = await response.text();
-      const character = CharacterParser.parseCharacterFile(content);
-      setSelectedCharacter(character);
-    } catch (error) {
-      console.error("Failed to fetch character data:", error);
-      setSelectedCharacter(null);
-    } finally {
-      setIsLoadingCharacter(false);
-    }
-  }, []);
+  // Temporarily commented out - PlayerInfoPanel is hidden for release
+  // const handleSelectPlayer = useCallback(async (playerNo: number) => {
+  //   setIsLoadingCharacter(true);
+  //
+  //   try {
+  //     const response = await fetch(getAssetPath(`/data/No${playerNo}.txt`));
+  //     if (!response.ok) {
+  //       setSelectedCharacter(null);
+  //       return;
+  //     }
+  //
+  //     const content = await response.text();
+  //     const character = CharacterParser.parseCharacterFile(content);
+  //     setSelectedCharacter(character);
+  //   } catch (error) {
+  //     console.error("Failed to fetch character data:", error);
+  //     setSelectedCharacter(null);
+  //   } finally {
+  //     setIsLoadingCharacter(false);
+  //   }
+  // }, []);
 
   // Get the actual color that will be displayed on the wheel
   const getCurrentItemColor = (): string => {
@@ -150,74 +156,78 @@ export const WheelPage = () => {
     setIsSpinning(false);
     setWinningItem(item);
 
+    // Temporarily commented out - PlayerInfoPanel is hidden for release
     // Check if we were spinning for an attribute
-    if (spinningAttribute && selectedCharacter) {
-      // Update the character with the spin result
-      const updatedCharacter = { ...selectedCharacter };
-      const resultValue = item.name;
+    // if (spinningAttribute && selectedCharacter) {
+    //   // Update the character with the spin result
+    //   const updatedCharacter = { ...selectedCharacter };
+    //   const resultValue = item.name;
+    //
+    //   switch (spinningAttribute.type) {
+    //     case "race":
+    //       updatedCharacter.race = {
+    //         ...updatedCharacter.race,
+    //         race: resultValue,
+    //       };
+    //       break;
+    //     case "archetype":
+    //       if (!updatedCharacter.archetypes.includes(resultValue)) {
+    //         updatedCharacter.archetypes = [
+    //           ...updatedCharacter.archetypes,
+    //           resultValue,
+    //         ];
+    //       }
+    //       break;
+    //     case "house":
+    //       updatedCharacter.house = resultValue;
+    //       break;
+    //     case "team":
+    //       // Extract team number from result (e.g., "Team 1" -> 1)
+    //       const teamMatch = resultValue.match(/\d+/);
+    //       updatedCharacter.team = teamMatch
+    //         ? parseInt(teamMatch[0])
+    //         : undefined;
+    //       break;
+    //     case "quirk":
+    //       if (!updatedCharacter.quirks.includes(resultValue)) {
+    //         updatedCharacter.quirks = [...updatedCharacter.quirks, resultValue];
+    //       }
+    //       break;
+    //     case "power":
+    //       if (!updatedCharacter.powers.includes(resultValue)) {
+    //         updatedCharacter.powers = [...updatedCharacter.powers, resultValue];
+    //       }
+    //       break;
+    //     case "weapon":
+    //       const newWeapon = {
+    //         name: resultValue,
+    //         type: "Normal" as const,
+    //         usable: true,
+    //       };
+    //       updatedCharacter.weapons = [...updatedCharacter.weapons, newWeapon];
+    //       break;
+    //     case "chardev":
+    //       if (!updatedCharacter.charDevs.includes(resultValue)) {
+    //         updatedCharacter.charDevs = [
+    //           ...updatedCharacter.charDevs,
+    //           resultValue,
+    //         ];
+    //       }
+    //       break;
+    //   }
+    //
+    //   setSelectedCharacter(updatedCharacter);
+    //   setSpinningAttribute(null);
+    //
+    //   // Open player panel to show updated info
+    //   setShowPlayerPanel(true);
+    // } else {
+    //   // Normal spin - fetch character data for the winning item
+    //   fetchCharacterData(item.name);
+    // }
 
-      switch (spinningAttribute.type) {
-        case "race":
-          updatedCharacter.race = {
-            ...updatedCharacter.race,
-            race: resultValue,
-          };
-          break;
-        case "archetype":
-          if (!updatedCharacter.archetypes.includes(resultValue)) {
-            updatedCharacter.archetypes = [
-              ...updatedCharacter.archetypes,
-              resultValue,
-            ];
-          }
-          break;
-        case "house":
-          updatedCharacter.house = resultValue;
-          break;
-        case "team":
-          // Extract team number from result (e.g., "Team 1" -> 1)
-          const teamMatch = resultValue.match(/\d+/);
-          updatedCharacter.team = teamMatch
-            ? parseInt(teamMatch[0])
-            : undefined;
-          break;
-        case "quirk":
-          if (!updatedCharacter.quirks.includes(resultValue)) {
-            updatedCharacter.quirks = [...updatedCharacter.quirks, resultValue];
-          }
-          break;
-        case "power":
-          if (!updatedCharacter.powers.includes(resultValue)) {
-            updatedCharacter.powers = [...updatedCharacter.powers, resultValue];
-          }
-          break;
-        case "weapon":
-          const newWeapon = {
-            name: resultValue,
-            type: "Normal" as const,
-            usable: true,
-          };
-          updatedCharacter.weapons = [...updatedCharacter.weapons, newWeapon];
-          break;
-        case "chardev":
-          if (!updatedCharacter.charDevs.includes(resultValue)) {
-            updatedCharacter.charDevs = [
-              ...updatedCharacter.charDevs,
-              resultValue,
-            ];
-          }
-          break;
-      }
-
-      setSelectedCharacter(updatedCharacter);
-      setSpinningAttribute(null);
-
-      // Open player panel to show updated info
-      setShowPlayerPanel(true);
-    } else {
-      // Normal spin - fetch character data for the winning item
-      fetchCharacterData(item.name);
-    }
+    // Normal spin - fetch character data for the winning item
+    // fetchCharacterData(item.name);
 
     // Get the actual color being displayed
     const actualColor =
@@ -301,103 +311,104 @@ export const WheelPage = () => {
     setWheelName(preset.wheelName || preset.name);
   };
 
+  // Temporarily commented out - PlayerInfoPanel is hidden for release
   // Map attribute types to preset IDs
-  const attributePresetMap: Record<string, string> = {
-    race: "race",
-    archetype: "archetype",
-    house: "houses",
-    team: "teams",
-    quirk: "quirk",
-    power: "power",
-    weapon: "weapon-normal",
-    chardev: "chardev",
-  };
+  // const attributePresetMap: Record<string, string> = {
+  //   race: "race",
+  //   archetype: "archetype",
+  //   house: "houses",
+  //   team: "teams",
+  //   quirk: "quirk",
+  //   power: "power",
+  //   weapon: "weapon-normal",
+  //   chardev: "chardev",
+  // };
 
   // State for tracking which attribute is being spun
-  const [spinningAttribute, setSpinningAttribute] = useState<{
-    type: string;
-    characterNo: number;
-  } | null>(null);
+  // const [spinningAttribute, setSpinningAttribute] = useState<{
+  //   type: string;
+  //   characterNo: number;
+  // } | null>(null);
 
   // Handle spin attribute from player panel
-  const handleSpinAttribute = useCallback(
-    async (attributeType: string, character: Character) => {
-      const presetId = attributePresetMap[attributeType];
-      if (!presetId) return;
-
-      try {
-        // Load default presets
-        const response = await fetch(
-          getAssetPath("/data/default-presets.json"),
-        );
-        if (!response.ok) return;
-
-        const presets = await response.json();
-        const preset = presets.find((p: { id: string }) => p.id === presetId);
-
-        if (preset) {
-          // Load the preset items with IDs
-          const itemsWithIds = preset.items.map(
-            (item: { name: string; weight: number; disabled?: boolean }) => ({
-              ...item,
-              id: crypto.randomUUID(),
-            }),
-          );
-
-          setItems(itemsWithIds);
-          setWheelName(preset.wheelName || preset.name);
-          setCustomSfxUrl(preset.customSfxUrl);
-
-          // Track which attribute we're spinning for
-          setSpinningAttribute({
-            type: attributeType,
-            characterNo: character.no,
-          });
-
-          // Close player panel to show wheel
-          setShowPlayerPanel(false);
-        }
-      } catch (error) {
-        console.error("Failed to load preset:", error);
-      }
-    },
-    [],
-  );
+  // const handleSpinAttribute = useCallback(
+  //   async (attributeType: string, character: Character) => {
+  //     const presetId = attributePresetMap[attributeType];
+  //     if (!presetId) return;
+  //
+  //     try {
+  //       // Load default presets
+  //       const response = await fetch(
+  //         getAssetPath("/data/default-presets.json"),
+  //       );
+  //       if (!response.ok) return;
+  //
+  //       const presets = await response.json();
+  //       const preset = presets.find((p: { id: string }) => p.id === presetId);
+  //
+  //       if (preset) {
+  //         // Load the preset items with IDs
+  //         const itemsWithIds = preset.items.map(
+  //           (item: { name: string; weight: number; disabled?: boolean }) => ({
+  //             ...item,
+  //             id: crypto.randomUUID(),
+  //           }),
+  //         );
+  //
+  //         setItems(itemsWithIds);
+  //         setWheelName(preset.wheelName || preset.name);
+  //         setCustomSfxUrl(preset.customSfxUrl);
+  //
+  //         // Track which attribute we're spinning for
+  //         setSpinningAttribute({
+  //           type: attributeType,
+  //           characterNo: character.no,
+  //         });
+  //
+  //         // Close player panel to show wheel
+  //         setShowPlayerPanel(false);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to load preset:", error);
+  //     }
+  //   },
+  //   [],
+  // );
 
   // Handle save character to file
-  const handleSaveCharacter = useCallback(async (character: Character) => {
-    setIsSavingCharacter(true);
-
-    try {
-      const content = CharacterParser.serializeCharacter(character);
-      const filename = `No${character.no}.txt`;
-
-      if (isTauri()) {
-        // Save directly to data folder in Tauri app
-        await saveCharacterToLocal(content, filename);
-      } else {
-        // Browser fallback - download as file
-        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      }
-
-      // Show success notification
-      setShowExportSuccess(true);
-      setTimeout(() => setShowExportSuccess(false), 3000);
-    } catch (error) {
-      console.error("Failed to save character:", error);
-      alert("Failed to save character: " + (error as Error).message);
-    } finally {
-      setIsSavingCharacter(false);
-    }
-  }, []);
+  // const handleSaveCharacter = useCallback(async (character: Character) => {
+  //   setIsSavingCharacter(true);
+  //
+  //   try {
+  //     const content = CharacterParser.serializeCharacter(character);
+  //     const filename = `No${character.no}.txt`;
+  //
+  //     if (isTauri()) {
+  //       // Save directly to data folder in Tauri app
+  //       await saveCharacterToLocal(content, filename);
+  //     } else {
+  //       // Browser fallback - download as file
+  //       const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  //       const url = URL.createObjectURL(blob);
+  //       const link = document.createElement("a");
+  //       link.href = url;
+  //       link.download = filename;
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       document.body.removeChild(link);
+  //       URL.revokeObjectURL(url);
+  //     }
+  //
+  //     // Show success notification
+  //     setShowExportSuccess(true);
+  //     setTimeout(() => setShowExportSuccess(false), 3000);
+  //   } catch (error) {
+  //     console.error("Failed to save character:", error);
+  //     alert("Failed to save character: " + (error as Error).message);
+  //   } finally {
+  //     setIsSavingCharacter(false);
+  //   }
+  // }, []);
 
   const toggleMute = () => {
     const newMutedState = !isMuted;
@@ -514,7 +525,7 @@ export const WheelPage = () => {
     >
       <div className="max-w-[1600px] mx-auto">
         <header className="mb-2">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-2 pl-44">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
               Wheel of Multiverse
             </h1>
@@ -530,7 +541,7 @@ export const WheelPage = () => {
               }}
             />
           </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 pl-44">
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
               <p className="text-gray-400 text-xs sm:text-sm whitespace-nowrap">
                 V3.0 Lite Edition
@@ -580,8 +591,8 @@ export const WheelPage = () => {
           </div>
         </header>
 
-        {/* Player Info Panel - Slide from left */}
-        <PlayerInfoPanel
+        {/* Player Info Panel - Temporarily hidden for release */}
+        {/* <PlayerInfoPanel
           character={selectedCharacter}
           isLoading={isLoadingCharacter}
           isOpen={showPlayerPanel}
@@ -590,7 +601,7 @@ export const WheelPage = () => {
           onSpinAttribute={handleSpinAttribute}
           onSaveCharacter={handleSaveCharacter}
           isSaving={isSavingCharacter}
-        />
+        /> */}
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_500px] xl:grid-cols-[1fr_550px] gap-6">
           {/* Left column: Wheel */}

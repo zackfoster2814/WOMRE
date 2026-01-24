@@ -7,7 +7,6 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
-import { LandingPage } from "./pages/LandingPage";
 import { WheelPage } from "./pages/WheelPage";
 import { PlayerListPage } from "./pages/PlayerListPage";
 import { BattleZonePage } from "./pages/BattleZonePage";
@@ -18,11 +17,10 @@ import { isTauri } from "./utils/localStorage";
 const isWebOnly = !isTauri();
 
 const navItems = [
-  { path: "/", label: "Home", icon: "", color: "bg-gray-600" },
-  { path: "/wheel", label: "Wheel", icon: "", color: "bg-blue-600" },
-  { path: "/players", label: "Players", icon: "", color: "bg-green-600" },
-  { path: "/battles", label: "Team Battles", icon: "", color: "bg-orange-600" },
-  { path: "/battle", label: "Battle Zone", icon: "", color: "bg-red-600" },
+  { path: "/", label: "Wheel of Name", color: "bg-blue-600" },
+  { path: "/players", label: "Players", color: "bg-green-600" },
+  { path: "/battles", label: "Team Battles", color: "bg-orange-600" },
+  { path: "/battle", label: "Battle Zone", color: "bg-red-600" },
 ];
 
 // Navigation component
@@ -49,20 +47,18 @@ const Navigation = () => {
     setIsOpen(false);
   };
 
-  // Don't show nav on landing page
-  if (location.pathname === "/") {
-    return null;
-  }
+  // Get current page label
+  const currentPage = navItems.find((item) => item.path === location.pathname);
 
   return (
-    <nav className="fixed top-4 left-4 z-50" ref={menuRef}>
+    <nav className="fixed top-4 left-4 z-[9999]" ref={menuRef}>
       {/* Menu Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="px-4 py-2 bg-gray-800/90 backdrop-blur-sm hover:bg-gray-700 border border-gray-600 rounded-lg text-white font-medium transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
+        className="px-4 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg text-white font-medium transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
       >
         <span>☰</span>
-        <span>Menu</span>
+        <span>{currentPage?.label || "Menu"}</span>
         <span
           className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
         >
@@ -72,21 +68,20 @@ const Navigation = () => {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-48 bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-lg shadow-xl overflow-hidden">
+        <div className="absolute top-full left-0 mt-2 w-52 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl overflow-hidden">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <button
                 key={item.path}
                 onClick={() => handleNavigate(item.path)}
-                className={`w-full px-4 py-3 flex items-center gap-3 transition-all text-left
+                className={`w-full px-4 py-3 flex items-center gap-2 transition-all text-left
                   ${
                     isActive
                       ? `${item.color} text-white font-semibold`
-                      : "text-gray-300 hover:bg-gray-700/50 hover:text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white"
                   }`}
               >
-                <span className="text-lg">{item.icon}</span>
                 <span>{item.label}</span>
                 {isActive && <span className="ml-auto text-xs">●</span>}
               </button>
@@ -112,9 +107,8 @@ function App() {
           </>
         ) : (
           <>
-            {/* Full Tauri app: all routes available */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/wheel" element={<WheelPage />} />
+            {/* Full Tauri app: Wheel of Name is default */}
+            <Route path="/" element={<WheelPage />} />
             <Route path="/players" element={<PlayerListPage />} />
             <Route path="/battles" element={<TeamBattlePage />} />
             <Route path="/battle" element={<BattleZonePage />} />

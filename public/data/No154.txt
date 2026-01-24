@@ -1,71 +1,72 @@
 No.154
 Name: Bưởi (ngbxxx)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Elf
+Sub-race: High Elf (+2 Base IQ)
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Loyal (Lover: Zackie (zackfoster___))
+```
+``` 
+2 Quirk:  
++ Cautious
++ Progressive
+```
+```
+Str:5
+Spd:5
+Dur:6
+IQ:8(Ban đầu là 6, +2 từ High-Elf)
+BIQ:6
+MA:8
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Ban Nhạc Ngọt Đoàn Kết (Đã rời đi)
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Kẹo (Từ House)
+  - Love Letter (đã kích)
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Long Sword (Dùng được)
+```
+
+``` 
+2 Rune: 
++ Ith
++ Ith
+Runeword: The Twin
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Fancy Feet 
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Kina Homeless
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:24
 ```
 
 ```
 Lover:
-+
++ Zackie (zackfoster___)
 ```

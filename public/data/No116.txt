@@ -6,59 +6,61 @@ Ký Sinh:
 +
 ```
 ```
-Race:
-Sub-race:
+Race: Demi-God
+Sub-race: Creation (Favor: Quay lại 3 chỉ số Str - Spd - MA )
 ```
 
 ```
-Archetype:
-+
+Archetype: 
++ Edgelord
+```
+``` 
+3 Quirk:  
++ Training Restricted
++ Patient
++ Athletic
 ```
 ```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
-```
-
-```
-Houses:
-+
+Str:10 ban đầu là 3 (Re-spin từ Favor)
+Spd:3 ban đầu là 5 (Re-spin từ Favor)
+Dur:10
+IQ:7
+BIQ:10
+MA:6 ban đầu là 1 (Re-spin từ Favor)
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Roundtable Hold
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Sổ tay
+  - Academie Ring
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Long Bow (Không dùng được )
++ Rapier (Dùng được) (Từ Favor, được tặng)
+```
+
+``` 
+1 Rune lên Rapier
++ Sol
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+0 Power: (Skip vì Quirk Patient)
++ 
 ```
 
 ```
-0 Power:
-+
-```
-
-```
-Char dev:
-+
+Char dev: Creator's Favor (Favor: Tặng Rapier)
 ```
 
 ```
@@ -67,5 +69,5 @@ Team:
 
 ```
 Lover:
-+
++ 
 ```

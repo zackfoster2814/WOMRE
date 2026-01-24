@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { BattleType } from "../types";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 
 export const BattleZonePage = () => {
-  const navigate = useNavigate();
   const [battleType, setBattleType] = useState<BattleType | null>(null);
 
   if (!battleType) {
@@ -19,13 +17,6 @@ export const BattleZonePage = () => {
         }}
       >
         <div className="max-w-4xl w-full">
-          <button
-            onClick={() => navigate("/")}
-            className="mb-6 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-medium transition-colors flex items-center gap-2"
-          >
-            <span>←</span> Back to Home
-          </button>
-
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 mb-4">
               Battle Zone

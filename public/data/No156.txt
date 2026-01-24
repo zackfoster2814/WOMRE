@@ -1,64 +1,62 @@
 No.156
 Name: mHamster (d.d.alfonce)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Human
+Sub-race: Vàng 
 ```
 
 ```
-Houses:
-+
+Archetype: Mason
+```
+``` 
+1 Quirk:  
++ Training Restricted
+```
+```
+Str:1
+Spd:6
+Dur:6
+IQ:8
+BIQ:1
+MA:5
 ```
 
 ```
-0 Gear:
+Houses: Uchiha
+```
+
+```
+1 Gear: 
  + 0 Normal gear:
-  -
- + 0 Legacy gear:
-  -
+  - 
+ + 1 Legacy gear:
+  - Human NPC's Axe
 ```
 
 ```
-0 Normal Weapon
-+
+0 Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Storm Calling (Từ Legacy Gear)
++ Bloody Strike
 ```
 
 ```
-0 Power:
-+
-```
-
-```
-Char dev:
-+
+Char dev: 
++ Abused 
 ```
 
 ```
@@ -67,5 +65,5 @@ Team:
 
 ```
 Lover:
-+
++ 
 ```
