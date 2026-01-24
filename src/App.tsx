@@ -11,6 +11,7 @@ import { LandingPage } from "./pages/LandingPage";
 import { WheelPage } from "./pages/WheelPage";
 import { PlayerListPage } from "./pages/PlayerListPage";
 import { BattleZonePage } from "./pages/BattleZonePage";
+import { TeamBattlePage } from "./pages/TeamBattlePage";
 import { isTauri } from "./utils/localStorage";
 
 // Check if running in web-only mode (not Tauri)
@@ -20,7 +21,8 @@ const navItems = [
   { path: "/", label: "Home", icon: "", color: "bg-gray-600" },
   { path: "/wheel", label: "Wheel", icon: "", color: "bg-blue-600" },
   { path: "/players", label: "Players", icon: "", color: "bg-green-600" },
-  { path: "/battle", label: "Battle", icon: "", color: "bg-red-600" },
+  { path: "/battles", label: "Team Battles", icon: "", color: "bg-orange-600" },
+  { path: "/battle", label: "Battle Zone", icon: "", color: "bg-red-600" },
 ];
 
 // Navigation component
@@ -114,6 +116,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/wheel" element={<WheelPage />} />
             <Route path="/players" element={<PlayerListPage />} />
+            <Route path="/battles" element={<TeamBattlePage />} />
             <Route path="/battle" element={<BattleZonePage />} />
           </>
         )}

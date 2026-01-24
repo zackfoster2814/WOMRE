@@ -1,0 +1,228 @@
+{
+  "bosses": [
+    {
+      "id": 1,
+      "name": "Slave Knight Gael",
+      "stats": { "str": 60, "spd": 35, "dur": 51, "iq": 39, "biq": 26, "ma": 32 },
+      "reward": "Toàn bộ tổ đội nhận +1 All Stats, +1 Stat thấp nhất, +1 Stat cao nhất",
+      "punishment": "Tổ đội bạn -1 All Stats"
+    },
+    {
+      "id": 2,
+      "name": "Isshin the Sword Saint",
+      "stats": { "str": 58, "spd": 38, "dur": 45, "iq": 42, "biq": 60, "ma": 60 },
+      "reward": "Toàn bộ tổ đội nhận 1 Gear \"Glock\".",
+      "punishment": "Tổ đội bạn nhận Quirk \"Impatient\" nhưng không được nhận 2 PvP Reward mặc định của nó."
+    },
+    {
+      "id": 3,
+      "name": "Allfather",
+      "stats": { "str": 60, "spd": 42, "dur": 40, "iq": 57, "biq": 56, "ma": 22 },
+      "reward": "Isekai 2 người có tổng Base Stats thấp nhất của đội. Tất cả đồng đội còn lại nhận +4 vào chỉ số thấp nhất của 2 người bị Isekai.",
+      "punishment": "Isekai toàn bộ tổ đội"
+    },
+    {
+      "id": 4,
+      "name": "67 Final Boss",
+      "stats": { "str": 6, "spd": 7, "dur": 6, "iq": 7, "biq": 6, "ma": 7 },
+      "reward": "Tổ đội bạn nhận power 67. Tất cả thành viên trong tổ đội của bạn nhận +1 Vào Stat thấp nhất.",
+      "punishment": "Tổ đội bạn nhận power 67"
+    },
+    {
+      "id": 5,
+      "name": "Mu FanBase",
+      "stats": { "str": 7, "spd": 47, "dur": 7, "iq": 37, "biq": 7, "ma": 37 },
+      "reward": "Tất cả thành viên trong tổ đội của bạn nhận +1 7 lần vào Stat ngẫu nhiên (Roll 7 stat được cộng và áp dụng cho cả tổ đội, không roll từng người)",
+      "punishment": "Team bạn nhận Power \"Glory glory Man United\"."
+    },
+    {
+      "id": 6,
+      "name": "Caligo Miasma Of Night",
+      "stats": { "str": 40, "spd": 28, "dur": 48, "iq": 26, "biq": 22, "ma": 10 },
+      "reward": "Team bạn nhận Power \"Cold Mirage\"",
+      "punishment": "1 Base Stat của team bạn biến thành 0"
+    },
+    {
+      "id": 7,
+      "name": "Brock",
+      "stats": { "str": 51, "spd": 53, "dur": 68, "iq": 45, "biq": 45, "ma": 68 },
+      "reward": "Tổ đội bạn nhận +2 All Stats",
+      "punishment": "Không bị phạt"
+    },
+    {
+      "id": 8,
+      "name": "Pontiff Sulyvahn",
+      "stats": { "str": 28, "spd": 35, "dur": 27, "iq": 36, "biq": 34, "ma": 27 },
+      "reward": "Tổ đội bạn nhận \"Dual Wielder\" và lập tức nhận 1 vũ khí 0 rune ở tay còn lại. Nếu đã có, nhận +1 All Stats",
+      "punishment": "Tổ đội bạn bị tước vũ khí."
+    },
+    {
+      "id": 9,
+      "name": "Kafka",
+      "stats": { "str": 36, "spd": 36, "dur": 37, "iq": 37, "biq": 38, "ma": 38 },
+      "reward": "Nhận Gear \"Stellaron Hunter's Member Card\".",
+      "punishment": "Mỗi người trong tổ đội chịu 1 hiệu ứng ngẫu nhiên: (1) Mất toàn bộ Power. (2) Mất toàn bộ Gear. (3) Mất toàn bộ Archetype và Quirk. (4) Không bị phạt. (5) Nhận Creator's Limitation."
+    },
+    {
+      "id": 10,
+      "name": "Rolling Skeletons",
+      "stats": { "str": 20, "spd": 20, "dur": 20, "iq": 20, "biq": 20, "ma": 20 },
+      "reward": "Team bạn nhận +2 Stat thấp nhất",
+      "punishment": "Team bạn nhận -2 Stat thấp nhất"
+    },
+    {
+      "id": 11,
+      "name": "Alduin",
+      "stats": { "str": 55, "spd": 52, "dur": 41, "iq": 38, "biq": 31, "ma": 35 },
+      "reward": "Tổ đội bạn nhận Power \"Sovngarde's Blessing\"",
+      "punishment": "Team bạn mất toàn bộ Char Dev"
+    },
+    {
+      "id": 12,
+      "name": "Violet Vessel",
+      "stats": { "str": null, "spd": null, "dur": null, "iq": null, "biq": null, "ma": null },
+      "reward": "Tổ đội nhận +1 vào Base Stat thấp nhất 10 lần.",
+      "punishment": "Không bị phạt."
+    },
+    {
+      "id": 13,
+      "name": "Night King",
+      "stats": { "str": 28, "spd": 36, "dur": 42, "iq": 35, "biq": 33, "ma": 40 },
+      "reward": "Bạn nhận Archetype \"Bravest of the Brave\", bỏ qua điều kiện đầu tiên của nó.",
+      "punishment": "Bạn nhận Archetype \"NPC\""
+    },
+    {
+      "id": 14,
+      "name": "Radagon of The Golden Order",
+      "stats": { "str": 35, "spd": 37, "dur": 39, "iq": 41, "biq": 28, "ma": 41 },
+      "reward": "Bạn nhận Power \"Golden Parry\"",
+      "punishment": "Stat cao nhất của bạn giảm nửa, Stat thấp nhất của bạn biến thành 0."
+    },
+    {
+      "id": 15,
+      "name": "Simon",
+      "stats": { "str": 33, "spd": 33, "dur": 33, "iq": 33, "biq": 33, "ma": 33 },
+      "reward": "Tổ đội nhận Power \"Artist\" và nhận +1 vào tất cả Base Stat chẵn. Nếu đã có Power \"Artist\" thì thay vào đó nhận +1 vào 3 Stat ngẫu nhiên.",
+      "punishment": "Tổ đội bạn mất 3 Power. (nếu có thể)"
+    },
+    {
+      "id": 16,
+      "name": "Capra Demon",
+      "stats": { "str": 25, "spd": 35, "dur": 45, "iq": 25, "biq": 50, "ma": 30 },
+      "reward": "Tổ đội nhận Power \"4 Hit Combo\" và +3 BIQ",
+      "punishment": "Tổ đội nhận Power \"4 Hit Combo\" và -3 BIQ"
+    },
+    {
+      "id": 17,
+      "name": "Sky Dancer",
+      "stats": { "str": 33, "spd": 67, "dur": 33, "iq": 67, "biq": 33, "ma": 67 },
+      "reward": "Team bạn nhận +1 All Stats và Power \"Ballet Dancing\"",
+      "punishment": "Team bạn nhận Power \"Ballet Dancing\""
+    },
+    {
+      "id": 18,
+      "name": "Dreglord",
+      "stats": { "str": 240, "spd": 0, "dur": 0, "iq": 0, "biq": 0, "ma": 0 },
+      "reward": "Base Strength team bạn +5",
+      "punishment": "Base Strength team bạn -5"
+    },
+    {
+      "id": 19,
+      "name": "Soul of Cinder",
+      "stats": { "str": 63, "spd": 54, "dur": 47, "iq": 62, "biq": 62, "ma": 50 },
+      "reward": "Tổ đội bạn nhận Archetype \"Cinderheart\", nếu đã có rồi, nhận +1 All Stats",
+      "punishment": "Tổ đội bạn bị đuổi khỏi House."
+    },
+    {
+      "id": 20,
+      "name": "The Elder Brain",
+      "stats": { "str": 80, "spd": 0, "dur": 80, "iq": 80, "biq": 55, "ma": 0 },
+      "reward": "Tổ đội bạn nhận từ 1 -> 20 Power (Cho toàn tổ đội). Chia lượng Power đó bằng vòng quay.",
+      "punishment": "Tổ đội bạn bị mất từ 1 -> 20 Power. Nếu không đủ Power, mất hết toàn bộ rồi -1 All Stats."
+    },
+    {
+      "id": 21,
+      "name": "Raphael",
+      "stats": { "str": 66, "spd": 66, "dur": 66, "iq": 66, "biq": 66, "ma": 66 },
+      "reward": "Team bạn mỗi người nhận 6 Gear \"Golden Coin\"",
+      "punishment": "Team bạn mỗi người nhận Gear \"Khung hình thờ\""
+    },
+    {
+      "id": 22,
+      "name": "Aatrox World Ender",
+      "stats": { "str": 60, "spd": 28, "dur": 34, "iq": 48, "biq": 45, "ma": 25 },
+      "reward": "Tổ đội Bạn nhận Gear \"Darkin Blade\".",
+      "punishment": "Tổ đội bạn mất hết Vũ khí, Power và Gear. -1 All Stats"
+    },
+    {
+      "id": 23,
+      "name": "Griffith",
+      "stats": { "str": 200, "spd": 200, "dur": 200, "iq": 200, "biq": 200, "ma": 200 },
+      "reward": "Tổ đội bạn nhận +2 All Stats.",
+      "punishment": "Không bị phạt"
+    },
+    {
+      "id": 24,
+      "name": "The Collector",
+      "stats": { "str": 30, "spd": 30, "dur": 30, "iq": 30, "biq": 30, "ma": 30 },
+      "reward": "Với mỗi round team bạn thắng, giảm 1 hồn của hắn. Với mỗi round team bạn thắng, nhận 1 Power và 1 Gear.",
+      "punishment": "Chọn 1 trong những người còn sống của tổ đội bạn để Isekai, player đó được tính là Collector hấp thụ."
+    },
+    {
+      "id": 25,
+      "name": "The Unblinking Gaze",
+      "stats": { "str": 35, "spd": 35, "dur": 35, "iq": 35, "biq": 35, "ma": 35 },
+      "reward": "Văn Tế bị loại bỏ khỏi vòng quay gear. PvP Reward \"Lời Nguyền Địa Ngục\" mở khóa với Trọng số = 1+số round thua. Tổ đội bạn không bị ảnh hưởng bởi \"Lời Nguyền Địa Ngục\" nếu có lỡ quay ra, hoặc người khác quay ra.",
+      "punishment": "Tổ đội thua bị Re-Spin toàn bộ Stat, mỗi Stat 2 lần và lấy cái thấp hơn."
+    },
+    {
+      "id": 26,
+      "name": "Laerys the Unknown",
+      "stats": { "str": 3, "spd": 3, "dur": 3, "iq": 3, "biq": 3, "ma": 3 },
+      "reward": "Mỗi thành viên tổ đội nhận 8 điểm chỉ số chia đều cho 4 chỉ số thấp nhất của họ. (Về cơ bản là +2 lmaoo)",
+      "punishment": "Xóa toàn bộ Quirk và Archetype của cả tổ đội."
+    },
+    {
+      "id": 27,
+      "name": "Polish Cow",
+      "stats": { "str": 10, "spd": 10, "dur": 10, "iq": 10, "biq": 10, "ma": 10 },
+      "reward": "Nhận 1 trong 2 Combo Gear sau: \"Shot Glass + Beer\" hoặc \"Empty Stein + Wine\"",
+      "punishment": "Nhận 1 trong 2 Combo Gear sau: \"Empty Stein + Shot Glass\" hoặc \"Beer + Wine\""
+    },
+    {
+      "id": 28,
+      "name": "Mambo",
+      "stats": { "str": 25, "spd": 25, "dur": 25, "iq": 25, "biq": 25, "ma": 25 },
+      "reward": "Mambo. あなたのチームの全ステータスがプラス1されます Mambo.",
+      "punishment": "Mambo!"
+    },
+    {
+      "id": 29,
+      "name": "Ca Cao the World Eater",
+      "stats": { "str": 48, "spd": 36, "dur": 50, "iq": 52, "biq": 39, "ma": 45 },
+      "reward": "Tổ đội nhận \"Creator Favor\".",
+      "punishment": "Tổ đội nhận \"Creator Limitation\"."
+    },
+    {
+      "id": 30,
+      "name": "Sigrun",
+      "stats": { "str": 33, "spd": 40, "dur": 33, "iq": 30, "biq": 41, "ma": 29 },
+      "reward": "Tổ đội nhận Power \"Valkyrie's Blessing\".",
+      "punishment": "Toàn bộ tổ đội bị mất 2 Power (nếu có thể). Ngoài ra, tất cả nhận -2 Speed."
+    },
+    {
+      "id": 31,
+      "name": "Divine Dragon",
+      "stats": { "str": 30, "spd": 30, "dur": 30, "iq": 30, "biq": 30, "ma": 30 },
+      "reward": "Tổ đội nhận +1 Base MA. Tổ đội nhận Power \"Divine Smite\" và \"Divine Lightning\".",
+      "punishment": "Chỉ số thấp nhất của tổ đội sẽ bị kéo xuống 0."
+    },
+    {
+      "id": 32,
+      "name": "Baron Nashor",
+      "stats": { "str": 45, "spd": 45, "dur": 45, "iq": 45, "biq": 45, "ma": 45 },
+      "reward": "Tổ đội nhận Gear \"Baron Buff\".",
+      "punishment": "Toàn bộ tổ đội bị -2 vào chỉ số thấp nhất. Với mỗi lần hiệu ứng Boss kích hoạt sẽ bị phạt thêm 1 lần nữa."
+    }
+  ]
+}

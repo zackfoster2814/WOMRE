@@ -28,16 +28,18 @@ export class CharacterParser {
 
     if (nameLineIndex >= 0) {
       const nameLine = lines[nameLineIndex];
-      // Match "Name: PlayerName (.username)" or "Name: PlayerName (username)"
-      const nameMatch = nameLine.match(/Name:\s*(.+?)\s*\(\.?([^)]+)\)/);
+      // Match "Name: PlayerName (username)" - capture full username including leading dot
+      const nameMatch = nameLine.match(/Name:\s*(.+?)\s*\(([^)]+)\)/);
       if (nameMatch) {
         character.name = nameMatch[1].trim();
         character.username = nameMatch[2].trim();
       } else {
-        // Try simpler format "Name: PlayerName"
+        // Try simpler format "Name: PlayerName" - use name as username fallback
         const simpleMatch = nameLine.match(/Name:\s*(.+)/);
         if (simpleMatch) {
           character.name = simpleMatch[1].trim();
+          // Use name as username if no explicit username in parentheses
+          character.username = character.name;
         }
       }
     }

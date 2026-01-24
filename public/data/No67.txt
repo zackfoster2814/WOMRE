@@ -5,7 +5,7 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Lùn
+Race: Dwarf
 Sub-race: Lùn xám
 ```
 
