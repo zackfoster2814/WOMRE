@@ -1,4 +1,46 @@
-import type { Character, CharacterStats, CharacterRace, Gear, Weapon, Rune, PvPReward } from '../types/character';
+import type { Character, CharacterStats, CharacterRace, Gear, GearItem, Weapon, Rune, RuneItem, PvPReward, LossableItem } from '../types/character';
+
+/**
+ * Check if an item text contains "lost" markers
+ * Patterns: (Đã mất), (đã mất), (Mất do ...), (đã mất do ...)
+ */
+function isLostItem(text: string): boolean {
+  const lostPatterns = [
+    /\(đã mất[^)]*\)/i,           // (Đã mất) or (đã mất do ...)
+    /\(mất do[^)]*\)/i,           // (Mất do ...)
+  ];
+  return lostPatterns.some(pattern => pattern.test(text));
+}
+
+/**
+ * Parse an item string into a LossableItem
+ */
+function parseLossableItem(text: string): LossableItem {
+  return {
+    name: text,
+    isLost: isLostItem(text)
+  };
+}
+
+/**
+ * Parse a gear item string into a GearItem
+ */
+function parseGearItem(text: string): GearItem {
+  return {
+    name: text,
+    isLost: isLostItem(text)
+  };
+}
+
+/**
+ * Parse a rune item string into a RuneItem
+ */
+function parseRuneItem(text: string): RuneItem {
+  return {
+    name: text,
+    isLost: isLostItem(text)
+  };
+}
 
 export class CharacterParser {
   /**
@@ -73,9 +115,9 @@ export class CharacterParser {
       character.race = this.parseRace(lines, raceIndex);
     }
 
-    // Parse Archetypes (support multiple)
+    // Parse Archetypes (support multiple) - archetypes cannot be lost
     const archetypeIndex = this.findSectionIndex(lines, 'Archetype:');
-    character.archetypes = this.parseListValue(lines, archetypeIndex);
+    character.archetypes = this.parseListValueAsStrings(lines, archetypeIndex);
 
     // Parse Quirks
     const quirkIndex = this.findSectionIndex(lines, 'Quirk:');
@@ -84,10 +126,13 @@ export class CharacterParser {
     // Parse Stats
     character.stats = this.parseStats(lines);
 
-    // Parse House
+    // Parse Houses - can have multiple, some may be lost (kicked out)
     const houseIndex = this.findSectionIndex(lines, 'Houses:');
-    const houses = this.parseListValue(lines, houseIndex);
-    character.house = houses[0];
+    const housesRaw = this.parseListValueAsStrings(lines, houseIndex);
+    character.houses = housesRaw.map(h => ({
+      name: h,
+      isLost: isLostItem(h)
+    }));
 
     // Parse Gear
     character.gear = this.parseGear(lines);
@@ -115,9 +160,9 @@ export class CharacterParser {
       }
     }
 
-    // Parse Lover
+    // Parse Lover - lovers cannot be lost
     const loverIndex = this.findSectionIndex(lines, 'Lover:');
-    const lovers = this.parseListValue(lines, loverIndex);
+    const lovers = this.parseListValueAsStrings(lines, loverIndex);
     character.lover = lovers[0];
 
     // Parse PvP Rewards
@@ -218,7 +263,32 @@ export class CharacterParser {
     return race;
   }
 
-  private static parseListValue(lines: string[], startIndex: number): string[] {
+  private static parseListValue(lines: string[], startIndex: number): LossableItem[] {
+    if (startIndex < 0) return [];
+
+    const values: LossableItem[] = [];
+
+    for (let i = startIndex + 1; i < Math.min(startIndex + 20, lines.length); i++) {
+      const line = lines[i];
+
+      // Stop at next section or code block
+      if (line.startsWith('```') && i > startIndex + 1) break;
+      if (!line || line === '```') continue;
+
+      // Parse list items starting with + or -
+      const match = line.match(/^[+\-*]\s*(.+)/);
+      if (match) {
+        const value = match[1].trim();
+        if (value) {
+          values.push(parseLossableItem(value));
+        }
+      }
+    }
+
+    return values;
+  }
+
+  private static parseListValueAsStrings(lines: string[], startIndex: number): string[] {
     if (startIndex < 0) return [];
 
     const values: string[] = [];
@@ -310,9 +380,9 @@ export class CharacterParser {
         const item = itemMatch[1].trim();
         if (item) {
           if (inNormalGear) {
-            gear.normalGear.push(item);
+            gear.normalGear.push(parseGearItem(item));
           } else if (inLegacyGear) {
-            gear.legacyGear.push(item);
+            gear.legacyGear.push(parseGearItem(item));
           }
         }
       }
@@ -343,12 +413,16 @@ export class CharacterParser {
         const weaponText = itemMatch[1].trim();
         if (weaponText) {
           const usableMatch = weaponText.match(/\((.+?)\)/);
-          const name = weaponText.replace(/\s*\(.+?\)\s*$/, '').trim();
+          // Keep full name including notes
+          const name = weaponText;
+          // Check if weapon is lost
+          const lost = isLostItem(weaponText);
 
           weapons.push({
             type: weaponType,
             name: name,
-            usable: usableMatch ? !usableMatch[1].includes('không dùng') : undefined
+            usable: usableMatch ? !usableMatch[1].includes('không dùng') : undefined,
+            isLost: lost || undefined
           });
         }
       }
@@ -375,7 +449,7 @@ export class CharacterParser {
       if (runeMatch) {
         const runeName = runeMatch[1].trim();
         if (runeName && !runeName.toLowerCase().includes('runeword')) {
-          rune.runes.push(runeName);
+          rune.runes.push(parseRuneItem(runeName));
         }
       }
 
@@ -455,7 +529,7 @@ export class CharacterParser {
     lines.push('```');
     lines.push(`${character.quirks.length} Quirk:`);
     if (character.quirks.length > 0) {
-      character.quirks.forEach(q => lines.push(`+ ${q}`));
+      character.quirks.forEach(q => lines.push(`+ ${q.name}`));
     } else {
       lines.push('+');
     }
@@ -475,7 +549,11 @@ export class CharacterParser {
     // Houses
     lines.push('```');
     lines.push('Houses:');
-    lines.push(`+ ${character.house || ''}`);
+    if (character.houses && character.houses.length > 0) {
+      character.houses.forEach(h => lines.push(`+ ${h.name}`));
+    } else {
+      lines.push('+');
+    }
     lines.push('```');
     lines.push('');
 
@@ -485,13 +563,13 @@ export class CharacterParser {
     lines.push(`${totalGear} Gear:`);
     lines.push(` + ${character.gear.normalGear.length} Normal gear:`);
     if (character.gear.normalGear.length > 0) {
-      character.gear.normalGear.forEach(g => lines.push(`  - ${g}`));
+      character.gear.normalGear.forEach(g => lines.push(`  - ${g.name}`));
     } else {
       lines.push('  -');
     }
     lines.push(` + ${character.gear.legacyGear.length} Legacy gear:`);
     if (character.gear.legacyGear.length > 0) {
-      character.gear.legacyGear.forEach(g => lines.push(`  - ${g}`));
+      character.gear.legacyGear.forEach(g => lines.push(`  - ${g.name}`));
     } else {
       lines.push('  -');
     }
@@ -516,7 +594,7 @@ export class CharacterParser {
     lines.push('```');
     lines.push(`${character.runes.runes.length} Rune:`);
     if (character.runes.runes.length > 0) {
-      character.runes.runes.forEach(r => lines.push(`+ ${r}`));
+      character.runes.runes.forEach(r => lines.push(`+ ${r.name}`));
     } else {
       lines.push('+');
     }
@@ -528,7 +606,7 @@ export class CharacterParser {
     lines.push('```');
     lines.push(`${character.powers.length} Power:`);
     if (character.powers.length > 0) {
-      character.powers.forEach(p => lines.push(`+ ${p}`));
+      character.powers.forEach(p => lines.push(`+ ${p.name}`));
     } else {
       lines.push('+');
     }
@@ -539,7 +617,7 @@ export class CharacterParser {
     lines.push('```');
     lines.push(`${character.charDevs?.length || 0} Char dev:`);
     if (character.charDevs && character.charDevs.length > 0) {
-      character.charDevs.forEach(c => lines.push(`+ ${c}`));
+      character.charDevs.forEach(c => lines.push(`+ ${c.name}`));
     } else {
       lines.push('+');
     }

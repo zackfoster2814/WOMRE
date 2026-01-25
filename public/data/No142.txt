@@ -18,16 +18,17 @@ Archetype:
 + One Trick Pony
 ```
 ```
-Str:7
-Spd:5
-Dur:6
-IQ:10
-BIQ:3
-MA:5
+Str: 7
+Spd: 5
+Dur: 6
+IQ: 10
+BIQ: 3
+MA: 5
 ```
 
 ```
-Houses: Stark
+Houses: 
++ Stark
 + Summer
 ```
 
@@ -46,12 +47,12 @@ Houses: Stark
 
 ``` 
 1 Rune: 
-+ Zod 
-Runeword: 
++ Zod
+Runeword: Không
 ```
 
 ```
-4 Power: 
+3 Power: 
 + Water Breathing (Từ Sub-race)
 + Magma Strike(Từ House)
 + Dominator (Từ House)

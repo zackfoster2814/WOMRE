@@ -18,21 +18,22 @@ Archetype:
 + Brainrot
 ```
 ```
-Str:5
-Spd:3
-Dur:2
-IQ:5
-BIQ:6
-MA:2
+Str: 5
+Spd: 3
+Dur: 2
+IQ: 5
+BIQ: 6
+MA: 2
 ```
 
 ```
-Houses: Ban Nhạc Ngọt Đoàn Kết
+Houses: 
++ Ban Nhạc Ngọt Đoàn Kết
 ```
 
 ```
-1 Gear: 
- + 1 Normal gear:
+2 Gear: 
+ + 2 Normal gear:
   - Kẹo (Từ House)
   - Thuốc Tráng Dương
  + 0 Legacy gear:
@@ -47,7 +48,7 @@ Houses: Ban Nhạc Ngọt Đoàn Kết
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -56,11 +57,12 @@ Runeword:
 ```
 
 ```
-Char dev: Seeking Wisdom
+Char dev: 
++ Seeking Wisdom
 ```
 
 ```
-Team:30
+Team: 30
 ```
 
 ```

@@ -1,71 +1,73 @@
 No.165
 Name: Lov4 (huylova)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Human
+Sub-race: Đen
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Skeleton Slayer
+```
+``` 
+2 Quirk:  
++ Impatient (PvP Reward: Nhận 1 Power, +2 Stat thấp nhất)
++ Slow Healer
+```
+```
+Str: 6
+Spd: 5
+Dur: 9
+IQ: 7
+BIQ: 4
+MA: 8
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: 
++ Targaryen
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Cuộn khăn giấy
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Ukulele (Dùng được)
 ```
 
-```
-0 Rune:
-+
+``` 
+1 Rune: 
++ El
 Runeword: Không
 ```
 
 ```
-0 Power:
-+
+3 Power: 
++ Detect Thoughts (Từ Quirk)
++ EscAPADe
++ The Sand of Time
 ```
 
 ```
-Char dev:
-+
+Char dev: 
++ Mad Scientist
 ```
 
 ```
-Team:
+Team: 28
 ```
 
 ```
 Lover:
-+
++ 
 ```

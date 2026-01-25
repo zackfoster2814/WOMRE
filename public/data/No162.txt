@@ -12,33 +12,34 @@ Sub-race:
 ```
 Archetype: 
 + Wibu
-  - Jojo 
-    - Tusk Act II
++ Jojo
++ Tusk Act II
 ```
 ``` 
-1 Quirk:  
+2 Quirk:  
 + Herbalist
 + Fast Learner
 ```
 ```
-Str:10 (Ban đầu là 5 God of War's Entry Ticket)
-Spd:8
-Dur:2
-IQ:9
-BIQ:3
-MA:2
+Str: 10 (Ban đầu là 5 God of War's Entry Ticket)
+Spd: 8
+Dur: 2
+IQ: 9
+BIQ: 3
+MA: 2
 ```
 
 ```
-Houses: Shurima
+Houses: 
++ Shurima
 ```
 
 ```
-2 Gear: 
+3 Gear: 
  + 2 Normal gear:
   - Ancient Protector
   - Thuốc Tráng Dương
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - God of War's Entry Ticket (Từ House)
 ```
 
@@ -50,11 +51,11 @@ Houses: Shurima
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-2 Power: 
+4 Power: 
 + Blood Manipulation (Từ House)
 + Borrowed Time (Từ House)
 + Enlarging
@@ -68,7 +69,7 @@ Char dev:
 ```
 
 ```
-Team:26
+Team: 26
 ```
 
 ```

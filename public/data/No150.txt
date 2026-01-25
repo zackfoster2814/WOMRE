@@ -14,7 +14,7 @@ Archetype:
 + Conquerer
 ```
 ``` 
-2 Quirk:  
+6 Quirk:  
 + Shining Brightly
 + Fast Learner
 + Cautious (Từ Rykard)
@@ -23,18 +23,17 @@ Archetype:
 + Independent (Từ Rykard)
 ```
 ```
-Str:6
-Spd:7 (Ban đầu là 4, +3 từ Conquerer)
-Dur:10
-IQ:7
-BIQ:8
-MA:7
+Str: 6
+Spd: 7 (Ban đầu là 4, +3 từ Conquerer)
+Dur: 10
+IQ: 7
+BIQ: 8
+MA: 7
 ```
 
 ```
 Houses: 
 + Golden Order (Đã bị đuổi+ Rykard Vẫn giữ)
-
 ```
 
 ```
@@ -53,7 +52,7 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -68,7 +67,7 @@ Char dev:
 ```
 
 ```
-Team:12
+Team: 12
 ```
 
 ```

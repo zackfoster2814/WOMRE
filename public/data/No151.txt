@@ -10,7 +10,8 @@ Sub-race: Angels
 ```
 
 ```
-Archetype: Pacifist
+Archetype: 
++ Pacifist
 + Gambler
 ```
 ``` 
@@ -18,16 +19,17 @@ Archetype: Pacifist
 + Cheater
 ```
 ```
-Str:3
-Spd:10
-Dur:5
-IQ:7
-BIQ:10
-MA:10
+Str: 3
+Spd: 10
+Dur: 5
+IQ: 7
+BIQ: 10
+MA: 10
 ```
 
 ```
-Houses: Dothraki
+Houses: 
++ Dothraki
 ```
 
 ```
@@ -46,11 +48,11 @@ Houses: Dothraki
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-0 Power: 
+1 Power: 
 + AIDS (từ Cha rdev)
 ```
 
@@ -60,7 +62,7 @@ Char dev:
 ```
 
 ```
-Team:31
+Team: 31
 ```
 
 ```

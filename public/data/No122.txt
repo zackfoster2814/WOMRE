@@ -5,7 +5,7 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Gnome 
+Race: Gnome
 Sub-race: 
 ```
 
@@ -19,21 +19,22 @@ Archetype:
 + Fit
 ```
 ```
-Str:5
-Spd:5 (ban đầu là 2,+3 từ Conquerer)
-Dur:4
-IQ:5
-BIQ:5
-MA:6
+Str: 5
+Spd: 5 (ban đầu là 2,+3 từ Conquerer)
+Dur: 4
+IQ: 5
+BIQ: 5
+MA: 6
 ```
 
 ```
-Houses: New London
+Houses: 
++ New London
 ```
 
 ```
-2 Gear: 
- + 2 Normal gear:
+3 Gear: 
+ + 3 Normal gear:
   - Golden Coin (Từ Merchants)
   - Kẹo
   - Knight's Armor
@@ -49,21 +50,21 @@ Houses: New London
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-0 Power: 
+1 Power: 
 + Critical Strike (+16%) (Từ Bloodthrist Dagger)
 ```
 
 ```
 Char dev: 
-+ Furry 
++ Furry
 ```
 
 ```
-Team:7
+Team: 7
 ```
 
 ```

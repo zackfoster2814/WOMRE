@@ -1,9 +1,8 @@
 No.139
 Name: Yun (yun_mori)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
 Race: God
@@ -11,11 +10,11 @@ Sub-race: Frigg
 ```
 
 ```
-Archetype:
+Archetype: 
 + Herald
 ```
-```
-1 Quirk:
+``` 
+4 Quirk:  
 + Slow Metabolism
 + Dextrous (từ SybauAuraFarming)
 + Cruelty (từ SybauAuraFarming)
@@ -31,17 +30,17 @@ MA: 5
 ```
 
 ```
-Houses:
-+ Ban nhạc Ngọt đoàn kết 
+Houses: 
++ Ban nhạc Ngọt đoàn kết
 ```
 
 ```
-1 Gear:
- + 0 Normal gear:
-  - Ancient Protector 
+2 Gear: 
+ + 2 Normal gear:
+  - Ancient Protector
   - Kẹo (từ Ban nhạc Ngọt đoàn kết )
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
@@ -49,21 +48,21 @@ Houses:
 + Banana Peel
 ```
 
-```
-1 Rune:
+``` 
+1 Rune: 
 + Ral
 Runeword: Không
 ```
 
 ```
-3 Power:
+3 Power: 
 + SybauAuraFarming
-+ Gaze of the Abyss 
++ Gaze of the Abyss
 + Magma Strike
 ```
 
 ```
-Char dev:
+Char dev: 
 + Become Hand of the King
 ```
 
@@ -73,5 +72,5 @@ Team: 11
 
 ```
 Lover:
-+
++ 
 ```

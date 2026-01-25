@@ -19,21 +19,22 @@ Archetype:
 + Bloodthirsty
 ```
 ```
-Str:3
-Spd:3
-Dur:4
-IQ:5
-BIQ:9
-MA:1
+Str: 3
+Spd: 3
+Dur: 4
+IQ: 5
+BIQ: 9
+MA: 1
 ```
 
 ```
-Houses: Ban Nhạc Ngọt Đoàn Kết
+Houses: 
++ Ban Nhạc Ngọt Đoàn Kết
 ```
 
 ```
-1 Gear: 
- + 1 Normal gear:
+2 Gear: 
+ + 2 Normal gear:
   - Ớt (Từ House)
   - Mì Tôm
  + 0 Legacy gear:
@@ -48,7 +49,7 @@ Houses: Ban Nhạc Ngọt Đoàn Kết
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -62,7 +63,7 @@ Char dev:
 ```
 
 ```
-Team:28
+Team: 28
 ```
 
 ```

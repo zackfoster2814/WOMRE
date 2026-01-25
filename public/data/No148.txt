@@ -5,7 +5,7 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton 
+Race: Skeleton
 Sub-race: Angel
 ```
 
@@ -19,12 +19,12 @@ Archetype:
 + Cowardly
 ```
 ```
-Str:10
-Spd:5
-Dur:5
-IQ:1 (Cố định)
-BIQ:7
-MA:7
+Str: 10
+Spd: 5
+Dur: 5
+IQ: 1 (Cố định)
+BIQ: 7
+MA: 7
 ```
 
 ```
@@ -33,8 +33,8 @@ Houses:
 ```
 
 ```
-3 Gear: 
- + 3 Normal gear:
+4 Gear: 
+ + 4 Normal gear:
   - Kẹo (Từ House)
   - Ba Hoa Trắng
   - Đai Trinh Tiết
@@ -51,12 +51,12 @@ Houses:
 ``` 
 1 Rune: 
 + Tir
-Runeword: 
+Runeword: Không
 ```
 
 ```
 1 Power: 
-+ Angling and Scheming 
++ Angling and Scheming
 ```
 
 ```
@@ -65,7 +65,7 @@ Char dev:
 ```
 
 ```
-Team:14
+Team: 14
 ```
 
 ```

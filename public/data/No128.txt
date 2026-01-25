@@ -1,9 +1,8 @@
 No.128
 Name: 0chjnchjn (tine2417)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
 Race: Angel
@@ -11,16 +10,16 @@ Sub-race: Archangles
 ```
 
 ```
-Archetype:
+Archetype: 
 + Pacifist
 + Chokevy
 + Thinkers
 ```
-```
-1 Quirk:
+``` 
+3 Quirk:  
 + Cruelty
 + Fast Leaner
-+ Night Owl 
++ Night Owl
 ```
 ```
 Str: 9
@@ -32,16 +31,16 @@ MA: 5
 ```
 
 ```
-Houses:
+Houses: 
 + New London
 ```
 
 ```
-1 Gear:
- + 0 Normal gear:
+1 Gear: 
+ + 1 Normal gear:
   - Fishing's Rod
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
@@ -49,20 +48,20 @@ Houses:
 + Backhand Blade
 ```
 
-```
-1 Rune:
+``` 
+1 Rune: 
 + Shael
 Runeword: Không
 ```
 
 ```
-2 Power:
+2 Power: 
 + Metamagic
 + Fancy Feet
 ```
 
 ```
-Char dev:
+Char dev: 
 + Mad Scientist
 ```
 
@@ -72,5 +71,5 @@ Team: 16
 
 ```
 Lover:
-+
++ 
 ```

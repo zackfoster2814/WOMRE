@@ -5,7 +5,7 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton 
+Race: Skeleton
 Sub-race: Orc
 ```
 
@@ -18,12 +18,12 @@ Archetype:
 + Artisan
 ```
 ```
-Str:6
-Spd:5
-Dur:10
-IQ:1 (Cố định)
-BIQ:6
-MA:2
+Str: 6
+Spd: 5
+Dur: 10
+IQ: 1 (Cố định)
+BIQ: 6
+MA: 2
 ```
 
 ```
@@ -32,8 +32,8 @@ Houses:
 ```
 
 ```
-2 Gear: 
- + 2 Normal gear:
+5 Gear: 
+ + 5 Normal gear:
   - Fishing Rod (Từ Fisher)
   - Frying Pan(Từ Artisan)
   - Đá (Từ Artisan)
@@ -44,19 +44,19 @@ Houses:
 ```
 
 ```
-1 Normal Weapon
+2 Normal Weapon
 + Magical Staff (Không dùng được) (Đã mất do Creator's Reforge)
 + Backhand Blade (Dùng được) (Từ Creator's Reforge)
 ```
 
 ``` 
-1 Rune: (Từ Creator's Reforge)
+1 Rune: 
 + Shael
-Runeword: 
+Runeword: Không
 ```
 
 ```
-0 Power: 
+1 Power: 
 + The Sand of Time(Từ Frying Pan)
 ```
 
@@ -66,7 +66,7 @@ Char dev:
 ```
 
 ```
-Team:6
+Team: 6
 ```
 
 ```

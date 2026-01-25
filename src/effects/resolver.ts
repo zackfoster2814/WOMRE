@@ -175,13 +175,14 @@ export class EffectResolver {
       }
     }
 
-    // Quirks
+    // Quirks (skip lost items)
     for (const quirk of character.quirks || []) {
-      const entry = EffectRegistry.get('quirk', quirk);
+      if (quirk.isLost) continue; // Skip lost items
+      const entry = EffectRegistry.get('quirk', quirk.name);
       if (entry) {
         sources.push({
           type: 'quirk',
-          name: quirk,
+          name: quirk.name,
           effects: entry.effects,
           rawDescription: entry.description,
           isActive: true
@@ -189,13 +190,14 @@ export class EffectResolver {
       }
     }
 
-    // Powers
+    // Powers (skip lost items)
     for (const power of character.powers || []) {
-      const entry = EffectRegistry.get('power', power);
+      if (power.isLost) continue; // Skip lost items
+      const entry = EffectRegistry.get('power', power.name);
       if (entry) {
         sources.push({
           type: 'power',
-          name: power,
+          name: power.name,
           effects: entry.effects,
           rawDescription: entry.description,
           isActive: true
@@ -203,8 +205,9 @@ export class EffectResolver {
       }
     }
 
-    // Weapons
+    // Weapons (skip lost items)
     for (const weapon of character.weapons || []) {
+      if (weapon.isLost) continue; // Skip lost items
       const entry = EffectRegistry.get('weapon', weapon.name);
       if (entry) {
         sources.push({
@@ -219,13 +222,14 @@ export class EffectResolver {
       }
     }
 
-    // Runes
+    // Runes (skip lost items)
     for (const rune of character.runes?.runes || []) {
-      const entry = EffectRegistry.get('rune', rune);
+      if (rune.isLost) continue; // Skip lost items
+      const entry = EffectRegistry.get('rune', rune.name);
       if (entry) {
         sources.push({
           type: 'rune',
-          name: rune,
+          name: rune.name,
           effects: entry.effects,
           rawDescription: entry.description,
           isActive: true
@@ -247,13 +251,14 @@ export class EffectResolver {
       }
     }
 
-    // Gear
+    // Gear (skip lost items)
     for (const gear of [...(character.gear?.normalGear || []), ...(character.gear?.legacyGear || [])]) {
-      const entry = EffectRegistry.get('gear', gear);
+      if (gear.isLost) continue; // Skip lost items
+      const entry = EffectRegistry.get('gear', gear.name);
       if (entry) {
         sources.push({
           type: 'gear',
-          name: gear,
+          name: gear.name,
           effects: entry.effects,
           rawDescription: entry.description,
           isActive: true
@@ -261,13 +266,14 @@ export class EffectResolver {
       }
     }
 
-    // House
-    if (character.house) {
-      const entry = EffectRegistry.get('house', character.house);
+    // Houses (skip lost houses)
+    for (const house of character.houses || []) {
+      if (house.isLost) continue; // Skip lost houses
+      const entry = EffectRegistry.get('house', house.name);
       if (entry) {
         sources.push({
           type: 'house',
-          name: character.house,
+          name: house.name,
           effects: entry.effects,
           rawDescription: entry.description,
           isActive: true
@@ -275,13 +281,14 @@ export class EffectResolver {
       }
     }
 
-    // Character Development
+    // Character Development (skip lost items)
     for (const charDev of character.charDevs || []) {
-      const entry = EffectRegistry.get('char_dev', charDev);
+      if (charDev.isLost) continue; // Skip lost items
+      const entry = EffectRegistry.get('char_dev', charDev.name);
       if (entry) {
         sources.push({
           type: 'char_dev',
-          name: charDev,
+          name: charDev.name,
           effects: entry.effects,
           rawDescription: entry.description,
           isActive: true

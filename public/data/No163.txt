@@ -18,16 +18,17 @@ Archetype:
 + Charming (Lover: KaTsumi - ChillWithCafe (katsumi3000))
 ```
 ```
-Str:1
-Spd:9
-Dur:3
-IQ:2
-BIQ:9
-MA:1
+Str: 1
+Spd: 9
+Dur: 3
+IQ: 2
+BIQ: 9
+MA: 1
 ```
 
 ```
-Houses: Uchiha
+Houses: 
++ Uchiha
 ```
 
 ```
@@ -47,11 +48,11 @@ Houses: Uchiha
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-1 Power: 
+2 Power: 
 + Detect Thoughts (Được KaTsumi - ChillWithCafe (katsumi3000) tặng)
 + Body Enhancing
 ```
@@ -62,7 +63,7 @@ Char dev:
 ```
 
 ```
-Team:13
+Team: 13
 ```
 
 ```

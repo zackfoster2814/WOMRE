@@ -10,28 +10,30 @@ Sub-race: 5000
 ```
 
 ```
-Archetype: Fisher
+Archetype: 
++ Fisher
 ```
 ``` 
 1 Quirk:  
 + Lazy
 ```
 ```
-Str:4
-Spd:5
-Dur:7
-IQ:1
-BIQ:4
-MA:5
+Str: 4
+Spd: 5
+Dur: 7
+IQ: 1
+BIQ: 4
+MA: 5
 ```
 
 ```
-Houses: Coven Council
+Houses: 
++ Coven Council
 ```
 
 ```
-3 Gear: 
- + 3 Normal gear:
+4 Gear: 
+ + 4 Normal gear:
   - Cần câu (Từ Archetype)
   - Knight's Armor
   - Ba Hoa Trắng
@@ -42,7 +44,7 @@ Houses: Coven Council
 
 ```
 1 Normal Weapon
-+ Flute (Dùng được) 
++ Flute (Dùng được)
 ```
 
 ``` 
@@ -64,7 +66,7 @@ Char dev:
 ```
 
 ```
-Team:22
+Team: 22
 ```
 
 ```

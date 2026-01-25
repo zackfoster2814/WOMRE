@@ -1,9 +1,8 @@
 No.130
 Name: Thang (thang0458)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
 Race: Human
@@ -11,11 +10,11 @@ Sub-race: Trắng
 ```
 
 ```
-Archetype:
+Archetype: 
 + Infirmarian
 ```
-```
-1 Quirk:
+``` 
+1 Quirk:  
 + Independent
 ```
 ```
@@ -28,16 +27,16 @@ MA: 7
 ```
 
 ```
-Houses:
-+
+Houses: 
++ 
 ```
 
 ```
-1 Gear:
+1 Gear: 
  + 1 Normal gear:
   - Wizard hat
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
@@ -45,20 +44,20 @@ Houses:
 + Magical Staff
 ```
 
-```
-2 Rune:
+``` 
+2 Rune: 
 + Shael
 + Ith
 Runeword: Không
 ```
 
 ```
-0 Power:
-+
+0 Power: 
++ 
 ```
 
 ```
-Char dev:
+Char dev: 
 + Make love (KaTsumi - ChillWithCafe (katsumi3000))
 ```
 

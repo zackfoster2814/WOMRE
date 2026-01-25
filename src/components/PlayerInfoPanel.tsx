@@ -98,12 +98,14 @@ export const PlayerInfoPanel = ({
               if (response.ok) {
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);
+                // Get first active house (not lost)
+                const activeHouse = char.houses?.find(h => !h.isLost);
                 return {
                   no: char.no || no,
                   name: char.name || `Player ${no}`,
                   username: char.username || "",
                   race: char.race?.race || "",
-                  house: char.house,
+                  house: activeHouse?.name,
                   isParasite: char.isParasite,
                   parasiteInfo: char.parasiteInfo,
                   isSymbiosis: char.isSymbiosis,
@@ -590,24 +592,36 @@ const PlayerContent = ({
         )}
       </div>
 
-      {/* House & Team - Clickable */}
+      {/* Houses & Team - Clickable */}
       <div className="grid grid-cols-2 gap-3">
         <div
           className={`bg-gray-700/50 rounded-lg p-3 ${onSpinAttribute ? "cursor-pointer hover:bg-gray-600/50 transition-colors group" : ""}`}
           onClick={onSpinAttribute ? () => onSpinAttribute("house") : undefined}
         >
           <div className="flex items-center justify-between">
-            <p className="text-gray-400 text-xs mb-1">House</p>
+            <p className="text-gray-400 text-xs mb-1">Houses ({character.houses?.length || 0})</p>
             {onSpinAttribute && (
               <span className="text-gray-500 text-xs group-hover:text-purple-400 transition-colors">
                 🎡
               </span>
             )}
           </div>
-          <p className="font-medium text-yellow-400">
-            {character.house || "-"}
-            {character.house && <StatModifierBadge name={character.house} sourceType="house" />}
-          </p>
+          {character.houses && character.houses.length > 0 ? (
+            <div className="space-y-1">
+              {character.houses.map((house, idx) => (
+                <p
+                  key={idx}
+                  className={`font-medium ${house.isLost ? "text-gray-500 line-through" : "text-yellow-400"}`}
+                >
+                  {house.name}
+                  {house.isLost && <span className="text-red-400 text-xs ml-1">(đuổi)</span>}
+                  {!house.isLost && <StatModifierBadge name={house.name} sourceType="house" />}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <p className="font-medium text-yellow-400">-</p>
+          )}
         </div>
         <ClickableField
           label="Team"
@@ -636,9 +650,13 @@ const PlayerContent = ({
         {character.quirks.length > 0 ? (
           <div className="space-y-1">
             {character.quirks.map((quirk, idx) => (
-              <p key={idx} className="text-white text-sm">
-                • {quirk}
-                <StatModifierBadge name={quirk} sourceType="quirk" />
+              <p
+                key={idx}
+                className={`text-sm ${quirk.isLost ? "text-gray-500 line-through" : "text-white"}`}
+              >
+                • {quirk.name}
+                {quirk.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                {!quirk.isLost && <StatModifierBadge name={quirk.name} sourceType="quirk" />}
               </p>
             ))}
           </div>
@@ -657,10 +675,15 @@ const PlayerContent = ({
             {character.powers.map((power, idx) => (
               <span
                 key={idx}
-                className="px-2 py-1 bg-purple-600/50 rounded text-xs text-purple-200"
+                className={`px-2 py-1 rounded text-xs ${
+                  power.isLost
+                    ? "bg-gray-600/30 text-gray-500 line-through"
+                    : "bg-purple-600/50 text-purple-200"
+                }`}
               >
-                {power}
-                <StatModifierBadge name={power} sourceType="power" />
+                {power.name}
+                {power.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                {!power.isLost && <StatModifierBadge name={power.name} sourceType="power" />}
               </span>
             ))}
           </div>
@@ -712,9 +735,13 @@ const PlayerContent = ({
             </p>
             <div className="space-y-1">
               {character.gear.normalGear.map((gear, idx) => (
-                <p key={idx} className="text-white text-sm">
-                  • {gear}
-                  <StatModifierBadge name={gear} sourceType="gear" />
+                <p
+                  key={idx}
+                  className={`text-sm ${gear.isLost ? "text-gray-500 line-through" : "text-white"}`}
+                >
+                  • {gear.name}
+                  {gear.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                  {!gear.isLost && <StatModifierBadge name={gear.name} sourceType="gear" />}
                 </p>
               ))}
             </div>
@@ -727,9 +754,13 @@ const PlayerContent = ({
             </p>
             <div className="space-y-1">
               {character.gear.legacyGear.map((gear, idx) => (
-                <p key={idx} className="text-yellow-400 text-sm">
-                  • {gear}
-                  <StatModifierBadge name={gear} sourceType="gear" />
+                <p
+                  key={idx}
+                  className={`text-sm ${gear.isLost ? "text-gray-500 line-through" : "text-yellow-400"}`}
+                >
+                  • {gear.name}
+                  {gear.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                  {!gear.isLost && <StatModifierBadge name={gear.name} sourceType="gear" />}
                 </p>
               ))}
             </div>
@@ -751,10 +782,15 @@ const PlayerContent = ({
             {character.runes.runes.map((rune, idx) => (
               <span
                 key={idx}
-                className="px-2 py-1 bg-orange-600/50 rounded text-xs text-orange-200"
+                className={`px-2 py-1 rounded text-xs ${
+                  rune.isLost
+                    ? "bg-gray-600/30 text-gray-500 line-through"
+                    : "bg-orange-600/50 text-orange-200"
+                }`}
               >
-                {rune}
-                <StatModifierBadge name={rune} sourceType="rune" />
+                {rune.name}
+                {rune.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                {!rune.isLost && <StatModifierBadge name={rune.name} sourceType="rune" />}
               </span>
             ))}
           </div>
@@ -776,8 +812,12 @@ const PlayerContent = ({
         {character.charDevs && character.charDevs.length > 0 ? (
           <div className="space-y-1">
             {character.charDevs.map((charDev, idx) => (
-              <p key={idx} className="text-white text-sm italic">
-                • {charDev}
+              <p
+                key={idx}
+                className={`text-sm italic ${charDev.isLost ? "text-gray-500 line-through" : "text-white"}`}
+              >
+                • {charDev.name}
+                {charDev.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
               </p>
             ))}
           </div>

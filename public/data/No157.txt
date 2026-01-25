@@ -10,23 +10,25 @@ Sub-race: Lùn thường
 ```
 
 ```
-Archetype: Anti-Social
+Archetype: 
++ Anti-Social
 ```
 ``` 
 1 Quirk:  
 + Lazy
 ```
 ```
-Str:7
-Spd:4
-Dur:8
-IQ:5
-BIQ:3
-MA:3
+Str: 7
+Spd: 4
+Dur: 8
+IQ: 5
+BIQ: 3
+MA: 3
 ```
 
 ```
-Houses: Uchiha
+Houses: 
++ Uchiha
 ```
 
 ```
@@ -45,8 +47,8 @@ Houses: Uchiha
 
 ``` 
 1 Rune: 
-+ Tir 
-Runeword: 
++ Tir
+Runeword: Không
 ```
 
 ```
@@ -60,7 +62,7 @@ Char dev:
 ```
 
 ```
-Team:17
+Team: 17
 ```
 
 ```

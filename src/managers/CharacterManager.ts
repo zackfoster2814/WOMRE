@@ -90,7 +90,7 @@ export class CharacterManager {
       race: char.race.race,
       archetypes: char.archetypes,
       team: char.team,
-      house: char.house
+      house: char.houses?.find(h => !h.isLost)?.name
     }));
   }
 
@@ -120,7 +120,7 @@ export class CharacterManager {
 
     if (filters.house) {
       results = results.filter(char =>
-        char.house?.toLowerCase().includes(filters.house!.toLowerCase())
+        char.houses?.some(h => !h.isLost && h.name.toLowerCase().includes(filters.house!.toLowerCase()))
       );
     }
 
@@ -149,7 +149,7 @@ export class CharacterManager {
    */
   getCharactersByHouse(house: string): Character[] {
     return this.getAllCharacters().filter(char =>
-      char.house?.toLowerCase().includes(house.toLowerCase())
+      char.houses?.some(h => !h.isLost && h.name.toLowerCase().includes(house.toLowerCase()))
     );
   }
 
@@ -194,7 +194,7 @@ export class CharacterManager {
       totalCharacters: characters.length,
       races: this.getUniqueValues(characters.map(c => c.race.race)),
       archetypes: this.getUniqueValues(characters.flatMap(c => c.archetypes)),
-      houses: this.getUniqueValues(characters.map(c => c.house).filter(Boolean) as string[]),
+      houses: this.getUniqueValues(characters.flatMap(c => c.houses?.filter(h => !h.isLost).map(h => h.name) || [])),
       teams: this.getUniqueValues(characters.map(c => c.team).filter(Boolean) as number[]),
       withLovers: characters.filter(c => c.lover).length,
       withParasite: characters.filter(c => c.isParasite).length

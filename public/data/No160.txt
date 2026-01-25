@@ -10,31 +10,33 @@ Sub-race:
 ```
 
 ```
-Archetype: Mid
+Archetype: 
++ Mid
 ```
 ``` 
-3 Quirk:  
+4 Quirk:  
 + Training Restricted
 + Brainrot
 + Under the Weather
 + Brave (Từ Baguette)
 ```
 ```
-Str:5
-Spd:5
-Dur:5
-IQ:5
-BIQ:5
-MA:5
+Str: 5
+Spd: 5
+Dur: 5
+IQ: 5
+BIQ: 5
+MA: 5
 ```
 
 ```
-Houses: Lannnister
+Houses: 
++ Lannnister
 ```
 
 ```
-2 Gear: 
- + 2 Normal gear:
+5 Gear: 
+ + 5 Normal gear:
   - Golden Coin x3(Từ House)
   - Baguette (Từ House)
   - Cuộn khăn giấy (Từ House)
@@ -53,7 +55,7 @@ Houses: Lannnister
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```

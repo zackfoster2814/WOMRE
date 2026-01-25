@@ -18,17 +18,17 @@ Archetype:
 + Mute
 ```
 ```
-Str:9
-Spd:1
-Dur:7
-IQ:6
-BIQ:6
-MA:6
+Str: 9
+Spd: 1
+Dur: 7
+IQ: 6
+BIQ: 6
+MA: 6
 ```
 
 ```
 Houses: 
-+ House Targaryen 
++ House Targaryen
 ```
 
 ```
@@ -47,7 +47,7 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```

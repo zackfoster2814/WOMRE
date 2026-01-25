@@ -19,21 +19,22 @@ Archetype:
 + Progressive
 ```
 ```
-Str:5
-Spd:5
-Dur:6
-IQ:8(Ban đầu là 6, +2 từ High-Elf)
-BIQ:6
-MA:8
+Str: 5
+Spd: 5
+Dur: 6
+IQ: 8(Ban đầu là 6, +2 từ High-Elf)
+BIQ: 6
+MA: 8
 ```
 
 ```
-Houses: Ban Nhạc Ngọt Đoàn Kết (Đã rời đi)
+Houses: 
++ Ban Nhạc Ngọt Đoàn Kết (Đã rời đi)
 ```
 
 ```
-1 Gear: 
- + 1 Normal gear:
+2 Gear: 
+ + 2 Normal gear:
   - Kẹo (Từ House)
   - Love Letter (đã kích)
  + 0 Legacy gear:
@@ -49,12 +50,12 @@ Houses: Ban Nhạc Ngọt Đoàn Kết (Đã rời đi)
 2 Rune: 
 + Ith
 + Ith
-Runeword: The Twin
+Runeword: Không
 ```
 
 ```
 1 Power: 
-+ Fancy Feet 
++ Fancy Feet
 ```
 
 ```
@@ -63,7 +64,7 @@ Char dev:
 ```
 
 ```
-Team:24
+Team: 24
 ```
 
 ```

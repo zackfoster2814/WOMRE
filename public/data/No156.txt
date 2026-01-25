@@ -6,27 +6,29 @@ Ký Sinh:
 ```
 ```
 Race: Human
-Sub-race: Vàng 
+Sub-race: Vàng
 ```
 
 ```
-Archetype: Mason
+Archetype: 
++ Mason
 ```
 ``` 
 1 Quirk:  
 + Training Restricted
 ```
 ```
-Str:1
-Spd:6
-Dur:6
-IQ:8
-BIQ:1
-MA:5
+Str: 1
+Spd: 6
+Dur: 6
+IQ: 8
+BIQ: 1
+MA: 5
 ```
 
 ```
-Houses: Uchiha
+Houses: 
++ Uchiha
 ```
 
 ```
@@ -38,29 +40,29 @@ Houses: Uchiha
 ```
 
 ```
-0 Weapon
+0 Normal Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-1 Power: 
+2 Power: 
 + Storm Calling (Từ Legacy Gear)
 + Bloody Strike
 ```
 
 ```
 Char dev: 
-+ Abused 
++ Abused
 ```
 
 ```
-Team:
+Team: 
 ```
 
 ```

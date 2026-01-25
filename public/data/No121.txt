@@ -19,21 +19,22 @@ Archetype:
 + Cautious
 ```
 ```
-Str:2
-Spd:6
-Dur:7
-IQ:3
-BIQ:7
-MA:3
+Str: 2
+Spd: 6
+Dur: 7
+IQ: 3
+BIQ: 7
+MA: 3
 ```
 
 ```
-Houses: New London
+Houses: 
++ New London
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
+1 Gear: 
+ + 1 Normal gear:
   - Đá (Từ Machinists)
  + 0 Legacy gear:
   - 
@@ -47,20 +48,21 @@ Houses: New London
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-0 Power: 
+1 Power: 
 + AIDS (Từ Metamorphosis)
 ```
 
 ```
-Char dev: Metamorphosis (+0IQ)
+Char dev: 
++ Metamorphosis (+0IQ)
 ```
 
 ```
-Team:15
+Team: 15
 ```
 
 ```

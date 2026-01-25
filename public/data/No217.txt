@@ -1,71 +1,70 @@
 No.217
 Name: Mặc Quyên (hodrick_.)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: 
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ 
+```
+``` 
+0 Quirk:  
++ 
+```
+```
+Str: 
+Spd: 
+Dur: 
+IQ: 
+BIQ: 
+MA: 
 ```
 
 ```
-0 Gear:
+Houses: 
++ 
+```
+
+```
+0 Gear: 
  + 0 Normal gear:
-  -
+  - 
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
 0 Normal Weapon
-+
++ 
 ```
 
-```
-0 Rune:
-+
+``` 
+0 Rune: 
++ 
 Runeword: Không
 ```
 
 ```
-0 Power:
-+
+0 Power: 
++ 
 ```
 
 ```
-Char dev:
-+
+Char dev: 
++ 
 ```
 
 ```
-Team:
+Team: 
 ```
 
 ```
 Lover:
-+
++ 
 ```

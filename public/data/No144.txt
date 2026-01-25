@@ -14,18 +14,18 @@ Archetype:
 + Loyal
 ```
 ``` 
-2 Quirk:  
+3 Quirk:  
 + Deaf
 + Brainrot
 + Fast Learner (Từ Cha rdev)
 ```
 ```
-Str:7
-Spd:7
-Dur:6
-IQ:5
-BIQ:5
-MA:1
+Str: 7
+Spd: 7
+Dur: 6
+IQ: 5
+BIQ: 5
+MA: 1
 ```
 
 ```
@@ -34,8 +34,8 @@ Houses:
 ```
 
 ```
-1 Gear: 
- + 1 Normal gear:
+2 Gear: 
+ + 2 Normal gear:
   - Bò khô (Từ House)
   - Sổ tay
  + 0 Legacy gear:
@@ -50,7 +50,7 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -64,7 +64,7 @@ Char dev:
 ```
 
 ```
-Team:8
+Team: 8
 ```
 
 ```

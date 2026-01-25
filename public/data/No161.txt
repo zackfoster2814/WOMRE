@@ -20,16 +20,17 @@ Archetype:
 + Generous
 ```
 ```
-Str:3
-Spd:9
-Dur:5
-IQ:5
-BIQ:6
-MA:6
+Str: 3
+Spd: 9
+Dur: 5
+IQ: 5
+BIQ: 6
+MA: 6
 ```
 
 ```
-Houses: The Shire
+Houses: 
++ The Shire
 + Nhận +4 vào Str
 ```
 
@@ -49,7 +50,7 @@ Houses: The Shire
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```

@@ -1,9 +1,8 @@
 No.131
 Name: Pui (pui19)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
 Race: Troll
@@ -11,12 +10,12 @@ Sub-race: Ice Troll
 ```
 
 ```
-Archetype:
+Archetype: 
 + Hero Grave Keeper
 ```
-```
-1 Quirk:
-- Fast Learner
+``` 
+1 Quirk:  
++ Fast Learner
 ```
 ```
 Str: 1 (từ 8, do Blessed of Chaos)
@@ -28,17 +27,17 @@ MA: 7
 ```
 
 ```
-Houses:
+Houses: 
 + Roundtable Hold
 ```
 
 ```
-2 Gear:
+2 Gear: 
  + 2 Normal gear:
   - Thuốc tráng dương
   - Văn tế
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
@@ -46,19 +45,19 @@ Houses:
 + 
 ```
 
-```
-0 Rune:
-+
+``` 
+0 Rune: 
++ 
 Runeword: Không
 ```
 
 ```
-1 Power:
+1 Power: 
 + Quirkless
 ```
 
 ```
-Char dev:
+Char dev: 
 + Blessed by Chaos
 + MrBeast
 + Seeking Wisdom
@@ -70,5 +69,5 @@ Team: 28
 
 ```
 Lover:
-+
++ 
 ```

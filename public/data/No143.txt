@@ -14,19 +14,19 @@ Archetype:
 + Hand Fighter
 ```
 ``` 
-1 Quirk:  
+4 Quirk:  
 + Slow Metabolism
 + Under the Weather (Sybauaurafarming)
 + Raumanian (Sybauaurafarming)
 + Herbalist (Sybauaurafarming)
 ```
 ```
-Str:5 (ban đầu là 10, Sybauaurafarming)
-Spd:5 (ban đầu là 7, Sybauaurafarming)
-Dur:4
-IQ:4
-BIQ:5 (ban đầu là 7, Sybauaurafarming)
-MA:1
+Str: 5 (ban đầu là 10, Sybauaurafarming)
+Spd: 5 (ban đầu là 7, Sybauaurafarming)
+Dur: 4
+IQ: 4
+BIQ: 5 (ban đầu là 7, Sybauaurafarming)
+MA: 1
 ```
 
 ```
@@ -50,11 +50,11 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-2 Power: 
+3 Power: 
 + Sybauaurafarming (Từ Sub-race)
 + Odin Blessing
 + Fair Duel
@@ -62,11 +62,11 @@ Runeword:
 
 ```
 Char dev: 
-+ No more Home 
++ No more Home
 ```
 
 ```
-Team:22
+Team: 22
 ```
 
 ```

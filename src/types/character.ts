@@ -16,20 +16,37 @@ export interface CharacterRace {
   reincarnatorInfo?: string;
 }
 
+export interface GearItem {
+  name: string;
+  isLost?: boolean;  // Items marked as "đã mất" won't affect stats
+}
+
 export interface Gear {
-  normalGear: string[];
-  legacyGear: string[];
+  normalGear: GearItem[];
+  legacyGear: GearItem[];
 }
 
 export interface Weapon {
   type: 'Normal' | 'Unique' | 'Legacy';
   name: string;
   usable?: boolean;
+  isLost?: boolean;  // Items marked as "đã mất" won't affect stats
+}
+
+export interface RuneItem {
+  name: string;
+  isLost?: boolean;  // Items marked as "đã mất" won't affect stats
 }
 
 export interface Rune {
-  runes: string[];
+  runes: RuneItem[];
   runeword?: string;
+}
+
+// Common interface for items that can be lost
+export interface LossableItem {
+  name: string;
+  isLost?: boolean;  // Items marked as "đã mất" won't affect stats
 }
 
 export interface PvPReward {
@@ -57,13 +74,13 @@ export interface Character {
   archetypes: string[];  // Support multiple archetypes
 
   // Quirks
-  quirks: string[];
+  quirks: LossableItem[];
 
   // Stats
   stats: CharacterStats;
 
-  // Faction
-  house?: string;
+  // Faction - can have multiple houses, some may be lost (kicked out)
+  houses: LossableItem[];
 
   // Equipment
   gear: Gear;
@@ -73,10 +90,10 @@ export interface Character {
   runes: Rune;
 
   // Abilities
-  powers: string[];
+  powers: LossableItem[];
 
   // Character Development
-  charDevs: string[];  // Support multiple char devs
+  charDevs: LossableItem[];  // Support multiple char devs
 
   // Social
   team?: number;

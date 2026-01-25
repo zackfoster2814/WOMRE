@@ -1,28 +1,27 @@
 No.129
 Name: Narita Taigoat (stan_taengoo)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
 Race: Giant
-Sub-race:
+Sub-race: 
 ```
 
 ```
-Archetype:
+Archetype: 
 + Blacksmith
 ```
-```
-2 Quirk:
+``` 
+3 Quirk:  
 + Mute
 + Blind
 + Generous (từ Baguette)
 ```
 ```
 Str: 8 (thành 13 do +5)
-Spd: 5 
+Spd: 5
 Dur: 7
 IQ: 7 (thành 2 do -5)
 BIQ: 7
@@ -30,18 +29,18 @@ MA: 10
 ```
 
 ```
-Houses:
+Houses: 
 + House Tyrell
 ```
 
 ```
-3 Gear:
- + 1 Normal gear:
+3 Gear: 
+ + 3 Normal gear:
   - Ancient Protector
-  - Đai trinh tiết 
+  - Đai trinh tiết
   - Baguette
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
@@ -49,21 +48,21 @@ Houses:
 + Magical Staff
 ```
 
-```
-0 Rune:
+``` 
+2 Rune: 
 + Tal
 + Ral
-Runeword: Extraordinary
+Runeword: Không
 ```
 
 ```
-2 Power:
+2 Power: 
 + Anti-Magic Barrier
 + Rickrolling
 ```
 
 ```
-Char dev:
+Char dev: 
 + MrBeast
 ```
 
@@ -73,5 +72,5 @@ Team: 25
 
 ```
 Lover:
-+
++ 
 ```

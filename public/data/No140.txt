@@ -1,6 +1,5 @@
 No.140
 Name: King Zalo (chi404)
-
 ```
 Ký Sinh:
 + 
@@ -11,31 +10,31 @@ Sub-race: Cursed Sword
 ```
 
 ```
-Archetype:
+Archetype: 
 + Herald
 ```
-```
-2 Quirk:
+``` 
+2 Quirk:  
 + Artisan
 + Slow Metabolism
 ```
 ```
-Str: 5 
+Str: 5
 Spd: 1 (ban đầu là 10 - inversion từ Soul of the Lazy Spirit)
 Dur: 5 (ban đầu là 1 - inversion từ Soul of the Lazy Spirit thành 10, roll lại do Cursed)
-IQ: 7 
+IQ: 7
 BIQ: 1 (ban đầu là 10 - inversion từ Soul of the Lazy Spirit)
-MA: 4 
+MA: 4
 ```
 
 ```
-Houses:
+Houses: 
 + House Targaryen
 ```
 
 ```
-2 Gear:
- + 1 Normal gear:
+4 Gear: 
+ + 3 Normal gear:
   - Empty Stein
   - Kuro's Charm (Artisan)
   - Fishing Rod (Artisan)
@@ -44,26 +43,26 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
+1 Normal Weapon
 + Bass (dùng được)
 ```
 
-```
-1 Rune:
+``` 
+1 Rune: 
 + Tir
 Runeword: Không
 ```
 
 ```
-4 Power:
+4 Power: 
 + Blood Manipulation
-+ Cursed 
++ Cursed
 + Storm Calling
 + Memory Alter
 ```
 
 ```
-Char dev:
+Char dev: 
 + Training Arc
 ```
 
@@ -73,5 +72,5 @@ Team: 26
 
 ```
 Lover:
-+
++ 
 ```

@@ -19,12 +19,12 @@ Archetype:
 + Artisan
 ```
 ```
-Str:7 (-5)
-Spd:4
-Dur:10
-IQ:10 (+5)
-BIQ:1
-MA:1
+Str: 7 (-5)
+Spd: 4
+Dur: 10
+IQ: 10 (+5)
+BIQ: 1
+MA: 1
 ```
 
 ```
@@ -33,8 +33,8 @@ Houses:
 ```
 
 ```
-3 Gear: 
- + 3 Normal gear:
+5 Gear: 
+ + 5 Normal gear:
   - Kuro's Charm (Từ Quirk)
   - Thuốc Tráng Dương (Từ Quirk)
   - Shot Glass
@@ -52,7 +52,7 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```

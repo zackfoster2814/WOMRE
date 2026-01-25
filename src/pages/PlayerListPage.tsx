@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Character, CharacterStats } from "../types/character";
+import { Character, CharacterStats, LossableItem } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver, type EffectSourceBreakdown } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
@@ -33,7 +33,7 @@ function calculateTotalStats(player: PlayerSummary): EffectStats {
     archetypes: player.archetypes || [],
     quirks: player.quirks || [],
     stats: player.stats,
-    house: player.house,
+    houses: player.houses || [],
     gear: { normalGear: [], legacyGear: [] },
     weapons: [],
     runes: { runes: [] },
@@ -51,9 +51,9 @@ interface PlayerSummary {
   race: string;
   subRace?: string;
   archetypes: string[];
-  quirks: string[];
-  powers: string[];
-  house?: string;
+  quirks: LossableItem[];
+  powers: LossableItem[];
+  houses: LossableItem[];
   team?: number;
   stats: CharacterStats;
   isParasite?: boolean;
@@ -164,7 +164,7 @@ export const PlayerListPage = () => {
                   archetypes: char.archetypes || [],
                   quirks: char.quirks || [],
                   powers: char.powers || [],
-                  house: char.house,
+                  houses: char.houses || [],
                   team: char.team,
                   stats: char.stats,
                   isParasite: char.isParasite,
@@ -214,7 +214,7 @@ export const PlayerListPage = () => {
                   archetypes: char.archetypes || [],
                   quirks: char.quirks || [],
                   powers: char.powers || [],
-                  house: char.house,
+                  houses: char.houses || [],
                   team: char.team,
                   stats: char.stats,
                   isParasite: char.isParasite,
@@ -1489,11 +1489,30 @@ const PlayerDetailModal = ({
                   </div>
                 </div>
                 <div className="flex items-start justify-between">
-                  <span className="text-gray-400 text-sm">House</span>
-                  <span className="text-cyan-400 text-sm text-right">
-                    {character.house || "-"}
-                    {character.house && <StatModifierBadge name={character.house} sourceType="house" />}
-                  </span>
+                  <span className="text-gray-400 text-sm">Houses</span>
+                  <div className="text-right">
+                    {character.houses && character.houses.length > 0 ? (
+                      <div className="flex flex-wrap gap-1 justify-end">
+                        {character.houses.map((house, idx) => (
+                          <span
+                            key={idx}
+                            className={`text-sm ${
+                              house.isLost
+                                ? "text-gray-500 line-through"
+                                : "text-cyan-400"
+                            }`}
+                          >
+                            {house.name}
+                            {house.isLost && <span className="ml-1 text-red-400 text-xs">(đuổi)</span>}
+                            {!house.isLost && <StatModifierBadge name={house.name} sourceType="house" />}
+                            {idx < character.houses.length - 1 ? "," : ""}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-cyan-400 text-sm">-</span>
+                    )}
+                  </div>
                 </div>
                 {character.isParasite && (
                   <InfoItem
@@ -1589,10 +1608,15 @@ const PlayerDetailModal = ({
                   {character.quirks.map((quirk, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1 bg-purple-500/30 text-purple-300 rounded-full text-sm"
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        quirk.isLost
+                          ? "bg-gray-600/30 text-gray-500 line-through"
+                          : "bg-purple-500/30 text-purple-300"
+                      }`}
                     >
-                      {quirk}
-                      <StatModifierBadge name={quirk} sourceType="quirk" />
+                      {quirk.name}
+                      {quirk.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
+                      {!quirk.isLost && <StatModifierBadge name={quirk.name} sourceType="quirk" />}
                     </span>
                   ))}
                 </div>
@@ -1616,10 +1640,15 @@ const PlayerDetailModal = ({
                       {character.gear.normalGear.map((gear, i) => (
                         <span
                           key={i}
-                          className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded text-sm"
+                          className={`px-3 py-1 rounded text-sm ${
+                            gear.isLost
+                              ? "bg-gray-600/20 text-gray-500 line-through"
+                              : "bg-blue-500/20 text-blue-300"
+                          }`}
                         >
-                          {gear}
-                          <StatModifierBadge name={gear} sourceType="gear" />
+                          {gear.name}
+                          {gear.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
+                          {!gear.isLost && <StatModifierBadge name={gear.name} sourceType="gear" />}
                         </span>
                       ))}
                     </div>
@@ -1632,10 +1661,15 @@ const PlayerDetailModal = ({
                       {character.gear.legacyGear.map((gear, i) => (
                         <span
                           key={i}
-                          className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded text-sm"
+                          className={`px-3 py-1 rounded text-sm ${
+                            gear.isLost
+                              ? "bg-gray-600/20 text-gray-500 line-through"
+                              : "bg-purple-500/20 text-purple-300"
+                          }`}
                         >
-                          {gear}
-                          <StatModifierBadge name={gear} sourceType="gear" />
+                          {gear.name}
+                          {gear.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
+                          {!gear.isLost && <StatModifierBadge name={gear.name} sourceType="gear" />}
                         </span>
                       ))}
                     </div>
@@ -1686,10 +1720,15 @@ const PlayerDetailModal = ({
                       {character.runes.runes.map((rune, i) => (
                         <span
                           key={i}
-                          className="px-3 py-1 bg-orange-500/20 text-orange-300 rounded text-sm"
+                          className={`px-3 py-1 rounded text-sm ${
+                            rune.isLost
+                              ? "bg-gray-600/20 text-gray-500 line-through"
+                              : "bg-orange-500/20 text-orange-300"
+                          }`}
                         >
-                          {rune}
-                          <StatModifierBadge name={rune} sourceType="rune" />
+                          {rune.name}
+                          {rune.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
+                          {!rune.isLost && <StatModifierBadge name={rune.name} sourceType="rune" />}
                         </span>
                       ))}
                     </div>
@@ -1716,10 +1755,15 @@ const PlayerDetailModal = ({
                   {character.powers.map((power, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-sm"
+                      className={`px-3 py-1 rounded-full text-sm ${
+                        power.isLost
+                          ? "bg-gray-600/20 text-gray-500 line-through"
+                          : "bg-red-500/20 text-red-300"
+                      }`}
                     >
-                      {power}
-                      <StatModifierBadge name={power} sourceType="power" />
+                      {power.name}
+                      {power.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
+                      {!power.isLost && <StatModifierBadge name={power.name} sourceType="power" />}
                     </span>
                   ))}
                 </div>
@@ -1735,9 +1779,10 @@ const PlayerDetailModal = ({
                 </h3>
                 <div className="space-y-2">
                   {character.charDevs.map((charDev, idx) => (
-                    <p key={idx} className="text-gray-300">
-                      • {charDev}
-                      <StatModifierBadge name={charDev} sourceType="char_dev" />
+                    <p key={idx} className={`${charDev.isLost ? "text-gray-500 line-through" : "text-gray-300"}`}>
+                      • {charDev.name}
+                      {charDev.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
+                      {!charDev.isLost && <StatModifierBadge name={charDev.name} sourceType="char_dev" />}
                     </p>
                   ))}
                 </div>

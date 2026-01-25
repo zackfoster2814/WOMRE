@@ -1,9 +1,8 @@
 No.126
 Name: Shin (shinrin2872)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
 Race: Primordial Being
@@ -11,11 +10,11 @@ Sub-race: Fire
 ```
 
 ```
-Archetype:
+Archetype: 
 + Trickster
 ```
-```
-1 Quirk:
+``` 
+1 Quirk:  
 + Deaf
 ```
 ```
@@ -28,18 +27,18 @@ MA: 5
 ```
 
 ```
-Houses:
+Houses: 
 + House Targaryen
 ```
 
 ```
-3 Gear:
+3 Gear: 
  + 3 Normal gear:
   - Đai trinh tiết
   - Ancient Protector
   - Holy symbol
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
@@ -47,19 +46,20 @@ Houses:
 + Morningstar
 ```
 
-```
-1 Rune:
+``` 
+1 Rune: 
 + El
 Runeword: Không
 ```
 
 ```
 0 Power: 
++ 
 ```
 
 ```
-Char dev:
-+ Lose Control 
+Char dev: 
++ Lose Control
 ```
 
 ```
@@ -68,5 +68,5 @@ Team: 27
 
 ```
 Lover:
-+
++ 
 ```

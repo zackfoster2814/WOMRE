@@ -79,11 +79,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   {archetype}
                 </span>
               ))}
-            {character.house && (
-              <span className="bg-yellow-600 px-3 py-1 rounded-full text-sm">
-                {character.house}
+            {character.houses && character.houses.filter(h => !h.isLost).map((house, idx) => (
+              <span key={idx} className="bg-yellow-600 px-3 py-1 rounded-full text-sm">
+                {house.name}
               </span>
-            )}
+            ))}
             {character.team && (
               <span className="bg-indigo-500 px-3 py-1 rounded-full text-sm">
                 Team {character.team}
@@ -153,9 +153,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 {character.quirks.map((quirk, i) => (
                   <span
                     key={i}
-                    className="bg-gray-200 px-3 py-1 rounded-full text-sm"
+                    className={`px-3 py-1 rounded-full text-sm ${
+                      quirk.isLost ? "bg-gray-100 text-gray-400 line-through" : "bg-gray-200"
+                    }`}
                   >
-                    {quirk}
+                    {quirk.name}
+                    {quirk.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
                   </span>
                 ))}
               </div>
@@ -168,8 +171,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               <h3 className="text-xl font-bold mb-3 text-gray-800">Powers</h3>
               <ul className="list-disc list-inside space-y-1">
                 {character.powers.map((power, i) => (
-                  <li key={i} className="text-gray-700">
-                    {power}
+                  <li
+                    key={i}
+                    className={power.isLost ? "text-gray-400 line-through" : "text-gray-700"}
+                  >
+                    {power.name}
+                    {power.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
                   </li>
                 ))}
               </ul>
@@ -188,8 +195,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   </h4>
                   <ul className="list-disc list-inside space-y-1">
                     {character.gear.normalGear.map((item, i) => (
-                      <li key={i} className="text-gray-600 text-sm">
-                        {item}
+                      <li
+                        key={i}
+                        className={`text-sm ${item.isLost ? "text-gray-400 line-through" : "text-gray-600"}`}
+                      >
+                        {item.name}
+                        {item.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
                       </li>
                     ))}
                   </ul>
@@ -202,8 +213,12 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   </h4>
                   <ul className="list-disc list-inside space-y-1">
                     {character.gear.legacyGear.map((item, i) => (
-                      <li key={i} className="text-purple-600 text-sm">
-                        {item}
+                      <li
+                        key={i}
+                        className={`text-sm ${item.isLost ? "text-gray-400 line-through" : "text-purple-600"}`}
+                      >
+                        {item.name}
+                        {item.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
                       </li>
                     ))}
                   </ul>
@@ -250,9 +265,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 {character.runes.runes.map((rune, i) => (
                   <span
                     key={i}
-                    className="bg-amber-100 border border-amber-400 px-3 py-1 rounded text-sm"
+                    className={`px-3 py-1 rounded text-sm border ${
+                      rune.isLost
+                        ? "bg-gray-100 border-gray-300 text-gray-400 line-through"
+                        : "bg-amber-100 border-amber-400"
+                    }`}
                   >
-                    {rune}
+                    {rune.name}
+                    {rune.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
                   </span>
                 ))}
               </div>
@@ -275,8 +295,16 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               </h3>
               <div className="space-y-2">
                 {character.charDevs.map((charDev, i) => (
-                  <p key={i} className="text-gray-700 bg-blue-50 p-3 rounded">
-                    {charDev}
+                  <p
+                    key={i}
+                    className={`p-3 rounded ${
+                      charDev.isLost
+                        ? "bg-gray-100 text-gray-400 line-through"
+                        : "text-gray-700 bg-blue-50"
+                    }`}
+                  >
+                    {charDev.name}
+                    {charDev.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
                   </p>
                 ))}
               </div>

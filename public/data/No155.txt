@@ -5,12 +5,13 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton 
+Race: Skeleton
 Sub-race: Dragon
 ```
 
 ```
-Archetype: Pacifist
+Archetype: 
++ Pacifist
 ```
 ``` 
 2 Quirk:  
@@ -18,21 +19,22 @@ Archetype: Pacifist
 + Athletic
 ```
 ```
-Str:6
-Spd:8
-Dur:6
-IQ:1 (Cố Định)
-BIQ:8
-MA:9
+Str: 6
+Spd: 8
+Dur: 6
+IQ: 1 (Cố Định)
+BIQ: 8
+MA: 9
 ```
 
 ```
-Houses: Lannister
+Houses: 
++ Lannister
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
+3 Gear: 
+ + 3 Normal gear:
   - Golden Coin x3 (Từ House)
   - Golden Coin (Từ House)
   - Đá (Từ House)
@@ -49,7 +51,7 @@ Houses: Lannister
 2 Rune: 
 + Ral
 + Thul
-Runeword: không
+Runeword: Không
 ```
 
 ```
@@ -65,7 +67,7 @@ Char dev:
 ```
 
 ```
-Team:10
+Team: 10
 ```
 
 ```

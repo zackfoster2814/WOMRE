@@ -5,7 +5,7 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton 
+Race: Skeleton
 Sub-race: Elf
 ```
 
@@ -14,20 +14,21 @@ Archetype:
 + NPC
 ```
 ``` 
-1 Quirk:
+1 Quirk:  
 + Patient
 ```
 ```
-Str:6
-Spd:9
-Dur:3
-IQ:1 (Cố định)
-BIQ:7
-MA:6
+Str: 6
+Spd: 9
+Dur: 3
+IQ: 1 (Cố định)
+BIQ: 7
+MA: 6
 ```
 
 ```
-Houses: Coven Council 
+Houses: 
++ Coven Council
 ```
 
 ```
@@ -41,18 +42,18 @@ Houses: Coven Council
 ```
 
 ```
-1 Unique Weapon 
+1 Unique Weapon
 + Blade of Chaos (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-1 Power: 
+0 Power: 
 + 
 ```
 
@@ -62,7 +63,7 @@ Char dev:
 ```
 
 ```
-Team:10
+Team: 10
 ```
 
 ```

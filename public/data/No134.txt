@@ -10,7 +10,8 @@ Sub-race:
 ```
 
 ```
-Archetype: Atheist
+Archetype: 
++ Atheist
 + Perfectionist (Từ Char dev)
 ```
 ``` 
@@ -18,12 +19,12 @@ Archetype: Atheist
 + Pure (Không Đai) (đã mất trinh)
 ```
 ```
-Str:6 (-5)
-Spd:3
-Dur:5
-IQ:7 (+5)
-BIQ:9 
-MA:7
+Str: 6 (-5)
+Spd: 3
+Dur: 5
+IQ: 7 (+5)
+BIQ: 9
+MA: 7
 ```
 
 ```
@@ -34,7 +35,7 @@ Houses:
 ```
 2 Gear: 
  + 2 Normal gear:
-  - Lover's Glover 
+  - Lover's Glover
   - Cursed Coin
  + 0 Legacy gear:
   - 
@@ -49,7 +50,7 @@ Houses:
 2 Rune: 
 + Ort
 + El
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -59,11 +60,11 @@ Runeword:
 
 ```
 Char dev: 
-+Become Perfectionist
++ Become Perfectionist
 ```
 
 ```
-Team:28
+Team: 28
 ```
 
 ```

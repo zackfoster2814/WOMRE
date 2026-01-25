@@ -18,12 +18,12 @@ Archetype:
 + Pure (nhận Đai)
 ```
 ```
-Str:4
-Spd:7
-Dur:5
-IQ:5
-BIQ:8
-MA:7
+Str: 4
+Spd: 7
+Dur: 5
+IQ: 5
+BIQ: 8
+MA: 7
 ```
 
 ```
@@ -32,8 +32,8 @@ Houses:
 ```
 
 ```
-3 Gear: 
- + 3 Normal gear:
+4 Gear: 
+ + 4 Normal gear:
   - Đai Trinh Tiết (Từ Quirk)
   - Ancient Protector
   - Gold Pine Resin
@@ -50,7 +50,7 @@ Houses:
 ``` 
 1 Rune: 
 + Shael
-Runeword: 
+Runeword: Không
 ```
 
 ```

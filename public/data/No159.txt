@@ -19,16 +19,17 @@ Archetype:
 + Lazy
 ```
 ```
-Str:3
-Spd:6
-Dur:0 (Ban đầu là 1, Demonic Pact)
-IQ:9(Ban đầu là 6, +3 từ Philosopher)
-BIQ:3
-MA:6
+Str: 3
+Spd: 6
+Dur: 0 (Ban đầu là 1, Demonic Pact)
+IQ: 9(Ban đầu là 6, +3 từ Philosopher)
+BIQ: 3
+MA: 6
 ```
 
 ```
-Houses: Uchiha
+Houses: 
++ Uchiha
 ```
 
 ```
@@ -47,14 +48,14 @@ Houses: Uchiha
 ```
 
 ``` 
-0 Rune: 
+2 Rune: 
 + Thul
 + Sol
-Runeword: Blackjack
+Runeword: Không
 ```
 
 ```
-2 Power: 
+6 Power: 
 + Rickrolling (Từ Frying Pan)
 + Thunder Orb
 + Dream Manipulation
@@ -69,7 +70,7 @@ Char dev:
 ```
 
 ```
-Team:25
+Team: 25
 ```
 
 ```

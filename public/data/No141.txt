@@ -6,7 +6,7 @@ Ký Sinh:
 ```
 ```
 Race: Elf
-Sub-race: Moon Elf 
+Sub-race: Moon Elf
 ```
 
 ```
@@ -18,12 +18,12 @@ Archetype:
 + Brave
 ```
 ```
-Str:1
-Spd:6
-Dur:1
-IQ:6
-BIQ:7
-MA:2
+Str: 1
+Spd: 6
+Dur: 1
+IQ: 6
+BIQ: 7
+MA: 2
 ```
 
 ```
@@ -34,7 +34,7 @@ Houses:
 ```
 2 Gear: 
  + 2 Normal gear:
-  - Swift Boots 
+  - Swift Boots
   - Beer
  + 0 Legacy gear:
   - 
@@ -49,11 +49,11 @@ Houses:
 2 Rune: 
 + Thul
 + Sol
-Runeword: Blackjack
+Runeword: Không
 ```
 
 ```
-1 Power: 
+2 Power: 
 + Blood Frenzy (Từ Moon Elf)
 + Thunder Orb
 ```
@@ -64,7 +64,7 @@ Char dev:
 ```
 
 ```
-Team:10
+Team: 10
 ```
 
 ```

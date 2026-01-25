@@ -10,7 +10,8 @@ Sub-race:
 ```
 
 ```
-Archetype: Chokevy
+Archetype: 
++ Chokevy
 ```
 ``` 
 2 Quirk:  
@@ -18,16 +19,17 @@ Archetype: Chokevy
 + Progressive
 ```
 ```
-Str:2
-Spd:6
-Dur:4
-IQ:10
-BIQ:1
-MA:3
+Str: 2
+Spd: 6
+Dur: 4
+IQ: 10
+BIQ: 1
+MA: 3
 ```
 
 ```
-Houses: Naga
+Houses: 
++ Naga
 ```
 
 ```
@@ -39,14 +41,14 @@ Houses: Naga
 ```
 
 ```
-0 Weapon
+0 Normal Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -55,11 +57,12 @@ Runeword:
 ```
 
 ```
-Char dev: Kungfu Training
+Char dev: 
++ Kungfu Training
 ```
 
 ```
-Team:17
+Team: 17
 ```
 
 ```

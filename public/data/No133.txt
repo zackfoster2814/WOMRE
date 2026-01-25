@@ -18,16 +18,16 @@ Archetype:
 + Cluttered Mind
 ```
 ```
-Str:7
-Spd:7
-Dur:7
-IQ:3
-BIQ:2
-MA:1
+Str: 7
+Spd: 7
+Dur: 7
+IQ: 3
+BIQ: 2
+MA: 1
 ```
 
 ```
-Houses:
+Houses: 
 + Baratheon
 ```
 
@@ -49,11 +49,11 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-2 Power: 
+3 Power: 
 + Numby (Từ Sub-race)
 + The Goat
 + Fire Control

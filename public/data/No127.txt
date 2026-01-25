@@ -1,9 +1,8 @@
 No.127
 Name: Shiro (kuriyamashiro)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
 Race: Merfolk
@@ -11,12 +10,12 @@ Sub-race:
 ```
 
 ```
-Archetype:
+Archetype: 
 + Farmer - thường
 + Edgelord
 ```
-```
-3 Quirk:
+``` 
+3 Quirk:  
 + Cautions
 + Independent
 + Slow Healer
@@ -31,16 +30,16 @@ MA: 2
 ```
 
 ```
-Houses:
+Houses: 
 + Naga
 ```
 
 ```
-1 Gear:
+1 Gear: 
  + 1 Normal gear:
   - Frying Pan
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
@@ -48,23 +47,23 @@ Houses:
 + Flower of Fire (dùng được)
 ```
 
-```
-0 Rune:
-+
+``` 
+0 Rune: 
++ 
 Runeword: Không
 ```
 
 ```
-4 Power:
-+ Cold Breeze 
+5 Power: 
++ Cold Breeze
 + Writer
 + Sacred Fire
 + Arcana Blast
-+ Hunter's Rewards 
++ Hunter's Rewards
 ```
 
 ```
-Char dev:
+Char dev: 
 + Too Edgy
 ```
 
@@ -74,5 +73,5 @@ Team: 28
 
 ```
 Lover:
-+
++ 
 ```

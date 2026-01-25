@@ -1,9 +1,8 @@
 No.116
 Name: Huy Le (.ilovepony)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
 Race: Demi-God
@@ -21,16 +20,17 @@ Archetype:
 + Athletic
 ```
 ```
-Str:10 ban đầu là 3 (Re-spin từ Favor)
-Spd:3 ban đầu là 5 (Re-spin từ Favor)
-Dur:10
-IQ:7
-BIQ:10
-MA:6 ban đầu là 1 (Re-spin từ Favor)
+Str: 10 ban đầu là 3 (Re-spin từ Favor)
+Spd: 3 ban đầu là 5 (Re-spin từ Favor)
+Dur: 10
+IQ: 7
+BIQ: 10
+MA: 6 ban đầu là 1 (Re-spin từ Favor)
 ```
 
 ```
-Houses: Roundtable Hold
+Houses: 
++ Roundtable Hold
 ```
 
 ```
@@ -43,28 +43,29 @@ Houses: Roundtable Hold
 ```
 
 ```
-1 Normal Weapon
+2 Normal Weapon
 + Long Bow (Không dùng được )
 + Rapier (Dùng được) (Từ Favor, được tặng)
 ```
 
 ``` 
-1 Rune lên Rapier
+1 Rune: 
 + Sol
-Runeword: 
+Runeword: Không
 ```
 
 ```
-0 Power: (Skip vì Quirk Patient)
+0 Power: 
 + 
 ```
 
 ```
-Char dev: Creator's Favor (Favor: Tặng Rapier)
+Char dev: 
++ Creator's Favor (Favor: Tặng Rapier)
 ```
 
 ```
-Team:
+Team: 
 ```
 
 ```

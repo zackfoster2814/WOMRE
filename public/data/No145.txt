@@ -1,7 +1,7 @@
 No.145
 Name: Nikki (huyhuhhuh)
 ```
-Ký Sinh: Yes
+Ký Sinh:
 + 67
 + Shian (italianpenguin2003)
 ```
@@ -11,7 +11,8 @@ Sub-race: 1000
 ```
 
 ```
-Archetype: Perfectionist
+Archetype: 
++ Perfectionist
 + Foragers (Từ New London)
 ```
 ``` 
@@ -21,16 +22,17 @@ Archetype: Perfectionist
 + Slow Healer
 ```
 ```
-Str:5
-Spd:3
-Dur:7
-IQ:2
-BIQ:6
-MA:7 (Ban đầu là 6, +1 từ Foragers)
+Str: 5
+Spd: 3
+Dur: 7
+IQ: 2
+BIQ: 6
+MA: 7 (Ban đầu là 6, +1 từ Foragers)
 ```
 
 ```
-Houses: New London
+Houses: 
++ New London
 ```
 
 ```
@@ -49,7 +51,7 @@ Houses: New London
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -63,7 +65,7 @@ Char dev:
 ```
 
 ```
-Team:9
+Team: 9
 ```
 
 ```

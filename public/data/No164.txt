@@ -14,22 +14,23 @@ Archetype:
 + Hero of the Emirate🍀
 ```
 ``` 
-2 Quirk:  
+3 Quirk:  
 + Raumanian🍀 (Từ Archetype)
 + Dextrous
 + Compassionate
 ```
 ```
-Str:1
-Spd:8
-Dur:3
-IQ:1
-BIQ:3
-MA:8
+Str: 1
+Spd: 8
+Dur: 3
+IQ: 1
+BIQ: 3
+MA: 8
 ```
 
 ```
-Houses: Tyrell
+Houses: 
++ Tyrell
 ```
 
 ```
@@ -42,18 +43,18 @@ Houses: Tyrell
 ```
 
 ```
-0 Weapon
+0 Normal Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-3 Power: 
+4 Power: 
 + Railroad Realm 🍀(Từ Archetype)
 + Hydrate
 + Tick-tock
@@ -61,11 +62,12 @@ Runeword:
 ```
 
 ```
-Char dev: Old Age
+Char dev: 
++ Old Age
 ```
 
 ```
-Team:25
+Team: 25
 ```
 
 ```

@@ -17,7 +17,7 @@ Archetype:
 3 Quirk:  
 + Clumsy
 + Independent
-+ Impatient (PvP Reward: 1 Dura, 1 MA)(Từ Bánh mì)
++ Impatient (Từ Bánh mì)
 ```
 ```
 Str: 7
@@ -73,4 +73,10 @@ Team: 18
 ```
 Lover:
 + 
+```
+
+```
+PvP Reward:
+- +1 Dura
+- +1 MA
 ```

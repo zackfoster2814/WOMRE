@@ -11,19 +11,19 @@ Sub-race: 1000
 
 ```
 Archetype: 
-+ Follower of the Two Fingers 
++ Follower of the Two Fingers
 ```
 ``` 
 1 Quirk:  
 + Artistic
 ```
 ```
-Str:5
-Spd:4
-Dur:7
-IQ:3
-BIQ:6
-MA:4
+Str: 5
+Spd: 4
+Dur: 7
+IQ: 3
+BIQ: 6
+MA: 4
 ```
 
 ```
@@ -48,7 +48,7 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -63,7 +63,7 @@ Char dev:
 ```
 
 ```
-Team:27
+Team: 27
 ```
 
 ```

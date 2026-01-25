@@ -19,12 +19,12 @@ Archetype:
 + Blind
 ```
 ```
-Str:2
-Spd:10
-Dur:2
-IQ:8
-BIQ:3
-MA:10
+Str: 2
+Spd: 10
+Dur: 2
+IQ: 8
+BIQ: 3
+MA: 10
 ```
 
 ```
@@ -35,7 +35,7 @@ Houses:
 ```
 1 Gear: 
  + 1 Normal gear:
-  - Radio 
+  - Radio
  + 0 Legacy gear:
   - 
 ```
@@ -48,7 +48,7 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -65,7 +65,7 @@ Char dev:
 ```
 
 ```
-Team:24
+Team: 24
 ```
 
 ```

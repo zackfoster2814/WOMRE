@@ -18,21 +18,22 @@ Archetype:
 + Shining Brightly
 ```
 ```
-Str:6
-Spd:6
-Dur:6
-IQ:9
-BIQ:9
-MA:5
+Str: 6
+Spd: 6
+Dur: 6
+IQ: 9
+BIQ: 9
+MA: 5
 ```
 
 ```
-Houses: Winterhome
+Houses: 
++ Winterhome
 ```
 
 ```
-3 Gear: 
- + 3 Normal gear:
+5 Gear: 
+ + 5 Normal gear:
   - Holy Symbol(Từ House)
   - Buckler (Từ House)
   - Ancient Protector
@@ -50,7 +51,7 @@ Houses: Winterhome
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
@@ -65,7 +66,7 @@ Char dev:
 ```
 
 ```
-Team:
+Team: 
 ```
 
 ```

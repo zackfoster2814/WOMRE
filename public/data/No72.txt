@@ -15,7 +15,7 @@ Archetype:
 ```
 ``` 
 1 Quirk:  
-+ Impatient (PvP Reward: 1 Gear, 1 IQ)
++ Impatient
 ```
 ```
 Str: 5 (Ban đầu là 3, Reroll thành 5)
@@ -70,4 +70,10 @@ Team: 19
 ```
 Lover:
 + 
+```
+
+```
+PvP Reward:
+- 1 Gear
+- +1 IQ
 ```

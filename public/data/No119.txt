@@ -10,28 +10,30 @@ Sub-race:
 ```
 
 ```
-Archetype: Gambler Bloodline
+Archetype: 
++ Gambler Bloodline
 ```
 ``` 
-2 Quirk:  (Được quay)
+2 Quirk:  
 + Training Restricted
 + Pure (không được quay vòng nhận đai)
 ```
 ```
-Str:1 (Không được quay)
-Spd:5 (Được quay)
-Dur:1 (Không được quay)
-IQ:1 (Không được quay)
-BIQ:7 (Được quay)
-MA:6 (Được quay)
+Str: 1 (Không được quay)
+Spd: 5 (Được quay)
+Dur: 1 (Không được quay)
+IQ: 1 (Không được quay)
+BIQ: 7 (Được quay)
+MA: 6 (Được quay)
 ```
 
 ```
-Houses: (Không được quay)
+Houses: 
++ (Không được quay)
 ```
 
 ```
-1 Gear: (Được quay)
+1 Gear: 
  + 1 Normal gear:
   - Healing Flask
  + 0 Legacy gear:
@@ -39,23 +41,24 @@ Houses: (Không được quay)
 ```
 
 ```
-1 Normal Weapon (Được quay)
+1 Normal Weapon
 + Morningstar (Không dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: 
+Runeword: Không
 ```
 
 ```
-4 Power: (Không được quay)
-```
-
-```
-Char dev: (Không được quay)
+0 Power: 
 + 
+```
+
+```
+Char dev: 
++ (Không được quay)
 ```
 
 ```
