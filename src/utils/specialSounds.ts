@@ -17,6 +17,7 @@ const SPECIAL_SOUNDS: Record<string, { path: string; volume: number }> = {
   "True Heir of the Emirate🍀": { path: "/assets/sfx/thanhhoa.mp3", volume: 0.5 },
   // Race special sounds
   "Raumanian🍀": { path: "/assets/sfx/thanhhoa_2.mp3", volume: 0.5 },
+  "Rickrolling": { path: "/assets/sfx/rickroll.mp3", volume: 0.5 },
 };
 
 // Random sounds for item named "1" when exactly 10 items
