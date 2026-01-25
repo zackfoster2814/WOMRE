@@ -1,71 +1,79 @@
 No.160
 Name: Dung (haruharu9127)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Gnome
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: Mid
+```
+``` 
+3 Quirk:  
++ Training Restricted
++ Brainrot
++ Under the Weather
++ Brave (Từ Baguette)
+```
+```
+Str:5
+Spd:5
+Dur:5
+IQ:5
+BIQ:5
+MA:5
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Lannnister
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Golden Coin x3(Từ House)
+  - Baguette (Từ House)
+  - Cuộn khăn giấy (Từ House)
+  - Buckler
+  - Love Letter
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Magical Staff (Dùng được) (đã mất)
++ Glass Bottle (Được tặng)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+4 Power: 
++ Black Magic
++ Blood Frenzy
++ Spear of Fire
++ Fire Control
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Creator's Reforge (Glass Bottle)
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team: 
 ```
 
 ```
 Lover:
-+
++ 
 ```

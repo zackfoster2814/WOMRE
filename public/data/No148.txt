@@ -5,8 +5,8 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton (Angel)
-Sub-race: 
+Race: Skeleton 
+Sub-race: Angel
 ```
 
 ```

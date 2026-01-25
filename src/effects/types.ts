@@ -142,6 +142,7 @@ export interface Condition {
   compareValue?: number;
   compareStat?: StatName;
   operator?: '>' | '<' | '=' | '>=' | '<=' | '!=';
+  useBaseStats?: boolean;       // So sánh base stats thay vì total stats
 
   // For has_item
   itemType?: 'power' | 'quirk' | 'gear' | 'weapon' | 'rune' | 'lover' | 'archetype';
@@ -327,6 +328,7 @@ export interface CharacterEffects {
 export interface CombatContext {
   self: {
     stats: CharacterStats;
+    baseStats?: CharacterStats;  // Base stats (từ vòng quay) cho condition check
     race: string;
     raceTier: number;
     hasLover: boolean;
@@ -340,6 +342,7 @@ export interface CombatContext {
 
   opponent?: {
     stats: CharacterStats;
+    baseStats?: CharacterStats;  // Base stats (từ vòng quay) cho condition check
     race: string;
     raceTier: number;
     hasLover: boolean;

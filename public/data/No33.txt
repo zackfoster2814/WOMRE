@@ -5,8 +5,8 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Human (Đen)
-Sub-race: 
+Race: Human 
+Sub-race: Đen
 ```
 
 ```

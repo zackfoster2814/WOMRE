@@ -1,71 +1,71 @@
 No.163
 Name: Julianus (khoi7435)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Troll
+Sub-race: Ice Troll
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Infirmarian
+```
+``` 
+1 Quirk:  
++ Charming (Lover: KaTsumi - ChillWithCafe (katsumi3000))
+```
+```
+Str:1
+Spd:9
+Dur:3
+IQ:2
+BIQ:9
+MA:1
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Uchiha
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Healing Flasks
+  - Love Letter
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Unique Weapon
++ Guinsoo's Rageblade (Dùng Được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Detect Thoughts (Được KaTsumi - ChillWithCafe (katsumi3000) tặng)
++ Body Enhancing
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Last Standing
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:13
 ```
 
 ```
 Lover:
-+
++ KaTsumi - ChillWithCafe (katsumi3000) (tặng Detect Thoughts)
 ```

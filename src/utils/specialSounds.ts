@@ -7,6 +7,16 @@
 const SPECIAL_SOUNDS: Record<string, { path: string; volume: number }> = {
   Uma: { path: "/assets/sfx/mambo.mp3", volume: 0.5 },
   God: { path: "/assets/sfx/godboss.mp3", volume: 0.3 },
+  // Power special sounds
+  Mewing: { path: "/assets/sfx/mewing.mp3", volume: 0.5 },
+  // Race special sounds
+  Symbiosis: { path: "/assets/sfx/symbi.mp3", volume: 0.5 },
+  // Archetype special sounds
+  "Người Trong Ban Nhạc": { path: "/assets/sfx/nhacngot_01.mp3", volume: 0.5 },
+  // Char Dev / Special items
+  "True Heir of the Emirate🍀": { path: "/assets/sfx/thanhhoa.mp3", volume: 0.5 },
+  // Race special sounds
+  "Raumanian🍀": { path: "/assets/sfx/thanhhoa_2.mp3", volume: 0.5 },
 };
 
 // Random sounds for item named "1" when exactly 10 items

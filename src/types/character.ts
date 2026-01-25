@@ -12,6 +12,8 @@ export interface CharacterStats {
 export interface CharacterRace {
   race: string;
   subRace?: string;
+  // For Reincarnator: stores the full info like "(Nagi) -> Uma"
+  reincarnatorInfo?: string;
 }
 
 export interface Gear {

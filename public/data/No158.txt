@@ -1,71 +1,73 @@
 No.158
 Name: Gambling (da_ork_)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Goblin
+Sub-race: 5000
 ```
 
 ```
-Houses:
-+
+Archetype: Fisher
+```
+``` 
+1 Quirk:  
++ Lazy
+```
+```
+Str:4
+Spd:5
+Dur:7
+IQ:1
+BIQ:4
+MA:5
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Coven Council
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Cần câu (Từ Archetype)
+  - Knight's Armor
+  - Ba Hoa Trắng
+  - Silver Steed
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Flute (Dùng được) 
 ```
 
-```
-0 Rune:
-+
+``` 
+2 Rune: 
++ Tir
++ Ith
 Runeword: Không
 ```
 
 ```
-0 Power:
-+
+2 Power: 
++ Acid Breath (Đã mất)
++ Chaos Enchantment (Đã mất)
 ```
 
 ```
-Char dev:
-+
+Char dev: 
++ Back to Basics
 ```
 
 ```
-Team:
+Team:22
 ```
 
 ```
 Lover:
-+
++ 
 ```

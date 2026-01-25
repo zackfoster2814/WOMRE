@@ -5,7 +5,7 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Lùn
+Race: Gnome
 Sub-race: Lùn Xám
 ```
 

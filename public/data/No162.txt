@@ -1,71 +1,77 @@
 No.162
 Name: mrcandy1612 (mrcandy1612)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Gnome
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Wibu
+  - Jojo 
+    - Tusk Act II
+```
+``` 
+1 Quirk:  
++ Herbalist
++ Fast Learner
+```
+```
+Str:10 (Ban đầu là 5 God of War's Entry Ticket)
+Spd:8
+Dur:2
+IQ:9
+BIQ:3
+MA:2
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Shurima
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Ancient Protector
+  - Thuốc Tráng Dương
  + 0 Legacy gear:
-  -
+  - God of War's Entry Ticket (Từ House)
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Glass Bottle (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+2 Power: 
++ Blood Manipulation (Từ House)
++ Borrowed Time (Từ House)
++ Enlarging
++ Scrying
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Make love (Đụ God)(God of War's Entry Ticket)
++ Seeking Wisdom
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:26
 ```
 
 ```
 Lover:
-+
++ 
 ```

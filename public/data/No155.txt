@@ -5,8 +5,8 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton (Dragon)
-Sub-race: 
+Race: Skeleton 
+Sub-race: Dragon
 ```
 
 ```

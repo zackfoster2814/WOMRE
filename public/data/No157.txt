@@ -1,71 +1,69 @@
 No.157
 Name: HuyMei (huymei)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Dwarf
+Sub-race: Lùn thường
 ```
 
 ```
-Houses:
-+
+Archetype: Anti-Social
+```
+``` 
+1 Quirk:  
++ Lazy
+```
+```
+Str:7
+Spd:4
+Dur:8
+IQ:5
+BIQ:3
+MA:3
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Uchiha
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Swift Boots
+  - Silver Steed
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Bass (Dùng được)
+```
+
+``` 
+1 Rune: 
++ Tir 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+1 Power: 
++ Tsunami Control
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ "Chuyện Bộ Tộc"
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:17
 ```
 
 ```
 Lover:
-+
++ 
 ```

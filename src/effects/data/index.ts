@@ -12,6 +12,8 @@ import { registerAllPowerEffects } from './powers';
 import { registerAllWeaponEffects } from './weapons';
 import { registerAllHouseEffects } from './houses';
 import { registerUmaParentEffects } from './uma-parents';
+import { registerCharDevEffects } from './char-devs';
+import { registerSymbiosisEffects } from './symbiosis';
 
 // Flags to prevent double registration
 let isInitialized = false;
@@ -35,6 +37,8 @@ export function initializeEffectData(): void {
   registerAllWeaponEffects();
   registerAllHouseEffects();
   registerUmaParentEffects();
+  registerCharDevEffects();
+  registerSymbiosisEffects();
 
   isInitialized = true;
   console.log('Effect data initialized successfully');
@@ -66,3 +70,5 @@ export { registerAllPowerEffects } from './powers';
 export { registerAllWeaponEffects } from './weapons';
 export { registerAllHouseEffects } from './houses';
 export { registerUmaParentEffects } from './uma-parents';
+export { registerCharDevEffects } from './char-devs';
+export { registerSymbiosisEffects } from './symbiosis';

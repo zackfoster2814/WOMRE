@@ -275,6 +275,38 @@ export class EffectResolver {
       }
     }
 
+    // Character Development
+    for (const charDev of character.charDevs || []) {
+      const entry = EffectRegistry.get('char_dev', charDev);
+      if (entry) {
+        sources.push({
+          type: 'char_dev',
+          name: charDev,
+          effects: entry.effects,
+          rawDescription: entry.description,
+          isActive: true
+        });
+      }
+    }
+
+    // Symbiosis (for hosts who have a symbiote)
+    if (character.isParasite && character.parasiteInfo) {
+      for (const symbiosis of character.parasiteInfo) {
+        // Extract symbiosis name (may contain extra info like "Mephisto ( nhận thêm...)")
+        const symbiosisName = symbiosis.split('(')[0].trim();
+        const entry = EffectRegistry.get('symbiosis', symbiosisName);
+        if (entry) {
+          sources.push({
+            type: 'symbiosis',
+            name: symbiosisName,
+            effects: entry.effects,
+            rawDescription: entry.description,
+            isActive: true
+          });
+        }
+      }
+    }
+
     return sources;
   }
 
@@ -295,17 +327,25 @@ export class EffectResolver {
 
       case 'stat_compare':
         if (condition.stat && condition.operator) {
-          const selfStats = resolveStatTarget(condition.stat, context.self.stats);
-          const selfValue = selfStats.reduce((sum, s) => sum + context.self.stats[s], 0) / selfStats.length;
+          // Use base stats if useBaseStats is true, otherwise use total stats
+          const statsToUse = condition.useBaseStats && context.self.baseStats
+            ? context.self.baseStats
+            : context.self.stats;
+
+          const selfStats = resolveStatTarget(condition.stat, statsToUse);
+          const selfValue = selfStats.reduce((sum, s) => sum + statsToUse[s], 0) / selfStats.length;
 
           let compareValue: number;
           if (condition.compareWith === 'opponent' && context.opponent) {
-            const oppStats = resolveStatTarget(condition.stat, context.opponent.stats);
-            compareValue = oppStats.reduce((sum, s) => sum + context.opponent!.stats[s], 0) / oppStats.length;
+            const oppStatsToUse = condition.useBaseStats && context.opponent.baseStats
+              ? context.opponent.baseStats
+              : context.opponent.stats;
+            const oppStats = resolveStatTarget(condition.stat, oppStatsToUse);
+            compareValue = oppStats.reduce((sum, s) => sum + oppStatsToUse[s], 0) / oppStats.length;
           } else if (condition.compareWith === 'value') {
             compareValue = condition.compareValue || 0;
           } else if (condition.compareWith === 'own_stat' && condition.compareStat) {
-            compareValue = context.self.stats[condition.compareStat];
+            compareValue = statsToUse[condition.compareStat];
           } else {
             compareValue = 0;
           }
@@ -405,6 +445,60 @@ export class EffectResolver {
   }
 
   /**
+   * Check immediate conditions (stat_compare with own_stat using base stats)
+   * This is a simplified check that only works for immediate timing conditions
+   */
+  static checkImmediateConditions(
+    conditions: Condition[] | undefined,
+    baseStats: CharacterStats
+  ): boolean {
+    if (!conditions || conditions.length === 0) return true;
+
+    for (const condition of conditions) {
+      let result = false;
+
+      switch (condition.type) {
+        case 'always':
+          result = true;
+          break;
+
+        case 'probability':
+          result = Math.random() * 100 < (condition.chance || 0);
+          break;
+
+        case 'stat_compare':
+          // For immediate effects, always use base stats for comparison
+          if (condition.stat && condition.operator && condition.compareWith === 'own_stat' && condition.compareStat) {
+            const selfStats = resolveStatTarget(condition.stat, baseStats);
+            const selfValue = selfStats.reduce((sum, s) => sum + baseStats[s], 0) / selfStats.length;
+            const compareValue = baseStats[condition.compareStat];
+            result = this.compare(selfValue, condition.operator, compareValue);
+          } else if (condition.stat && condition.operator && condition.compareWith === 'value') {
+            const selfStats = resolveStatTarget(condition.stat, baseStats);
+            const selfValue = selfStats.reduce((sum, s) => sum + baseStats[s], 0) / selfStats.length;
+            result = this.compare(selfValue, condition.operator, condition.compareValue || 0);
+          } else {
+            // Other stat_compare types need combat context, skip for immediate
+            result = true;
+          }
+          break;
+
+        default:
+          // Other condition types need combat context, skip for immediate
+          result = true;
+      }
+
+      // Apply negate
+      if (condition.negate) result = !result;
+
+      // All conditions must pass
+      if (!result) return false;
+    }
+
+    return true;
+  }
+
+  /**
    * Resolve all immediate effects and calculate total stats
    */
   static resolveImmediateEffects(
@@ -434,6 +528,11 @@ export class EffectResolver {
             isActive: true
           });
           continue;
+        }
+
+        // Check conditions for immediate effects (use ORIGINAL baseStats for Giant-like effects)
+        if (!this.checkImmediateConditions(effect.conditions, baseStats)) {
+          continue; // Skip this effect if conditions not met
         }
 
         // Process stat modifiers
@@ -617,6 +716,17 @@ export class EffectResolver {
       ma: 'MA'
     };
 
+    // Check if any effect has conditions (conditional effects)
+    const hasConditionalEffects = entry.effects.some(
+      e => e.type === 'stat_modifier' && e.timing === 'immediate' && e.conditions && e.conditions.length > 0
+    );
+
+    // If there are conditional effects, return description or "conditional" indicator
+    if (hasConditionalEffects) {
+      // Return empty to let the UI show just the name without misleading stat info
+      return 'conditional';
+    }
+
     for (const effect of entry.effects) {
       if (effect.type === 'stat_modifier' && effect.timing === 'immediate' && effect.value !== undefined) {
         if (effect.stat === 'all') {
@@ -635,16 +745,25 @@ export class EffectResolver {
   /**
    * Get all effect sources with their stat summaries for a character
    * Useful for displaying detailed breakdown in UI
+   * Now properly checks conditions using character's base stats
    */
   static getCharacterEffectBreakdown(character: Character): EffectSourceBreakdown[] {
     const sources = this.gatherEffectSources(character);
     const breakdown: EffectSourceBreakdown[] = [];
+
+    // Get character's base stats for condition checking
+    const baseStats = convertStats(character.stats);
 
     for (const source of sources) {
       const statChanges: StatChange[] = [];
 
       for (const effect of source.effects) {
         if (effect.type === 'stat_modifier' && effect.timing === 'immediate' && effect.value !== undefined) {
+          // Check conditions before including in breakdown
+          if (!this.checkImmediateConditions(effect.conditions, baseStats)) {
+            continue; // Skip effects that don't meet conditions
+          }
+
           if (effect.stat === 'all') {
             for (const stat of STAT_NAMES) {
               statChanges.push({ stat, value: effect.value });

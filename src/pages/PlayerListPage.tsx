@@ -104,6 +104,9 @@ export const PlayerListPage = () => {
   const [selectedRaces, setSelectedRaces] = useState<string[]>([]);
   const [showRaceFilter, setShowRaceFilter] = useState(false);
   const [showRaceStats, setShowRaceStats] = useState(false);
+  // TODO: House filter - temporarily disabled, will update later
+  // const [selectedHouses, setSelectedHouses] = useState<string[]>([]);
+  // const [showHouseFilter, setShowHouseFilter] = useState(false);
 
   // View mode: "players" or "teams"
   const [viewMode, setViewMode] = useState<"players" | "teams">("players");
@@ -284,6 +287,28 @@ export const PlayerListPage = () => {
     );
   };
 
+  // TODO: House filter - temporarily disabled, will update later
+  // // Get unique houses from all players
+  // const availableHouses = useMemo(() => {
+  //   const houses = new Set<string>(
+  //     players.map((p) => p.house).filter((h): h is string => !!h && h.trim() !== ""),
+  //   );
+  //   const sortedHouses = Array.from(houses).sort();
+  //   // Check if there are players without house
+  //   const hasNoHouse = players.some((p) => !p.house || p.house.trim() === "");
+  //   if (hasNoHouse) {
+  //     sortedHouses.push("No House");
+  //   }
+  //   return sortedHouses;
+  // }, [players]);
+
+  // // Toggle house selection
+  // const toggleHouseFilter = (house: string) => {
+  //   setSelectedHouses((prev) =>
+  //     prev.includes(house) ? prev.filter((h) => h !== house) : [...prev, house],
+  //   );
+  // };
+
   // Filter and sort players
   const filteredPlayers = useMemo(() => {
     let result = players.filter(
@@ -307,6 +332,20 @@ export const PlayerListPage = () => {
         return selectedRaces.includes(p.race);
       });
     }
+
+    // // Apply house filter if any houses are selected
+    // if (selectedHouses.length > 0) {
+    //   result = result.filter((p) => {
+    //     // Handle "No House" filter for players without house
+    //     if (
+    //       selectedHouses.includes("No House") &&
+    //       (!p.house || p.house.trim() === "")
+    //     ) {
+    //       return true;
+    //     }
+    //     return selectedHouses.includes(p.house || "");
+    //   });
+    // }
 
     // Helper function to calculate total stats
     const getTotalStats = (stats: CharacterStats) =>
@@ -334,6 +373,7 @@ export const PlayerListPage = () => {
 
     return result;
   }, [players, searchTerm, sortBy, selectedRaces]);
+  // }, [players, searchTerm, sortBy, selectedRaces, selectedHouses]);
 
   // Create boss lookup map
   const bossMap = useMemo(() => {
@@ -468,6 +508,10 @@ export const PlayerListPage = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowRaceFilter(!showRaceFilter)}
+                  // onClick={() => {
+                  //   setShowRaceFilter(!showRaceFilter);
+                  //   setShowHouseFilter(false);
+                  // }}
                   className={`px-4 py-2 border rounded-lg font-medium transition-colors flex items-center gap-2 ${
                     selectedRaces.length > 0
                       ? "bg-amber-600/80 border-amber-500 text-white"
@@ -532,6 +576,79 @@ export const PlayerListPage = () => {
                     </div>
                   </div>
                 )}
+              </div>
+              
+              {/* House Filter Button */}
+              <div className="relative">
+                {/* <button
+                  onClick={() => {
+                    setShowHouseFilter(!showHouseFilter);
+                    setShowRaceFilter(false);
+                  }}
+                  className={`px-4 py-2 border rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                    selectedHouses.length > 0
+                      ? "bg-cyan-600/80 border-cyan-500 text-white"
+                      : "bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80"
+                  }`}
+                >
+                  <span>🏠 House Filter</span>
+                  {selectedHouses.length > 0 && (
+                    <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                      {selectedHouses.length}
+                    </span>
+                  )}
+                </button> */}
+
+                {/* House Filter Dropdown */}
+                {/* {showHouseFilter && (
+                  <div className="absolute top-full right-0 mt-2 z-[9999] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
+                    <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-600">
+                      <span className="text-white font-medium text-sm">
+                        Filter by House
+                      </span>
+                      {selectedHouses.length > 0 && (
+                        <button
+                          onClick={() => setSelectedHouses([])}
+                          className="text-xs text-red-400 hover:text-red-300"
+                        >
+                          Clear all
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-1">
+                      {availableHouses.map((house) => {
+                        const count =
+                          house === "No House"
+                            ? players.filter(
+                                (p) => !p.house || p.house.trim() === "",
+                              ).length
+                            : players.filter((p) => p.house === house).length;
+                        const isSelected = selectedHouses.includes(house);
+                        return (
+                          <label
+                            key={house}
+                            className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer transition-colors ${
+                              isSelected ? "bg-cyan-600/30" : "hover:bg-gray-700"
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={() => toggleHouseFilter(house)}
+                              className="w-4 h-4 rounded border-gray-500 text-cyan-500 focus:ring-cyan-500 bg-gray-700"
+                            />
+                            <span className="text-white text-sm flex-1">
+                              {house}
+                            </span>
+                            <span className="text-gray-400 text-xs">
+                              ({count})
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )} */}
               </div>
               <button
                 onClick={() => setShowRaceStats(true)}
@@ -1053,6 +1170,15 @@ const StatModifierBadge = ({
   const summary = EffectResolver.getEffectSummary(name, sourceType);
   if (!summary) return null;
 
+  // For conditional effects, show "conditional" in different color
+  if (summary === 'conditional') {
+    return (
+      <span className="text-[10px] text-yellow-400 ml-1">
+        {/* (conditional) */}
+      </span>
+    );
+  }
+
   return (
     <span className="text-[10px] text-emerald-400 ml-1">
       ({summary})
@@ -1060,33 +1186,17 @@ const StatModifierBadge = ({
   );
 };
 
-// Effect Source Item Component for breakdown display
-const EffectSourceItem = ({ source }: { source: EffectSourceBreakdown }) => {
-  const statAbbrev: Record<string, string> = {
-    strength: 'STR',
-    speed: 'SPD',
-    durability: 'DUR',
-    iq: 'IQ',
-    biq: 'BIQ',
-    ma: 'MA'
-  };
-
-  const sourceTypeLabels: Record<EffectSourceType, string> = {
-    race: 'Race',
-    sub_race: 'Sub-race',
-    archetype: 'Archetype',
-    quirk: 'Quirk',
-    power: 'Power',
-    gear: 'Gear',
-    weapon: 'Weapon',
-    rune: 'Rune',
-    runeword: 'Runeword',
-    house: 'House',
-    char_dev: 'Char Dev',
-    pvp_reward: 'PvP Reward',
-    lover: 'Lover',
-    symbiosis: 'Symbiosis'
-  };
+// Stat Modifiers Table Component
+const StatModifiersTable = ({
+  breakdown,
+  baseStats
+}: {
+  breakdown: EffectSourceBreakdown[];
+  baseStats: { str: number; spd: number; dur: number; iq: number; biq: number; ma: number };
+}) => {
+  const statKeys: Array<'strength' | 'speed' | 'durability' | 'iq' | 'biq' | 'ma'> =
+    ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
+  const statLabels = ['STR', 'SPD', 'DUR', 'IQ', 'BIQ', 'MA'];
 
   const sourceTypeColors: Record<EffectSourceType, string> = {
     race: 'text-amber-400',
@@ -1099,37 +1209,106 @@ const EffectSourceItem = ({ source }: { source: EffectSourceBreakdown }) => {
     rune: 'text-orange-400',
     runeword: 'text-orange-300',
     house: 'text-cyan-400',
-    char_dev: 'text-gray-400',
+    char_dev: 'text-teal-400',
     pvp_reward: 'text-green-400',
     lover: 'text-pink-300',
     symbiosis: 'text-red-300'
   };
 
-  const statChangeSummary = source.statChanges.map(change => {
-    const prefix = change.value > 0 ? '+' : '';
-    return `${prefix}${change.value} ${statAbbrev[change.stat] || change.stat}`;
-  }).join(', ');
+  // Filter sources with stat changes
+  const sourcesWithStats = breakdown.filter(s => s.statChanges.length > 0);
 
-  if (!statChangeSummary) return null;
+  // Calculate totals for each stat
+  const totals = statKeys.map((statKey, idx) => {
+    const baseValue = idx === 0 ? baseStats.str
+      : idx === 1 ? baseStats.spd
+      : idx === 2 ? baseStats.dur
+      : idx === 3 ? baseStats.iq
+      : idx === 4 ? baseStats.biq
+      : baseStats.ma;
+
+    const bonusValue = sourcesWithStats.reduce((sum, source) => {
+      const change = source.statChanges.find(c => c.stat === statKey);
+      return sum + (change?.value || 0);
+    }, 0);
+
+    return { base: baseValue, bonus: bonusValue, total: baseValue + bonusValue };
+  });
+
+  // Get stat value for a source
+  const getStatValue = (source: EffectSourceBreakdown, statKey: string): number | null => {
+    const change = source.statChanges.find(c => c.stat === statKey);
+    return change ? change.value : null;
+  };
+
+  // Format stat value with color
+  const formatStatValue = (value: number | null) => {
+    if (value === null || value === 0) return <span className="text-gray-600">-</span>;
+    const color = value > 0 ? 'text-green-400' : 'text-red-400';
+    const prefix = value > 0 ? '+' : '';
+    return <span className={color}>{prefix}{value}</span>;
+  };
 
   return (
-    <div className="flex items-center justify-between text-xs">
-      <div className="flex items-center gap-2">
-        <span className="text-gray-500 w-16">{sourceTypeLabels[source.type]}</span>
-        <span className={sourceTypeColors[source.type]}>{source.name}</span>
-      </div>
-      <span className={`font-medium ${
-        source.statChanges.some(c => c.value > 0) && source.statChanges.some(c => c.value < 0)
-          ? 'text-yellow-400'
-          : source.statChanges.every(c => c.value > 0)
-            ? 'text-green-400'
-            : 'text-red-400'
-      }`}>
-        {statChangeSummary}
-      </span>
+    <div className="overflow-x-auto">
+      <table className="w-full text-xs border-collapse">
+        <thead>
+          <tr className="border-b border-gray-600">
+            <th className="text-left py-1.5 px-2 text-gray-400 font-medium">Nguồn</th>
+            {statLabels.map(label => (
+              <th key={label} className="text-center py-1.5 px-1.5 text-gray-400 font-medium w-10">{label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {/* Base stats row */}
+          <tr className="border-b border-gray-700/50">
+            <td className="py-1.5 px-2 text-gray-300">ban đầu</td>
+            {statKeys.map((_, idx) => (
+              <td key={idx} className="text-center py-1.5 px-1.5 text-gray-300">
+                {totals[idx].base}
+              </td>
+            ))}
+          </tr>
+
+          {/* Source rows */}
+          {sourcesWithStats.map((source, idx) => (
+            <tr key={idx} className="border-b border-gray-700/30">
+              <td className={`py-1.5 px-2 ${sourceTypeColors[source.type]} truncate max-w-[120px]`} title={source.name}>
+                {source.name}
+              </td>
+              {statKeys.map(statKey => (
+                <td key={statKey} className="text-center py-1.5 px-1.5">
+                  {formatStatValue(getStatValue(source, statKey))}
+                </td>
+              ))}
+            </tr>
+          ))}
+
+          {/* Separator */}
+          <tr>
+            <td colSpan={7} className="py-0.5">
+              <div className="border-t border-gray-500"></div>
+            </td>
+          </tr>
+
+          {/* Total row */}
+          <tr className="font-bold">
+            <td className="py-1.5 px-2 text-white">Tổng:</td>
+            {totals.map((total, idx) => (
+              <td key={idx} className={`text-center py-1.5 px-1.5 ${
+                total.bonus > 0 ? 'text-green-400' : total.bonus < 0 ? 'text-red-400' : 'text-white'
+              }`}>
+                {total.total}
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
+
 
 // Player Detail Modal Component
 interface PlayerDetailModalProps {
@@ -1274,6 +1453,9 @@ const PlayerDetailModal = ({
                   <span className="text-gray-400 text-sm">Race</span>
                   <span className="text-amber-400 text-sm text-right">
                     {character.race?.race || "-"}
+                    {character.race?.reincarnatorInfo && (
+                      <span className="text-amber-300 ml-1">{character.race.reincarnatorInfo}</span>
+                    )}
                     <StatModifierBadge name={character.race?.race || ""} sourceType="race" />
                   </span>
                 </div>
@@ -1341,15 +1523,14 @@ const PlayerDetailModal = ({
                 </button>
               </div>
 
-              {/* Breakdown Panel */}
+              {/* Breakdown Panel - Table View */}
               {showBreakdown && effectBreakdown.length > 0 && (
                 <div className="mb-4 p-3 bg-gray-800/70 rounded-lg border border-gray-600">
                   <p className="text-xs text-gray-400 mb-2 font-medium">Stat Modifiers Sources:</p>
-                  <div className="space-y-1.5 max-h-48 overflow-y-auto">
-                    {effectBreakdown.map((source, idx) => (
-                      <EffectSourceItem key={idx} source={source} />
-                    ))}
-                  </div>
+                  <StatModifiersTable
+                    breakdown={effectBreakdown}
+                    baseStats={character.stats}
+                  />
                 </div>
               )}
 
@@ -1556,6 +1737,7 @@ const PlayerDetailModal = ({
                   {character.charDevs.map((charDev, idx) => (
                     <p key={idx} className="text-gray-300">
                       • {charDev}
+                      <StatModifierBadge name={charDev} sourceType="char_dev" />
                     </p>
                   ))}
                 </div>

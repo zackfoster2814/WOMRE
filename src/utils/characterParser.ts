@@ -194,7 +194,16 @@ export class CharacterParser {
 
       const raceMatch = line.match(/Race:\s*(.+)/);
       if (raceMatch) {
-        race.race = raceMatch[1].trim();
+        const fullRace = raceMatch[1].trim();
+
+        // Check if this is a Reincarnator - format: "Reincarnator (Name) -> NewRace"
+        const reincarnatorMatch = fullRace.match(/^Reincarnator\s*(\(.+\)\s*->\s*.*)$/i);
+        if (reincarnatorMatch) {
+          race.race = 'Reincarnator';
+          race.reincarnatorInfo = reincarnatorMatch[1].trim();
+        } else {
+          race.race = fullRace;
+        }
       }
 
       const subRaceMatch = line.match(/Sub-race:\s*(.+)/);

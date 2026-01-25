@@ -5,8 +5,8 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton (Orc)
-Sub-race: 
+Race: Skeleton 
+Sub-race: Orc
 ```
 
 ```

@@ -5,8 +5,8 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Reincarnator (Skibidi) -> Skeleton (Rồng)
-Sub-race: 
+Race: Reincarnator (Skibidi) -> 
+Sub-race: Skeleton (Rồng)
 ```
 
 ```

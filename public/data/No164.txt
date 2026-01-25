@@ -1,71 +1,74 @@
 No.164
 Name: Note (note8442)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: God
+Sub-race: Bragi
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Hero of the Emirate🍀
+```
+``` 
+2 Quirk:  
++ Raumanian🍀 (Từ Archetype)
++ Dextrous
++ Compassionate
+```
+```
+Str:1
+Spd:8
+Dur:3
+IQ:1
+BIQ:3
+MA:8
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Tyrell
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Đá
+  - Magical Scroll
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+0 Weapon
++ 
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+3 Power: 
++ Railroad Realm 🍀(Từ Archetype)
++ Hydrate
++ Tick-tock
++ Bucking Bronco
 ```
 
 ```
-0 Power:
-+
+Char dev: Old Age
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:25
 ```
 
 ```
 Lover:
-+
++ 
 ```

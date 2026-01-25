@@ -229,10 +229,10 @@ export function registerRaces() {
     })
     .register();
 
-  // Giant
+  // Giant - So sánh dựa trên BASE stats (stats từ vòng quay ban đầu)
   defineEffect("race", "Giant")
     .description(
-      "+5 IQ nếu IQ > Str (-5 Str). +5 Str nếu Str > IQ (-5 IQ). Bằng nhau: +3 cả hai.",
+      "+5 IQ nếu Base IQ > Base Str (-5 Str). +5 Str nếu Base Str > Base IQ (-5 IQ). Bằng nhau: +3 cả hai.",
     )
     .weight(4)
     .tier(6)
@@ -249,6 +249,7 @@ export function registerRaces() {
           compareWith: "own_stat",
           compareStat: "strength",
           operator: ">",
+          useBaseStats: true, // So sánh base stats
         },
       ],
     })
@@ -265,6 +266,7 @@ export function registerRaces() {
           compareWith: "own_stat",
           compareStat: "strength",
           operator: ">",
+          useBaseStats: true,
         },
       ],
     })
@@ -281,6 +283,7 @@ export function registerRaces() {
           compareWith: "own_stat",
           compareStat: "iq",
           operator: ">",
+          useBaseStats: true,
         },
       ],
     })
@@ -297,6 +300,7 @@ export function registerRaces() {
           compareWith: "own_stat",
           compareStat: "iq",
           operator: ">",
+          useBaseStats: true,
         },
       ],
     })
@@ -313,6 +317,7 @@ export function registerRaces() {
           compareWith: "own_stat",
           compareStat: "iq",
           operator: "=",
+          useBaseStats: true,
         },
       ],
     })
@@ -329,6 +334,7 @@ export function registerRaces() {
           compareWith: "own_stat",
           compareStat: "iq",
           operator: "=",
+          useBaseStats: true,
         },
       ],
     })

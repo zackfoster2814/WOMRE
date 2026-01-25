@@ -1,71 +1,73 @@
 No.161
 Name: nahhhh_hecker (nahhhh_hecker)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Angel
+Sub-race: Cherubim
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Pacifist
++ Atheist
+```
+``` 
+2 Quirk:  
++ Mute
++ Generous
+```
+```
+Str:3
+Spd:9
+Dur:5
+IQ:5
+BIQ:6
+MA:6
 ```
 
 ```
-0 Gear:
+Houses: The Shire
++ Nhận +4 vào Str
+```
+
+```
+0 Gear: 
  + 0 Normal gear:
-  -
+  - 
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Unique Weapon
++ Chastiefol (Dùng được)
+```
+
+``` 
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+2 Power: 
++ Zoltraak
++ Writer
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Overcome the Habits
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team: 25
 ```
 
 ```
 Lover:
-+
++ 
 ```

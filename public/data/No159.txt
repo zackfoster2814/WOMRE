@@ -1,71 +1,78 @@
 No.159
 Name: DK Yuri (longgg0058)
-
 ```
 Ký Sinh:
-+
++ 
 ```
 ```
-Race:
-Sub-race:
-```
-
-```
-Archetype:
-+
-```
-```
-2 Quirk:
-+
-```
-```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Race: Gnome
+Sub-race: 
 ```
 
 ```
-Houses:
-+
+Archetype: 
++ Philosopher
+```
+``` 
+2 Quirk:  
++ Generous
++ Lazy
+```
+```
+Str:3
+Spd:6
+Dur:0 (Ban đầu là 1, Demonic Pact)
+IQ:9(Ban đầu là 6, +3 từ Philosopher)
+BIQ:3
+MA:6
 ```
 
 ```
-0 Gear:
- + 0 Normal gear:
-  -
+Houses: Uchiha
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Frying Pan
+  - Love Letter
+  - Knight's Armor
  + 0 Legacy gear:
-  -
+  - 
 ```
 
 ```
-0 Normal Weapon
-+
+1 Normal Weapon
++ Broken Straight Sword (Dùng được)
+```
+
+``` 
+0 Rune: 
++ Thul
++ Sol
+Runeword: Blackjack
 ```
 
 ```
-0 Rune:
-+
-Runeword: Không
+2 Power: 
++ Rickrolling (Từ Frying Pan)
++ Thunder Orb
++ Dream Manipulation
++ Accelerating Sorcery (Từ Demonic Pact)
++ Master of War (Từ Demonic Pact)
++ Power Negation (Từ Demonic Pact)
 ```
 
 ```
-0 Power:
-+
+Char dev: 
++ Demonic Pact (Hiến Dura)
 ```
 
 ```
-Char dev:
-+
-```
-
-```
-Team:
+Team:25
 ```
 
 ```
 Lover:
-+
++ 
 ```
