@@ -31,7 +31,6 @@ MA: 6
 ```
 Houses: 
 + The Shire
-+ Nhận +4 vào Str
 ```
 
 ```

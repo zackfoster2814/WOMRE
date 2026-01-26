@@ -29,7 +29,7 @@ MA: 2
 
 ```
 Houses: 
-+ Baratheon
++ House Baratheon
 ```
 
 ```

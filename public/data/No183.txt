@@ -5,30 +5,31 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Primordial Being
+Sub-race: Earth
 ```
 
 ```
 Archetype: 
-+ 
++ Devotee
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Dextrous
++ Clumsy (từ Primordial Being) 
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 2
+Spd: 6
+Dur: 9
+IQ: 9
+BIQ: 1
+MA: 1
 ```
 
 ```
 Houses: 
-+ 
++ Atreides
 ```
 
 ```
@@ -40,8 +41,8 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Halberd (không dùng được) (mất luôn vũ khí do Fist Fighting)
 ```
 
 ``` 
@@ -51,20 +52,23 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+3 Power: 
++ Gourmand
++ Fist Fighting
++ Force Field
++ Earth Shaking (từ Primordial Being)
 ```
 
 ```
 Char dev: 
-+ 
++ Make love
 ```
 
 ```
-Team: 
+Team: 21
 ```
 
 ```
 Lover:
-+ 
++ Trung Kiên (trungkien1412)
 ```

@@ -5,36 +5,38 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Gnome
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Paladin
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Fast Learner
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 6
+Spd: 6
+Dur: 9
+IQ: 8
+BIQ: 6
+MA: 11 (đã +2 từ Paladin, ban đầu là 9)
 ```
 
 ```
 Houses: 
-+ 
++ House Stark
+ -> Grey Wind
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Gold Pine Resin
+  - Thuốc tráng dương
  + 0 Legacy gear:
   - 
 ```
@@ -52,16 +54,16 @@ Runeword: Không
 
 ```
 0 Power: 
-+ 
++ Divine Smite (từ Paladin)
 ```
 
 ```
 Char dev: 
-+ 
++ Become Hand of The King
 ```
 
 ```
-Team: 
+Team: 13
 ```
 
 ```

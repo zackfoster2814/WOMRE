@@ -29,7 +29,7 @@ MA: 4 ban đầu là 7 (Inversion)
 
 ```
 Houses: 
-+ Lannister
++ House Lannister
 ```
 
 ```

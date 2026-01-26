@@ -5,36 +5,37 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Goblin
+Sub-race: 5000
 ```
 
 ```
 Archetype: 
-+ 
++ Hand Fighter
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Patient
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 1
+Spd: 9
+Dur: 4
+IQ: 8
+BIQ: 5
+MA: 2
 ```
 
 ```
 Houses: 
-+ 
++ Atreides
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Buckler
+  - Golden coin
  + 0 Legacy gear:
   - 
 ```
@@ -57,11 +58,11 @@ Runeword: Không
 
 ```
 Char dev: 
-+ 
++ Become Perfectionist
 ```
 
 ```
-Team: 
+Team: 18
 ```
 
 ```

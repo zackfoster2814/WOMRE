@@ -5,43 +5,47 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Demi-god
+Sub-race: Moon
 ```
 
 ```
-Archetype: 
-+ 
+Archetype:
++ Pacifist (từ Moon)
++ Mid
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Slow Healer 
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 5
+Spd: 5
+Dur: 5
+IQ: 5
+BIQ: 5
+MA: 5
 ```
 
 ```
 Houses: 
-+ 
++ Winterhome
 ```
 
 ```
-0 Gear: 
+2 Gear: 
  + 0 Normal gear:
-  - 
+  - Soap
+  - Thuốc tráng dương
+  - Văn tế (Winterhome)
+  - Cuộn khăn giấy(Winterhome)
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Dawnbreaker (không dùng được)
 ```
 
 ``` 
@@ -51,17 +55,19 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+3 Power: 
++ Body Enhancing
++ Blood Frenzy
++ No stopping me
 ```
 
 ```
 Char dev: 
-+ 
++ King's Landing
 ```
 
 ```
-Team: 
+Team: 1
 ```
 
 ```

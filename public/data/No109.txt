@@ -29,7 +29,7 @@ MA: 0 (ban đầu là 5, Demonic Pact)
 
 ```
 Houses: 
-+ Baratheon
++ House Baratheon
 ```
 
 ```

@@ -27,7 +27,7 @@ MA:1
 ```
 
 ```
-Houses:
+Houses: 
 + Dothraki (Bị đuổi)
 ```
 

@@ -30,7 +30,7 @@ MA: 8
 
 ```
 Houses: 
-+ Tyrell
++ House Tyrell
 ```
 
 ```

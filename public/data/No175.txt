@@ -28,7 +28,7 @@ MA:6
 
 ```
 Houses: 
-+ Shurima 
++ Shurima
 ```
 
 ```

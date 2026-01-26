@@ -12,8 +12,8 @@ Sub-race:
 ```
 Archetype: 
 + Wibu
-+ Jojo
-+ Tusk Act II
+ -> Jojo
+  -> Tusk Act II
 ```
 ``` 
 2 Quirk:  

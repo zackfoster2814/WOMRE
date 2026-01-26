@@ -5,43 +5,46 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Dwarf
+Sub-race: Lùn Xám
 ```
 
 ```
 Archetype: 
-+ 
++ Farmer
+ -> Aura Farmer
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Deaf
++ Let me solo her
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 9
+Spd: 1
+Dur: 8
+IQ: 2
+BIQ: 7
+MA: 8
 ```
 
 ```
 Houses: 
-+ 
++ Roundtable Hold
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Đai trinh tiết
+  - Wizard Hat
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Drums (không dùng được)
 ```
 
 ``` 
@@ -57,11 +60,14 @@ Runeword: Không
 
 ```
 Char dev: 
-+ 
++ Final Reserves
++ Transmute: chaos
++ Kungfu Trainning
++ Mad Scientist
 ```
 
 ```
-Team: 
+Team: 31
 ```
 
 ```

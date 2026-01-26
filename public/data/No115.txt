@@ -31,8 +31,7 @@ MA: 6
 
 ```
 Houses: 
-+ Stark
-+ Lady
++ House Stark (Lady)
 ```
 
 ```

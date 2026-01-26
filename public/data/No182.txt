@@ -5,43 +5,46 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Angel
+Sub-race: Archangels
 ```
 
 ```
 Archetype: 
-+ 
++ Pacifist (Từ Race)
++ Zealot
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Clumsy
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 10
+Spd: 8
+Dur: 1
+IQ: 6
+BIQ: 8
+MA: 6
 ```
 
 ```
 Houses: 
-+ 
++ House Tyrell
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Storage Room Key
+  - Đai trinh tiết (từ Storage Room Key)
+  - Soap
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Nunchuck (không dùng được)
 ```
 
 ``` 
@@ -57,11 +60,11 @@ Runeword: Không
 
 ```
 Char dev: 
-+ 
++ Last Standing
 ```
 
 ```
-Team: 
+Team: 16
 ```
 
 ```

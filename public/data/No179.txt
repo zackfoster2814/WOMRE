@@ -5,48 +5,51 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Troll
+Sub-race: Ice troll
 ```
 
 ```
 Archetype: 
-+ 
++ Dual Wielder
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Artistic
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 5
+Spd: 1
+Dur: 7
+IQ: 8
+BIQ: 6
+MA: 6
 ```
 
 ```
 Houses: 
-+ 
++ New London
+ -> Thinkers
 ```
 
 ```
-0 Gear: 
+2 Gear: 
  + 0 Normal gear:
-  - 
+  - Kuro's Charms
+  - Cuộn khăn giấy
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+2 Normal Weapon
++ Broken Straight Sword (không dùng được)
++ Drums (dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
+1 Rune: 
++ Ort
 Runeword: Không
 ```
 
@@ -57,11 +60,11 @@ Runeword: Không
 
 ```
 Char dev: 
-+ 
++ Training arc
 ```
 
 ```
-Team: 
+Team: 22
 ```
 
 ```

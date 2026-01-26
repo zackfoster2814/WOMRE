@@ -5,66 +5,74 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Giant
 Sub-race: 
 ```
 
 ```
-Archetype: 
-+ 
+Archetype: Blacksmith
++ Herald (Từ Spatula)
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Dextrous
++ Lucky (Max: 0)
++ Bloodthirsty
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 10(+5)
+Spd: 7 (ban đầu là 4, +3 từ Herald)
+Dur: 6
+IQ: 4(-5)
+BIQ: 8
+MA: 1
 ```
 
 ```
 Houses: 
-+ 
++ House Baratheon
 ```
 
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Beer (Từ Char Dev)
+  - Spatula (Từ Char Dev)
+  - Lover's Glover (Lover: Roku da Poet (roku2807))(Từ Char Dev)
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon (Từ Blacksmith)
++ Claymore(Dùng được) (Đã mất)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+2 Rune: (Từ Blacksmith) (Đã mất)
++ Ort 
++ Sol
+Runeword: Affection
 ```
 
 ```
-0 Power: 
-+ 
+4 Power: 
++ Fist Fighting 
++ Rampage
++ Continental Super Storm
++ Blood Frenzy
 ```
 
 ```
 Char dev: 
-+ 
++ Armed to the Teeth
 ```
 
 ```
-Team: 
+Team: 16
 ```
 
 ```
 Lover:
-+ 
++ Roku da Poet (roku2807)
 ```

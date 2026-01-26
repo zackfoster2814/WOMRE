@@ -5,63 +5,68 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Đen
 ```
 
 ```
 Archetype: 
-+ 
++ Wibu
+ -> One Piece
+  -> Observation
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Artistic (Mất do Quirkless)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 6
+Spd: 6
+Dur: 10
+IQ: 1
+BIQ: 5
+MA: 1
 ```
 
 ```
 Houses: 
-+ 
++ Coven Council
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Academie Ring
+  - Storage Room Key
+  - Wizard hat (từ Storage Room Key)
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Magical Staff - dùng được (mất cmnl luôn do It is What it is)
 ```
 
 ``` 
-0 Rune: 
-+ 
+1 Rune: 
++ Tir
 Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Quirkless
++ Invulnerability
 ```
 
 ```
 Char dev: 
-+ 
++ It is What it is
 ```
 
 ```
-Team: 
+Team: 5
 ```
 
 ```

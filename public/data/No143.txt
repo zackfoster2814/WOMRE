@@ -31,7 +31,7 @@ MA: 1
 
 ```
 Houses: 
-+ Stark ( +Grey Wind (Đã mất, No more Home ))
++ House Stark (Grey Wind - Đã mất, No more Home)
 ```
 
 ```

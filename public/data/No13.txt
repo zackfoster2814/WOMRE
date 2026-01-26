@@ -12,8 +12,8 @@ Sub-race:
 ```
 Archetype: 
 + Wibu
-+ Jojo
-+ The World
+ -> Jojo
+  -> The World
 ```
 ``` 
 3 Quirk:  

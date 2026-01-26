@@ -5,36 +5,39 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Demi-god
+Sub-race: Love (Lover: DK Yuri (longgg0058) - No Fembi)
 ```
 
 ```
 Archetype: 
-+ 
++ Wibu 
+ => Jojo (Hey ya!)
 ```
 ``` 
 0 Quirk:  
-+ 
++ Compassionate (Đã mất do Quirkless)
++ Bloodthirsty (Đã mất do Quirkless)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 10
+Spd: 8
+Dur: 3
+IQ: 4
+BIQ: 1
+MA: 10
 ```
 
 ```
 Houses: 
-+ 
++ House Targaryen 
 ```
 
 ```
-0 Gear: 
+2 Gear: 
  + 0 Normal gear:
-  - 
+  - Frying Pan
+  - Leather Jacket 
  + 0 Legacy gear:
   - 
 ```
@@ -51,20 +54,23 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+3 Power: 
++ Age Manipulation
++ Divine Lightning
++ Quirkless
++ Angling And Scheming
 ```
 
 ```
 Char dev: 
-+ 
++ Become A Power Ranger (Black)
 ```
 
 ```
-Team: 
+Team: 15
 ```
 
 ```
 Lover:
-+ 
++ DK Yuri (longgg0058) (Quà từ Race)
 ```

@@ -29,7 +29,7 @@ MA: 10
 
 ```
 Houses: 
-+ The Shire (+4 Spd)
++ 
 ```
 
 ```

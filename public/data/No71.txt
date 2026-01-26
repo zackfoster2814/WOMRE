@@ -31,7 +31,7 @@ MA: 7 (Ban đầu là 5, nhận +2 từ Paladin)
 
 ```
 Houses: 
-+ Lannister
++ House Lannister
 ```
 
 ```

@@ -28,7 +28,7 @@ MA: 3
 
 ```
 Houses: 
-+ Targaryen
++ House Targaryen
 ```
 
 ```

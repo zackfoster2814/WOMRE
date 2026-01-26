@@ -30,7 +30,6 @@ MA: 6
 
 ```
 Houses: 
-+ Atreides (Đã bị đá khỏi nhà) + 2 Base Speed
 + Ban Nhạc Ngọt Đoàn Kết (Từ Người Trong Ban Nhạc)
 ```
 

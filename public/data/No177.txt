@@ -5,63 +5,78 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Reincarnator (Angel -> Gici)
+Sub-race: Angels
 ```
 
 ```
 Archetype: 
-+ 
++ Pacifist (Từ Race)
++ Herald
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Shining Brightly
++ Resilent
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 1
+Spd: 5 (đã +3 từ Herald)
+Dur: 1
+IQ: 2
+BIQ: 1
+MA: 1
 ```
 
 ```
 Houses: 
-+ 
++ Shurima 
 ```
 
 ```
-0 Gear: 
+1 Gear: 
  + 0 Normal gear:
   - 
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  - The First Dragon Scale
+  - Weakest Angel's Will (từ Shurima)
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Drums (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+2 Rune: 
++ Amn
++ Amn
+Runeword: The Twin
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Thunder Orb 
++ Fire Control
++ Bloody Strike (từ Shurima)
++ Fragrant (từ Shurima)
++ Shringking (từ Weakest Angel's Will)
++ Railroad Realm 🍀 (từ Weakest Angel's Will)
++ Groundwork  (từ Weakest Angel's Will)
++ Golden Vow (từ Weakest Angel's Will)
++ Black Magic (từ Weakest Angel's Will)
++ The Great Storm (từ Weakest Angel's Will)
++ 67 (từ Weakest Angel's Will)
++ AIDS (từ Weakest Angel's Will)
 ```
 
 ```
 Char dev: 
-+ 
++ Put the fries in the bag
 ```
 
 ```
-Team: 
+Team: 21
 ```
 
 ```

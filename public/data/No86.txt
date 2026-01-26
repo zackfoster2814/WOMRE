@@ -31,7 +31,6 @@ MA: 3
 ```
 Houses: 
 + The Shire
-+ Cộng 4 vào MA
 ```
 
 ```

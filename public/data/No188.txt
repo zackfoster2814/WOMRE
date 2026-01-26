@@ -5,36 +5,40 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: God
+Sub-race: Loki
 ```
 
 ```
 Archetype: 
-+ 
++ Farmer
+ -> thường
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Herbalist
++ Cruelty
++ Lucky
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 3
+Spd: 10
+Dur: 7
+IQ: 1
+BIQ: 9
+MA: 5
 ```
 
 ```
 Houses: 
-+ 
++ Atreides
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Bò khô 
+  - Fishing Rod
  + 0 Legacy gear:
   - 
 ```
@@ -51,17 +55,22 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+4 Power: 
++ Frost Fingers
++ AIDS
++ Gaze of the Abyss
++ EscAPADe
++ Critical Strike (từ Loki)
++ Evasion (từ Loki)
 ```
 
 ```
 Char dev: 
-+ 
++ True Heir of the Emirate🍀
 ```
 
 ```
-Team: 
+Team: 24
 ```
 
 ```

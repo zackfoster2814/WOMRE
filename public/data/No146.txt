@@ -29,7 +29,7 @@ MA: 1
 
 ```
 Houses: 
-+ Stark (Shaggydog)
++ House Stark (Shaggydog)
 ```
 
 ```

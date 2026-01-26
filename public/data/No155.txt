@@ -29,7 +29,7 @@ MA: 9
 
 ```
 Houses: 
-+ Lannister
++ House Lannister
 ```
 
 ```

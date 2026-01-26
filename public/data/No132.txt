@@ -28,6 +28,7 @@ MA: 1 (Không được quay)
 
 ```
 Houses: 
++ 
 + (Không được quay)
 ```
 

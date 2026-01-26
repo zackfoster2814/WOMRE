@@ -30,8 +30,7 @@ MA: 9
 
 ```
 Houses: 
-+ Stark
-+ Nymeria
++ House Stark (Nymeria)
 ```
 
 ```

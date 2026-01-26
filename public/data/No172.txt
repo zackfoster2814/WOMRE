@@ -30,10 +30,9 @@ MA:10 ban đầu là 1
 ```
 
 ```
-Houses: Tracen academy
-+ Nhận 1 Str
-+ Nhận 3 Spd
-+ Nhận 2 Dura
+Houses: 
++ Tracen Academy
+ => +1 Str, +3 Spd, +2 Dura
 ```
 
 ```

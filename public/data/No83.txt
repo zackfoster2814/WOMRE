@@ -30,9 +30,7 @@ MA: 5
 ```
 Houses: 
 + Tracen Academy
-+ Nhận 2 Strength
-+ Nhận 2 Speed
-+ Nhận 3 Durability
+ => +2 Str, +2 Spd, +3 Dura
 ```
 
 ```

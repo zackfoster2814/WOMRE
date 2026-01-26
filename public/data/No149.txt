@@ -28,7 +28,7 @@ MA: 7
 
 ```
 Houses: 
-+ Baratheon
++ House Baratheon
 ```
 
 ```

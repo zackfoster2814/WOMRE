@@ -28,7 +28,8 @@ MA:6
 ```
 
 ```
-Houses: Golden Order
+Houses: 
++ Golden Order
 - Unborn (Quay lại Str)
 ```
 

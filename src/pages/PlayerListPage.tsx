@@ -104,9 +104,8 @@ export const PlayerListPage = () => {
   const [selectedRaces, setSelectedRaces] = useState<string[]>([]);
   const [showRaceFilter, setShowRaceFilter] = useState(false);
   const [showRaceStats, setShowRaceStats] = useState(false);
-  // TODO: House filter - temporarily disabled, will update later
-  // const [selectedHouses, setSelectedHouses] = useState<string[]>([]);
-  // const [showHouseFilter, setShowHouseFilter] = useState(false);
+  const [selectedHouses, setSelectedHouses] = useState<string[]>([]);
+  const [showHouseFilter, setShowHouseFilter] = useState(false);
 
   // View mode: "players" or "teams"
   const [viewMode, setViewMode] = useState<"players" | "teams">("players");
@@ -292,27 +291,33 @@ export const PlayerListPage = () => {
     );
   };
 
-  // TODO: House filter - temporarily disabled, will update later
-  // // Get unique houses from all players
-  // const availableHouses = useMemo(() => {
-  //   const houses = new Set<string>(
-  //     players.map((p) => p.house).filter((h): h is string => !!h && h.trim() !== ""),
-  //   );
-  //   const sortedHouses = Array.from(houses).sort();
-  //   // Check if there are players without house
-  //   const hasNoHouse = players.some((p) => !p.house || p.house.trim() === "");
-  //   if (hasNoHouse) {
-  //     sortedHouses.push("No House");
-  //   }
-  //   return sortedHouses;
-  // }, [players]);
+  // Get unique houses from all players
+  const availableHouses = useMemo(() => {
+    const houseSet = new Set<string>();
+    players.forEach((p) => {
+      p.houses?.forEach((h) => {
+        if (!h.isLost && h.name.trim()) {
+          houseSet.add(h.name);
+        }
+      });
+    });
+    const sortedHouses = Array.from(houseSet).sort();
+    // Check if there are players without house
+    const hasNoHouse = players.some(
+      (p) => !p.houses || p.houses.length === 0 || p.houses.every((h) => h.isLost)
+    );
+    if (hasNoHouse) {
+      sortedHouses.push("No House");
+    }
+    return sortedHouses;
+  }, [players]);
 
-  // // Toggle house selection
-  // const toggleHouseFilter = (house: string) => {
-  //   setSelectedHouses((prev) =>
-  //     prev.includes(house) ? prev.filter((h) => h !== house) : [...prev, house],
-  //   );
-  // };
+  // Toggle house selection
+  const toggleHouseFilter = (house: string) => {
+    setSelectedHouses((prev) =>
+      prev.includes(house) ? prev.filter((h) => h !== house) : [...prev, house],
+    );
+  };
 
   // Filter and sort players
   const filteredPlayers = useMemo(() => {
@@ -338,19 +343,20 @@ export const PlayerListPage = () => {
       });
     }
 
-    // // Apply house filter if any houses are selected
-    // if (selectedHouses.length > 0) {
-    //   result = result.filter((p) => {
-    //     // Handle "No House" filter for players without house
-    //     if (
-    //       selectedHouses.includes("No House") &&
-    //       (!p.house || p.house.trim() === "")
-    //     ) {
-    //       return true;
-    //     }
-    //     return selectedHouses.includes(p.house || "");
-    //   });
-    // }
+    // Apply house filter if any houses are selected
+    if (selectedHouses.length > 0) {
+      result = result.filter((p) => {
+        // Handle "No House" filter for players without active house
+        const activeHouses = p.houses?.filter((h) => !h.isLost) || [];
+        if (
+          selectedHouses.includes("No House") &&
+          activeHouses.length === 0
+        ) {
+          return true;
+        }
+        return activeHouses.some((h) => selectedHouses.includes(h.name));
+      });
+    }
 
     // Helper function to calculate total stats
     const getTotalStats = (stats: CharacterStats) =>
@@ -512,11 +518,10 @@ export const PlayerListPage = () => {
               {/* Race Filter Button */}
               <div className="relative">
                 <button
-                  onClick={() => setShowRaceFilter(!showRaceFilter)}
-                  // onClick={() => {
-                  //   setShowRaceFilter(!showRaceFilter);
-                  //   setShowHouseFilter(false);
-                  // }}
+                  onClick={() => {
+                    setShowRaceFilter(!showRaceFilter);
+                    setShowHouseFilter(false);
+                  }}
                   className={`px-4 py-2 border rounded-lg font-medium transition-colors flex items-center gap-2 ${
                     selectedRaces.length > 0
                       ? "bg-amber-600/80 border-amber-500 text-white"
@@ -585,7 +590,7 @@ export const PlayerListPage = () => {
               
               {/* House Filter Button */}
               <div className="relative">
-                {/* <button
+                <button
                   onClick={() => {
                     setShowHouseFilter(!showHouseFilter);
                     setShowRaceFilter(false);
@@ -602,10 +607,10 @@ export const PlayerListPage = () => {
                       {selectedHouses.length}
                     </span>
                   )}
-                </button> */}
+                </button>
 
                 {/* House Filter Dropdown */}
-                {/* {showHouseFilter && (
+                {showHouseFilter && (
                   <div className="absolute top-full right-0 mt-2 z-[9999] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-600">
                       <span className="text-white font-medium text-sm">
@@ -625,9 +630,16 @@ export const PlayerListPage = () => {
                         const count =
                           house === "No House"
                             ? players.filter(
-                                (p) => !p.house || p.house.trim() === "",
+                                (p) =>
+                                  !p.houses ||
+                                  p.houses.length === 0 ||
+                                  p.houses.every((h) => h.isLost),
                               ).length
-                            : players.filter((p) => p.house === house).length;
+                            : players.filter((p) =>
+                                p.houses?.some(
+                                  (h) => !h.isLost && h.name === house,
+                                ),
+                              ).length;
                         const isSelected = selectedHouses.includes(house);
                         return (
                           <label
@@ -653,7 +665,7 @@ export const PlayerListPage = () => {
                       })}
                     </div>
                   </div>
-                )} */}
+                )}
               </div>
               <button
                 onClick={() => setShowRaceStats(true)}

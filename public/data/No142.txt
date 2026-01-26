@@ -28,8 +28,7 @@ MA: 5
 
 ```
 Houses: 
-+ Stark
-+ Summer
++ House Stark (Summer)
 ```
 
 ```

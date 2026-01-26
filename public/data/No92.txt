@@ -29,7 +29,7 @@ MA: 7
 ```
 Houses: 
 + The Shire
-+ Cộng 4 Speed
+ => +4 Spd
 ```
 
 ```

@@ -30,7 +30,6 @@ MA: 1
 ```
 Houses: 
 + The Shire
-+ Nhận +6 vào MA
 ```
 
 ```

@@ -112,12 +112,12 @@ export function registerAllPowerEffects() {
     .addStat('durability', 4)
     .register();
 
-  // Hydrate
-  defineEffect('power', 'Hydrate')
-    .description('Buff: +4 Durability.')
-    .weight(0.78)
-    .addStat('durability', 4)
-    .register();
+  // // Hydrate
+  // defineEffect('power', 'Hydrate')
+  //   .description('Buff: +4 Durability.')
+  //   .weight(0.78)
+  //   .addStat('durability', 4)
+  //   .register();
 
   // Lone Wolf
   defineEffect('power', 'Lone Wolf')

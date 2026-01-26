@@ -5,36 +5,45 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Goblin
+Sub-race: 1000
 ```
 
 ```
 Archetype: 
-+ 
++ Hero Grave Keeper
++ Người Trong Ban Nhạc
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Lucky
++ Artisan
++ Let me solo her (từ Fingerthing)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 6
+Spd: 6
+Dur: 3
+IQ: 4
+BIQ: 3
+MA: 10
 ```
 
 ```
 Houses: 
-+ 
++ Golden Order (đổi nhà) -> Godrick
++ Ban Nhạc Ngọt Đoàn Kết (Từ Người Trong Ban Nhạc) - không ra nhạc cụ
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+3 Gear: 
+ + 3 Normal gear:
+  - Lover's Glove
+  - Shot glass
+  - Kẹo
+  - Spatula (từ Artisan)
+  - Fingerthing (từ Artisan)
+  - Mì tôm (từ Ban Nhạc Ngọt Đoàn Kết)
  + 0 Legacy gear:
   - 
 ```
@@ -51,20 +60,20 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Ice Spike (mất do Lose Control)
 ```
 
 ```
 Char dev: 
-+ 
++ Lose Control 
 ```
 
 ```
-Team: 
+Team: 5
 ```
 
 ```
 Lover:
-+ 
++ Milann (milanneeee) (từ Lover's Glove)
 ```

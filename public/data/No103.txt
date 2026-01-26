@@ -31,9 +31,7 @@ MA: 10
 ```
 Houses: 
 + Tracen Academy
-+ Nhận +1 Str
-+ Nhận +1 Spd
-+ Nhận +1 Dura
+ => +1 Str, +1 Spd, +1 Dura
 ```
 
 ```
