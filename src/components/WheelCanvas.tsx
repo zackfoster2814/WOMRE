@@ -410,11 +410,11 @@ export const WheelCanvas = ({
 
     const item = activeItems[hoveredItemIndex];
 
-    const searchResults = EffectRegistry.search(item.name);
+    const searchResults = EffectRegistry.search(item?.name);
 
     if (searchResults.length) return searchResults[0].description;
 
-    return item.effectDescription;
+    return item?.effectDescription;
   }, [hoveredItemIndex]);
 
   return (

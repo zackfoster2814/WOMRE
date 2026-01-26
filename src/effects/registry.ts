@@ -127,7 +127,7 @@ class EffectRegistryClass {
    * Search entries by name (partial match)
    */
   search(query: string, sourceType?: EffectSourceType): EffectRegistryEntry[] {
-    const lowerQuery = query.toLowerCase();
+    const lowerQuery = query?.toLowerCase();
     const results: EffectRegistryEntry[] = [];
 
     if (sourceType) {
