@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "node scripts/generate-player-index.js && tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:build": "node scripts/generate-player-index.js && tauri build",
+    "generate:players": "node scripts/generate-player-index.js"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",

@@ -5,66 +5,72 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Uma
+Sub-race: Symboli Rudolf + Special Week (Hydrate)
 ```
 
 ```
 Archetype: 
-+ 
++ Him
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Hydrate (Special Week)
++ Bloodthirsty
++ Brainrot
++ Charming (Lover: Kaori (khanhnguyen1703) - tặng Sonic Scream)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:4 ban đầu là 7
+Spd:6 ban đầu là 5
+Dur:1 ban đầu là 10
+IQ:6 ban đầu là 5
+BIQ:3 ban đầu là 8
+MA:10 ban đầu là 1
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses: Tracen academy
++ Nhận 1 Str
++ Nhận 3 Spd
++ Nhận 2 Dura
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Gold Pine Resin
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
 0 Power: 
-+ 
++ Hydrate
++ Sonic Scream 
 ```
 
 ```
 Char dev: 
-+ 
++ Inversion
 ```
 
 ```
-Team: 
+Team: 8
 ```
 
 ```
 Lover:
-+ 
++ Kaori (khanhnguyen1703)
 ```

@@ -5,7 +5,7 @@ import { EffectResolver, type EffectSourceBreakdown } from "../effects/resolver"
 import { initializeEffectData } from "../effects/data";
 import type { CharacterStats as EffectStats, EffectSourceType } from "../effects/types";
 import wheelBgImage from "../assets/img/wheel-bg.png";
-import { getAssetPath } from "../utils/basePath";
+import { getAssetPath, getPlayerNumbers, clearPlayerNumbersCache } from "../utils/basePath";
 import { isTauri } from "../utils/localStorage";
 
 // Check if running in web-only mode
@@ -145,19 +145,20 @@ export const PlayerListPage = () => {
       // Load players
       const playerList: PlayerSummary[] = [];
 
-      // Scan for player files from No1 to No256
+      // Get player numbers from player-index.json
+      const playerNumbers = await getPlayerNumbers();
       const fetchPromises: Promise<void>[] = [];
 
-      for (let i = 1; i <= 256; i++) {
+      for (const playerNo of playerNumbers) {
         fetchPromises.push(
-          fetch(getAssetPath(`/data/No${i}.txt`))
+          fetch(getAssetPath(`/data/No${playerNo}.txt`))
             .then(async (response) => {
               if (response.ok) {
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);
                 playerList.push({
-                  no: char.no || i,
-                  name: char.name || `Player ${i}`,
+                  no: char.no || playerNo,
+                  name: char.name || `Player ${playerNo}`,
                   username: char.username || "",
                   race: char.race?.race || "Unknown",
                   subRace: char.race?.subRace,
@@ -193,21 +194,25 @@ export const PlayerListPage = () => {
   const refreshPlayers = () => {
     setPlayers([]);
     setIsLoading(true);
+    // Clear cache to get fresh player list
+    clearPlayerNumbersCache();
     // Trigger re-fetch by clearing and re-running
     const loadPlayers = async () => {
       const playerList: PlayerSummary[] = [];
+      // Force reload player numbers from file
+      const playerNumbers = await getPlayerNumbers(true);
       const fetchPromises: Promise<void>[] = [];
 
-      for (let i = 1; i <= 256; i++) {
+      for (const playerNo of playerNumbers) {
         fetchPromises.push(
-          fetch(getAssetPath(`/data/No${i}.txt`), { cache: "no-store" })
+          fetch(getAssetPath(`/data/No${playerNo}.txt`), { cache: "no-store" })
             .then(async (response) => {
               if (response.ok) {
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);
                 playerList.push({
-                  no: char.no || i,
-                  name: char.name || `Player ${i}`,
+                  no: char.no || playerNo,
+                  name: char.name || `Player ${playerNo}`,
                   username: char.username || "",
                   race: char.race?.race || "Unknown",
                   subRace: char.race?.subRace,

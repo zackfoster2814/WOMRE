@@ -5,63 +5,65 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human 
+Sub-race: đen
 ```
 
 ```
 Archetype: 
-+ 
++ Philosopher
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Weak-Knee
++ Brainrot (Từ Braindead)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:4 (Re-spin từ Unborn, ban đầu là 6)
+Spd:6
+Dur:7
+IQ:9 (Ban đầu là 6, +3 từ Philosopher)
+BIQ:6
+MA:6
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses: Golden Order
+- Unborn (Quay lại Str)
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Silver Steed
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Drums (Không dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Baldening
 ```
 
 ```
 Char dev: 
-+ 
++ Nghe Bài Thú Tội
++ Braindead (Từ Nghe Bài Thú Tội)
 ```
 
 ```
-Team: 
+Team: 1
 ```
 
 ```

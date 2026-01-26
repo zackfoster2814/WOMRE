@@ -5,49 +5,51 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Giant
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Egoist
++ Merchants
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Resilient
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:7 (+3)
+Spd:7
+Dur:9
+IQ:7 (+3)
+BIQ:7
+MA:1
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses: New London
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Golden Coin (Từ Archetype)
+  - Cuộn khăn giấy
+  - Knight's Armor
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Glass Bottle
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
@@ -57,11 +59,11 @@ Runeword: Không
 
 ```
 Char dev: 
-+ 
++ Never Skip Leg Day
 ```
 
 ```
-Team: 
+Team: 20
 ```
 
 ```

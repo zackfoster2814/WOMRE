@@ -146,7 +146,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           </div>
 
           {/* Quirks */}
-          {character.quirks.length > 0 && (
+          {character.quirks && character.quirks.length > 0 && (
             <div>
               <h3 className="text-xl font-bold mb-3 text-gray-800">Quirks</h3>
               <div className="flex flex-wrap gap-2">
@@ -166,7 +166,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
 
           {/* Powers */}
-          {character.powers.length > 0 && (
+          {character.powers && character.powers.length > 0 && (
             <div>
               <h3 className="text-xl font-bold mb-3 text-gray-800">Powers</h3>
               <ul className="list-disc list-inside space-y-1">
@@ -184,11 +184,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
 
           {/* Gear */}
-          {(character.gear.normalGear.length > 0 ||
-            character.gear.legacyGear.length > 0) && (
+          {character.gear && (character.gear.normalGear?.length > 0 ||
+            character.gear.legacyGear?.length > 0) && (
             <div>
               <h3 className="text-xl font-bold mb-3 text-gray-800">Gear</h3>
-              {character.gear.normalGear.length > 0 && (
+              {character.gear.normalGear?.length > 0 && (
                 <div className="mb-3">
                   <h4 className="font-semibold text-gray-700 mb-2">
                     Normal Gear:
@@ -206,7 +206,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   </ul>
                 </div>
               )}
-              {character.gear.legacyGear.length > 0 && (
+              {character.gear.legacyGear?.length > 0 && (
                 <div>
                   <h4 className="font-semibold text-purple-700 mb-2">
                     Legacy Gear:
@@ -228,7 +228,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
 
           {/* Weapons */}
-          {character.weapons.length > 0 && (
+          {character.weapons && character.weapons.length > 0 && (
             <div>
               <h3 className="text-xl font-bold mb-3 text-gray-800">Weapons</h3>
               <div className="space-y-2">
@@ -258,7 +258,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
 
           {/* Runes */}
-          {character.runes.runes.length > 0 && (
+          {character.runes?.runes?.length > 0 && (
             <div>
               <h3 className="text-xl font-bold mb-3 text-gray-800">Runes</h3>
               <div className="flex items-center gap-2 flex-wrap">

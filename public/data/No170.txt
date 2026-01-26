@@ -5,63 +5,71 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Gnome
 Sub-race: 
 ```
 
 ```
-Archetype: 
+Archetype: Mid 
 + 
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Cautious
++ Pure (Nhận Đai Trinh Tiết)
++ Slow Healer (Từ Fingerthing)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:5
+Spd:5
+Dur:5
+IQ:5
+BIQ:5
+MA:5
 ```
 
 ```
 Houses: 
-+ 
++ Lannister
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Đai Trinh Tiết (Từ Quirk Pure)
+  - Golden Coin (Từ House)
+  - Fingerthing (Từ House)
+  - Mì Tôm (Từ House)
+  - Sổ tay
+  - Magical Scroll
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Wand (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Spell Flux
++ Burning Hand
 ```
 
 ```
 Char dev: 
-+ 
++ Training Arc
 ```
 
 ```
-Team: 
+Team: 30
 ```
 
 ```

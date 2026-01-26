@@ -5,63 +5,67 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Goblin
+Sub-race: 50
 ```
 
 ```
 Archetype: 
-+ 
++ Infirmarian
++ Perfectionist (Từ Char Dev)
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Bloodthirsty
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:7
+Spd:5
+Dur:6
+IQ:4
+BIQ:3
+MA:3
 ```
 
 ```
 Houses: 
-+ 
++ Baratheon
 ```
 
 ```
-0 Gear: 
+1 Gear: 
  + 0 Normal gear:
   - 
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  - Soul Sucker
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Drums (Không dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Acid Breath
++ Fist Fighting 
 ```
 
 ```
 Char dev: 
-+ 
++ Trasmute: Chaos
++ Become a Power Ranger (Red)
++ Become Perfectionist
 ```
 
 ```
-Team: 
+Team: 7
 ```
 
 ```

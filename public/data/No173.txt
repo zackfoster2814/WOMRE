@@ -5,66 +5,75 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Vàng
 ```
 
 ```
 Archetype: 
-+ 
++ Perfectionist
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Generous
++ Graceful (Lover: King Zalo (chi404))
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:1
+Spd:4
+Dur:8
+IQ:8
+BIQ:6
+MA:10
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses: Stark
++ Summer
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Holy Symbol
+  - Frying Pan
+  - Shot Glass
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+4 Power: 
++ Night Vision (Từ House)
++ Body Enhancing (Từ House)
++ Petrification (Từ Frying Pan)
++ 67
++ The Sand of Time
++ Rampage
++ Sacred Fire
 ```
 
 ```
 Char dev: 
-+ 
++ Training Arc
 ```
 
 ```
-Team: 
+Team: 20
 ```
 
 ```
 Lover:
-+ 
++ King Zalo (chi404)
 ```

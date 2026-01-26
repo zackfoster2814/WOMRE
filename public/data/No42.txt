@@ -1,4 +1,5 @@
 No.42
+No.42
 Name: Kaori (khanhnguyen1703)
 ```
 Ký Sinh:
@@ -55,7 +56,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Sonic Scream
++ Sonic Scream  (đã mất do tặng Toast (toast_4274))
 ```
 
 ```

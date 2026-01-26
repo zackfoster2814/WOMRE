@@ -5,30 +5,30 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Troll
+Sub-race: Regular Troll
 ```
 
 ```
 Archetype: 
-+ 
++ Zealot
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Cautious
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:7
+Spd:2
+Dur:10
+IQ:10
+BIQ:4
+MA:6
 ```
 
 ```
 Houses: 
-+ 
++ Shurima 
 ```
 
 ```
@@ -36,32 +36,35 @@ Houses:
  + 0 Normal gear:
   - 
  + 0 Legacy gear:
-  - 
+  - Almighty Vampire's Blood (Từ House)
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Magical Staff (Không dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Baldening (Từ House)
++ Ice Hammer(Từ House)
++ Blood Manipulation
++ Shooting for Victory
 ```
 
 ```
 Char dev: 
-+ 
++ Become Woke 
 ```
 
 ```
-Team: 
+Team: 7
 ```
 
 ```

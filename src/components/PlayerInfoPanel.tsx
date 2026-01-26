@@ -4,7 +4,7 @@ import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
 import type { CharacterEffects, CharacterStats as EffectStats, EffectSourceType } from "../effects/types";
-import { getAssetPath } from "../utils/basePath";
+import { getAssetPath, getPlayerNumbers } from "../utils/basePath";
 
 // Initialize effect data once
 let effectsInitialized = false;
@@ -75,20 +75,8 @@ export const PlayerInfoPanel = ({
       setIsLoadingList(true);
 
       try {
-        // Fetch player index from JSON file
-        const indexResponse = await fetch(getAssetPath("/data/player-index.json"));
-        let playerNumbers: number[] = [];
-
-        if (indexResponse.ok) {
-          const indexData = await indexResponse.json();
-          playerNumbers = indexData.players || [];
-        } else {
-          // Fallback to hardcoded list if index doesn't exist
-          playerNumbers = [
-            35, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 116, 117, 118, 119, 120,
-            121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131,
-          ];
-        }
+        // Get player numbers using shared utility
+        const playerNumbers = await getPlayerNumbers();
 
         // Fetch all player files in parallel
         const fetchPromises = playerNumbers.map(
@@ -645,9 +633,9 @@ const PlayerContent = ({
       {/* Quirks */}
       <div className="bg-gray-700/50 rounded-lg p-3">
         <p className="text-gray-400 text-xs mb-2">
-          Quirks ({character.quirks.length})
+          Quirks ({character.quirks?.length || 0})
         </p>
-        {character.quirks.length > 0 ? (
+        {character.quirks && character.quirks.length > 0 ? (
           <div className="space-y-1">
             {character.quirks.map((quirk, idx) => (
               <p
@@ -668,9 +656,9 @@ const PlayerContent = ({
       {/* Powers */}
       <div className="bg-gray-700/50 rounded-lg p-3">
         <p className="text-gray-400 text-xs mb-2">
-          Powers ({character.powers.length})
+          Powers ({character.powers?.length || 0})
         </p>
-        {character.powers.length > 0 ? (
+        {character.powers && character.powers.length > 0 ? (
           <div className="flex flex-wrap gap-1">
             {character.powers.map((power, idx) => (
               <span
@@ -695,9 +683,9 @@ const PlayerContent = ({
       {/* Weapons */}
       <div className="bg-gray-700/50 rounded-lg p-3">
         <p className="text-gray-400 text-xs mb-2">
-          Weapons ({character.weapons.length})
+          Weapons ({character.weapons?.length || 0})
         </p>
-        {character.weapons.length > 0 ? (
+        {character.weapons && character.weapons.length > 0 ? (
           <div className="space-y-1">
             {character.weapons.map((weapon, idx) => (
               <p
@@ -726,9 +714,9 @@ const PlayerContent = ({
       <div className="bg-gray-700/50 rounded-lg p-3">
         <p className="text-gray-400 text-xs mb-2">
           Gear (
-          {character.gear.normalGear.length + character.gear.legacyGear.length})
+          {(character.gear?.normalGear?.length || 0) + (character.gear?.legacyGear?.length || 0)})
         </p>
-        {character.gear.normalGear.length > 0 && (
+        {character.gear?.normalGear && character.gear.normalGear.length > 0 && (
           <div className="mb-2">
             <p className="text-gray-500 text-xs mb-1">
               Normal ({character.gear.normalGear.length})
@@ -747,7 +735,7 @@ const PlayerContent = ({
             </div>
           </div>
         )}
-        {character.gear.legacyGear.length > 0 && (
+        {character.gear?.legacyGear && character.gear.legacyGear.length > 0 && (
           <div>
             <p className="text-gray-500 text-xs mb-1">
               Legacy ({character.gear.legacyGear.length})
@@ -766,8 +754,8 @@ const PlayerContent = ({
             </div>
           </div>
         )}
-        {character.gear.normalGear.length === 0 &&
-          character.gear.legacyGear.length === 0 && (
+        {(!character.gear?.normalGear || character.gear.normalGear.length === 0) &&
+          (!character.gear?.legacyGear || character.gear.legacyGear.length === 0) && (
             <p className="text-gray-500 text-sm">-</p>
           )}
       </div>
@@ -775,9 +763,9 @@ const PlayerContent = ({
       {/* Runes */}
       <div className="bg-gray-700/50 rounded-lg p-3">
         <p className="text-gray-400 text-xs mb-2">
-          Runes ({character.runes.runes.length})
+          Runes ({character.runes?.runes?.length || 0})
         </p>
-        {character.runes.runes.length > 0 && (
+        {character.runes?.runes && character.runes.runes.length > 0 && (
           <div className="flex flex-wrap gap-1 mb-2">
             {character.runes.runes.map((rune, idx) => (
               <span

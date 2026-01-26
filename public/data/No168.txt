@@ -5,63 +5,63 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Đen
 ```
 
 ```
 Archetype: 
-+ 
++ Femboy
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Resilient
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:10
+Spd:2
+Dur:5
+IQ:1
+BIQ:6
+MA:1
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses:
++ Dothraki (Bị đuổi)
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Fishing Rod
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Moonveil (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Rampage 
 ```
 
 ```
 Char dev: 
-+ 
++ Kinda Homeless
 ```
 
 ```
-Team: 
+Team: 28
 ```
 
 ```

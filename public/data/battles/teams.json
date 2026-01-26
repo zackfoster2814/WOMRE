@@ -2,12 +2,13 @@
   "teams": [
     {
       "id": 1,
-      "boss": null,
+      "boss": "Dreglord",
       "members": [
         { "name": "mGilzuha", "username": "gilgamesh_2202" },
         { "name": "Roku da Poet", "username": "roku2807" },
         { "name": "KaTsumi - ChillWithCafe", "username": "katsumi3000" },
-        { "name": "PYBB113", "username": "quang03022" }
+        { "name": "PYBB113", "username": "quang03022" },
+        { "name": "sarah", "username": "sarahaxtroll" }
       ]
     },
     {
@@ -26,7 +27,7 @@
     },
     {
       "id": 3,
-      "boss": null,
+      "boss": "Aatrox World Ender",
       "members": [
         { "name": "MasMerterserker", "username": "azzapp36" }
       ]
@@ -54,7 +55,7 @@
     },
     {
       "id": 6,
-      "boss": null,
+      "boss": "Mambo",
       "members": [
         { "name": "Farm Mạnh Quỳnh", "username": "phuongan1704" },
         { "name": "...??", "username": "_1469" },
@@ -69,7 +70,9 @@
         { "name": "TheViet", "username": "c9ru5" },
         { "name": "Dương Quá Quá", "username": "duongquaqua" },
         { "name": "Hoàng Tuyền Không Trấn", "username": "franx9816" },
-        { "name": "Nygg", "username": "nyggystorm" }
+        { "name": "Nygg", "username": "nyggystorm" },
+        { "name": "Chigga", "username": "bunbunbunbill" },
+        { "name": "Kophaiezio", "username": "doanngocthang" }
       ]
     },
     {
@@ -82,12 +85,13 @@
         { "name": "_paower", "username": "baoissleepy" },
         { "name": "AtKo", "username": "ame_tako" },
         { "name": "dlwlrma", "username": "aem2804" },
-        { "name": "Hayato", "username": "hayatoo_o" }
+        { "name": "Hayato", "username": "hayatoo_o" },
+        { "name": "Toast", "username": "toast_4274" }
       ]
     },
     {
       "id": 9,
-      "boss": null,
+      "boss": "Simon",
       "members": [
         { "name": "Quý Trần Tường", "username": "wyug1234" },
         { "name": "Memento Duelist", "username": "memento_duelist" },
@@ -114,7 +118,7 @@
         { "name": "Khogadetem", "username": "font_bard" },
         { "name": "Em Phốc Trắng", "username": "dick8704" },
         { "name": "Korokiri", "username": "Korokiri" },
-        { "name": "\"1037\"", "username": ".huy._" },
+        { "name": "1037", "username": ".huy._" },
         { "name": "LDL", "username": "longle_59366" },
         { "name": "ltq", "username": "tcltq" },
         { "name": "Yun", "username": "yun_mori" }
@@ -122,7 +126,7 @@
     },
     {
       "id": 12,
-      "boss": null,
+      "boss": "Slave Knight Gael",
       "members": [
         { "name": "Inglorious", "username": "ingloriousv" },
         { "name": "Ngũ hổ vồ xôi", "username": "uchihahahaha_" },
@@ -138,12 +142,13 @@
         { "name": "Lười", "username": "lazbu2501" },
         { "name": "SoloWingPixy", "username": "s0l0wingpixy" },
         { "name": "Yoh Hai Kiếm", "username": "yoh711" },
-        { "name": "Thang", "username": "thang0458" }
+        { "name": "Thang", "username": "thang0458" },
+        { "name": "Julianus", "username": "khoi7435" }
       ]
     },
     {
       "id": 14,
-      "boss": null,
+      "boss": "Kafka",
       "members": [
         { "name": "Hero X", "username": "enatc0" },
         { "name": "Đóm con", "username": "pinz2223" },
@@ -167,12 +172,13 @@
     },
     {
       "id": 16,
-      "boss": null,
+      "boss": "Polish Cow",
       "members": [
         { "name": "Manhattan Cafe chơi TFT", "username": "randomguy5719" },
         { "name": "Lock", "username": "lock485" },
         { "name": "nat296", "username": "anhtai8340" },
-        { "name": "0chjnchjn", "username": "tine2417" }
+        { "name": "0chjnchjn", "username": "tine2417" },
+        { "name": "Lunar", "username": "huyvp1412" }
       ]
     },
     {
@@ -182,7 +188,8 @@
         { "name": "V1ncc", "username": "vinhbang" },
         { "name": "We are Charlie Kirk", "username": "_yeetusmymeatus" },
         { "name": "Warmbunny", "username": "warmbunny" },
-        { "name": "litelonglon", "username": "littotalk" }
+        { "name": "litelonglon", "username": "littotalk" },
+        { "name": "HuyMei", "username": "huymei" }
       ]
     },
     {
@@ -200,7 +207,7 @@
     },
     {
       "id": 19,
-      "boss": null,
+      "boss": "Laerys the Unknown",
       "members": [
         { "name": "Euoid", "username": "euoid" },
         { "name": "Nicre", "username": ".jan_01" },
@@ -211,8 +218,11 @@
     },
     {
       "id": 20,
-      "boss": null,
-      "members": []
+      "boss": "The Elder Brain",
+      "members": [
+        { "name": "Asumi Kurenai", "username": "weaboololi" },
+        { "name": "Ca Cao", "username": "Catos" }
+      ]
     },
     {
       "id": 21,
@@ -230,22 +240,24 @@
         { "name": "llaW", "username": "llaw3344" },
         { "name": "Rentarou", "username": "viet3657" },
         { "name": "iodern", "username": "iodern" },
-        { "name": "mystery pham", "username": "mysterypham" }
+        { "name": "mystery pham", "username": "mysterypham" },
+        { "name": "Gambling", "username": "da_ork_" }
       ]
     },
     {
       "id": 23,
-      "boss": null,
+      "boss": "Capra Demon",
       "members": [
         { "name": "Đừng Nhờn với Two Fingers", "username": "dabotnhondc1nam" },
         { "name": "Fami", "username": "Fami" },
         { "name": "Sâm bổ lượng Châu Đốc", "username": "ginkka" },
-        { "name": "catfish", "username": "catfish0140" }
+        { "name": "catfish", "username": "catfish0140" },
+        { "name": "zun", "username": "zuniee" }
       ]
     },
     {
       "id": 24,
-      "boss": null,
+      "boss": "Soul of Cinder",
       "members": [
         { "name": "idontloveyou", "username": "iloveyou1233406" },
         { "name": "Ako Darling", "username": "mikukhang" },
@@ -257,29 +269,33 @@
     },
     {
       "id": 25,
-      "boss": null,
+      "boss": "Radagon of The Golden Order",
       "members": [
         { "name": "Pine", "username": "pinemon" },
         { "name": "NPC", "username": "npc867" },
         { "name": "Con dê", "username": "doibacnhusilver" },
         { "name": "Muon liem chan Seed qua", "username": "tandepzai3282101" },
-        { "name": "Narita Taigoat", "username": "stan_taengoo" }
+        { "name": "Narita Taigoat", "username": "stan_taengoo" },
+        { "name": "DK Yuri", "username": "longgg0058" },
+        { "name": "nahhhh_hecker", "username": "nahhhh_hecker" },
+        { "name": "Note", "username": "note8442" }
       ]
     },
     {
       "id": 26,
-      "boss": null,
+      "boss": "Griffith",
       "members": [
         { "name": "Johnny Joestar", "username": "newtransocial" },
         { "name": "caubetuky._.", "username": "haruhanasaki" },
         { "name": "CkTrangNhung", "username": "baophan" },
         { "name": "AsuK", "username": "asuk214" },
-        { "name": "King Zalo", "username": "chi404" }
+        { "name": "King Zalo", "username": "chi404" },
+        { "name": "mrcandy1612", "username": "mrcandy1612" }
       ]
     },
     {
       "id": 27,
-      "boss": null,
+      "boss": "Mu FanBase",
       "members": [
         { "name": "Yamakun", "username": "yamakunson" },
         { "name": "trthesloth", "username": "_trthesloth" },
@@ -296,12 +312,13 @@
         { "name": "Pui", "username": "pui19" },
         { "name": "Shiro", "username": "kuriyamashiro" },
         { "name": "Chovy Golden Roader", "username": "moimoi6820" },
-        { "name": "Lov4", "username": "huylova" }
+        { "name": "Lov4", "username": "huylova" },
+        { "name": "HunggViEn", "username": "hunggvn" }
       ]
     },
     {
       "id": 29,
-      "boss": null,
+      "boss": "Brock",
       "members": [
         { "name": "Johnny Walkaways", "username": "johnnywalkaways" },
         { "name": "Wohlhabend", "username": "wohlhabend_" }
@@ -309,21 +326,23 @@
     },
     {
       "id": 30,
-      "boss": null,
+      "boss": "Isshin the Sword Saint",
       "members": [
         { "name": "GoonNaga", "username": "goonaga" },
         { "name": "Kaori", "username": "khanhnguyen1703" },
         { "name": "baonine", "username": "baonine" },
-        { "name": "Em Minh", "username": "minhloptruong" }
+        { "name": "Em Minh", "username": "minhloptruong" },
+        { "name": "Lee", "username": "long_bick_dig" }
       ]
     },
     {
       "id": 31,
-      "boss": null,
+      "boss": "The Unblinking Gaze",
       "members": [
         { "name": "Sami", "username": "saminoceda" },
         { "name": "Wakamo Lunatic", "username": "nguyuyen" },
-        { "name": "Mork", "username": "mork2104" }
+        { "name": "Mork", "username": "mork2104" },
+        { "name": "luchii", "username": "lucii1701" }
       ]
     },
     {

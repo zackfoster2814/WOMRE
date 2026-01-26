@@ -5,63 +5,69 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Goblin
+Sub-race: 100
 ```
 
 ```
 Archetype: 
-+ 
++ Invoker
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Cheater
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:5
+Spd:10
+Dur:6
+IQ:4
+BIQ:5
+MA:7
 ```
 
 ```
 Houses: 
-+ 
++ Hallownest
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 1 Normal gear:
+  - Cuộn khăn giấy 
+  - Sổ tay
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Labrys Axe (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
+3 Power: 
++ Quas
++ Wex
++ Exort
++ Rampage
++ Voidwalking
++ Clearmind
+```
+
+```
+Char dev: Lost an Arm
 + 
 ```
 
 ```
-Char dev: 
-+ 
-```
-
-```
-Team: 
+Team: 23
 ```
 
 ```

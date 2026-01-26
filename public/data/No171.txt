@@ -5,63 +5,63 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Gnome
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Devotee
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Bloodthirsty
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:4
+Spd:1
+Dur:5
+IQ:7
+BIQ:5
+MA:2
 ```
 
 ```
 Houses: 
-+ 
++ Ban Nhạc Ngọt Đoàn Kết
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Bò khô (Từ House)
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Hou Yi's Divine Bow (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Mewing 
 ```
 
 ```
 Char dev: 
-+ 
++ Overcome the Habits
 ```
 
 ```
-Team: 
+Team: 31
 ```
 
 ```
