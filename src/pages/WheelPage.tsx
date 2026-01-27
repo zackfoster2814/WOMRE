@@ -505,9 +505,9 @@ export const WheelPage = () => {
   };
 
   const description = useMemo(() => {
-    if (currentItem === null) return null;
+    if (!currentItem?.name) return null;
 
-    const searchResults = EffectRegistry.search(currentItem.name);
+    const searchResults = EffectRegistry.searchExact(currentItem.name);
     if (searchResults.length) return searchResults[0].description;
 
     return currentItem.effectDescription;

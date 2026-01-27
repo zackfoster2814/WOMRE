@@ -150,6 +150,33 @@ class EffectRegistryClass {
     return results;
   }
 
+  searchExact(
+    query: string,
+    sourceType?: EffectSourceType,
+  ): EffectRegistryEntry[] {
+    let results: EffectRegistryEntry[] = [];
+    const lowerCaseQuery = query.toLowerCase();
+
+    if (sourceType) {
+      const typeMap = this.entriesByType.get(sourceType);
+      if (typeMap) {
+        for (const entry of typeMap.values()) {
+          if (entry.name.toLowerCase() == lowerCaseQuery) {
+            results.push(entry);
+          }
+        }
+      }
+    } else {
+      for (const entry of this.entries.values()) {
+        if (entry.name.toLowerCase() == lowerCaseQuery) {
+          results.push(entry);
+        }
+      }
+    }
+
+    return results;
+  }
+
   private createKey(sourceType: EffectSourceType, name: string): string {
     return `${sourceType}:${name.toLowerCase()}`;
   }
