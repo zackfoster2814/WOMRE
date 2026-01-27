@@ -8,7 +8,8 @@
         { "name": "Roku da Poet", "username": "roku2807" },
         { "name": "KaTsumi - ChillWithCafe", "username": "katsumi3000" },
         { "name": "PYBB113", "username": "quang03022" },
-        { "name": "sarah", "username": "sarahaxtroll" }
+        { "name": "sarah", "username": "sarahaxtroll" },
+        { "name": "Tuấn Anh", "username": "tuananh260601" }
       ]
     },
     {
@@ -50,7 +51,9 @@
       "id": 5,
       "boss": "Violet Vessel",
       "members": [
-        { "name": "ar2di", "username": "ar2di" }
+        { "name": "ar2di", "username": "ar2di" },
+        { "name": "vuvip", "username": ".vuvip" },
+        { "name": "Amos", "username": "amos0603" }
       ]
     },
     {
@@ -143,7 +146,8 @@
         { "name": "SoloWingPixy", "username": "s0l0wingpixy" },
         { "name": "Yoh Hai Kiếm", "username": "yoh711" },
         { "name": "Thang", "username": "thang0458" },
-        { "name": "Julianus", "username": "khoi7435" }
+        { "name": "Julianus", "username": "khoi7435" },
+        { "name": "Thanh Tước bé cưng", "username": "cleade1stmay" }
       ]
     },
     {
@@ -172,13 +176,14 @@
     },
     {
       "id": 16,
-      "boss": "Polish Cow",
+      "boss": "Polish cow",
       "members": [
         { "name": "Manhattan Cafe chơi TFT", "username": "randomguy5719" },
         { "name": "Lock", "username": "lock485" },
         { "name": "nat296", "username": "anhtai8340" },
         { "name": "0chjnchjn", "username": "tine2417" },
-        { "name": "Lunar", "username": "huyvp1412" }
+        { "name": "Lunar", "username": "huyvp1412" },
+        { "name": "BLèBLè", "username": "amebear" }
       ]
     },
     {
@@ -202,7 +207,8 @@
         { "name": "NDP", "username": "ndp1792" },
         { "name": "Elai", "username": "elai2924" },
         { "name": "vietbuon", "username": "kotorukondou" },
-        { "name": "Anh Bác Sĩ", "username": "shigurekt1sha" }
+        { "name": "Anh Bác Sĩ", "username": "shigurekt1sha" },
+        { "name": "Novaz", "username": "novaz1234" }
       ]
     },
     {
@@ -230,7 +236,9 @@
       "members": [
         { "name": "KK", "username": "harry.hm" },
         { "name": "Zackie", "username": "zackfoster___" },
-        { "name": "act engage draw engage", "username": "gnasuwu" }
+        { "name": "act engage draw engage", "username": "gnasuwu" },
+        { "name": "HuyRhythm", "username": "huyrhythm" },
+        { "name": "Bộ PC", "username": "conchocaobangbopc" }
       ]
     },
     {
@@ -241,7 +249,8 @@
         { "name": "Rentarou", "username": "viet3657" },
         { "name": "iodern", "username": "iodern" },
         { "name": "mystery pham", "username": "mysterypham" },
-        { "name": "Gambling", "username": "da_ork_" }
+        { "name": "Gambling", "username": "da_ork_" },
+        { "name": "Vạn vật thua Gwen", "username": "milkman6936" }
       ]
     },
     {
@@ -264,7 +273,8 @@
         { "name": "Hà", "username": "huanghe11" },
         { "name": "Son WuKong", "username": "maidinhhongson" },
         { "name": "Sizaky", "username": "sizaky" },
-        { "name": "Bưởi", "username": "ngbxxx" }
+        { "name": "Bưởi", "username": "ngbxxx" },
+        { "name": "4k_iIl", "username": "kh4ser1ll" }
       ]
     },
     {
@@ -295,7 +305,7 @@
     },
     {
       "id": 27,
-      "boss": "Mu FanBase",
+      "boss": "Mu Fanbase",
       "members": [
         { "name": "Yamakun", "username": "yamakunson" },
         { "name": "trthesloth", "username": "_trthesloth" },
@@ -342,13 +352,16 @@
         { "name": "Sami", "username": "saminoceda" },
         { "name": "Wakamo Lunatic", "username": "nguyuyen" },
         { "name": "Mork", "username": "mork2104" },
-        { "name": "luchii", "username": "lucii1701" }
+        { "name": "luchii", "username": "lucii1701" },
+        { "name": "мιтιᴘнᴀι︵²ᵏ⁷", "username": "mitiphai" }
       ]
     },
     {
       "id": 32,
       "boss": "Alduin",
-      "members": []
+      "members": [
+        { "name": "Vinh Vander Bek", "username": "vinhvan" }
+      ]
     }
   ]
 }
