@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { WheelItem } from "../types";
 import { generateColors } from "../utils/colors";
 import {
@@ -10,7 +10,7 @@ import { playSpecialSound } from "../utils/specialSounds";
 import arrowImg from "../assets/img/arrow.png";
 import borderImg from "../assets/img/border.png";
 import MouseTracker from "./MouseTracker";
-import { EffectRegistry } from "../effects";
+// import { EffectRegistry } from "../effects";
 
 interface WheelCanvasProps {
   items: WheelItem[];
@@ -405,17 +405,19 @@ export const WheelCanvas = ({
   const activeItems = items.filter((item) => !item.disabled && item.weight > 0);
   const canSpin = activeItems.length > 0 && !isSpinning;
 
-  const description = useMemo(() => {
-    if (hoveredItemIndex === null) return null;
+  // Hover description temporarily disabled
+  // const description = useMemo(() => {
+  //   if (hoveredItemIndex === null) return null;
 
-    const item = activeItems[hoveredItemIndex];
+  //   const item = activeItems[hoveredItemIndex];
 
-    const searchResults = EffectRegistry.searchExact(item?.name);
+  //   const searchResults = EffectRegistry.searchExact(item?.name);
 
-    if (searchResults.length) return searchResults[0].description;
+  //   if (searchResults.length) return searchResults[0].description;
 
-    return item?.effectDescription;
-  }, [hoveredItemIndex]);
+  //   return item?.effectDescription;
+  // }, [hoveredItemIndex]);
+  const description = null;
 
   return (
     <div className="relative inline-block w-full" style={{ padding: "3%" }}>

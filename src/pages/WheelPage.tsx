@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { WheelItem, WheelPreset, SpinHistoryEntry } from "../types";
 // Temporarily commented out - PlayerInfoPanel is hidden for release
 // import { Character } from "../types/character";
@@ -23,9 +23,11 @@ import {
 } from "../utils/localStorage";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { initializeEffectData } from "../effects/data";
-import { EffectRegistry } from "../effects";
+// Temporarily disabled hover tooltip
+// import { EffectRegistry } from "../effects";
 // import { getAssetPath } from "../utils/basePath";
-import { RemoveScroll } from "react-remove-scroll";
+// Temporarily disabled hover tooltip
+// import { RemoveScroll } from "react-remove-scroll";
 
 export const WheelPage = () => {
   const [items, setItems] = useState<WheelItem[]>([
@@ -57,9 +59,10 @@ export const WheelPage = () => {
   // const [isLoadingCharacter, setIsLoadingCharacter] = useState(false);
   // const [showPlayerPanel, setShowPlayerPanel] = useState(false);
   // const [isSavingCharacter, setIsSavingCharacter] = useState(false);
-  const tooltipRef = useRef<HTMLDivElement | null>(null);
-  const [isCurrentItemResultHover, setIsCurrentItemResultHover] =
-    useState(false);
+  // Temporarily disabled hover tooltip
+  // const tooltipRef = useRef<HTMLDivElement | null>(null);
+  // const [isCurrentItemResultHover, setIsCurrentItemResultHover] =
+  //   useState(false);
 
   useEffect(() => {
     initializeEffectData();
@@ -499,19 +502,20 @@ export const WheelPage = () => {
     }
   };
 
-  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
-    if (!tooltipRef.current) return;
-    tooltipRef.current.scrollTop += e.deltaY;
-  };
+  // Temporarily disabled hover tooltip
+  // const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+  //   if (!tooltipRef.current) return;
+  //   tooltipRef.current.scrollTop += e.deltaY;
+  // };
 
-  const description = useMemo(() => {
-    if (!currentItem?.name) return null;
+  // const description = useMemo(() => {
+  //   if (!currentItem?.name) return null;
 
-    const searchResults = EffectRegistry.searchExact(currentItem.name);
-    if (searchResults.length) return searchResults[0].description;
+  //   const searchResults = EffectRegistry.searchExact(currentItem.name);
+  //   if (searchResults.length) return searchResults[0].description;
 
-    return currentItem.effectDescription;
-  }, [currentItem]);
+  //   return currentItem.effectDescription;
+  // }, [currentItem]);
 
   return (
     <div
@@ -666,26 +670,10 @@ export const WheelPage = () => {
                           backgroundColor: getCurrentItemColor(),
                         }}
                       />
-                      <div
-                        className="flex-1 flex flex-col items-center justify-center min-h-[3rem] relative group"
-                        onWheel={handleWheel}
-                        onMouseEnter={() => setIsCurrentItemResultHover(true)}
-                        onMouseLeave={() => setIsCurrentItemResultHover(false)}
-                      >
+                      <div className="flex-1 flex flex-col items-center justify-center min-h-[3rem] relative">
                         <p className="text-lg sm:text-xl font-bold text-white text-center break-words px-2">
                           {currentItem.name}
                         </p>
-                        {!isSpinning &&
-                          isCurrentItemResultHover &&
-                          description && (
-                            <RemoveScroll
-                              ref={tooltipRef}
-                              removeScrollBar={false}
-                              className="min-w-[140%] w-fit max-h-96 absolute z-50 bottom-full hidden group-hover:flex mb-2 px-4 py-2 justify-center bg-black border-yellow-500 border-solid border-4 text-white text-xl rounded-md overflow-y-auto custom-scrollbar whitespace-pre-line overscroll-none"
-                            >
-                              {description}
-                            </RemoveScroll>
-                          )}
                       </div>
                       <div className="flex-shrink-0 mt-4">
                         <p className="text-sm sm:text-base text-gray-400">

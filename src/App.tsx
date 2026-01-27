@@ -10,7 +10,7 @@ import {
 import { WheelPage } from "./pages/WheelPage";
 import { PlayerListPage } from "./pages/PlayerListPage";
 import { BattleZonePage } from "./pages/BattleZonePage";
-import { TeamBattlePage } from "./pages/TeamBattlePage";
+// import { TeamBattlePage } from "./pages/TeamBattlePage";
 import { isTauri } from "./utils/localStorage";
 
 // Check if running in web-only mode (not Tauri)
@@ -19,7 +19,7 @@ const isWebOnly = !isTauri();
 const navItems = [
   { path: "/", label: "Wheel of Name", color: "bg-blue-600" },
   { path: "/players", label: "Players", color: "bg-green-600" },
-  { path: "/battles", label: "Team Battles", color: "bg-orange-600" },
+  // { path: "/battles", label: "Team Battles", color: "bg-orange-600" },
   { path: "/battle", label: "Battle Zone", color: "bg-red-600" },
 ];
 
@@ -110,7 +110,7 @@ function App() {
             {/* Full Tauri app: Wheel of Name is default */}
             <Route path="/" element={<WheelPage />} />
             <Route path="/players" element={<PlayerListPage />} />
-            <Route path="/battles" element={<TeamBattlePage />} />
+            {/* <Route path="/battles" element={<TeamBattlePage />} /> */}
             <Route path="/battle" element={<BattleZonePage />} />
           </>
         )}

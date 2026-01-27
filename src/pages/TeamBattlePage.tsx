@@ -5,6 +5,7 @@ import { CharacterParser } from "../utils/characterParser";
 import { getAssetPath } from "../utils/basePath";
 import { isTauri } from "../utils/localStorage";
 import wheelBgImage from "../assets/img/wheel-bg.png";
+import { BossBattleRoom } from "../components/BossBattleRoom";
 
 // Check if running in web-only mode
 const isWebOnly = !isTauri();
@@ -72,6 +73,7 @@ export const TeamBattlePage = () => {
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
   const [filterType, setFilterType] = useState<"all" | "with-boss" | "no-boss">("all");
   const [selectedBoss, setSelectedBoss] = useState<Boss | null>(null);
+  const [battleRoomTeam, setBattleRoomTeam] = useState<BattleView | null>(null);
 
   // Load data
   useEffect(() => {
@@ -274,6 +276,7 @@ export const TeamBattlePage = () => {
                 }
                 getTotalStats={getTotalStats}
                 onBossClick={() => battle.boss && setSelectedBoss(battle.boss)}
+                onStartBattle={() => battle.boss && setBattleRoomTeam(battle)}
               />
             ))}
           </div>
@@ -290,6 +293,14 @@ export const TeamBattlePage = () => {
       {selectedBoss && (
         <BossDetailModal boss={selectedBoss} onClose={() => setSelectedBoss(null)} />
       )}
+
+      {/* Boss Battle Room */}
+      {battleRoomTeam && battleRoomTeam.boss && (
+        <BossBattleRoom
+          battle={battleRoomTeam}
+          onClose={() => setBattleRoomTeam(null)}
+        />
+      )}
     </div>
   );
 };
@@ -301,9 +312,10 @@ interface BattleCardProps {
   onToggle: () => void;
   getTotalStats: (stats: BossStats | CharacterStats) => number;
   onBossClick: () => void;
+  onStartBattle: () => void;
 }
 
-const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick }: BattleCardProps) => {
+const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, onStartBattle }: BattleCardProps) => {
   const hasBoss = battle.boss !== null;
   const bossTotalStats = battle.boss ? getTotalStats(battle.boss.stats) : 0;
 
@@ -403,6 +415,21 @@ const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick }
               <h4 className="text-sm font-bold mb-1 text-red-400">Punishment (Lose)</h4>
               <p className="text-sm text-red-300 line-clamp-3">{battle.boss.punishment}</p>
             </div>
+          </div>
+        )}
+
+        {/* Start Battle Button */}
+        {hasBoss && battle.playerData.length > 0 && (
+          <div className="mt-4 text-center">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onStartBattle();
+              }}
+              className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+            >
+              Enter Lair Battle
+            </button>
           </div>
         )}
 
