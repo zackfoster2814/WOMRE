@@ -128,8 +128,12 @@ export const ItemList = ({
 
   const bulkAdd = (text: string) => {
     let newItems: WheelItem[] = [];
+    const trimmedText = text
+      .split("\n")
+      .map((line) => line.replace(/\t{2,}/g, "\t"))
+      .join("\n");
 
-    Papa.parse<[string, string?, string?, string?]>(text, {
+    Papa.parse<[string, string?, string?, string?]>(trimmedText, {
       header: false,
       skipEmptyLines: "greedy",
       newline: "\n",
@@ -141,30 +145,31 @@ export const ItemList = ({
         return value;
       },
       complete(results) {
-        results.data.map((e) => {
+        results.data.forEach((e) => {
           let weight = 1;
 
-          if (e[1] && !isNaN(parseFloat(e[1]))) {
+          if (e[1] && !Number.isNaN(Number.parseFloat(e[1]))) {
             weight = Number(e[1]);
           }
 
-          let des = "";
-
-          if (e[2]?.length) des = e[2];
-          if (e[3]?.length) {
-            // Usable
-            if (
-              e[3].includes("%", -1) &&
-              !isNaN(parseInt(e[3].replace("%", "")))
-            ) {
-              des = `${e[2]}\nUsable: ${e[3]}`;
-            }
-          }
+          // Disable because currently no support for data with header
+          // let des = "";
+          // if (e[2]?.length) des = e[2];
+          // if (e[3]?.length) {
+          //   // Usable
+          //   if (
+          //     e[3].includes("%", -1) &&
+          //     !Number.isNaN(Number.parseInt(e[3].replace("%", "")))
+          //   ) {
+          //     des = `${e[2]}\nUsable: ${e[3]}`;
+          //   }
+          // }
           newItems.push({
             id: crypto.randomUUID(),
             name: e[0],
             weight: weight,
-            effectDescription: des,
+            // Disable because currently no support for data with header
+            // effectDescription: des,
           });
         });
       },
