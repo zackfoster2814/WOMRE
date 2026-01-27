@@ -4,363 +4,876 @@
       "id": 1,
       "boss": "Dreglord",
       "members": [
-        { "name": "mGilzuha", "username": "gilgamesh_2202" },
-        { "name": "Roku da Poet", "username": "roku2807" },
-        { "name": "KaTsumi - ChillWithCafe", "username": "katsumi3000" },
-        { "name": "PYBB113", "username": "quang03022" },
-        { "name": "sarah", "username": "sarahaxtroll" },
-        { "name": "Tuấn Anh", "username": "tuananh260601" }
+        {
+          "name": "mGilzuha",
+          "username": "gilgamesh_2202"
+        },
+        {
+          "name": "Roku da Poet",
+          "username": "roku2807"
+        },
+        {
+          "name": "KaTsumi - ChillWithCafe",
+          "username": "katsumi3000"
+        },
+        {
+          "name": "PYBB113",
+          "username": "quang03022"
+        },
+        {
+          "name": "sarah",
+          "username": "sarahaxtroll"
+        },
+        {
+          "name": "Tuấn Anh",
+          "username": "tuananh260601"
+        }
       ]
     },
     {
       "id": 2,
       "boss": "Rolling Skeletons",
       "members": [
-        { "name": "Nagi", "username": "nagi_2208" },
-        { "name": "LTL", "username": "ltl.jr" },
-        { "name": "Swem", "username": ".swem" },
-        { "name": "CúNga", "username": "minh1mui" },
-        { "name": "handoivodoi", "username": "handoivodoi" },
-        { "name": "Anh Mèo", "username": "meowtea" },
-        { "name": "Nasume", "username": "nasume04590" },
-        { "name": "cá hồi chấm mắm tôm", "username": "hoangsun274" }
+        {
+          "name": "Nagi",
+          "username": "nagi_2208"
+        },
+        {
+          "name": "LTL",
+          "username": "ltl.jr"
+        },
+        {
+          "name": "Swem",
+          "username": ".swem"
+        },
+        {
+          "name": "CúNga",
+          "username": "minh1mui"
+        },
+        {
+          "name": "handoivodoi",
+          "username": "handoivodoi"
+        },
+        {
+          "name": "Anh Mèo",
+          "username": "meowtea"
+        },
+        {
+          "name": "Nasume",
+          "username": "nasume04590"
+        },
+        {
+          "name": "cá hồi chấm mắm tôm",
+          "username": "hoangsun274"
+        }
       ]
     },
     {
       "id": 3,
       "boss": "Aatrox World Ender",
       "members": [
-        { "name": "MasMerterserker", "username": "azzapp36" }
+        {
+          "name": "MasMerterserker",
+          "username": "azzapp36"
+        }
       ]
     },
     {
       "id": 4,
       "boss": "Divine Dragon",
       "members": [
-        { "name": "Duckie2369", "username": "Duckie2369" },
-        { "name": "Yui", "username": "duyanh_57789" },
-        { "name": "Nốt Ruồi Lệch Pha", "username": "cooku_35645" },
-        { "name": "GiCi", "username": "gic." },
-        { "name": "Lowns", "username": ".lowns" },
-        { "name": "Nega", "username": "thxwngs" },
-        { "name": "uchihahahaha5296", "username": "uchihahahaha5296" },
-        { "name": "naughtyboy1", "username": "naughtyboy1" }
+        {
+          "name": "Duckie2369",
+          "username": "Duckie2369"
+        },
+        {
+          "name": "Yui",
+          "username": "duyanh_57789"
+        },
+        {
+          "name": "Nốt Ruồi Lệch Pha",
+          "username": "cooku_35645"
+        },
+        {
+          "name": "GiCi",
+          "username": "gic."
+        },
+        {
+          "name": "Lowns",
+          "username": ".lowns"
+        },
+        {
+          "name": "Nega",
+          "username": "thxwngs"
+        },
+        {
+          "name": "uchihahahaha5296",
+          "username": "uchihahahaha5296"
+        },
+        {
+          "name": "naughtyboy1",
+          "username": "naughtyboy1"
+        }
       ]
     },
     {
       "id": 5,
       "boss": "Violet Vessel",
       "members": [
-        { "name": "ar2di", "username": "ar2di" },
-        { "name": "vuvip", "username": ".vuvip" },
-        { "name": "Amos", "username": "amos0603" }
+        {
+          "name": "ar2di",
+          "username": "ar2di"
+        },
+        {
+          "name": "vuvip",
+          "username": ".vuvip"
+        },
+        {
+          "name": "Amos",
+          "username": "amos0603"
+        }
       ]
     },
     {
       "id": 6,
       "boss": "Mambo",
       "members": [
-        { "name": "Farm Mạnh Quỳnh", "username": "phuongan1704" },
-        { "name": "...??", "username": "_1469" },
-        { "name": "boomaiweed", "username": "boomaiweed" },
-        { "name": "Kami Tsuna", "username": "kamitsuna" }
+        {
+          "name": "Farm Mạnh Quỳnh",
+          "username": "phuongan1704"
+        },
+        {
+          "name": "...??",
+          "username": "_1469"
+        },
+        {
+          "name": "boomaiweed",
+          "username": "boomaiweed"
+        },
+        {
+          "name": "Kami Tsuna",
+          "username": "kamitsuna"
+        }
       ]
     },
     {
       "id": 7,
       "boss": "Pontiff Sulyvahn",
       "members": [
-        { "name": "TheViet", "username": "c9ru5" },
-        { "name": "Dương Quá Quá", "username": "duongquaqua" },
-        { "name": "Hoàng Tuyền Không Trấn", "username": "franx9816" },
-        { "name": "Nygg", "username": "nyggystorm" },
-        { "name": "Chigga", "username": "bunbunbunbill" },
-        { "name": "Kophaiezio", "username": "doanngocthang" }
+        {
+          "name": "TheViet",
+          "username": "c9ru5"
+        },
+        {
+          "name": "Dương Quá Quá",
+          "username": "duongquaqua"
+        },
+        {
+          "name": "Hoàng Tuyền Không Trấn",
+          "username": "franx9816"
+        },
+        {
+          "name": "Nygg",
+          "username": "nyggystorm"
+        },
+        {
+          "name": "Chigga",
+          "username": "bunbunbunbill"
+        },
+        {
+          "name": "Kophaiezio",
+          "username": "doanngocthang"
+        }
       ]
     },
     {
       "id": 8,
       "boss": "Allfather",
       "members": [
-        { "name": "zed", "username": "zed9179" },
-        { "name": "thomasjoec", "username": "thomasjoec" },
-        { "name": "OddMan", "username": "thaioturan" },
-        { "name": "_paower", "username": "baoissleepy" },
-        { "name": "AtKo", "username": "ame_tako" },
-        { "name": "dlwlrma", "username": "aem2804" },
-        { "name": "Hayato", "username": "hayatoo_o" },
-        { "name": "Toast", "username": "toast_4274" }
+        {
+          "name": "zed",
+          "username": "zed9179"
+        },
+        {
+          "name": "thomasjoec",
+          "username": "thomasjoec"
+        },
+        {
+          "name": "OddMan",
+          "username": "thaioturan"
+        },
+        {
+          "name": "_paower",
+          "username": "baoissleepy"
+        },
+        {
+          "name": "AtKo",
+          "username": "ame_tako"
+        },
+        {
+          "name": "dlwlrma",
+          "username": "aem2804"
+        },
+        {
+          "name": "Hayato",
+          "username": "hayatoo_o"
+        },
+        {
+          "name": "Toast",
+          "username": "toast_4274"
+        }
       ]
     },
     {
       "id": 9,
       "boss": "Simon",
       "members": [
-        { "name": "Quý Trần Tường", "username": "wyug1234" },
-        { "name": "Memento Duelist", "username": "memento_duelist" },
-        { "name": "Nikki", "username": "huyhuhhuh" }
+        {
+          "name": "Quý Trần Tường",
+          "username": "wyug1234"
+        },
+        {
+          "name": "Memento Duelist",
+          "username": "memento_duelist"
+        },
+        {
+          "name": "Nikki",
+          "username": "huyhuhhuh"
+        }
       ]
     },
     {
       "id": 10,
       "boss": "Sky Dancer",
       "members": [
-        { "name": "Yami", "username": "yami2233" },
-        { "name": "tophate", "username": "d233tvu" },
-        { "name": "Adrian Fahrenheit Țepeș", "username": "adrian_the_gigachad" },
-        { "name": "Mr. C.B.", "username": "dogefear" },
-        { "name": "ngọn cỏ ven sông", "username": "ngon_co_ven_duong" },
-        { "name": "Trung Kiên", "username": "trungkien1412" }
+        {
+          "name": "Yami",
+          "username": "yami2233"
+        },
+        {
+          "name": "tophate",
+          "username": "d233tvu"
+        },
+        {
+          "name": "Adrian Fahrenheit Țepeș",
+          "username": "adrian_the_gigachad"
+        },
+        {
+          "name": "Mr. C.B.",
+          "username": "dogefear"
+        },
+        {
+          "name": "ngọn cỏ ven sông",
+          "username": "ngon_co_ven_duong"
+        },
+        {
+          "name": "Trung Kiên",
+          "username": "trungkien1412"
+        }
       ]
     },
     {
       "id": 11,
       "boss": "67 Final Boss",
       "members": [
-        { "name": "Lệch rate Jingliu 2 lần", "username": "nguyentk24hlk" },
-        { "name": "Khogadetem", "username": "font_bard" },
-        { "name": "Em Phốc Trắng", "username": "dick8704" },
-        { "name": "Korokiri", "username": "Korokiri" },
-        { "name": "1037", "username": ".huy._" },
-        { "name": "LDL", "username": "longle_59366" },
-        { "name": "ltq", "username": "tcltq" },
-        { "name": "Yun", "username": "yun_mori" }
+        {
+          "name": "Lệch rate Jingliu 2 lần",
+          "username": "nguyentk24hlk"
+        },
+        {
+          "name": "Khogadetem",
+          "username": "font_bard"
+        },
+        {
+          "name": "Em Phốc Trắng",
+          "username": "dick8704"
+        },
+        {
+          "name": "Korokiri",
+          "username": "Korokiri"
+        },
+        {
+          "name": "1037",
+          "username": ".huy._"
+        },
+        {
+          "name": "LDL",
+          "username": "longle_59366"
+        },
+        {
+          "name": "ltq",
+          "username": "tcltq"
+        },
+        {
+          "name": "Yun",
+          "username": "yun_mori"
+        }
       ]
     },
     {
       "id": 12,
       "boss": "Slave Knight Gael",
       "members": [
-        { "name": "Inglorious", "username": "ingloriousv" },
-        { "name": "Ngũ hổ vồ xôi", "username": "uchihahahaha_" },
-        { "name": "Boy lắc đầu", "username": "huntervu" },
-        { "name": "Illya", "username": "chunchunmaru26" },
-        { "name": "Myue", "username": "_fallen_myue" }
+        {
+          "name": "Inglorious",
+          "username": "ingloriousv"
+        },
+        {
+          "name": "Ngũ hổ vồ xôi",
+          "username": "uchihahahaha_"
+        },
+        {
+          "name": "Boy lắc đầu",
+          "username": "huntervu"
+        },
+        {
+          "name": "Illya",
+          "username": "chunchunmaru26"
+        },
+        {
+          "name": "Myue",
+          "username": "_fallen_myue"
+        }
       ]
     },
     {
       "id": 13,
       "boss": "The Collector",
       "members": [
-        { "name": "Lười", "username": "lazbu2501" },
-        { "name": "SoloWingPixy", "username": "s0l0wingpixy" },
-        { "name": "Yoh Hai Kiếm", "username": "yoh711" },
-        { "name": "Thang", "username": "thang0458" },
-        { "name": "Julianus", "username": "khoi7435" },
-        { "name": "Thanh Tước bé cưng", "username": "cleade1stmay" }
+        {
+          "name": "Lười",
+          "username": "lazbu2501"
+        },
+        {
+          "name": "SoloWingPixy",
+          "username": "s0l0wingpixy"
+        },
+        {
+          "name": "Yoh Hai Kiếm",
+          "username": "yoh711"
+        },
+        {
+          "name": "Thang",
+          "username": "thang0458"
+        },
+        {
+          "name": "Julianus",
+          "username": "khoi7435"
+        },
+        {
+          "name": "Thanh Tước bé cưng",
+          "username": "cleade1stmay"
+        }
       ]
     },
     {
       "id": 14,
       "boss": "Kafka",
       "members": [
-        { "name": "Hero X", "username": "enatc0" },
-        { "name": "Đóm con", "username": "pinz2223" },
-        { "name": "Seefish", "username": "seefish._80347" },
-        { "name": "Đào viên họa gia", "username": "long2222sla" }
+        {
+          "name": "Hero X",
+          "username": "enatc0"
+        },
+        {
+          "name": "Đóm con",
+          "username": "pinz2223"
+        },
+        {
+          "name": "Seefish",
+          "username": "seefish._80347"
+        },
+        {
+          "name": "Đào viên họa gia",
+          "username": "long2222sla"
+        }
       ]
     },
     {
       "id": 15,
       "boss": "Ca Cao the World Eater",
       "members": [
-        { "name": "Trapcon", "username": "trapcon" },
-        { "name": "Etsu", "username": "relkya" },
-        { "name": "cá trê vượt thác nhé hehe", "username": "huypui" },
-        { "name": "Milann", "username": "milanneeee" },
-        { "name": "HolyOne", "username": "holyone78" },
-        { "name": "Kain ヅ", "username": "greed101101" },
-        { "name": "Dopamine", "username": "surviveathust" },
-        { "name": "CatShark", "username": "catshark0903" }
+        {
+          "name": "Trapcon",
+          "username": "trapcon"
+        },
+        {
+          "name": "Etsu",
+          "username": "relkya"
+        },
+        {
+          "name": "cá trê vượt thác nhé hehe",
+          "username": "huypui"
+        },
+        {
+          "name": "Milann",
+          "username": "milanneeee"
+        },
+        {
+          "name": "HolyOne",
+          "username": "holyone78"
+        },
+        {
+          "name": "Kain ヅ",
+          "username": "greed101101"
+        },
+        {
+          "name": "Dopamine",
+          "username": "surviveathust"
+        },
+        {
+          "name": "CatShark",
+          "username": "catshark0903"
+        }
       ]
     },
     {
       "id": 16,
-      "boss": "Polish cow",
+      "boss": "Polish Cow",
       "members": [
-        { "name": "Manhattan Cafe chơi TFT", "username": "randomguy5719" },
-        { "name": "Lock", "username": "lock485" },
-        { "name": "nat296", "username": "anhtai8340" },
-        { "name": "0chjnchjn", "username": "tine2417" },
-        { "name": "Lunar", "username": "huyvp1412" },
-        { "name": "BLèBLè", "username": "amebear" }
+        {
+          "name": "Manhattan Cafe chơi TFT",
+          "username": "randomguy5719"
+        },
+        {
+          "name": "Lock",
+          "username": "lock485"
+        },
+        {
+          "name": "nat296",
+          "username": "anhtai8340"
+        },
+        {
+          "name": "0chjnchjn",
+          "username": "tine2417"
+        },
+        {
+          "name": "Lunar",
+          "username": "huyvp1412"
+        },
+        {
+          "name": "BLèBLè",
+          "username": "amebear"
+        }
       ]
     },
     {
       "id": 17,
       "boss": "Sigrun",
       "members": [
-        { "name": "V1ncc", "username": "vinhbang" },
-        { "name": "We are Charlie Kirk", "username": "_yeetusmymeatus" },
-        { "name": "Warmbunny", "username": "warmbunny" },
-        { "name": "litelonglon", "username": "littotalk" },
-        { "name": "HuyMei", "username": "huymei" }
+        {
+          "name": "V1ncc",
+          "username": "vinhbang"
+        },
+        {
+          "name": "We are Charlie Kirk",
+          "username": "_yeetusmymeatus"
+        },
+        {
+          "name": "Warmbunny",
+          "username": "warmbunny"
+        },
+        {
+          "name": "litelonglon",
+          "username": "littotalk"
+        },
+        {
+          "name": "HuyMei",
+          "username": "huymei"
+        }
       ]
     },
     {
       "id": 18,
       "boss": "Raphael",
       "members": [
-        { "name": "Hung Nguyen", "username": "hung_nguyen98" },
-        { "name": "Lunacy", "username": "lunacy6545" },
-        { "name": "Moonice", "username": "muroku_18" },
-        { "name": "NDP", "username": "ndp1792" },
-        { "name": "Elai", "username": "elai2924" },
-        { "name": "vietbuon", "username": "kotorukondou" },
-        { "name": "Anh Bác Sĩ", "username": "shigurekt1sha" },
-        { "name": "Novaz", "username": "novaz1234" }
+        {
+          "name": "Hung Nguyen",
+          "username": "hung_nguyen98"
+        },
+        {
+          "name": "Lunacy",
+          "username": "lunacy6545"
+        },
+        {
+          "name": "Moonice",
+          "username": "muroku_18"
+        },
+        {
+          "name": "NDP",
+          "username": "ndp1792"
+        },
+        {
+          "name": "Elai",
+          "username": "elai2924"
+        },
+        {
+          "name": "vietbuon",
+          "username": "kotorukondou"
+        },
+        {
+          "name": "Anh Bác Sĩ",
+          "username": "shigurekt1sha"
+        },
+        {
+          "name": "Novaz",
+          "username": "novaz1234"
+        }
       ]
     },
     {
       "id": 19,
       "boss": "Laerys the Unknown",
       "members": [
-        { "name": "Euoid", "username": "euoid" },
-        { "name": "Nicre", "username": ".jan_01" },
-        { "name": "0reki", "username": "0rekihoutarou" },
-        { "name": "KayWai", "username": "kaywai81" },
-        { "name": "tuancon", "username": ".tuancon" }
+        {
+          "name": "Euoid",
+          "username": "euoid"
+        },
+        {
+          "name": "Nicre",
+          "username": ".jan_01"
+        },
+        {
+          "name": "0reki",
+          "username": "0rekihoutarou"
+        },
+        {
+          "name": "KayWai",
+          "username": "kaywai81"
+        },
+        {
+          "name": "tuancon",
+          "username": ".tuancon"
+        }
       ]
     },
     {
       "id": 20,
       "boss": "The Elder Brain",
       "members": [
-        { "name": "Asumi Kurenai", "username": "weaboololi" },
-        { "name": "Ca Cao", "username": "Catos" }
+        {
+          "name": "Asumi Kurenai",
+          "username": "weaboololi"
+        },
+        {
+          "name": "Ca Cao",
+          "username": "Catos"
+        }
       ]
     },
     {
       "id": 21,
       "boss": "Caligo Miasma Of Night",
       "members": [
-        { "name": "KK", "username": "harry.hm" },
-        { "name": "Zackie", "username": "zackfoster___" },
-        { "name": "act engage draw engage", "username": "gnasuwu" },
-        { "name": "HuyRhythm", "username": "huyrhythm" },
-        { "name": "Bộ PC", "username": "conchocaobangbopc" }
+        {
+          "name": "KK",
+          "username": "harry.hm"
+        },
+        {
+          "name": "Zackie",
+          "username": "zackfoster___"
+        },
+        {
+          "name": "act engage draw engage",
+          "username": "gnasuwu"
+        },
+        {
+          "name": "HuyRhythm",
+          "username": "huyrhythm"
+        },
+        {
+          "name": "Bộ PC",
+          "username": "conchocaobangbopc"
+        }
       ]
     },
     {
       "id": 22,
       "boss": "Baron Nashor",
       "members": [
-        { "name": "llaW", "username": "llaw3344" },
-        { "name": "Rentarou", "username": "viet3657" },
-        { "name": "iodern", "username": "iodern" },
-        { "name": "mystery pham", "username": "mysterypham" },
-        { "name": "Gambling", "username": "da_ork_" },
-        { "name": "Vạn vật thua Gwen", "username": "milkman6936" }
+        {
+          "name": "llaW",
+          "username": "llaw3344"
+        },
+        {
+          "name": "Rentarou",
+          "username": "viet3657"
+        },
+        {
+          "name": "iodern",
+          "username": "iodern"
+        },
+        {
+          "name": "mystery pham",
+          "username": "mysterypham"
+        },
+        {
+          "name": "Gambling",
+          "username": "da_ork_"
+        },
+        {
+          "name": "Vạn vật thua Gwen",
+          "username": "milkman6936"
+        }
       ]
     },
     {
       "id": 23,
       "boss": "Capra Demon",
       "members": [
-        { "name": "Đừng Nhờn với Two Fingers", "username": "dabotnhondc1nam" },
-        { "name": "Fami", "username": "Fami" },
-        { "name": "Sâm bổ lượng Châu Đốc", "username": "ginkka" },
-        { "name": "catfish", "username": "catfish0140" },
-        { "name": "zun", "username": "zuniee" }
+        {
+          "name": "Đừng Nhờn với Two Fingers",
+          "username": "dabotnhondc1nam"
+        },
+        {
+          "name": "Fami",
+          "username": "Fami"
+        },
+        {
+          "name": "Sâm bổ lượng Châu Đốc",
+          "username": "ginkka"
+        },
+        {
+          "name": "catfish",
+          "username": "catfish0140"
+        },
+        {
+          "name": "zun",
+          "username": "zuniee"
+        }
       ]
     },
     {
       "id": 24,
       "boss": "Soul of Cinder",
       "members": [
-        { "name": "idontloveyou", "username": "iloveyou1233406" },
-        { "name": "Ako Darling", "username": "mikukhang" },
-        { "name": "Hà", "username": "huanghe11" },
-        { "name": "Son WuKong", "username": "maidinhhongson" },
-        { "name": "Sizaky", "username": "sizaky" },
-        { "name": "Bưởi", "username": "ngbxxx" },
-        { "name": "4k_iIl", "username": "kh4ser1ll" }
+        {
+          "name": "idontloveyou",
+          "username": "iloveyou1233406"
+        },
+        {
+          "name": "Ako Darling",
+          "username": "mikukhang"
+        },
+        {
+          "name": "Hà",
+          "username": "huanghe11"
+        },
+        {
+          "name": "Son WuKong",
+          "username": "maidinhhongson"
+        },
+        {
+          "name": "Sizaky",
+          "username": "sizaky"
+        },
+        {
+          "name": "Bưởi",
+          "username": "ngbxxx"
+        },
+        {
+          "name": "4k_iIl",
+          "username": "kh4ser1ll"
+        }
       ]
     },
     {
       "id": 25,
       "boss": "Radagon of The Golden Order",
       "members": [
-        { "name": "Pine", "username": "pinemon" },
-        { "name": "NPC", "username": "npc867" },
-        { "name": "Con dê", "username": "doibacnhusilver" },
-        { "name": "Muon liem chan Seed qua", "username": "tandepzai3282101" },
-        { "name": "Narita Taigoat", "username": "stan_taengoo" },
-        { "name": "DK Yuri", "username": "longgg0058" },
-        { "name": "nahhhh_hecker", "username": "nahhhh_hecker" },
-        { "name": "Note", "username": "note8442" }
+        {
+          "name": "Pine",
+          "username": "pinemon"
+        },
+        {
+          "name": "NPC",
+          "username": "npc867"
+        },
+        {
+          "name": "Con dê",
+          "username": "doibacnhusilver"
+        },
+        {
+          "name": "Muon liem chan Seed qua",
+          "username": "tandepzai3282101"
+        },
+        {
+          "name": "Narita Taigoat",
+          "username": "stan_taengoo"
+        },
+        {
+          "name": "DK Yuri",
+          "username": "longgg0058"
+        },
+        {
+          "name": "nahhhh_hecker",
+          "username": "nahhhh_hecker"
+        },
+        {
+          "name": "Note",
+          "username": "note8442"
+        }
       ]
     },
     {
       "id": 26,
       "boss": "Griffith",
       "members": [
-        { "name": "Johnny Joestar", "username": "newtransocial" },
-        { "name": "caubetuky._.", "username": "haruhanasaki" },
-        { "name": "CkTrangNhung", "username": "baophan" },
-        { "name": "AsuK", "username": "asuk214" },
-        { "name": "King Zalo", "username": "chi404" },
-        { "name": "mrcandy1612", "username": "mrcandy1612" }
+        {
+          "name": "Johnny Joestar",
+          "username": "newtransocial"
+        },
+        {
+          "name": "caubetuky._.",
+          "username": "haruhanasaki"
+        },
+        {
+          "name": "CkTrangNhung",
+          "username": "baophan"
+        },
+        {
+          "name": "AsuK",
+          "username": "asuk214"
+        },
+        {
+          "name": "King Zalo",
+          "username": "chi404"
+        },
+        {
+          "name": "mrcandy1612",
+          "username": "mrcandy1612"
+        }
       ]
     },
     {
       "id": 27,
       "boss": "Mu Fanbase",
       "members": [
-        { "name": "Yamakun", "username": "yamakunson" },
-        { "name": "trthesloth", "username": "_trthesloth" },
-        { "name": "Shin", "username": "shinrin2872" },
-        { "name": "bưởi béo", "username": "ntd2020" },
-        { "name": "Sparxie đã bán nước chưa", "username": "god19879725" }
+        {
+          "name": "Yamakun",
+          "username": "yamakunson"
+        },
+        {
+          "name": "trthesloth",
+          "username": "_trthesloth"
+        },
+        {
+          "name": "Shin",
+          "username": "shinrin2872"
+        },
+        {
+          "name": "bưởi béo",
+          "username": "ntd2020"
+        },
+        {
+          "name": "Sparxie đã bán nước chưa",
+          "username": "god19879725"
+        }
       ]
     },
     {
       "id": 28,
       "boss": "Night King",
       "members": [
-        { "name": "Lonely boy", "username": "zombieman7477" },
-        { "name": "Pui", "username": "pui19" },
-        { "name": "Shiro", "username": "kuriyamashiro" },
-        { "name": "Chovy Golden Roader", "username": "moimoi6820" },
-        { "name": "Lov4", "username": "huylova" },
-        { "name": "HunggViEn", "username": "hunggvn" }
+        {
+          "name": "Lonely boy",
+          "username": "zombieman7477"
+        },
+        {
+          "name": "Pui",
+          "username": "pui19"
+        },
+        {
+          "name": "Shiro",
+          "username": "kuriyamashiro"
+        },
+        {
+          "name": "Chovy Golden Roader",
+          "username": "moimoi6820"
+        },
+        {
+          "name": "Lov4",
+          "username": "huylova"
+        },
+        {
+          "name": "HunggViEn",
+          "username": "hunggvn"
+        }
       ]
     },
     {
       "id": 29,
       "boss": "Brock",
       "members": [
-        { "name": "Johnny Walkaways", "username": "johnnywalkaways" },
-        { "name": "Wohlhabend", "username": "wohlhabend_" }
+        {
+          "name": "Johnny Walkaways",
+          "username": "johnnywalkaways"
+        },
+        {
+          "name": "Wohlhabend",
+          "username": "wohlhabend_"
+        }
       ]
     },
     {
       "id": 30,
       "boss": "Isshin the Sword Saint",
       "members": [
-        { "name": "GoonNaga", "username": "goonaga" },
-        { "name": "Kaori", "username": "khanhnguyen1703" },
-        { "name": "baonine", "username": "baonine" },
-        { "name": "Em Minh", "username": "minhloptruong" },
-        { "name": "Lee", "username": "long_bick_dig" }
+        {
+          "name": "GoonNaga",
+          "username": "goonaga"
+        },
+        {
+          "name": "Kaori",
+          "username": "khanhnguyen1703"
+        },
+        {
+          "name": "baonine",
+          "username": "baonine"
+        },
+        {
+          "name": "Em Minh",
+          "username": "minhloptruong"
+        },
+        {
+          "name": "Lee",
+          "username": "long_bick_dig"
+        }
       ]
     },
     {
       "id": 31,
       "boss": "The Unblinking Gaze",
       "members": [
-        { "name": "Sami", "username": "saminoceda" },
-        { "name": "Wakamo Lunatic", "username": "nguyuyen" },
-        { "name": "Mork", "username": "mork2104" },
-        { "name": "luchii", "username": "lucii1701" },
-        { "name": "мιтιᴘнᴀι︵²ᵏ⁷", "username": "mitiphai" }
+        {
+          "name": "Sami",
+          "username": "saminoceda"
+        },
+        {
+          "name": "Wakamo Lunatic",
+          "username": "nguyuyen"
+        },
+        {
+          "name": "Mork",
+          "username": "mork2104"
+        },
+        {
+          "name": "luchii",
+          "username": "lucii1701"
+        },
+        {
+          "name": "мιтιᴘнᴀι︵²ᵏ⁷",
+          "username": "mitiphai"
+        }
       ]
     },
     {
       "id": 32,
       "boss": "Alduin",
       "members": [
-        { "name": "Vinh Vander Bek", "username": "vinhvan" }
+        {
+          "name": "Vinh Vander Bek",
+          "username": "vinhvan"
+        }
       ]
     }
   ]
