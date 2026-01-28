@@ -5,63 +5,70 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Giant
 Sub-race: 
 ```
 
 ```
-Archetype: 
+Archetype: Gambler
 + 
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Pure (Không Đai)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:6 (+5)
+Spd:2
+Dur:7
+IQ:5 (-5)
+BIQ:6
+MA:1
 ```
 
 ```
 Houses: 
-+ 
++ Golden Order
+ -> Morgott
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Thuốc Tráng Dương
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Infinity Gauntlet
+ - Power - [Sami (saminoceda)]
+ - Space - [...?? (_1469)]
+ - Soul  - [Wohlhabend (wohlhabend_)]
+ - Mind  - [Em Phốc Trắng (dick8704)]
+ - Time  - [LocK (lock485)]
+ - Reality - [Syren (syren1412)]
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+4 Power: 
++ Red Shift/Lp1211-M (Từ House)
++ Odin Blessing (Từ House)
 ```
 
 ```
-Char dev: 
-+ 
+Char dev: Training Arc
 ```
 
 ```
-Team: 
+Team:12
 ```
 
 ```

@@ -5,63 +5,68 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Đen
 ```
 
 ```
-Archetype: 
+Archetype: Glass Cannon 
 + 
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Artistic
++ Resilient
++ One Trick Pony
++ Brainrot (Từ Char Dev)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:4
+Spd:7
+Dur:7
+IQ:8
+BIQ:7
+MA:10
 ```
 
 ```
 Houses: 
-+ 
++ Ban Nhạc Ngọt Đoàn Kết
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Radio (Từ House)
+  - Mì Tôm
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Backhand Blade (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
+1 Rune:
++ Shael
 Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ EscAPADe
 ```
 
 ```
 Char dev: 
-+ 
++ Creator's Limitation (Limitation: Braindead)
++ Braindead
 ```
 
 ```
-Team: 
+Team:31
 ```
 
 ```

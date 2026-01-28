@@ -25,6 +25,7 @@ interface PlayerData {
   username: string;
   stats: CharacterStats;
   team?: number;
+  quirks?: string[];
 }
 
 interface TeamMemberJson {
@@ -81,19 +82,52 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
 
   const boss = battle.boss!;
 
-  // Calculate team total stats (sum of all members)
+  // Check for "Let Me Solo Her" quirk
+  const soloHerInfo = useMemo(() => {
+    const playersWithQuirk = battle.playerData.filter((player) =>
+      player.quirks?.some((q) => q.toLowerCase().includes("let me solo her"))
+    );
+
+    // Only activate if EXACTLY 1 player has the quirk
+    if (playersWithQuirk.length === 1) {
+      return {
+        active: true,
+        soloPlayer: playersWithQuirk[0],
+        multiplier: 8, // x8 stats
+      };
+    }
+
+    return { active: false, soloPlayer: null, multiplier: 1 };
+  }, [battle.playerData]);
+
+  // Calculate team total stats (sum of all members OR solo player x8)
   const teamStats = useMemo(() => {
     const totals: CharacterStats = { str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0 };
-    battle.playerData.forEach((player) => {
-      totals.str += player.stats.str || 0;
-      totals.spd += player.stats.spd || 0;
-      totals.dur += player.stats.dur || 0;
-      totals.iq += player.stats.iq || 0;
-      totals.biq += player.stats.biq || 0;
-      totals.ma += player.stats.ma || 0;
-    });
+
+    if (soloHerInfo.active && soloHerInfo.soloPlayer) {
+      // Let Me Solo Her mode: use solo player stats x8
+      const player = soloHerInfo.soloPlayer;
+      const mult = soloHerInfo.multiplier;
+      totals.str = (player.stats.str || 0) * mult;
+      totals.spd = (player.stats.spd || 0) * mult;
+      totals.dur = (player.stats.dur || 0) * mult;
+      totals.iq = (player.stats.iq || 0) * mult;
+      totals.biq = (player.stats.biq || 0) * mult;
+      totals.ma = (player.stats.ma || 0) * mult;
+    } else {
+      // Normal mode: sum all team members
+      battle.playerData.forEach((player) => {
+        totals.str += player.stats.str || 0;
+        totals.spd += player.stats.spd || 0;
+        totals.dur += player.stats.dur || 0;
+        totals.iq += player.stats.iq || 0;
+        totals.biq += player.stats.biq || 0;
+        totals.ma += player.stats.ma || 0;
+      });
+    }
+
     return totals;
-  }, [battle.playerData]);
+  }, [battle.playerData, soloHerInfo]);
 
   // Calculate battle score
   const score = useMemo(() => {
@@ -301,6 +335,23 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
         </div>
 
         <div className="p-6">
+          {/* Let Me Solo Her Banner */}
+          {soloHerInfo.active && soloHerInfo.soloPlayer && (
+            <div className="mb-4 p-3 bg-gradient-to-r from-yellow-600/30 via-orange-600/30 to-yellow-600/30 border border-yellow-500 rounded-lg">
+              <div className="text-center">
+                <span className="text-yellow-400 font-bold text-lg">
+                  🗡️ LET ME SOLO HER MODE 🗡️
+                </span>
+                <p className="text-yellow-300 text-sm mt-1">
+                  <span className="font-bold">{soloHerInfo.soloPlayer.name}</span> đang solo boss với x{soloHerInfo.multiplier} stats!
+                </p>
+                <p className="text-yellow-200/70 text-xs mt-1">
+                  Đội không được hỗ trợ.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Stats Comparison Header */}
           <div className="grid grid-cols-3 gap-4 mb-6">
             {/* Boss Side */}
@@ -317,7 +368,11 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
 
             {/* Team Side */}
             <div className="text-center">
-              <h3 className="text-xl font-bold text-green-400 mb-2">Team {battle.teamId}</h3>
+              <h3 className="text-xl font-bold text-green-400 mb-2">
+                {soloHerInfo.active && soloHerInfo.soloPlayer
+                  ? soloHerInfo.soloPlayer.name
+                  : `Team ${battle.teamId}`}
+              </h3>
               <div className="text-3xl font-bold text-green-500">{score.team}</div>
               <p className="text-gray-400 text-sm">Rounds Won</p>
             </div>
@@ -581,14 +636,22 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
 
             {/* Team Total Stats */}
             <div className="mt-4 bg-gray-800/50 rounded-lg p-3">
-              <h5 className="text-sm font-medium text-gray-400 mb-2">Team Total Stats</h5>
+              <h5 className="text-sm font-medium text-gray-400 mb-2">
+                {soloHerInfo.active && soloHerInfo.soloPlayer
+                  ? `${soloHerInfo.soloPlayer.name} Solo Stats (x${soloHerInfo.multiplier})`
+                  : "Team Total Stats"}
+              </h5>
               <div className="grid grid-cols-6 gap-2 text-center">
                 {STAT_KEYS.map((stat) => (
-                  <div key={stat} className="bg-gray-700/50 rounded px-2 py-1">
+                  <div key={stat} className={`rounded px-2 py-1 ${
+                    soloHerInfo.active ? "bg-yellow-600/30" : "bg-gray-700/50"
+                  }`}>
                     <div className="text-xs font-medium text-gray-400">
                       {stat.toUpperCase()}
                     </div>
-                    <div className="text-green-400 font-bold">{teamStats[stat]}</div>
+                    <div className={`font-bold ${soloHerInfo.active ? "text-yellow-400" : "text-green-400"}`}>
+                      {teamStats[stat]}
+                    </div>
                   </div>
                 ))}
               </div>

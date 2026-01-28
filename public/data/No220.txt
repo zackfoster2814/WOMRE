@@ -5,63 +5,65 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Trắng
 ```
 
 ```
 Archetype: 
-+ 
++ Follower of the Two Fingers
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Independent
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:8 ban đầu là 3 (Inversion)
+Spd:2 ban đầu là 9 (Inversion)
+Dur:7 ban đầu là 4 (Inversion)
+IQ:4 ban đầu là 7 (Inversion)
+BIQ:4 ban đầu là 7 (Inversion)
+MA:6 ban đầu là 5 (Inversion)
 ```
 
 ```
 Houses: 
-+ 
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Bò Khô
+  - Holy Symbol
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Death's Web Wand (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+3 Power: 
++ Artist
++ Lightning Enchant
++ Night Vision
 ```
 
 ```
 Char dev: 
-+ 
++ Inversion
 ```
 
 ```
-Team: 
+Team:9
 ```
 
 ```

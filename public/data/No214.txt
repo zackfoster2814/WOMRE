@@ -5,36 +5,38 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Dwarf
+Sub-race: Cổ Lùn
 ```
 
 ```
 Archetype: 
-+ 
++ Gigachad
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Impatient (PvP Reward: +1 Dura,+1 IQ)
++ Clumsy
++ Artistic
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:8 (Ban đầu là 6, +2 Từ Atreides)
+Spd:5
+Dur:6
+IQ:6
+BIQ:4
+MA:3
 ```
 
 ```
 Houses: 
-+ 
++ Atreides
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Soap
  + 0 Legacy gear:
   - 
 ```
@@ -47,21 +49,21 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
 0 Power: 
-+ 
++
 ```
 
 ```
 Char dev: 
-+ 
++ True Heir of the Emirate
 ```
 
 ```
-Team: 
+Team:21
 ```
 
 ```

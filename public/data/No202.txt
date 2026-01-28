@@ -5,63 +5,68 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Primordial Being
+Sub-race: Earth
 ```
 
 ```
 Archetype: 
-+ 
++ Atheist
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Resilient(Từ Sub-race)
++ Herbalist
++ One Trick Pony
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:1
+Spd:1
+Dur:2
+IQ:1
+BIQ:8
+MA:5
 ```
 
 ```
 Houses: 
-+ 
++ The Shire
+  -> Nhận +4 IQ
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+3 Gear: 
+ + 3 Normal gear:
+  - Mì Tôm 
+  - Healing Flasks
+  - Dark Lanthorn
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Morningstar (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ Ith 
+Runeword: 
 ```
 
 ```
 0 Power: 
-+ 
++ Earth-Shaking ()
 ```
 
 ```
 Char dev: 
-+ 
++ Kungfu Training
 ```
 
 ```
-Team: 
+Team: 21
 ```
 
 ```

@@ -5,49 +5,53 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Troll
+Sub-race: Ice Troll
 ```
 
 ```
 Archetype: 
-+ 
++ Conquerer
++ Edgelord(Từ Spatula)
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Herbalist
++ Training Restricted
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:3
+Spd:12 (ban đầu là 9, +3 từ Conquerer)
+Dur:10
+IQ:3
+BIQ:1
+MA:7
 ```
 
 ```
 Houses: 
-+ 
++ Roundtable Hold
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+3 Gear: 
+ + 3 Normal gear:
+  - Spatula 
+  - Kẹo
+  - Magical Scroll
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Green Dragon Crescent Blade (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
@@ -57,11 +61,11 @@ Runeword: Không
 
 ```
 Char dev: 
-+ 
++ Lost a Leg
 ```
 
 ```
-Team: 
+Team:20
 ```
 
 ```

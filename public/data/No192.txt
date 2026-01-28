@@ -5,36 +5,40 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Merfolk
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Infirmarian
++ Promised Consort (Từ Spatula)
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Brave
++ Brainrot (Từ Braindead)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:6
+Spd:7
+Dur:6
+IQ:3
+BIQ:4
+MA:10
 ```
 
 ```
 Houses: 
-+ 
++ Naga
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Văn Tế
+  - Strorage Room Key
+  - Spatula (Từ Strorage Room Key)
  + 0 Legacy gear:
   - 
 ```
@@ -47,21 +51,23 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Ice Hammer
++ Drunken Boxing
 ```
 
 ```
 Char dev: 
-+ 
++ Nghe Bài Thú Tội
++ Braindead
 ```
 
 ```
-Team: 
+Team: 28
 ```
 
 ```

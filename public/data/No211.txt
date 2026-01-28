@@ -5,36 +5,40 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Angel
+Sub-race: Archangels
 ```
 
 ```
 Archetype: 
-+ 
++ Pacifist
++ Fisher
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Pure (Không có Đai)
++ Artistic
++ Fast Learner (Từ Char Dev)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:10
+Spd:10
+Dur:9
+IQ:1
+BIQ:5
+MA:1
 ```
 
 ```
 Houses: 
-+ 
++ Ban Nhạc Ngọt Đoàn Kết
 ```
 
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Fishing Rod (Từ Archetype)
+  - Radio (Từ House)
  + 0 Legacy gear:
   - 
 ```
@@ -47,21 +51,24 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+4 Power: 
++ Black Magic
++ Rising Tide
++ Odin Blessing
++ Borrowed Time
 ```
 
 ```
 Char dev: 
-+ 
++ Seeking Wisdom
 ```
 
 ```
-Team: 
+Team:7
 ```
 
 ```

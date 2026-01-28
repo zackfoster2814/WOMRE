@@ -5,30 +5,32 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Werebeast
+Sub-race: Wererat
 ```
 
 ```
 Archetype: 
-+ 
++ Devotee
++ Labourers (New London)
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Progressive
++ Slow Healer
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:8 (Ban đầu là 7, +1 Từ Labourers)
+Spd:8
+Dur:7
+IQ:7
+BIQ:6
+MA:7
 ```
 
 ```
 Houses: 
-+ 
++ New London
 ```
 
 ```
@@ -40,28 +42,30 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Guitar (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
+2 Rune: 
++ Shael
++ Sol
 Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Zoltraak
++ U=ma2
 ```
 
 ```
 Char dev: 
-+ 
++ MrBeast
 ```
 
 ```
-Team: 
+Team:23
 ```
 
 ```

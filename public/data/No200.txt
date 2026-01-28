@@ -5,36 +5,40 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Giant
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Wibu
+  - Jojo
+    - Hey Ya!
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Brainrot
++ Fit (Từ Baguette)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:8
+Spd:4
+Dur:4
+IQ:5
+BIQ:6
+MA:1
 ```
 
 ```
-Houses: 
-+ 
+Houses: Targaryen
 ```
 
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Baguette (từ Armed to the Teeth)
+  - Frying Pan (Từ Armed to the Teeth)
+  - Cursed Charm (Từ Armed to the Teeth )
  + 0 Legacy gear:
   - 
 ```
@@ -47,21 +51,21 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
 0 Power: 
-+ 
++ Mind Control (Frying Pan)
 ```
 
 ```
 Char dev: 
-+ 
++ Armed to the Teeth 
 ```
 
 ```
-Team: 
+Team:12
 ```
 
 ```

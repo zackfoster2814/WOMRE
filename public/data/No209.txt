@@ -5,36 +5,39 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Orc
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Herald
++ Hand Fighter (Spatula)
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Fit
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:6
+Spd:5 (Ban đầu là 2, +3 từ Herald)
+Dur:5
+IQ:10
+BIQ:6
+MA:6
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses: The Shire
++ Nhận +4 vào Spd
+```
+
+```
+3 Gear: 
+ + 3 Normal gear:
+  - Holy Symbol
+  - Spatula 
+  - Ớt
  + 0 Legacy gear:
   - 
 ```
@@ -47,21 +50,21 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Fragrant
 ```
 
 ```
 Char dev: 
-+ 
++ Mentor (Thầy: Moonice (muroku_18) - không có Power)
 ```
 
 ```
-Team: 
+Team:31
 ```
 
 ```

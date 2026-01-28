@@ -5,30 +5,30 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Vàng
 ```
 
 ```
 Archetype: 
-+ 
++ Hand Fighter
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Pure 
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:5
+Spd:1
+Dur:2
+IQ:9
+BIQ:5
+MA:6
 ```
 
 ```
-Houses: 
-+ 
+Houses:
++ Roundtable Hold
 ```
 
 ```
@@ -47,7 +47,7 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
@@ -57,11 +57,11 @@ Runeword: Không
 
 ```
 Char dev: 
-+ 
++ Furry
 ```
 
 ```
-Team: 
+Team: 13
 ```
 
 ```

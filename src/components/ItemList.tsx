@@ -138,6 +138,7 @@ export const ItemList = ({
       skipEmptyLines: "greedy",
       newline: "\n",
       delimitersToGuess: ["\t", ":"],
+      quoteChar: "\0",
       transform: (value, columnIndex) => {
         if (columnIndex === 1 && typeof value === "string") {
           return value.replace(",", ".");

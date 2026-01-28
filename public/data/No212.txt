@@ -5,34 +5,33 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Demi-God
+Sub-race: Arts and Magic
 ```
 
 ```
 Archetype: 
-+ 
++ Gambler Bloodline
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk: (Được Quay)
++ Mute
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:1 (Không được Quay)
+Spd:4 (Được Quay)
+Dur:1 (Không được Quay)
+IQ:1 (Không được Quay)
+BIQ:1 (Không được Quay)
+MA:9 (Được Quay)
 ```
 
 ```
-0 Gear: 
+Houses: (Không được Quay)
+```
+
+```
+0 Gear: (Không được Quay)
  + 0 Normal gear:
   - 
  + 0 Legacy gear:
@@ -40,28 +39,33 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
+0 Normal Weapon (Được Quay)
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
+4 Power: 
++ Magma Strike(Từ Sub-race)
++ Artist (Từ Sub-race)
++ Power Negation
++ Weapon Enhancing
++ Gate to Heaven
++ Luck Manipulation
+```
+
+```
+Char dev: (Không được Quay)
 + 
 ```
 
 ```
-Char dev: 
-+ 
-```
-
-```
-Team: 
+Team: (Không được Quay)
 ```
 
 ```

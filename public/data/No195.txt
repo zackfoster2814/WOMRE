@@ -5,63 +5,70 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Giant
 Sub-race: 
 ```
 
 ```
-Archetype: 
-+ 
+Archetype:
++ Edgelord
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Under The Weather
++ Deaf
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:9(+5)
+Spd:4
+Dur:7
+IQ:8(-5)
+BIQ:3
+MA:7
 ```
 
 ```
 Houses: 
-+ 
++ The Shire
+ -> Nhận +4 Str
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 1 Normal gear:
+  - Holy Symbol
+  - Magical Scroll
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ B.F Sword (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ El 
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+3 Power: 
++ Memory Freeze
++ Body Enhancing
++ Hand Washing
++ Artist (Từ Char Dev)
++ Healing Factor(Từ Char Dev)
 ```
 
 ```
 Char dev: 
-+ 
++ No more Family
 ```
 
 ```
-Team: 
+Team: 7
 ```
 
 ```

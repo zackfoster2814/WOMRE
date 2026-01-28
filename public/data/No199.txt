@@ -5,63 +5,63 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Đen
 ```
 
 ```
 Archetype: 
-+ 
++ Mason
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ One Trick Pony 
++ Cheater
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:9
+Spd:3
+Dur:5
+IQ:4
+BIQ:7
+MA:10
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses: Uchiha
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Gold Pine Resin
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Magical Staff (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
+1 Rune: 
++ Tir
 Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Cleaning Sins 
 ```
 
 ```
 Char dev: 
-+ 
++ MrBeast
 ```
 
 ```
-Team: 
+Team:1
 ```
 
 ```

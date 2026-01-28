@@ -5,59 +5,67 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Werebeast
+Sub-race: Wereraven
 ```
 
 ```
-Archetype: 
+Archetype: Femboy
 + 
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Under the Weather
++ Bloodthirsty
++ Training Restricted(Từ Bánh Mì)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:10
+Spd:6
+Dur:0 (Ban đầu là 1, Demoniac Pact)
+IQ:2
+BIQ:5
+MA:5
 ```
 
 ```
 Houses: 
-+ 
++ Roundtable Hold
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+3 Gear: 
+ + 3 Normal gear:
+  - Leather Jacket
+  - Baguette 
+  - Fishing Rod
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Flute (Không dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ AIDS (Từ Archetype)
++ Ice Hammer
++ The Coast is Clear!
++ Weapon Enhancing
++ Spear of Fire
 ```
 
 ```
 Char dev: 
-+ 
++ Demoniac Pact (Dura)
 ```
 
 ```

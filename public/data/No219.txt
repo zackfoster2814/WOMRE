@@ -5,63 +5,68 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Giant
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Elf Slayer
++ Gambler (Từ The Dice of the Dead)
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Artisan
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:10 (+5)
+Spd:6
+Dur:3
+IQ:8 (-5)
+BIQ:4
+MA:3
 ```
 
 ```
 Houses: 
-+ 
++ Shurima  
 ```
 
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Magical Scroll (Từ Quirk Artisan)
+  - Thuốc Tráng Dương(Từ Quirk Artisan)
  + 0 Legacy gear:
-  - 
+  - The Dice of the Dead (Từ House)
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Necronomicon (Dùng Được) (Đã mất)
++ Backhand Blade (Không dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ Shael (Chưa dùng được)
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ The Coast is Clear (Từ House)
++ Love Wolf(Từ House)
++ Magma Strike
 ```
 
 ```
 Char dev: 
-+ 
++ Creator's Reforge
 ```
 
 ```
-Team: 
+Team:5
 ```
 
 ```

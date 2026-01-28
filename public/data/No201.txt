@@ -5,30 +5,29 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Orc
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Paladin
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Shining Brightly (Đã mất)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:7
+Spd:6
+Dur:5
+IQ:5
+BIQ:8
+MA:9(Ban đầu là 7, +2 từ Paladin)
 ```
 
 ```
-Houses: 
-+ 
+Houses: Shurima
 ```
 
 ```
@@ -36,32 +35,35 @@ Houses:
  + 0 Normal gear:
   - 
  + 0 Legacy gear:
-  - 
+  - Creator's Cat Ring(Từ House)(2 Favor: Nhận +1 all stat, Nhận +1 all stats)
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Guitar (Không dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Divine Smite
++ The Coast is Clear!(Từ House)
++ Quirkless (Từ House)
++ Fair Duel
 ```
 
 ```
 Char dev: 
-+ 
++ Training Arc
 ```
 
 ```
-Team: 
+Team:28
 ```
 
 ```

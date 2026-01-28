@@ -5,30 +5,31 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Vàng
 ```
 
 ```
 Archetype: 
-+ 
++ Glass Cannon
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Slow Healer
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:2
+Spd:5
+Dur:5
+IQ:5
+BIQ:7
+MA:10
 ```
 
 ```
 Houses: 
-+ 
++ Stark
+ -> Nymeria
 ```
 
 ```
@@ -40,28 +41,28 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Whip (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ Tal
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Tsunami Control
 ```
 
 ```
 Char dev: 
-+ 
++ Lost an Arm
 ```
 
 ```
-Team: 
+Team: 22
 ```
 
 ```

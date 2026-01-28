@@ -5,63 +5,66 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Elf
+Sub-race: Wood Elf
 ```
 
 ```
-Archetype: 
-+ 
+Archetype:
++ Promised Consort
++ Edgelord
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Clumsy
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:6
+Spd:8
+Dur:1
+IQ:5
+BIQ:7
+MA:9
 ```
 
 ```
 Houses: 
-+ 
++ Coven Council
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Love Letter
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Needle (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Acid Breath(Từ Sub-race)
++ Detect Thoughts
++ Wex
 ```
 
 ```
 Char dev: 
-+ 
++ Too Edgy
 ```
 
 ```
-Team: 
+Team: 21
 ```
 
 ```

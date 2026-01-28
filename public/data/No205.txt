@@ -5,36 +5,43 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Orc
 Sub-race: 
 ```
 
 ```
-Archetype: 
-+ 
+Archetype: Bookworm
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Impatient (PvP: +1MA, +1Str)
++ Artisan
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:6
+Spd:5
+Dur:5
+IQ:1
+BIQ:7
+MA:6
 ```
 
 ```
 Houses: 
-+ 
++ Lannister
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Sổ tay (Từ Archetype)
+  - Giấy Nợ Gia Truyền (Từ Artisan)
+  - Mì tôm (Từ Artisan)
+  - Thuốc Tráng Dương (Từ House)
+  - Đai Trinh Tiết (Từ House)
+  - Golden Coin x3(Từ House)
+  - Radio
+  - Love Letter
  + 0 Legacy gear:
   - 
 ```
@@ -47,21 +54,21 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Capybara 
 ```
 
 ```
 Char dev: 
-+ 
++ True Heir of the Emirate
 ```
 
 ```
-Team: 
+Team:23
 ```
 
 ```

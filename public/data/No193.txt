@@ -5,66 +5,71 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Skeleton (Dwarf)
 Sub-race: 
 ```
 
 ```
-Archetype: 
-+ 
+Archetype:
++ Edgelord
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Graceful (Lover: baonine (baonine))
++ Artisan
++ Resilient
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:4
+Spd:7
+Dur:6
+IQ:1 (cố định)
+BIQ:6
+MA:8
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses: Hallownest
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Shot Glass(Từ Quirk)
+  - Ancient Protector(Từ Quirk)
+  - Kuro's Charm
+  - Wooden Shield
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ War Axe (Không dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
+2 Rune: 
++ Tir
++ Ral
 Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Mewing
 ```
 
 ```
 Char dev: 
-+ 
++ Kungfu Training
 ```
 
 ```
-Team: 
+Team: 30
 ```
 
 ```
 Lover:
-+ 
++ baonine (baonine) (Đơn Phương)
 ```

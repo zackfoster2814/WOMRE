@@ -5,36 +5,44 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Uma
+Sub-race: Gold Ship + Mihono Bourbon
 ```
 
 ```
 Archetype: 
-+ 
++ Bookworm
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Traning Restricted (Từ Sub-race)
++ Blind
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:5
+Spd:6
+Dur:8
+IQ:3
+BIQ:6
+MA:1
 ```
 
 ```
 Houses: 
-+ 
++ Tracen Academy
+ -> Nhận +2 Str
+ -> Nhận +1 Spd
+ -> Nhận +2 Dura
 ```
 
 ```
-0 Gear: 
+3 Gear: 
  + 0 Normal gear:
-  - 
+  - Sổ tay (Từ Archetype)
+  - Storage Room Key (Tặng: Đai Trinh Tiết)
+  - Đai Trinh Tiết (Từ Storage Room Key)
+  - Beer
+  - Wooden Shield
  + 0 Legacy gear:
   - 
 ```
@@ -47,21 +55,21 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Acid Breath 
 ```
 
 ```
 Char dev: 
-+ 
++ King's Landing
 ```
 
 ```
-Team: 
+Team:
 ```
 
 ```

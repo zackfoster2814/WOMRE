@@ -5,66 +5,69 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Dryad
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Loyal (Lover: KuSenpai (kusenpai))
++ Machinists (Từ House)
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Night Owl
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:1
+Spd:1
+Dur:1
+IQ:10
+BIQ:3
+MA:1
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses: New London
+```
+
+```
+1 Gear: 
+ + 1 Normal gear:
+  - Sổ Tay (Từ Archetype)
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Uchigatana (Dùng được) (Đã mất)
++ Banana Peel (Creator's Reforge)
 ```
 
 ``` 
-0 Rune: 
-+ 
+1 Rune: 
++ Shael
 Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ AIDS (Từ Lover: KuSenpai (kusenpai))
++ Frost Armor
++ Uno Reverse Card
 ```
 
 ```
 Char dev: 
-+ 
++ Creator's Reforge
 ```
 
 ```
-Team: 
+Team: 17
 ```
 
 ```
 Lover:
-+ 
++ KuSenpai (kusenpai)
 ```

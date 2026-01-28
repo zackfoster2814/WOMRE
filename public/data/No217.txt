@@ -5,66 +5,75 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Gnome
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Sentinel of Purity
++ Goblin Slayer (Từ Become King Slayer)
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Cautious 
++ Impatient (PvP: +1 IQ, 1 Power)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:5 ban đầu là 6 (Inversion)
+Spd:9 ban đầu là 2 (Inversion)
+Dur:6 ban đầu là 5 (Inversion)
+IQ:10 ban đầu là 1 (Inversion)
+BIQ:4 ban đầu là 7 (Inversion)
+MA:2 ban đầu là 9 (Inversion)
 ```
 
 ```
 Houses: 
-+ 
++ Tyrell
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Lover's Glover (Lover: ltq (tcltq))
+  - Knight's Armor 
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Ukulele (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
+2 Rune: 
++ Shael
++ Ort
 Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+3 Power: 
++ Zoltraak (Từ Impatient)
++ Mewing
++ Luck Manipulation
++ Accelerating Sorcery
 ```
 
 ```
 Char dev: 
-+ 
++ Transmute: Chaos
++ Inversion
++ Become King Slayer
 ```
 
 ```
-Team: 
+Team:5
 ```
 
 ```
 Lover:
-+ 
++ ltq (tcltq)
 ```

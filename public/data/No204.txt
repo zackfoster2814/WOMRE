@@ -5,36 +5,40 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Dwarf
+Sub-race: Lùn núi
 ```
 
 ```
 Archetype: 
-+ 
++ Người Trong Ban Nhạc
++ Uma Slayer (Từ Become King Slayer)
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Athletic
++ Under the Weather
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:5
+Spd:1
+Dur:7
+IQ:5
+BIQ:1
+MA:8
 ```
 
 ```
 Houses: 
-+ 
++ Ban Nhạc Ngọt Đoàn Kết (Từ Người Trong Ban Nhạc)
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Mì Tôm (Từ House)
+  - Silver Steed
+  - Academie Ring
  + 0 Legacy gear:
   - 
 ```
@@ -47,21 +51,21 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Shirnking
 ```
 
 ```
 Char dev: 
-+ 
++ Become King Slayer
 ```
 
 ```
-Team: 
+Team: 19
 ```
 
 ```

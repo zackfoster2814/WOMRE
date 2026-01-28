@@ -10,6 +10,7 @@ import {
 import { WheelPage } from "./pages/WheelPage";
 import { PlayerListPage } from "./pages/PlayerListPage";
 import { BattleZonePage } from "./pages/BattleZonePage";
+import { PvPTournamentPage } from "./pages/PvPTournamentPage";
 // import { TeamBattlePage } from "./pages/TeamBattlePage";
 import { isTauri } from "./utils/localStorage";
 
@@ -21,6 +22,7 @@ const navItems = [
   { path: "/players", label: "Players", color: "bg-green-600" },
   // { path: "/battles", label: "Team Battles", color: "bg-orange-600" },
   { path: "/battle", label: "Battle Zone", color: "bg-red-600" },
+  { path: "/pvp-tournament", label: "PvP Tournament", color: "bg-purple-600" },
 ];
 
 // Navigation component
@@ -112,6 +114,7 @@ function App() {
             <Route path="/players" element={<PlayerListPage />} />
             {/* <Route path="/battles" element={<TeamBattlePage />} /> */}
             <Route path="/battle" element={<BattleZonePage />} />
+            <Route path="/pvp-tournament" element={<PvPTournamentPage />} />
           </>
         )}
       </Routes>

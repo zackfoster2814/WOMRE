@@ -5,30 +5,30 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Gnome
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Promised Consort
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Generous
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:1
+Spd:2
+Dur:2
+IQ:3
+BIQ:5
+MA:7
 ```
 
 ```
 Houses: 
-+ 
++ Shurima
 ```
 
 ```
@@ -36,7 +36,7 @@ Houses:
  + 0 Normal gear:
   - 
  + 0 Legacy gear:
-  - 
+  - Honored Goblin's Scroll (Từ House)
 ```
 
 ```
@@ -47,21 +47,25 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+3 Power: 
++ Age Manipulation (Từ House)
++ Weapon Enhancing (Từ House)
++ Let's Pump Some Iron
++ Cleaning Sins
++ Bloody Strike
 ```
 
 ```
 Char dev: 
-+ 
++ Make Love (Dung (haruharu9127) - Gnome)
 ```
 
 ```
-Team: 
+Team: 1
 ```
 
 ```

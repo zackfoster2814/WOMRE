@@ -29,6 +29,7 @@ interface PlayerData {
   username: string;
   stats: CharacterStats;
   team?: number;
+  quirks?: string[];
 }
 
 interface TeamMemberJson {
@@ -311,6 +312,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                     username: char.username || "",
                     stats: char.stats,
                     team: char.team,
+                    quirks: char.quirks.map((q) => q.name),
                   });
                 }
               })

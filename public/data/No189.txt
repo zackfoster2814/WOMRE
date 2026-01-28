@@ -5,63 +5,68 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Da đen
 ```
 
 ```
 Archetype: 
-+ 
++ Dual Wielder
++ Perfectionist
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Let me solo her
++ Blind
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:2
+Spd:2
+Dur:5
+IQ:6
+BIQ:1
+MA:10 (Ban đầu là 8, +2 từ House)
 ```
 
 ```
 Houses: 
-+ 
++ Atreides
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Đai Trinh Tiết
+  - Swift Boots
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon và 1 Unique Weapon
++ Broken Straight Sword (Không dùng được)
++ Infinity Edge (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Critical Strike (Từ Weapon)
++ Sonic Scream
 ```
 
 ```
 Char dev: 
-+ 
++ Become Perfectionist
 ```
 
 ```
-Team: 
+Team: 5
 ```
 
 ```

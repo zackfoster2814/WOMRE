@@ -5,63 +5,66 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Gnome
 Sub-race: 
 ```
 
 ```
-Archetype: 
+Archetype: Pacifist
 + 
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Cautious
++ Fast Learner (Từ Char Dev)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:9
+Spd:2
+Dur:5
+IQ:4
+BIQ:4
+MA:5
 ```
 
 ```
 Houses: 
-+ 
++ Coven Council
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+3 Gear: 
+ + 3 Normal gear:
+  - Sổ Tay
+  - Swift Boots
+  - Knight's Armor
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Nunchuck (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ Zod 
+Runeword: 
 ```
 
 ```
 0 Power: 
-+ 
++
 ```
 
 ```
 Char dev: 
-+ 
++ Seeking Wisdom
 ```
 
 ```
-Team: 
+Team:31
 ```
 
 ```

@@ -5,36 +5,39 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Goblin
+Sub-race: 50
 ```
 
 ```
 Archetype: 
-+ 
++ NPC
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Progressive
++ Night Owl
++ Independent
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:1
+Spd:6
+Dur:3
+IQ:5
+BIQ:6
+MA:5
 ```
 
 ```
 Houses: 
-+ 
++ Uchiha (Đã mất)
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Magical Scroll
+  - Fingerthing
  + 0 Legacy gear:
   - 
 ```
@@ -47,12 +50,13 @@ Houses:
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Gaze of the Abyss
++ Clear Mind
 ```
 
 ```
@@ -61,7 +65,7 @@ Char dev:
 ```
 
 ```
-Team: 
+Team:
 ```
 
 ```

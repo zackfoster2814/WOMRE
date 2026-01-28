@@ -5,30 +5,33 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Orc
 Sub-race: 
 ```
 
 ```
-Archetype: 
+Archetype: Follower of the Two Fingers
 + 
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Brainrot
++ Blind
++ One Trick Pony
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:7
+Spd:6
+Dur:7
+IQ:6
+BIQ:7
+MA:8
 ```
 
 ```
 Houses: 
-+ 
++ Golden Order
+ -> Malenia
 ```
 
 ```
@@ -40,28 +43,29 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Cursed Pennywort (Không dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
 0 Power: 
-+ 
++ (Từ House) (Đã mất khỏi quay)
++ (Từ House) (Đã mất khỏi quay)
 ```
 
 ```
 Char dev: 
-+ 
++ Lose Control
 ```
 
 ```
-Team: 
+Team: 30
 ```
 
 ```
