@@ -126,6 +126,12 @@ export class CharacterParser {
     // Parse Stats
     character.stats = this.parseStats(lines);
 
+    // Parse original base stats (before effects like Inversion)
+    character.originalBaseStats = this.parseOriginalBaseStats(lines);
+
+    // Parse flags (e.g., Giant bonus already applied)
+    character.giantBonusApplied = this.parseFlag(lines, 'GiantBonusApplied');
+
     // Parse Houses - can have multiple, some may be lost (kicked out)
     const houseIndex = this.findSectionIndex(lines, 'Houses:');
     const housesRaw = this.parseListValueAsStrings(lines, houseIndex);
@@ -173,6 +179,18 @@ export class CharacterParser {
 
   private static findSectionIndex(lines: string[], keyword: string): number {
     return lines.findIndex(line => line.includes(keyword));
+  }
+
+  /**
+   * Parse a boolean flag from the file
+   * Format: "FlagName: Yes" or "FlagName: true" (case insensitive)
+   */
+  private static parseFlag(lines: string[], flagName: string): boolean {
+    for (const line of lines) {
+      const match = line.match(new RegExp(`${flagName}:\\s*(yes|true)`, 'i'));
+      if (match) return true;
+    }
+    return false;
   }
 
   private static parseParasiteInfo(lines: string[], startIndex: number): {
@@ -344,6 +362,65 @@ export class CharacterParser {
     }
 
     return stats;
+  }
+
+  /**
+   * Parse original base stats from annotations like "ban đầu là X"
+   * Returns undefined if no original stats found
+   */
+  private static parseOriginalBaseStats(lines: string[]): CharacterStats | undefined {
+    const stats: Partial<CharacterStats> = {};
+    let hasOriginal = false;
+
+    for (const line of lines) {
+      // Pattern: "Str: 2 ban đầu là 4" -> extract 4
+      const strMatch = line.match(/Str:\s*\d+.*ban đầu là\s*(\d+)/i);
+      if (strMatch) {
+        stats.str = parseInt(strMatch[1]);
+        hasOriginal = true;
+      }
+
+      const spdMatch = line.match(/Spd:\s*\d+.*ban đầu là\s*(\d+)/i);
+      if (spdMatch) {
+        stats.spd = parseInt(spdMatch[1]);
+        hasOriginal = true;
+      }
+
+      const durMatch = line.match(/Dur:\s*\d+.*ban đầu là\s*(\d+)/i);
+      if (durMatch) {
+        stats.dur = parseInt(durMatch[1]);
+        hasOriginal = true;
+      }
+
+      const iqMatch = line.match(/^IQ:\s*\d+.*ban đầu là\s*(\d+)/i);
+      if (iqMatch) {
+        stats.iq = parseInt(iqMatch[1]);
+        hasOriginal = true;
+      }
+
+      const biqMatch = line.match(/BIQ:\s*\d+.*ban đầu là\s*(\d+)/i);
+      if (biqMatch) {
+        stats.biq = parseInt(biqMatch[1]);
+        hasOriginal = true;
+      }
+
+      const maMatch = line.match(/MA:\s*\d+.*ban đầu là\s*(\d+)/i);
+      if (maMatch) {
+        stats.ma = parseInt(maMatch[1]);
+        hasOriginal = true;
+      }
+    }
+
+    if (!hasOriginal) return undefined;
+
+    return {
+      str: stats.str ?? 0,
+      spd: stats.spd ?? 0,
+      dur: stats.dur ?? 0,
+      iq: stats.iq ?? 0,
+      biq: stats.biq ?? 0,
+      ma: stats.ma ?? 0
+    };
   }
 
   private static parseGear(lines: string[]): Gear {

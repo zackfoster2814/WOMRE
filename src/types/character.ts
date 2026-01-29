@@ -79,6 +79,14 @@ export interface Character {
   // Stats
   stats: CharacterStats;
 
+  // Flag to indicate Giant race bonus has been pre-applied to stats
+  // Used when stats were manually calculated (e.g., after Inversion)
+  giantBonusApplied?: boolean;
+
+  // Original base stats before effects like Inversion
+  // Used to show the roll values for transparency
+  originalBaseStats?: CharacterStats;
+
   // Faction - can have multiple houses, some may be lost (kicked out)
   houses: LossableItem[];
 

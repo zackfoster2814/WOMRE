@@ -1206,10 +1206,12 @@ const StatModifierBadge = ({
 // Stat Modifiers Table Component
 const StatModifiersTable = ({
   breakdown,
-  baseStats
+  baseStats,
+  originalBaseStats
 }: {
   breakdown: EffectSourceBreakdown[];
   baseStats: { str: number; spd: number; dur: number; iq: number; biq: number; ma: number };
+  originalBaseStats?: { str: number; spd: number; dur: number; iq: number; biq: number; ma: number };
 }) => {
   const statKeys: Array<'strength' | 'speed' | 'durability' | 'iq' | 'biq' | 'ma'> =
     ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
@@ -1278,9 +1280,21 @@ const StatModifiersTable = ({
           </tr>
         </thead>
         <tbody>
+          {/* Original base stats row (before Inversion, if applicable) */}
+          {originalBaseStats && (
+            <tr className="border-b border-gray-700/50 bg-gray-700/30">
+              <td className="py-1.5 px-2 text-gray-400 italic">roll gốc</td>
+              {[originalBaseStats.str, originalBaseStats.spd, originalBaseStats.dur, originalBaseStats.iq, originalBaseStats.biq, originalBaseStats.ma].map((val, idx) => (
+                <td key={idx} className="text-center py-1.5 px-1.5 text-gray-400 italic">
+                  {val}
+                </td>
+              ))}
+            </tr>
+          )}
+
           {/* Base stats row */}
           <tr className="border-b border-gray-700/50">
-            <td className="py-1.5 px-2 text-gray-300">ban đầu</td>
+            <td className="py-1.5 px-2 text-gray-300">{originalBaseStats ? 'sau inversion' : 'ban đầu'}</td>
             {statKeys.map((_, idx) => (
               <td key={idx} className="text-center py-1.5 px-1.5 text-gray-300">
                 {totals[idx].base}
@@ -1566,6 +1580,7 @@ const PlayerDetailModal = ({
                   <StatModifiersTable
                     breakdown={effectBreakdown}
                     baseStats={character.stats}
+                    originalBaseStats={character.originalBaseStats}
                   />
                 </div>
               )}
