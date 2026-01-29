@@ -53,7 +53,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Evasion
++ Evasion (đã mất vì bị con vợ Bamialoai2 bú)
 ```
 
 ```
@@ -67,5 +67,5 @@ Team: 2
 
 ```
 Lover:
-+ 
++ Bamialoai2 (lmaooo1308)
 ```

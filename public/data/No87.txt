@@ -69,5 +69,7 @@ Team: 1
 
 ```
 Lover:
++ Julianus (khoi7435)
++ Thang (thang0458)
 + Zackie (zackfoster___)
 ```

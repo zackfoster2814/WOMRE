@@ -68,4 +68,5 @@ Team: 2
 ```
 Lover:
 + ar2di
++ AtKo (ame_tako)
 ```

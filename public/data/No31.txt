@@ -67,5 +67,6 @@ Team: 15
 
 ```
 Lover:
-+ 
++ baonine (baonine)
++ LamBeii (lambeii)
 ```

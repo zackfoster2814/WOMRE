@@ -6,7 +6,8 @@ Ký Sinh:
 ```
 ```
 Race: Giant
-Sub-race: 
+Sub-race:
+GiantBonusApplied: Yes
 ```
 
 ```
@@ -19,12 +20,12 @@ Archetype:
 + Cautious
 ```
 ```
-Str: 7 ban đầu là 4 (-5)
-Spd: 10 ban đầu là 1
-Dur: 7 ban đầu là 4
-IQ: 2 ban đầu là 9 (+5)
-BIQ: 8 ban đầu là 3
-MA: 5 ban đầu là 6
+Str: 2 ban đầu là 4 (inversion -> 7, Giant -5)
+Spd: 10 ban đầu là 1 (inversion -> 10)
+Dur: 7 ban đầu là 4 (inversion -> 7)
+IQ: 7 ban đầu là 9 (inversion -> 2, Giant +5)
+BIQ: 8 ban đầu là 3 (inversion -> 8)
+MA: 5 ban đầu là 6 (inversion -> 5)
 ```
 
 ```

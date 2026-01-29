@@ -74,5 +74,6 @@ Team: 9
 
 ```
 Lover:
-+ 
++ ar2di
++ Euoid (euoid)
 ```

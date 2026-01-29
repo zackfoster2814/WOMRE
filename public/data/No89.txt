@@ -71,5 +71,5 @@ Team: 4
 
 ```
 Lover:
-+ 
++ Nasume (nasume04590)
 ```

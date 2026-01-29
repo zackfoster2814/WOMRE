@@ -77,5 +77,6 @@ Team: 2
 
 ```
 Lover:
++ Wakamo Lunatic (nguyuyen)
 + OddMan (thaioturan)
 ```

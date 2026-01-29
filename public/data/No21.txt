@@ -72,5 +72,7 @@ Team: 24
 
 ```
 Lover:
-+ 
++ ngọn cỏ ven sông (ngon_co_ven_duong)
++ Son WuKong (maidinhhongson)
++ NDP (ndp1792)
 ```

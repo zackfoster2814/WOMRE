@@ -72,5 +72,5 @@ Team: 10
 
 ```
 Lover:
-+ 
++ Bộ PC (conchocaobangbopc)
 ```
