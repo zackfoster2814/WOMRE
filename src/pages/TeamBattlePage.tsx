@@ -71,7 +71,9 @@ export const TeamBattlePage = () => {
   const [players, setPlayers] = useState<PlayerData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
-  const [filterType, setFilterType] = useState<"all" | "with-boss" | "no-boss">("all");
+  const [filterType, setFilterType] = useState<"all" | "with-boss" | "no-boss">(
+    "all",
+  );
   const [selectedBoss, setSelectedBoss] = useState<Boss | null>(null);
   const [battleRoomTeam, setBattleRoomTeam] = useState<BattleView | null>(null);
 
@@ -81,14 +83,18 @@ export const TeamBattlePage = () => {
       setIsLoading(true);
       try {
         // Load teams.json
-        const teamsResponse = await fetch(getAssetPath("/data/battles/teams.json"));
+        const teamsResponse = await fetch(
+          getAssetPath("/data/battles/teams.json"),
+        );
         if (teamsResponse.ok) {
           const teamsData: TeamsData = await teamsResponse.json();
           setTeams(teamsData.teams);
         }
 
         // Load bosses.json
-        const bossesResponse = await fetch(getAssetPath("/data/battles/bosses.json"));
+        const bossesResponse = await fetch(
+          getAssetPath("/data/battles/bosses.json"),
+        );
         if (bossesResponse.ok) {
           const bossesData: BossesData = await bossesResponse.json();
           setBosses(bossesData.bosses);
@@ -114,7 +120,7 @@ export const TeamBattlePage = () => {
                   });
                 }
               })
-              .catch(() => {})
+              .catch(() => {}),
           );
         }
 
@@ -246,12 +252,18 @@ export const TeamBattlePage = () => {
             {/* Filter */}
             <select
               value={filterType}
-              onChange={(e) => setFilterType(e.target.value as typeof filterType)}
+              onChange={(e) =>
+                setFilterType(e.target.value as typeof filterType)
+              }
               className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
             >
               <option value="all">All Teams ({summary.total})</option>
-              <option value="with-boss">Fighting Boss ({summary.withBoss})</option>
-              <option value="no-boss">No Boss Assigned ({summary.noBoss})</option>
+              <option value="with-boss">
+                Fighting Boss ({summary.withBoss})
+              </option>
+              <option value="no-boss">
+                No Boss Assigned ({summary.noBoss})
+              </option>
             </select>
           </div>
         </div>
@@ -272,7 +284,9 @@ export const TeamBattlePage = () => {
                 battle={battle}
                 isExpanded={expandedTeam === battle.teamId}
                 onToggle={() =>
-                  setExpandedTeam(expandedTeam === battle.teamId ? null : battle.teamId)
+                  setExpandedTeam(
+                    expandedTeam === battle.teamId ? null : battle.teamId,
+                  )
                 }
                 getTotalStats={getTotalStats}
                 onBossClick={() => battle.boss && setSelectedBoss(battle.boss)}
@@ -291,7 +305,10 @@ export const TeamBattlePage = () => {
 
       {/* Boss Detail Modal */}
       {selectedBoss && (
-        <BossDetailModal boss={selectedBoss} onClose={() => setSelectedBoss(null)} />
+        <BossDetailModal
+          boss={selectedBoss}
+          onClose={() => setSelectedBoss(null)}
+        />
       )}
 
       {/* Boss Battle Room */}
@@ -315,13 +332,23 @@ interface BattleCardProps {
   onStartBattle: () => void;
 }
 
-const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, onStartBattle }: BattleCardProps) => {
+const BattleCard = ({
+  battle,
+  isExpanded,
+  onToggle,
+  getTotalStats,
+  onBossClick,
+  onStartBattle,
+}: BattleCardProps) => {
   const hasBoss = battle.boss !== null;
   const bossTotalStats = battle.boss ? getTotalStats(battle.boss.stats) : 0;
 
   // Calculate team total stats
   const teamTotalStats = useMemo(() => {
-    return battle.playerData.reduce((sum, p) => sum + getTotalStats(p.stats), 0);
+    return battle.playerData.reduce(
+      (sum, p) => sum + getTotalStats(p.stats),
+      0,
+    );
   }, [battle.playerData, getTotalStats]);
 
   return (
@@ -333,15 +360,21 @@ const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, 
       {/* Card Header */}
       <div
         className={`px-4 py-3 cursor-pointer transition-colors ${
-          hasBoss ? "bg-red-600/20 hover:bg-red-600/30" : "bg-gray-700/50 hover:bg-gray-700/70"
+          hasBoss
+            ? "bg-red-600/20 hover:bg-red-600/30"
+            : "bg-gray-700/50 hover:bg-gray-700/70"
         }`}
         onClick={onToggle}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-2xl font-bold text-orange-400">#{battle.teamId}</span>
+            <span className="text-2xl font-bold text-orange-400">
+              #{battle.teamId}
+            </span>
             <div>
-              <h3 className="text-lg font-bold text-white">Team {battle.teamId}</h3>
+              <h3 className="text-lg font-bold text-white">
+                Team {battle.teamId}
+              </h3>
               <p className="text-sm text-gray-400">
                 {hasBoss ? (
                   <>
@@ -366,7 +399,9 @@ const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, 
             <span className="text-sm text-gray-400">
               {battle.members.length} members
             </span>
-            <span className={`transition-transform ${isExpanded ? "rotate-180" : ""}`}>
+            <span
+              className={`transition-transform ${isExpanded ? "rotate-180" : ""}`}
+            >
               ▼
             </span>
           </div>
@@ -378,14 +413,40 @@ const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, 
         {/* Boss Stats */}
         {hasBoss && battle.boss && (
           <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-400 mb-2">Boss Stats</h4>
+            <h4 className="text-sm font-medium text-gray-400 mb-2">
+              Boss Stats
+            </h4>
             <div className="grid grid-cols-6 gap-2 text-center">
-              <StatBadge label="STR" value={battle.boss.stats.str} color="text-red-400" />
-              <StatBadge label="SPD" value={battle.boss.stats.spd} color="text-yellow-400" />
-              <StatBadge label="DUR" value={battle.boss.stats.dur} color="text-blue-400" />
-              <StatBadge label="IQ" value={battle.boss.stats.iq} color="text-purple-400" />
-              <StatBadge label="BIQ" value={battle.boss.stats.biq} color="text-pink-400" />
-              <StatBadge label="MA" value={battle.boss.stats.ma} color="text-orange-400" />
+              <StatBadge
+                label="STR"
+                value={battle.boss.stats.str}
+                color="text-red-400"
+              />
+              <StatBadge
+                label="SPD"
+                value={battle.boss.stats.spd}
+                color="text-yellow-400"
+              />
+              <StatBadge
+                label="DUR"
+                value={battle.boss.stats.dur}
+                color="text-blue-400"
+              />
+              <StatBadge
+                label="IQ"
+                value={battle.boss.stats.iq}
+                color="text-purple-400"
+              />
+              <StatBadge
+                label="BIQ"
+                value={battle.boss.stats.biq}
+                color="text-pink-400"
+              />
+              <StatBadge
+                label="MA"
+                value={battle.boss.stats.ma}
+                color="text-orange-400"
+              />
             </div>
             <div className="text-center mt-2">
               <span className="text-gray-400 text-sm">Boss Total: </span>
@@ -394,7 +455,9 @@ const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, 
                 <>
                   <span className="text-gray-500 mx-2">vs</span>
                   <span className="text-gray-400 text-sm">Team Total: </span>
-                  <span className="text-green-400 font-bold">{teamTotalStats}</span>
+                  <span className="text-green-400 font-bold">
+                    {teamTotalStats}
+                  </span>
                 </>
               )}
             </div>
@@ -406,14 +469,22 @@ const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, 
           <div className="grid grid-cols-2 gap-4">
             {/* Reward */}
             <div className="p-3 rounded-lg border bg-green-500/10 border-green-500/50">
-              <h4 className="text-sm font-bold mb-1 text-green-400">Reward (Win)</h4>
-              <p className="text-sm text-green-300 line-clamp-3">{battle.boss.reward}</p>
+              <h4 className="text-sm font-bold mb-1 text-green-400">
+                Reward (Win)
+              </h4>
+              <p className="text-sm text-green-300 line-clamp-3">
+                {battle.boss.reward}
+              </p>
             </div>
 
             {/* Punishment */}
             <div className="p-3 rounded-lg border bg-red-500/10 border-red-500/50">
-              <h4 className="text-sm font-bold mb-1 text-red-400">Punishment (Lose)</h4>
-              <p className="text-sm text-red-300 line-clamp-3">{battle.boss.punishment}</p>
+              <h4 className="text-sm font-bold mb-1 text-red-400">
+                Punishment (Lose)
+              </h4>
+              <p className="text-sm text-red-300 line-clamp-3">
+                {battle.boss.punishment}
+              </p>
             </div>
           </div>
         )}
@@ -435,13 +506,19 @@ const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, 
 
         {/* Expanded: Team Members */}
         {isExpanded && (
-          <div className={`mt-4 pt-4 border-t border-gray-600 ${!hasBoss ? "mt-0 pt-0 border-t-0" : ""}`}>
-            <h4 className="text-sm font-medium text-gray-400 mb-2">Team Members ({battle.members.length})</h4>
+          <div
+            className={`mt-4 pt-4 border-t border-gray-600 ${!hasBoss ? "mt-0 pt-0 border-t-0" : ""}`}
+          >
+            <h4 className="text-sm font-medium text-gray-400 mb-2">
+              Team Members ({battle.members.length})
+            </h4>
             {battle.members.length > 0 ? (
               <div className="space-y-2">
                 {battle.members.map((member, idx) => {
                   const playerData = battle.playerData.find(
-                    (p) => p.username.toLowerCase() === member.username.toLowerCase()
+                    (p) =>
+                      p.username.toLowerCase() ===
+                      member.username.toLowerCase(),
                   );
                   return (
                     <div
@@ -450,10 +527,16 @@ const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, 
                     >
                       <div>
                         {playerData && (
-                          <span className="text-teal-400 text-xs mr-2">No.{playerData.no}</span>
+                          <span className="text-teal-400 text-xs mr-2">
+                            No.{playerData.no}
+                          </span>
                         )}
-                        <span className="text-white font-medium">{member.name}</span>
-                        <span className="text-gray-400 text-sm ml-2">({member.username})</span>
+                        <span className="text-white font-medium">
+                          {member.name}
+                        </span>
+                        <span className="text-gray-400 text-sm ml-2">
+                          ({member.username})
+                        </span>
                       </div>
                       {playerData && (
                         <div className="text-xs text-gray-400">
@@ -468,7 +551,9 @@ const BattleCard = ({ battle, isExpanded, onToggle, getTotalStats, onBossClick, 
                 })}
               </div>
             ) : (
-              <p className="text-gray-500 text-sm italic">No members in this team</p>
+              <p className="text-gray-500 text-sm italic">
+                No members in this team
+              </p>
             )}
           </div>
         )}
@@ -519,12 +604,36 @@ const BossDetailModal = ({ boss, onClose }: BossDetailModalProps) => {
         <div className="p-6">
           <h3 className="text-lg font-bold text-white mb-3">Stats</h3>
           <div className="grid grid-cols-6 gap-3 text-center mb-4">
-            <StatBadgeLarge label="STR" value={boss.stats.str} color="text-red-400" />
-            <StatBadgeLarge label="SPD" value={boss.stats.spd} color="text-yellow-400" />
-            <StatBadgeLarge label="DUR" value={boss.stats.dur} color="text-blue-400" />
-            <StatBadgeLarge label="IQ" value={boss.stats.iq} color="text-purple-400" />
-            <StatBadgeLarge label="BIQ" value={boss.stats.biq} color="text-pink-400" />
-            <StatBadgeLarge label="MA" value={boss.stats.ma} color="text-orange-400" />
+            <StatBadgeLarge
+              label="STR"
+              value={boss.stats.str}
+              color="text-red-400"
+            />
+            <StatBadgeLarge
+              label="SPD"
+              value={boss.stats.spd}
+              color="text-yellow-400"
+            />
+            <StatBadgeLarge
+              label="DUR"
+              value={boss.stats.dur}
+              color="text-blue-400"
+            />
+            <StatBadgeLarge
+              label="IQ"
+              value={boss.stats.iq}
+              color="text-purple-400"
+            />
+            <StatBadgeLarge
+              label="BIQ"
+              value={boss.stats.biq}
+              color="text-pink-400"
+            />
+            <StatBadgeLarge
+              label="MA"
+              value={boss.stats.ma}
+              color="text-orange-400"
+            />
           </div>
           <div className="text-center mb-6">
             <span className="text-gray-400">Total: </span>

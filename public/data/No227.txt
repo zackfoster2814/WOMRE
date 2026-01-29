@@ -5,63 +5,66 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Troll
+Sub-race: Ice Troll 
 ```
 
 ```
-Archetype: 
-+ 
+Archetype: Infirmarian
++ Machinists (Từ New London)
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Shining Brightly
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:4
+Spd:5
+Dur:2
+IQ:6
+BIQ:5
+MA:3
 ```
 
 ```
 Houses: 
-+ 
++ New London
 ```
 
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Silver Steed (Từ House)
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+4 Power: 
++ 67
++ Blood Manipulation
++ U=ma2
++ Arcana Blast
 ```
 
 ```
 Char dev: 
-+ 
++ Cơ Cấu (Team 12)
 ```
 
 ```
-Team: 
+Team: 12
 ```
 
 ```

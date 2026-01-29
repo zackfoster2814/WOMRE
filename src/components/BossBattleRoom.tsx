@@ -74,7 +74,9 @@ interface BossBattleRoomProps {
 }
 
 export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
-  const [battleState, setBattleState] = useState<"idle" | "fighting" | "finished">("idle");
+  const [battleState, setBattleState] = useState<
+    "idle" | "fighting" | "finished"
+  >("idle");
   const [currentRound, setCurrentRound] = useState(0);
   const [roundResults, setRoundResults] = useState<RoundResult[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -85,7 +87,7 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
   // Check for "Let Me Solo Her" quirk
   const soloHerInfo = useMemo(() => {
     const playersWithQuirk = battle.playerData.filter((player) =>
-      player.quirks?.some((q) => q.toLowerCase().includes("let me solo her"))
+      player.quirks?.some((q) => q.toLowerCase().includes("let me solo her")),
     );
 
     // Only activate if EXACTLY 1 player has the quirk
@@ -102,7 +104,14 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
 
   // Calculate team total stats (sum of all members OR solo player x8)
   const teamStats = useMemo(() => {
-    const totals: CharacterStats = { str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0 };
+    const totals: CharacterStats = {
+      str: 0,
+      spd: 0,
+      dur: 0,
+      iq: 0,
+      biq: 0,
+      ma: 0,
+    };
 
     if (soloHerInfo.active && soloHerInfo.soloPlayer) {
       // Let Me Solo Her mode: use solo player stats x8
@@ -250,7 +259,10 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
       const teamValue = teamStats[stat] || 0;
 
       // Apply weighting: higher side gets x2
-      const { bossWeight, teamWeight } = getWeightedValues(bossValue, teamValue);
+      const { bossWeight, teamWeight } = getWeightedValues(
+        bossValue,
+        teamValue,
+      );
       const total = bossWeight + teamWeight;
 
       let winner: "boss" | "team" | "tie" = "tie";
@@ -300,14 +312,15 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
 
   // Current stat being fought
   const currentStat = currentRound < 6 ? STAT_KEYS[currentRound] : null;
-  const currentBossValue = currentStat ? (boss.stats[currentStat] || 0) : 0;
-  const currentTeamValue = currentStat ? (teamStats[currentStat] || 0) : 0;
+  const currentBossValue = currentStat ? boss.stats[currentStat] || 0 : 0;
+  const currentTeamValue = currentStat ? teamStats[currentStat] || 0 : 0;
 
   // Weighted values for wheel display
   const currentWeighted = currentStat
     ? getWeightedValues(currentBossValue, currentTeamValue)
     : { bossWeight: 0, teamWeight: 0 };
-  const currentTotalWeight = currentWeighted.bossWeight + currentWeighted.teamWeight;
+  const currentTotalWeight =
+    currentWeighted.bossWeight + currentWeighted.teamWeight;
 
   return (
     <div
@@ -343,7 +356,10 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
                   🗡️ LET ME SOLO HER MODE 🗡️
                 </span>
                 <p className="text-yellow-300 text-sm mt-1">
-                  <span className="font-bold">{soloHerInfo.soloPlayer.name}</span> đang solo boss với x{soloHerInfo.multiplier} stats!
+                  <span className="font-bold">
+                    {soloHerInfo.soloPlayer.name}
+                  </span>{" "}
+                  đang solo boss với x{soloHerInfo.multiplier} stats!
                 </p>
                 <p className="text-yellow-200/70 text-xs mt-1">
                   Đội không được hỗ trợ.
@@ -356,8 +372,12 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
           <div className="grid grid-cols-3 gap-4 mb-6">
             {/* Boss Side */}
             <div className="text-center">
-              <h3 className="text-xl font-bold text-red-400 mb-2">{boss.name}</h3>
-              <div className="text-3xl font-bold text-red-500">{score.boss}</div>
+              <h3 className="text-xl font-bold text-red-400 mb-2">
+                {boss.name}
+              </h3>
+              <div className="text-3xl font-bold text-red-500">
+                {score.boss}
+              </div>
               <p className="text-gray-400 text-sm">Rounds Won</p>
             </div>
 
@@ -373,7 +393,9 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
                   ? soloHerInfo.soloPlayer.name
                   : `Team ${battle.teamId}`}
               </h3>
-              <div className="text-3xl font-bold text-green-500">{score.team}</div>
+              <div className="text-3xl font-bold text-green-500">
+                {score.team}
+              </div>
               <p className="text-gray-400 text-sm">Rounds Won</p>
             </div>
           </div>
@@ -384,7 +406,8 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
               const bossVal = boss.stats[stat] || 0;
               const teamVal = teamStats[stat] || 0;
               const result = roundResults[idx];
-              const isCurrentRound = idx === currentRound && battleState === "fighting";
+              const isCurrentRound =
+                idx === currentRound && battleState === "fighting";
               const isPending = idx > currentRound || battleState === "idle";
 
               return (
@@ -394,14 +417,14 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
                     isCurrentRound
                       ? "border-yellow-400 bg-yellow-500/20 scale-105"
                       : result
-                      ? result.winner === "boss"
-                        ? "border-red-500 bg-red-500/20"
-                        : result.winner === "team"
-                        ? "border-green-500 bg-green-500/20"
-                        : "border-gray-500 bg-gray-500/20"
-                      : isPending
-                      ? "border-gray-600 bg-gray-800/50"
-                      : "border-gray-600 bg-gray-800/50"
+                        ? result.winner === "boss"
+                          ? "border-red-500 bg-red-500/20"
+                          : result.winner === "team"
+                            ? "border-green-500 bg-green-500/20"
+                            : "border-gray-500 bg-gray-500/20"
+                        : isPending
+                          ? "border-gray-600 bg-gray-800/50"
+                          : "border-gray-600 bg-gray-800/50"
                   }`}
                 >
                   <div className="text-center">
@@ -419,15 +442,15 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
                           result.winner === "boss"
                             ? "text-red-400"
                             : result.winner === "team"
-                            ? "text-green-400"
-                            : "text-gray-400"
+                              ? "text-green-400"
+                              : "text-gray-400"
                         }`}
                       >
                         {result.winner === "boss"
                           ? "BOSS"
                           : result.winner === "team"
-                          ? "TEAM"
-                          : "TIE"}
+                            ? "TEAM"
+                            : "TIE"}
                       </div>
                     )}
                   </div>
@@ -447,16 +470,24 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
               <div className="flex justify-center gap-8 mb-4 text-sm">
                 <div className="text-center">
                   <span className="text-gray-400">Boss: </span>
-                  <span className="text-red-400 font-bold">{currentBossValue}</span>
+                  <span className="text-red-400 font-bold">
+                    {currentBossValue}
+                  </span>
                   {currentBossValue > currentTeamValue && (
-                    <span className="text-yellow-400 ml-1">(x2 = {currentWeighted.bossWeight})</span>
+                    <span className="text-yellow-400 ml-1">
+                      (x2 = {currentWeighted.bossWeight})
+                    </span>
                   )}
                 </div>
                 <div className="text-center">
                   <span className="text-gray-400">Team: </span>
-                  <span className="text-green-400 font-bold">{currentTeamValue}</span>
+                  <span className="text-green-400 font-bold">
+                    {currentTeamValue}
+                  </span>
                   {currentTeamValue > currentBossValue && (
-                    <span className="text-yellow-400 ml-1">(x2 = {currentWeighted.teamWeight})</span>
+                    <span className="text-yellow-400 ml-1">
+                      (x2 = {currentWeighted.teamWeight})
+                    </span>
                   )}
                 </div>
               </div>
@@ -477,7 +508,8 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
                 >
                   {/* Boss label */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="absolute text-white font-bold text-sm"
+                    <div
+                      className="absolute text-white font-bold text-sm"
                       style={{
                         transform: `rotate(${-(currentWeighted.bossWeight / (currentTotalWeight || 1)) * 180}deg) translateY(-60px)`,
                       }}
@@ -511,7 +543,9 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
                 </button>
               )}
               {isSpinning && (
-                <p className="text-yellow-400 font-medium animate-pulse">Spinning...</p>
+                <p className="text-yellow-400 font-medium animate-pulse">
+                  Spinning...
+                </p>
               )}
             </div>
           )}
@@ -520,7 +554,8 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
           {battleState === "idle" && (
             <div className="flex flex-col items-center gap-4 mb-6">
               <p className="text-gray-400 text-center">
-                Battle consists of 6 rounds, one for each stat.<br />
+                Battle consists of 6 rounds, one for each stat.
+                <br />
                 Each round uses a weighted wheel based on the stat values.
               </p>
               <div className="flex gap-4">
@@ -548,8 +583,8 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
                   finalWinner === "team"
                     ? "bg-green-500/30 border-2 border-green-500"
                     : finalWinner === "boss"
-                    ? "bg-red-500/30 border-2 border-red-500"
-                    : "bg-gray-500/30 border-2 border-gray-500"
+                      ? "bg-red-500/30 border-2 border-red-500"
+                      : "bg-gray-500/30 border-2 border-gray-500"
                 }`}
               >
                 <h3
@@ -557,15 +592,15 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
                     finalWinner === "team"
                       ? "text-green-400"
                       : finalWinner === "boss"
-                      ? "text-red-400"
-                      : "text-gray-400"
+                        ? "text-red-400"
+                        : "text-gray-400"
                   }`}
                 >
                   {finalWinner === "team"
                     ? "VICTORY!"
                     : finalWinner === "boss"
-                    ? "DEFEAT!"
-                    : "TIE!"}
+                      ? "DEFEAT!"
+                      : "TIE!"}
                 </h3>
                 <p className="text-white">
                   Final Score: {score.team} - {score.boss}
@@ -643,13 +678,18 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
               </h5>
               <div className="grid grid-cols-6 gap-2 text-center">
                 {STAT_KEYS.map((stat) => (
-                  <div key={stat} className={`rounded px-2 py-1 ${
-                    soloHerInfo.active ? "bg-yellow-600/30" : "bg-gray-700/50"
-                  }`}>
+                  <div
+                    key={stat}
+                    className={`rounded px-2 py-1 ${
+                      soloHerInfo.active ? "bg-yellow-600/30" : "bg-gray-700/50"
+                    }`}
+                  >
                     <div className="text-xs font-medium text-gray-400">
                       {stat.toUpperCase()}
                     </div>
-                    <div className={`font-bold ${soloHerInfo.active ? "text-yellow-400" : "text-green-400"}`}>
+                    <div
+                      className={`font-bold ${soloHerInfo.active ? "text-yellow-400" : "text-green-400"}`}
+                    >
                       {teamStats[stat]}
                     </div>
                   </div>

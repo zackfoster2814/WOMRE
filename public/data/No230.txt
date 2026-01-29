@@ -5,66 +5,72 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Primordial Being
+Sub-race: Fire
 ```
 
 ```
 Archetype: 
-+ 
++ Mason
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Progressive
++ Charming (Lover: Dương Quá Quá (duongquaqua), tặng Critical Strike)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:10
+Spd:5
+Dur:4
+IQ:6
+BIQ:6
+MA:1
 ```
 
 ```
 Houses: 
-+ 
++ Tyrell
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Sổ Tay
+  - Fishing Rod
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Fire Control (Từ Sub-race)
++ Critical Strike (Từ Dương Quá Quá (duongquaqua))
++ Powerful Strike(Từ Sub-race)
++ Ballet Dancing
++ Rickrolling 
 ```
 
 ```
 Char dev: 
-+ 
++ Creator's Limitation (-1 All Stats)
 ```
 
 ```
-Team: 
+Team: 27
 ```
 
 ```
 Lover:
-+ 
++ Dương Quá Quá (duongquaqua)
 ```

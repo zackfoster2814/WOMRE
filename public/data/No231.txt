@@ -1,67 +1,72 @@
 No.231
-Name: E4zyyyy (Hinaso1) (e4zyyyy)
+Name: E4zyyyy (Hinaso1)
 ```
 Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Dwarf
+Sub-race: Thường
 ```
 
 ```
 Archetype: 
-+ 
++ Edgelord
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Raumanian🍀
++ Slow Healer
++ Fast Learner (Từ Char Dev)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:3
+Spd:2
+Dur:7
+IQ:1
+BIQ:10
+MA:6
 ```
 
 ```
 Houses: 
-+ 
++ Coven Council
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+3 Gear: 
+ + 3 Normal gear:
+  - Kuro's Charm
+  - Golden Coin
+  - Wine
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Summoning Scroll (Không dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Invulnerability 
++ Mewing
 ```
 
 ```
 Char dev: 
-+ 
++ Seeking Wisdom
 ```
 
 ```
-Team: 
+Team: 17
 ```
 
 ```

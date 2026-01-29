@@ -132,10 +132,16 @@ export class EffectResolver {
     if (character.race?.race) {
       const raceEntry = EffectRegistry.get('race', character.race.race);
       if (raceEntry) {
+        // If Giant bonus was pre-applied (e.g., due to Inversion), skip stat modifier effects
+        const isGiantWithPreAppliedBonus = character.race.race === 'Giant' && character.giantBonusApplied;
+        const filteredEffects = isGiantWithPreAppliedBonus
+          ? raceEntry.effects.filter(e => e.type !== 'stat_modifier')
+          : raceEntry.effects;
+
         sources.push({
           type: 'race',
           name: character.race.race,
-          effects: raceEntry.effects,
+          effects: filteredEffects,
           rawDescription: raceEntry.description,
           isActive: true
         });

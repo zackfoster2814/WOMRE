@@ -899,6 +899,316 @@ export function registerHumanSubRaces() {
 }
 
 // ============================================================================
+// SUB-RACES: VAMPIRE BODY COUNT
+// ============================================================================
+
+export function registerVampireSubRaces() {
+  defineEffect("sub_race", "Body Count 45689")
+    .description("-1 all stats. (Bạn chắc hẳn rất kén ăn...)")
+    .weight(2.5)
+    .addAllStats(-1)
+    .register();
+
+  defineEffect("sub_race", "Body Count 10+")
+    .description("Mới nhú. Không có hiệu ứng đặc biệt.")
+    .weight(5)
+    .register();
+
+  defineEffect("sub_race", "Body Count 50+")
+    .description("Nhóc. Không có hiệu ứng đặc biệt.")
+    .weight(20)
+    .register();
+
+  defineEffect("sub_race", "Body Count 500+")
+    .description("+1 Speed, +1 IQ.")
+    .weight(25)
+    .addStat("speed", 1)
+    .addStat("iq", 1)
+    .register();
+
+  defineEffect("sub_race", "Body Count 2000+")
+    .description("+1 Speed, +1 IQ, +1 BIQ.")
+    .weight(25)
+    .addStat("speed", 1)
+    .addStat("iq", 1)
+    .addStat("biq", 1)
+    .register();
+
+  defineEffect("sub_race", "Body Count 10000+")
+    .description("+1 Speed, +1 IQ, +1 BIQ, +1 Durability.")
+    .weight(20)
+    .addStat("speed", 1)
+    .addStat("iq", 1)
+    .addStat("biq", 1)
+    .addStat("durability", 1)
+    .register();
+
+  defineEffect("sub_race", "Body Count 50000+")
+    .description("+1 all stats. (Ma cà rồng cổ xưa)")
+    .weight(2.5)
+    .addAllStats(1)
+    .register();
+}
+
+// ============================================================================
+// SUB-RACES: PRIMORDIAL BEING ELEMENTAL
+// ============================================================================
+
+export function registerElementalSubRaces() {
+  defineEffect("sub_race", "Air")
+    .description(
+      'Nhận Power "Blowing Leaves", +1 Speed, +1 vào Stat thấp nhất.',
+    )
+    .weight(25)
+    .grantPower("Blowing Leaves", 1)
+    .addStat("speed", 1)
+    .addStat("lowest", 1)
+    .register();
+
+  defineEffect("sub_race", "Water")
+    .description(
+      'Nhận Power "Water Breathing", +1 BIQ, +1 vào Stat cao nhất.',
+    )
+    .weight(25)
+    .grantPower("Water Breathing", 1)
+    .addStat("biq", 1)
+    .addStat("highest", 1)
+    .register();
+
+  defineEffect("sub_race", "Fire")
+    .description('Nhận Power "Fire Control", +1 MA, nhận thêm 1 Power.')
+    .weight(25)
+    .grantPower("Fire Control", 1)
+    .addStat("ma", 1)
+    .grantPower("random", 1)
+    .register();
+
+  defineEffect("sub_race", "Earth")
+    .description('Nhận Power "Earth-Shaking", +1 Strength, nhận thêm 1 Quirk.')
+    .weight(25)
+    .grantPower("Earth-Shaking", 1)
+    .addStat("strength", 1)
+    .grantQuirk("random", 1)
+    .register();
+}
+
+// ============================================================================
+// SUB-RACES: UMA PARENTS
+// ============================================================================
+
+export function registerUmaParentSubRaces() {
+  defineEffect("sub_race", "Maruzensky")
+    .description('Nhận Power "Red Shift/LP1211-M".')
+    .weight(4.8)
+    .grantPower("Red Shift/LP1211-M", 1)
+    .register();
+
+  defineEffect("sub_race", "Mejiro Ryan")
+    .description('Nhận Power "Let\'s Pump Some Iron!"')
+    .weight(4.8)
+    .grantPower("Let's Pump Some Iron!", 1)
+    .register();
+
+  defineEffect("sub_race", "Taiki Shuttle")
+    .description('Nhận Power "Shooting for Victory".')
+    .weight(4.8)
+    .grantPower("Shooting for Victory", 1)
+    .register();
+
+  defineEffect("sub_race", "Haru Urara")
+    .description(
+      "-1 all stats. Nếu còn sống tới vòng 32, chuyển thành +2 all stats.",
+    )
+    .weight(4.8)
+    .addAllStats(-1)
+    .effect({
+      type: "custom",
+      timing: "immediate",
+      target: "self",
+      customHandler: "haru_urara_late_game_buff",
+      triggerOnce: true,
+    })
+    .register();
+
+  defineEffect("sub_race", "Oguri Cap")
+    .description("+1 Strength, +2 Speed.")
+    .weight(4.8)
+    .addStat("strength", 1)
+    .addStat("speed", 2)
+    .register();
+
+  defineEffect("sub_race", "Gold Ship")
+    .description(
+      'Nhận Quirk "Training Restricted". Trong combat: 50% +1 all stats, 50% -1 all stats.',
+    )
+    .weight(4.8)
+    .grantQuirk("Training Restricted", 1)
+    .effect({
+      type: "custom",
+      timing: "during_combat",
+      target: "self",
+      customHandler: "gold_ship_coin_flip",
+    })
+    .register();
+
+  defineEffect("sub_race", "Symboli Rudolf")
+    .description(
+      "Sau khi thắng 3 PvP đầu tiên: +1 all stats. Thắng chung kết nhánh thắng: +1 all stats nữa.",
+    )
+    .weight(4.8)
+    .effect({
+      type: "stat_modifier",
+      stat: "all",
+      value: 1,
+      timing: "after_combat_win",
+      target: "self",
+      conditions: [
+        { type: "pvp_win_count", winCount: 3, winCountOperator: "=" },
+      ],
+      triggerOnce: true,
+    })
+    .effect({
+      type: "custom",
+      timing: "after_combat_win",
+      target: "self",
+      customHandler: "symboli_rudolf_winner_bracket_final",
+    })
+    .register();
+
+  defineEffect("sub_race", "Silence Suzuka")
+    .description("+6 Speed, -3 Durability.")
+    .weight(4.8)
+    .addStat("speed", 6)
+    .addStat("durability", -3)
+    .register();
+
+  defineEffect("sub_race", "Mejiro McQueen")
+    .description("+3 Durability.")
+    .weight(4.8)
+    .addStat("durability", 3)
+    .register();
+
+  defineEffect("sub_race", "Mihono Bourbon")
+    .description("+1 Strength, +2 Durability.")
+    .weight(4.8)
+    .addStat("strength", 1)
+    .addStat("durability", 2)
+    .register();
+
+  defineEffect("sub_race", "Tokai Teio")
+    .description("Gấp đôi Speed Base khi sử dụng nhạc cụ làm vũ khí.")
+    .weight(4.8)
+    .effect({
+      type: "custom",
+      timing: "during_combat",
+      target: "self",
+      customHandler: "tokai_teio_instrument_speed",
+    })
+    .register();
+
+  defineEffect("sub_race", "Agnes Tachyon")
+    .description('Nhận Power "U=ma2".')
+    .weight(4.8)
+    .grantPower("U=ma2", 1)
+    .register();
+
+  defineEffect("sub_race", "Nice Nature")
+    .description(
+      "Trong combat: Nếu cả hai bên đều có 3 điểm khi kết thúc, bỏ qua Tie-Break và thắng. (Mạnh hơn mọi tie-breaker khác)",
+    )
+    .weight(4.8)
+    .effect({
+      type: "custom",
+      timing: "during_combat",
+      target: "self",
+      customHandler: "nice_nature_tie_win",
+    })
+    .register();
+
+  defineEffect("sub_race", "Special Week")
+    .description('50% nhận Power "Gourmand", 50% nhận Power "Hydrate".')
+    .weight(4.8)
+    .effect({
+      type: "custom",
+      timing: "immediate",
+      target: "self",
+      customHandler: "special_week_random_power",
+    })
+    .register();
+
+  defineEffect("sub_race", "Rice Shower")
+    .description("+1 all stats ở nhánh thua. Hết hiệu lực khi tới chung kết.")
+    .weight(4.8)
+    .effect({
+      type: "stat_modifier",
+      stat: "all",
+      value: 1,
+      timing: "on_loser_bracket",
+      target: "self",
+    })
+    .register();
+
+  defineEffect("sub_race", "Mayano Top Gun")
+    .description("+2 Durability, +1 BIQ.")
+    .weight(4.8)
+    .addStat("durability", 2)
+    .addStat("biq", 1)
+    .register();
+
+  defineEffect("sub_race", "Biwa Hayahide")
+    .description("+2 IQ, +1 BIQ.")
+    .weight(4.8)
+    .addStat("iq", 2)
+    .addStat("biq", 1)
+    .register();
+
+  defineEffect("sub_race", "El Condor Pasa")
+    .description(
+      "Sau mỗi PvP thắng Round Dura: +3 Speed, +3 Strength trong combat kế tiếp.",
+    )
+    .weight(4.8)
+    .effect({
+      type: "custom",
+      timing: "after_combat",
+      target: "self",
+      customHandler: "el_condor_pasa_dura_win_buff",
+    })
+    .register();
+
+  defineEffect("sub_race", "Nagi")
+    .description("Nhận thêm 2 Char Dev ngẫu nhiên khi quay vòng quay Char Dev.")
+    .weight(4.4)
+    .effect({
+      type: "wheel_grant",
+      wheelType: "Char Dev",
+      grantCount: 2,
+      timing: "immediate",
+      target: "self",
+    })
+    .register();
+
+  defineEffect("sub_race", "Mork")
+    .description(
+      "Thắng 1 Round: +1 Điểm. Thua 1 Round: mất hết điểm đang có. +2 BIQ.",
+    )
+    .weight(4.4)
+    .addStat("biq", 2)
+    .effect({
+      type: "custom",
+      timing: "during_combat",
+      target: "self",
+      customHandler: "mork_high_risk_points",
+    })
+    .register();
+
+  defineEffect("sub_race", "Seiun Sky")
+    .description('Nhận Power "Angling and Scheming".')
+    .weight(4.8)
+    .grantPower("Angling and Scheming", 1)
+    .register();
+}
+
+// ============================================================================
 // REGISTER ALL
 // ============================================================================
 
@@ -911,4 +1221,7 @@ export function registerAllRaceEffects() {
   registerDragonSubRaces();
   registerAngelSubRaces();
   registerHumanSubRaces();
+  registerVampireSubRaces();
+  registerElementalSubRaces();
+  registerUmaParentSubRaces();
 }

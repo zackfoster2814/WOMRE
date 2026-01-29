@@ -5,63 +5,67 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Troll
+Sub-race: Ice Troll
 ```
 
 ```
-Archetype: 
+Archetype: Herald
 + 
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Brave
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:6
+Spd:5(Ban đầu là 2, +3 từ Herald)
+Dur:4
+IQ:5
+BIQ:9
+MA:7
 ```
 
 ```
 Houses: 
-+ 
++ Golden Order (Đã bị đuổi)
+ -> Radahn (Đã mất) 
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Shot Glass
+  - Thuốc Tráng Dương
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Misericorde (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power: 
++ Homeguard (Từ House)
++ Acid Breath (Từ House)
++ Baldening
 ```
 
 ```
 Char dev: 
-+ 
++ No more Home
 ```
 
 ```
-Team: 
+Team: 29
 ```
 
 ```

@@ -5,63 +5,67 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Vàng
 ```
 
 ```
-Archetype: 
-+ 
+Archetype: Conquerer
++ Power Ranger (Silver)
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Brave
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:3
+Spd:4 (Ban đầu là 1, +3 từ Conquerer)
+Dur:5
+IQ:6
+BIQ:6 (từ 12 (Ban đầu là 10, +2 từ House))
+MA:7
 ```
 
 ```
 Houses: 
-+ 
++ Atreides
 ```
 
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Storage Room Key
+  - Spatula
+  - Radio
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Bass (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ Shael
+Runeword: 
 ```
 
 ```
 0 Power: 
 + 
++
++
 ```
 
 ```
 Char dev: 
-+ 
++ Fate's Trick (Chia)
 ```
 
 ```
-Team: 
+Team: 5
 ```
 
 ```

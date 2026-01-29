@@ -5,66 +5,75 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: ELf
+Sub-race: Moon Elf (Lover: Yui (duyanh_57789)) 
 ```
 
 ```
 Archetype: 
-+ 
++ Invoker
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Resilient
++ Brave
++ Lucky
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:1
+Spd:6
+Dur:5
+IQ:6
+BIQ:6
+MA:3
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+Houses:
++ Tyrell
+```
+
+```
+2 Gear: 
+ + 2 Normal gear:
+  - Gold Pine Resin
+  - Swift Boots
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
 0 Power: 
-+ 
++ AIDS (Asmodeus) (Từ Yui (duyanh_57789))
++ Quas (Từ Invoker)
++ Wex (Từ Invoker)
++ Exort (Từ Invoker)
++ Misty Step Ahead (Từ Sub-race)
++ Petrification (Từ Char Dev)
++ Encroaching Shadow (Từ Char Dev)
 ```
 
 ```
 Char dev: 
-+ 
++ No more Family
 ```
 
 ```
-Team: 
+Team: 32
 ```
 
 ```
 Lover:
-+ 
++ Yui (duyanh_57789)
 ```

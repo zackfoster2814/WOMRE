@@ -5,30 +5,30 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Human
+Sub-race: Trắng
 ```
 
 ```
-Archetype: 
+Archetype: Glass Cannon
 + 
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Blind
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:4
+Spd:3
+Dur:5
+IQ:8
+BIQ:1
+MA:6
 ```
 
 ```
-Houses: 
-+ 
+Houses:
++ Kazuya Kinoshita's House
 ```
 
 ```
@@ -40,14 +40,14 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Ruan Mei's Lute (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
@@ -57,11 +57,11 @@ Runeword: Không
 
 ```
 Char dev: 
-+ 
++ Never skip Leg Day
 ```
 
 ```
-Team: 
+Team: 23
 ```
 
 ```

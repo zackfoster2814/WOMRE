@@ -5,63 +5,68 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Gnome
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Wibu
+  -> JJK
+     -> Self-Embodiment of Perfection 
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Deaf
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:5
+Spd:4
+Dur:3
+IQ:9
+BIQ:4
+MA:2
 ```
 
 ```
 Houses: 
-+ 
++ Tyrell
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Cần Câu
+  - Bia
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Self-Embodiment of Perfection (Từ JJK Wibu)
++ EscAPADe
++ Enhanced Hearing
 ```
 
 ```
 Char dev: 
-+ 
++ King's Landing
 ```
 
 ```
-Team: 
+Team: 19
 ```
 
 ```

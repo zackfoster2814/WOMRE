@@ -5,63 +5,66 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Goblin
+Sub-race: 5000
 ```
 
 ```
 Archetype: 
-+ 
++ Sentinel of Purity
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Clumsy
++ One Trick Pony
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:3
+Spd:6
+Dur:4
+IQ:1
+BIQ:4
+MA:1
 ```
 
 ```
 Houses: 
-+ 
++ Uchiha
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Ớt
+  - Wine (Từ Char dev)
+  - Cuộn khăn giấy (Từ Char dev)
+  - Swift Boots (Từ Char dev)
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Caestus (Không dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
 0 Power: 
-+ 
 ```
 
 ```
 Char dev: 
-+ 
++ Armed to the Teeth
 ```
 
 ```
-Team: 
+Team: 14
 ```
 
 ```

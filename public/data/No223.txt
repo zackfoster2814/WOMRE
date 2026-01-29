@@ -5,30 +5,31 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Dryad
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Loyal (iu anh Mèo)
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Charming (Bú power Evasion từ anh Moè)
++ Patient
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 10
+Spd: 1
+Dur: 6
+IQ: 5
+BIQ: 3
+MA: 1
 ```
 
 ```
 Houses: 
-+ 
++ Hallownest
 ```
 
 ```
@@ -40,31 +41,33 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Claymore (dùng được) (mất vì Creator's Reforge)
++ Hidden Blade (nhận từ Creator's Reforge)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ Thul
+Runeword: không
 ```
 
 ```
 0 Power: 
-+ 
++ Evasion (từ Charming)
++ Critical Strike
 ```
 
 ```
 Char dev: 
-+ 
++ Creator's Reforge
 ```
 
 ```
-Team: 
+Team: 30
 ```
 
 ```
 Lover:
-+ 
++ Anh Mèo (Meowtea)
 ```
