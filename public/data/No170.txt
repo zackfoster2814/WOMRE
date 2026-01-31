@@ -10,8 +10,8 @@ Sub-race:
 ```
 
 ```
-Archetype: Mid 
-+ 
+Archetype: 
++ Mid 
 ```
 ``` 
 1 Quirk:  
