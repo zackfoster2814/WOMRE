@@ -1209,6 +1209,535 @@ export function registerUmaParentSubRaces() {
 }
 
 // ============================================================================
+// SUB-RACES: DEMON SINS
+// ============================================================================
+
+export function registerDemonSinSubRaces() {
+  defineEffect("sub_race", "Lucifer")
+    .description(
+      'Nhận Archetype "Egoist". Vòng quay Power đạt kết quả tối đa (4).',
+    )
+    .weight(14.282)
+    .effect({
+      type: "grant_archetype",
+      grantName: "Egoist",
+      grantCount: 1,
+      timing: "immediate",
+      target: "self",
+    })
+    .effect({
+      type: "custom",
+      timing: "immediate",
+      target: "self",
+      customHandler: "lucifer_max_power_wheel",
+    })
+    .register();
+
+  defineEffect("sub_race", "Beelzebub")
+    .description(
+      'Nhận Quirk "Slow Metabolism". 1 chỉ số ngẫu nhiên đạt tối đa (10).',
+    )
+    .weight(14.282)
+    .grantQuirk("Slow Metabolism", 1)
+    .effect({
+      type: "custom",
+      timing: "immediate",
+      target: "self",
+      customHandler: "beelzebub_max_random_stat",
+    })
+    .register();
+
+  defineEffect("sub_race", "Leviathan")
+    .description(
+      "Quay 6 người chơi nhận Gear: Leviathan's Mark. Khi tất cả bị loại: +6 stat thấp nhất.",
+    )
+    .weight(14.282)
+    .effect({
+      type: "custom",
+      timing: "immediate",
+      target: "self",
+      customHandler: "leviathan_mark_distribution",
+    })
+    .register();
+
+  defineEffect("sub_race", "Behemoth")
+    .description(
+      "Sau combat thua: Base 1 stat ngẫu nhiên = 0. Sau combat thắng: Base 1 stat ngẫu nhiên +2.",
+    )
+    .weight(14.282)
+    .effect({
+      type: "custom",
+      timing: "after_combat_lose",
+      target: "self",
+      customHandler: "behemoth_lose_penalty",
+    })
+    .effect({
+      type: "custom",
+      timing: "after_combat_win",
+      target: "self",
+      customHandler: "behemoth_win_bonus",
+    })
+    .register();
+
+  defineEffect("sub_race", "Mammon")
+    .description("-2 all stats. Sau combat thắng: Nhận 2 phần thưởng PvP.")
+    .weight(14.282)
+    .addAllStats(-2)
+    .effect({
+      type: "double_reward",
+      timing: "after_combat_win",
+      target: "self",
+    })
+    .register();
+
+  defineEffect("sub_race", "Belphegor")
+    .description(
+      "Trong combat: 2 Round đầu nếu thắng có 66% không nhận điểm. +1 điểm khởi đầu.",
+    )
+    .weight(14.282)
+    .effect({
+      type: "combat_points",
+      points: 1,
+      timing: "before_combat",
+      target: "self",
+    })
+    .effect({
+      type: "custom",
+      timing: "during_combat",
+      target: "self",
+      customHandler: "belphegor_lazy_rounds",
+    })
+    .register();
+
+  defineEffect("sub_race", "Asmodeus")
+    .description(
+      'Nhận Power "AIDS" (không thể chữa). Trong combat: +1 điểm khởi đầu nếu đối thủ bị AIDS.',
+    )
+    .weight(14.29)
+    .grantPower("AIDS", 1)
+    .effect({
+      type: "combat_points",
+      points: 1,
+      timing: "before_combat",
+      target: "self",
+      conditions: [
+        { type: "opponent_has", opponentItemType: "power", opponentItemName: "AIDS" },
+      ],
+    })
+    .register();
+}
+
+// ============================================================================
+// SUB-RACES: WEREBEAST TYPES
+// ============================================================================
+
+export function registerWerebeastSubRaces() {
+  defineEffect("sub_race", "Wereraven")
+    .description("[PvE Only] +2 all stats.")
+    .weight(12)
+    .effect({
+      type: "stat_modifier",
+      stat: "all",
+      value: 2,
+      timing: "pve_only",
+      target: "self",
+    })
+    .register();
+
+  defineEffect("sub_race", "Werewolf")
+    .description("[PvE Only] Đội nhận +2 Strength với mỗi thành viên.")
+    .weight(12)
+    .effect({
+      type: "custom",
+      timing: "pve_only",
+      target: "team",
+      customHandler: "werewolf_team_strength",
+    })
+    .register();
+
+  defineEffect("sub_race", "Wererat")
+    .description("[PvE Only] Đội nhận +1 điểm nếu thắng round BIQ.")
+    .weight(12)
+    .effect({
+      type: "extra_point_on_win",
+      timing: "pve_only",
+      target: "team",
+      conditions: [{ type: "round_result", stat: "biq" }],
+    })
+    .register();
+
+  defineEffect("sub_race", "Wereboar")
+    .description("[PvE Only] Sau mỗi round thua, đội có 20% nhận 1 điểm.")
+    .weight(12)
+    .effect({
+      type: "custom",
+      timing: "pve_only",
+      target: "team",
+      customHandler: "wereboar_chance_point_on_lose",
+    })
+    .register();
+
+  defineEffect("sub_race", "Werebear")
+    .description("[PvE Only] Round MA thắng, đội nhận thêm 1 điểm.")
+    .weight(12)
+    .effect({
+      type: "extra_point_on_win",
+      timing: "pve_only",
+      target: "team",
+      conditions: [{ type: "round_result", stat: "ma" }],
+    })
+    .register();
+
+  defineEffect("sub_race", "Werebat")
+    .description(
+      "[PvE Only] -3 all stats. Đội thua: bạn nhận thưởng (không phạt). Đội thắng: bạn không nhận thưởng (bị phạt).",
+    )
+    .weight(12)
+    .effect({
+      type: "stat_modifier",
+      stat: "all",
+      value: -3,
+      timing: "pve_only",
+      target: "self",
+    })
+    .effect({
+      type: "custom",
+      timing: "pve_only",
+      target: "self",
+      customHandler: "werebat_reverse_reward",
+    })
+    .register();
+
+  defineEffect("sub_race", "Werecapybara")
+    .description(
+      "[PvE Only] +10 BIQ. Round BIQ thi đấu 2 lần (cả hai đều tính điểm).",
+    )
+    .weight(12)
+    .effect({
+      type: "stat_modifier",
+      stat: "biq",
+      value: 10,
+      timing: "pve_only",
+      target: "self",
+    })
+    .effect({
+      type: "custom",
+      timing: "pve_only",
+      target: "team",
+      customHandler: "werecapybara_double_biq_round",
+    })
+    .register();
+
+  defineEffect("sub_race", "Weresheep")
+    .description(
+      "[PvE Only] +3 Dura. Nếu đội thắng, +3 Dura được cộng vĩnh viễn vào base.",
+    )
+    .weight(8)
+    .effect({
+      type: "stat_modifier",
+      stat: "durability",
+      value: 3,
+      timing: "pve_only",
+      target: "self",
+    })
+    .effect({
+      type: "custom",
+      timing: "after_combat_win",
+      target: "self",
+      customHandler: "weresheep_permanent_dura",
+    })
+    .register();
+
+  defineEffect("sub_race", "Wereseal")
+    .description("[PvE Only] Đội -100 all stats. Đội thắng nếu ghi được 1 điểm.")
+    .weight(8)
+    .effect({
+      type: "stat_modifier",
+      stat: "all",
+      value: -100,
+      timing: "pve_only",
+      target: "team",
+    })
+    .effect({
+      type: "custom",
+      timing: "pve_only",
+      target: "team",
+      customHandler: "wereseal_one_point_win",
+    })
+    .register();
+}
+
+// ============================================================================
+// SUB-RACES: GOD'S GIFTS (Demi-God)
+// ============================================================================
+
+export function registerGodsGiftSubRaces() {
+  defineEffect("sub_race", "Cursed Sword")
+    .description("-1 all stats.")
+    .weight(30)
+    .addAllStats(-1)
+    .register();
+
+  defineEffect("sub_race", "War")
+    .description("+3 Strength.")
+    .weight(7)
+    .addStat("strength", 3)
+    .register();
+
+  defineEffect("sub_race", "Love")
+    .description('Nhận 1 Lover, 50% nhận Archetype "Femboy".')
+    .weight(7)
+    .effect({
+      type: "grant_lover",
+      grantType: "lover",
+      grantName: "random",
+      grantCount: 1,
+      timing: "immediate",
+      target: "self",
+    })
+    .effect({
+      type: "grant_archetype",
+      grantName: "Femboy",
+      grantCount: 1,
+      timing: "immediate",
+      target: "self",
+      conditions: [{ type: "probability", chance: 50 }],
+    })
+    .register();
+
+  defineEffect("sub_race", "Time")
+    .description("+3 Speed.")
+    .weight(7)
+    .addStat("speed", 3)
+    .register();
+
+  defineEffect("sub_race", "Fortune")
+    .description('Nhận 3 Gear "Đồng Tiền Vàng".')
+    .weight(7)
+    .grantGear("Đồng Tiền Vàng", 3)
+    .register();
+
+  defineEffect("sub_race", "Secret Evil")
+    .description("Trong Combat: +2 Stat cao nhất và thấp nhất.")
+    .weight(7)
+    .effect({
+      type: "stat_modifier",
+      stat: "highest",
+      value: 2,
+      timing: "during_combat",
+      target: "self",
+    })
+    .effect({
+      type: "stat_modifier",
+      stat: "lowest",
+      value: 2,
+      timing: "during_combat",
+      target: "self",
+    })
+    .register();
+
+  defineEffect("sub_race", "Knowledge")
+    .description("+3 IQ.")
+    .weight(7)
+    .addStat("iq", 3)
+    .register();
+
+  defineEffect("sub_race", "Arts and Magic")
+    .description("Nhận 2 Power.")
+    .weight(7)
+    .grantPower("random", 2)
+    .register();
+
+  defineEffect("sub_race", "Wilderness and Sea")
+    .description("Nhận 1 lần Summon Wheel và 1 lần Elemental Wheel.")
+    .weight(7)
+    .effect({
+      type: "wheel_grant",
+      wheelType: "Summon",
+      grantCount: 1,
+      timing: "immediate",
+      target: "self",
+    })
+    .effect({
+      type: "wheel_grant",
+      wheelType: "Elemental",
+      grantCount: 1,
+      timing: "immediate",
+      target: "self",
+    })
+    .register();
+
+  defineEffect("sub_race", "Creation")
+    .description("Nhận 1 Creator's Favor.")
+    .weight(7)
+    .effect({
+      type: "custom",
+      timing: "immediate",
+      target: "self",
+      customHandler: "creation_creators_favor",
+    })
+    .register();
+
+  defineEffect("sub_race", "Moon")
+    .description(
+      'Nhận Archetype "Pacifist" từ đầu (sẽ nhận thêm một Archetype nữa).',
+    )
+    .weight(7)
+    .effect({
+      type: "grant_archetype",
+      grantName: "Pacifist",
+      grantCount: 1,
+      timing: "immediate",
+      target: "self",
+    })
+    .register();
+}
+
+// ============================================================================
+// SUB-RACES: GODS
+// ============================================================================
+
+export function registerGodSubRaces() {
+  defineEffect("sub_race", "Odin")
+    .description(
+      "+1 all stats. Sau combat thắng: Đối phương bị Isekai. (Chỉ ở nhánh thắng)",
+    )
+    .weight(12.5)
+    .addAllStats(1)
+    .effect({
+      type: "isekai",
+      timing: "after_combat_win",
+      target: "opponent",
+      conditions: [{ type: "bracket", bracket: "winner" }],
+    })
+    .register();
+
+  defineEffect("sub_race", "Týr")
+    .description("+3 Strength. Sau combat thắng Round Strength: nhận 1 Quirk.")
+    .weight(12.5)
+    .addStat("strength", 3)
+    .effect({
+      type: "grant_quirk",
+      grantType: "quirk",
+      grantName: "random",
+      grantCount: 1,
+      timing: "after_combat",
+      target: "self",
+      conditions: [{ type: "round_result", stat: "strength" }],
+    })
+    .register();
+
+  defineEffect("sub_race", "Frigg")
+    .description("+3 IQ. Sau combat thắng Round IQ: nhận 1 Power.")
+    .weight(12.5)
+    .addStat("iq", 3)
+    .effect({
+      type: "grant_power",
+      grantType: "power",
+      grantName: "random",
+      grantCount: 1,
+      timing: "after_combat",
+      target: "self",
+      conditions: [{ type: "round_result", stat: "iq" }],
+    })
+    .register();
+
+  defineEffect("sub_race", "Baldur")
+    .description(
+      "Lần đầu có God bị loại: +2 all stats. Nếu bạn là God đầu tiên bị loại: tất cả God nhận 1 Power.",
+    )
+    .weight(12.5)
+    .effect({
+      type: "custom",
+      timing: "on_death",
+      target: "self",
+      customHandler: "baldur_first_god_death",
+    })
+    .register();
+
+  defineEffect("sub_race", "Loki")
+    .description('Nhận 2 Power "Critical Strike" và "Evasion".')
+    .weight(12.5)
+    .grantPower("Critical Strike", 1)
+    .grantPower("Evasion", 1)
+    .register();
+
+  defineEffect("sub_race", "Freyja")
+    .description(
+      "Trong combat: Khi đối đầu với người có Lover, +1 điểm khởi đầu.",
+    )
+    .weight(12.5)
+    .effect({
+      type: "combat_points",
+      points: 1,
+      timing: "before_combat",
+      target: "self",
+      conditions: [{ type: "opponent_has", opponentItemType: "lover" }],
+    })
+    .register();
+
+  defineEffect("sub_race", "Eir")
+    .description("+1 Dura. Sau combat: gấp đôi bonus này. (stack vô hạn)")
+    .weight(12.5)
+    .addStat("durability", 1)
+    .effect({
+      type: "custom",
+      timing: "after_combat",
+      target: "self",
+      customHandler: "eir_double_dura_stack",
+      stackable: true,
+    })
+    .register();
+
+  defineEffect("sub_race", "Bragi")
+    .description(
+      "+1 điểm khởi đầu vs người dùng nhạc cụ. Thắng vs nhạc cụ: +1 Power.",
+    )
+    .weight(12.5)
+    .effect({
+      type: "combat_points",
+      points: 1,
+      timing: "before_combat",
+      target: "self",
+      conditions: [
+        { type: "opponent_has", opponentItemType: "weapon", opponentItemName: "instrument" },
+      ],
+    })
+    .effect({
+      type: "grant_power",
+      grantType: "power",
+      grantName: "random",
+      grantCount: 1,
+      timing: "after_combat_win",
+      target: "self",
+      conditions: [
+        { type: "opponent_has", opponentItemType: "weapon", opponentItemName: "instrument" },
+      ],
+    })
+    .register();
+
+  defineEffect("sub_race", "Thor")
+    .description(
+      "Nhận Unique Weapon Mjolnir (chắc chắn dùng được). +1 điểm vs Human. (Nếu đã có người cầm Mjolnir: combat tranh chấp)",
+    )
+    .weight(12.5)
+    .effect({
+      type: "custom",
+      timing: "immediate",
+      target: "self",
+      customHandler: "thor_mjolnir_grant",
+    })
+    .effect({
+      type: "combat_points",
+      points: 1,
+      timing: "before_combat",
+      target: "self",
+      conditions: [{ type: "race_match", races: ["Human"] }],
+    })
+    .register();
+}
+
+// ============================================================================
 // REGISTER ALL
 // ============================================================================
 
@@ -1224,4 +1753,8 @@ export function registerAllRaceEffects() {
   registerVampireSubRaces();
   registerElementalSubRaces();
   registerUmaParentSubRaces();
+  registerDemonSinSubRaces();
+  registerWerebeastSubRaces();
+  registerGodsGiftSubRaces();
+  registerGodSubRaces();
 }

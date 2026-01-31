@@ -12,8 +12,8 @@ Sub-race: War
 ```
 Archetype: 
 + Wibu
-+ Bleach
-+ Katen Kyokotsu: Karamatsu Shinju (Bankai)
+  -> Bleach
+    -> Katen Kyokotsu: Karamatsu Shinju (Bankai)
 ```
 ``` 
 3 Quirk:  

@@ -30,7 +30,7 @@ MA:7
 ```
 Houses: 
 + The Shire
- -> Nhận +4 Str
+ -> +4 Str
 ```
 
 ```

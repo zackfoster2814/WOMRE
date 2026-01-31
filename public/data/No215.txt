@@ -12,7 +12,7 @@ Sub-race: Undead Dragon (Summon: Imp)
 ```
 Archetype: 
 + Farmer
- - Aura Farmer
+  -> Aura Farmer
 ```
 ``` 
 1 Quirk:  

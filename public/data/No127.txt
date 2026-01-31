@@ -11,7 +11,8 @@ Sub-race:
 
 ```
 Archetype: 
-+ Farmer - thường
++ Farmer 
+  -> Normal
 + Edgelord
 ```
 ``` 

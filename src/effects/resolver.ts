@@ -123,6 +123,45 @@ export function resolveStatTarget(target: DynamicStatTarget, stats: CharacterSta
 
 export class EffectResolver {
   /**
+   * Parse stat bonus string into an Effect
+   * Examples: "+4 Dura", "+6 Str", "-2 IQ", "+1 All"
+   */
+  private static parseStatBonus(bonusStr: string): Effect | null {
+    // Pattern: +/-NUMBER STAT_NAME
+    const match = bonusStr.match(/^([+-]?\d+)\s+(\w+)/i);
+    if (!match) return null;
+
+    const value = parseInt(match[1]);
+    const statStr = match[2].toLowerCase();
+
+    // Map stat abbreviations to DynamicStatTarget
+    const statMap: Record<string, DynamicStatTarget> = {
+      'str': 'strength',
+      'strength': 'strength',
+      'spd': 'speed',
+      'speed': 'speed',
+      'dur': 'durability',
+      'dura': 'durability',
+      'durability': 'durability',
+      'iq': 'iq',
+      'biq': 'biq',
+      'ma': 'ma',
+      'all': 'all'
+    };
+
+    const stat = statMap[statStr];
+    if (!stat) return null;
+
+    return {
+      type: 'stat_modifier',
+      stat,
+      value,
+      timing: 'immediate',
+      target: 'self'
+    };
+  }
+
+  /**
    * Gather all effect sources from a character
    */
   static gatherEffectSources(character: Character): EffectSource[] {
@@ -273,8 +312,58 @@ export class EffectResolver {
     }
 
     // Houses (skip lost houses)
+    // Check nestedHouses first for statBonus, fall back to regular houses
+    const processedHouses = new Set<string>();
+
+    for (const house of character.nestedHouses || []) {
+      if (house.isLost) continue;
+      processedHouses.add(house.name);
+
+      // If house has explicit statBonus (e.g., "+4 Dura"), use that instead of registry effect
+      if (house.statBonus) {
+        const bonusEffect = this.parseStatBonus(house.statBonus);
+        if (bonusEffect) {
+          sources.push({
+            type: 'house',
+            name: house.name,
+            effects: [bonusEffect],
+            rawDescription: `${house.name}: ${house.statBonus}`,
+            isActive: true
+          });
+          continue;
+        }
+      }
+
+      // Otherwise use registry entry
+      const entry = EffectRegistry.get('house', house.name);
+      if (entry) {
+        sources.push({
+          type: 'house',
+          name: house.name,
+          effects: entry.effects,
+          rawDescription: entry.description,
+          isActive: true
+        });
+      }
+
+      // Also process house sub-type if present
+      if (house.subType) {
+        const subEntry = EffectRegistry.get('house_sub', house.subType);
+        if (subEntry) {
+          sources.push({
+            type: 'house_sub' as EffectSourceType,
+            name: house.subType,
+            effects: subEntry.effects,
+            rawDescription: subEntry.description,
+            isActive: true
+          });
+        }
+      }
+    }
+
+    // Fall back to regular houses array for any not in nestedHouses
     for (const house of character.houses || []) {
-      if (house.isLost) continue; // Skip lost houses
+      if (house.isLost || processedHouses.has(house.name)) continue;
       const entry = EffectRegistry.get('house', house.name);
       if (entry) {
         sources.push({

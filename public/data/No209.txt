@@ -28,8 +28,9 @@ MA:6
 ```
 
 ```
-Houses: The Shire
-+ Nhận +4 vào Spd
+Houses: 
++ The Shire 
+  -> +4 Spd
 ```
 
 ```

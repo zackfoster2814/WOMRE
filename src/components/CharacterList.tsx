@@ -122,7 +122,15 @@ export const CharacterList: React.FC = () => {
                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
                   {char.race}
                 </span>
-                {char.archetypes && char.archetypes.map((archetype, i) => (
+                {char.nestedArchetypes && char.nestedArchetypes.length > 0 ? (
+                  char.nestedArchetypes.map((arch, i) => (
+                    <span key={i} className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                      {arch.name}
+                      {arch.subType && ` → ${arch.subType}`}
+                      {arch.subSubType && ` → ${arch.subSubType}`}
+                    </span>
+                  ))
+                ) : char.archetypes && char.archetypes.map((archetype, i) => (
                   <span key={i} className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
                     {archetype}
                   </span>

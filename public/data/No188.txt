@@ -12,7 +12,7 @@ Sub-race: Loki
 ```
 Archetype: 
 + Farmer
- -> thường
+ -> Normal
 ```
 ``` 
 3 Quirk:  

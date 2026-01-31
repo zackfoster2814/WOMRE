@@ -12,7 +12,7 @@ Sub-race: Werebat
 ```
 Archetype: 
 + Farmer
-+ Normal
+  -> Normal
 ```
 ``` 
 1 Quirk:  

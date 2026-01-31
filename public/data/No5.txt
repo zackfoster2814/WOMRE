@@ -11,7 +11,8 @@ Sub-race:
 
 ```
 Archetype: 
-+ Power Ranger - Blue
++ Power Ranger 
+  -> Blue
 ```
 ``` 
 1 Quirk:  

@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import { Character, CharacterStats, LossableItem } from "../types/character";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { Character, CharacterStats, LossableItem, NestedArchetype, NestedHouse, Gear, Weapon, Rune, PvPReward } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver, type EffectSourceBreakdown } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
@@ -23,24 +23,29 @@ function ensureEffectsInitialized() {
 // Helper to calculate total stats from effect system
 function calculateTotalStats(player: PlayerSummary): EffectStats {
   ensureEffectsInitialized();
-  // Create a minimal character object for effect calculation
-  const minimalCharacter: Character = {
+  // Create a full character object for accurate effect calculation
+  const character: Character = {
     no: player.no,
     name: player.name,
     username: player.username,
     isParasite: player.isParasite || false,
     race: { race: player.race, subRace: player.subRace },
     archetypes: player.archetypes || [],
+    nestedArchetypes: player.nestedArchetypes,
     quirks: player.quirks || [],
     stats: player.stats,
+    giantBonusApplied: player.giantBonusApplied,
     houses: player.houses || [],
-    gear: { normalGear: [], legacyGear: [] },
-    weapons: [],
-    runes: { runes: [] },
+    nestedHouses: player.nestedHouses,
+    gear: player.gear || { normalGear: [], legacyGear: [] },
+    weapons: player.weapons || [],
+    runes: player.runes || { runes: [] },
     powers: player.powers || [],
-    charDevs: [],
+    charDevs: player.charDevs || [],
+    lover: player.lover,
+    pvpRewards: player.pvpRewards,
   };
-  const effects = EffectResolver.calculateCharacterEffects(minimalCharacter);
+  const effects = EffectResolver.calculateCharacterEffects(character);
   return effects.totalStats;
 }
 
@@ -51,11 +56,20 @@ interface PlayerSummary {
   race: string;
   subRace?: string;
   archetypes: string[];
+  nestedArchetypes?: NestedArchetype[];
   quirks: LossableItem[];
   powers: LossableItem[];
   houses: LossableItem[];
+  nestedHouses?: NestedHouse[];
   team?: number;
   stats: CharacterStats;
+  gear: Gear;
+  weapons: Weapon[];
+  runes: Rune;
+  charDevs: LossableItem[];
+  lover?: string;
+  pvpRewards?: PvPReward[];
+  giantBonusApplied?: boolean;
   isParasite?: boolean;
   parasiteInfo?: string[];
   isSymbiosis?: boolean;
@@ -162,11 +176,20 @@ export const PlayerListPage = () => {
                   race: char.race?.race || "Unknown",
                   subRace: char.race?.subRace,
                   archetypes: char.archetypes || [],
+                  nestedArchetypes: char.nestedArchetypes,
                   quirks: char.quirks || [],
                   powers: char.powers || [],
                   houses: char.houses || [],
+                  nestedHouses: char.nestedHouses,
                   team: char.team,
                   stats: char.stats,
+                  gear: char.gear,
+                  weapons: char.weapons,
+                  runes: char.runes,
+                  charDevs: char.charDevs || [],
+                  lover: char.lover,
+                  pvpRewards: char.pvpRewards,
+                  giantBonusApplied: char.giantBonusApplied,
                   isParasite: char.isParasite,
                   parasiteInfo: char.parasiteInfo,
                   isSymbiosis: char.isSymbiosis,
@@ -216,11 +239,20 @@ export const PlayerListPage = () => {
                   race: char.race?.race || "Unknown",
                   subRace: char.race?.subRace,
                   archetypes: char.archetypes || [],
+                  nestedArchetypes: char.nestedArchetypes,
                   quirks: char.quirks || [],
                   powers: char.powers || [],
                   houses: char.houses || [],
+                  nestedHouses: char.nestedHouses,
                   team: char.team,
                   stats: char.stats,
+                  gear: char.gear,
+                  weapons: char.weapons,
+                  runes: char.runes,
+                  charDevs: char.charDevs || [],
+                  lover: char.lover,
+                  pvpRewards: char.pvpRewards,
+                  giantBonusApplied: char.giantBonusApplied,
                   isParasite: char.isParasite,
                   parasiteInfo: char.parasiteInfo,
                   isSymbiosis: char.isSymbiosis,
@@ -1203,6 +1235,116 @@ const StatModifierBadge = ({
   );
 };
 
+// Info button component for showing hierarchy popup
+const InfoButton = ({ onClick }: { onClick: (e: React.MouseEvent) => void }) => (
+  <button
+    onClick={onClick}
+    className="ml-1 w-4 h-4 rounded-full bg-gray-600 hover:bg-indigo-500 text-gray-300 hover:text-white text-[10px] font-bold transition-colors inline-flex items-center justify-center"
+    title="Xem chi tiết"
+  >
+    ?
+  </button>
+);
+
+// Inline tooltip component to show full archetype/house hierarchy
+const HierarchyTooltip = ({
+  isOpen,
+  onClose,
+  item,
+  type
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  item: NestedArchetype | NestedHouse;
+  type: 'archetype' | 'house';
+}) => {
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  // Click outside to close
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    // Delay adding listener to prevent immediate close
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+    }, 0);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      ref={tooltipRef}
+      className="absolute left-full top-0 ml-2 z-[100] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-2 min-w-[180px] whitespace-nowrap"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {type === 'archetype' ? (
+        <div className="space-y-1">
+          {/* Level 1: Main archetype */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-indigo-400 font-medium text-xs">
+              {(item as NestedArchetype).name}
+            </span>
+            <StatModifierBadge name={(item as NestedArchetype).name} sourceType="archetype" />
+          </div>
+          {/* Level 2: Sub-type */}
+          {(item as NestedArchetype).subType && (
+            <div className="flex items-center gap-1.5 ml-3">
+              <span className="text-gray-500 text-xs">→</span>
+              <span className="text-pink-400 text-xs">
+                {(item as NestedArchetype).subType}
+              </span>
+              <StatModifierBadge name={(item as NestedArchetype).subType!} sourceType="archetype_sub" />
+            </div>
+          )}
+          {/* Level 3: Sub-sub-type */}
+          {(item as NestedArchetype).subSubType && (
+            <div className="flex items-center gap-1.5 ml-6">
+              <span className="text-gray-500 text-xs">→</span>
+              <span className="text-purple-400 text-xs">
+                {(item as NestedArchetype).subSubType}
+              </span>
+              <StatModifierBadge name={(item as NestedArchetype).subSubType!} sourceType="archetype_sub" />
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-1">
+          {/* Level 1: Main house */}
+          <div className="flex items-center gap-1.5">
+            <span className={`font-medium text-xs ${(item as NestedHouse).isLost ? 'text-gray-500 line-through' : 'text-yellow-400'}`}>
+              {(item as NestedHouse).name}
+            </span>
+            {!(item as NestedHouse).isLost && <StatModifierBadge name={(item as NestedHouse).name} sourceType="house" />}
+            {(item as NestedHouse).isLost && <span className="text-red-400 text-[10px]">(đuổi)</span>}
+          </div>
+          {/* Level 2: Sub-type */}
+          {(item as NestedHouse).subType && !(item as NestedHouse).isLost && (
+            <div className="flex items-center gap-1.5 ml-3">
+              <span className="text-gray-500 text-xs">→</span>
+              <span className="text-cyan-400 text-xs">
+                {(item as NestedHouse).subType}
+              </span>
+              <StatModifierBadge name={(item as NestedHouse).subType!} sourceType="house_sub" />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Stat Modifiers Table Component
 const StatModifiersTable = ({
   breakdown,
@@ -1221,6 +1363,8 @@ const StatModifiersTable = ({
     race: 'text-amber-400',
     sub_race: 'text-amber-300',
     archetype: 'text-pink-400',
+    archetype_sub: 'text-pink-300',
+    house_sub: 'text-cyan-300',
     quirk: 'text-purple-400',
     power: 'text-red-400',
     gear: 'text-blue-400',
@@ -1354,6 +1498,12 @@ const PlayerDetailModal = ({
   onClose,
 }: PlayerDetailModalProps) => {
   const [showBreakdown, setShowBreakdown] = useState(false);
+  const [openArchetypeTooltip, setOpenArchetypeTooltip] = useState<string | null>(null);
+  const [openHouseTooltip, setOpenHouseTooltip] = useState<string | null>(null);
+
+  // Helper functions
+  const hasArchetypeSubTypes = (arch: NestedArchetype) => arch.subType || arch.subSubType;
+  const hasHouseSubTypes = (house: NestedHouse) => house.subType;
 
   // Calculate total stats with effects
   const characterEffects = useMemo(() => {
@@ -1504,7 +1654,32 @@ const PlayerDetailModal = ({
                 <div className="flex items-start justify-between">
                   <span className="text-gray-400 text-sm">Archetypes</span>
                   <div className="text-right">
-                    {character.archetypes && character.archetypes.length > 0 ? (
+                    {character.nestedArchetypes && character.nestedArchetypes.length > 0 ? (
+                      <div className="flex flex-wrap gap-1 justify-end">
+                        {character.nestedArchetypes.map((arch, idx) => (
+                          <span key={idx} className="text-pink-400 text-sm inline-flex items-center relative">
+                            {arch.name}
+                            <StatModifierBadge name={arch.name} sourceType="archetype" />
+                            {hasArchetypeSubTypes(arch) && (
+                              <>
+                                <InfoButton onClick={(e) => {
+                                  e.stopPropagation();
+                                  setOpenArchetypeTooltip(openArchetypeTooltip === arch.name ? null : arch.name);
+                                  setOpenHouseTooltip(null);
+                                }} />
+                                <HierarchyTooltip
+                                  isOpen={openArchetypeTooltip === arch.name}
+                                  onClose={() => setOpenArchetypeTooltip(null)}
+                                  item={arch}
+                                  type="archetype"
+                                />
+                              </>
+                            )}
+                            {idx < character.nestedArchetypes!.length - 1 ? "," : ""}
+                          </span>
+                        ))}
+                      </div>
+                    ) : character.archetypes && character.archetypes.length > 0 ? (
                       <div className="flex flex-wrap gap-1 justify-end">
                         {character.archetypes.map((archetype, idx) => (
                           <span key={idx} className="text-pink-400 text-sm">
@@ -1522,7 +1697,40 @@ const PlayerDetailModal = ({
                 <div className="flex items-start justify-between">
                   <span className="text-gray-400 text-sm">Houses</span>
                   <div className="text-right">
-                    {character.houses && character.houses.length > 0 ? (
+                    {character.nestedHouses && character.nestedHouses.length > 0 ? (
+                      <div className="flex flex-wrap gap-1 justify-end">
+                        {character.nestedHouses.map((house, idx) => (
+                          <span
+                            key={idx}
+                            className={`text-sm inline-flex items-center relative ${
+                              house.isLost
+                                ? "text-gray-500 line-through"
+                                : "text-cyan-400"
+                            }`}
+                          >
+                            {house.name}
+                            {house.isLost && <span className="ml-1 text-red-400 text-xs">(đuổi)</span>}
+                            {!house.isLost && <StatModifierBadge name={house.name} sourceType="house" />}
+                            {hasHouseSubTypes(house) && !house.isLost && (
+                              <>
+                                <InfoButton onClick={(e) => {
+                                  e.stopPropagation();
+                                  setOpenHouseTooltip(openHouseTooltip === house.name ? null : house.name);
+                                  setOpenArchetypeTooltip(null);
+                                }} />
+                                <HierarchyTooltip
+                                  isOpen={openHouseTooltip === house.name}
+                                  onClose={() => setOpenHouseTooltip(null)}
+                                  item={house}
+                                  type="house"
+                                />
+                              </>
+                            )}
+                            {idx < character.nestedHouses!.length - 1 ? "," : ""}
+                          </span>
+                        ))}
+                      </div>
+                    ) : character.houses && character.houses.length > 0 ? (
                       <div className="flex flex-wrap gap-1 justify-end">
                         {character.houses.map((house, idx) => (
                           <span
@@ -1553,6 +1761,7 @@ const PlayerDetailModal = ({
                   />
                 )}
               </div>
+
             </div>
 
             {/* Stats */}
@@ -1588,8 +1797,9 @@ const PlayerDetailModal = ({
               <div className="space-y-3">
                 {stats.map((stat) => {
                   const diff = stat.totalValue - stat.baseValue;
+                  const isNegative = stat.totalValue < 0;
                   return (
-                    <div key={stat.key} className="flex items-center gap-3">
+                    <div key={stat.key} className={`flex items-center gap-3 ${isNegative ? 'opacity-50' : ''}`}>
                       <span className={`w-24 text-sm font-medium ${stat.color}`}>
                         {stat.label}
                       </span>
@@ -1601,13 +1811,15 @@ const PlayerDetailModal = ({
                             width: `${((stat.baseValue || 0) / maxStat) * 100}%`,
                           }}
                         />
-                        {/* Total stat bar */}
-                        <div
-                          className={`h-full ${stat.bg} transition-all duration-500`}
-                          style={{
-                            width: `${((stat.totalValue || 0) / maxStat) * 100}%`,
-                          }}
-                        />
+                        {/* Total stat bar - hide if negative */}
+                        {!isNegative && (
+                          <div
+                            className={`h-full ${stat.bg} transition-all duration-500`}
+                            style={{
+                              width: `${((stat.totalValue || 0) / maxStat) * 100}%`,
+                            }}
+                          />
+                        )}
                       </div>
                       <span className="text-white font-bold w-20 text-right text-sm">
                         <span className="text-gray-500">{stat.baseValue}</span>

@@ -89,8 +89,10 @@ export class CharacterManager {
       username: char.username,
       race: char.race.race,
       archetypes: char.archetypes,
+      nestedArchetypes: char.nestedArchetypes,
       team: char.team,
-      house: char.houses?.find(h => !h.isLost)?.name
+      house: char.houses?.find(h => !h.isLost)?.name,
+      nestedHouses: char.nestedHouses
     }));
   }
 

@@ -49,6 +49,21 @@ export interface LossableItem {
   isLost?: boolean;  // Items marked as "đã mất" won't affect stats
 }
 
+// Nested archetype structure (e.g., Wibu -> Jojo -> The World)
+export interface NestedArchetype {
+  name: string;           // Main archetype (e.g., "Wibu")
+  subType?: string;       // Sub-type from wheel (e.g., "Jojo", "JJK", "Bleach")
+  subSubType?: string;    // Sub-sub-type (e.g., "The World", "Self-Embodiment of Perfection")
+}
+
+// Nested house structure (e.g., New London -> Thinkers)
+export interface NestedHouse {
+  name: string;           // Main house (e.g., "New London", "House Stark")
+  subType?: string;       // Sub-type (e.g., "Thinkers", "Grey Wind")
+  statBonus?: string;     // Stat bonus from house (e.g., "+4 Dura", "+6 Str")
+  isLost?: boolean;       // House can be lost (kicked out)
+}
+
 export interface PvPReward {
   description: string;
   applied: boolean;
@@ -71,7 +86,8 @@ export interface Character {
 
   // Race & Class
   race: CharacterRace;
-  archetypes: string[];  // Support multiple archetypes
+  archetypes: string[];  // Support multiple archetypes (flat list for backward compat)
+  nestedArchetypes?: NestedArchetype[];  // Detailed archetype info with sub-types
 
   // Quirks
   quirks: LossableItem[];
@@ -89,6 +105,7 @@ export interface Character {
 
   // Faction - can have multiple houses, some may be lost (kicked out)
   houses: LossableItem[];
+  nestedHouses?: NestedHouse[];  // Detailed house info with sub-types (e.g., New London -> Thinkers)
 
   // Equipment
   gear: Gear;
@@ -117,8 +134,10 @@ export interface CharacterSummary {
   username: string;
   race: string;
   archetypes: string[];
+  nestedArchetypes?: NestedArchetype[];  // Detailed archetype info
   team?: number;
   house?: string;
+  nestedHouses?: NestedHouse[];  // Detailed house info
 }
 
 export interface CharacterDatabase {

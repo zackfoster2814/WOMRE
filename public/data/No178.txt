@@ -12,7 +12,8 @@ Sub-race: Love (Lover: DK Yuri (longgg0058) - No Fembi)
 ```
 Archetype: 
 + Wibu 
- => Jojo (Hey ya!)
+ -> Jojo 
+  -> Hey ya!
 ```
 ``` 
 0 Quirk:  

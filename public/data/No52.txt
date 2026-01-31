@@ -30,7 +30,8 @@ MA: 6
 
 ```
 Houses: 
-+ 
++ The Shire 
+ -> +4 Dura
 ```
 
 ```

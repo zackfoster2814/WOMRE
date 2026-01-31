@@ -1,4 +1,4 @@
-import type { Character, CharacterStats, CharacterRace, Gear, GearItem, Weapon, Rune, RuneItem, PvPReward, LossableItem } from '../types/character';
+import type { Character, CharacterStats, CharacterRace, Gear, GearItem, Weapon, Rune, RuneItem, PvPReward, LossableItem, NestedArchetype, NestedHouse } from '../types/character';
 
 /**
  * Check if an item text contains "lost" markers
@@ -43,6 +43,98 @@ function parseRuneItem(text: string): RuneItem {
 }
 
 export class CharacterParser {
+  // Archetypes that have sub-wheels
+  // Map: sub-type -> parent archetype
+  private static readonly ARCHETYPE_SUB_TYPE_MAP: Record<string, string> = {
+    // Wibu sub-types (Wibu Wheel)
+    'Dược sư tự sự': 'Wibu',
+    'JJK': 'Wibu',
+    'Jojo': 'Wibu',
+    'My Hero Academia': 'Wibu',
+    'MHA': 'Wibu',
+    'One Piece': 'Wibu',
+    'Bleach': 'Wibu',
+    // Farmer sub-types (Farmer Wheel)
+    'Normal Farmer': 'Farmer',
+    'Aura Farmer': 'Farmer',
+    // X sub-types (Hero X Wheel)
+    'Lin Ling': 'X',
+    'E-Soul': 'X',
+    'Ahu': 'X',
+    'Lucky Cyan': 'X',
+    'Loli': 'X',
+    'The Johnnies': 'X',
+    'Ghostblade': 'X',
+    'Dragon Boy': 'X',
+    'Queen': 'X',
+    // Trickster sub-types (Trickster Wheel)
+    'Ace of Spades': 'Trickster',
+    'King of Diamonds': 'Trickster',
+    'Queen of Clubs': 'Trickster',
+    'Jack of 97': 'Trickster',
+    'Ten of Hearts': 'Trickster',
+    // Power Ranger sub-types (Power Ranger Wheel)
+    'Red': 'Power Ranger',
+    'Blue': 'Power Ranger',
+    'Black': 'Power Ranger',
+    'Yellow': 'Power Ranger',
+    'Pink': 'Power Ranger',
+    'Silver': 'Power Ranger',
+    // Superhero sub-types (Siêu Anh Hùng Wheel)
+    'Captain America': 'Superhero',
+    'Iron Man': 'Superhero',
+    'Batman': 'Superhero',
+    'Superman': 'Superhero',
+    'Wonder Woman': 'Superhero',
+    'Spiderman': 'Superhero',
+    'The Flash': 'Superhero',
+    'Hulk': 'Superhero',
+  };
+
+  // Sub-sub-types: sub-types that have their own wheels
+  // Map: sub-sub-type -> parent sub-type
+  private static readonly ARCHETYPE_SUB_SUB_TYPE_MAP: Record<string, string> = {
+    // JJK -> Domain Expansion Wheel
+    'Infinity': 'JJK',
+    'Malevolent Shrine': 'JJK',
+    'Idle Death Gamble': 'JJK',
+    'Self-Embodiment of Perfection': 'JJK',
+    'Coffin of the Iron Mountain': 'JJK',
+    'Coffin of Iron Mountain': 'JJK',
+    'Deadly Sentencing': 'JJK',
+    // Jojo -> Stands Wheel
+    'Hey Ya!': 'Jojo',
+    'Tusk Act II': 'Jojo',
+    'The World': 'Jojo',
+    'King Crimson': 'Jojo',
+    'Golden Experience Requiem': 'Jojo',
+    // MHA -> MHA Power Wheel
+    'Quirkless': 'My Hero Academia',
+    'IQ': 'My Hero Academia',
+    'Dark Shadow': 'My Hero Academia',
+    'Erasure': 'My Hero Academia',
+    'Heal': 'My Hero Academia',
+    'Half-Cold Half-Hot': 'My Hero Academia',
+    'Float': 'My Hero Academia',
+    'Hellflame': 'My Hero Academia',
+    'Rewind': 'My Hero Academia',
+    'Overhaul': 'My Hero Academia',
+    'One For All': 'My Hero Academia',
+    'All For One': 'My Hero Academia',
+    // One Piece -> Haki Wheel
+    'Observation': 'One Piece',
+    'Armament': 'One Piece',
+    'Observation + Armament': 'One Piece',
+    'Observation + Armament + King Conqueror': 'One Piece',
+    // Bleach -> Bankai Wheel
+    'Shinuchi': 'Bleach',
+    'Zanka no Tachi': 'Bleach',
+    'Daiguren Hyorinmaru': 'Bleach',
+    'Katen Kyokotsu': 'Bleach',
+    'Katen Kyokotsu: Karamatsu Shinju': 'Bleach',
+    'Gangaku Kairo': 'Bleach',
+  };
+
   /**
    * Parse character text file content into Character object
    */
@@ -117,7 +209,9 @@ export class CharacterParser {
 
     // Parse Archetypes (support multiple) - archetypes cannot be lost
     const archetypeIndex = this.findSectionIndex(lines, 'Archetype:');
-    character.archetypes = this.parseListValueAsStrings(lines, archetypeIndex);
+    const archetypeResult = this.parseNestedArchetypes(lines, archetypeIndex);
+    character.archetypes = archetypeResult.flat;
+    character.nestedArchetypes = archetypeResult.nested;
 
     // Parse Quirks
     const quirkIndex = this.findSectionIndex(lines, 'Quirk:');
@@ -134,11 +228,12 @@ export class CharacterParser {
 
     // Parse Houses - can have multiple, some may be lost (kicked out)
     const houseIndex = this.findSectionIndex(lines, 'Houses:');
-    const housesRaw = this.parseListValueAsStrings(lines, houseIndex);
-    character.houses = housesRaw.map(h => ({
+    const houseResult = this.parseNestedHouses(lines, houseIndex);
+    character.houses = houseResult.flat.map(h => ({
       name: h,
       isLost: isLostItem(h)
     }));
+    character.nestedHouses = houseResult.nested;
 
     // Parse Gear
     character.gear = this.parseGear(lines);
@@ -329,6 +424,231 @@ export class CharacterParser {
     }
 
     return values;
+  }
+
+  /**
+   * Parse nested archetypes with sub-types
+   * Format examples:
+   *   + Wibu
+   *    -> Jojo
+   *     -> The World
+   *   + Farmer
+   *    -> Aura Farmer
+   *
+   * Also handles flat format where sub-types are listed separately:
+   *   + Wibu
+   *   + Jojo
+   *   + The World
+   * This will be merged into: Wibu -> Jojo -> The World
+   *
+   * Note: lines are trimmed, so we determine nesting by order of appearance:
+   * - First -> after + is subType
+   * - Second -> is subSubType
+   */
+  private static parseNestedArchetypes(lines: string[], startIndex: number): {
+    flat: string[];
+    nested: NestedArchetype[];
+  } {
+    if (startIndex < 0) return { flat: [], nested: [] };
+
+    const flat: string[] = [];
+    const nested: NestedArchetype[] = [];
+    let currentArchetype: NestedArchetype | null = null;
+
+    for (let i = startIndex + 1; i < Math.min(startIndex + 30, lines.length); i++) {
+      const line = lines[i];
+
+      // Stop at next section or code block end
+      if (line.startsWith('```') && i > startIndex + 1) break;
+      if (!line || line === '```') continue;
+
+      // Main archetype: starts with + (e.g., "+ Wibu")
+      const mainMatch = line.match(/^[+]\s*(.+)/);
+      if (mainMatch) {
+        const name = mainMatch[1].trim();
+        if (!name) continue;
+
+        // Check if this is a sub-sub-type (e.g., "The World" is sub-sub of "Jojo")
+        const subSubParent = this.ARCHETYPE_SUB_SUB_TYPE_MAP[name];
+        if (subSubParent && currentArchetype && currentArchetype.subType === subSubParent && !currentArchetype.subSubType) {
+          currentArchetype.subSubType = name;
+          continue;
+        }
+
+        // Check if this is a sub-type of the current archetype
+        const subParent = this.ARCHETYPE_SUB_TYPE_MAP[name];
+        if (subParent && currentArchetype && currentArchetype.name === subParent && !currentArchetype.subType) {
+          currentArchetype.subType = name;
+          continue;
+        }
+
+        // This is a new main archetype
+        // Save previous archetype
+        if (currentArchetype) {
+          nested.push(currentArchetype);
+        }
+        flat.push(name);
+        currentArchetype = { name };
+        continue;
+      }
+
+      // Sub-type: starts with -> or => (lines are trimmed so no leading spaces)
+      // Patterns: "-> Jojo", "=> JJK"
+      const subMatch = line.match(/^(?:->|=>)\s*(.+)/);
+      if (subMatch && currentArchetype) {
+        const subValue = subMatch[1].trim();
+        if (subValue) {
+          // Determine nesting by whether subType is already set
+          if (!currentArchetype.subType) {
+            // First -> is subType (e.g., "Jojo")
+            currentArchetype.subType = subValue;
+          } else if (!currentArchetype.subSubType) {
+            // Second -> is subSubType (e.g., "The World")
+            currentArchetype.subSubType = subValue;
+          }
+          // Ignore any further -> for this archetype
+        }
+        continue;
+      }
+    }
+
+    // Don't forget the last archetype
+    if (currentArchetype) {
+      nested.push(currentArchetype);
+    }
+
+    return { flat, nested };
+  }
+
+  // Known houses that have sub-types
+  // When we see one of these sub-types listed separately, we should merge it with the parent
+  private static readonly HOUSE_SUB_TYPE_MAP: Record<string, string> = {
+    // New London sub-types
+    'Thinkers': 'New London',
+    'Frostlanders': 'New London',
+    'New Londoners': 'New London',
+    'Winterhomers': 'New London',
+    'Wanderers': 'New London',
+    'Engineers': 'New London',
+    'Workers': 'New London',
+    'Children': 'New London',
+    'Faith Keepers': 'New London',
+    'Venturers': 'New London',
+    // House Stark dire wolves
+    'Grey Wind': 'House Stark',
+    'Lady': 'House Stark',
+    'Summer': 'House Stark',
+    'Shaggydog': 'House Stark',
+    'Ghost': 'House Stark',
+    'Nymeria': 'House Stark',
+    // Golden Order shardbearers
+    'Godrick': 'Golden Order',
+    'Malenia': 'Golden Order',
+    'Radahn': 'Golden Order',
+    'Morgott': 'Golden Order',
+    'Mohg': 'Golden Order',
+    'Rykard': 'Golden Order',
+  };
+
+  /**
+   * Parse nested houses with sub-types
+   * Format examples:
+   *   + New London
+   *    -> Thinkers
+   *   + House Stark
+   *    -> Grey Wind
+   *   + Golden Order (đổi nhà) -> Godrick
+   *
+   * Also handles flat format where sub-types are listed separately:
+   *   + New London
+   *   + Thinkers
+   * This will be merged into: New London -> Thinkers
+   */
+  private static parseNestedHouses(lines: string[], startIndex: number): {
+    flat: string[];
+    nested: NestedHouse[];
+  } {
+    if (startIndex < 0) return { flat: [], nested: [] };
+
+    const flat: string[] = [];
+    const nested: NestedHouse[] = [];
+    let currentHouse: NestedHouse | null = null;
+
+    for (let i = startIndex + 1; i < Math.min(startIndex + 20, lines.length); i++) {
+      const line = lines[i];
+
+      // Stop at next section or code block end
+      if (line.startsWith('```') && i > startIndex + 1) break;
+      if (!line || line === '```') continue;
+
+      // Main house: starts with + (e.g., "+ New London")
+      const mainMatch = line.match(/^[+]\s*(.+)/);
+      if (mainMatch) {
+        let name = mainMatch[1].trim();
+
+        // Check for inline sub-type: "Golden Order (đổi nhà) -> Godrick"
+        const inlineMatch = name.match(/^(.+?)\s*(?:\([^)]*\))?\s*->\s*(.+)$/);
+        if (inlineMatch) {
+          // Save previous house first
+          if (currentHouse) {
+            nested.push(currentHouse);
+          }
+          const mainName = inlineMatch[1].trim();
+          const subType = inlineMatch[2].trim();
+          flat.push(mainName);
+          currentHouse = {
+            name: mainName,
+            subType,
+            isLost: isLostItem(name)
+          };
+          continue;
+        }
+
+        // Check if this is a known sub-type that should be merged with previous house
+        const parentHouse = this.HOUSE_SUB_TYPE_MAP[name];
+        if (parentHouse && currentHouse && currentHouse.name === parentHouse && !currentHouse.subType) {
+          // This is a sub-type of the current house, merge it
+          currentHouse.subType = name;
+          continue;
+        }
+
+        // Save previous house
+        if (currentHouse) {
+          nested.push(currentHouse);
+        }
+
+        if (name) {
+          flat.push(name);
+          currentHouse = { name, isLost: isLostItem(name) };
+        }
+        continue;
+      }
+
+      // Sub-type or stat bonus: starts with -> (with leading spaces)
+      // Pattern: " -> Thinkers", " -> Grey Wind", " -> +4 Dura"
+      const subMatch = line.match(/^\s*->\s*(.+)/);
+      if (subMatch && currentHouse) {
+        const subValue = subMatch[1].trim();
+        if (subValue) {
+          // Check if this is a stat bonus (starts with + or - followed by number)
+          // Pattern: "+4 Dura", "+6 Str", "-2 IQ", etc.
+          const statBonusMatch = subValue.match(/^[+-]\d+\s+\w+/);
+          if (statBonusMatch) {
+            currentHouse.statBonus = subValue;
+          } else {
+            currentHouse.subType = subValue;
+          }
+        }
+        continue;
+      }
+    }
+
+    // Don't forget the last house
+    if (currentHouse) {
+      nested.push(currentHouse);
+    }
+
+    return { flat, nested };
   }
 
   private static parseStats(lines: string[]): CharacterStats {

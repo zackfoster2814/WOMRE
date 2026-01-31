@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Character } from "../types/character";
+import { Character, NestedArchetype, NestedHouse } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
@@ -429,6 +429,116 @@ const StatModifierBadge = ({
   );
 };
 
+// Popup component to show full archetype/house hierarchy
+const HierarchyPopup = ({
+  isOpen,
+  onClose,
+  title,
+  items,
+  type
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  items: NestedArchetype[] | NestedHouse[];
+  type: 'archetype' | 'house';
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/60"
+        onClick={onClose}
+      />
+      {/* Popup */}
+      <div className="relative bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-4 min-w-[280px] max-w-[90vw] z-10">
+        <div className="flex items-center justify-between mb-3">
+          <h4 className="text-white font-bold text-sm">{title}</h4>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div className="space-y-3">
+          {items.map((item, idx) => (
+            <div key={idx} className="bg-gray-700/50 rounded-lg p-3">
+              {type === 'archetype' ? (
+                <div className="space-y-2">
+                  {/* Level 1: Main archetype */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-indigo-400 font-medium">
+                      {(item as NestedArchetype).name}
+                    </span>
+                    <StatModifierBadge name={(item as NestedArchetype).name} sourceType="archetype" />
+                  </div>
+                  {/* Level 2: Sub-type */}
+                  {(item as NestedArchetype).subType && (
+                    <div className="flex items-center gap-2 ml-4">
+                      <span className="text-gray-500">→</span>
+                      <span className="text-pink-400">
+                        {(item as NestedArchetype).subType}
+                      </span>
+                      <StatModifierBadge name={(item as NestedArchetype).subType!} sourceType="archetype_sub" />
+                    </div>
+                  )}
+                  {/* Level 3: Sub-sub-type */}
+                  {(item as NestedArchetype).subSubType && (
+                    <div className="flex items-center gap-2 ml-8">
+                      <span className="text-gray-500">→</span>
+                      <span className="text-purple-400">
+                        {(item as NestedArchetype).subSubType}
+                      </span>
+                      <StatModifierBadge name={(item as NestedArchetype).subSubType!} sourceType="archetype_sub" />
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {/* Level 1: Main house */}
+                  <div className="flex items-center gap-2">
+                    <span className={`font-medium ${(item as NestedHouse).isLost ? 'text-gray-500 line-through' : 'text-yellow-400'}`}>
+                      {(item as NestedHouse).name}
+                    </span>
+                    {!(item as NestedHouse).isLost && <StatModifierBadge name={(item as NestedHouse).name} sourceType="house" />}
+                    {(item as NestedHouse).isLost && <span className="text-red-400 text-xs">(đuổi)</span>}
+                  </div>
+                  {/* Level 2: Sub-type */}
+                  {(item as NestedHouse).subType && !(item as NestedHouse).isLost && (
+                    <div className="flex items-center gap-2 ml-4">
+                      <span className="text-gray-500">→</span>
+                      <span className="text-cyan-400">
+                        {(item as NestedHouse).subType}
+                      </span>
+                      <StatModifierBadge name={(item as NestedHouse).subType!} sourceType="house_sub" />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Info button component
+const InfoButton = ({ onClick }: { onClick: (e: React.MouseEvent) => void }) => (
+  <button
+    onClick={onClick}
+    className="ml-1 w-4 h-4 rounded-full bg-gray-600 hover:bg-indigo-500 text-gray-300 hover:text-white text-[10px] font-bold transition-colors inline-flex items-center justify-center"
+    title="Xem chi tiết"
+  >
+    ?
+  </button>
+);
+
 // Separated content component for character display
 const PlayerContent = ({
   character,
@@ -444,6 +554,16 @@ const PlayerContent = ({
   // Initialize effects
   ensureEffectsInitialized();
 
+  // State for hierarchy popups
+  const [archetypePopup, setArchetypePopup] = useState<{ isOpen: boolean; archetype: NestedArchetype | null }>({
+    isOpen: false,
+    archetype: null
+  });
+  const [housePopup, setHousePopup] = useState<{ isOpen: boolean; house: NestedHouse | null }>({
+    isOpen: false,
+    house: null
+  });
+
   // Calculate effects
   const characterEffects: CharacterEffects = useMemo(() => {
     return EffectResolver.calculateCharacterEffects(character);
@@ -456,6 +576,10 @@ const PlayerContent = ({
     (sum, val) => sum + val,
     0,
   );
+
+  // Check if archetype has sub-types
+  const hasArchetypeSubTypes = (arch: NestedArchetype) => arch.subType || arch.subSubType;
+  const hasHouseSubTypes = (house: NestedHouse) => house.subType;
 
   return (
     <div className="p-4 space-y-4 pb-20">
@@ -563,7 +687,25 @@ const PlayerContent = ({
             </span>
           )}
         </div>
-        {character.archetypes && character.archetypes.length > 0 ? (
+        {character.nestedArchetypes && character.nestedArchetypes.length > 0 ? (
+          <div className="space-y-1">
+            {character.nestedArchetypes.map((arch, idx) => (
+              <div key={idx} className="flex flex-wrap items-center gap-1">
+                {/* Main archetype with info button */}
+                <span className="px-2 py-1 bg-indigo-600/50 rounded text-xs text-indigo-200 inline-flex items-center">
+                  {arch.name}
+                  <StatModifierBadge name={arch.name} sourceType="archetype" />
+                  {hasArchetypeSubTypes(arch) && (
+                    <InfoButton onClick={(e) => {
+                      e.stopPropagation();
+                      setArchetypePopup({ isOpen: true, archetype: arch });
+                    }} />
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : character.archetypes && character.archetypes.length > 0 ? (
           <div className="flex flex-wrap gap-1">
             {character.archetypes.map((archetype, idx) => (
               <span
@@ -577,6 +719,17 @@ const PlayerContent = ({
           </div>
         ) : (
           <p className="text-gray-500 text-sm">-</p>
+        )}
+
+        {/* Archetype Hierarchy Popup */}
+        {archetypePopup.archetype && (
+          <HierarchyPopup
+            isOpen={archetypePopup.isOpen}
+            onClose={() => setArchetypePopup({ isOpen: false, archetype: null })}
+            title={`${archetypePopup.archetype.name} Hierarchy`}
+            items={[archetypePopup.archetype]}
+            type="archetype"
+          />
         )}
       </div>
 
@@ -594,7 +747,28 @@ const PlayerContent = ({
               </span>
             )}
           </div>
-          {character.houses && character.houses.length > 0 ? (
+          {character.nestedHouses && character.nestedHouses.length > 0 ? (
+            <div className="space-y-1">
+              {character.nestedHouses.map((house, idx) => (
+                <div
+                  key={idx}
+                  className={`${house.isLost ? "text-gray-500" : ""}`}
+                >
+                  <span className={`font-medium inline-flex items-center ${house.isLost ? "line-through text-gray-500" : "text-yellow-400"}`}>
+                    {house.name}
+                    {house.isLost && <span className="text-red-400 text-xs ml-1">(đuổi)</span>}
+                    {!house.isLost && <StatModifierBadge name={house.name} sourceType="house" />}
+                    {hasHouseSubTypes(house) && !house.isLost && (
+                      <InfoButton onClick={(e) => {
+                        e.stopPropagation();
+                        setHousePopup({ isOpen: true, house });
+                      }} />
+                    )}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : character.houses && character.houses.length > 0 ? (
             <div className="space-y-1">
               {character.houses.map((house, idx) => (
                 <p
@@ -609,6 +783,17 @@ const PlayerContent = ({
             </div>
           ) : (
             <p className="font-medium text-yellow-400">-</p>
+          )}
+
+          {/* House Hierarchy Popup */}
+          {housePopup.house && (
+            <HierarchyPopup
+              isOpen={housePopup.isOpen}
+              onClose={() => setHousePopup({ isOpen: false, house: null })}
+              title={`${housePopup.house.name} Hierarchy`}
+              items={[housePopup.house]}
+              type="house"
+            />
           )}
         </div>
         <ClickableField

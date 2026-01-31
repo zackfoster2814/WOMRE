@@ -31,7 +31,7 @@ MA:5
 ```
 Houses: 
 + The Shire
-  -> Nhận +4 IQ
+  -> +4 IQ
 ```
 
 ```

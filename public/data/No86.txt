@@ -1,4 +1,4 @@
-No.
+No.86
 Name: Kain ヅ (greed101101)
 ```
 Ký Sinh:
@@ -31,6 +31,7 @@ MA: 3
 ```
 Houses: 
 + The Shire
+  -> +4 MA
 ```
 
 ```

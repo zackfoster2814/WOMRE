@@ -12,7 +12,7 @@ Sub-race: Silence Suzuka + Haru Urara
 ```
 Archetype: 
 + X
-+ The Johnnies
+ -> The Johnnies
 ```
 ``` 
 2 Quirk:  

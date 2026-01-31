@@ -640,4 +640,1095 @@ export function registerAllPowerEffects() {
       customHandler: 'fancy_feet_disable_rune'
     })
     .register();
+
+  // Artist
+  defineEffect('power', 'Artist')
+    .description('Khi xuống nhánh thua: Stat lẻ của bạn nhận +1. (Dựa theo Base Stats)')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'odd',
+      value: 1,
+      timing: 'on_loser_bracket',
+      target: 'self'
+    })
+    .register();
+
+  // Writer
+  defineEffect('power', 'Writer')
+    .description('Khi xuống nhánh thua: Stat chẵn của bạn nhận +1. (Dựa theo Base Stats)')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'even',
+      value: 1,
+      timing: 'on_loser_bracket',
+      target: 'self'
+    })
+    .register();
+
+  // Red Shift/LP1211-M
+  defineEffect('power', 'Red Shift/LP1211-M')
+    .description('Trong combat: Nếu thắng ít nhất 1/3 round đầu, Buff: +1 IQ, +1 BIQ, +2 MA.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'iq',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'red_shift_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'biq',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'red_shift_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'ma',
+      value: 2,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'red_shift_check'
+    })
+    .register();
+
+  // Shooting for Victory
+  defineEffect('power', 'Shooting for Victory')
+    .description('Trong combat: Nếu thắng ít nhất 1 và thua ít nhất 1/3 round đầu, Buff: +1 IQ, +1 BIQ, +2 MA.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'iq',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'shooting_for_victory_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'biq',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'shooting_for_victory_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'ma',
+      value: 2,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'shooting_for_victory_check'
+    })
+    .register();
+
+  // Let's Pump Some Iron!
+  defineEffect('power', "Let's Pump Some Iron!")
+    .description('Trong combat: Nếu thắng đúng 1/3 round đầu, Buff: +2 IQ, +2 BIQ, +2 MA.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'iq',
+      value: 2,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'pump_iron_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'biq',
+      value: 2,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'pump_iron_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'ma',
+      value: 2,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'pump_iron_check'
+    })
+    .register();
+
+  // Hunter's Rewards
+  defineEffect('power', "Hunter's Rewards")
+    .description('Sau Combat: Thắng PvP nhận 2 phần thưởng thay vì 1.')
+    .weight(0.78)
+    .effect({
+      type: 'double_reward',
+      timing: 'after_combat_win',
+      target: 'self'
+    })
+    .register();
+
+  // Quirkful
+  defineEffect('power', 'Quirkful')
+    .description('Nhận thêm 1 Power với mỗi Quirk bạn có khi quay ra Power này.')
+    .weight(0.78)
+    .effect({
+      type: 'grant_power',
+      grantType: 'power',
+      grantName: 'random',
+      timing: 'immediate',
+      target: 'self',
+      triggerOnce: true,
+      customHandler: 'quirkful_grant_per_quirk'
+    })
+    .register();
+
+  // Quirkless
+  defineEffect('power', 'Quirkless')
+    .description('Mất hết tất cả Quirk.')
+    .weight(0.78)
+    .effect({
+      type: 'custom',
+      timing: 'immediate',
+      target: 'self',
+      customHandler: 'quirkless_remove_all_quirks'
+    })
+    .register();
+
+  // Sybaurafarming
+  defineEffect('power', 'Sybaurafarming')
+    .description('Base Stat >5 thành 5. Mỗi stat bị đổi nhận 1 Quirk.')
+    .weight(0.78)
+    .effect({
+      type: 'custom',
+      timing: 'immediate',
+      target: 'self',
+      triggerOnce: true,
+      customHandler: 'sybaurafarming_effect'
+    })
+    .register();
+
+  // Swinging Maestro
+  defineEffect('power', 'Swinging Maestro')
+    .description('Buff: Nhận 4 Durability.')
+    .weight(0.78)
+    .addStat('durability', 4)
+    .register();
+
+  // The Coast is Clear!
+  defineEffect('power', 'The Coast is Clear!')
+    .description('Bạn nhìn rõ đối thủ!')
+    .weight(0.78)
+    .register();
+
+  // Angling and Scheming
+  defineEffect('power', 'Angling and Scheming')
+    .description('Trong Combat: Nếu thắng Round Strength, Buff: +1 IQ, +1 BIQ, +2 MA.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'iq',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'angling_scheming_str_win'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'biq',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'angling_scheming_str_win'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'ma',
+      value: 2,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'angling_scheming_str_win'
+    })
+    .register();
+
+  // EscAPADe
+  defineEffect('power', 'EscAPADe')
+    .description('Chuyển hoá tất cả IQ cộng thêm thành Strength.')
+    .weight(0.78)
+    .effect({
+      type: 'custom',
+      timing: 'immediate',
+      target: 'self',
+      customHandler: 'escapade_convert_iq_to_str'
+    })
+    .register();
+
+  // Spirit Link
+  defineEffect('power', 'Spirit Link')
+    .description('Nhận +1 vào 1 Stat ngẫu nhiên với mỗi 1 người bạn loại.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'random',
+      value: 1,
+      timing: 'after_combat_win',
+      target: 'self',
+      stackable: true
+    })
+    .register();
+
+  // The Sand of Time
+  defineEffect('power', 'The Sand of Time')
+    .description('Trong Combat: Lần đầu thua round, 40% +1 điểm bạn và -1 điểm đối thủ.')
+    .weight(0.78)
+    .effect({
+      type: 'combat_points',
+      points: 1,
+      timing: 'on_round_lose',
+      target: 'self',
+      triggerOnce: true,
+      conditions: [{ type: 'probability', chance: 40 }]
+    })
+    .effect({
+      type: 'combat_points',
+      points: -1,
+      timing: 'on_round_lose',
+      target: 'opponent',
+      triggerOnce: true,
+      conditions: [{ type: 'probability', chance: 40 }]
+    })
+    .register();
+
+  // Memory Alter
+  defineEffect('power', 'Memory Alter')
+    .description('Trước Combat: Vô hiệu 1 Power "trong combat" đối thủ. Thắng thì đối thủ mất vĩnh viễn.')
+    .weight(0.78)
+    .effect({
+      type: 'power_disable',
+      timing: 'before_combat',
+      target: 'opponent',
+      grantCount: 1,
+      customHandler: 'memory_alter_disable_in_combat_power'
+    })
+    .register();
+
+  // Frost Fingers
+  defineEffect('power', 'Frost Fingers')
+    .description('Debuff: Mỗi Gear đối thủ có, -1 Stat cao nhất đối thủ (tối đa 5).')
+    .weight(0.78)
+    .effect({
+      type: 'debuff',
+      stat: 'highest',
+      value: -1,
+      timing: 'during_combat',
+      target: 'opponent',
+      customHandler: 'frost_fingers_per_gear'
+    })
+    .register();
+
+  // Gaze of the Abyss
+  defineEffect('power', 'Gaze of the Abyss')
+    .description('Trong Combat: Thua 5 Round, round tiếp theo thắng +5 Điểm.')
+    .weight(0.78)
+    .effect({
+      type: 'extra_point_on_win',
+      points: 5,
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'gaze_of_abyss_5_loses'
+    })
+    .register();
+
+  // Railroad Realm
+  defineEffect('power', 'Railroad Realm 🍀')
+    .description('Trong Combat: Bạn và đối thủ nghe tiếng xình xịch của tàu 🍀')
+    .weight(0.78)
+    .register();
+
+  // Mewing
+  defineEffect('power', 'Mewing')
+    .description('Bye bye 🤫🧏‍♂.')
+    .weight(0.78)
+    .register();
+
+  // Master of War
+  defineEffect('power', 'Master of War')
+    .description('Ngay lập tức khi nhận, bạn dùng được tất cả Weapon.')
+    .weight(0.78)
+    .effect({
+      type: 'custom',
+      timing: 'immediate',
+      target: 'self',
+      customHandler: 'master_of_war_unlock_all_weapons'
+    })
+    .register();
+
+  // Borrowed Time
+  defineEffect('power', 'Borrowed Time')
+    .description('Trong Combat: Thua 2 round, round tiếp theo đối thủ không nhận điểm nếu bạn thua.')
+    .weight(0.78)
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      triggerOnce: true,
+      customHandler: 'borrowed_time_2_loses'
+    })
+    .register();
+
+  // Guidance
+  defineEffect('power', 'Guidance')
+    .description('Trước Combat: +1 vào 2 Stat ngẫu nhiên nếu đối thủ có ít power hơn.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'random',
+      value: 1,
+      timing: 'before_combat',
+      target: 'self',
+      customHandler: 'guidance_fewer_powers_check'
+    })
+    .register();
+
+  // Hunter's Mark
+  defineEffect('power', "Hunter's Mark")
+    .description('Trước Combat: Chọn 1 Round ngẫu nhiên, thắng round đó +1 điểm.')
+    .weight(0.78)
+    .effect({
+      type: 'extra_point_on_win',
+      points: 1,
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'hunters_mark_random_round'
+    })
+    .register();
+
+  // Ice Liquefactors
+  defineEffect('power', 'Ice Liquefactors')
+    .description('Hóa lỏng băng 💀???')
+    .weight(0.78)
+    .register();
+
+  // Fire Control
+  defineEffect('power', 'Fire Control')
+    .description('Điều khiển được một ngọn lửa bật hoặc tắt 💀')
+    .weight(0.78)
+    .register();
+
+  // Water Breathing
+  defineEffect('power', 'Water Breathing')
+    .description('Thở dưới nước.')
+    .weight(0.78)
+    .register();
+
+  // Cursed
+  defineEffect('power', 'Cursed')
+    .description('Re-spin lại chỉ số cao nhất 1 lần.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_respin',
+      stat: 'highest',
+      timing: 'immediate',
+      target: 'self',
+      triggerOnce: true
+    })
+    .register();
+
+  // Enhanced Hearing
+  defineEffect('power', 'Enhanced Hearing')
+    .description('+2 MA. Trước Combat: -1 all nếu đối thủ dùng nhạc cụ, -2 all nếu đối thủ có power âm thanh.')
+    .weight(0.78)
+    .addStat('ma', 2)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'all',
+      value: -1,
+      timing: 'before_combat',
+      target: 'self',
+      customHandler: 'enhanced_hearing_instrument_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'all',
+      value: -2,
+      timing: 'before_combat',
+      target: 'self',
+      customHandler: 'enhanced_hearing_sound_power_check'
+    })
+    .register();
+
+  // Rickrolling
+  defineEffect('power', 'Rickrolling')
+    .description('Chắc không cần giải thích đâu nhỉ 💀')
+    .weight(0.78)
+    .register();
+
+  // Hand Washing
+  defineEffect('power', 'Hand Washing')
+    .description('Tay sạch 💀')
+    .weight(0.78)
+    .register();
+
+  // 67
+  defineEffect('power', '67')
+    .description('Trong Combat: Chạy Clip 67 cho cả 2 người chơi.')
+    .weight(0.78)
+    .register();
+
+  // Age Manipulation
+  defineEffect('power', 'Age Manipulation')
+    .description('Debuff: Đối thủ +1 IQ, -1 mọi stat còn lại.')
+    .weight(0.78)
+    .effect({
+      type: 'debuff',
+      stat: 'iq',
+      value: 1,
+      timing: 'during_combat',
+      target: 'opponent'
+    })
+    .effect({
+      type: 'debuff',
+      stat: 'strength',
+      value: -1,
+      timing: 'during_combat',
+      target: 'opponent'
+    })
+    .effect({
+      type: 'debuff',
+      stat: 'speed',
+      value: -1,
+      timing: 'during_combat',
+      target: 'opponent'
+    })
+    .effect({
+      type: 'debuff',
+      stat: 'durability',
+      value: -1,
+      timing: 'during_combat',
+      target: 'opponent'
+    })
+    .effect({
+      type: 'debuff',
+      stat: 'biq',
+      value: -1,
+      timing: 'during_combat',
+      target: 'opponent'
+    })
+    .effect({
+      type: 'debuff',
+      stat: 'ma',
+      value: -1,
+      timing: 'during_combat',
+      target: 'opponent'
+    })
+    .register();
+
+  // Garlic Breath
+  defineEffect('power', 'Garlic Breath')
+    .description('Buff: +1 all stats vs Vampire. Có 3+ Power "Breath" thì bỏ qua điều kiện.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'all',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'garlic_breath_check'
+    })
+    .register();
+
+  // The Goat
+  defineEffect('power', 'The Goat')
+    .description('Bạn là dê! 💀')
+    .weight(0.78)
+    .register();
+
+  // Body Enhancing
+  defineEffect('power', 'Body Enhancing')
+    .description('Nhận +1 Strength, +1 Speed, +1 Durability.')
+    .weight(0.78)
+    .addStat('strength', 1)
+    .addStat('speed', 1)
+    .addStat('durability', 1)
+    .register();
+
+  // Clear Mind
+  defineEffect('power', 'Clear Mind')
+    .description('Nhận +3 IQ.')
+    .weight(0.78)
+    .addStat('iq', 3)
+    .register();
+
+  // Force Field
+  defineEffect('power', 'Force Field')
+    .description('Debuff: Đối thủ nhận -2 Speed, -1 MA.')
+    .weight(0.78)
+    .debuffOpponent('speed', 2)
+    .debuffOpponent('ma', 1)
+    .register();
+
+  // Anti-Magic Barrier
+  defineEffect('power', 'Anti-Magic Barrier')
+    .description('-1 Durability. Trước Combat: Vô hiệu 2 Power ngẫu nhiên đối thủ.')
+    .weight(0.78)
+    .addStat('durability', -1)
+    .effect({
+      type: 'disable_powers',
+      count: 2,
+      timing: 'before_combat',
+      target: 'opponent'
+    })
+    .register();
+
+  // Black Magic
+  defineEffect('power', 'Black Magic')
+    .description('Debuff: Đối thủ -2 vào một stat ngẫu nhiên.')
+    .weight(0.78)
+    .effect({
+      type: 'debuff',
+      stat: 'random',
+      value: -2,
+      timing: 'during_combat',
+      target: 'opponent'
+    })
+    .register();
+
+  // The Great Storm
+  defineEffect('power', 'The Great Storm')
+    .description('Debuff: -2 Durability đối thủ.')
+    .weight(0.78)
+    .debuffOpponent('durability', 2)
+    .register();
+
+  // Continental Super Storm
+  defineEffect('power', 'Continental Super Storm')
+    .description('Buff: Nhận +2 Speed.')
+    .weight(0.78)
+    .addStat('speed', 2)
+    .register();
+
+  // Sacred Fire
+  defineEffect('power', 'Sacred Fire')
+    .description('Buff: +1 all stats vs Vampire hoặc Demon.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'all',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      conditions: [{ type: 'race_match', races: ['Vampire', 'Demon'] }]
+    })
+    .register();
+
+  // Capybara
+  defineEffect('power', 'Capybara')
+    .description('Capybara')
+    .weight(0.78)
+    .register();
+
+  // Tsunami Control
+  defineEffect('power', 'Tsunami Control')
+    .description('Buff: Nhận +2 Strength.')
+    .weight(0.78)
+    .addStat('strength', 2)
+    .register();
+
+  // Rising tide
+  defineEffect('power', 'Rising tide')
+    .description('Buff: Nhận +2 MA.')
+    .weight(0.78)
+    .addStat('ma', 2)
+    .register();
+
+  // Seismic
+  defineEffect('power', 'Seismic')
+    .description('Debuff: Đối thủ -2 MA.')
+    .weight(0.78)
+    .debuffOpponent('ma', 2)
+    .register();
+
+  // Night Vision
+  defineEffect('power', 'Night Vision')
+    .description('Có thể nhìn trong bóng tối. 💀')
+    .weight(0.78)
+    .register();
+
+  // Gotta go Fast
+  defineEffect('power', 'Gotta go Fast')
+    .description('Bạn là Sonic 💀')
+    .weight(0.78)
+    .register();
+
+  // Fair Duel
+  defineEffect('power', 'Fair Duel')
+    .description('Trước Combat: Cả 2 miễn nhiễm Debuff từ nhau.')
+    .weight(0.78)
+    .effect({
+      type: 'immunity',
+      immuneTo: ['debuff'],
+      timing: 'before_combat',
+      target: 'both'
+    })
+    .register();
+
+  // Uno Reverse Card
+  defineEffect('power', 'Uno Reverse Card')
+    .description('Trước Combat: Debuff giảm stat từ đối thủ áp dụng lên chính hắn và ngược lại.')
+    .weight(0.78)
+    .effect({
+      type: 'custom',
+      timing: 'before_combat',
+      target: 'self',
+      customHandler: 'uno_reverse_card_swap_debuffs'
+    })
+    .register();
+
+  // Burning Hand
+  defineEffect('power', 'Burning Hand')
+    .description('Nhận +1 Strength.')
+    .weight(0.78)
+    .addStat('strength', 1)
+    .register();
+
+  // Tick-tock
+  defineEffect('power', 'Tick-tock')
+    .description('Trong Combat: Cơ thể bạn phát ra tiếng đồng hồ. 💀')
+    .weight(0.78)
+    .register();
+
+  // Frost Armor
+  defineEffect('power', 'Frost Armor')
+    .description('Nhận +2 Durability.')
+    .weight(0.78)
+    .addStat('durability', 2)
+    .register();
+
+  // Lightning Enchant
+  defineEffect('power', 'Lightning Enchant')
+    .description('Nhận +2 Speed.')
+    .weight(0.78)
+    .addStat('speed', 2)
+    .register();
+
+  // Chaos Enchantment
+  defineEffect('power', 'Chaos Enchantment')
+    .description('Sau Combat: +1 Str và +1 MA khi trong nhánh thua.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'strength',
+      value: 1,
+      timing: 'after_combat',
+      target: 'self',
+      conditions: [{ type: 'bracket', bracket: 'loser' }]
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'ma',
+      value: 1,
+      timing: 'after_combat',
+      target: 'self',
+      conditions: [{ type: 'bracket', bracket: 'loser' }]
+    })
+    .register();
+
+  // Dream Manipulation
+  defineEffect('power', 'Dream Manipulation')
+    .description('Debuff: đối phương -2 IQ và -1 Speed.')
+    .weight(0.78)
+    .debuffOpponent('iq', 2)
+    .debuffOpponent('speed', 1)
+    .register();
+
+  // Powerful Strike
+  defineEffect('power', 'Powerful Strike')
+    .description('Nếu có vũ khí, nhận +2 MA.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'ma',
+      value: 2,
+      timing: 'immediate',
+      target: 'self',
+      conditions: [{ type: 'has_item', itemType: 'weapon' }]
+    })
+    .register();
+
+  // Fragrant
+  defineEffect('power', 'Fragrant')
+    .description('Thơm tho dễ chịu.')
+    .weight(0.78)
+    .register();
+
+  // Voidwalking
+  defineEffect('power', 'Voidwalking')
+    .description('Buff: Nhận +2 Speed.')
+    .weight(0.78)
+    .addStat('speed', 2)
+    .register();
+
+  // Odin Blessing
+  defineEffect('power', 'Odin Blessing')
+    .description('+2 Strength. Sau Combat Thua: Chuyển thành +2 vào Stat cao nhất.')
+    .weight(0.78)
+    .addStat('strength', 2)
+    .effect({
+      type: 'custom',
+      timing: 'after_combat_lose',
+      target: 'self',
+      customHandler: 'odin_blessing_convert_to_highest'
+    })
+    .register();
+
+  // Misty Step Ahead
+  defineEffect('power', 'Misty Step Ahead')
+    .description('[PVE ONLY] Trong combat: Tổ đội khởi đầu với 1 điểm.')
+    .weight(0.78)
+    .effect({
+      type: 'combat_points',
+      points: 1,
+      timing: 'before_combat',
+      target: 'team',
+      conditions: [{ type: 'always' }]
+    })
+    .register();
+
+  // Ballet Dancing
+  defineEffect('power', 'Ballet Dancing')
+    .description('Múa dẻo 💃')
+    .weight(0.78)
+    .register();
+
+  // Luck Manipulation
+  defineEffect('power', 'Luck Manipulation')
+    .description('Trước Combat: Từ vòng 64, 15% +1 all stats, 5% +2 all stats.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'all',
+      value: 1,
+      timing: 'before_combat',
+      target: 'self',
+      conditions: [{ type: 'probability', chance: 15 }],
+      customHandler: 'luck_manipulation_round_64_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'all',
+      value: 2,
+      timing: 'before_combat',
+      target: 'self',
+      conditions: [{ type: 'probability', chance: 5 }],
+      customHandler: 'luck_manipulation_round_64_check'
+    })
+    .register();
+
+  // Scrying
+  defineEffect('power', 'Scrying')
+    .description('Debuff: Đối thủ 40% -4 Stat mạnh nhất.')
+    .weight(0.78)
+    .effect({
+      type: 'debuff',
+      stat: 'highest',
+      value: -4,
+      timing: 'during_combat',
+      target: 'opponent',
+      conditions: [{ type: 'probability', chance: 40 }]
+    })
+    .register();
+
+  // Cold Breeze
+  defineEffect('power', 'Cold Breeze')
+    .description('Mát lạnh!')
+    .weight(0.78)
+    .register();
+
+  // Bucking Bronco
+  defineEffect('power', 'Bucking Bronco')
+    .description('Sau Combat: Thắng round MA và thắng trận, +1 MA. (Stack)')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'ma',
+      value: 1,
+      timing: 'after_combat_win',
+      target: 'self',
+      stackable: true,
+      customHandler: 'bucking_bronco_ma_round_win'
+    })
+    .register();
+
+  // Detect Thoughts
+  defineEffect('power', 'Detect Thoughts')
+    .description('Trước Combat: Base IQ cao hơn đối thủ, BIQ trong trận +2.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'biq',
+      value: 2,
+      timing: 'before_combat',
+      target: 'self',
+      conditions: [{
+        type: 'stat_compare',
+        stat: 'iq',
+        compareWith: 'opponent',
+        operator: '>',
+        useBaseStats: true
+      }]
+    })
+    .register();
+
+  // Arcana Blast
+  defineEffect('power', 'Arcana Blast')
+    .description('Debuff: Đối thủ nhận -3 Durability.')
+    .weight(0.78)
+    .debuffOpponent('durability', 3)
+    .register();
+
+  // Blood Frenzy
+  defineEffect('power', 'Blood Frenzy')
+    .description('-3 IQ và -3 BIQ, +2 all stat còn lại.')
+    .weight(0.78)
+    .addStat('iq', -3)
+    .addStat('biq', -3)
+    .addStat('strength', 2)
+    .addStat('speed', 2)
+    .addStat('durability', 2)
+    .addStat('ma', 2)
+    .register();
+
+  // Analysis Sins
+  defineEffect('power', 'Analysis Sins')
+    .description('Buff: vs Demon/Vampire/Spirit/Orc/Skeleton/Goblin, +1 IQ và +1 Strength.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'iq',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      conditions: [{ type: 'race_match', races: ['Demon', 'Vampire', 'Spirit', 'Orc', 'Skeleton', 'Goblin'] }]
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'strength',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      conditions: [{ type: 'race_match', races: ['Demon', 'Vampire', 'Spirit', 'Orc', 'Skeleton', 'Goblin'] }]
+    })
+    .register();
+
+  // Cleaning Sins
+  defineEffect('power', 'Cleaning Sins')
+    .description('Buff: vs Demon/Vampire/Spirit/Orc/Skeleton/Goblin, +1 BIQ và +1 Dura.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'biq',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      conditions: [{ type: 'race_match', races: ['Demon', 'Vampire', 'Spirit', 'Orc', 'Skeleton', 'Goblin'] }]
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'durability',
+      value: 1,
+      timing: 'during_combat',
+      target: 'self',
+      conditions: [{ type: 'race_match', races: ['Demon', 'Vampire', 'Spirit', 'Orc', 'Skeleton', 'Goblin'] }]
+    })
+    .register();
+
+  // Hydrate
+  defineEffect('power', 'Hydrate')
+    .description('Cơ thể bạn được cung cấp đủ nước. 💦💦💦')
+    .weight(0.78)
+    .register();
+
+  // Groundwork
+  defineEffect('power', 'Groundwork')
+    .description('Buff: Có ít nhất 3 Power khác, +2 Strength và +2 Speed.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'strength',
+      value: 2,
+      timing: 'immediate',
+      target: 'self',
+      customHandler: 'groundwork_3_powers_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'speed',
+      value: 2,
+      timing: 'immediate',
+      target: 'self',
+      customHandler: 'groundwork_3_powers_check'
+    })
+    .register();
+
+  // Dominator
+  defineEffect('power', 'Dominator')
+    .description('Trong Combat: Thua ít nhất 2/3 round đầu, Debuff: đối phương -1 all stats.')
+    .weight(0.78)
+    .effect({
+      type: 'debuff',
+      stat: 'all',
+      value: -1,
+      timing: 'during_combat',
+      target: 'opponent',
+      duration: 'combat',
+      customHandler: 'dominator_2_of_3_loses'
+    })
+    .register();
+
+  // Ice Spike
+  defineEffect('power', 'Ice Spike')
+    .description('Debuff: Đối thủ nhận -2 Durability.')
+    .weight(0.78)
+    .debuffOpponent('durability', 2)
+    .register();
+
+  // Stat Absorption
+  defineEffect('power', 'Stat Absorption')
+    .description('Sau Combat thắng: +1 vào chỉ số đối thủ có cao nhất.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'random',
+      value: 1,
+      timing: 'after_combat_win',
+      target: 'self',
+      customHandler: 'stat_absorption_opponent_highest'
+    })
+    .register();
+
+  // Golden Vow
+  defineEffect('power', 'Golden Vow')
+    .description('Trong combat: Khởi đầu với +1 điểm.')
+    .weight(0.78)
+    .effect({
+      type: 'combat_points',
+      points: 1,
+      timing: 'before_combat',
+      target: 'self'
+    })
+    .register();
+
+  // Acid Breath
+  defineEffect('power', 'Acid Breath')
+    .description('Debuff: -1 Durability đối thủ. Sau Combat thắng: Nhận Power "Poison Breath".')
+    .weight(0.78)
+    .debuffOpponent('durability', 1)
+    .effect({
+      type: 'grant_power',
+      grantType: 'power',
+      grantName: 'Poison Breath',
+      timing: 'after_combat_win',
+      target: 'self'
+    })
+    .register();
+
+  // Poison Breath
+  defineEffect('power', 'Poison Breath')
+    .description('Debuff: -1 IQ đối thủ. Sau Combat thua: Nhận Power "Garlic Breath".')
+    .weight(0.78)
+    .debuffOpponent('iq', 1)
+    .effect({
+      type: 'grant_power',
+      grantType: 'power',
+      grantName: 'Garlic Breath',
+      timing: 'after_combat_lose',
+      target: 'self'
+    })
+    .register();
+
+  // Zoltraak
+  defineEffect('power', 'Zoltraak')
+    .description('+3 BIQ. Trong Combat: Round BIQ diễn ra 2 lần, mỗi lần đều tính điểm.')
+    .weight(0.78)
+    .addStat('biq', 3)
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'zoltraak_double_biq_round'
+    })
+    .register();
+
+  // Encroaching Shadow
+  defineEffect('power', 'Encroaching Shadow')
+    .description('Trong combat: 75% nhận +7 Speed.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'speed',
+      value: 7,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      conditions: [{ type: 'probability', chance: 75 }]
+    })
+    .register();
+
+  // No Stopping Me
+  defineEffect('power', 'No Stopping Me')
+    .description('Trong Combat: Nếu 3 round đầu so le (thắng-thua-thắng hoặc thua-thắng-thua), Buff: +3 IQ, +3 BIQ, +3 MA.')
+    .weight(0.78)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'iq',
+      value: 3,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'no_stopping_me_alternating_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'biq',
+      value: 3,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'no_stopping_me_alternating_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'ma',
+      value: 3,
+      timing: 'during_combat',
+      target: 'self',
+      duration: 'combat',
+      customHandler: 'no_stopping_me_alternating_check'
+    })
+    .register();
+
+  // Mystifying Murmur
+  defineEffect('power', 'Mystifying Murmur')
+    .description('Trong combat: Đối thủ nhận Debuff: -3 Dura.')
+    .weight(0.78)
+    .effect({
+      type: 'debuff',
+      stat: 'durability',
+      value: -3,
+      timing: 'during_combat',
+      target: 'opponent'
+    })
+    .register();
 }

@@ -43,6 +43,8 @@ export type EffectTiming =
   | 'after_combat'        // Sau Combat
   | 'after_combat_win'    // Sau Combat thắng
   | 'after_combat_lose'   // Sau Combat thua
+  | 'after_combat_scoring' // Sau khi tính điểm combat (trước khi xác định thắng/thua)
+  | 'before_combat_end'   // Trước khi kết thúc combat
   | 'on_round_win'        // Khi thắng 1 round
   | 'on_round_lose'       // Khi thua 1 round
   | 'on_loser_bracket'    // Khi ở nhánh thua
@@ -50,6 +52,11 @@ export type EffectTiming =
   | 'on_finals'           // Khi ở chung kết
   | 'on_death'            // Khi bị loại
   | 'on_pvp_win'          // Khi thắng PvP (tích lũy)
+  | 'on_lover_eliminated' // Khi Lover bị loại
+  | 'on_aids_received'    // Khi nhận AIDS
+  | 'on_gear_received'    // Khi nhận Gear
+  | 'on_round_16'         // Khi đến vòng 16
+  | 'after_round'         // Sau mỗi vòng tournament
   | 'pve_only';           // Chỉ áp dụng trong PvE
 
 // ============================================================================
@@ -59,6 +66,7 @@ export type EffectTiming =
 export type EffectTarget =
   | 'self'              // Bản thân
   | 'opponent'          // Đối thủ
+  | 'both'              // Cả 2 (self và opponent)
   | 'lover'             // Lover
   | 'team'              // Đội
   | 'random_player'     // Random player
@@ -112,8 +120,10 @@ export type EffectType =
   | 'evolve'                  // Tiến hóa (Skeleton -> Lich)
   | 'weapon_disable'          // Vô hiệu hóa vũ khí
   | 'power_disable'           // Vô hiệu hóa Power
+  | 'disable_powers'          // Vô hiệu hóa nhiều Power của opponent
   | 'house_assign'            // Gán House cố định
   | 'wheel_grant'             // Cho thêm vòng quay
+  | 'grant_wheel'             // Nhận vòng quay con (e.g., Wibu -> Jojo Wheel)
   | 'double_reward'           // Nhân đôi phần thưởng
   | 'custom';                 // Custom effect (cho các effect phức tạp)
 
@@ -204,6 +214,10 @@ export interface Effect {
 
   // Wheel grant
   wheelType?: string;             // Loại wheel: 'elemental', 'summon', 'sub-race'
+  wheelName?: string;             // Tên wheel cụ thể: 'Wibu Wheel', 'Stands Wheel'
+
+  // Disable powers
+  count?: number;                 // Số lượng power bị disable
 
   // Evolution
   evolveTo?: string;              // Tiến hóa thành gì
@@ -239,6 +253,8 @@ export type EffectSourceType =
   | 'race'
   | 'sub_race'
   | 'archetype'
+  | 'archetype_sub'    // Sub-type of archetype (e.g., Jojo for Wibu)
+  | 'house_sub'        // Sub-type of house (e.g., Thinkers for New London)
   | 'quirk'
   | 'power'
   | 'gear'

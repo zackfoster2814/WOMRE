@@ -419,9 +419,21 @@ export function registerAllQuirkEffects() {
     })
     .register();
 
-  // Raumanian
+  // Raumanian / Raumanian🍀 (same quirk, different display names)
   defineEffect('quirk', 'Raumanian')
     .description('36% nhận 1 điểm khởi đầu.')
+    .weight(2.38)
+    .effect({
+      type: 'combat_points',
+      points: 1,
+      timing: 'before_combat',
+      target: 'self',
+      conditions: [{ type: 'probability', chance: 36 }]
+    })
+    .register();
+
+  defineEffect('quirk', 'Raumanian🍀')
+    .description('36% nhận 1 điểm khởi đầu. 🍀')
     .weight(2.38)
     .effect({
       type: 'combat_points',
@@ -487,6 +499,135 @@ export function registerAllQuirkEffects() {
       timing: 'pve_only',
       target: 'self',
       customHandler: 'let_me_solo_her'
+    })
+    .register();
+
+  // Generous
+  defineEffect('quirk', 'Generous')
+    .description('Sau combat thắng: Tặng đối thủ PvP Reward. Sau combat thua: +1 Power và +1 lowest stat với mỗi PvP Reward đã tặng.')
+    .weight(2.38)
+    .effect({
+      type: 'custom',
+      timing: 'after_combat_win',
+      target: 'self',
+      customHandler: 'generous_give_reward'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'after_combat_lose',
+      target: 'self',
+      customHandler: 'generous_receive_bonus'
+    })
+    .register();
+
+  // Cheater
+  defineEffect('quirk', 'Cheater')
+    .description('Nếu có >1 Lover: +1 all stats. Lover của bạn -2 BIQ. Khi bị loại: Lover được +1 all stats.')
+    .weight(2.38)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'all',
+      value: 1,
+      timing: 'immediate',
+      target: 'self',
+      customHandler: 'cheater_multi_lover_check'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'biq',
+      value: -2,
+      timing: 'immediate',
+      target: 'lover'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'on_death',
+      target: 'self',
+      customHandler: 'cheater_death_buff_lovers'
+    })
+    .register();
+
+  // Deaf
+  defineEffect('quirk', 'Deaf')
+    .description('Miễn nhiễm toàn bộ hiệu ứng từ nhạc cụ (bao gồm cả bản thân).')
+    .weight(2.38)
+    .effect({
+      type: 'immunity',
+      immuneTo: ['instrument_effects'],
+      timing: 'immediate',
+      target: 'self'
+    })
+    .register();
+
+  // Patient
+  defineEffect('quirk', 'Patient')
+    .description('Không có vòng quay Power. Sau combat thắng: Nhận vòng quay Power với kết quả tối đa.')
+    .weight(2.38)
+    .effect({
+      type: 'custom',
+      timing: 'immediate',
+      target: 'self',
+      customHandler: 'patient_no_power_wheel'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'after_combat_win',
+      target: 'self',
+      customHandler: 'patient_max_power_wheel'
+    })
+    .register();
+
+  // Impatient
+  defineEffect('quirk', 'Impatient')
+    .description('Nhận 2 PvP Rewards ngay. Sau đó không thể nhận PvP Reward bằng cách nào khác.')
+    .weight(2.38)
+    .effect({
+      type: 'custom',
+      timing: 'immediate',
+      target: 'self',
+      customHandler: 'impatient_instant_rewards'
+    })
+    .effect({
+      type: 'immunity',
+      immuneTo: ['pvp_reward'],
+      timing: 'immediate',
+      target: 'self'
+    })
+    .register();
+
+  // One Trick Pony
+  defineEffect('quirk', 'One Trick Pony')
+    .description('Trong combat: Chọn ngẫu nhiên 1 stat, thắng stat đó được 3 điểm. Các stat còn lại thắng được 0 điểm.')
+    .weight(2.38)
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'one_trick_pony_stat_selection'
+    })
+    .register();
+
+  // Weak-Knee
+  defineEffect('quirk', 'Weak-Knee')
+    .description('Trong combat: Round đầu tiên chiến thắng không nhận điểm.')
+    .weight(2.38)
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'weak_knee_first_round'
+    })
+    .register();
+
+  // Cruelty
+  defineEffect('quirk', 'Cruelty')
+    .description('Trong combat: Khi round hòa, quay 50/50 để quyết định ai nhận 1 điểm (thay vì không ai nhận).')
+    .weight(2.38)
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'cruelty_tie_coinflip'
     })
     .register();
 }

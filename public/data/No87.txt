@@ -29,7 +29,7 @@ MA: 7
 ```
 Houses: 
 + The Shire
- => +4 IQ
+ -> +4 IQ
 ```
 
 ```

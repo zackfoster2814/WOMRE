@@ -11,7 +11,8 @@ Sub-race: Creation (1 Favor)
 
 ```
 Archetype: 
-+ Farmer - Normal
++ Farmer 
+  -> Normal
 + Người Trong Ban Nhạc (Không ra vũ khí) (Từ Ký Sinh)
 ```
 ``` 

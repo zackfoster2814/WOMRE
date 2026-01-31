@@ -182,6 +182,77 @@ export function registerRunewords() {
     })
     .register();
 
+  // Elven Night (Sol + Zod)
+  defineEffect('runeword', 'Elven Night')
+    .description('Trong combat: Mỗi bên bị -9 vào 1 chỉ số ngẫu nhiên.')
+    .effect({
+      type: 'stat_modifier',
+      stat: 'random',
+      value: -9,
+      timing: 'during_combat',
+      target: 'self'
+    })
+    .effect({
+      type: 'stat_modifier',
+      stat: 'random',
+      value: -9,
+      timing: 'during_combat',
+      target: 'opponent'
+    })
+    .register();
+
+  // Blackjack (Sol + Thul)
+  defineEffect('runeword', 'Blackjack')
+    .description('Trong combat: Gọi ngẫu nhiên 1 Summon từ vòng quay Summon Wheel. Có 97% sẽ bỏ Summon đó, nếu không bỏ thì giữ lại.')
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'blackjack_summon_gamble'
+    })
+    .register();
+
+  // Dead Touch (Ort + Thul)
+  defineEffect('runeword', 'Dead Touch')
+    .description('Sau combat: Đối thủ nhận 1 Power vô dụng. Sau đó, cướp ngẫu nhiên 2 Power của đối thủ.')
+    .effect({
+      type: 'grant_power',
+      grantType: 'power',
+      grantName: 'Useless Power',
+      grantCount: 1,
+      timing: 'after_combat',
+      target: 'opponent'
+    })
+    .effect({
+      type: 'steal_power',
+      grantCount: 2,
+      timing: 'after_combat',
+      target: 'self'
+    })
+    .register();
+
+  // Affection (Ort + Sol)
+  defineEffect('runeword', 'Affection')
+    .description('Khi bắt đầu combat, người sở hữu runeword này và đối thủ sẽ bị đảo (inversion) 1 chỉ số ngẫu nhiên.')
+    .effect({
+      type: 'stat_inversion',
+      stat: 'random',
+      timing: 'before_combat',
+      target: 'both'
+    })
+    .register();
+
+  // Highroller (El + Shael)
+  defineEffect('runeword', 'Highroller')
+    .description('Trong combat: Chỉ số Base 1 của cả hai bên được tính là Base 10 và Base 10 sẽ là 1.')
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'both',
+      customHandler: 'highroller_swap_base_1_10'
+    })
+    .register();
+
   // The Twin (Any Pair)
   defineEffect('runeword', 'The Twin')
     .description('+2 Speed, +2 IQ. Sau 2 PvP thắng: +2 Str, +2 Dura. Sau 4 PvP thắng: +2 BIQ, +2 MA.')
@@ -257,6 +328,53 @@ export function registerRunewords() {
       timing: 'after_combat',
       target: 'self',
       customHandler: 'flawless_perfect_win'
+    })
+    .register();
+
+  // Death's Dance (Tal + Shael)
+  defineEffect('runeword', "Death's Dance")
+    .description('3 chỉ số IQ, BIQ và MA của bạn được cố định là 12. 3 chỉ số Strength, Speed, Dura của bạn được cố định là 1.')
+    .effect({
+      type: 'stat_set',
+      stat: 'iq',
+      value: 12,
+      timing: 'immediate',
+      target: 'self'
+    })
+    .effect({
+      type: 'stat_set',
+      stat: 'biq',
+      value: 12,
+      timing: 'immediate',
+      target: 'self'
+    })
+    .effect({
+      type: 'stat_set',
+      stat: 'ma',
+      value: 12,
+      timing: 'immediate',
+      target: 'self'
+    })
+    .effect({
+      type: 'stat_set',
+      stat: 'strength',
+      value: 1,
+      timing: 'immediate',
+      target: 'self'
+    })
+    .effect({
+      type: 'stat_set',
+      stat: 'speed',
+      value: 1,
+      timing: 'immediate',
+      target: 'self'
+    })
+    .effect({
+      type: 'stat_set',
+      stat: 'durability',
+      value: 1,
+      timing: 'immediate',
+      target: 'self'
     })
     .register();
 

@@ -12,8 +12,8 @@ Sub-race:
 ```
 Archetype: 
 + Wibu
-  - Jojo
-    - Hey Ya!
+  -> Jojo
+    -> Hey Ya!
 ```
 ``` 
 1 Quirk:  

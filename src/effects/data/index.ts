@@ -11,9 +11,11 @@ import { registerAllQuirkEffects } from './quirks';
 import { registerAllPowerEffects } from './powers';
 import { registerAllWeaponEffects } from './weapons';
 import { registerAllHouseEffects } from './houses';
+import { registerAllGearEffects } from './gears';
 import { registerUmaParentEffects } from './uma-parents';
 import { registerCharDevEffects } from './char-devs';
 import { registerSymbiosisEffects } from './symbiosis';
+import { registerPvPRewardEffects } from './pvp-rewards';
 
 // Flags to prevent double registration
 let isInitialized = false;
@@ -36,9 +38,11 @@ export function initializeEffectData(): void {
   registerAllPowerEffects();
   registerAllWeaponEffects();
   registerAllHouseEffects();
+  registerAllGearEffects();
   registerUmaParentEffects();
   registerCharDevEffects();
   registerSymbiosisEffects();
+  registerPvPRewardEffects();
 
   isInitialized = true;
   console.log('Effect data initialized successfully');
@@ -69,6 +73,8 @@ export { registerAllQuirkEffects } from './quirks';
 export { registerAllPowerEffects } from './powers';
 export { registerAllWeaponEffects } from './weapons';
 export { registerAllHouseEffects } from './houses';
+export { registerAllGearEffects } from './gears';
 export { registerUmaParentEffects } from './uma-parents';
 export { registerCharDevEffects } from './char-devs';
 export { registerSymbiosisEffects } from './symbiosis';
+export { registerPvPRewardEffects } from './pvp-rewards';

@@ -70,8 +70,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               {character.race.race}
               {character.race.subRace && ` - ${character.race.subRace}`}
             </span>
-            {character.archetypes &&
-              character.archetypes.map((archetype, i) => (
+            {character.nestedArchetypes && character.nestedArchetypes.length > 0 ? (
+              character.nestedArchetypes.map((arch, i) => (
+                <span
+                  key={i}
+                  className="bg-green-500 px-3 py-1 rounded-full text-sm"
+                >
+                  {arch.name}
+                  {arch.subType && ` → ${arch.subType}`}
+                  {arch.subSubType && ` → ${arch.subSubType}`}
+                </span>
+              ))
+            ) : character.archetypes && character.archetypes.map((archetype, i) => (
                 <span
                   key={i}
                   className="bg-green-500 px-3 py-1 rounded-full text-sm"
@@ -79,7 +89,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   {archetype}
                 </span>
               ))}
-            {character.houses && character.houses.filter(h => !h.isLost).map((house, idx) => (
+            {character.nestedHouses && character.nestedHouses.length > 0 ? (
+              character.nestedHouses.filter(h => !h.isLost).map((house, idx) => (
+                <span key={idx} className="bg-yellow-600 px-3 py-1 rounded-full text-sm">
+                  {house.name}
+                  {house.subType && ` → ${house.subType}`}
+                </span>
+              ))
+            ) : character.houses && character.houses.filter(h => !h.isLost).map((house, idx) => (
               <span key={idx} className="bg-yellow-600 px-3 py-1 rounded-full text-sm">
                 {house.name}
               </span>

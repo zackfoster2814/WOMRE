@@ -12,7 +12,7 @@ Sub-race:
 ```
 Archetype: 
 + Farmer
-+ thường
+  -> Normal
 ```
 ``` 
 1 Quirk:  
