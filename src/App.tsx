@@ -11,6 +11,7 @@ import { WheelPage } from "./pages/WheelPage";
 import { PlayerListPage } from "./pages/PlayerListPage";
 import { BattleZonePage } from "./pages/BattleZonePage";
 import { PvPTournamentPage } from "./pages/PvPTournamentPage";
+import { WikiPage } from "./pages/WikiPage";
 // import { TeamBattlePage } from "./pages/TeamBattlePage";
 import { isTauri } from "./utils/localStorage";
 
@@ -23,6 +24,7 @@ const navItems = [
   // { path: "/battles", label: "Team Battles", color: "bg-orange-600" },
   { path: "/battle", label: "Battle Zone", color: "bg-red-600" },
   { path: "/pvp-tournament", label: "PvP Tournament", color: "bg-purple-600" },
+  // { path: "/wiki", label: "Wiki", color: "bg-cyan-600" },
 ];
 
 // Navigation component
@@ -30,6 +32,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [isWheelSpinning, setIsWheelSpinning] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -44,9 +47,38 @@ const Navigation = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Listen to wheel spinning state changes
+  useEffect(() => {
+    const handleSpinningChange = (
+      event: CustomEvent<{ isSpinning: boolean }>,
+    ) => {
+      setIsWheelSpinning(event.detail.isSpinning);
+      // Close dropdown if wheel starts spinning
+      if (event.detail.isSpinning) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener(
+      "wheelSpinningChange",
+      handleSpinningChange as EventListener,
+    );
+    return () =>
+      window.removeEventListener(
+        "wheelSpinningChange",
+        handleSpinningChange as EventListener,
+      );
+  }, []);
+
   const handleNavigate = (path: string) => {
+    if (isWheelSpinning) return;
     navigate(path);
     setIsOpen(false);
+  };
+
+  const handleToggleMenu = () => {
+    if (isWheelSpinning) return;
+    setIsOpen(!isOpen);
   };
 
   // Get current page label
@@ -56,8 +88,12 @@ const Navigation = () => {
     <nav className="fixed top-4 left-4 z-[9999]" ref={menuRef}>
       {/* Menu Button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="px-4 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 rounded-lg text-white font-medium transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
+        onClick={handleToggleMenu}
+        className={`px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white font-medium transition-all shadow-lg flex items-center gap-2 ${
+          isWheelSpinning
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:bg-gray-700 hover:shadow-xl"
+        }`}
       >
         <span>☰</span>
         <span>{currentPage?.label || "Menu"}</span>
@@ -115,6 +151,7 @@ function App() {
             {/* <Route path="/battles" element={<TeamBattlePage />} /> */}
             <Route path="/battle" element={<BattleZonePage />} />
             <Route path="/pvp-tournament" element={<PvPTournamentPage />} />
+            <Route path="/wiki" element={<WikiPage />} />
           </>
         )}
       </Routes>

@@ -22,7 +22,7 @@ Archetype:
 Str: 5
 Spd: 5
 Dur: 6
-IQ: 8(Ban đầu là 6, +2 từ High-Elf)
+IQ: 8 (Ban đầu là 6, +2 từ High-Elf)
 BIQ: 6
 MA: 8
 ```
@@ -50,7 +50,7 @@ Houses:
 2 Rune: 
 + Ith
 + Ith
-Runeword: Không
+Runeword: The Twin
 ```
 
 ```

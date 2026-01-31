@@ -267,7 +267,13 @@ export class EffectResolver {
       }
     }
 
-    // Runes (skip lost items)
+    // Check if player has a usable weapon (not lost, usable)
+    // Runes only activate when player has a weapon
+    const hasUsableWeapon = (character.weapons || []).some(
+      weapon => !weapon.isLost && weapon.usable !== false
+    );
+
+    // Runes (skip lost items, only active if player has a usable weapon)
     for (const rune of character.runes?.runes || []) {
       if (rune.isLost) continue; // Skip lost items
       const entry = EffectRegistry.get('rune', rune.name);
@@ -277,12 +283,14 @@ export class EffectResolver {
           name: rune.name,
           effects: entry.effects,
           rawDescription: entry.description,
-          isActive: true
+          isActive: hasUsableWeapon,
+          isDisabled: !hasUsableWeapon,
+          disabledReason: !hasUsableWeapon ? 'Không có vũ khí' : undefined
         });
       }
     }
 
-    // Runeword
+    // Runeword (only active if player has a usable weapon)
     if (character.runes?.runeword) {
       const entry = EffectRegistry.get('runeword', character.runes.runeword);
       if (entry) {
@@ -291,7 +299,9 @@ export class EffectResolver {
           name: character.runes.runeword,
           effects: entry.effects,
           rawDescription: entry.description,
-          isActive: true
+          isActive: hasUsableWeapon,
+          isDisabled: !hasUsableWeapon,
+          disabledReason: !hasUsableWeapon ? 'Không có vũ khí' : undefined
         });
       }
     }
@@ -312,24 +322,43 @@ export class EffectResolver {
     }
 
     // Houses (skip lost houses)
-    // Check nestedHouses first for statBonus, fall back to regular houses
+    // Check nestedHouses first for statBonuses, fall back to regular houses
     const processedHouses = new Set<string>();
 
     for (const house of character.nestedHouses || []) {
       if (house.isLost) continue;
       processedHouses.add(house.name);
 
-      // If house has explicit statBonus (e.g., "+4 Dura"), use that instead of registry effect
-      if (house.statBonus) {
-        const bonusEffect = this.parseStatBonus(house.statBonus);
-        if (bonusEffect) {
+      // If house has explicit statBonuses (e.g., ["+2 Str", "+1 Spd", "+2 Dura"]), use those instead of registry effect
+      if (house.statBonuses && house.statBonuses.length > 0) {
+        const bonusEffects: Effect[] = [];
+        for (const bonus of house.statBonuses) {
+          const bonusEffect = this.parseStatBonus(bonus);
+          if (bonusEffect) {
+            bonusEffects.push(bonusEffect);
+          }
+        }
+        if (bonusEffects.length > 0) {
           sources.push({
             type: 'house',
             name: house.name,
-            effects: [bonusEffect],
-            rawDescription: `${house.name}: ${house.statBonus}`,
+            effects: bonusEffects,
+            rawDescription: `${house.name}: ${house.statBonuses.join(', ')}`,
             isActive: true
           });
+          // Still process sub-type if present
+          if (house.subType) {
+            const subEntry = EffectRegistry.get('house_sub', house.subType);
+            if (subEntry) {
+              sources.push({
+                type: 'house_sub' as EffectSourceType,
+                name: house.subType,
+                effects: subEntry.effects,
+                rawDescription: subEntry.description,
+                isActive: true
+              });
+            }
+          }
           continue;
         }
       }

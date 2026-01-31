@@ -15,7 +15,7 @@ Archetype:
 ```
 ``` 
 3 Quirk:  
-+ Impatient (PvP Reward: +1 Dura,+1 IQ)
++ Impatient 
 + Clumsy
 + Artistic
 ```
@@ -69,4 +69,10 @@ Team:21
 ```
 Lover:
 + 
+```
+
+```
+PvP Reward:
+- +1 Dura
+- 1 IQ
 ```

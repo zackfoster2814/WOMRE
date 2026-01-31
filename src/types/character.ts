@@ -60,7 +60,7 @@ export interface NestedArchetype {
 export interface NestedHouse {
   name: string;           // Main house (e.g., "New London", "House Stark")
   subType?: string;       // Sub-type (e.g., "Thinkers", "Grey Wind")
-  statBonus?: string;     // Stat bonus from house (e.g., "+4 Dura", "+6 Str")
+  statBonuses?: string[]; // Stat bonuses from house (e.g., ["+2 Str", "+1 Spd", "+2 Dura"] for Tracen Academy)
   isLost?: boolean;       // House can be lost (kicked out)
 }
 

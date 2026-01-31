@@ -29,7 +29,9 @@ MA: 5
 ```
 Houses: 
 + Tracen Academy
- => +1 Str, +3 Spd, +2 Dura
+ -> +1 Str
+ -> +3 Spd
+ -> +2 Dura
 ```
 
 ```

@@ -625,16 +625,21 @@ export class CharacterParser {
       }
 
       // Sub-type or stat bonus: starts with -> (with leading spaces)
-      // Pattern: " -> Thinkers", " -> Grey Wind", " -> +4 Dura"
+      // Pattern: " -> Thinkers", " -> Grey Wind", " -> +4 Dura", " -> Nhận +2 Str"
       const subMatch = line.match(/^\s*->\s*(.+)/);
       if (subMatch && currentHouse) {
         const subValue = subMatch[1].trim();
         if (subValue) {
-          // Check if this is a stat bonus (starts with + or - followed by number)
-          // Pattern: "+4 Dura", "+6 Str", "-2 IQ", etc.
-          const statBonusMatch = subValue.match(/^[+-]\d+\s+\w+/);
+          // Check if this is a stat bonus
+          // Patterns: "+4 Dura", "+6 Str", "-2 IQ", "Nhận +2 Str", etc.
+          const statBonusMatch = subValue.match(/([+-]\d+)\s+(\w+)/);
           if (statBonusMatch) {
-            currentHouse.statBonus = subValue;
+            // Extract the stat bonus part (e.g., "+2 Str" from "Nhận +2 Str")
+            const bonusPart = statBonusMatch[0];
+            if (!currentHouse.statBonuses) {
+              currentHouse.statBonuses = [];
+            }
+            currentHouse.statBonuses.push(bonusPart);
           } else {
             currentHouse.subType = subValue;
           }

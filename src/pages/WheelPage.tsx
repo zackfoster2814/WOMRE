@@ -37,6 +37,11 @@ export const WheelPage = () => {
     { id: "4", name: "Option 4", weight: 1 },
   ]);
   const [isSpinning, setIsSpinning] = useState(false);
+
+  // Dispatch custom event when spinning state changes
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('wheelSpinningChange', { detail: { isSpinning } }));
+  }, [isSpinning]);
   const [customSfxUrl, setCustomSfxUrl] = useState<string>();
   const [customSfxName, setCustomSfxName] = useState<string>();
   const [isMuted, setIsMuted] = useState(false);
