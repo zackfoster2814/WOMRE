@@ -5,29 +5,32 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Merfolk
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Farmer
+ - Normal Farmer
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Herbalist
++ Brainrot
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:4 Cursed of 36k
+Spd:7 Cursed of 36k
+Dur:3 Cursed of 36k
+IQ:5 Cursed of 36k
+BIQ:4 Cursed of 36k
+MA:8 Cursed of 36k
 ```
 
 ```
-Houses: 
+Houses: Naga
 + 
 ```
 
@@ -35,33 +38,36 @@ Houses:
 0 Gear: 
  + 0 Normal gear:
   - 
+  - 
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Whip (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+2 Rune: 
++ Ith
++ Ort
+Runeword: Pennyworthy
 ```
 
 ```
-0 Power: 
+0 Power:  
++ 
 + 
 ```
 
 ```
 Char dev: 
-+ 
++ Metamorphosis (Pennyworthy Deny AIDS) (Nhận +7 Dura)
 ```
 
 ```
-Team: 
+Team:10
 ```
 
 ```

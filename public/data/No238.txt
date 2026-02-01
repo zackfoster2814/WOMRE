@@ -5,63 +5,69 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Dryad
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Hero Grave Keeper
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Night Owl
++ Clumsy
++ Brain Rot (Từ Braindead)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:10
+Spd:6
+Dur:2
+IQ:7
+BIQ:9
+MA:1
 ```
 
 ```
 Houses: 
-+ 
++ Winterhome
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Shot Glass (Từ House)
+  - Wine (Từ House)
+  - Đá
+  - Beer
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Misty Step Ahead
++ Cleaning Sins
 ```
 
 ```
 Char dev: 
-+ 
++ Braindead
 ```
 
 ```
-Team: 
+Team:26
 ```
 
 ```

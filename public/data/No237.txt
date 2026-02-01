@@ -5,30 +5,30 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Troll
+Sub-race: Ice Troll
 ```
 
 ```
 Archetype: 
-+ 
++ Mason
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Impatient (PvP: +1 Speed, +1 BIQ)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:1
+Spd:6
+Dur:10
+IQ:5
+BIQ:4
+MA:6
 ```
 
 ```
 Houses: 
-+ 
++ House Tyrell
 ```
 
 ```
@@ -40,28 +40,30 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Staff of Homa (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power:  
++ Powerful Strike (Từ Vũ Khí)
++ Exort
++ AIDS (Từ Char Dev)
 ```
 
 ```
 Char dev: 
-+ 
++ Metamorphosis (Nhận +1 Strength)
 ```
 
 ```
-Team: 
+Team:13
 ```
 
 ```

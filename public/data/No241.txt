@@ -5,63 +5,66 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Angel 
+Sub-race: Angels
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Pacifist
++ Edgelord
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Open-minded 
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:7 Cursed of 36k
+Spd:7 Cursed of 36k
+Dur:1 (Ban đầu là 0, Favor Respin) Cursed of 36k
+IQ:9 (Ban đầu là 0, Favor Respin) Cursed of 36k
+BIQ:1 Cursed of 36k
+MA:8 (Ban đầu là 0, Favor Respin) Cursed of 36k
 ```
 
 ```
 Houses: 
-+ 
++ Ban Nhạc Ngọt Đoàn Kết
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Ớt (Từ House)
+  - Holy Symbol
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Unique Weapon
++ Diffusal Blade (Dùng Được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power:  
++ Fair Duel
 ```
 
 ```
 Char dev: 
-+ 
++ Creator's Favor (Roll lại 3 chỉ số Dura IQ MA)
 ```
 
 ```
-Team: 
+Team:17
 ```
 
 ```

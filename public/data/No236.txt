@@ -1,34 +1,37 @@
 No.236
 Name: Yuto (yuto2306)
+`Name: Yuto (yuto2306)
 ```
 Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Demi-God
+Sub-race: Time
 ```
 
 ```
 Archetype: 
-+ 
++ Trickster
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Patient
++ Lucky (Max: Dura)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:2
+Spd:3
+Dur:10
+IQ:6
+BIQ:4
+MA:4 ban đầu là 1 (Unborn)
 ```
 
 ```
 Houses: 
-+ 
++ Golden Order
+ -> Unborn
 ```
 
 ```
@@ -45,23 +48,24 @@ Houses:
 ```
 
 ``` 
-0 Rune: 
+1 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Uno Reverse Card (Từ House)
++ Baldening (Từ House)
 ```
 
 ```
 Char dev: 
-+ 
++ Cơ Cấu
 ```
 
 ```
-Team: 
+Team:5
 ```
 
 ```

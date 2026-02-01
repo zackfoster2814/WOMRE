@@ -5,63 +5,70 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Dryad
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Anti-Social
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Let me solo her
++ Shining Bightly
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:4 Cursed of 36k
+Spd:1 Cursed of 36k
+Dur:9 Cursed of 36k
+IQ:5 Cursed of 36k
+BIQ:1Cursed of 36k
+MA:2Cursed of 36k
 ```
 
 ```
 Houses: 
-+ 
++ Targaryen
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+3 Gear: 
+ + 3 Normal gear:
+  - Ớt
+  - Shot Glass
+  - Radio
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Clawmark Seal (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+0 Rune:  
++
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Master of War 
++ Drunken Boxing
++ Sacred Fire(Từ No more Family)
++ Rising Tide(Từ No more Family)
 ```
 
 ```
 Char dev: 
-+ 
++ No more Family
 ```
 
 ```
-Team: 
+Team:26
 ```
 
 ```

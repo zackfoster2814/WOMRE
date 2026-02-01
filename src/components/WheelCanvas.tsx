@@ -283,6 +283,7 @@ export const WheelCanvas = ({
           winningItem.name,
           items.length,
           previousWinningItemRef.current,
+          items.map((item) => item.name),
         );
 
         if (!hasSpecialSound) {

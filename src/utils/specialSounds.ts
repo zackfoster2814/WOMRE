@@ -96,6 +96,14 @@ const isPartOfCombo = (
   return COMBO_SOUNDS[prevItem]?.[currentItem] !== undefined;
 };
 
+/** Check if wheel items are consecutive numbers 1-10 */
+const isConsecutiveStatWheel = (wheelItems: string[]): boolean => {
+  if (wheelItems.length !== 10) return false;
+  const expectedItems = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  const sortedItems = [...wheelItems].sort((a, b) => Number(a) - Number(b));
+  return expectedItems.every((item, index) => sortedItems[index] === item);
+};
+
 // ============================================================================
 // MAIN EXPORT
 // ============================================================================
@@ -105,15 +113,20 @@ const isPartOfCombo = (
  * @param itemName - The name of the winning item
  * @param totalItems - Total number of items in the wheel
  * @param previousItemName - The name of the previous winning item
+ * @param wheelItems - Array of all item names in the wheel (optional, for stat wheel validation)
  * @returns true if special sound was played, false otherwise
  */
 export const playSpecialSound = (
   itemName: string,
   totalItems: number,
   previousItemName: string | null,
+  wheelItems?: string[],
 ): boolean => {
-  // Stat wheel (10 items) handling
-  if (totalItems === 10) {
+  // Stat wheel (10 items) handling - only if items are consecutive 1-10
+  const isStatWheel =
+    totalItems === 10 && wheelItems && isConsecutiveStatWheel(wheelItems);
+
+  if (isStatWheel) {
     // Priority 1: Check combo sequences (e.g., 3→6, 6→7, 2→8)
     if (previousItemName && COMBO_SOUNDS[previousItemName]?.[itemName]) {
       playAudio(COMBO_SOUNDS[previousItemName][itemName]);

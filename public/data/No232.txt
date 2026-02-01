@@ -5,63 +5,64 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Gnome
 Sub-race: 
 ```
 
 ```
-Archetype: 
+Archetype: Trickster
 + 
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Let me solo her
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:5
+Spd:3
+Dur:1
+IQ:1
+BIQ:5
+MA:2
 ```
 
 ```
 Houses: 
-+ 
++ Coven Council
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Kẹo
+  - Holy Symbol
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Glass Bottle (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
+0 Power:  
++
+```
+
+```
+Char dev: Become Vegetarian
 + 
 ```
 
 ```
-Char dev: 
-+ 
-```
-
-```
-Team: 
+Team:16
 ```
 
 ```

@@ -5,63 +5,68 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Troll
+Sub-race: Ice Troll
 ```
 
 ```
 Archetype: 
-+ 
++ Sentinel of Purity
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Cautious
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:7
+Spd:7
+Dur:6
+IQ:2
+BIQ:0 ban đầu là 7 (Demonic Pact)
+MA:7
 ```
 
 ```
 Houses: 
-+ 
++ Stark
+ -> Lady
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Academie Ring
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Halberd (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ Ral 
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Mystifying Murmur
++ Hunter's Rewards
++ Force Field (Từ Demonic Pact)
++ Luck Manipulation (Từ Demonic Pact)
++ EscAPADe (Từ Demonic Pact)
 ```
 
 ```
 Char dev: 
-+ 
++ Demonic Pact (BIQ Xuống 0)
 ```
 
 ```
-Team: 
+Team:27
 ```
 
 ```

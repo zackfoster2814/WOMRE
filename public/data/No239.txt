@@ -5,29 +5,30 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Merfolk
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Philosopher
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Independent
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:1 Cursed of 36k
+Spd:5 Cursed of 36k
+Dur:5 Cursed of 36k
+IQ:7 (Ban đầu là 4, +3 từ Philosopher) Cursed of 36k
+BIQ:0 Cursed of 36k
+MA:6 Cursed of 36k
 ```
 
 ```
-Houses: 
+Houses: Naga (Đã rời đi)
 + 
 ```
 
@@ -35,33 +36,35 @@ Houses:
 0 Gear: 
  + 0 Normal gear:
   - 
+  - 
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Caestus (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ Tir
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Critical Strike 
++ Blood Frenzy
 ```
 
 ```
 Char dev: 
-+ 
++ Mentor (Mr. C.B. (dogefear))
 ```
 
 ```
-Team: 
+Team:16
 ```
 
 ```

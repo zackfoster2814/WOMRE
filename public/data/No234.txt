@@ -5,63 +5,71 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Giant
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Người Trong Ban Nhạc (Nhận Nhạc Cụ)
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Cautious
++ Brainrot (Từ Braindead)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:5 (+3)
+Spd:7
+Dur:5
+IQ:5 (+3)
+BIQ:6
+MA:3
 ```
 
 ```
 Houses: 
-+ 
++ Ban Nhạc Ngọt Đoàn Kết
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+3 Gear: 
+ + 3 Normal gear:
+  - Radio (Từ House)
+  - Dark Lanthorn
+  - Kuro's Charm
+  - Holy Symbol
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Bass (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+1 Rune: 
++ Ral
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+4 Power: 
++ Arcana Blast
++ Baldening
++ Evasion
++ Healing Factor
 ```
 
 ```
 Char dev: 
-+ 
++ Nghe Bài thú tội
++ Braindead
 ```
 
 ```
-Team: 
+Team:24
 ```
 
 ```
