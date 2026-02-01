@@ -126,8 +126,11 @@ export class EffectParser {
     if (lower.includes('sau combat:') || lower.includes('after combat:')) {
       return 'after_combat';
     }
-    if (lower.includes('[pve only]') || lower.includes('[pvp only]')) {
+    if (lower.includes('[pve only]') || lower.includes('[pve]')) {
       return 'pve_only';
+    }
+    if (lower.includes('[pvp only]') || lower.includes('[pvp]')) {
+      return 'pvp_only';
     }
     if (lower.includes('nhánh thua') || lower.includes('loser bracket')) {
       return 'on_loser_bracket';

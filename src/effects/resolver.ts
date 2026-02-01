@@ -631,10 +631,14 @@ export class EffectResolver {
 
   /**
    * Resolve all immediate effects and calculate total stats
+   * @param sources - Effect sources to process
+   * @param baseStats - Base character stats
+   * @param context - Optional combat context for PvE/PvP timing checks
    */
   static resolveImmediateEffects(
     sources: EffectSource[],
-    baseStats: CharacterStats
+    baseStats: CharacterStats,
+    context?: { isPvE?: boolean }
   ): CharacterEffects {
     const result: CharacterEffects = {
       statModifiers: [],
@@ -650,15 +654,46 @@ export class EffectResolver {
       if (!source.isActive || source.isDisabled) continue;
 
       for (const effect of source.effects) {
-        // Only process immediate effects
-        if (effect.timing !== 'immediate') {
-          // Store for later use in combat
-          result.combatEffects.push({
-            source,
-            effect,
-            isActive: true
-          });
-          continue;
+        // Check PvE/PvP timing if context is provided
+        if (context !== undefined) {
+          if (context.isPvE) {
+            // PvE mode: ONLY apply pve_only effects, skip immediate and pvp_only
+            if (effect.timing === 'pve_only') {
+              // Process this effect as immediate (fall through to stat modifier logic below)
+            } else if (effect.timing === 'immediate' || effect.timing === 'pvp_only') {
+              // Skip immediate and pvp_only effects in PvE
+              result.combatEffects.push({ source, effect, isActive: false, reason: 'Not applicable in PvE - only pve_only effects apply' });
+              continue;
+            } else {
+              // Other non-immediate effects - store for combat
+              result.combatEffects.push({ source, effect, isActive: true });
+              continue;
+            }
+          } else {
+            // PvP mode: Apply immediate and pvp_only, skip pve_only
+            if (effect.timing === 'pve_only') {
+              // Skip pve_only effects in PvP
+              result.combatEffects.push({ source, effect, isActive: false, reason: 'PvE only - not in PvE' });
+              continue;
+            } else if (effect.timing === 'pvp_only' || effect.timing === 'immediate') {
+              // Process this effect as immediate (fall through to stat modifier logic below)
+            } else {
+              // Other non-immediate effects - store for combat
+              result.combatEffects.push({ source, effect, isActive: true });
+              continue;
+            }
+          }
+        } else {
+          // No context - only process immediate effects
+          if (effect.timing !== 'immediate') {
+            // Store for later use in combat
+            result.combatEffects.push({
+              source,
+              effect,
+              isActive: true
+            });
+            continue;
+          }
         }
 
         // Check conditions for immediate effects (use ORIGINAL baseStats for Giant-like effects)
@@ -668,7 +703,12 @@ export class EffectResolver {
 
         // Process stat modifiers
         if (effect.type === 'stat_modifier' && effect.stat && effect.value !== undefined) {
-          const targetStats = resolveStatTarget(effect.stat, result.totalStats);
+          // For effects targeting 'lowest'/'highest' with isBase, use original baseStats to determine which stat
+          // This ensures "Base Stat thấp nhất" looks at original base stats, not modified stats
+          const statsForResolution = (effect.isBase && (effect.stat === 'lowest' || effect.stat === 'highest'))
+            ? baseStats  // Use original base stats passed to this function
+            : result.totalStats;
+          const targetStats = resolveStatTarget(effect.stat, statsForResolution);
 
           for (const stat of targetStats) {
             result.statModifiers.push({
@@ -766,6 +806,8 @@ export class EffectResolver {
         return context.isFinals;
       case 'pve_only':
         return context.isPvE;
+      case 'pvp_only':
+        return !context.isPvE;
       default:
         return true;
     }
@@ -822,11 +864,16 @@ export class EffectResolver {
 
   /**
    * Calculate full character effects
+   * @param character - Character to calculate effects for
+   * @param context - Optional context for PvE/PvP timing (e.g., { isPvE: true } for boss battles)
    */
-  static calculateCharacterEffects(character: Character): CharacterEffects {
+  static calculateCharacterEffects(
+    character: Character,
+    context?: { isPvE?: boolean }
+  ): CharacterEffects {
     const sources = this.gatherEffectSources(character);
     const baseStats = convertStats(character.stats);
-    return this.resolveImmediateEffects(sources, baseStats);
+    return this.resolveImmediateEffects(sources, baseStats, context);
   }
 
   /**
@@ -901,15 +948,32 @@ export class EffectResolver {
             }
           } else if (effect.stat && STAT_NAMES.includes(effect.stat as StatName)) {
             statChanges.push({ stat: effect.stat as StatName, value: effect.value });
+          } else if (effect.stat === 'lowest' || effect.stat === 'highest') {
+            // Resolve dynamic stat targets using base stats
+            const resolvedStats = resolveStatTarget(effect.stat, baseStats);
+            for (const stat of resolvedStats) {
+              statChanges.push({ stat, value: effect.value });
+            }
           }
         }
       }
 
       if (statChanges.length > 0 || source.rawDescription) {
+        // Merge duplicate stat changes (e.g., +1 BIQ and +2 BIQ from lowest -> +3 BIQ)
+        const mergedStatChanges: StatChange[] = [];
+        for (const change of statChanges) {
+          const existing = mergedStatChanges.find(c => c.stat === change.stat);
+          if (existing) {
+            existing.value += change.value;
+          } else {
+            mergedStatChanges.push({ ...change });
+          }
+        }
+
         breakdown.push({
           type: source.type,
           name: source.name,
-          statChanges,
+          statChanges: mergedStatChanges,
           description: source.rawDescription,
           isActive: source.isActive !== false,
           isDisabled: source.isDisabled || false

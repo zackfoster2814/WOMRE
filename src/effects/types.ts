@@ -57,7 +57,8 @@ export type EffectTiming =
   | 'on_gear_received'    // Khi nhận Gear
   | 'on_round_16'         // Khi đến vòng 16
   | 'after_round'         // Sau mỗi vòng tournament
-  | 'pve_only';           // Chỉ áp dụng trong PvE
+  | 'pve_only'            // Chỉ áp dụng trong PvE
+  | 'pvp_only';           // Chỉ áp dụng trong PvP
 
 // ============================================================================
 // TARGET - Đối tượng chịu ảnh hưởng
