@@ -11,6 +11,41 @@
         "biq": 26,
         "ma": 32
       },
+      "rules": [
+        "Với mỗi Stat cao hơn 14 mà một player trong tổ đội bạn có, Gael nhận +3 All Stats.",
+        "Nếu team bạn có ít nhất 1 Human, nhận +3 All Party Stats.",
+        "Nếu team bạn có ít nhất 1 Gigachad, nhận +3 All Party Stats.",
+        "Nếu team bạn không ai cùng Race với ai, nhận +8 All Party Stats."
+      ],
+      "ruleEffects": [
+        {
+          "type": "statAboveThreshold",
+          "threshold": 14,
+          "bonusPerStat": 3,
+          "target": "boss",
+          "description": "Gael +{bonus} All Stats ({count} stats > 14)"
+        },
+        {
+          "type": "hasRace",
+          "race": "Human",
+          "bonus": 3,
+          "target": "team",
+          "description": "Team +3 All Stats (có Human)"
+        },
+        {
+          "type": "hasRace",
+          "race": "Gigachad",
+          "bonus": 3,
+          "target": "team",
+          "description": "Team +3 All Stats (có Gigachad)"
+        },
+        {
+          "type": "uniqueRaces",
+          "bonus": 8,
+          "target": "team",
+          "description": "Team +8 All Stats (không ai cùng Race)"
+        }
+      ],
       "reward": "Toàn bộ tổ đội nhận +1 All Stats, +1 Stat thấp nhất, +1 Stat cao nhất",
       "punishment": "Tổ đội bạn -1 All Stats"
     },
@@ -25,6 +60,25 @@
         "biq": 60,
         "ma": 60
       },
+      "rules": [
+        "Isshin nhận 2 điểm/round thắng thay vì 1.",
+        "Thắng Round Speed sẽ khiến tổ đội bạn được 5 điểm."
+      ],
+      "ruleEffects": [
+        {
+          "type": "bossPointsPerWin",
+          "points": 2,
+          "target": "boss",
+          "description": "Isshin nhận 2 điểm mỗi round thắng"
+        },
+        {
+          "type": "teamBonusOnStatWin",
+          "stat": "spd",
+          "bonusPoints": 5,
+          "target": "team",
+          "description": "Team +5 điểm khi thắng round Speed"
+        }
+      ],
       "reward": "Toàn bộ tổ đội nhận 1 Gear \"Glock\".",
       "punishment": "Tổ đội bạn nhận Quirk \"Impatient\" nhưng không được nhận 2 PvP Reward mặc định của nó."
     },
@@ -39,6 +93,46 @@
         "biq": 56,
         "ma": 22
       },
+      "rules": [
+        "Với mỗi thành viên trong tổ đội dưới 3 Base IQ, -1 điểm khởi đầu.",
+        "Với mỗi thành viên trong tổ đội dưới 3 Base BIQ, -1 điểm khởi đầu.",
+        "Với mỗi thành viên trong tổ đội trên 7 Base IQ, +1 điểm khởi đầu.",
+        "Với mỗi thành viên trong tổ đội trên 7 Base BIQ, +1 điểm khởi đầu."
+      ],
+      "ruleEffects": [
+        {
+          "type": "statBelowThreshold",
+          "stat": "iq",
+          "threshold": 3,
+          "bonusPoints": -1,
+          "target": "team",
+          "description": "Team -{count} điểm khởi đầu ({count} người có Base IQ < 3)"
+        },
+        {
+          "type": "statBelowThreshold",
+          "stat": "biq",
+          "threshold": 3,
+          "bonusPoints": -1,
+          "target": "team",
+          "description": "Team -{count} điểm khởi đầu ({count} người có Base BIQ < 3)"
+        },
+        {
+          "type": "statAboveThreshold",
+          "stat": "iq",
+          "threshold": 7,
+          "bonusPoints": 1,
+          "target": "team",
+          "description": "Team +{count} điểm khởi đầu ({count} người có Base IQ > 7)"
+        },
+        {
+          "type": "statAboveThreshold",
+          "stat": "biq",
+          "threshold": 7,
+          "bonusPoints": 1,
+          "target": "team",
+          "description": "Team +{count} điểm khởi đầu ({count} người có Base BIQ > 7)"
+        }
+      ],
       "reward": "Isekai 2 người có tổng Base Stats thấp nhất của đội. Tất cả đồng đội còn lại nhận +4 vào chỉ số thấp nhất của 2 người bị Isekai.",
       "punishment": "Isekai toàn bộ tổ đội"
     },
@@ -53,6 +147,25 @@
         "biq": 6,
         "ma": 7
       },
+      "rules": [
+        "Chỉ cần có Stat 6 đứng cạnh stat 7 ở bất cứ thành viên nào trong tổ đội, tổ đội bạn -1 điểm khởi đầu.",
+        "Nếu tổ đội của bạn có trên 67 chỉ số ở 1 stat, Hắn lập tức +6 hoặc 7 điểm."
+      ],
+      "ruleEffects": [
+        {
+          "type": "adjacent67Pattern",
+          "bonusPoints": -1,
+          "target": "team",
+          "description": "Team -{count} điểm khởi đầu ({count} cặp 6-7 liền kề)"
+        },
+        {
+          "type": "teamStatOver67",
+          "threshold": 67,
+          "bonusPoints": 7,
+          "target": "boss",
+          "description": "Boss +6/7 điểm (team có stat tổng > 67)"
+        }
+      ],
       "reward": "Tổ đội bạn nhận power 67. Tất cả thành viên trong tổ đội của bạn nhận +1 Vào Stat thấp nhất.",
       "punishment": "Tổ đội bạn nhận power 67"
     },
@@ -67,6 +180,19 @@
         "biq": 7,
         "ma": 37
       },
+      "rules": [
+        "Glory glory Man United",
+        "Glory glory Man United",
+        "Với mỗi round MU Fanbase thắng, All Stats của MU Fanbase được +7."
+      ],
+      "ruleEffects": [
+        {
+          "type": "bossStatBoostOnWin",
+          "bonus": 7,
+          "target": "boss",
+          "description": "MU Fanbase +7 All Stats mỗi round thắng"
+        }
+      ],
       "reward": "Tất cả thành viên trong tổ đội của bạn nhận +1 7 lần vào Stat ngẫu nhiên (Roll 7 stat được cộng và áp dụng cho cả tổ đội, không roll từng người)",
       "punishment": "Team bạn nhận Power \"Glory glory Man United\"."
     },
@@ -81,6 +207,31 @@
         "biq": 22,
         "ma": 10
       },
+      "rules": [
+        "Caligo đóng băng một thành viên trong tổ đội sau 1 round so stat, khiến người đồng đội không thể đóng góp trong phần còn lại của trận chiến nữa.",
+        "Khi thắng Round, Caligo đóng băng thêm 1 người nữa.",
+        "Thành viên có Race thuộc chủng tộc từ Dragon trở lên sẽ không thể bị đóng băng."
+      ],
+      "ruleEffects": [
+        {
+          "type": "freezeAfterRound",
+          "freezeCount": 1,
+          "target": "team",
+          "description": "Caligo đóng băng 1 thành viên sau mỗi round"
+        },
+        {
+          "type": "freezeOnBossWin",
+          "freezeCount": 1,
+          "target": "team",
+          "description": "Caligo đóng băng thêm 1 người khi thắng round"
+        },
+        {
+          "type": "freezeImmunity",
+          "immuneRaces": ["Dragon", "Deity", "Cosmic Entity", "Eldritch"],
+          "target": "team",
+          "description": "Race từ Dragon trở lên miễn nhiễm đóng băng"
+        }
+      ],
       "reward": "Team bạn nhận Power \"Cold Mirage\"",
       "punishment": "1 Base Stat của team bạn biến thành 0"
     },
@@ -109,6 +260,17 @@
         "biq": 34,
         "ma": 27
       },
+      "rules": [
+        "Pontiff Sulyvahn cứ mỗi 2 Round sẽ được nhân đôi Stat ở Round tiếp theo."
+      ],
+      "ruleEffects": [
+        {
+          "type": "doubleStatsEveryNRounds",
+          "roundInterval": 2,
+          "target": "boss",
+          "description": "Pontiff nhân đôi Stat mỗi 2 round"
+        }
+      ],
       "reward": "Tổ đội bạn nhận \"Dual Wielder\" và lập tức nhận 1 vũ khí 0 rune ở tay còn lại. Nếu đã có, nhận +1 All Stats",
       "punishment": "Tổ đội bạn bị tước vũ khí."
     },
@@ -123,6 +285,17 @@
         "biq": 38,
         "ma": 38
       },
+      "rules": [
+        "Kafka sẽ thôi miên 1 thành viên ngẫu nhiên của tổ đội, toàn bộ chỉ số của người chơi này sẽ bị loại bỏ khỏi tổ đội của bạn và chuyển sang cho Boss Kafka.",
+        "Nếu thành viên đó có bất kì hiệu ứng [PvE Only] nào, Kafka sẽ nhận được chúng. (Target \"Boss\" trong hiệu ứng sẽ chuyển sang tổ đội nếu có thể. Còn \"Tổ đội\" = Kafka)"
+      ],
+      "ruleEffects": [
+        {
+          "type": "hypnotizeRandomMember",
+          "target": "boss",
+          "description": "Kafka thôi miên 1 thành viên, lấy stats và hiệu ứng [PvE Only] của họ"
+        }
+      ],
       "reward": "Nhận Gear \"Stellaron Hunter's Member Card\".",
       "punishment": "Mỗi người trong tổ đội chịu 1 hiệu ứng ngẫu nhiên: (1) Mất toàn bộ Power. (2) Mất toàn bộ Gear. (3) Mất toàn bộ Archetype và Quirk. (4) Không bị phạt. (5) Nhận Creator's Limitation."
     },
@@ -137,6 +310,32 @@
         "biq": 20,
         "ma": 20
       },
+      "rules": [
+        "Spooky Spooky Skeleton.",
+        "Không nhân đôi để cấu thành trọng số của cả hai bên khi combat.",
+        "Nếu bạn không thắng liên tiếp (Chuỗi) 6 round, đánh lại Combat lần nữa với All Party Stats -20.",
+        "Nếu có bất kỳ 1 Party Stat nào dưới 20, tổ đội bạn thua."
+      ],
+      "ruleEffects": [
+        {
+          "type": "noDoubleWeight",
+          "target": "both",
+          "description": "Không nhân đôi trọng số khi combat"
+        },
+        {
+          "type": "winStreakRequired",
+          "streakCount": 6,
+          "penaltyStats": -20,
+          "target": "team",
+          "description": "Phải thắng 6 round liên tiếp, nếu không đánh lại với -20 All Party Stats"
+        },
+        {
+          "type": "partyStatMinimum",
+          "minimum": 20,
+          "target": "team",
+          "description": "Thua nếu có Party Stat < 20"
+        }
+      ],
       "reward": "Team bạn nhận +2 Stat thấp nhất",
       "punishment": "Team bạn nhận -2 Stat thấp nhất"
     },
@@ -151,6 +350,24 @@
         "biq": 31,
         "ma": 35
       },
+      "rules": [
+        "Alduin khởi đầu trận với 1 điểm.",
+        "Tổ đội bạn khởi đầu trận đấu với -1 điểm."
+      ],
+      "ruleEffects": [
+        {
+          "type": "startingPoints",
+          "points": 1,
+          "target": "boss",
+          "description": "Alduin khởi đầu với 1 điểm"
+        },
+        {
+          "type": "startingPoints",
+          "points": -1,
+          "target": "team",
+          "description": "Team khởi đầu với -1 điểm"
+        }
+      ],
       "reward": "Tổ đội bạn nhận Power \"Sovngarde's Blessing\"",
       "punishment": "Team bạn mất toàn bộ Char Dev"
     },
@@ -165,6 +382,24 @@
         "biq": null,
         "ma": null
       },
+      "rules": [
+        "Stat của Violet Vessel = Base Stat của người chơi có tổng Base Stat cao nhất trong tổ đội của bạn x Số người chơi trong tổ đội.",
+        "Tổ đội của bạn chiến thắng khi giành được 2 điểm."
+      ],
+      "ruleEffects": [
+        {
+          "type": "dynamicBossStats",
+          "calculation": "highestPlayerBaseStats * teamSize",
+          "target": "boss",
+          "description": "Stats = Base Stat cao nhất x Số người trong team"
+        },
+        {
+          "type": "customWinCondition",
+          "pointsToWin": 2,
+          "target": "team",
+          "description": "Team thắng khi đạt 2 điểm"
+        }
+      ],
       "reward": "Tổ đội nhận +1 vào Base Stat thấp nhất 10 lần.",
       "punishment": "Không bị phạt."
     },
@@ -179,6 +414,17 @@
         "biq": 33,
         "ma": 40
       },
+      "rules": [
+        "Mỗi Round bạn thua, Night King nhận +8 All Stats."
+      ],
+      "ruleEffects": [
+        {
+          "type": "bossStatBoostOnTeamLoss",
+          "bonus": 8,
+          "target": "boss",
+          "description": "Night King +8 All Stats mỗi round team thua"
+        }
+      ],
       "reward": "Bạn nhận Archetype \"Bravest of the Brave\", bỏ qua điều kiện đầu tiên của nó.",
       "punishment": "Bạn nhận Archetype \"NPC\""
     },
@@ -193,6 +439,17 @@
         "biq": 28,
         "ma": 41
       },
+      "rules": [
+        "Radagon có 50% chặn bạn ghi điểm."
+      ],
+      "ruleEffects": [
+        {
+          "type": "blockTeamScore",
+          "chance": 50,
+          "target": "team",
+          "description": "Radagon có 50% chặn team ghi điểm"
+        }
+      ],
       "reward": "Bạn nhận Power \"Golden Parry\"",
       "punishment": "Stat cao nhất của bạn giảm nửa, Stat thấp nhất của bạn biến thành 0."
     },
@@ -207,6 +464,31 @@
         "biq": 33,
         "ma": 33
       },
+      "rules": [
+        "Simon vô hiệu hoá tất cả hiệu ứng [PvE Only] của tổ đội bạn.",
+        "Khi tổ đội của bạn có round thắng đầu tiên, Simon sẽ nhận +3 All Stats.",
+        "Khi tổ đội của bạn thắng 3 round đấu, Simon sẽ xoá bỏ 3 thành viên trong tổ đội của bạn (3 thành viên đó không thể đóng góp trong phần còn lại của trận chiến)."
+      ],
+      "ruleEffects": [
+        {
+          "type": "disablePvEOnly",
+          "target": "team",
+          "description": "Vô hiệu hóa tất cả hiệu ứng [PvE Only] của team"
+        },
+        {
+          "type": "bossStatBoostOnFirstTeamWin",
+          "bonus": 3,
+          "target": "boss",
+          "description": "Simon +3 All Stats khi team thắng round đầu tiên"
+        },
+        {
+          "type": "removeTeamMembersOnWins",
+          "winsRequired": 3,
+          "membersToRemove": 3,
+          "target": "team",
+          "description": "Loại 3 thành viên khi team thắng 3 round"
+        }
+      ],
       "reward": "Tổ đội nhận Power \"Artist\" và nhận +1 vào tất cả Base Stat chẵn. Nếu đã có Power \"Artist\" thì thay vào đó nhận +1 vào 3 Stat ngẫu nhiên.",
       "punishment": "Tổ đội bạn mất 3 Power. (nếu có thể)"
     },
@@ -221,6 +503,39 @@
         "biq": 50,
         "ma": 30
       },
+      "rules": [
+        "Sau 4 round, tùy vào số điểm của tổ đội bạn mà sẽ kích hiệu ứng:",
+        "Dưới hoặc bằng 1 điểm: BIQ của Capra Demon giảm 50, thua round này sẽ khiến hắn mất 3 điểm, Round MA trở thành BO3.",
+        "2 điểm: Round BIQ trở thành BO3.",
+        "3 điểm: IQ của Capra Demon tăng 25, Đánh lại Round IQ.",
+        "4 điểm hoặc hơn: BIQ Capra Demon tăng 50, thắng round này sẽ khiến hắn được nhận lượng điểm bằng với tổ đội, Round MA trở thành BO3."
+      ],
+      "ruleEffects": [
+        {
+          "type": "conditionalAfterRounds",
+          "roundTrigger": 4,
+          "conditions": [
+            {
+              "teamPoints": "<=1",
+              "effects": "Boss BIQ -50, thua = Boss -3 điểm, MA thành BO3"
+            },
+            {
+              "teamPoints": "2",
+              "effects": "BIQ thành BO3"
+            },
+            {
+              "teamPoints": "3",
+              "effects": "Boss IQ +25, đánh lại round IQ"
+            },
+            {
+              "teamPoints": ">=4",
+              "effects": "Boss BIQ +50, thắng = Boss nhận điểm bằng team, MA thành BO3"
+            }
+          ],
+          "target": "both",
+          "description": "Hiệu ứng đặc biệt sau 4 round dựa trên điểm team"
+        }
+      ],
       "reward": "Tổ đội nhận Power \"4 Hit Combo\" và +3 BIQ",
       "punishment": "Tổ đội nhận Power \"4 Hit Combo\" và -3 BIQ"
     },
@@ -235,6 +550,32 @@
         "biq": 33,
         "ma": 67
       },
+      "rules": [
+        "Vũ Công Bầu Trời giáng xuống vòng quay.",
+        "Với mỗi round đội bạn ghi điểm, Sky Dancer cũng ghi điểm.",
+        "Với mỗi Round Sky Dancer ghi điểm, đội bạn cũng được điểm.",
+        "Nếu hai bên cùng số điểm, bạn thắng.",
+        "Nếu hai bên lệch điểm, bạn thua.",
+        "Nếu tổ đội của bạn có Feature [PvE Only], có 50% tỉ lệ kích hoạt được nó."
+      ],
+      "ruleEffects": [
+        {
+          "type": "mirrorScoring",
+          "target": "both",
+          "description": "Cả 2 bên đều ghi điểm khi 1 bên ghi điểm"
+        },
+        {
+          "type": "tieWinCondition",
+          "target": "team",
+          "description": "Team thắng nếu hòa điểm, thua nếu lệch điểm"
+        },
+        {
+          "type": "pveOnlyChance",
+          "chance": 50,
+          "target": "team",
+          "description": "50% kích hoạt [PvE Only] Feature"
+        }
+      ],
       "reward": "Team bạn nhận +1 All Stats và Power \"Ballet Dancing\"",
       "punishment": "Team bạn nhận Power \"Ballet Dancing\""
     },
@@ -249,6 +590,24 @@
         "biq": 0,
         "ma": 0
       },
+      "rules": [
+        "Cộng tổng 6 Party Stats của bạn lại đấm nhau 7 round với tổng Stat của hắn. (so Tổng Stat 2 bên 7 round)",
+        "Với mỗi Round thua, nhận +80 Tổng Stat cho bên thua."
+      ],
+      "ruleEffects": [
+        {
+          "type": "totalStatBattle",
+          "rounds": 7,
+          "target": "both",
+          "description": "So tổng 6 Party Stats với tổng Stat của Boss trong 7 round"
+        },
+        {
+          "type": "loserStatBoost",
+          "bonus": 80,
+          "target": "both",
+          "description": "Bên thua +80 Tổng Stat mỗi round"
+        }
+      ],
       "reward": "Base Strength team bạn +5",
       "punishment": "Base Strength team bạn -5"
     },
@@ -263,6 +622,21 @@
         "biq": 62,
         "ma": 50
       },
+      "rules": [
+        "Soul of Cinder nhận toàn bộ hiệu ứng từ vũ khí của tổ đội, tổ đội bạn thì không và bị vô hiệu hóa nếu có [PvE Only]"
+      ],
+      "ruleEffects": [
+        {
+          "type": "stealWeaponEffects",
+          "target": "boss",
+          "description": "Boss nhận toàn bộ hiệu ứng vũ khí của team"
+        },
+        {
+          "type": "disableWeaponEffects",
+          "target": "team",
+          "description": "Team mất hiệu ứng vũ khí và vô hiệu hóa [PvE Only]"
+        }
+      ],
       "reward": "Tổ đội bạn nhận Archetype \"Cinderheart\", nếu đã có rồi, nhận +1 All Stats",
       "punishment": "Tổ đội bạn bị đuổi khỏi House."
     },
@@ -277,6 +651,27 @@
         "biq": 55,
         "ma": 0
       },
+      "rules": [
+        "Trước trận chiến, quay 1 vòng quay gồm 20 số:",
+        "Số 01 sẽ khiến tổ đội của bạn -2 điểm khởi đầu.",
+        "Số 20 sẽ khiến tổ đội của bạn +2 điểm khởi đầu.",
+        "Số từ 02-09 sẽ khiến Party Stats của bạn -3 All.",
+        "Số 10-19 sẽ khiến Party Stats của bạn +3 All."
+      ],
+      "ruleEffects": [
+        {
+          "type": "preBattleWheel",
+          "wheelSize": 20,
+          "outcomes": [
+            { "range": [1, 1], "effect": "teamStartingPoints", "value": -2, "description": "Team -2 điểm khởi đầu" },
+            { "range": [20, 20], "effect": "teamStartingPoints", "value": 2, "description": "Team +2 điểm khởi đầu" },
+            { "range": [2, 9], "effect": "teamStats", "value": -3, "description": "Party Stats -3 All" },
+            { "range": [10, 19], "effect": "teamStats", "value": 3, "description": "Party Stats +3 All" }
+          ],
+          "target": "team",
+          "description": "Quay vòng quay 1-20 trước trận để xác định buff/debuff"
+        }
+      ],
       "reward": "Tổ đội bạn nhận từ 1 -> 20 Power (Cho toàn tổ đội). Chia lượng Power đó bằng vòng quay.",
       "punishment": "Tổ đội bạn bị mất từ 1 -> 20 Power. Nếu không đủ Power, mất hết toàn bộ rồi -1 All Stats."
     },
@@ -291,6 +686,27 @@
         "biq": 66,
         "ma": 66
       },
+      "rules": [
+        "Trước trận chiến, quay 1 vòng quay gồm 20 số:",
+        "Số 01 sẽ tăng All Stats của Raphael lên 666.",
+        "Số 20 sẽ giảm All Stats của Raphael đi 66.",
+        "Số từ 02-09 sẽ tước toàn bộ Gear trong người tổ đội của bạn sau trận chiến, cho tổ đội của bạn 1 điểm khởi đầu.",
+        "Số 10-19 sẽ cho tổ đội của bạn 2 Gear \"Golden Coin\" sau trận chiến."
+      ],
+      "ruleEffects": [
+        {
+          "type": "preBattleWheel",
+          "wheelSize": 20,
+          "outcomes": [
+            { "range": [1, 1], "effect": "bossStats", "value": 666, "description": "Raphael All Stats = 666" },
+            { "range": [20, 20], "effect": "bossStats", "value": -66, "description": "Raphael -66 All Stats" },
+            { "range": [2, 9], "effect": "removeGearAfter", "startingPoints": 1, "description": "Tước Gear sau trận, +1 điểm khởi đầu" },
+            { "range": [10, 19], "effect": "giveGearAfter", "gear": "Golden Coin", "count": 2, "description": "+2 Golden Coin sau trận" }
+          ],
+          "target": "both",
+          "description": "Quay vòng quay 1-20 trước trận để xác định hiệu ứng"
+        }
+      ],
       "reward": "Team bạn mỗi người nhận 6 Gear \"Golden Coin\"",
       "punishment": "Team bạn mỗi người nhận Gear \"Khung hình thờ\""
     },
@@ -305,6 +721,47 @@
         "biq": 45,
         "ma": 25
       },
+      "rules": [
+        "Aatrox có hai mạng. Bạn cần thắng 1 trận rồi 1 trận nữa trước hắn. (12 Round)",
+        "Aatrox hút 1 điểm của team bạn với mỗi round hắn thắng ở trận 2 thay vì ghi 1 điểm.",
+        "Aatrox nhận +8 All Stats ở trận 2.",
+        "Nếu team bạn có ít nhất 1 Human, khởi đầu với +2 điểm.",
+        "Nếu team bạn có ít nhất 1 Gigachad, khởi đầu với +2 điểm."
+      ],
+      "ruleEffects": [
+        {
+          "type": "multiPhase",
+          "phases": 2,
+          "totalRounds": 12,
+          "target": "boss",
+          "description": "Aatrox có 2 mạng, cần thắng 2 trận (12 round)"
+        },
+        {
+          "type": "drainPointsPhase2",
+          "target": "boss",
+          "description": "Aatrox hút điểm team thay vì ghi điểm ở trận 2"
+        },
+        {
+          "type": "bossStatBoostPhase2",
+          "bonus": 8,
+          "target": "boss",
+          "description": "Aatrox +8 All Stats ở trận 2"
+        },
+        {
+          "type": "hasRace",
+          "race": "Human",
+          "bonusPoints": 2,
+          "target": "team",
+          "description": "Team +2 điểm khởi đầu (có Human)"
+        },
+        {
+          "type": "hasRace",
+          "race": "Gigachad",
+          "bonusPoints": 2,
+          "target": "team",
+          "description": "Team +2 điểm khởi đầu (có Gigachad)"
+        }
+      ],
       "reward": "Tổ đội Bạn nhận Gear \"Darkin Blade\".",
       "punishment": "Tổ đội bạn mất hết Vũ khí, Power và Gear. -1 All Stats"
     },
@@ -319,6 +776,30 @@
         "biq": 200,
         "ma": 200
       },
+      "rules": [
+        "Tổ đội Bạn chiến thắng khi giành được 1 điểm.",
+        "Với mỗi [PvE Only] Feature tổ đội bạn có, Griffith -10 All Stats.",
+        "Tổ đội bạn không thể nhận được điểm từ các hiệu ứng [PvE Only] (các hiệu ứng khác kích hoạt bình thường)"
+      ],
+      "ruleEffects": [
+        {
+          "type": "customWinCondition",
+          "pointsToWin": 1,
+          "target": "team",
+          "description": "Team thắng khi đạt 1 điểm"
+        },
+        {
+          "type": "bossStatPenaltyPerPvEOnly",
+          "penalty": -10,
+          "target": "boss",
+          "description": "Griffith -10 All Stats mỗi [PvE Only] Feature của team"
+        },
+        {
+          "type": "noPvEOnlyPoints",
+          "target": "team",
+          "description": "Team không nhận điểm từ [PvE Only]"
+        }
+      ],
       "reward": "Tổ đội bạn nhận +2 All Stats.",
       "punishment": "Không bị phạt"
     },
@@ -333,6 +814,25 @@
         "biq": 30,
         "ma": 30
       },
+      "rules": [
+        "Với mỗi Round bạn thua, The Collector Isekai 1 người ngẫu nhiên trong team bạn. Người đó bị loại và không thể đóng góp trong phần còn lại của trận chiến nữa. Người đó được tính là The Collector hấp thụ.",
+        "Hắn mạnh lên qua từng mùa với mỗi Player hắn Isekai, mỗi Player sẽ cho hắn +2 All Stats và 1 Feature ngẫu nhiên.",
+        "Số Player bị hấp thụ: 0"
+      ],
+      "ruleEffects": [
+        {
+          "type": "isekaiOnLoss",
+          "target": "team",
+          "description": "Isekai 1 người ngẫu nhiên mỗi round thua"
+        },
+        {
+          "type": "collectorAbsorb",
+          "bonusPerAbsorb": 2,
+          "absorbedCount": 0,
+          "target": "boss",
+          "description": "Collector +2 All Stats và 1 Feature mỗi player hấp thụ"
+        }
+      ],
       "reward": "Với mỗi round team bạn thắng, giảm 1 hồn của hắn. Với mỗi round team bạn thắng, nhận 1 Power và 1 Gear.",
       "punishment": "Chọn 1 trong những người còn sống của tổ đội bạn để Isekai, player đó được tính là Collector hấp thụ."
     },
@@ -347,6 +847,17 @@
         "biq": 35,
         "ma": 35
       },
+      "rules": [
+        "Với mỗi Round tổ đội bạn thua, 1 Player ngẫu nhiên lập tức nhận \"Văn Tế\"."
+      ],
+      "ruleEffects": [
+        {
+          "type": "giveGearOnLoss",
+          "gear": "Văn Tế",
+          "target": "team",
+          "description": "1 Player ngẫu nhiên nhận Văn Tế mỗi round thua"
+        }
+      ],
       "reward": "Văn Tế bị loại bỏ khỏi vòng quay gear. PvP Reward \"Lời Nguyền Địa Ngục\" mở khóa với Trọng số = 1+số round thua. Tổ đội bạn không bị ảnh hưởng bởi \"Lời Nguyền Địa Ngục\" nếu có lỡ quay ra, hoặc người khác quay ra.",
       "punishment": "Tổ đội thua bị Re-Spin toàn bộ Stat, mỗi Stat 2 lần và lấy cái thấp hơn."
     },
@@ -361,6 +872,24 @@
         "biq": 3,
         "ma": 3
       },
+      "rules": [
+        "Mỗi khi tổ đội thắng 1 round, Laerys nhận 60 điểm chỉ số chia đều cho tất cả những round chưa đánh.",
+        "Tổ đội sẽ mặc định thua tie-break."
+      ],
+      "ruleEffects": [
+        {
+          "type": "bossStatBoostOnTeamWin",
+          "totalBonus": 60,
+          "distribution": "remainingRounds",
+          "target": "boss",
+          "description": "Laerys +60 stats chia đều cho các round còn lại mỗi khi team thắng"
+        },
+        {
+          "type": "autoLoseTiebreak",
+          "target": "team",
+          "description": "Team mặc định thua tie-break"
+        }
+      ],
       "reward": "Mỗi thành viên tổ đội nhận 8 điểm chỉ số chia đều cho 4 chỉ số thấp nhất của họ. (Về cơ bản là +2 lmaoo)",
       "punishment": "Xóa toàn bộ Quirk và Archetype của cả tổ đội."
     },
@@ -375,6 +904,25 @@
         "biq": 10,
         "ma": 10
       },
+      "rules": [
+        "Trong trận chiến, mở bài nhạc \"Điệu nhảy bò Ba Lan\".",
+        "Với 1 người bị điếc trong tổ đội của bạn, bò nhận +20 All Stats."
+      ],
+      "ruleEffects": [
+        {
+          "type": "playMusic",
+          "music": "Điệu nhảy bò Ba Lan",
+          "target": "both",
+          "description": "Mở nhạc Polish Cow trong trận"
+        },
+        {
+          "type": "hasCondition",
+          "condition": "deaf",
+          "bonus": 20,
+          "target": "boss",
+          "description": "Polish Cow +20 All Stats nếu team có người điếc"
+        }
+      ],
       "reward": "Nhận 1 trong 2 Combo Gear sau: \"Shot Glass + Beer\" hoặc \"Empty Stein + Wine\"",
       "punishment": "Nhận 1 trong 2 Combo Gear sau: \"Empty Stein + Shot Glass\" hoặc \"Beer + Wine\""
     },
@@ -389,6 +937,16 @@
         "biq": 25,
         "ma": 25
       },
+      "rules": [
+        "Mambo."
+      ],
+      "ruleEffects": [
+        {
+          "type": "mambo",
+          "target": "both",
+          "description": "Mambo."
+        }
+      ],
       "reward": "Mambo. あなたのチームの全ステータスがプラス1されます Mambo.",
       "punishment": "Mambo!"
     },
@@ -403,6 +961,23 @@
         "biq": 39,
         "ma": 45
       },
+      "rules": [
+        "Ca Cao vô hiệu hóa toàn bộ hiệu ứng [PvE Only].",
+        "Ca Cao có hiệu ứng của Crit và Evasion."
+      ],
+      "ruleEffects": [
+        {
+          "type": "disablePvEOnly",
+          "target": "team",
+          "description": "Vô hiệu hóa tất cả hiệu ứng [PvE Only]"
+        },
+        {
+          "type": "bossHasEffect",
+          "effects": ["Crit", "Evasion"],
+          "target": "boss",
+          "description": "Ca Cao có Crit và Evasion"
+        }
+      ],
       "reward": "Tổ đội nhận \"Creator Favor\".",
       "punishment": "Tổ đội nhận \"Creator Limitation\"."
     },
@@ -417,6 +992,28 @@
         "biq": 41,
         "ma": 29
       },
+      "rules": [
+        "Với mỗi Angel và God có trong mùa, Sigrun nhận +1 all stats. (Tối đa +10 all stats).",
+        "Nếu tổ đội có ít nhất 1 God hoặc 1 Angel, tổ đội nhận 1 điểm khởi đầu."
+      ],
+      "ruleEffects": [
+        {
+          "type": "bossStatBoostPerRace",
+          "races": ["Angel", "God"],
+          "bonusPerRace": 1,
+          "maxBonus": 10,
+          "countScope": "season",
+          "target": "boss",
+          "description": "Sigrun +1 All Stats mỗi Angel/God trong mùa (max +10)"
+        },
+        {
+          "type": "hasRace",
+          "races": ["God", "Angel"],
+          "bonusPoints": 1,
+          "target": "team",
+          "description": "Team +1 điểm khởi đầu nếu có God hoặc Angel"
+        }
+      ],
       "reward": "Tổ đội nhận Power \"Valkyrie's Blessing\".",
       "punishment": "Toàn bộ tổ đội bị mất 2 Power (nếu có thể). Ngoài ra, tất cả nhận -2 Speed."
     },
@@ -431,6 +1028,17 @@
         "biq": 30,
         "ma": 30
       },
+      "rules": [
+        "Divine Dragon sẽ luôn nhận được 1 điểm mỗi round bất kể thắng hay thua. (Tổ đội vẫn sẽ nhận 1 điểm khi thắng round)."
+      ],
+      "ruleEffects": [
+        {
+          "type": "bossAlwaysScores",
+          "points": 1,
+          "target": "boss",
+          "description": "Divine Dragon +1 điểm mỗi round bất kể thắng thua"
+        }
+      ],
       "reward": "Tổ đội nhận +1 Base MA. Tổ đội nhận Power \"Divine Smite\" và \"Divine Lightning\".",
       "punishment": "Chỉ số thấp nhất của tổ đội sẽ bị kéo xuống 0."
     },
@@ -445,6 +1053,18 @@
         "biq": 45,
         "ma": 45
       },
+      "rules": [
+        "Cứ 2 round 1 lần, Baron sẽ nhận 2 điểm nếu kết quả của chúng là so le. (Thua - Thắng hoặc Thắng - Thua)."
+      ],
+      "ruleEffects": [
+        {
+          "type": "alternatingResultBonus",
+          "roundInterval": 2,
+          "bonusPoints": 2,
+          "target": "boss",
+          "description": "Baron +2 điểm mỗi 2 round nếu kết quả so le"
+        }
+      ],
       "reward": "Tổ đội nhận Gear \"Baron Buff\".",
       "punishment": "Toàn bộ tổ đội bị -2 vào chỉ số thấp nhất. Với mỗi lần hiệu ứng Boss kích hoạt sẽ bị phạt thêm 1 lần nữa."
     }

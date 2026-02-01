@@ -15,10 +15,22 @@ interface BossStats {
   ma: number | null;
 }
 
+interface RuleEffect {
+  type: string;
+  target: "boss" | "team";
+  description: string;
+  threshold?: number;
+  bonusPerStat?: number;
+  race?: string;
+  bonus?: number;
+}
+
 interface Boss {
   id: number;
   name: string;
   stats: BossStats;
+  rules?: string[];
+  ruleEffects?: RuleEffect[];
   reward: string;
   punishment: string;
 }
@@ -30,6 +42,7 @@ interface PlayerData {
   stats: CharacterStats;
   team?: number;
   quirks?: string[];
+  race?: string;
 }
 
 interface TeamMemberJson {
@@ -313,6 +326,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                     stats: char.stats,
                     team: char.team,
                     quirks: char.quirks.map((q) => q.name),
+                    race: char.race?.race,
                   });
                 }
               })

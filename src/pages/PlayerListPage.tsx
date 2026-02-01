@@ -1,11 +1,31 @@
 import { useState, useEffect, useMemo, useRef } from "react";
-import { Character, CharacterStats, LossableItem, NestedArchetype, NestedHouse, Gear, Weapon, Rune, PvPReward } from "../types/character";
+import {
+  Character,
+  CharacterStats,
+  LossableItem,
+  NestedArchetype,
+  NestedHouse,
+  Gear,
+  Weapon,
+  Rune,
+  PvPReward,
+} from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
-import { EffectResolver, type EffectSourceBreakdown } from "../effects/resolver";
+import {
+  EffectResolver,
+  type EffectSourceBreakdown,
+} from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
-import type { CharacterStats as EffectStats, EffectSourceType } from "../effects/types";
+import type {
+  CharacterStats as EffectStats,
+  EffectSourceType,
+} from "../effects/types";
 import wheelBgImage from "../assets/img/wheel-bg.png";
-import { getAssetPath, getPlayerNumbers, clearPlayerNumbersCache } from "../utils/basePath";
+import {
+  getAssetPath,
+  getPlayerNumbers,
+  clearPlayerNumbersCache,
+} from "../utils/basePath";
 import { isTauri } from "../utils/localStorage";
 
 // Check if running in web-only mode
@@ -91,6 +111,7 @@ interface Boss {
   id: number;
   name: string;
   stats: BossStats;
+  rules?: string[];
   reward: string;
   punishment: string;
 }
@@ -120,6 +141,8 @@ export const PlayerListPage = () => {
   const [showRaceStats, setShowRaceStats] = useState(false);
   const [selectedHouses, setSelectedHouses] = useState<string[]>([]);
   const [showHouseFilter, setShowHouseFilter] = useState(false);
+  const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
+  const [showTeamFilter, setShowTeamFilter] = useState(false);
 
   // View mode: "players" or "teams"
   const [viewMode, setViewMode] = useState<"players" | "teams">("players");
@@ -128,7 +151,9 @@ export const PlayerListPage = () => {
   const [teams, setTeams] = useState<TeamJson[]>([]);
   const [bosses, setBosses] = useState<Boss[]>([]);
   const [selectedBoss, setSelectedBoss] = useState<Boss | null>(null);
-  const [teamFilterType, setTeamFilterType] = useState<"all" | "with-boss" | "no-boss">("all");
+  const [teamFilterType, setTeamFilterType] = useState<
+    "all" | "with-boss" | "no-boss"
+  >("all");
 
   // Load all data on mount
   useEffect(() => {
@@ -136,6 +161,7 @@ export const PlayerListPage = () => {
       setIsLoading(true);
 
       // Load teams and bosses data
+      let teamsData: TeamJson[] = [];
       try {
         const [teamsRes, bossesRes] = await Promise.all([
           fetch(getAssetPath("/data/battles/teams.json")),
@@ -143,8 +169,9 @@ export const PlayerListPage = () => {
         ]);
 
         if (teamsRes.ok) {
-          const teamsData = await teamsRes.json();
-          setTeams(teamsData.teams || []);
+          const teamsJson = await teamsRes.json();
+          teamsData = teamsJson.teams || [];
+          setTeams(teamsData);
         }
 
         if (bossesRes.ok) {
@@ -154,6 +181,14 @@ export const PlayerListPage = () => {
       } catch (error) {
         console.error("Failed to load team/boss data:", error);
       }
+
+      // Build username to team mapping
+      const usernameToTeam = new Map<string, number>();
+      teamsData.forEach((team) => {
+        team.members.forEach((member) => {
+          usernameToTeam.set(member.username.toLowerCase(), team.id);
+        });
+      });
 
       // Load players
       const playerList: PlayerSummary[] = [];
@@ -169,10 +204,13 @@ export const PlayerListPage = () => {
               if (response.ok) {
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);
+                const username = char.username || "";
+                // Get team from teams.json mapping
+                const teamId = usernameToTeam.get(username.toLowerCase());
                 playerList.push({
                   no: char.no || playerNo,
                   name: char.name || `Player ${playerNo}`,
-                  username: char.username || "",
+                  username: username,
                   race: char.race?.race || "Unknown",
                   subRace: char.race?.subRace,
                   archetypes: char.archetypes || [],
@@ -181,7 +219,7 @@ export const PlayerListPage = () => {
                   powers: char.powers || [],
                   houses: char.houses || [],
                   nestedHouses: char.nestedHouses,
-                  team: char.team,
+                  team: teamId,
                   stats: char.stats,
                   gear: char.gear,
                   weapons: char.weapons,
@@ -220,6 +258,27 @@ export const PlayerListPage = () => {
     clearPlayerNumbersCache();
     // Trigger re-fetch by clearing and re-running
     const loadPlayers = async () => {
+      // Reload teams data
+      let teamsData: TeamJson[] = [];
+      try {
+        const teamsRes = await fetch(getAssetPath("/data/battles/teams.json"), { cache: "no-store" });
+        if (teamsRes.ok) {
+          const teamsJson = await teamsRes.json();
+          teamsData = teamsJson.teams || [];
+          setTeams(teamsData);
+        }
+      } catch (error) {
+        console.error("Failed to reload teams:", error);
+      }
+
+      // Build username to team mapping
+      const usernameToTeam = new Map<string, number>();
+      teamsData.forEach((team) => {
+        team.members.forEach((member) => {
+          usernameToTeam.set(member.username.toLowerCase(), team.id);
+        });
+      });
+
       const playerList: PlayerSummary[] = [];
       // Force reload player numbers from file
       const playerNumbers = await getPlayerNumbers(true);
@@ -232,10 +291,12 @@ export const PlayerListPage = () => {
               if (response.ok) {
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);
+                const username = char.username || "";
+                const teamId = usernameToTeam.get(username.toLowerCase());
                 playerList.push({
                   no: char.no || playerNo,
                   name: char.name || `Player ${playerNo}`,
-                  username: char.username || "",
+                  username: username,
                   race: char.race?.race || "Unknown",
                   subRace: char.race?.subRace,
                   archetypes: char.archetypes || [],
@@ -244,7 +305,7 @@ export const PlayerListPage = () => {
                   powers: char.powers || [],
                   houses: char.houses || [],
                   nestedHouses: char.nestedHouses,
-                  team: char.team,
+                  team: teamId,
                   stats: char.stats,
                   gear: char.gear,
                   weapons: char.weapons,
@@ -313,7 +374,11 @@ export const PlayerListPage = () => {
     // Sort by count descending
     return Object.entries(stats)
       .sort((a, b) => b[1] - a[1])
-      .map(([race, count]) => ({ race, count, percentage: (count / players.length) * 100 }));
+      .map(([race, count]) => ({
+        race,
+        count,
+        percentage: (count / players.length) * 100,
+      }));
   }, [players]);
 
   // Toggle race selection
@@ -336,7 +401,8 @@ export const PlayerListPage = () => {
     const sortedHouses = Array.from(houseSet).sort();
     // Check if there are players without house
     const hasNoHouse = players.some(
-      (p) => !p.houses || p.houses.length === 0 || p.houses.every((h) => h.isLost)
+      (p) =>
+        !p.houses || p.houses.length === 0 || p.houses.every((h) => h.isLost),
     );
     if (hasNoHouse) {
       sortedHouses.push("No House");
@@ -349,6 +415,36 @@ export const PlayerListPage = () => {
     setSelectedHouses((prev) =>
       prev.includes(house) ? prev.filter((h) => h !== house) : [...prev, house],
     );
+  };
+
+  // Get unique teams from all players
+  const availableTeams = useMemo(() => {
+    const teamSet = new Set<number>();
+    players.forEach((p) => {
+      if (p.team !== undefined && p.team !== null) {
+        teamSet.add(p.team);
+      }
+    });
+    const sortedTeams = Array.from(teamSet).sort((a, b) => a - b);
+    return sortedTeams;
+  }, [players]);
+
+  // Check if there are players without team
+  const hasNoTeam = useMemo(() => {
+    return players.some((p) => p.team === undefined || p.team === null);
+  }, [players]);
+
+  // Toggle team selection
+  const toggleTeamFilter = (team: number | "no-team") => {
+    if (team === "no-team") {
+      setSelectedTeams((prev) =>
+        prev.includes(-1) ? prev.filter((t) => t !== -1) : [...prev, -1],
+      );
+    } else {
+      setSelectedTeams((prev) =>
+        prev.includes(team) ? prev.filter((t) => t !== team) : [...prev, team],
+      );
+    }
   };
 
   // Filter and sort players
@@ -380,13 +476,21 @@ export const PlayerListPage = () => {
       result = result.filter((p) => {
         // Handle "No House" filter for players without active house
         const activeHouses = p.houses?.filter((h) => !h.isLost) || [];
-        if (
-          selectedHouses.includes("No House") &&
-          activeHouses.length === 0
-        ) {
+        if (selectedHouses.includes("No House") && activeHouses.length === 0) {
           return true;
         }
         return activeHouses.some((h) => selectedHouses.includes(h.name));
+      });
+    }
+
+    // Apply team filter if any teams are selected
+    if (selectedTeams.length > 0) {
+      result = result.filter((p) => {
+        // Handle "No Team" filter (using -1 as marker)
+        if (selectedTeams.includes(-1) && (p.team === undefined || p.team === null)) {
+          return true;
+        }
+        return p.team !== undefined && p.team !== null && selectedTeams.includes(p.team);
       });
     }
 
@@ -415,7 +519,7 @@ export const PlayerListPage = () => {
     });
 
     return result;
-  }, [players, searchTerm, sortBy, selectedRaces]);
+  }, [players, searchTerm, sortBy, selectedRaces, selectedTeams]);
   // }, [players, searchTerm, sortBy, selectedRaces, selectedHouses]);
 
   // Create boss lookup map
@@ -489,7 +593,9 @@ export const PlayerListPage = () => {
       }}
     >
       {/* Fixed Header - add left padding for menu button in app mode */}
-      <header className={`flex-shrink-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 py-3 overflow-visible relative z-[50] ${!isWebOnly ? "pl-40" : ""}`}>
+      <header
+        className={`flex-shrink-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 py-3 overflow-visible relative z-[50] ${!isWebOnly ? "pl-40" : ""}`}
+      >
         <div className="max-w-7xl mx-auto overflow-visible">
           <div className="flex items-center justify-center gap-6 mb-3">
             {/* View Mode Toggle */}
@@ -553,6 +659,7 @@ export const PlayerListPage = () => {
                   onClick={() => {
                     setShowRaceFilter(!showRaceFilter);
                     setShowHouseFilter(false);
+                    setShowTeamFilter(false);
                   }}
                   className={`px-4 py-2 border rounded-lg font-medium transition-colors flex items-center gap-2 ${
                     selectedRaces.length > 0
@@ -597,7 +704,9 @@ export const PlayerListPage = () => {
                           <label
                             key={race}
                             className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer transition-colors ${
-                              isSelected ? "bg-amber-600/30" : "hover:bg-gray-700"
+                              isSelected
+                                ? "bg-amber-600/30"
+                                : "hover:bg-gray-700"
                             }`}
                           >
                             <input
@@ -619,13 +728,14 @@ export const PlayerListPage = () => {
                   </div>
                 )}
               </div>
-              
+
               {/* House Filter Button */}
               <div className="relative">
                 <button
                   onClick={() => {
                     setShowHouseFilter(!showHouseFilter);
                     setShowRaceFilter(false);
+                    setShowTeamFilter(false);
                   }}
                   className={`px-4 py-2 border rounded-lg font-medium transition-colors flex items-center gap-2 ${
                     selectedHouses.length > 0
@@ -677,7 +787,9 @@ export const PlayerListPage = () => {
                           <label
                             key={house}
                             className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer transition-colors ${
-                              isSelected ? "bg-cyan-600/30" : "hover:bg-gray-700"
+                              isSelected
+                                ? "bg-cyan-600/30"
+                                : "hover:bg-gray-700"
                             }`}
                           >
                             <input
@@ -688,6 +800,100 @@ export const PlayerListPage = () => {
                             />
                             <span className="text-white text-sm flex-1">
                               {house}
+                            </span>
+                            <span className="text-gray-400 text-xs">
+                              ({count})
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Team Filter Button */}
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    setShowTeamFilter(!showTeamFilter);
+                    setShowRaceFilter(false);
+                    setShowHouseFilter(false);
+                  }}
+                  className={`px-4 py-2 border rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                    selectedTeams.length > 0
+                      ? "bg-purple-600/80 border-purple-500 text-white"
+                      : "bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80"
+                  }`}
+                >
+                  <span>👥 Team Filter</span>
+                  {selectedTeams.length > 0 && (
+                    <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                      {selectedTeams.length}
+                    </span>
+                  )}
+                </button>
+
+                {/* Team Filter Dropdown */}
+                {showTeamFilter && (
+                  <div className="absolute top-full right-0 mt-2 z-[9999] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[200px] max-h-[400px] overflow-y-auto">
+                    <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-600">
+                      <span className="text-white font-medium text-sm">
+                        Filter by Team
+                      </span>
+                      {selectedTeams.length > 0 && (
+                        <button
+                          onClick={() => setSelectedTeams([])}
+                          className="text-xs text-red-400 hover:text-red-300"
+                        >
+                          Clear all
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-1">
+                      {/* No Team option */}
+                      {hasNoTeam && (
+                        <label
+                          className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer transition-colors ${
+                            selectedTeams.includes(-1)
+                              ? "bg-purple-600/30"
+                              : "hover:bg-gray-700"
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedTeams.includes(-1)}
+                            onChange={() => toggleTeamFilter("no-team")}
+                            className="w-4 h-4 rounded border-gray-500 text-purple-500 focus:ring-purple-500 bg-gray-700"
+                          />
+                          <span className="text-white text-sm flex-1">
+                            No Team
+                          </span>
+                          <span className="text-gray-400 text-xs">
+                            ({players.filter((p) => p.team === undefined || p.team === null).length})
+                          </span>
+                        </label>
+                      )}
+                      {availableTeams.map((team) => {
+                        const count = players.filter((p) => p.team === team).length;
+                        const isSelected = selectedTeams.includes(team);
+                        return (
+                          <label
+                            key={team}
+                            className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer transition-colors ${
+                              isSelected
+                                ? "bg-purple-600/30"
+                                : "hover:bg-gray-700"
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={() => toggleTeamFilter(team)}
+                              className="w-4 h-4 rounded border-gray-500 text-purple-500 focus:ring-purple-500 bg-gray-700"
+                            />
+                            <span className="text-white text-sm flex-1">
+                              Team {team}
                             </span>
                             <span className="text-gray-400 text-xs">
                               ({count})
@@ -725,11 +931,15 @@ export const PlayerListPage = () => {
               </div>
               <select
                 value={teamFilterType}
-                onChange={(e) => setTeamFilterType(e.target.value as typeof teamFilterType)}
+                onChange={(e) =>
+                  setTeamFilterType(e.target.value as typeof teamFilterType)
+                }
                 className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
                 <option value="all">All Teams ({teamSummary.total})</option>
-                <option value="with-boss">Fighting Boss ({teamSummary.withBoss})</option>
+                <option value="with-boss">
+                  Fighting Boss ({teamSummary.withBoss})
+                </option>
                 <option value="no-boss">No Boss ({teamSummary.noBoss})</option>
               </select>
             </div>
@@ -779,7 +989,9 @@ export const PlayerListPage = () => {
                   <TeamBattleCard
                     key={team.id}
                     team={team}
-                    onBossClick={() => team.bossData && setSelectedBoss(team.bossData)}
+                    onBossClick={() =>
+                      team.bossData && setSelectedBoss(team.bossData)
+                    }
                     getTotalStats={getTotalStatsHelper}
                     onMemberClick={handleSelectPlayer}
                   />
@@ -817,7 +1029,10 @@ export const PlayerListPage = () => {
 
       {/* Boss Detail Modal */}
       {selectedBoss && (
-        <BossDetailModal boss={selectedBoss} onClose={() => setSelectedBoss(null)} />
+        <BossDetailModal
+          boss={selectedBoss}
+          onClose={() => setSelectedBoss(null)}
+        />
       )}
     </div>
   );
@@ -830,23 +1045,27 @@ interface RaceStatsDialogProps {
   onClose: () => void;
 }
 
-const RaceStatsDialog = ({ raceStats, totalPlayers, onClose }: RaceStatsDialogProps) => {
+const RaceStatsDialog = ({
+  raceStats,
+  totalPlayers,
+  onClose,
+}: RaceStatsDialogProps) => {
   const topRace = raceStats[0];
   const maxCount = topRace?.count || 1;
 
   // Color palette for bars
   const getBarColor = (index: number) => {
     const colors = [
-      'bg-amber-500',
-      'bg-teal-500',
-      'bg-purple-500',
-      'bg-pink-500',
-      'bg-blue-500',
-      'bg-green-500',
-      'bg-red-500',
-      'bg-orange-500',
-      'bg-cyan-500',
-      'bg-indigo-500',
+      "bg-amber-500",
+      "bg-teal-500",
+      "bg-purple-500",
+      "bg-pink-500",
+      "bg-blue-500",
+      "bg-green-500",
+      "bg-red-500",
+      "bg-orange-500",
+      "bg-cyan-500",
+      "bg-indigo-500",
     ];
     return colors[index % colors.length];
   };
@@ -866,7 +1085,9 @@ const RaceStatsDialog = ({ raceStats, totalPlayers, onClose }: RaceStatsDialogPr
             <h2 className="text-xl font-bold text-white flex items-center gap-2">
               <span>📊</span> Race Statistics
             </h2>
-            <p className="text-white/70 text-sm">Total: {totalPlayers} players</p>
+            <p className="text-white/70 text-sm">
+              Total: {totalPlayers} players
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -881,12 +1102,18 @@ const RaceStatsDialog = ({ raceStats, totalPlayers, onClose }: RaceStatsDialogPr
           <div className="px-6 py-4 bg-amber-500/20 border-b border-amber-500/30">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-amber-400 text-sm font-medium">Most Popular Race</p>
+                <p className="text-amber-400 text-sm font-medium">
+                  Most Popular Race
+                </p>
                 <p className="text-2xl font-bold text-white">{topRace.race}</p>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-bold text-amber-400">{topRace.count}</p>
-                <p className="text-sm text-gray-400">{topRace.percentage.toFixed(1)}%</p>
+                <p className="text-3xl font-bold text-amber-400">
+                  {topRace.count}
+                </p>
+                <p className="text-sm text-gray-400">
+                  {topRace.percentage.toFixed(1)}%
+                </p>
               </div>
             </div>
           </div>
@@ -897,10 +1124,14 @@ const RaceStatsDialog = ({ raceStats, totalPlayers, onClose }: RaceStatsDialogPr
           <div className="space-y-2">
             {raceStats.map((stat, index) => (
               <div key={stat.race} className="flex items-center gap-3">
-                <span className="w-6 text-gray-500 text-sm text-right">#{index + 1}</span>
+                <span className="w-6 text-gray-500 text-sm text-right">
+                  #{index + 1}
+                </span>
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-white text-sm font-medium">{stat.race}</span>
+                    <span className="text-white text-sm font-medium">
+                      {stat.race}
+                    </span>
                     <span className="text-gray-400 text-xs">
                       {stat.count} ({stat.percentage.toFixed(1)}%)
                     </span>
@@ -936,19 +1167,49 @@ const RaceStatsDialog = ({ raceStats, totalPlayers, onClose }: RaceStatsDialogPr
 };
 
 // Mini Hexagon Radar Chart for Player Card
-const MiniHexagonChart = ({ stats, totalStats }: { stats: CharacterStats; totalStats: EffectStats }) => {
+const MiniHexagonChart = ({
+  stats,
+  totalStats,
+}: {
+  stats: CharacterStats;
+  totalStats: EffectStats;
+}) => {
   const size = 70;
   const center = size / 2;
   const maxRadius = size / 2 - 8;
   const fixedMaxStat = 15; // Fixed max stat value
 
   const statConfig = [
-    { key: "str" as keyof CharacterStats, effectKey: "strength" as keyof EffectStats, color: "#f87171" },
-    { key: "spd" as keyof CharacterStats, effectKey: "speed" as keyof EffectStats, color: "#fbbf24" },
-    { key: "dur" as keyof CharacterStats, effectKey: "durability" as keyof EffectStats, color: "#60a5fa" },
-    { key: "iq" as keyof CharacterStats, effectKey: "iq" as keyof EffectStats, color: "#a78bfa" },
-    { key: "biq" as keyof CharacterStats, effectKey: "biq" as keyof EffectStats, color: "#f472b6" },
-    { key: "ma" as keyof CharacterStats, effectKey: "ma" as keyof EffectStats, color: "#fb923c" },
+    {
+      key: "str" as keyof CharacterStats,
+      effectKey: "strength" as keyof EffectStats,
+      color: "#f87171",
+    },
+    {
+      key: "spd" as keyof CharacterStats,
+      effectKey: "speed" as keyof EffectStats,
+      color: "#fbbf24",
+    },
+    {
+      key: "dur" as keyof CharacterStats,
+      effectKey: "durability" as keyof EffectStats,
+      color: "#60a5fa",
+    },
+    {
+      key: "iq" as keyof CharacterStats,
+      effectKey: "iq" as keyof EffectStats,
+      color: "#a78bfa",
+    },
+    {
+      key: "biq" as keyof CharacterStats,
+      effectKey: "biq" as keyof EffectStats,
+      color: "#f472b6",
+    },
+    {
+      key: "ma" as keyof CharacterStats,
+      effectKey: "ma" as keyof EffectStats,
+      color: "#fb923c",
+    },
   ];
 
   const getHexagonPoints = (radius: number) => {
@@ -1178,7 +1439,14 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
         <div className="flex-1 grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
           {statLabels.map(({ key, label, color }) => {
             const baseValue = player.stats[key] || 0;
-            const effectKey = key === 'str' ? 'strength' : key === 'spd' ? 'speed' : key === 'dur' ? 'durability' : key;
+            const effectKey =
+              key === "str"
+                ? "strength"
+                : key === "spd"
+                  ? "speed"
+                  : key === "dur"
+                    ? "durability"
+                    : key;
             const totalValue = totalStats[effectKey as keyof EffectStats] || 0;
             const diff = totalValue - baseValue;
             return (
@@ -1187,7 +1455,15 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
                 <span className="text-white font-medium">
                   <span className="text-gray-500">{baseValue}</span>
                   <span className="text-gray-600 mx-0.5">→</span>
-                  <span className={diff > 0 ? 'text-green-400' : diff < 0 ? 'text-red-400' : 'text-white'}>
+                  <span
+                    className={
+                      diff > 0
+                        ? "text-green-400"
+                        : diff < 0
+                          ? "text-red-400"
+                          : "text-white"
+                    }
+                  >
                     {totalValue}
                   </span>
                 </span>
@@ -1211,7 +1487,7 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
 // Helper component to display stat modifier badge inline
 const StatModifierBadge = ({
   name,
-  sourceType
+  sourceType,
 }: {
   name: string;
   sourceType: EffectSourceType;
@@ -1220,7 +1496,7 @@ const StatModifierBadge = ({
   if (!summary) return null;
 
   // For conditional effects, show "conditional" in different color
-  if (summary === 'conditional') {
+  if (summary === "conditional") {
     return (
       <span className="text-[10px] text-yellow-400 ml-1">
         {/* (conditional) */}
@@ -1228,15 +1504,15 @@ const StatModifierBadge = ({
     );
   }
 
-  return (
-    <span className="text-[10px] text-emerald-400 ml-1">
-      ({summary})
-    </span>
-  );
+  return <span className="text-[10px] text-emerald-400 ml-1">({summary})</span>;
 };
 
 // Info button component for showing hierarchy popup
-const InfoButton = ({ onClick }: { onClick: (e: React.MouseEvent) => void }) => (
+const InfoButton = ({
+  onClick,
+}: {
+  onClick: (e: React.MouseEvent) => void;
+}) => (
   <button
     onClick={onClick}
     className="ml-1 w-4 h-4 rounded-full bg-gray-600 hover:bg-indigo-500 text-gray-300 hover:text-white text-[10px] font-bold transition-colors inline-flex items-center justify-center"
@@ -1251,12 +1527,12 @@ const HierarchyTooltip = ({
   isOpen,
   onClose,
   item,
-  type
+  type,
 }: {
   isOpen: boolean;
   onClose: () => void;
   item: NestedArchetype | NestedHouse;
-  type: 'archetype' | 'house';
+  type: "archetype" | "house";
 }) => {
   const tooltipRef = useRef<HTMLDivElement>(null);
 
@@ -1265,19 +1541,22 @@ const HierarchyTooltip = ({
     if (!isOpen) return;
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (tooltipRef.current && !tooltipRef.current.contains(event.target as Node)) {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
 
     // Delay adding listener to prevent immediate close
     const timeoutId = setTimeout(() => {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }, 0);
 
     return () => {
       clearTimeout(timeoutId);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, onClose]);
 
@@ -1289,14 +1568,17 @@ const HierarchyTooltip = ({
       className="absolute left-full top-0 ml-2 z-[100] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-2 min-w-[180px] whitespace-nowrap"
       onClick={(e) => e.stopPropagation()}
     >
-      {type === 'archetype' ? (
+      {type === "archetype" ? (
         <div className="space-y-1">
           {/* Level 1: Main archetype */}
           <div className="flex items-center gap-1.5">
             <span className="text-indigo-400 font-medium text-xs">
               {(item as NestedArchetype).name}
             </span>
-            <StatModifierBadge name={(item as NestedArchetype).name} sourceType="archetype" />
+            <StatModifierBadge
+              name={(item as NestedArchetype).name}
+              sourceType="archetype"
+            />
           </div>
           {/* Level 2: Sub-type */}
           {(item as NestedArchetype).subType && (
@@ -1305,7 +1587,10 @@ const HierarchyTooltip = ({
               <span className="text-pink-400 text-xs">
                 {(item as NestedArchetype).subType}
               </span>
-              <StatModifierBadge name={(item as NestedArchetype).subType!} sourceType="archetype_sub" />
+              <StatModifierBadge
+                name={(item as NestedArchetype).subType!}
+                sourceType="archetype_sub"
+              />
             </div>
           )}
           {/* Level 3: Sub-sub-type */}
@@ -1315,7 +1600,10 @@ const HierarchyTooltip = ({
               <span className="text-purple-400 text-xs">
                 {(item as NestedArchetype).subSubType}
               </span>
-              <StatModifierBadge name={(item as NestedArchetype).subSubType!} sourceType="archetype_sub" />
+              <StatModifierBadge
+                name={(item as NestedArchetype).subSubType!}
+                sourceType="archetype_sub"
+              />
             </div>
           )}
         </div>
@@ -1323,11 +1611,20 @@ const HierarchyTooltip = ({
         <div className="space-y-1">
           {/* Level 1: Main house */}
           <div className="flex items-center gap-1.5">
-            <span className={`font-medium text-xs ${(item as NestedHouse).isLost ? 'text-gray-500 line-through' : 'text-yellow-400'}`}>
+            <span
+              className={`font-medium text-xs ${(item as NestedHouse).isLost ? "text-gray-500 line-through" : "text-yellow-400"}`}
+            >
               {(item as NestedHouse).name}
             </span>
-            {!(item as NestedHouse).isLost && <StatModifierBadge name={(item as NestedHouse).name} sourceType="house" />}
-            {(item as NestedHouse).isLost && <span className="text-red-400 text-[10px]">(đuổi)</span>}
+            {!(item as NestedHouse).isLost && (
+              <StatModifierBadge
+                name={(item as NestedHouse).name}
+                sourceType="house"
+              />
+            )}
+            {(item as NestedHouse).isLost && (
+              <span className="text-red-400 text-[10px]">(đuổi)</span>
+            )}
           </div>
           {/* Level 2: Sub-type */}
           {(item as NestedHouse).subType && !(item as NestedHouse).isLost && (
@@ -1336,7 +1633,10 @@ const HierarchyTooltip = ({
               <span className="text-cyan-400 text-xs">
                 {(item as NestedHouse).subType}
               </span>
-              <StatModifierBadge name={(item as NestedHouse).subType!} sourceType="house_sub" />
+              <StatModifierBadge
+                name={(item as NestedHouse).subType!}
+                sourceType="house_sub"
+              />
             </div>
           )}
         </div>
@@ -1349,67 +1649,101 @@ const HierarchyTooltip = ({
 const StatModifiersTable = ({
   breakdown,
   baseStats,
-  originalBaseStats
+  originalBaseStats,
 }: {
   breakdown: EffectSourceBreakdown[];
-  baseStats: { str: number; spd: number; dur: number; iq: number; biq: number; ma: number };
-  originalBaseStats?: { str: number; spd: number; dur: number; iq: number; biq: number; ma: number };
+  baseStats: {
+    str: number;
+    spd: number;
+    dur: number;
+    iq: number;
+    biq: number;
+    ma: number;
+  };
+  originalBaseStats?: {
+    str: number;
+    spd: number;
+    dur: number;
+    iq: number;
+    biq: number;
+    ma: number;
+  };
 }) => {
-  const statKeys: Array<'strength' | 'speed' | 'durability' | 'iq' | 'biq' | 'ma'> =
-    ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
-  const statLabels = ['STR', 'SPD', 'DUR', 'IQ', 'BIQ', 'MA'];
+  const statKeys: Array<
+    "strength" | "speed" | "durability" | "iq" | "biq" | "ma"
+  > = ["strength", "speed", "durability", "iq", "biq", "ma"];
+  const statLabels = ["STR", "SPD", "DUR", "IQ", "BIQ", "MA"];
 
   const sourceTypeColors: Record<EffectSourceType, string> = {
-    race: 'text-amber-400',
-    sub_race: 'text-amber-300',
-    archetype: 'text-pink-400',
-    archetype_sub: 'text-pink-300',
-    house_sub: 'text-cyan-300',
-    quirk: 'text-purple-400',
-    power: 'text-red-400',
-    gear: 'text-blue-400',
-    weapon: 'text-yellow-400',
-    rune: 'text-orange-400',
-    runeword: 'text-orange-300',
-    house: 'text-cyan-400',
-    char_dev: 'text-teal-400',
-    pvp_reward: 'text-green-400',
-    lover: 'text-pink-300',
-    symbiosis: 'text-red-300'
+    race: "text-amber-400",
+    sub_race: "text-amber-300",
+    archetype: "text-pink-400",
+    archetype_sub: "text-pink-300",
+    house_sub: "text-cyan-300",
+    quirk: "text-purple-400",
+    power: "text-red-400",
+    gear: "text-blue-400",
+    weapon: "text-yellow-400",
+    rune: "text-orange-400",
+    runeword: "text-orange-300",
+    house: "text-cyan-400",
+    char_dev: "text-teal-400",
+    pvp_reward: "text-green-400",
+    lover: "text-pink-300",
+    symbiosis: "text-red-300",
   };
 
   // Filter sources with stat changes
-  const sourcesWithStats = breakdown.filter(s => s.statChanges.length > 0);
+  const sourcesWithStats = breakdown.filter((s) => s.statChanges.length > 0);
 
   // Calculate totals for each stat
   const totals = statKeys.map((statKey, idx) => {
-    const baseValue = idx === 0 ? baseStats.str
-      : idx === 1 ? baseStats.spd
-      : idx === 2 ? baseStats.dur
-      : idx === 3 ? baseStats.iq
-      : idx === 4 ? baseStats.biq
-      : baseStats.ma;
+    const baseValue =
+      idx === 0
+        ? baseStats.str
+        : idx === 1
+          ? baseStats.spd
+          : idx === 2
+            ? baseStats.dur
+            : idx === 3
+              ? baseStats.iq
+              : idx === 4
+                ? baseStats.biq
+                : baseStats.ma;
 
     const bonusValue = sourcesWithStats.reduce((sum, source) => {
-      const change = source.statChanges.find(c => c.stat === statKey);
+      const change = source.statChanges.find((c) => c.stat === statKey);
       return sum + (change?.value || 0);
     }, 0);
 
-    return { base: baseValue, bonus: bonusValue, total: baseValue + bonusValue };
+    return {
+      base: baseValue,
+      bonus: bonusValue,
+      total: baseValue + bonusValue,
+    };
   });
 
   // Get stat value for a source
-  const getStatValue = (source: EffectSourceBreakdown, statKey: string): number | null => {
-    const change = source.statChanges.find(c => c.stat === statKey);
+  const getStatValue = (
+    source: EffectSourceBreakdown,
+    statKey: string,
+  ): number | null => {
+    const change = source.statChanges.find((c) => c.stat === statKey);
     return change ? change.value : null;
   };
 
   // Format stat value with color
   const formatStatValue = (value: number | null) => {
-    if (value === null || value === 0) return <span className="text-gray-600">-</span>;
-    const color = value > 0 ? 'text-green-400' : 'text-red-400';
-    const prefix = value > 0 ? '+' : '';
-    return <span className={color}>{prefix}{value}</span>;
+    if (value === null || value === 0)
+      return <span className="text-gray-600">-</span>;
+    const color = value > 0 ? "text-green-400" : "text-red-400";
+    const prefix = value > 0 ? "+" : "";
+    return (
+      <span className={color}>
+        {prefix}
+        {value}
+      </span>
+    );
   };
 
   return (
@@ -1417,9 +1751,16 @@ const StatModifiersTable = ({
       <table className="w-full text-xs border-collapse">
         <thead>
           <tr className="border-b border-gray-600">
-            <th className="text-left py-1.5 px-2 text-gray-400 font-medium">Nguồn</th>
-            {statLabels.map(label => (
-              <th key={label} className="text-center py-1.5 px-1.5 text-gray-400 font-medium w-10">{label}</th>
+            <th className="text-left py-1.5 px-2 text-gray-400 font-medium">
+              Nguồn
+            </th>
+            {statLabels.map((label) => (
+              <th
+                key={label}
+                className="text-center py-1.5 px-1.5 text-gray-400 font-medium w-10"
+              >
+                {label}
+              </th>
             ))}
           </tr>
         </thead>
@@ -1428,8 +1769,18 @@ const StatModifiersTable = ({
           {originalBaseStats && (
             <tr className="border-b border-gray-700/50 bg-gray-700/30">
               <td className="py-1.5 px-2 text-gray-400 italic">roll gốc</td>
-              {[originalBaseStats.str, originalBaseStats.spd, originalBaseStats.dur, originalBaseStats.iq, originalBaseStats.biq, originalBaseStats.ma].map((val, idx) => (
-                <td key={idx} className="text-center py-1.5 px-1.5 text-gray-400 italic">
+              {[
+                originalBaseStats.str,
+                originalBaseStats.spd,
+                originalBaseStats.dur,
+                originalBaseStats.iq,
+                originalBaseStats.biq,
+                originalBaseStats.ma,
+              ].map((val, idx) => (
+                <td
+                  key={idx}
+                  className="text-center py-1.5 px-1.5 text-gray-400 italic"
+                >
                   {val}
                 </td>
               ))}
@@ -1438,7 +1789,9 @@ const StatModifiersTable = ({
 
           {/* Base stats row */}
           <tr className="border-b border-gray-700/50">
-            <td className="py-1.5 px-2 text-gray-300">{originalBaseStats ? 'sau inversion' : 'ban đầu'}</td>
+            <td className="py-1.5 px-2 text-gray-300">
+              {originalBaseStats ? "sau inversion" : "ban đầu"}
+            </td>
             {statKeys.map((_, idx) => (
               <td key={idx} className="text-center py-1.5 px-1.5 text-gray-300">
                 {totals[idx].base}
@@ -1449,10 +1802,13 @@ const StatModifiersTable = ({
           {/* Source rows */}
           {sourcesWithStats.map((source, idx) => (
             <tr key={idx} className="border-b border-gray-700/30">
-              <td className={`py-1.5 px-2 ${sourceTypeColors[source.type]} truncate max-w-[120px]`} title={source.name}>
+              <td
+                className={`py-1.5 px-2 ${sourceTypeColors[source.type]} truncate max-w-[120px]`}
+                title={source.name}
+              >
                 {source.name}
               </td>
-              {statKeys.map(statKey => (
+              {statKeys.map((statKey) => (
                 <td key={statKey} className="text-center py-1.5 px-1.5">
                   {formatStatValue(getStatValue(source, statKey))}
                 </td>
@@ -1471,9 +1827,16 @@ const StatModifiersTable = ({
           <tr className="font-bold">
             <td className="py-1.5 px-2 text-white">Tổng:</td>
             {totals.map((total, idx) => (
-              <td key={idx} className={`text-center py-1.5 px-1.5 ${
-                total.bonus > 0 ? 'text-green-400' : total.bonus < 0 ? 'text-red-400' : 'text-white'
-              }`}>
+              <td
+                key={idx}
+                className={`text-center py-1.5 px-1.5 ${
+                  total.bonus > 0
+                    ? "text-green-400"
+                    : total.bonus < 0
+                      ? "text-red-400"
+                      : "text-white"
+                }`}
+              >
                 {total.total}
               </td>
             ))}
@@ -1483,7 +1846,6 @@ const StatModifiersTable = ({
     </div>
   );
 };
-
 
 // Player Detail Modal Component
 interface PlayerDetailModalProps {
@@ -1498,11 +1860,14 @@ const PlayerDetailModal = ({
   onClose,
 }: PlayerDetailModalProps) => {
   const [showBreakdown, setShowBreakdown] = useState(false);
-  const [openArchetypeTooltip, setOpenArchetypeTooltip] = useState<string | null>(null);
+  const [openArchetypeTooltip, setOpenArchetypeTooltip] = useState<
+    string | null
+  >(null);
   const [openHouseTooltip, setOpenHouseTooltip] = useState<string | null>(null);
 
   // Helper functions
-  const hasArchetypeSubTypes = (arch: NestedArchetype) => arch.subType || arch.subSubType;
+  const hasArchetypeSubTypes = (arch: NestedArchetype) =>
+    arch.subType || arch.subSubType;
   const hasHouseSubTypes = (house: NestedHouse) => house.subType;
 
   // Calculate total stats with effects
@@ -1635,9 +2000,14 @@ const PlayerDetailModal = ({
                   <span className="text-amber-400 text-sm text-right">
                     {character.race?.race || "-"}
                     {character.race?.reincarnatorInfo && (
-                      <span className="text-amber-300 ml-1">{character.race.reincarnatorInfo}</span>
+                      <span className="text-amber-300 ml-1">
+                        {character.race.reincarnatorInfo}
+                      </span>
                     )}
-                    <StatModifierBadge name={character.race?.race || ""} sourceType="race" />
+                    <StatModifierBadge
+                      name={character.race?.race || ""}
+                      sourceType="race"
+                    />
                   </span>
                 </div>
                 {character.race?.subRace && (
@@ -1645,28 +2015,47 @@ const PlayerDetailModal = ({
                     <span className="text-gray-400 text-sm">Sub-race</span>
                     <span className="text-amber-300 text-sm text-right">
                       {character.race.subRace}
-                      {character.race.subRace.split(/\s*\+\s*/).map((subRace, idx) => (
-                        <StatModifierBadge key={idx} name={subRace.trim()} sourceType="sub_race" />
-                      ))}
+                      {character.race.subRace
+                        .split(/\s*\+\s*/)
+                        .map((subRace, idx) => (
+                          <StatModifierBadge
+                            key={idx}
+                            name={subRace.trim()}
+                            sourceType="sub_race"
+                          />
+                        ))}
                     </span>
                   </div>
                 )}
                 <div className="flex items-start justify-between">
                   <span className="text-gray-400 text-sm">Archetypes</span>
                   <div className="text-right">
-                    {character.nestedArchetypes && character.nestedArchetypes.length > 0 ? (
+                    {character.nestedArchetypes &&
+                    character.nestedArchetypes.length > 0 ? (
                       <div className="flex flex-wrap gap-1 justify-end">
                         {character.nestedArchetypes.map((arch, idx) => (
-                          <span key={idx} className="text-pink-400 text-sm inline-flex items-center relative">
+                          <span
+                            key={idx}
+                            className="text-pink-400 text-sm inline-flex items-center relative"
+                          >
                             {arch.name}
-                            <StatModifierBadge name={arch.name} sourceType="archetype" />
+                            <StatModifierBadge
+                              name={arch.name}
+                              sourceType="archetype"
+                            />
                             {hasArchetypeSubTypes(arch) && (
                               <>
-                                <InfoButton onClick={(e) => {
-                                  e.stopPropagation();
-                                  setOpenArchetypeTooltip(openArchetypeTooltip === arch.name ? null : arch.name);
-                                  setOpenHouseTooltip(null);
-                                }} />
+                                <InfoButton
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpenArchetypeTooltip(
+                                      openArchetypeTooltip === arch.name
+                                        ? null
+                                        : arch.name,
+                                    );
+                                    setOpenHouseTooltip(null);
+                                  }}
+                                />
                                 <HierarchyTooltip
                                   isOpen={openArchetypeTooltip === arch.name}
                                   onClose={() => setOpenArchetypeTooltip(null)}
@@ -1675,16 +2064,22 @@ const PlayerDetailModal = ({
                                 />
                               </>
                             )}
-                            {idx < character.nestedArchetypes!.length - 1 ? "," : ""}
+                            {idx < character.nestedArchetypes!.length - 1
+                              ? ","
+                              : ""}
                           </span>
                         ))}
                       </div>
-                    ) : character.archetypes && character.archetypes.length > 0 ? (
+                    ) : character.archetypes &&
+                      character.archetypes.length > 0 ? (
                       <div className="flex flex-wrap gap-1 justify-end">
                         {character.archetypes.map((archetype, idx) => (
                           <span key={idx} className="text-pink-400 text-sm">
                             {archetype}
-                            <StatModifierBadge name={archetype} sourceType="archetype" />
+                            <StatModifierBadge
+                              name={archetype}
+                              sourceType="archetype"
+                            />
                             {idx < character.archetypes.length - 1 ? "," : ""}
                           </span>
                         ))}
@@ -1697,7 +2092,8 @@ const PlayerDetailModal = ({
                 <div className="flex items-start justify-between">
                   <span className="text-gray-400 text-sm">Houses</span>
                   <div className="text-right">
-                    {character.nestedHouses && character.nestedHouses.length > 0 ? (
+                    {character.nestedHouses &&
+                    character.nestedHouses.length > 0 ? (
                       <div className="flex flex-wrap gap-1 justify-end">
                         {character.nestedHouses.map((house, idx) => (
                           <span
@@ -1709,15 +2105,30 @@ const PlayerDetailModal = ({
                             }`}
                           >
                             {house.name}
-                            {house.isLost && <span className="ml-1 text-red-400 text-xs">(đuổi)</span>}
-                            {!house.isLost && <StatModifierBadge name={house.name} sourceType="house" />}
+                            {house.isLost && (
+                              <span className="ml-1 text-red-400 text-xs">
+                                (đuổi)
+                              </span>
+                            )}
+                            {!house.isLost && (
+                              <StatModifierBadge
+                                name={house.name}
+                                sourceType="house"
+                              />
+                            )}
                             {hasHouseSubTypes(house) && !house.isLost && (
                               <>
-                                <InfoButton onClick={(e) => {
-                                  e.stopPropagation();
-                                  setOpenHouseTooltip(openHouseTooltip === house.name ? null : house.name);
-                                  setOpenArchetypeTooltip(null);
-                                }} />
+                                <InfoButton
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpenHouseTooltip(
+                                      openHouseTooltip === house.name
+                                        ? null
+                                        : house.name,
+                                    );
+                                    setOpenArchetypeTooltip(null);
+                                  }}
+                                />
                                 <HierarchyTooltip
                                   isOpen={openHouseTooltip === house.name}
                                   onClose={() => setOpenHouseTooltip(null)}
@@ -1726,7 +2137,9 @@ const PlayerDetailModal = ({
                                 />
                               </>
                             )}
-                            {idx < character.nestedHouses!.length - 1 ? "," : ""}
+                            {idx < character.nestedHouses!.length - 1
+                              ? ","
+                              : ""}
                           </span>
                         ))}
                       </div>
@@ -1742,8 +2155,17 @@ const PlayerDetailModal = ({
                             }`}
                           >
                             {house.name}
-                            {house.isLost && <span className="ml-1 text-red-400 text-xs">(đuổi)</span>}
-                            {!house.isLost && <StatModifierBadge name={house.name} sourceType="house" />}
+                            {house.isLost && (
+                              <span className="ml-1 text-red-400 text-xs">
+                                (đuổi)
+                              </span>
+                            )}
+                            {!house.isLost && (
+                              <StatModifierBadge
+                                name={house.name}
+                                sourceType="house"
+                              />
+                            )}
                             {idx < character.houses.length - 1 ? "," : ""}
                           </span>
                         ))}
@@ -1761,7 +2183,6 @@ const PlayerDetailModal = ({
                   />
                 )}
               </div>
-
             </div>
 
             {/* Stats */}
@@ -1774,18 +2195,20 @@ const PlayerDetailModal = ({
                   onClick={() => setShowBreakdown(!showBreakdown)}
                   className={`text-xs px-3 py-1 rounded-full transition-colors ${
                     showBreakdown
-                      ? 'bg-teal-500 text-white'
-                      : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                      ? "bg-teal-500 text-white"
+                      : "bg-gray-600 text-gray-300 hover:bg-gray-500"
                   }`}
                 >
-                  {showBreakdown ? 'Hide Sources' : 'Show Sources'}
+                  {showBreakdown ? "Hide Sources" : "Show Sources"}
                 </button>
               </div>
 
               {/* Breakdown Panel - Table View */}
               {showBreakdown && effectBreakdown.length > 0 && (
                 <div className="mb-4 p-3 bg-gray-800/70 rounded-lg border border-gray-600">
-                  <p className="text-xs text-gray-400 mb-2 font-medium">Stat Modifiers Sources:</p>
+                  <p className="text-xs text-gray-400 mb-2 font-medium">
+                    Stat Modifiers Sources:
+                  </p>
                   <StatModifiersTable
                     breakdown={effectBreakdown}
                     baseStats={character.stats}
@@ -1799,8 +2222,13 @@ const PlayerDetailModal = ({
                   const diff = stat.totalValue - stat.baseValue;
                   const isNegative = stat.totalValue < 0;
                   return (
-                    <div key={stat.key} className={`flex items-center gap-3 ${isNegative ? 'opacity-50' : ''}`}>
-                      <span className={`w-24 text-sm font-medium ${stat.color}`}>
+                    <div
+                      key={stat.key}
+                      className={`flex items-center gap-3 ${isNegative ? "opacity-50" : ""}`}
+                    >
+                      <span
+                        className={`w-24 text-sm font-medium ${stat.color}`}
+                      >
                         {stat.label}
                       </span>
                       <div className="flex-1 bg-gray-600 rounded-full h-3 overflow-hidden relative">
@@ -1824,7 +2252,15 @@ const PlayerDetailModal = ({
                       <span className="text-white font-bold w-20 text-right text-sm">
                         <span className="text-gray-500">{stat.baseValue}</span>
                         <span className="text-gray-600 mx-0.5">→</span>
-                        <span className={diff > 0 ? 'text-green-400' : diff < 0 ? 'text-red-400' : 'text-white'}>
+                        <span
+                          className={
+                            diff > 0
+                              ? "text-green-400"
+                              : diff < 0
+                                ? "text-red-400"
+                                : "text-white"
+                          }
+                        >
                           {stat.totalValue}
                         </span>
                       </span>
@@ -1859,8 +2295,17 @@ const PlayerDetailModal = ({
                       }`}
                     >
                       {quirk.name}
-                      {quirk.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
-                      {!quirk.isLost && <StatModifierBadge name={quirk.name} sourceType="quirk" />}
+                      {quirk.isLost && (
+                        <span className="ml-1 text-red-400 text-xs">
+                          (đã mất)
+                        </span>
+                      )}
+                      {!quirk.isLost && (
+                        <StatModifierBadge
+                          name={quirk.name}
+                          sourceType="quirk"
+                        />
+                      )}
                     </span>
                   ))}
                 </div>
@@ -1891,8 +2336,17 @@ const PlayerDetailModal = ({
                           }`}
                         >
                           {gear.name}
-                          {gear.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
-                          {!gear.isLost && <StatModifierBadge name={gear.name} sourceType="gear" />}
+                          {gear.isLost && (
+                            <span className="ml-1 text-red-400 text-xs">
+                              (đã mất)
+                            </span>
+                          )}
+                          {!gear.isLost && (
+                            <StatModifierBadge
+                              name={gear.name}
+                              sourceType="gear"
+                            />
+                          )}
                         </span>
                       ))}
                     </div>
@@ -1912,8 +2366,17 @@ const PlayerDetailModal = ({
                           }`}
                         >
                           {gear.name}
-                          {gear.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
-                          {!gear.isLost && <StatModifierBadge name={gear.name} sourceType="gear" />}
+                          {gear.isLost && (
+                            <span className="ml-1 text-red-400 text-xs">
+                              (đã mất)
+                            </span>
+                          )}
+                          {!gear.isLost && (
+                            <StatModifierBadge
+                              name={gear.name}
+                              sourceType="gear"
+                            />
+                          )}
                         </span>
                       ))}
                     </div>
@@ -1942,7 +2405,10 @@ const PlayerDetailModal = ({
                     >
                       <span>
                         {weapon.name}
-                        <StatModifierBadge name={weapon.name} sourceType="weapon" />
+                        <StatModifierBadge
+                          name={weapon.name}
+                          sourceType="weapon"
+                        />
                       </span>
                       <span className="text-xs opacity-70">{weapon.type}</span>
                     </div>
@@ -1971,8 +2437,17 @@ const PlayerDetailModal = ({
                           }`}
                         >
                           {rune.name}
-                          {rune.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
-                          {!rune.isLost && <StatModifierBadge name={rune.name} sourceType="rune" />}
+                          {rune.isLost && (
+                            <span className="ml-1 text-red-400 text-xs">
+                              (đã mất)
+                            </span>
+                          )}
+                          {!rune.isLost && (
+                            <StatModifierBadge
+                              name={rune.name}
+                              sourceType="rune"
+                            />
+                          )}
                         </span>
                       ))}
                     </div>
@@ -1982,7 +2457,10 @@ const PlayerDetailModal = ({
                       Runeword:{" "}
                       <span className="text-orange-400 font-medium">
                         {character.runes.runeword}
-                        <StatModifierBadge name={character.runes.runeword} sourceType="runeword" />
+                        <StatModifierBadge
+                          name={character.runes.runeword}
+                          sourceType="runeword"
+                        />
                       </span>
                     </p>
                   )}
@@ -2006,8 +2484,17 @@ const PlayerDetailModal = ({
                       }`}
                     >
                       {power.name}
-                      {power.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
-                      {!power.isLost && <StatModifierBadge name={power.name} sourceType="power" />}
+                      {power.isLost && (
+                        <span className="ml-1 text-red-400 text-xs">
+                          (đã mất)
+                        </span>
+                      )}
+                      {!power.isLost && (
+                        <StatModifierBadge
+                          name={power.name}
+                          sourceType="power"
+                        />
+                      )}
                     </span>
                   ))}
                 </div>
@@ -2023,10 +2510,22 @@ const PlayerDetailModal = ({
                 </h3>
                 <div className="space-y-2">
                   {character.charDevs.map((charDev, idx) => (
-                    <p key={idx} className={`${charDev.isLost ? "text-gray-500 line-through" : "text-gray-300"}`}>
+                    <p
+                      key={idx}
+                      className={`${charDev.isLost ? "text-gray-500 line-through" : "text-gray-300"}`}
+                    >
                       • {charDev.name}
-                      {charDev.isLost && <span className="ml-1 text-red-400 text-xs">(đã mất)</span>}
-                      {!charDev.isLost && <StatModifierBadge name={charDev.name} sourceType="char_dev" />}
+                      {charDev.isLost && (
+                        <span className="ml-1 text-red-400 text-xs">
+                          (đã mất)
+                        </span>
+                      )}
+                      {!charDev.isLost && (
+                        <StatModifierBadge
+                          name={charDev.name}
+                          sourceType="char_dev"
+                        />
+                      )}
                     </p>
                   ))}
                 </div>
@@ -2124,7 +2623,9 @@ const TeamBattleCard = ({
                   onClick={onBossClick}
                 >
                   <span>vs</span>
-                  <span className="underline decoration-dotted">{team.bossData!.name}</span>
+                  <span className="underline decoration-dotted">
+                    {team.bossData!.name}
+                  </span>
                   <span className="text-xs">&#8599;</span>
                 </button>
               ) : (
@@ -2138,18 +2639,30 @@ const TeamBattleCard = ({
             <div className="flex items-center gap-3 text-sm">
               <div className="text-right">
                 <div className="text-gray-500 text-xs">Team</div>
-                <div className="text-green-400 font-bold text-lg">{teamTotalStats}</div>
+                <div className="text-green-400 font-bold text-lg">
+                  {teamTotalStats}
+                </div>
               </div>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                battleStatus === "winning" ? "bg-green-500/20 text-green-400" :
-                battleStatus === "losing" ? "bg-red-500/20 text-red-400" :
-                "bg-yellow-500/20 text-yellow-400"
-              }`}>
-                {battleStatus === "winning" ? ">" : battleStatus === "losing" ? "<" : "="}
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                  battleStatus === "winning"
+                    ? "bg-green-500/20 text-green-400"
+                    : battleStatus === "losing"
+                      ? "bg-red-500/20 text-red-400"
+                      : "bg-yellow-500/20 text-yellow-400"
+                }`}
+              >
+                {battleStatus === "winning"
+                  ? ">"
+                  : battleStatus === "losing"
+                    ? "<"
+                    : "="}
               </div>
               <div className="text-left">
                 <div className="text-gray-500 text-xs">Boss</div>
-                <div className="text-red-400 font-bold text-lg">{bossTotalStats}</div>
+                <div className="text-red-400 font-bold text-lg">
+                  {bossTotalStats}
+                </div>
               </div>
             </div>
           )}
@@ -2162,21 +2675,55 @@ const TeamBattleCard = ({
         {hasBoss && team.bossData && (
           <div className="bg-red-500/10 rounded-xl p-4 border border-red-500/20">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-semibold text-red-400">Boss: {team.bossData.name}</h4>
-              <span className="text-xs text-gray-500">Total: {bossTotalStats}</span>
+              <h4 className="text-sm font-semibold text-red-400">
+                Boss: {team.bossData.name}
+              </h4>
+              <span className="text-xs text-gray-500">
+                Total: {bossTotalStats}
+              </span>
             </div>
             <div className="flex gap-2">
               {[
-                { label: "STR", value: team.bossData.stats.str, color: "text-red-400" },
-                { label: "SPD", value: team.bossData.stats.spd, color: "text-yellow-400" },
-                { label: "DUR", value: team.bossData.stats.dur, color: "text-blue-400" },
-                { label: "IQ", value: team.bossData.stats.iq, color: "text-purple-400" },
-                { label: "BIQ", value: team.bossData.stats.biq, color: "text-pink-400" },
-                { label: "MA", value: team.bossData.stats.ma, color: "text-orange-400" },
+                {
+                  label: "STR",
+                  value: team.bossData.stats.str,
+                  color: "text-red-400",
+                },
+                {
+                  label: "SPD",
+                  value: team.bossData.stats.spd,
+                  color: "text-yellow-400",
+                },
+                {
+                  label: "DUR",
+                  value: team.bossData.stats.dur,
+                  color: "text-blue-400",
+                },
+                {
+                  label: "IQ",
+                  value: team.bossData.stats.iq,
+                  color: "text-purple-400",
+                },
+                {
+                  label: "BIQ",
+                  value: team.bossData.stats.biq,
+                  color: "text-pink-400",
+                },
+                {
+                  label: "MA",
+                  value: team.bossData.stats.ma,
+                  color: "text-orange-400",
+                },
               ].map((stat) => (
                 <div key={stat.label} className="flex-1 text-center">
-                  <div className={`${stat.color} text-[10px] font-medium opacity-70`}>{stat.label}</div>
-                  <div className="text-white font-bold">{stat.value ?? "?"}</div>
+                  <div
+                    className={`${stat.color} text-[10px] font-medium opacity-70`}
+                  >
+                    {stat.label}
+                  </div>
+                  <div className="text-white font-bold">
+                    {stat.value ?? "?"}
+                  </div>
                 </div>
               ))}
             </div>
@@ -2197,16 +2744,22 @@ const TeamBattleCard = ({
             <div className="bg-green-500/10 rounded-lg p-3 border border-green-500/20">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-green-400">&#10003;</span>
-                <span className="text-green-400 text-xs font-semibold">THANG</span>
+                <span className="text-green-400 text-xs font-semibold">
+                  THANG
+                </span>
               </div>
-              <p className="text-green-300/90 text-sm leading-relaxed">{team.bossData.reward}</p>
+              <p className="text-green-300/90 text-sm leading-relaxed">
+                {team.bossData.reward}
+              </p>
             </div>
             <div className="bg-red-500/10 rounded-lg p-3 border border-red-500/20">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-red-400">&#10007;</span>
                 <span className="text-red-400 text-xs font-semibold">THUA</span>
               </div>
-              <p className="text-red-300/90 text-sm leading-relaxed">{team.bossData.punishment}</p>
+              <p className="text-red-300/90 text-sm leading-relaxed">
+                {team.bossData.punishment}
+              </p>
             </div>
           </div>
         )}
@@ -2214,13 +2767,15 @@ const TeamBattleCard = ({
         {/* Team Members */}
         <div>
           <h4 className="text-sm font-semibold text-gray-400 mb-3 flex items-center gap-2">
-            <span>&#9733;</span> Thanh vien ({team.members.length}/{MAX_TEAM_MEMBERS})
+            <span>&#9733;</span> Thanh vien ({team.members.length}/
+            {MAX_TEAM_MEMBERS})
           </h4>
           <div className="grid grid-cols-2 gap-2">
             {/* Filled slots */}
             {team.members.map((member, idx) => {
               const playerData = team.memberData.find(
-                (p) => p.username.toLowerCase() === member.username.toLowerCase()
+                (p) =>
+                  p.username.toLowerCase() === member.username.toLowerCase(),
               );
               return (
                 <div
@@ -2232,27 +2787,35 @@ const TeamBattleCard = ({
                     {playerData ? playerData.no : "?"}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-white text-sm font-medium truncate">{member.name}</div>
-                    <div className="text-gray-500 text-xs truncate">@{member.username}</div>
+                    <div className="text-white text-sm font-medium truncate">
+                      {member.name}
+                    </div>
+                    <div className="text-gray-500 text-xs truncate">
+                      @{member.username}
+                    </div>
                   </div>
                   {playerData && (
-                    <div className="text-teal-400 text-xs font-bold">{getTotalStats(playerData.stats)}</div>
+                    <div className="text-teal-400 text-xs font-bold">
+                      {getTotalStats(playerData.stats)}
+                    </div>
                   )}
                 </div>
               );
             })}
             {/* Empty slots */}
-            {Array.from({ length: MAX_TEAM_MEMBERS - team.members.length }).map((_, idx) => (
-              <div
-                key={`empty-${idx}`}
-                className="flex items-center gap-3 bg-gray-800/30 rounded-lg px-3 py-2 border border-dashed border-gray-700"
-              >
-                <div className="w-8 h-8 rounded-lg bg-gray-700/30 flex items-center justify-center text-gray-600 text-xs">
-                  +
+            {Array.from({ length: MAX_TEAM_MEMBERS - team.members.length }).map(
+              (_, idx) => (
+                <div
+                  key={`empty-${idx}`}
+                  className="flex items-center gap-3 bg-gray-800/30 rounded-lg px-3 py-2 border border-dashed border-gray-700"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-gray-700/30 flex items-center justify-center text-gray-600 text-xs">
+                    +
+                  </div>
+                  <span className="text-gray-600 text-sm">Slot trong</span>
                 </div>
-                <span className="text-gray-600 text-sm">Slot trong</span>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         </div>
       </div>
@@ -2274,16 +2837,6 @@ const BossDetailModal = ({ boss, onClose }: BossDetailModalProps) => {
     (boss.stats.iq || 0) +
     (boss.stats.biq || 0) +
     (boss.stats.ma || 0);
-
-  // Battle rules for boss fights
-  const battleRules = [
-    "Moi thanh vien trong team roll d20 (xuc xac 20 mat)",
-    "Cong diem roll cua ca team lai",
-    "So sanh voi Boss (Boss cung roll d20)",
-    "Team thang neu tong diem >= Boss",
-    "Bonus +2 diem neu stat tuong ung cao hon Boss",
-    "Co the su dung skill/power dac biet trong tran",
-  ];
 
   return (
     <div
@@ -2312,12 +2865,36 @@ const BossDetailModal = ({ boss, onClose }: BossDetailModalProps) => {
         <div className="p-6">
           <h3 className="text-lg font-bold text-white mb-3">Stats</h3>
           <div className="grid grid-cols-6 gap-3 text-center mb-4">
-            <BossStatBadgeLarge label="STR" value={boss.stats.str} color="text-red-400" />
-            <BossStatBadgeLarge label="SPD" value={boss.stats.spd} color="text-yellow-400" />
-            <BossStatBadgeLarge label="DUR" value={boss.stats.dur} color="text-blue-400" />
-            <BossStatBadgeLarge label="IQ" value={boss.stats.iq} color="text-purple-400" />
-            <BossStatBadgeLarge label="BIQ" value={boss.stats.biq} color="text-pink-400" />
-            <BossStatBadgeLarge label="MA" value={boss.stats.ma} color="text-orange-400" />
+            <BossStatBadgeLarge
+              label="STR"
+              value={boss.stats.str}
+              color="text-red-400"
+            />
+            <BossStatBadgeLarge
+              label="SPD"
+              value={boss.stats.spd}
+              color="text-yellow-400"
+            />
+            <BossStatBadgeLarge
+              label="DUR"
+              value={boss.stats.dur}
+              color="text-blue-400"
+            />
+            <BossStatBadgeLarge
+              label="IQ"
+              value={boss.stats.iq}
+              color="text-purple-400"
+            />
+            <BossStatBadgeLarge
+              label="BIQ"
+              value={boss.stats.biq}
+              color="text-pink-400"
+            />
+            <BossStatBadgeLarge
+              label="MA"
+              value={boss.stats.ma}
+              color="text-orange-400"
+            />
           </div>
           <div className="text-center mb-6">
             <span className="text-gray-400">Total: </span>
@@ -2337,19 +2914,19 @@ const BossDetailModal = ({ boss, onClose }: BossDetailModalProps) => {
           </div>
 
           {/* Battle Rules */}
-          <div className="p-4 rounded-lg bg-purple-500/20 border border-purple-500/50">
-            <h4 className="text-purple-400 font-bold mb-3 flex items-center gap-2">
-              <span>&#9876;</span> Luat Dau Boss
-            </h4>
-            <ul className="space-y-2">
-              {battleRules.map((rule, idx) => (
-                <li key={idx} className="text-purple-300 text-sm flex items-start gap-2">
-                  <span className="text-purple-400 font-bold">{idx + 1}.</span>
-                  <span>{rule}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {boss.rules && boss.rules.length > 0 && (
+            <div className="mb-4 p-4 rounded-lg bg-purple-500/20 border border-purple-500/50">
+              <h4 className="text-purple-400 font-bold mb-2">⚔️ Battle Rules</h4>
+              <ul className="text-purple-300 text-sm space-y-1">
+                {boss.rules.map((rule, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <span className="text-purple-400">•</span>
+                    <span>{rule}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>
