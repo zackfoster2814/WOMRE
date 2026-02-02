@@ -5,63 +5,61 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
+Race: Merfolk
 Sub-race: 
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Gambler Bloodline
 ```
 ``` 
-0 Quirk:  
-+ 
+0 Quirk: (Không được quay) 
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:1 (Không được quay) 
+Spd:1 (Không được quay) 
+Dur:5 Cursed of 36k (Được quay) 
+IQ:0 ban đầu là 1 (Too Horny) (Không được quay)
+BIQ:5 Cursed of 36k (Được quay) 
+MA:1 Cursed of 36k (Được quay) 
 ```
 
 ```
 Houses: 
-+ 
++ Naga
 ```
 
 ```
-0 Gear: 
+0 Gear: (Không được quay) 
  + 0 Normal gear:
-  - 
+  -  
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon (Không được quay) 
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+0 Power:(Không được quay) 
 ```
 
 ```
-Char dev: 
-+ 
+Char dev: Too Horny (Được quay) 
 ```
 
 ```
-Team: 
+Team:22
 ```
 
 ```

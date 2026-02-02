@@ -5,66 +5,79 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Reincarnator (Nasume) -> ELf
+Sub-race: Star Elf
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Hero of the Emirate🍀
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Raumanian🍀(Hero of the Emirate🍀)
++ Charming (Lover: Đừng Nhờn với Two Fingers, tặng: "")
++ Dextrous
++ Shining Brightly
++ Artistic (Từ Fingerthing)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:4 ban đầu là 7 (Fate's Trick)
+Spd:4
+Dur:4
+IQ:5
+BIQ:4
+MA:6
 ```
 
 ```
 Houses: 
-+ 
++ Lannister
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Academie Ring (Từ House)
+  - Xương Sống Lưỡi (Từ House)
+  - Golden Coinx3 (Từ House)
+  - Fingerthing
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+1 Power:  
++ Railroad Realm 🍀 (Hero of the Emirate🍀)
++ U=ma2 (Từ Lover: Đừng Nhờn với Two Fingers)
++ Burning Hand (Từ Sub-race)
++ The Coast is Clear!
 ```
 
 ```
 Char dev: 
-+ 
++ Transmute: Chaos
++ Fate's Trick (Chia đôi Str) (Transmute: Chaos)
++ Mad Scientist (Transmute: Chaos)
 ```
 
 ```
-Team: 
+Team:9
 ```
 
 ```
 Lover:
-+ 
++ Đừng Nhờn với Two Fingers
 ```

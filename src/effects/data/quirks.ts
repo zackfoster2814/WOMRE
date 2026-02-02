@@ -269,10 +269,31 @@ export function registerAllQuirkEffects() {
     .register();
 
   // Pure
+  // Effect (1): +1 all stats khi còn trinh (không có lover)
+  // Effect (2): Khi mất trinh (có lover), loại bỏ (1) và -1 all stats
+  // => Còn trinh: +1 all | Mất trinh: -1 all
   defineEffect('quirk', 'Pure')
-    .description('+1 all stats, 25% nhận "Đai Trinh Tiết". Khi mất trinh: -1 all stats.')
+    .description('+1 all stats, 25% nhận "Đai Trinh Tiết". Khi mất trinh (có Lover): -1 all stats.')
     .weight(2.38)
-    .addAllStats(1)
+    // Còn trinh (không có lover): +1 all stats
+    .effect({
+      type: 'stat_modifier',
+      stat: 'all',
+      value: 1,
+      timing: 'immediate',
+      target: 'self',
+      conditions: [{ type: 'has_lover', negate: true }]
+    })
+    // Mất trinh (có lover): -1 all stats
+    .effect({
+      type: 'stat_modifier',
+      stat: 'all',
+      value: -1,
+      timing: 'immediate',
+      target: 'self',
+      conditions: [{ type: 'has_lover' }]
+    })
+    // 25% chance grant gear (chỉ define, cần xử lý riêng khi spin)
     .effect({
       type: 'grant_gear',
       grantType: 'gear',
@@ -281,14 +302,6 @@ export function registerAllQuirkEffects() {
       timing: 'immediate',
       target: 'self',
       conditions: [{ type: 'probability', chance: 25 }]
-    })
-    .effect({
-      type: 'stat_modifier',
-      stat: 'all',
-      value: -2, // -1 (remove bonus) -1 (penalty) = -2 total change
-      timing: 'immediate',
-      target: 'self',
-      customHandler: 'pure_virginity_lost'
     })
     .register();
 

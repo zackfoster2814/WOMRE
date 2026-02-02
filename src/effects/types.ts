@@ -136,6 +136,8 @@ export type ConditionType =
   | 'always'                  // Luôn kích hoạt
   | 'stat_compare'            // So sánh stat
   | 'has_item'                // Có item
+  | 'has_char_dev'            // Có char dev
+  | 'has_lover'               // Có lover (dùng để check mất trinh)
   | 'race_match'              // Match race
   | 'race_tier_compare'       // So sánh tier race
   | 'bracket'                 // Đang ở nhánh nào
@@ -179,6 +181,9 @@ export interface Condition {
   // For opponent_has
   opponentItemType?: string;
   opponentItemName?: string;
+
+  // For has_char_dev
+  charDev?: string;
 
   // Negate condition
   negate?: boolean;

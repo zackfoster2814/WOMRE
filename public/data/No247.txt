@@ -5,63 +5,64 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Goblin
+Sub-race: 10000
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Gambler Bloodline
 ```
 ``` 
-0 Quirk:  
-+ 
+0 Quirk: (Không được quay) 
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:4 Cursed of 36k (Được quay) 
+Spd:1 (Không được quay) 
+Dur:0 Cursed of 36k (Được quay) 
+IQ:1 (Không được quay) 
+BIQ:1 (Không được quay) 
+MA:1 (Không được quay) 
 ```
 
 ```
 Houses: 
-+ 
++ Targaryen (Được quay) 
 ```
 
 ```
-0 Gear: 
+0 Gear: (Không được quay)
  + 0 Normal gear:
+  - 
   - 
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon (Không được quay)
 + 
 ```
 
 ``` 
-0 Rune: 
+1 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
+0 Power:  (Không được quay)
 + 
-```
-
-```
-Char dev: 
 + 
 ```
 
 ```
-Team: 
+Char dev: (Không được quay)
+```
+
+```
+Team:32
 ```
 
 ```

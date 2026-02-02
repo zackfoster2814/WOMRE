@@ -5,63 +5,71 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Goblin
+Sub-race: 5000
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Egoist
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Shining Brightly
++ Bloodthirsty
++ Lazy
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:0 Cursed of 36k
+Spd:5 Cursed of 36k
+Dur:2 Cursed of 36k
+IQ:1 Cursed of 36k
+BIQ:5 Cursed of 36k
+MA:2 Cursed of 36k
 ```
 
 ```
 Houses: 
-+ 
++ The Shire
+ -> +4 Str
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear: 
+  - Shot Glass
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Broken Straight Sword (Không dùng được) (Đã mất)
 ```
 
 ``` 
-0 Rune: 
+1 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+3 Power:  
++ Luck Manipulation
++ Gaze of the Abyss
++ Invulnerability
++ Fist Fighting (Từ No more Family)
++ Chaos Enchantment (Từ No more Family)
 ```
 
 ```
 Char dev: 
-+ 
++ No more Family
 ```
 
 ```
-Team: 
+Team:20
 ```
 
 ```

@@ -5,63 +5,69 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Troll
+Sub-race: Troll thường
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Người Trong Ban Nhạc (Không có)
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Impatient (+1IQ +1MA)
++ Training Restricted
++ Fit (Từ Baguette)
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:4 Cursed of 36k
+Spd:2 Cursed of 36k
+Dur:9 Cursed of 36k
+IQ:2 Cursed of 36k
+BIQ:8 Cursed of 36k
+MA:5 Cursed of 36k
 ```
 
 ```
 Houses: 
-+ 
++ Ban Nhạc Ngọt Đoàn Kết
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Ớt (Từ House)
+  - Ancient Protector
+  - Baguette 
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
+0 Power:  
++ 
 + 
 ```
 
 ```
 Char dev: 
-+ 
++ Don't say it
 ```
 
 ```
-Team: 
+Team:
 ```
 
 ```

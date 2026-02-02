@@ -581,7 +581,8 @@ export class EffectResolver {
    */
   static checkImmediateConditions(
     conditions: Condition[] | undefined,
-    baseStats: CharacterStats
+    baseStats: CharacterStats,
+    character?: Character
   ): boolean {
     if (!conditions || conditions.length === 0) return true;
 
@@ -614,6 +615,28 @@ export class EffectResolver {
           }
           break;
 
+        case 'has_char_dev':
+          // Check if character has a specific char dev
+          if (character && condition.charDev) {
+            const hasCharDev = character.charDevs?.some(
+              cd => !cd.isLost && cd.name.toLowerCase().includes(condition.charDev!.toLowerCase())
+            ) || false;
+            result = hasCharDev;
+          } else {
+            // No character context, default to false (condition not met)
+            result = false;
+          }
+          break;
+
+        case 'has_lover':
+          // Check if character has a lover (used to determine virginity loss)
+          if (character) {
+            result = !!character.lover && character.lover.trim() !== '';
+          } else {
+            result = false;
+          }
+          break;
+
         default:
           // Other condition types need combat context, skip for immediate
           result = true;
@@ -634,11 +657,13 @@ export class EffectResolver {
    * @param sources - Effect sources to process
    * @param baseStats - Base character stats
    * @param context - Optional combat context for PvE/PvP timing checks
+   * @param character - Optional character for condition checks (e.g., has_char_dev)
    */
   static resolveImmediateEffects(
     sources: EffectSource[],
     baseStats: CharacterStats,
-    context?: { isPvE?: boolean }
+    context?: { isPvE?: boolean },
+    character?: Character
   ): CharacterEffects {
     const result: CharacterEffects = {
       statModifiers: [],
@@ -697,7 +722,7 @@ export class EffectResolver {
         }
 
         // Check conditions for immediate effects (use ORIGINAL baseStats for Giant-like effects)
-        if (!this.checkImmediateConditions(effect.conditions, baseStats)) {
+        if (!this.checkImmediateConditions(effect.conditions, baseStats, character)) {
           continue; // Skip this effect if conditions not met
         }
 
@@ -873,7 +898,7 @@ export class EffectResolver {
   ): CharacterEffects {
     const sources = this.gatherEffectSources(character);
     const baseStats = convertStats(character.stats);
-    return this.resolveImmediateEffects(sources, baseStats, context);
+    return this.resolveImmediateEffects(sources, baseStats, context, character);
   }
 
   /**
@@ -938,7 +963,7 @@ export class EffectResolver {
       for (const effect of source.effects) {
         if (effect.type === 'stat_modifier' && effect.timing === 'immediate' && effect.value !== undefined) {
           // Check conditions before including in breakdown
-          if (!this.checkImmediateConditions(effect.conditions, baseStats)) {
+          if (!this.checkImmediateConditions(effect.conditions, baseStats, character)) {
             continue; // Skip effects that don't meet conditions
           }
 

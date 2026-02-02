@@ -5,66 +5,73 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Skeleton
+Sub-race: God
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Summoner
 ```
 ``` 
-0 Quirk:  
-+ 
+3 Quirk:  
++ Cautious
++ Herbalist
++ Cheater
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:8 Cursed of 36k
+Spd:9 Cursed of 36k
+Dur:6 Cursed of 36k
+IQ:1 (Cố định)
+BIQ:3 Cursed of 36k
+MA:4 Cursed of 36k
 ```
 
 ```
 Houses: 
-+ 
++ Winterhome
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+2 Gear: 
+ + 2 Normal gear:
+  - Thuốc Tráng Dương (Từ House)
+  - Bò Khô (Từ House)
+  - Đai Trinh Tiết
+  - Lover's Glover (Lover: kinbum)
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Ukulele (Dùng được)
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Power Negation
++ Mind Control
 ```
 
 ```
 Char dev: 
-+ 
++ Old Age
 ```
 
 ```
-Team: 
+Team:14
 ```
 
 ```
 Lover:
-+ 
++ kinbum
 ```

@@ -5,34 +5,34 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Werebeast
+Sub-race: Wereseal
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Gambler Bloodline
 ```
 ``` 
-0 Quirk:  
-+ 
+0 Quirk: (Không được quay) 
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
-```
-
-```
-Houses: 
-+ 
+Str:4 Cursed of 36k (Được quay) 
+Spd:1 (Không được quay) 
+Dur:1 (Không được quay) 
+IQ:1 (Không được quay) 
+BIQ:1 (Không được quay) 
+MA:1 (Không được quay) 
 ```
 
 ```
-0 Gear: 
+Houses:
++ (Không được quay)
+```
+
+```
+0 Gear:(Không được quay)
  + 0 Normal gear:
   - 
  + 0 Legacy gear:
@@ -40,28 +40,28 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
+0 Weapon (Không được quay)
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: (Được quay)
++ Guidance
++ Fist Fighting
 ```
 
 ```
-Char dev: 
-+ 
+Char dev: Lost an Arm (Được quay)
 ```
 
 ```
-Team: 
+Team: 29 (Được quay)
 ```
 
 ```

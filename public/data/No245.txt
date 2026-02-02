@@ -5,63 +5,65 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Dragon
+Sub-race: Thunder Dragon
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Herald
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Athletic
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str:6 Cursed of 36k
+Spd:5 (Ban đầu là 2,+3 từ Herald) Cursed of 36k
+Dur:7 Cursed of 36k
+IQ:7 Cursed of 36k
+BIQ:2 Cursed of 36k
+MA:0 Cursed of 36k
 ```
 
 ```
 Houses: 
-+ 
++ Tyrell
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Healing Flasks
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
 ``` 
 0 Rune: 
 + 
-Runeword: Không
+Runeword: 
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Bash
++ Lightning Enchant
 ```
 
 ```
 Char dev: 
-+ 
++ Pessimistic
 ```
 
 ```
-Team: 
+Team:20
 ```
 
 ```
