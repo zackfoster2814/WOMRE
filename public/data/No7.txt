@@ -2,7 +2,8 @@ No.7
 Name: Hero X (enatc0)
 ```
 Ký Sinh:
-+ Diablo
++ Loại: Diablo
++ Parasite: Munchlax (mitxitieu005)
 ```
 ```
 Race: Elf

@@ -5,36 +5,39 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Elf
+Sub-race: Star Elf 
 ```
 
 ```
 Archetype: 
-+ 
++ Người trong ban nhạc (không có vòng quay nhạc cụ)
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Brave 
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 9 ban đầu là 2 (Inversion)
+Spd: 9 ban đầu là 2 (Inversion)
+Dur: 9 ban đầu là 2 (Inversion)
+IQ: 3 ban đầu là 8 (Inversion)
+BIQ: 4 ban đầu là 7 (Inversion)
+MA: 10 ban đầu là 1 (Inversion)
 ```
 
 ```
 Houses: 
-+ 
++ Ban Nhạc Ngọt Đoàn Kết
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+3 Gear: 
+ + 3 Normal gear:
+  - Thuốc tráng dương
+  - Đai trinh tiết
+  - Wizard hat
+  - Kẹo (Người trong ban nhạc)
  + 0 Legacy gear:
   - 
 ```
@@ -51,17 +54,19 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Invulnerability
++ Rising tide
++ Magma Strike (Star Elf)
 ```
 
 ```
 Char dev: 
-+ 
++ Inversion
 ```
 
 ```
-Team: 
+Team: 3
 ```
 
 ```

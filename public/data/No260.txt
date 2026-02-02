@@ -5,30 +5,34 @@ Ký Sinh:
 +
 ```
 ```
-Race:
-Sub-race:
+Race: Uma
+Sub-race: Oguri Cap + Special Weak (nhận Gourmand)
 ```
 
 ```
 Archetype:
-+
++ Hero of the Emirate🍀 
 ```
 ```
-0 Quirk:
-+
+1 Quirk:
++ Shining Brightly
++ Raumanian🍀 (Từ Archetype)
 ```
 ```
-Str:
-Spd:
-Dur:
-IQ:
-BIQ:
-MA:
+Str: 5
+Spd: 6
+Dur: 5
+IQ: 9
+BIQ: 8
+MA: 6
 ```
 
 ```
 Houses: 
-+ 
++ Tracen Academy
+ -> +1 str
+ -> +1 spd
+ -> +2 dura
 ```
 
 ```
@@ -41,27 +45,30 @@ Houses:
 
 ```
 0 Normal Weapon
-+
++ Drums (Dùng được) (từ Creator's Favor)
 ```
 
 ```
-0 Rune:
-+
+1 Rune:
++ Tir 
 Runeword: Không
 ```
 
 ```
-0 Power:
-+
+2 Power:
++ Mystifying Murmur
++ The Goat
++ Gourmand (từ Special Weak)
++ Railroad Realm 🍀(Từ Archetype)
 ```
 
 ```
 Char dev:
-+
++ Creator's Favor 
 ```
 
 ```
-Team:
+Team: 29
 ```
 
 ```

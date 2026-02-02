@@ -5,36 +5,38 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Goblin
+Sub-race: 1000
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Stargazer 
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Fast Learner
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 1 (Cursed of 36k)
+Spd: 5 (Cursed of 36k)
+Dur: 6 (Cursed of 36k)
+IQ: 4 (Cursed of 36k)
+BIQ: 6 (Cursed of 36k)
+MA: 2 (Cursed of 36k)
 ```
 
 ```
 Houses: 
-+ 
++ Winterhome
 ```
 
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Cursed Charm
+  - Magical Scroll
  + 0 Legacy gear:
   - 
 ```
@@ -51,17 +53,21 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+3 Power: 
++ Rampage
++ Dominator
++ Sonic Scream
++ Memory Alter
++ Spell Flux (từ Stargazer)
 ```
 
 ```
 Char dev: 
-+ 
++ Depression
 ```
 
 ```
-Team: 
+Team: 14
 ```
 
 ```

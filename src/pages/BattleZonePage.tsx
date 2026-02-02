@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { BattleType } from "../types";
 import { CharacterStats } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
@@ -93,9 +93,7 @@ export const BattleZonePage = () => {
             <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-orange-400 to-yellow-400 mb-4">
               Battle Zone
             </h1>
-            <p className="text-gray-300 text-lg">
-              Choose your battle type
-            </p>
+            <p className="text-gray-300 text-lg">Choose your battle type</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -198,9 +196,7 @@ const PvPBattlePage = ({ onBack }: PvPBattlePageProps) => {
                 <h2 className="text-3xl font-bold text-white mb-2">
                   Wheel of Truth
                 </h2>
-                <p className="text-gray-400">
-                  Spin the wheel based on stats
-                </p>
+                <p className="text-gray-400">Spin the wheel based on stats</p>
               </div>
             </button>
           </div>
@@ -210,9 +206,7 @@ const PvPBattlePage = ({ onBack }: PvPBattlePageProps) => {
   }
 
   if (selectedMode === "stats-comparison") {
-    return (
-      <StatsComparisonMode onBack={() => setSelectedMode(null)} />
-    );
+    return <StatsComparisonMode onBack={() => setSelectedMode(null)} />;
   }
 
   return <WheelOfTruthMode onBack={() => setSelectedMode(null)} />;
@@ -224,28 +218,28 @@ interface BattleModeProps {
 
 // Race tier for tie-breaker (lower tier number = stronger race, wins tie)
 const RACE_TIERS: Record<string, number> = {
-  'God': 1,
-  'Demon': 2,
-  'Primordial Being': 3,
-  'Demi-God': 4,
-  'Angel': 5,
-  'Reincarnator': 6,
-  'Dragon': 7,
-  'Giant': 8,
-  'Vampire': 9,
-  'Werebeast': 10,
-  'Uma': 11,
-  'Spirit': 12,
-  'Elf': 13,
-  'Dryad': 14,
-  'Merfolk': 15,
-  'Orc': 16,
-  'Troll': 17,
-  'Skeleton': 18,
-  'Dwarf': 19,
-  'Human': 20,
-  'Gnome': 21,
-  'Goblin': 22,
+  God: 1,
+  Demon: 2,
+  "Primordial Being": 3,
+  "Demi-God": 4,
+  Angel: 5,
+  Reincarnator: 6,
+  Dragon: 7,
+  Giant: 8,
+  Vampire: 9,
+  Werebeast: 10,
+  Uma: 11,
+  Spirit: 12,
+  Elf: 13,
+  Dryad: 14,
+  Merfolk: 15,
+  Orc: 16,
+  Troll: 17,
+  Skeleton: 18,
+  Dwarf: 19,
+  Human: 20,
+  Gnome: 21,
+  Goblin: 22,
 };
 
 // PvP Player data with calculated stats
@@ -264,7 +258,7 @@ interface RoundResult {
   statLabel: string;
   player1Value: number;
   player2Value: number;
-  winner: 'player1' | 'player2' | 'tie';
+  winner: "player1" | "player2" | "tie";
 }
 
 // Combat result
@@ -272,24 +266,24 @@ interface CombatResult {
   rounds: RoundResult[];
   player1Score: number;
   player2Score: number;
-  winner: 'player1' | 'player2';
-  tieBreaker?: 'race' | null;
+  winner: "player1" | "player2";
+  tieBreaker?: "race" | null;
 }
 
 const STAT_ORDER: { key: keyof CharacterStats; label: string }[] = [
-  { key: 'str', label: 'STR' },
-  { key: 'spd', label: 'SPD' },
-  { key: 'dur', label: 'DUR' },
-  { key: 'iq', label: 'IQ' },
-  { key: 'biq', label: 'BIQ' },
-  { key: 'ma', label: 'MA' },
+  { key: "str", label: "STR" },
+  { key: "spd", label: "SPD" },
+  { key: "dur", label: "DUR" },
+  { key: "iq", label: "IQ" },
+  { key: "biq", label: "BIQ" },
+  { key: "ma", label: "MA" },
 ];
 
 const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
   const [allPlayers, setAllPlayers] = useState<PvPPlayerData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm1, setSearchTerm1] = useState('');
-  const [searchTerm2, setSearchTerm2] = useState('');
+  const [searchTerm1, setSearchTerm1] = useState("");
+  const [searchTerm2, setSearchTerm2] = useState("");
   const [player1, setPlayer1] = useState<PvPPlayerData | null>(null);
   const [player2, setPlayer2] = useState<PvPPlayerData | null>(null);
   const [combatResult, setCombatResult] = useState<CombatResult | null>(null);
@@ -313,7 +307,10 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                   const char = CharacterParser.parseCharacterFile(content);
 
                   // Calculate stats with PvP context (isPvE: false)
-                  const effects = EffectResolver.calculateCharacterEffects(char, { isPvE: false });
+                  const effects = EffectResolver.calculateCharacterEffects(
+                    char,
+                    { isPvE: false },
+                  );
                   const pvpStats: CharacterStats = {
                     str: effects.totalStats.strength,
                     spd: effects.totalStats.speed,
@@ -323,18 +320,18 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                     ma: effects.totalStats.ma,
                   };
 
-                  const race = char.race?.race || 'Human';
+                  const race = char.race?.race || "Human";
                   playerList.push({
                     no: char.no || i,
                     name: char.name || `Player ${i}`,
-                    username: char.username || '',
+                    username: char.username || "",
                     race,
                     raceTier: RACE_TIERS[race] || 0,
                     stats: pvpStats,
                   });
                 }
               })
-              .catch(() => {})
+              .catch(() => {}),
           );
         }
 
@@ -343,7 +340,7 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
         playerList.sort((a, b) => a.no - b.no);
         setAllPlayers(playerList);
       } catch (error) {
-        console.error('Error loading players:', error);
+        console.error("Error loading players:", error);
       } finally {
         setLoading(false);
       }
@@ -356,23 +353,27 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
   const filteredPlayers1 = useMemo(() => {
     if (!searchTerm1) return [];
     const term = searchTerm1.toLowerCase();
-    return allPlayers.filter(
-      (p) =>
-        p.name.toLowerCase().includes(term) ||
-        p.username.toLowerCase().includes(term) ||
-        p.no.toString().includes(term)
-    ).slice(0, 10);
+    return allPlayers
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(term) ||
+          p.username.toLowerCase().includes(term) ||
+          p.no.toString().includes(term),
+      )
+      .slice(0, 10);
   }, [allPlayers, searchTerm1]);
 
   const filteredPlayers2 = useMemo(() => {
     if (!searchTerm2) return [];
     const term = searchTerm2.toLowerCase();
-    return allPlayers.filter(
-      (p) =>
-        p.name.toLowerCase().includes(term) ||
-        p.username.toLowerCase().includes(term) ||
-        p.no.toString().includes(term)
-    ).slice(0, 10);
+    return allPlayers
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(term) ||
+          p.username.toLowerCase().includes(term) ||
+          p.no.toString().includes(term),
+      )
+      .slice(0, 10);
   }, [allPlayers, searchTerm2]);
 
   // Run combat simulation
@@ -392,15 +393,15 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
       const p1Value = player1.stats[key];
       const p2Value = player2.stats[key];
 
-      let winner: 'player1' | 'player2' | 'tie';
+      let winner: "player1" | "player2" | "tie";
       if (p1Value > p2Value) {
-        winner = 'player1';
+        winner = "player1";
         p1Score++;
       } else if (p2Value > p1Value) {
-        winner = 'player2';
+        winner = "player2";
         p2Score++;
       } else {
-        winner = 'tie';
+        winner = "tie";
         // No points for tie
       }
 
@@ -414,20 +415,20 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
     }
 
     // Determine overall winner
-    let overallWinner: 'player1' | 'player2';
-    let tieBreaker: 'race' | null = null;
+    let overallWinner: "player1" | "player2";
+    let tieBreaker: "race" | null = null;
 
     if (p1Score > p2Score) {
-      overallWinner = 'player1';
+      overallWinner = "player1";
     } else if (p2Score > p1Score) {
-      overallWinner = 'player2';
+      overallWinner = "player2";
     } else {
       // Tie-breaker: LOWER race tier wins (tier 1 = strongest, tier 22 = weakest)
-      tieBreaker = 'race';
+      tieBreaker = "race";
       if (player1.raceTier < player2.raceTier) {
-        overallWinner = 'player1';
+        overallWinner = "player1";
       } else {
-        overallWinner = 'player2';
+        overallWinner = "player2";
       }
     }
 
@@ -478,9 +479,9 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
         className="min-h-screen flex items-center justify-center"
         style={{
           backgroundImage: `url(${wheelBgImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
         }}
       >
         <div className="text-white text-2xl">Loading players...</div>
@@ -493,9 +494,9 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
       className="min-h-screen py-4 px-4"
       style={{
         backgroundImage: `url(${wheelBgImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
       }}
     >
       <div className="max-w-6xl mx-auto">
@@ -555,8 +556,12 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
               <div className="mt-4">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <span className="text-blue-400 font-bold">#{player1.no}</span>
-                    <span className="text-white font-medium ml-2">{player1.name}</span>
+                    <span className="text-blue-400 font-bold">
+                      #{player1.no}
+                    </span>
+                    <span className="text-white font-medium ml-2">
+                      {player1.name}
+                    </span>
                   </div>
                   <span className="px-2 py-1 bg-blue-600/30 rounded text-blue-300 text-sm">
                     {player1.race} (Tier {player1.raceTier})
@@ -564,9 +569,14 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                 </div>
                 <div className="grid grid-cols-6 gap-2">
                   {STAT_ORDER.map(({ key, label }) => (
-                    <div key={key} className="text-center bg-gray-700/50 rounded p-2">
+                    <div
+                      key={key}
+                      className="text-center bg-gray-700/50 rounded p-2"
+                    >
                       <div className="text-gray-400 text-xs">{label}</div>
-                      <div className="text-white font-bold">{player1.stats[key]}</div>
+                      <div className="text-white font-bold">
+                        {player1.stats[key]}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -575,7 +585,10 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
           </div>
 
           {/* VS Badge & Swap Button */}
-          <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center justify-center" style={{ top: '280px' }}>
+          <div
+            className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center justify-center"
+            style={{ top: "280px" }}
+          >
             <button
               onClick={swapPlayers}
               disabled={!player1 || !player2 || isAnimating}
@@ -629,8 +642,12 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
               <div className="mt-4">
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <span className="text-red-400 font-bold">#{player2.no}</span>
-                    <span className="text-white font-medium ml-2">{player2.name}</span>
+                    <span className="text-red-400 font-bold">
+                      #{player2.no}
+                    </span>
+                    <span className="text-white font-medium ml-2">
+                      {player2.name}
+                    </span>
                   </div>
                   <span className="px-2 py-1 bg-red-600/30 rounded text-red-300 text-sm">
                     {player2.race} (Tier {player2.raceTier})
@@ -638,9 +655,14 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                 </div>
                 <div className="grid grid-cols-6 gap-2">
                   {STAT_ORDER.map(({ key, label }) => (
-                    <div key={key} className="text-center bg-gray-700/50 rounded p-2">
+                    <div
+                      key={key}
+                      className="text-center bg-gray-700/50 rounded p-2"
+                    >
                       <div className="text-gray-400 text-xs">{label}</div>
-                      <div className="text-white font-bold">{player2.stats[key]}</div>
+                      <div className="text-white font-bold">
+                        {player2.stats[key]}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -668,7 +690,7 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
               disabled={isAnimating}
               className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-50 rounded-xl text-white font-bold text-xl transition-all transform hover:scale-105 shadow-lg"
             >
-              {isAnimating ? 'Fighting...' : '⚔️ START BATTLE ⚔️'}
+              {isAnimating ? "Fighting..." : "⚔️ START BATTLE ⚔️"}
             </button>
           </div>
         )}
@@ -691,12 +713,12 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                     key={key}
                     className={`grid grid-cols-3 gap-4 items-center p-3 rounded-lg transition-all duration-300 ${
                       isRevealed
-                        ? round?.winner === 'player1'
-                          ? 'bg-blue-900/30 border border-blue-500/50'
-                          : round?.winner === 'player2'
-                          ? 'bg-red-900/30 border border-red-500/50'
-                          : 'bg-gray-800/50 border border-gray-600'
-                        : 'bg-gray-800/30 border border-gray-700'
+                        ? round?.winner === "player1"
+                          ? "bg-blue-900/30 border border-blue-500/50"
+                          : round?.winner === "player2"
+                            ? "bg-red-900/30 border border-red-500/50"
+                            : "bg-gray-800/50 border border-gray-600"
+                        : "bg-gray-800/30 border border-gray-700"
                     }`}
                   >
                     {/* Player 1 Value */}
@@ -704,15 +726,15 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                       <span
                         className={`text-2xl font-bold ${
                           isRevealed
-                            ? round?.winner === 'player1'
-                              ? 'text-green-400'
-                              : round?.winner === 'tie'
-                              ? 'text-yellow-400'
-                              : 'text-gray-400'
-                            : 'text-gray-600'
+                            ? round?.winner === "player1"
+                              ? "text-green-400"
+                              : round?.winner === "tie"
+                                ? "text-yellow-400"
+                                : "text-gray-400"
+                            : "text-gray-600"
                         }`}
                       >
-                        {isRevealed ? player1.stats[key] : '?'}
+                        {isRevealed ? player1.stats[key] : "?"}
                       </span>
                     </div>
 
@@ -723,13 +745,13 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                       </span>
                       {isRevealed && (
                         <div className="text-xs mt-1">
-                          {round?.winner === 'player1' && (
+                          {round?.winner === "player1" && (
                             <span className="text-blue-400">← WIN</span>
                           )}
-                          {round?.winner === 'player2' && (
+                          {round?.winner === "player2" && (
                             <span className="text-red-400">WIN →</span>
                           )}
-                          {round?.winner === 'tie' && (
+                          {round?.winner === "tie" && (
                             <span className="text-yellow-400">TIE</span>
                           )}
                         </div>
@@ -741,15 +763,15 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                       <span
                         className={`text-2xl font-bold ${
                           isRevealed
-                            ? round?.winner === 'player2'
-                              ? 'text-green-400'
-                              : round?.winner === 'tie'
-                              ? 'text-yellow-400'
-                              : 'text-gray-400'
-                            : 'text-gray-600'
+                            ? round?.winner === "player2"
+                              ? "text-green-400"
+                              : round?.winner === "tie"
+                                ? "text-yellow-400"
+                                : "text-gray-400"
+                            : "text-gray-600"
                         }`}
                       >
-                        {isRevealed ? player2.stats[key] : '?'}
+                        {isRevealed ? player2.stats[key] : "?"}
                       </span>
                     </div>
                   </div>
@@ -778,16 +800,26 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
 
                 {combatResult.tieBreaker && (
                   <div className="text-yellow-400 text-sm mb-2">
-                    Tie-breaker: Race Tier ({combatResult.winner === 'player1' ? player1.race : player2.race} wins)
+                    Tie-breaker: Race Tier (
+                    {combatResult.winner === "player1"
+                      ? player1.race
+                      : player2.race}{" "}
+                    wins)
                   </div>
                 )}
 
                 <div
                   className={`text-3xl font-bold ${
-                    combatResult.winner === 'player1' ? 'text-blue-400' : 'text-red-400'
+                    combatResult.winner === "player1"
+                      ? "text-blue-400"
+                      : "text-red-400"
                   }`}
                 >
-                  🏆 {combatResult.winner === 'player1' ? player1.name : player2.name} WINS! 🏆
+                  🏆{" "}
+                  {combatResult.winner === "player1"
+                    ? player1.name
+                    : player2.name}{" "}
+                  WINS! 🏆
                 </div>
 
                 <button
@@ -804,9 +836,10 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
         {/* Rules Info */}
         <div className="bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-lg p-4 text-center">
           <p className="text-gray-400 text-sm">
-            <strong className="text-purple-400">Rules:</strong> Compare 6 stats (STR → SPD → DUR → IQ → BIQ → MA).
-            Higher stat wins the round. Equal stats = no points.
-            If tied 3-3, lower Race Tier wins (God T1 &gt; Goblin T22).
+            <strong className="text-purple-400">Rules:</strong> Compare 6 stats
+            (STR → SPD → DUR → IQ → BIQ → MA). Higher stat wins the round. Equal
+            stats = no points. If tied 3-3, lower Race Tier wins (God T1 &gt;
+            Goblin T22).
           </p>
         </div>
       </div>
@@ -814,7 +847,260 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
   );
 };
 
+// Wheel of Truth - PvP with spinning wheel
 const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
+  const [allPlayers, setAllPlayers] = useState<PvPPlayerData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm1, setSearchTerm1] = useState("");
+  const [searchTerm2, setSearchTerm2] = useState("");
+  const [player1, setPlayer1] = useState<PvPPlayerData | null>(null);
+  const [player2, setPlayer2] = useState<PvPPlayerData | null>(null);
+
+  // Battle state
+  const [battleState, setBattleState] = useState<
+    "idle" | "fighting" | "finished"
+  >("idle");
+  const [currentRound, setCurrentRound] = useState(0);
+  const [roundResults, setRoundResults] = useState<
+    Array<{
+      stat: string;
+      statLabel: string;
+      p1Value: number;
+      p2Value: number;
+      winner: "player1" | "player2";
+      wheelAngle: number;
+    }>
+  >([]);
+  const [p1Score, setP1Score] = useState(0);
+  const [p2Score, setP2Score] = useState(0);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [wheelRotation, setWheelRotation] = useState(0);
+  const [finalWinner, setFinalWinner] = useState<"player1" | "player2" | null>(
+    null,
+  );
+  const [tieBreaker, setTieBreaker] = useState<"race" | null>(null);
+
+  // Load all players
+  useEffect(() => {
+    const loadPlayers = async () => {
+      try {
+        ensureEffectsInitialized();
+        const playerList: PvPPlayerData[] = [];
+        const fetchPromises: Promise<void>[] = [];
+
+        for (let i = 1; i <= 260; i++) {
+          fetchPromises.push(
+            fetch(`/data/No${i}.txt`)
+              .then(async (response) => {
+                if (response.ok) {
+                  const content = await response.text();
+                  const char = CharacterParser.parseCharacterFile(content);
+                  const effects = EffectResolver.calculateCharacterEffects(
+                    char,
+                    { isPvE: false },
+                  );
+                  const pvpStats: CharacterStats = {
+                    str: effects.totalStats.strength,
+                    spd: effects.totalStats.speed,
+                    dur: effects.totalStats.durability,
+                    iq: effects.totalStats.iq,
+                    biq: effects.totalStats.biq,
+                    ma: effects.totalStats.ma,
+                  };
+                  const race = char.race?.race || "Human";
+                  playerList.push({
+                    no: char.no || i,
+                    name: char.name || `Player ${i}`,
+                    username: char.username || "",
+                    race,
+                    raceTier: RACE_TIERS[race] || 0,
+                    stats: pvpStats,
+                  });
+                }
+              })
+              .catch(() => {}),
+          );
+        }
+
+        await Promise.all(fetchPromises);
+        playerList.sort((a, b) => a.no - b.no);
+        setAllPlayers(playerList);
+      } catch (error) {
+        console.error("Error loading players:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPlayers();
+  }, []);
+
+  // Filter players for search
+  const filteredPlayers1 = useMemo(() => {
+    if (!searchTerm1) return [];
+    const term = searchTerm1.toLowerCase();
+    return allPlayers
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(term) ||
+          p.username.toLowerCase().includes(term) ||
+          p.no.toString().includes(term),
+      )
+      .slice(0, 10);
+  }, [allPlayers, searchTerm1]);
+
+  const filteredPlayers2 = useMemo(() => {
+    if (!searchTerm2) return [];
+    const term = searchTerm2.toLowerCase();
+    return allPlayers
+      .filter(
+        (p) =>
+          p.name.toLowerCase().includes(term) ||
+          p.username.toLowerCase().includes(term) ||
+          p.no.toString().includes(term),
+      )
+      .slice(0, 10);
+  }, [allPlayers, searchTerm2]);
+
+  // Spin wheel for current round
+  const spinWheel = useCallback(() => {
+    if (!player1 || !player2 || isSpinning || currentRound >= 6) return;
+
+    setIsSpinning(true);
+    const statInfo = STAT_ORDER[currentRound];
+    const p1Val = player1.stats[statInfo.key];
+    const p2Val = player2.stats[statInfo.key];
+
+    // Calculate win probability based on stats ratio
+    // Higher stat = more wheel area = higher chance to win
+    const total = p1Val + p2Val;
+    const p1Chance = total > 0 ? (p1Val / total) * 360 : 180; // degrees for player 1
+
+    // Random spin result
+    const spinRotations = 5 + Math.random() * 3; // 5-8 full rotations
+    const finalAngle = Math.random() * 360; // Where it lands
+    const totalRotation = spinRotations * 360 + finalAngle;
+
+    setWheelRotation((prev) => prev + totalRotation);
+
+    // Determine winner based on where wheel lands
+    // 0 to p1Chance degrees = player1 wins, rest = player2 wins
+    const winner: "player1" | "player2" =
+      finalAngle < p1Chance ? "player1" : "player2";
+
+    // After spin animation completes
+    setTimeout(() => {
+      setRoundResults((prev) => [
+        ...prev,
+        {
+          stat: statInfo.key,
+          statLabel: statInfo.label,
+          p1Value: p1Val,
+          p2Value: p2Val,
+          winner,
+          wheelAngle: finalAngle,
+        },
+      ]);
+
+      if (winner === "player1") {
+        setP1Score((prev) => prev + 1);
+      } else {
+        setP2Score((prev) => prev + 1);
+      }
+
+      setCurrentRound((prev) => prev + 1);
+      setIsSpinning(false);
+    }, 3000); // 3 second spin animation
+  }, [player1, player2, isSpinning, currentRound]);
+
+  // Check for battle end
+  useEffect(() => {
+    if (currentRound === 6 && battleState === "fighting") {
+      // Determine final winner
+      let winner: "player1" | "player2";
+      let usedTieBreaker: "race" | null = null;
+
+      if (p1Score > p2Score) {
+        winner = "player1";
+      } else if (p2Score > p1Score) {
+        winner = "player2";
+      } else {
+        // Tie-breaker: Lower race tier wins
+        usedTieBreaker = "race";
+        winner =
+          (player1?.raceTier || 99) < (player2?.raceTier || 99)
+            ? "player1"
+            : "player2";
+      }
+
+      setFinalWinner(winner);
+      setTieBreaker(usedTieBreaker);
+      setBattleState("finished");
+    }
+  }, [currentRound, battleState, p1Score, p2Score, player1, player2]);
+
+  // Start battle
+  const startBattle = () => {
+    if (!player1 || !player2) return;
+    setBattleState("fighting");
+    setCurrentRound(0);
+    setRoundResults([]);
+    setP1Score(0);
+    setP2Score(0);
+    setFinalWinner(null);
+    setTieBreaker(null);
+    setWheelRotation(0);
+  };
+
+  // Reset battle
+  const resetBattle = () => {
+    setBattleState("idle");
+    setCurrentRound(0);
+    setRoundResults([]);
+    setP1Score(0);
+    setP2Score(0);
+    setFinalWinner(null);
+    setTieBreaker(null);
+    setWheelRotation(0);
+  };
+
+  // Swap players
+  const swapPlayers = () => {
+    const temp = player1;
+    setPlayer1(player2);
+    setPlayer2(temp);
+    const tempSearch = searchTerm1;
+    setSearchTerm1(searchTerm2);
+    setSearchTerm2(tempSearch);
+    resetBattle();
+  };
+
+  // Get current stat info for wheel display
+  const currentStatInfo = currentRound < 6 ? STAT_ORDER[currentRound] : null;
+  const currentP1Val =
+    currentStatInfo && player1 ? player1.stats[currentStatInfo.key] : 0;
+  const currentP2Val =
+    currentStatInfo && player2 ? player2.stats[currentStatInfo.key] : 0;
+  const currentTotal = currentP1Val + currentP2Val;
+  const p1Percentage =
+    currentTotal > 0 ? (currentP1Val / currentTotal) * 100 : 50;
+
+  if (loading) {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{
+          backgroundImage: `url(${wheelBgImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <div className="text-white text-2xl">Loading players...</div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="min-h-screen py-4 px-4"
@@ -837,13 +1123,348 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
           Wheel of Truth
         </h1>
 
-        <div className="bg-gray-800/80 backdrop-blur-sm border border-gray-700 rounded-lg p-8 text-center">
-          <p className="text-gray-400 text-lg mb-4">
-            Wheel of Truth Mode - Under Development
-          </p>
-          <p className="text-gray-500 text-sm">
-            This feature will use a wheel to determine battle outcomes based on
-            player stats. Higher stats = better chance to win!
+        {/* Player Selection (show when idle) */}
+        {battleState === "idle" && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              {/* Player 1 Selection */}
+              <div className="bg-gray-800/90 backdrop-blur-sm border-2 border-blue-500/50 rounded-xl p-6">
+                <h2 className="text-xl font-bold text-blue-400 mb-4">
+                  Player 1
+                </h2>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search by name, username, or No..."
+                    value={searchTerm1}
+                    onChange={(e) => {
+                      setSearchTerm1(e.target.value);
+                      if (player1) setPlayer1(null);
+                    }}
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  {filteredPlayers1.length > 0 && !player1 && (
+                    <div className="absolute z-10 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                      {filteredPlayers1.map((p) => (
+                        <button
+                          key={p.no}
+                          onClick={() => {
+                            setPlayer1(p);
+                            setSearchTerm1(p.name);
+                          }}
+                          className="w-full px-4 py-2 text-left hover:bg-gray-700 text-white flex justify-between items-center"
+                        >
+                          <span>
+                            <span className="text-blue-400">#{p.no}</span>{" "}
+                            {p.name}
+                          </span>
+                          <span className="text-sm text-gray-400">
+                            {p.race}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {player1 && (
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <span className="text-blue-400 font-bold">
+                          #{player1.no}
+                        </span>
+                        <span className="text-white font-medium ml-2">
+                          {player1.name}
+                        </span>
+                      </div>
+                      <span className="px-2 py-1 bg-blue-600/30 rounded text-blue-300 text-sm">
+                        {player1.race}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-6 gap-2">
+                      {STAT_ORDER.map(({ key, label }) => (
+                        <div
+                          key={key}
+                          className="text-center bg-gray-700/50 rounded p-2"
+                        >
+                          <div className="text-gray-400 text-xs">{label}</div>
+                          <div className="text-white font-bold">
+                            {player1.stats[key]}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Player 2 Selection */}
+              <div className="bg-gray-800/90 backdrop-blur-sm border-2 border-red-500/50 rounded-xl p-6">
+                <h2 className="text-xl font-bold text-red-400 mb-4">
+                  Player 2
+                </h2>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search by name, username, or No..."
+                    value={searchTerm2}
+                    onChange={(e) => {
+                      setSearchTerm2(e.target.value);
+                      if (player2) setPlayer2(null);
+                    }}
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  />
+                  {filteredPlayers2.length > 0 && !player2 && (
+                    <div className="absolute z-10 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-60 overflow-y-auto">
+                      {filteredPlayers2.map((p) => (
+                        <button
+                          key={p.no}
+                          onClick={() => {
+                            setPlayer2(p);
+                            setSearchTerm2(p.name);
+                          }}
+                          className="w-full px-4 py-2 text-left hover:bg-gray-700 text-white flex justify-between items-center"
+                        >
+                          <span>
+                            <span className="text-red-400">#{p.no}</span>{" "}
+                            {p.name}
+                          </span>
+                          <span className="text-sm text-gray-400">
+                            {p.race}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {player2 && (
+                  <div className="mt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <span className="text-red-400 font-bold">
+                          #{player2.no}
+                        </span>
+                        <span className="text-white font-medium ml-2">
+                          {player2.name}
+                        </span>
+                      </div>
+                      <span className="px-2 py-1 bg-red-600/30 rounded text-red-300 text-sm">
+                        {player2.race}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-6 gap-2">
+                      {STAT_ORDER.map(({ key, label }) => (
+                        <div
+                          key={key}
+                          className="text-center bg-gray-700/50 rounded p-2"
+                        >
+                          <div className="text-gray-400 text-xs">{label}</div>
+                          <div className="text-white font-bold">
+                            {player2.stats[key]}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Swap & Start Buttons */}
+            <div className="flex justify-center gap-4 mb-8">
+              {player1 && player2 && (
+                <>
+                  <button
+                    onClick={swapPlayers}
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-white font-medium transition-all"
+                  >
+                    ⇄ Swap
+                  </button>
+                  <button
+                    onClick={startBattle}
+                    className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 rounded-xl text-white font-bold text-xl transition-all transform hover:scale-105 shadow-lg"
+                  >
+                    🎡 START WHEEL OF TRUTH 🎡
+                  </button>
+                </>
+              )}
+            </div>
+          </>
+        )}
+
+        {/* Battle Arena */}
+        {(battleState === "fighting" || battleState === "finished") &&
+          player1 &&
+          player2 && (
+            <div className="bg-gray-900/95 backdrop-blur-sm border-2 border-yellow-500/50 rounded-xl p-6">
+              {/* Score Header */}
+              <div className="flex justify-between items-center mb-6">
+                <div className="text-center flex-1">
+                  <div className="text-sm text-blue-400">{player1.name}</div>
+                  <div className="text-4xl font-bold text-blue-400">
+                    {p1Score}
+                  </div>
+                </div>
+                <div className="text-2xl text-gray-500 px-4">
+                  Round {Math.min(currentRound + 1, 6)} / 6
+                </div>
+                <div className="text-center flex-1">
+                  <div className="text-sm text-red-400">{player2.name}</div>
+                  <div className="text-4xl font-bold text-red-400">
+                    {p2Score}
+                  </div>
+                </div>
+              </div>
+
+              {/* Wheel Section */}
+              {battleState === "fighting" && currentRound < 6 && (
+                <div className="flex flex-col items-center mb-6">
+                  {/* Current Stat */}
+                  <div className="text-2xl font-bold text-yellow-400 mb-4">
+                    {currentStatInfo?.label} Round
+                  </div>
+
+                  {/* Stat Values */}
+                  <div className="flex justify-center items-center gap-8 mb-4">
+                    <div className="text-center">
+                      <div className="text-blue-400 text-sm">
+                        {player1.name}
+                      </div>
+                      <div className="text-3xl font-bold text-blue-400">
+                        {currentP1Val}
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        ({p1Percentage.toFixed(1)}%)
+                      </div>
+                    </div>
+                    <div className="text-gray-500">vs</div>
+                    <div className="text-center">
+                      <div className="text-red-400 text-sm">{player2.name}</div>
+                      <div className="text-3xl font-bold text-red-400">
+                        {currentP2Val}
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        ({(100 - p1Percentage).toFixed(1)}%)
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Wheel */}
+                  <div className="relative w-64 h-64 mb-4">
+                    {/* Wheel Background */}
+                    <div
+                      className="absolute inset-0 rounded-full border-4 border-yellow-500 overflow-hidden transition-transform duration-[3000ms] ease-out"
+                      style={{
+                        transform: `rotate(${wheelRotation}deg)`,
+                        background: `conic-gradient(
+                        from 0deg,
+                        #3b82f6 0deg ${p1Percentage * 3.6}deg,
+                        #ef4444 ${p1Percentage * 3.6}deg 360deg
+                      )`,
+                      }}
+                    >
+                      {/* Player labels on wheel */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-white font-bold text-lg drop-shadow-lg">
+                          {isSpinning ? "🎡" : ""}
+                        </div>
+                      </div>
+                    </div>
+                    {/* Pointer */}
+                    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 w-0 h-0 border-l-4 border-r-4 border-b-8 border-l-transparent border-r-transparent border-b-yellow-400 z-10" />
+                  </div>
+
+                  {/* Spin Button */}
+                  <button
+                    onClick={spinWheel}
+                    disabled={isSpinning}
+                    className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white font-bold text-xl transition-all transform hover:scale-105"
+                  >
+                    {isSpinning ? "Spinning..." : "🎡 SPIN"}
+                  </button>
+                </div>
+              )}
+
+              {/* Round Results */}
+              <div className="space-y-2 mb-6">
+                {roundResults.map((result, index) => (
+                  <div
+                    key={index}
+                    className={`grid grid-cols-3 gap-4 items-center p-3 rounded-lg ${
+                      result.winner === "player1"
+                        ? "bg-blue-900/30 border border-blue-500/50"
+                        : "bg-red-900/30 border border-red-500/50"
+                    }`}
+                  >
+                    <div className="text-right">
+                      <span
+                        className={`text-xl font-bold ${result.winner === "player1" ? "text-green-400" : "text-gray-400"}`}
+                      >
+                        {result.p1Value}
+                      </span>
+                      {result.winner === "player1" && (
+                        <span className="text-green-400 ml-2">✓</span>
+                      )}
+                    </div>
+                    <div className="text-center">
+                      <span className="px-3 py-1 bg-yellow-600/50 rounded-full text-white font-bold">
+                        {result.statLabel}
+                      </span>
+                    </div>
+                    <div className="text-left">
+                      {result.winner === "player2" && (
+                        <span className="text-green-400 mr-2">✓</span>
+                      )}
+                      <span
+                        className={`text-xl font-bold ${result.winner === "player2" ? "text-green-400" : "text-gray-400"}`}
+                      >
+                        {result.p2Value}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Final Result */}
+              {battleState === "finished" && finalWinner && (
+                <div className="text-center">
+                  {tieBreaker && (
+                    <div className="text-yellow-400 text-sm mb-2">
+                      Tie-breaker: Race Tier (
+                      {finalWinner === "player1" ? player1.race : player2.race}{" "}
+                      wins)
+                    </div>
+                  )}
+                  <div
+                    className={`text-4xl font-bold mb-4 ${
+                      finalWinner === "player1"
+                        ? "text-blue-400"
+                        : "text-red-400"
+                    }`}
+                  >
+                    🏆 {finalWinner === "player1" ? player1.name : player2.name}{" "}
+                    WINS! 🏆
+                  </div>
+                  <button
+                    onClick={resetBattle}
+                    className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
+                  >
+                    Fight Again
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+        {/* Rules Info */}
+        <div className="mt-8 bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-lg p-4 text-center">
+          <p className="text-gray-400 text-sm">
+            <strong className="text-yellow-400">Wheel of Truth:</strong> Spin
+            the wheel for each stat round. Higher stat = larger wheel area =
+            higher chance to win that round. First to 4 points wins. If tied
+            3-3, lower Race Tier wins.
           </p>
         </div>
       </div>
@@ -857,7 +1478,9 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
   const [teams, setTeams] = useState<TeamJson[]>([]);
   const [allPlayers, setAllPlayers] = useState<PlayerData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filterType, setFilterType] = useState<"all" | "with-boss" | "no-boss">("with-boss");
+  const [filterType, setFilterType] = useState<"all" | "with-boss" | "no-boss">(
+    "with-boss",
+  );
   const [battleView, setBattleView] = useState<BattleView | null>(null);
 
   // Load data on mount
@@ -890,7 +1513,10 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                   const char = CharacterParser.parseCharacterFile(content);
 
                   // Calculate stats with PvE context to apply PvE-only effects
-                  const effects = EffectResolver.calculateCharacterEffects(char, { isPvE: true });
+                  const effects = EffectResolver.calculateCharacterEffects(
+                    char,
+                    { isPvE: true },
+                  );
                   const pveStats: CharacterStats = {
                     str: effects.totalStats.strength,
                     spd: effects.totalStats.speed,
@@ -911,7 +1537,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                   });
                 }
               })
-              .catch(() => {})
+              .catch(() => {}),
           );
         }
 
@@ -984,6 +1610,18 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
     const noBoss = battles.filter((b) => b.boss === null).length;
     return { total: battles.length, withBoss, noBoss };
   }, [battles]);
+
+  // Count races in entire season (for Sigrun boss effect)
+  const seasonRaceCounts = useMemo(() => {
+    let angel = 0;
+    let god = 0;
+    allPlayers.forEach((p) => {
+      const race = p.race?.toLowerCase() || "";
+      if (race === "angel") angel++;
+      if (race === "god") god++;
+    });
+    return { angel, god, total: angel + god };
+  }, [allPlayers]);
 
   // Calculate total stats
   const getTotalStats = (stats: BossStats | CharacterStats) => {
@@ -1073,10 +1711,12 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredBattles.map((battle) => {
             const hasBoss = battle.boss !== null;
-            const bossTotalStats = battle.boss ? getTotalStats(battle.boss.stats) : 0;
+            const bossTotalStats = battle.boss
+              ? getTotalStats(battle.boss.stats)
+              : 0;
             const teamTotalStats = battle.playerData.reduce(
               (sum, p) => sum + getTotalStats(p.stats),
-              0
+              0,
             );
 
             return (
@@ -1121,25 +1761,32 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                     <>
                       {/* Stats Comparison */}
                       <div className="grid grid-cols-6 gap-1 text-center text-xs mb-3">
-                        {(["str", "spd", "dur", "iq", "biq", "ma"] as const).map(
-                          (stat) => (
-                            <div key={stat} className="bg-gray-700/50 rounded p-1">
-                              <div className="text-gray-400 text-[10px]">
-                                {stat.toUpperCase()}
-                              </div>
-                              <div className="text-red-400 font-bold text-xs">
-                                {battle.boss!.stats[stat] ?? "?"}
-                              </div>
+                        {(
+                          ["str", "spd", "dur", "iq", "biq", "ma"] as const
+                        ).map((stat) => (
+                          <div
+                            key={stat}
+                            className="bg-gray-700/50 rounded p-1"
+                          >
+                            <div className="text-gray-400 text-[10px]">
+                              {stat.toUpperCase()}
                             </div>
-                          )
-                        )}
+                            <div className="text-red-400 font-bold text-xs">
+                              {battle.boss!.stats[stat] ?? "?"}
+                            </div>
+                          </div>
+                        ))}
                       </div>
 
                       {/* Total Stats */}
                       <div className="text-center text-sm mb-3">
-                        <span className="text-red-400 font-bold">{bossTotalStats}</span>
+                        <span className="text-red-400 font-bold">
+                          {bossTotalStats}
+                        </span>
                         <span className="text-gray-500 mx-2">vs</span>
-                        <span className="text-green-400 font-bold">{teamTotalStats}</span>
+                        <span className="text-green-400 font-bold">
+                          {teamTotalStats}
+                        </span>
                       </div>
 
                       {/* Reward Preview */}
@@ -1186,6 +1833,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
         <BossBattleRoom
           battle={battleView}
           onClose={() => setBattleView(null)}
+          seasonRaceCounts={seasonRaceCounts}
         />
       )}
     </div>

@@ -2,8 +2,8 @@ No.55
 Name: Phùng Canh Mộ (faevandir)
 ```
 Ký Sinh:
-+ Diablo
-+ ...?? (_1469)
++ Loại: Diablo
++ Host: ...?? (_1469)
 ```
 ```
 Race: 

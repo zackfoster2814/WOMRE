@@ -160,12 +160,19 @@ interface HypnotizedPlayer {
   stats: CharacterStats;
 }
 
+interface SeasonRaceCounts {
+  angel: number;
+  god: number;
+  total: number; // angel + god
+}
+
 interface BossBattleRoomProps {
   battle: BattleView;
   onClose: () => void;
+  seasonRaceCounts?: SeasonRaceCounts; // For Sigrun: count Angel/God in entire season
 }
 
-export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
+export const BossBattleRoom = ({ battle, onClose, seasonRaceCounts }: BossBattleRoomProps) => {
   const [battleState, setBattleState] = useState<
     "idle" | "preBattle" | "fighting" | "finished"
   >("idle");
@@ -319,17 +326,23 @@ export const BossBattleRoom = ({ battle, onClose }: BossBattleRoomProps) => {
       );
     }
 
-    // Check for Sigrun - count Angels and Gods in season (simplified: count in team)
+    // Check for Sigrun - count Angels and Gods in season
     if (boss.id === 30) {
-      const angelGodRaces = ["angel", "god"];
-      const count = battle.playerData.filter((p) =>
-        angelGodRaces.includes(p.race?.toLowerCase() || "")
-      ).length;
-      checks.angelGodCount = Math.min(count, 10); // Max +10
+      // Use seasonRaceCounts if provided (counts from entire season), otherwise fallback to team count
+      if (seasonRaceCounts) {
+        checks.angelGodCount = Math.min(seasonRaceCounts.total, 10); // Max +10
+      } else {
+        // Fallback: count in team only
+        const angelGodRaces = ["angel", "god"];
+        const count = battle.playerData.filter((p) =>
+          angelGodRaces.includes(p.race?.toLowerCase() || "")
+        ).length;
+        checks.angelGodCount = Math.min(count, 10); // Max +10
+      }
     }
 
     return checks;
-  }, [boss.id, battle.playerData]);
+  }, [boss.id, battle.playerData, seasonRaceCounts]);
 
   // Generic rule engine for boss battle effects
   const ruleBonus = useMemo(() => {

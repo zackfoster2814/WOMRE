@@ -5,48 +5,50 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Troll
+Sub-race: Regular Troll
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Trickster
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Pure (nhận đai trinh tiết)
++ Herbalist
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 4 (Cursed of 36k)
+Spd: 4 (Cursed of 36k)
+Dur: 9 (Cursed of 36k)
+IQ: 0 (Cursed of 36k)
+BIQ: 2 (Cursed of 36k)
+MA: 6 (Cursed of 36k)
 ```
 
 ```
 Houses: 
-+ 
++ Coven Council
 ```
 
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Đai trinh tiết 
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Nunchuck (dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
+1 Rune: 
++ Thul
 Runeword: Không
 ```
 
@@ -57,11 +59,11 @@ Runeword: Không
 
 ```
 Char dev: 
-+ 
++ True Heir of the Emirate🍀
 ```
 
 ```
-Team: 
+Team: 14
 ```
 
 ```

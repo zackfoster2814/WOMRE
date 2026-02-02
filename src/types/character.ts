@@ -76,14 +76,16 @@ export interface Character {
   name: string;
   username: string;
 
-  // Parasitic Status (for hosts who have a symbiote)
+  // Parasitic Status (for hosts who have a symbiote attached)
   isParasite: boolean;
   parasiteInfo?: string[];
+  parasiteName?: string;     // Name of the parasite attached (e.g., "Majin (majinlord666)")
+  parasiteType?: string;     // Type of parasite (e.g., "Mephisto", "Diablo", "67")
 
-  // Symbiosis Status (for the symbiote itself)
+  // Symbiosis Status (for the symbiote/parasite itself)
   isSymbiosis?: boolean;
   symbiosisType?: string;  // e.g., "Mephisto", "Diablo"
-  symbiosisHost?: string;  // e.g., "2.Quý Trần Tường (wyug1234)"
+  symbiosisHost?: string;  // e.g., "Quý Trần Tường (wyug1234)"
 
   // Race & Class
   race: CharacterRace;

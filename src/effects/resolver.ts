@@ -420,12 +420,29 @@ export class EffectResolver {
       }
     }
 
-    // Symbiosis (for hosts who have a symbiote)
-    if (character.isParasite && character.parasiteInfo) {
+    // Symbiosis (for hosts who have a symbiote attached)
+    if (character.isParasite && character.parasiteType) {
+      // New format: parasiteType contains the symbiosis type (e.g., "Mephisto", "Diablo", "67")
+      const symbiosisName = character.parasiteType;
+      // Handle "67" -> "The Six Seven" mapping
+      const lookupName = symbiosisName === '67' ? 'The Six Seven' : symbiosisName;
+      const entry = EffectRegistry.get('symbiosis', lookupName);
+      if (entry) {
+        sources.push({
+          type: 'symbiosis',
+          name: symbiosisName,
+          effects: entry.effects,
+          rawDescription: entry.description,
+          isActive: true
+        });
+      }
+    } else if (character.isParasite && character.parasiteInfo) {
+      // Fallback to old format for backward compatibility
       for (const symbiosis of character.parasiteInfo) {
         // Extract symbiosis name (may contain extra info like "Mephisto ( nhận thêm...)")
         const symbiosisName = symbiosis.split('(')[0].trim();
-        const entry = EffectRegistry.get('symbiosis', symbiosisName);
+        const lookupName = symbiosisName === '67' ? 'The Six Seven' : symbiosisName;
+        const entry = EffectRegistry.get('symbiosis', lookupName);
         if (entry) {
           sources.push({
             type: 'symbiosis',

@@ -31,9 +31,7 @@
     {
       "id": 3,
       "boss": "Aatrox World Ender",
-      "members": [
-        { "name": "MasMerterserker", "username": "azzapp36" }
-      ]
+      "members": [{ "name": "MasMerterserker", "username": "azzapp36" }]
     },
     {
       "id": 4,
@@ -71,7 +69,10 @@
         { "name": "...??", "username": "_1469" },
         { "name": "boomaiweed", "username": "boomaiweed" },
         { "name": "Kami Tsuna", "username": "kamitsuna" },
-        { "name": "⭐⭐⭐⭐⭐⭐", "username": "karthus2705" }
+        {
+          "name": "⭐⭐⭐⭐⭐⭐ karthus2705",
+          "username": "⭐⭐⭐⭐⭐⭐ karthus2705"
+        }
       ]
     },
     {
@@ -118,7 +119,10 @@
       "members": [
         { "name": "Yami", "username": "yami2233" },
         { "name": "tophate", "username": "d233tvu" },
-        { "name": "Adrian Fahrenheit Țepeș", "username": "adrian_the_gigachad" },
+        {
+          "name": "Adrian Fahrenheit Țepeș",
+          "username": "adrian_the_gigachad"
+        },
         { "name": "Mr. C.B.", "username": "dogefear" },
         { "name": "ngọn cỏ ven sông", "username": "ngon_co_ven_duong" },
         { "name": "Trung Kiên", "username": "trungkien1412" },
@@ -194,7 +198,7 @@
     },
     {
       "id": 16,
-      "boss": "Polish cow",
+      "boss": "Polish Cow",
       "members": [
         { "name": "Manhattan Cafe chơi TFT", "username": "randomguy5719" },
         { "name": "Lock", "username": "lock485" },

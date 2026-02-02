@@ -5,43 +5,49 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Dwarf
+Sub-race: Lùn thường
 ```
 
 ```
 Archetype: 
-+ 
++ Cursed of 36k
++ Glass Cannon
 ```
 ``` 
-0 Quirk:  
-+ 
+2 Quirk:  
++ Artistic
++ Resilient
++ Training Restricted
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 5 (Cursed of 36k)
+Spd: 8 (Cursed of 36k)
+Dur: 4 (Cursed of 36k)
+IQ: 2 (Cursed of 36k)
+BIQ: 6 (Cursed of 36k)
+MA: 3 (Cursed of 36k)
 ```
 
 ```
 Houses: 
-+ 
++ Golden Order
+  -> Godrick
 ```
 
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Baguette
+  - Radio
+  - Gold Pine Resin
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Claymore (dùng được)
 ```
 
 ``` 
@@ -51,13 +57,16 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+2 Power: 
++ Cold Breeze
++ Scrying
++ Wex (Golden Order)
++ Block Manipulation (Golden Order)
 ```
 
 ```
 Char dev: 
-+ 
++ Armed to the Teeth
 ```
 
 ```

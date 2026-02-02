@@ -5,36 +5,37 @@ Ký Sinh:
 + 
 ```
 ```
-Race: 
-Sub-race: 
+Race: Primordial Being
+Sub-race: Earth
 ```
 
 ```
 Archetype: 
-+ 
++ Edgelord
 ```
 ``` 
-0 Quirk:  
-+ 
+1 Quirk:  
++ Open-minded
++ One Trick Pony
 ```
 ```
-Str: 
-Spd: 
-Dur: 
-IQ: 
-BIQ: 
-MA: 
+Str: 7
+Spd: 6
+Dur: 2
+IQ: 5
+BIQ: 6
+MA: 10
 ```
 
 ```
 Houses: 
-+ 
++ House Tyrell
 ```
 
 ```
-0 Gear: 
+1 Gear: 
  + 0 Normal gear:
-  - 
+  - Knight's Armor
  + 0 Legacy gear:
   - 
 ```
@@ -51,17 +52,21 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
-+ 
+4 Power: 
++ Force Field
++ Golden Vow
++ Zoltraak
++ Thunder Orb
++ Earth-Shaking (Primordial Being - Earth)
 ```
 
 ```
 Char dev: 
-+ 
++ Last Standing
 ```
 
 ```
-Team: 
+Team: 29
 ```
 
 ```

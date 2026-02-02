@@ -453,6 +453,23 @@ export function registerRaces() {
 // ============================================================================
 
 export function registerGoblinSubRaces() {
+  // Sub-race là số lượng goblin trong đàn
+  // Cả tên "1" và "Goblin Horde 1" đều được register để support cả 2 format
+
+  // Tier 1: 1 goblin - weight 5
+  defineEffect("sub_race", "1")
+    .description("-1 all stats. Mỗi PvP thắng: +1 all stats.")
+    .weight(5)
+    .addAllStats(-1)
+    .effect({
+      type: "stat_modifier",
+      stat: "all",
+      value: 1,
+      timing: "after_combat_win",
+      target: "self",
+    })
+    .register();
+
   defineEffect("sub_race", "Goblin Horde 1")
     .description("-1 all stats. Mỗi PvP thắng: +1 all stats.")
     .weight(5)
@@ -466,10 +483,23 @@ export function registerGoblinSubRaces() {
     })
     .register();
 
+  // Tier 2: 50 goblins - weight 10
+  defineEffect("sub_race", "50")
+    .description("-1 all stats.")
+    .weight(10)
+    .addAllStats(-1)
+    .register();
+
   defineEffect("sub_race", "Goblin Horde 50")
     .description("-1 all stats.")
     .weight(10)
     .addAllStats(-1)
+    .register();
+
+  // Tier 3: 100 goblins - weight 25
+  defineEffect("sub_race", "100")
+    .description("Bạn là 1 con Goblin.")
+    .weight(25)
     .register();
 
   defineEffect("sub_race", "Goblin Horde 100")
@@ -477,10 +507,25 @@ export function registerGoblinSubRaces() {
     .weight(25)
     .register();
 
+  // Tier 4: 1000 goblins - weight 25
+  defineEffect("sub_race", "1000")
+    .description("+1 Strength.")
+    .weight(25)
+    .addStat("strength", 1)
+    .register();
+
   defineEffect("sub_race", "Goblin Horde 1000")
     .description("+1 Strength.")
     .weight(25)
     .addStat("strength", 1)
+    .register();
+
+  // Tier 5: 5000 goblins - weight 20
+  defineEffect("sub_race", "5000")
+    .description("+1 Strength, +1 Speed.")
+    .weight(20)
+    .addStat("strength", 1)
+    .addStat("speed", 1)
     .register();
 
   defineEffect("sub_race", "Goblin Horde 5000")
@@ -490,11 +535,33 @@ export function registerGoblinSubRaces() {
     .addStat("speed", 1)
     .register();
 
+  // Tier 6: 10000 goblins - weight 10
+  defineEffect("sub_race", "10000")
+    .description("+2 Strength, +2 Speed.")
+    .weight(10)
+    .addStat("strength", 2)
+    .addStat("speed", 2)
+    .register();
+
   defineEffect("sub_race", "Goblin Horde 10000")
     .description("+2 Strength, +2 Speed.")
     .weight(10)
     .addStat("strength", 2)
     .addStat("speed", 2)
+    .register();
+
+  // Tier 7: 100000 goblins - weight 5
+  defineEffect("sub_race", "100000")
+    .description("+1 all stats. Nhận 1 Gear. Chắc chắn nhận Unique Weapon.")
+    .weight(5)
+    .addAllStats(1)
+    .grantGear("random", 1)
+    .effect({
+      type: "custom",
+      timing: "immediate",
+      target: "self",
+      customHandler: "goblin_100k_unique_weapon",
+    })
     .register();
 
   defineEffect("sub_race", "Goblin Horde 100000")

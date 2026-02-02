@@ -187,7 +187,7 @@ export class CharacterParser {
     const isSymbiosisChar = parasiteResult.isSymbiosis;
 
     if (isSymbiosisChar) {
-      // This is a Symbiosis character
+      // This is a Symbiosis character (the parasite itself)
       character.isSymbiosis = true;
       character.symbiosisType = parasiteResult.symbiosisType;
       character.symbiosisHost = parasiteResult.symbiosisHost;
@@ -196,9 +196,11 @@ export class CharacterParser {
       // Set race as Symbiosis
       character.race = { race: 'Symbiosis', subRace: parasiteResult.symbiosisType };
     } else {
-      // This is a regular character (may or may not have a parasite)
+      // This is a regular character (may or may not be a host)
       character.isParasite = parasiteResult.isParasite;
       character.parasiteInfo = parasiteResult.info;
+      character.parasiteName = parasiteResult.parasiteName;
+      character.parasiteType = parasiteResult.symbiosisType; // Type of parasite attached
       character.isSymbiosis = false;
     }
 
@@ -289,19 +291,22 @@ export class CharacterParser {
   }
 
   private static parseParasiteInfo(lines: string[], startIndex: number): {
-    isParasite: boolean;
+    isParasite: boolean;        // This character is a HOST (has a parasite on them)
+    isSymbiosis: boolean;       // This character IS a parasite (Symbiosis)
     info: string[];
-    isSymbiosis: boolean;
-    symbiosisType?: string;
-    symbiosisHost?: string;
+    symbiosisType?: string;     // Type of symbiosis (Mephisto, Diablo, 67, etc.)
+    symbiosisHost?: string;     // For Symbiosis: who they're attached to
+    parasiteName?: string;      // For Host: who is attached to them
   } {
     if (startIndex < 0) return { isParasite: false, info: [], isSymbiosis: false };
 
     const info: string[] = [];
     let hasContent = false;
     let isSymbiosis = false;
+    let isHost = false;
     let symbiosisType: string | undefined;
     let symbiosisHost: string | undefined;
+    let parasiteName: string | undefined;
 
     // Check if this line contains "Yes" indicating this IS a Symbiosis character
     const kyShinhLine = lines[startIndex];
@@ -324,8 +329,23 @@ export class CharacterParser {
           info.push(value);
           hasContent = true;
 
-          // For Symbiosis characters, first item is type, second is host
-          if (isSymbiosis) {
+          // New format: "+ Loại: Mephisto", "+ Host: Name", "+ Parasite: Name"
+          const loaiMatch = value.match(/^Loại:\s*(.+)/i);
+          const hostMatch = value.match(/^Host:\s*(.+)/i);
+          const parasiteMatch = value.match(/^Parasite:\s*(.+)/i);
+
+          if (loaiMatch) {
+            symbiosisType = loaiMatch[1].trim();
+          } else if (hostMatch) {
+            // This character IS a Symbiosis, attached to a host
+            symbiosisHost = hostMatch[1].trim();
+            isSymbiosis = true;
+          } else if (parasiteMatch) {
+            // This character is a HOST, has a parasite attached
+            parasiteName = parasiteMatch[1].trim();
+            isHost = true;
+          } else if (isSymbiosis) {
+            // Old format fallback for Symbiosis characters
             if (!symbiosisType) {
               symbiosisType = value;
             } else if (!symbiosisHost) {
@@ -339,7 +359,14 @@ export class CharacterParser {
       }
     }
 
-    return { isParasite: hasContent && !isSymbiosis, info, isSymbiosis, symbiosisType, symbiosisHost };
+    return {
+      isParasite: isHost || (hasContent && !isSymbiosis),
+      info,
+      isSymbiosis,
+      symbiosisType,
+      symbiosisHost,
+      parasiteName
+    };
   }
 
   private static parseRace(lines: string[], startIndex: number): CharacterRace {

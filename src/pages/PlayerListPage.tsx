@@ -92,6 +92,8 @@ interface PlayerSummary {
   giantBonusApplied?: boolean;
   isParasite?: boolean;
   parasiteInfo?: string[];
+  parasiteName?: string;
+  parasiteType?: string;
   isSymbiosis?: boolean;
   symbiosisType?: string;
   symbiosisHost?: string;
@@ -230,6 +232,8 @@ export const PlayerListPage = () => {
                   giantBonusApplied: char.giantBonusApplied,
                   isParasite: char.isParasite,
                   parasiteInfo: char.parasiteInfo,
+                  parasiteName: char.parasiteName,
+                  parasiteType: char.parasiteType,
                   isSymbiosis: char.isSymbiosis,
                   symbiosisType: char.symbiosisType,
                   symbiosisHost: char.symbiosisHost,
@@ -316,6 +320,8 @@ export const PlayerListPage = () => {
                   giantBonusApplied: char.giantBonusApplied,
                   isParasite: char.isParasite,
                   parasiteInfo: char.parasiteInfo,
+                  parasiteName: char.parasiteName,
+                  parasiteType: char.parasiteType,
                   isSymbiosis: char.isSymbiosis,
                   symbiosisType: char.symbiosisType,
                   symbiosisHost: char.symbiosisHost,
@@ -1362,7 +1368,7 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
                 className="text-xs font-medium text-red-400 bg-red-400/20 px-2 py-0.5 rounded cursor-help relative group"
                 title={`${player.symbiosisType} → ${player.symbiosisHost}`}
               >
-                Symbiosis
+                🦠 {player.symbiosisType} → {player.symbiosisHost}
                 {/* Tooltip */}
                 <div className="absolute left-0 top-full mt-1 z-50 hidden group-hover:block">
                   <div className="bg-gray-900 border border-red-500/50 rounded-lg p-2 shadow-xl min-w-[150px] max-w-[250px]">
@@ -1370,10 +1376,10 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
                       Ký Sinh Trùng:
                     </div>
                     <div className="text-xs text-gray-300">
-                      Type: {player.symbiosisType}
+                      Loại: {player.symbiosisType}
                     </div>
                     <div className="text-xs text-gray-300">
-                      Host: {player.symbiosisHost}
+                      Vật chủ: {player.symbiosisHost}
                     </div>
                   </div>
                 </div>
@@ -1381,27 +1387,24 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
             )}
             {/* Badge for host character (has a parasite) */}
             {player.isParasite &&
-              player.parasiteInfo &&
-              player.parasiteInfo.length > 0 && (
+              player.parasiteName && (
                 <span
                   className="text-xs font-medium text-green-400 bg-green-400/20 px-2 py-0.5 rounded cursor-help relative group"
-                  title={player.parasiteInfo.join("\n")}
+                  title={`Bị ký sinh bởi ${player.parasiteName} (${player.parasiteType})`}
                 >
-                  Host
+                  🦠 {player.parasiteName} ({player.parasiteType}) →
                   {/* Tooltip */}
                   <div className="absolute left-0 top-full mt-1 z-50 hidden group-hover:block">
                     <div className="bg-gray-900 border border-green-500/50 rounded-lg p-2 shadow-xl min-w-[150px] max-w-[250px]">
                       <div className="text-xs text-green-300 font-semibold mb-1">
                         Bị Ký Sinh bởi:
                       </div>
-                      {player.parasiteInfo.map((info, idx) => (
-                        <div
-                          key={idx}
-                          className="text-xs text-gray-300 whitespace-nowrap"
-                        >
-                          {info}
-                        </div>
-                      ))}
+                      <div className="text-xs text-gray-300">
+                        Loại: {player.parasiteType}
+                      </div>
+                      <div className="text-xs text-gray-300">
+                        Ký sinh: {player.parasiteName}
+                      </div>
                     </div>
                   </div>
                 </span>

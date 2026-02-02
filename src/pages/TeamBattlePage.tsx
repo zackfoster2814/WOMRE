@@ -54,6 +54,7 @@ interface PlayerData {
   username: string;
   stats: CharacterStats;
   team?: number;
+  race?: string;
 }
 
 // Combined battle view
@@ -117,6 +118,7 @@ export const TeamBattlePage = () => {
                     username: char.username || "",
                     stats: char.stats,
                     team: char.team,
+                    race: char.race?.race,
                   });
                 }
               })
@@ -150,6 +152,18 @@ export const TeamBattlePage = () => {
       if (p.username) map.set(p.username.toLowerCase(), p);
     });
     return map;
+  }, [players]);
+
+  // Count races in entire season (for Sigrun boss effect)
+  const seasonRaceCounts = useMemo(() => {
+    let angel = 0;
+    let god = 0;
+    players.forEach((p) => {
+      const race = p.race?.toLowerCase() || "";
+      if (race === "angel") angel++;
+      if (race === "god") god++;
+    });
+    return { angel, god, total: angel + god };
   }, [players]);
 
   // Build battle views
@@ -316,6 +330,7 @@ export const TeamBattlePage = () => {
         <BossBattleRoom
           battle={battleRoomTeam}
           onClose={() => setBattleRoomTeam(null)}
+          seasonRaceCounts={seasonRaceCounts}
         />
       )}
     </div>
