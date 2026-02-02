@@ -31,7 +31,8 @@ MA: 10
 
 ```
 Houses: 
-+ Golden Order (đổi nhà) -> Godrick
++ Golden Order (đổi nhà) 
+  -> Godrick (đã mất)
 + Ban Nhạc Ngọt Đoàn Kết (Từ Người Trong Ban Nhạc) - không ra nhạc cụ
 ```
 

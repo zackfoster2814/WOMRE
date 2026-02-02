@@ -30,7 +30,7 @@ MA: 6
 ```
 Houses: 
 + Golden Order
-+ Morgott
+ -> Morgott
 ```
 
 ```

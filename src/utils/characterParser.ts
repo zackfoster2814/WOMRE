@@ -625,7 +625,7 @@ export class CharacterParser {
       }
 
       // Sub-type or stat bonus: starts with -> (with leading spaces)
-      // Pattern: " -> Thinkers", " -> Grey Wind", " -> +4 Dura", " -> Nhận +2 Str"
+      // Pattern: " -> Thinkers", " -> Grey Wind", " -> +4 Dura", " -> Nhận +2 Str", " -> Godrick (đã mất)"
       const subMatch = line.match(/^\s*->\s*(.+)/);
       if (subMatch && currentHouse) {
         const subValue = subMatch[1].trim();
@@ -641,7 +641,12 @@ export class CharacterParser {
             }
             currentHouse.statBonuses.push(bonusPart);
           } else {
-            currentHouse.subType = subValue;
+            // Check if subType is lost (e.g., "Godrick (đã mất)")
+            const subTypeIsLost = isLostItem(subValue);
+            // Strip "(đã mất...)" from subType name for registry lookup
+            const cleanSubType = subValue.replace(/\s*\(đã mất[^)]*\)/gi, '').replace(/\s*\(mất do[^)]*\)/gi, '').trim();
+            currentHouse.subType = cleanSubType;
+            currentHouse.subTypeIsLost = subTypeIsLost;
           }
         }
         continue;

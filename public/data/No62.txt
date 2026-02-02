@@ -31,7 +31,7 @@ MA: 5 ban đầu là 6 (inversion -> 5)
 ```
 Houses: 
 + Golden Order
-+ Malenia
+ -> Malenia
 ```
 
 ```

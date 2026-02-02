@@ -346,8 +346,8 @@ export class EffectResolver {
             rawDescription: `${house.name}: ${house.statBonuses.join(', ')}`,
             isActive: true
           });
-          // Still process sub-type if present
-          if (house.subType) {
+          // Still process sub-type if present and not lost
+          if (house.subType && !house.subTypeIsLost) {
             const subEntry = EffectRegistry.get('house_sub', house.subType);
             if (subEntry) {
               sources.push({
@@ -375,8 +375,8 @@ export class EffectResolver {
         });
       }
 
-      // Also process house sub-type if present
-      if (house.subType) {
+      // Also process house sub-type if present and not lost
+      if (house.subType && !house.subTypeIsLost) {
         const subEntry = EffectRegistry.get('house_sub', house.subType);
         if (subEntry) {
           sources.push({

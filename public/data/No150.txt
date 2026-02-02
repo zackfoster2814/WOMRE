@@ -33,7 +33,8 @@ MA: 7
 
 ```
 Houses: 
-+ Golden Order (Đã bị đuổi+ Rykard Vẫn giữ)
++ Golden Order (Đã bị đuổi + Rykard Vẫn giữ)
+ -> Rykard
 ```
 
 ```

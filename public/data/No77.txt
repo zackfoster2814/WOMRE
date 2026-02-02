@@ -29,7 +29,7 @@ MA: 8
 ```
 Houses: 
 + Golden Order
-+ Unborn (Re spin spd)
+ -> Unborn
 ```
 
 ```

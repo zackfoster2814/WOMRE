@@ -28,7 +28,8 @@ MA: 6
 
 ```
 Houses: 
-+ Golden Order: Malenia
++ Golden Order: 
+ -> Malenia
 ```
 
 ```

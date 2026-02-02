@@ -30,7 +30,7 @@ MA:6
 ```
 Houses: 
 + Golden Order
-- Unborn (Quay lại Str)
+ -> Unborn
 ```
 
 ```
