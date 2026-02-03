@@ -30,7 +30,7 @@ MA: 1 (Không được quay)
 
 ```
 Houses: 
-+ New London (Được quay)
++ New London
 ```
 
 ```

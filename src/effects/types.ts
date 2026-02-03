@@ -263,6 +263,7 @@ export type EffectSourceType =
   | 'house_sub'        // Sub-type of house (e.g., Thinkers for New London)
   | 'quirk'
   | 'power'
+  | 'summon'           // Summons (from Summon Wheel, stored in Power section as "Summon: X")
   | 'gear'
   | 'weapon'
   | 'rune'

@@ -28,7 +28,8 @@ MA: 6
 
 ```
 Houses: 
-+ House Stark (Grey Wind)
++ House Stark 
+ -> Grey Wind
 ```
 
 ```

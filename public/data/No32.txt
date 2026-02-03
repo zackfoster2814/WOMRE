@@ -29,7 +29,7 @@ MA: 7
 
 ```
 Houses: 
-+ Targarryen
++ House Targaryen
 ```
 
 ```

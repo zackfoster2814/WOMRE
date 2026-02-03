@@ -53,7 +53,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Imp (Summon, từ Legacy Gear)
++ Summon: Imp (từ Legacy Gear)
 ```
 
 ```

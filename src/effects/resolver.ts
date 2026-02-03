@@ -238,6 +238,24 @@ export class EffectResolver {
     // Powers (skip lost items)
     for (const power of character.powers || []) {
       if (power.isLost) continue; // Skip lost items
+
+      // Check if this is a Summon (format: "Summon: X" or "Summon: X (note)")
+      const summonMatch = power.name.match(/^Summon:\s*([^(]+)/i);
+      if (summonMatch) {
+        const summonName = summonMatch[1].trim();
+        const entry = EffectRegistry.get('summon', summonName);
+        if (entry) {
+          sources.push({
+            type: 'summon',
+            name: summonName,
+            effects: entry.effects,
+            rawDescription: entry.description,
+            isActive: true
+          });
+        }
+        continue; // Skip normal power lookup
+      }
+
       const entry = EffectRegistry.get('power', power.name);
       if (entry) {
         sources.push({

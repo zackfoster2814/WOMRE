@@ -29,7 +29,7 @@ MA: 10
 ```
 Houses: 
 + House Baratheon (Đã bị đá vì Char Dev)
- => +1 Str
+ -> +1 Str
 ```
 
 ```

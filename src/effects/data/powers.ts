@@ -1731,4 +1731,97 @@ export function registerAllPowerEffects() {
       target: 'opponent'
     })
     .register();
+
+  // ============================================================================
+  // SUMMONS (from Summon Wheel - stored as "Summon: X" in Power section)
+  // ============================================================================
+
+  // 1. Chihuahua - Weight 10
+  defineEffect('summon', 'Chihuahua')
+    .description('-1 all stats.')
+    .weight(10)
+    .addAllStats(-1)
+    .register();
+
+  // 2. Mufasa - Weight 12
+  defineEffect('summon', 'Mufasa')
+    .description('+3 Strength.')
+    .weight(12)
+    .addStat('strength', 3)
+    .register();
+
+  // 3. Pack of Wolves - Weight 12
+  defineEffect('summon', 'Pack of Wolves')
+    .description('+3 Speed.')
+    .weight(12)
+    .addStat('speed', 3)
+    .register();
+
+  // 4. Earth Golem - Weight 12
+  defineEffect('summon', 'Earth Golem')
+    .description('+3 Durability.')
+    .weight(12)
+    .addStat('durability', 3)
+    .register();
+
+  // 5. Water Elemental - Weight 12
+  defineEffect('summon', 'Water Elemental')
+    .description('+3 IQ.')
+    .weight(12)
+    .addStat('iq', 3)
+    .register();
+
+  // 6. Imp - Weight 12
+  defineEffect('summon', 'Imp')
+    .description('+3 BIQ.')
+    .weight(12)
+    .addStat('biq', 3)
+    .register();
+
+  // 7. Igris - Weight 12
+  defineEffect('summon', 'Igris')
+    .description('+3 Martial Arts.')
+    .weight(12)
+    .addStat('ma', 3)
+    .register();
+
+  // 8. Numby - Weight 12
+  defineEffect('summon', 'Numby')
+    .description('Trong Combat: +4 vào 1 chỉ số ngẫu nhiên.')
+    .weight(12)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'random',
+      value: 4,
+      timing: 'during_combat',
+      target: 'self',
+    })
+    .register();
+
+  // 9. Wyvern's Egg - Weight 3
+  defineEffect('summon', "Wyvern's Egg")
+    .description('Ở trận chung kết tổng, nhận 2 điểm khởi đầu.')
+    .weight(3)
+    .effect({
+      type: 'combat_points',
+      points: 2,
+      timing: 'before_combat',
+      target: 'self',
+      conditions: [{ type: 'bracket', bracket: 'final' }],
+    })
+    .register();
+
+  // 10. Creator's Cat - Weight 3
+  defineEffect('summon', "Creator's Cat")
+    .description('Nhận 1 lần Char Dev: "Creator\'s Favor".')
+    .weight(3)
+    .effect({
+      type: 'grant_char_dev',
+      grantType: 'char_dev',
+      grantName: "Creator's Favor",
+      grantCount: 1,
+      timing: 'immediate',
+      target: 'self',
+    })
+    .register();
 }

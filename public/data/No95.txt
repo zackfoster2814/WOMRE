@@ -30,7 +30,8 @@ MA: 1
 
 ```
 Houses: 
-+ House Stark (Ghost)
++ House Stark 
+  -> Ghost
 ```
 
 ```

@@ -972,9 +972,18 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     const p2Val = player2.stats[statInfo.key];
 
     // Calculate win probability based on stats ratio
-    // Higher stat = more wheel area = higher chance to win
-    const total = p1Val + p2Val;
-    const p1Chance = total > 0 ? (p1Val / total) * 360 : 180; // degrees for player 1
+    // Player with higher stat gets x2 weight
+    let p1Weight = p1Val;
+    let p2Weight = p2Val;
+    if (p1Val > p2Val) {
+      p1Weight = p1Val * 2; // x2 for higher stat
+    } else if (p2Val > p1Val) {
+      p2Weight = p2Val * 2; // x2 for higher stat
+    }
+    // If equal, both have same weight (no x2)
+
+    const total = p1Weight + p2Weight;
+    const p1Chance = total > 0 ? (p1Weight / total) * 360 : 180; // degrees for player 1
 
     // Random spin result
     const spinRotations = 5 + Math.random() * 3; // 5-8 full rotations
@@ -1081,9 +1090,18 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     currentStatInfo && player1 ? player1.stats[currentStatInfo.key] : 0;
   const currentP2Val =
     currentStatInfo && player2 ? player2.stats[currentStatInfo.key] : 0;
-  const currentTotal = currentP1Val + currentP2Val;
+
+  // Calculate weighted values (x2 for higher stat)
+  let currentP1Weight = currentP1Val;
+  let currentP2Weight = currentP2Val;
+  if (currentP1Val > currentP2Val) {
+    currentP1Weight = currentP1Val * 2;
+  } else if (currentP2Val > currentP1Val) {
+    currentP2Weight = currentP2Val * 2;
+  }
+  const currentWeightTotal = currentP1Weight + currentP2Weight;
   const p1Percentage =
-    currentTotal > 0 ? (currentP1Val / currentTotal) * 100 : 50;
+    currentWeightTotal > 0 ? (currentP1Weight / currentWeightTotal) * 100 : 50;
 
   if (loading) {
     return (
@@ -1334,6 +1352,9 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       </div>
                       <div className="text-3xl font-bold text-blue-400">
                         {currentP1Val}
+                        {currentP1Val > currentP2Val && (
+                          <span className="text-yellow-400 text-lg ml-1">×2={currentP1Val * 2}</span>
+                        )}
                       </div>
                       <div className="text-sm text-gray-400">
                         ({p1Percentage.toFixed(1)}%)
@@ -1344,6 +1365,9 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       <div className="text-red-400 text-sm">{player2.name}</div>
                       <div className="text-3xl font-bold text-red-400">
                         {currentP2Val}
+                        {currentP2Val > currentP1Val && (
+                          <span className="text-yellow-400 text-lg ml-1">×2={currentP2Val * 2}</span>
+                        )}
                       </div>
                       <div className="text-sm text-gray-400">
                         ({(100 - p1Percentage).toFixed(1)}%)

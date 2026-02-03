@@ -26,7 +26,7 @@ class EffectRegistryClass {
   constructor() {
     // Initialize type maps
     const types: EffectSourceType[] = [
-      'race', 'sub_race', 'archetype', 'archetype_sub', 'quirk', 'power',
+      'race', 'sub_race', 'archetype', 'archetype_sub', 'quirk', 'power', 'summon',
       'gear', 'weapon', 'rune', 'runeword', 'house', 'house_sub',
       'char_dev', 'pvp_reward', 'lover', 'symbiosis'
     ];
