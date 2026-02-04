@@ -1,5 +1,8 @@
 No.10
 Name: Trapcon (trapcon)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 

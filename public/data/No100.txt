@@ -1,5 +1,8 @@
 No.100
 Name: CkTrangNhung (baophan)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 

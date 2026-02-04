@@ -56,9 +56,11 @@ export function registerRaces() {
     .register();
 
   // Skeleton
+  // IQ của Skeleton LUÔN là 1, không thể tăng hay giảm bằng bất kỳ cách nào
+  // Chỉ khi tiến hóa thành Lich thì IQ mới thay đổi (thành 8)
   defineEffect("race", "Skeleton")
     .description(
-      "Quay Bone Lineage.\nSau 2 PvP thắng: tiến hóa Lich (IQ=8). Sau 4 PvP thắng: Lich King (+1 all). Miễn nhiễm AIDS.",
+      "Quay Bone Lineage.\nIQ luôn = 1 (không thể thay đổi).\nSau 2 PvP thắng: tiến hóa Lich (IQ=8). Sau 4 PvP thắng: Lich King (+1 all). Miễn nhiễm AIDS.",
     )
     .weight(5.25)
     .tier(8)

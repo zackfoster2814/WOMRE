@@ -1,5 +1,8 @@
 No.
 Name: Yami (yami2233)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
@@ -28,7 +31,7 @@ MA: 1
 
 ```
 Houses: 
-+ Uchiha (Đã bị đá)
++ Uchiha (Đã bị đá vì No more Home)
 ```
 
 ```

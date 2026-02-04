@@ -1,5 +1,8 @@
 No.225
 Name: Smolder (smolred209)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
@@ -28,7 +31,7 @@ MA:7
 
 ```
 Houses: 
-+ Golden Order (Đã bị đuổi)
++ Golden Order (Đã bị đuổi do No more Home)
  -> Radahn (Đã mất) 
 ```
 

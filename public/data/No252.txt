@@ -1,5 +1,8 @@
 No.252
 Name: Hachi (hachi2378)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
@@ -30,7 +33,7 @@ MA:3 Cursed of 36k
 
 ```
 Houses: 
-+ Uchiha (Bị đuổi nhưng vẫn giữ Bonus)
++ Uchiha (Bị đuổi vì Kinda Homeless)
 ```
 
 ```

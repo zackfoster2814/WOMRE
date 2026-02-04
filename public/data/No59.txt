@@ -1,5 +1,8 @@
 No.59
 Name: Johnny Walkaways (johnnywalkaways)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
@@ -29,7 +32,7 @@ MA: 5
 
 ```
 Houses: 
-+ Kazuya Kinoshita's House (Bay khỏi nhà từ Char Dev)
++ Kazuya Kinoshita's House (Bay khỏi nhà vì No more Home)
 ```
 
 ```

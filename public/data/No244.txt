@@ -1,5 +1,8 @@
 No.244
 Name: .hor1zon
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 

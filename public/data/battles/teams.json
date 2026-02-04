@@ -31,7 +31,10 @@
     {
       "id": 3,
       "boss": "Aatrox World Ender",
-      "members": [{ "name": "MasMerterserker", "username": "azzapp36" }]
+      "members": [
+        { "name": "MasMerterserker", "username": "azzapp36" },
+        { "name": "Fen", "username": "fentf" }
+      ]
     },
     {
       "id": 4,
@@ -69,10 +72,7 @@
         { "name": "...??", "username": "_1469" },
         { "name": "boomaiweed", "username": "boomaiweed" },
         { "name": "Kami Tsuna", "username": "kamitsuna" },
-        {
-          "name": "⭐⭐⭐⭐⭐⭐ karthus2705",
-          "username": "⭐⭐⭐⭐⭐⭐ karthus2705"
-        }
+        { "name": "karthus2705", "username": "karthus2705" }
       ]
     },
     {
@@ -110,7 +110,8 @@
         { "name": "Quý Trần Tường", "username": "wyug1234" },
         { "name": "Memento Duelist", "username": "memento_duelist" },
         { "name": "Nikki", "username": "huyhuhhuh" },
-        { "name": "banhtiuuu", "username": "banhtiuuu" }
+        { "name": "banhtiuuu", "username": "banhtiuuu" },
+        { "name": "U36hetvi", "username": "trieutulongcuuauchuareal" }
       ]
     },
     {
@@ -119,10 +120,7 @@
       "members": [
         { "name": "Yami", "username": "yami2233" },
         { "name": "tophate", "username": "d233tvu" },
-        {
-          "name": "Adrian Fahrenheit Țepeș",
-          "username": "adrian_the_gigachad"
-        },
+        { "name": "Adrian Fahrenheit Țepeș", "username": "adrian_the_gigachad" },
         { "name": "Mr. C.B.", "username": "dogefear" },
         { "name": "ngọn cỏ ven sông", "username": "ngon_co_ven_duong" },
         { "name": "Trung Kiên", "username": "trungkien1412" },
@@ -179,7 +177,10 @@
         { "name": "Đóm con", "username": "pinz2223" },
         { "name": "Seefish", "username": "seefish._80347" },
         { "name": "Đào viên họa gia", "username": "long2222sla" },
-        { "name": "2FaceCat", "username": "2facecat." }
+        { "name": "2FaceCat", "username": "2facecat." },
+        { "name": ".hor1zon", "username": ".hor1zon" },
+        { "name": "Pilèy", "username": "piley." },
+        { "name": "Cornmann", "username": "cornmann_69401_87403" }
       ]
     },
     {
@@ -198,7 +199,7 @@
     },
     {
       "id": 16,
-      "boss": "Polish Cow",
+      "boss": "Polish cow",
       "members": [
         { "name": "Manhattan Cafe chơi TFT", "username": "randomguy5719" },
         { "name": "Lock", "username": "lock485" },
@@ -258,7 +259,10 @@
       "members": [
         { "name": "Asumi Kurenai", "username": "weaboololi" },
         { "name": "Ca Cao", "username": "Catos" },
-        { "name": "nhatdog", "username": "nhatdog" }
+        { "name": "nhatdog", "username": "nhatdog" },
+        { "name": "trantrinhtri", "username": "trantrinhtri" },
+        { "name": "Koroo", "username": "koroo_51" },
+        { "name": "wibuslayer786", "username": "wibuslayer786" }
       ]
     },
     {
@@ -272,7 +276,7 @@
         { "name": "Bộ PC", "username": "conchocaobangbopc" },
         { "name": "Vilhelm", "username": "Vilhelm" },
         { "name": "NhờnNnNn", "username": "nhonnnnn" },
-        { "name": "Cô Fulun`", "username": "Cô Fulun`" }
+        { "name": "Cô Fulun", "username": "cofulun" }
       ]
     },
     {
@@ -285,7 +289,8 @@
         { "name": "mystery pham", "username": "mysterypham" },
         { "name": "Gambling", "username": "da_ork_" },
         { "name": "Vạn vật thua Gwen", "username": "milkman6936" },
-        { "name": "Anh Thầy Bói", "username": "nongnoc0977" }
+        { "name": "Anh Thầy Bói", "username": "nongnoc0977" },
+        { "name": "Del1ght", "username": "del1ghtviet" }
       ]
     },
     {
@@ -354,7 +359,8 @@
         { "name": "bưởi béo", "username": "ntd2020" },
         { "name": "Sparxie đã bán nước chưa", "username": "god19879725" },
         { "name": "Billz", "username": "zabillz" },
-        { "name": "Devourer Of Gays", "username": "devourerofgays_75679" }
+        { "name": "Devourer Of Gays", "username": "devourerofgays_75679" },
+        { "name": "Anh Bảo", "username": "baogiadinh1003" }
       ]
     },
     {
@@ -378,7 +384,10 @@
         { "name": "Johnny Walkaways", "username": "johnnywalkaways" },
         { "name": "Wohlhabend", "username": "wohlhabend_" },
         { "name": "Smolder", "username": "smolred209" },
-        { "name": "sodium_nickel_89", "username": "sodium_nickel_89" }
+        { "name": "sodium_nickel_89", "username": "sodium_nickel_89" },
+        { "name": "Bow", "username": "hungehehehe" },
+        { "name": "Gowther", "username": "yunashigemura4303" },
+        { "name": "Heir of Raumania", "username": "trunghieu6775" }
       ]
     },
     {
@@ -414,7 +423,8 @@
       "boss": "Alduin",
       "members": [
         { "name": "Vinh Vander Bek", "username": "vinhvan" },
-        { "name": "Duck03", "username": "duck098039_65870" }
+        { "name": "Duck03", "username": "duck098039_65870" },
+        { "name": "Creeper", "username": "creeper717" }
       ]
     }
   ]

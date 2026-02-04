@@ -339,13 +339,19 @@ export class EffectResolver {
       }
     }
 
-    // Houses (skip lost houses)
+    // Houses (handle lost houses based on lostType)
+    // - 'kinda_homeless': Player left house but KEEPS stat bonuses
+    // - 'no_more_home' or isLost without lostType: Player kicked out and LOSES all bonuses
     // Check nestedHouses first for statBonuses, fall back to regular houses
     const processedHouses = new Set<string>();
 
     for (const house of character.nestedHouses || []) {
-      if (house.isLost) continue;
+      // Skip houses that are completely lost (no_more_home or default isLost behavior)
+      if (house.isLost && house.lostType !== 'kinda_homeless') continue;
       processedHouses.add(house.name);
+
+      // For kinda_homeless: only apply stat bonuses, skip other effects
+      const isKindaHomeless = house.isLost && house.lostType === 'kinda_homeless';
 
       // If house has explicit statBonuses (e.g., ["+2 Str", "+1 Spd", "+2 Dura"]), use those instead of registry effect
       if (house.statBonuses && house.statBonuses.length > 0) {
@@ -361,11 +367,11 @@ export class EffectResolver {
             type: 'house',
             name: house.name,
             effects: bonusEffects,
-            rawDescription: `${house.name}: ${house.statBonuses.join(', ')}`,
+            rawDescription: `${house.name}: ${house.statBonuses.join(', ')}${isKindaHomeless ? ' (Kinda Homeless - giữ stat)' : ''}`,
             isActive: true
           });
-          // Still process sub-type if present and not lost
-          if (house.subType && !house.subTypeIsLost) {
+          // For kinda_homeless: don't process sub-types since they left the house
+          if (!isKindaHomeless && house.subType && !house.subTypeIsLost) {
             const subEntry = EffectRegistry.get('house_sub', house.subType);
             if (subEntry) {
               sources.push({
@@ -384,17 +390,26 @@ export class EffectResolver {
       // Otherwise use registry entry
       const entry = EffectRegistry.get('house', house.name);
       if (entry) {
-        sources.push({
-          type: 'house',
-          name: house.name,
-          effects: entry.effects,
-          rawDescription: entry.description,
-          isActive: true
-        });
+        // For kinda_homeless: only keep stat_modifier effects with immediate timing
+        const effectsToApply = isKindaHomeless
+          ? entry.effects.filter(e => e.type === 'stat_modifier' && e.timing === 'immediate')
+          : entry.effects;
+
+        if (effectsToApply.length > 0) {
+          sources.push({
+            type: 'house',
+            name: house.name,
+            effects: effectsToApply,
+            rawDescription: isKindaHomeless
+              ? `${entry.description} (Kinda Homeless - chỉ giữ stat bonus)`
+              : entry.description,
+            isActive: true
+          });
+        }
       }
 
-      // Also process house sub-type if present and not lost
-      if (house.subType && !house.subTypeIsLost) {
+      // For kinda_homeless: don't process sub-types since they left the house
+      if (!isKindaHomeless && house.subType && !house.subTypeIsLost) {
         const subEntry = EffectRegistry.get('house_sub', house.subType);
         if (subEntry) {
           sources.push({
@@ -933,7 +948,20 @@ export class EffectResolver {
   ): CharacterEffects {
     const sources = this.gatherEffectSources(character);
     const baseStats = convertStats(character.stats);
-    return this.resolveImmediateEffects(sources, baseStats, context, character);
+    const result = this.resolveImmediateEffects(sources, baseStats, context, character);
+
+    // Special case: Skeleton race has IQ locked at 1
+    // IQ cannot be modified by any effect until evolution to Lich
+    // Check if race is Skeleton (not Lich or Lich King which are evolutions)
+    const race = character.race?.race?.toLowerCase() || '';
+    if (race === 'skeleton') {
+      // Force IQ to always be 1 for Skeleton
+      result.totalStats.iq = 1;
+      result.baseStats.iq = 1;
+      result.bonusStats.iq = 0;
+    }
+
+    return result;
   }
 
   /**
@@ -984,18 +1012,48 @@ export class EffectResolver {
    * Get all effect sources with their stat summaries for a character
    * Useful for displaying detailed breakdown in UI
    * Now properly checks conditions using character's base stats
+   * @param character - Character to get breakdown for
+   * @param tournamentInfo - Optional tournament info (bracket, round) to determine active conditional effects
    */
-  static getCharacterEffectBreakdown(character: Character): EffectSourceBreakdown[] {
+  static getCharacterEffectBreakdown(
+    character: Character,
+    _tournamentInfo?: { bracket?: string; round?: string }
+  ): EffectSourceBreakdown[] {
     const sources = this.gatherEffectSources(character);
     const breakdown: EffectSourceBreakdown[] = [];
 
     // Get character's base stats for condition checking
     const baseStats = convertStats(character.stats);
 
+    // Map timing to Vietnamese display text
+    const timingLabels: Record<string, string> = {
+      'after_combat': 'Sau combat',
+      'after_combat_win': 'Sau combat thắng',
+      'after_combat_lose': 'Sau combat thua',
+      'during_combat': 'Trong combat',
+      'before_combat': 'Trước combat',
+      'on_round_win': 'Khi thắng round',
+      'on_round_lose': 'Khi thua round',
+      'on_loser_bracket': 'Ở nhánh thua',
+      'on_winner_bracket': 'Ở nhánh thắng',
+      'on_finals': 'Ở chung kết',
+      'on_death': 'Khi bị loại',
+      'on_round_16': 'Vòng 16',
+      'on_round_8': 'Tứ kết',
+      'on_round_32': 'Vòng 32',
+      'on_round_64': 'Vòng 64',
+      'on_round_128': 'Vòng 128',
+      'on_round_256': 'Vòng 256',
+      'pve_only': 'Chỉ PvE',
+      'pvp_only': 'Chỉ PvP'
+    };
+
     for (const source of sources) {
       const statChanges: StatChange[] = [];
+      const conditionalEffects: ConditionalEffect[] = [];
 
       for (const effect of source.effects) {
+        // Collect immediate stat modifiers
         if (effect.type === 'stat_modifier' && effect.timing === 'immediate' && effect.value !== undefined) {
           // Check conditions before including in breakdown
           if (!this.checkImmediateConditions(effect.conditions, baseStats, character)) {
@@ -1014,6 +1072,29 @@ export class EffectResolver {
             for (const stat of resolvedStats) {
               statChanges.push({ stat, value: effect.value });
             }
+          }
+        }
+        // Collect conditional/combat effects (non-immediate timing)
+        else if (effect.timing && effect.timing !== 'immediate') {
+          const timingLabel = timingLabels[effect.timing] || effect.timing;
+          let effectDesc = timingLabel;
+
+          // Add stat info if it's a stat modifier
+          if (effect.type === 'stat_modifier' && effect.stat && effect.value !== undefined) {
+            const prefix = effect.value > 0 ? '+' : '';
+            const statName = effect.stat === 'all' ? 'All' :
+                           effect.stat === 'lowest' ? 'Stat thấp nhất' :
+                           effect.stat === 'highest' ? 'Stat cao nhất' :
+                           effect.stat.toUpperCase();
+            effectDesc = `${timingLabel}: ${prefix}${effect.value} ${statName}`;
+          }
+
+          // Avoid duplicates
+          if (!conditionalEffects.find(ce => ce.timing === effect.timing && ce.description === effectDesc)) {
+            conditionalEffects.push({
+              timing: effect.timing,
+              description: effectDesc
+            });
           }
         }
       }
@@ -1036,7 +1117,8 @@ export class EffectResolver {
           statChanges: mergedStatChanges,
           description: source.rawDescription,
           isActive: source.isActive !== false,
-          isDisabled: source.isDisabled || false
+          isDisabled: source.isDisabled || false,
+          conditionalEffects: conditionalEffects.length > 0 ? conditionalEffects : undefined
         });
       }
     }
@@ -1054,6 +1136,11 @@ export interface StatChange {
   value: number;
 }
 
+export interface ConditionalEffect {
+  timing: string;
+  description: string;
+}
+
 export interface EffectSourceBreakdown {
   type: EffectSourceType;
   name: string;
@@ -1061,6 +1148,8 @@ export interface EffectSourceBreakdown {
   description?: string;
   isActive: boolean;
   isDisabled: boolean;
+  // Info about conditional/combat effects that aren't immediately applied
+  conditionalEffects?: ConditionalEffect[];
 }
 
 // ============================================================================

@@ -1,5 +1,8 @@
 No.2
 Name: Quý Trần Tường (wyug1234)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + Loại: Mephisto
@@ -23,15 +26,16 @@ Archetype:
 ```
 ```
 Str: 6
-Spd: 10 (Ban đầu là 10, +2 từ House)
+Spd: 10
 Dur: 6
-IQ: 3 (ban đầu là nhưng vì Too Horny 3)
+IQ: 0 (ban đầu 3 là nhưng vì Too Horny)
 BIQ: 8
 MA: 6
 ```
 
 ```
 Houses: 
++ Atreides (Đã bị đá khỏi nhà do Kinda Homeless)
 + Ban Nhạc Ngọt Đoàn Kết (Từ Người Trong Ban Nhạc)
 ```
 

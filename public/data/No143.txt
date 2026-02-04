@@ -1,5 +1,8 @@
 No.143
 Name: mystery pham (mysterypham)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
@@ -31,7 +34,8 @@ MA: 1
 
 ```
 Houses: 
-+ House Stark (Grey Wind - Đã mất, No more Home)
++ House Stark (Đã mất do No more Home)
+  -> Grey Wind
 ```
 
 ```

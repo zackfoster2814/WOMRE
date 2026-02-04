@@ -1,5 +1,8 @@
 No.24
 Name: OddMan (thaioturan)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
@@ -28,7 +31,7 @@ MA: 10
 
 ```
 Houses: 
-+ House Baratheon (Đã bị đá vì Char Dev)
++ House Baratheon (Đã bị đá vì Kinda Homeless)
  -> +1 Str
 ```
 

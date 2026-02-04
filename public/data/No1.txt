@@ -1,5 +1,8 @@
 No.1
 Name: Đừng Nhờn với Two Fingers (dabotnhondc1nam)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
@@ -55,7 +58,7 @@ Runeword: Không
 
 ```
 4 Power: 
-+ U=ma2 (Từ Sub-Race)
++ U=ma2 (Từ Sub-Race) (đã mất do lover thó mất)
 + Baldening
 + Memory Freeze
 + Metamagic

@@ -63,11 +63,27 @@ export interface NestedHouse {
   subTypeIsLost?: boolean; // Sub-type can be lost (e.g., "Godrick (đã mất)")
   statBonuses?: string[]; // Stat bonuses from house (e.g., ["+2 Str", "+1 Spd", "+2 Dura"] for Tracen Academy)
   isLost?: boolean;       // House can be lost (kicked out)
+  // Loại mất nhà:
+  // - 'kinda_homeless': Rời nhà nhưng vẫn giữ stat bonuses đã nhận
+  // - 'no_more_home': Bị đuổi và mất tất cả bonuses từ nhà
+  lostType?: 'kinda_homeless' | 'no_more_home';
 }
 
 export interface PvPReward {
   description: string;
   applied: boolean;
+}
+
+// Tournament status types
+export type TournamentStatus = 'alive' | 'eliminated' | 'champion';
+export type TournamentRound = '-' | '256' | '128' | '64' | '32' | '16' | '8' | 'quarter' | 'semi' | 'final';
+export type TournamentBracket = '-' | 'winner' | 'loser';
+
+export interface TournamentInfo {
+  status: TournamentStatus;       // còn sống / đã bị loại / vô địch
+  round: TournamentRound;         // vòng thi đấu hiện tại
+  bracket: TournamentBracket;     // nhánh thắng / thua
+  pvpWins?: number;               // số trận PvP thắng
 }
 
 export interface Character {
@@ -129,6 +145,9 @@ export interface Character {
 
   // PvP Rewards
   pvpRewards?: PvPReward[];
+
+  // Tournament Status
+  tournament?: TournamentInfo;
 }
 
 export interface CharacterSummary {

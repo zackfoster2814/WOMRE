@@ -1807,7 +1807,7 @@ export function registerAllPowerEffects() {
       points: 2,
       timing: 'before_combat',
       target: 'self',
-      conditions: [{ type: 'bracket', bracket: 'final' }],
+      conditions: [{ type: 'bracket', bracket: 'finals' }],
     })
     .register();
 

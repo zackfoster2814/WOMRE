@@ -1,4 +1,4 @@
-import type { Character, CharacterStats, CharacterRace, Gear, GearItem, Weapon, Rune, RuneItem, PvPReward, LossableItem, NestedArchetype, NestedHouse } from '../types/character';
+import type { Character, CharacterStats, CharacterRace, Gear, GearItem, Weapon, Rune, RuneItem, PvPReward, LossableItem, NestedArchetype, NestedHouse, TournamentInfo, TournamentStatus, TournamentRound, TournamentBracket } from '../types/character';
 
 /**
  * Check if an item text contains "lost" markers
@@ -270,6 +270,9 @@ export class CharacterParser {
 
     // Parse PvP Rewards
     character.pvpRewards = this.parsePvPRewards(lines);
+
+    // Parse Tournament Status
+    character.tournament = this.parseTournamentInfo(lines);
 
     return character as Character;
   }
@@ -897,6 +900,96 @@ export class CharacterParser {
     }
 
     return rune;
+  }
+
+  /**
+   * Parse Tournament Info
+   * Format in file (standalone lines at top):
+   * Status: Còn sống / Đã bị loại / Vô địch
+   * Vòng thi đấu: - / 256 / 128 / 64 / 32 / 16 / 8 / tứ kết / bán kết / chung kết
+   * Nhánh thi đấu: - / thắng / thua
+   */
+  private static parseTournamentInfo(lines: string[]): TournamentInfo | undefined {
+    let status: TournamentStatus = 'alive';
+    let round: TournamentRound = '-';
+    let bracket: TournamentBracket = '-';
+    let pvpWins: number | undefined;
+    let foundAny = false;
+
+    // Search for tournament info in the first 20 lines (they appear at the top)
+    for (let i = 0; i < Math.min(20, lines.length); i++) {
+      const line = lines[i].trim();
+
+      // Parse Status (standalone line)
+      const statusMatch = line.match(/^Status:\s*(.+)/i);
+      if (statusMatch) {
+        foundAny = true;
+        const statusStr = statusMatch[1].trim().toLowerCase();
+        if (statusStr.includes('vô địch') || statusStr === 'champion') {
+          status = 'champion';
+        } else if (statusStr.includes('loại') || statusStr === 'eliminated') {
+          status = 'eliminated';
+        } else {
+          status = 'alive';
+        }
+      }
+
+      // Parse Round (Vòng thi đấu)
+      const roundMatch = line.match(/^(?:Vòng thi đấu|Vòng|Round):\s*(.+)/i);
+      if (roundMatch) {
+        foundAny = true;
+        const roundStr = roundMatch[1].trim().toLowerCase();
+        if (roundStr === '-' || roundStr === '') {
+          round = '-';
+        } else if (roundStr.includes('chung kết') || roundStr === 'final') {
+          round = 'final';
+        } else if (roundStr.includes('bán kết') || roundStr === 'semi') {
+          round = 'semi';
+        } else if (roundStr.includes('tứ kết') || roundStr === 'quarter') {
+          round = 'quarter';
+        } else {
+          // Try to parse numeric round: 256, 128, 64, 32, 16, 8
+          const numMatch = roundStr.match(/(\d+)/);
+          if (numMatch) {
+            const num = numMatch[1] as TournamentRound;
+            if (['256', '128', '64', '32', '16', '8'].includes(num)) {
+              round = num;
+            }
+          }
+        }
+      }
+
+      // Parse Bracket (Nhánh thi đấu)
+      const bracketMatch = line.match(/^(?:Nhánh thi đấu|Nhánh|Bracket):\s*(.+)/i);
+      if (bracketMatch) {
+        foundAny = true;
+        const bracketStr = bracketMatch[1].trim().toLowerCase();
+        if (bracketStr.includes('thắng') || bracketStr === 'winner') {
+          bracket = 'winner';
+        } else if (bracketStr.includes('thua') || bracketStr === 'loser') {
+          bracket = 'loser';
+        } else {
+          bracket = '-';
+        }
+      }
+
+      // Parse PvP Wins
+      const winsMatch = line.match(/^(?:PvP Wins|Wins):\s*(\d+)/i);
+      if (winsMatch) {
+        foundAny = true;
+        pvpWins = parseInt(winsMatch[1]);
+      }
+    }
+
+    // Only return if we found at least one tournament field
+    if (!foundAny) return undefined;
+
+    return {
+      status,
+      round,
+      bracket,
+      pvpWins
+    };
   }
 
   private static parsePvPRewards(lines: string[]): PvPReward[] {

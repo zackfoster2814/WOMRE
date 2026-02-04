@@ -1,5 +1,8 @@
 No.110
 Name: Memento Duelist (memento_duelist)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
@@ -29,7 +32,7 @@ MA: 7
 
 ```
 Houses: 
-+ Coven Council (Đã bị đuổi do Từ Cha rdev)
++ Coven Council (Đã bị đuổi do No more Home)
 ```
 
 ```

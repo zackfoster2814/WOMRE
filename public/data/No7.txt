@@ -1,5 +1,8 @@
 No.7
 Name: Hero X (enatc0)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + Loại: Diablo

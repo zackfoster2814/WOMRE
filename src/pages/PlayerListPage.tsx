@@ -9,6 +9,7 @@ import {
   Weapon,
   Rune,
   PvPReward,
+  TournamentInfo,
 } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
 import {
@@ -97,6 +98,8 @@ interface PlayerSummary {
   isSymbiosis?: boolean;
   symbiosisType?: string;
   symbiosisHost?: string;
+  // Tournament status
+  tournament?: TournamentInfo;
 }
 
 // Types for team/boss data
@@ -129,6 +132,242 @@ interface TeamJson {
   members: TeamMemberJson[];
 }
 
+// House Lore Section Component
+interface HouseLoreSectionProps {
+  players: PlayerSummary[];
+  onPlayerClick: (playerNo: number) => void;
+}
+
+interface HouseLoreData {
+  houseName: string;
+  description: string;
+  effect: string;
+  // Người phản bội - chọn lợi ích cá nhân thay vì tập thể
+  traitor?: {
+    name: string;
+    username: string;
+  };
+  traitorEffect?: string;
+  // Hiệu ứng cho toàn tộc (khi không có người phản bội hoặc hiệu ứng tập thể)
+  collectiveEffect?: string;
+  tooltipPlaceholder?: boolean;
+  color: string;
+  bgGradient: string;
+  icon: string;
+}
+
+const HouseLoreSection = ({
+  players,
+  onPlayerClick,
+}: HouseLoreSectionProps) => {
+  const houseLoreData: HouseLoreData[] = [
+    {
+      houseName: "House Baratheon",
+      description: "Ours Is The Fury.",
+      effect: "+1 Str, +1 BIQ, +1 MA, Base Stat thấp nhất +2",
+      collectiveEffect: "Đã kích hoạt: +1 all base stat cho toàn tộc",
+      color: "amber",
+      bgGradient: "from-amber-900/80 to-yellow-900/80",
+      icon: "",
+    },
+    {
+      houseName: "House Lannister",
+      description: "Hear Me Roar!",
+      effect: "Nhận 3 Gear 'Golden Coin' và 2 Gear ngẫu nhiên",
+      traitor: {
+        name: "Dung",
+        username: "haruharu9127",
+      },
+      traitorEffect: "Đã kích hoạt: +2 all base stat (chỉ bản thân)",
+      tooltipPlaceholder: true,
+      color: "red",
+      bgGradient: "from-red-900/80 to-amber-900/80",
+      icon: "",
+    },
+    {
+      houseName: "Uchiha",
+      description:
+        "They stayed with me my whole life only to leave me at my death – my tears",
+      effect:
+        "+2 Dura, +2 BIQ. Mỗi khi đánh bại đối thủ, nhận +1 Stat cao nhất",
+      traitor: {
+        name: "2FaceCat",
+        username: "2facecat.",
+      },
+      traitorEffect: "Đã kích hoạt: +2 all base stat (chỉ bản thân)",
+      tooltipPlaceholder: true,
+      color: "purple",
+      bgGradient: "from-purple-900/80 to-red-900/80",
+      icon: "",
+    },
+  ];
+
+  // Find players belonging to each house
+  const getHouseMembers = (houseName: string) => {
+    return players.filter((p) =>
+      p.houses?.some((h) => !h.isLost && h.name === houseName),
+    );
+  };
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-purple-300 mb-2">
+          Chuyện bộ tộc
+        </h2>
+      </div>
+
+      {/* House Cards */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {houseLoreData.map((house) => {
+          const members = getHouseMembers(house.houseName);
+          const traitorPlayer = house.traitor
+            ? players.find(
+                (p) =>
+                  p.username.toLowerCase() ===
+                  house.traitor!.username.toLowerCase(),
+              )
+            : null;
+
+          return (
+            <div
+              key={house.houseName}
+              className={`bg-gradient-to-br ${house.bgGradient} border border-gray-600 rounded-xl overflow-hidden shadow-xl`}
+            >
+              {/* House Header */}
+              <div
+                className={`bg-${house.color}-600/30 px-6 py-4 border-b border-gray-600`}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-4xl">{house.icon}</span>
+                  <div>
+                    <h3 className="text-xl font-bold text-white">
+                      {house.houseName}
+                    </h3>
+                    <span className={`text-${house.color}-300 text-sm`}>
+                      {members.length} thành viên
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* House Content */}
+              <div className="p-6 space-y-4">
+                {/* Description */}
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {house.description}
+                </p>
+
+                {/* Base Effect */}
+                <div className="bg-black/30 rounded-lg p-3">
+                  <p className="text-xs text-gray-400 mb-1">Hiệu ứng cơ bản:</p>
+                  <p className={`text-${house.color}-300 font-medium text-sm`}>
+                    {house.effect}
+                  </p>
+                </div>
+
+                {/* Traitor Section - Người phản bội */}
+                {house.traitor ? (
+                  <div className="bg-gradient-to-r from-red-900/40 to-red-800/40 border-2 border-red-500/50 rounded-lg p-4 relative overflow-hidden">
+                    {/* Warning stripes background */}
+                    <div className="absolute inset-0 opacity-5">
+                      <div
+                        className="w-full h-full"
+                        style={{
+                          backgroundImage:
+                            "repeating-linear-gradient(45deg, transparent, transparent 10px, #ef4444 10px, #ef4444 20px)",
+                        }}
+                      ></div>
+                    </div>
+
+                    <div className="relative">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2"></div>
+                        {house.tooltipPlaceholder && (
+                          <div className="group relative">
+                            <span className="text-gray-400 text-xs cursor-help border-b border-dotted border-gray-400">
+                              [Bằng chứng]
+                            </span>
+                            <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10">
+                              Hình ảnh sẽ được thêm sau
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-3 bg-black/30 rounded-lg p-3">
+                        <div className="flex-1">
+                          <p className="text-red-300 font-bold text-lg">
+                            {house.traitor.name}
+                          </p>
+                          <p className="text-red-400/70 text-xs">
+                            @{house.traitor.username}
+                          </p>
+                        </div>
+                      </div>
+
+                      {traitorPlayer && (
+                        <button
+                          onClick={() => onPlayerClick(traitorPlayer.no)}
+                          className="mt-2 text-xs text-red-400 hover:text-red-300 underline"
+                        >
+                          Xem thông tin
+                        </button>
+                      )}
+
+                      <div className="mt-3 pt-3 border-t border-red-500/30">
+                        <p className="text-red-300 text-sm font-medium flex items-center gap-2">
+                          {house.traitorEffect}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-gradient-to-r from-green-500/20 to-teal-500/20 border border-green-500/30 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-green-400 text-xs font-medium uppercase tracking-wider">
+                        Hiệu ứng toàn tộc
+                      </span>
+                    </div>
+                    <p className="text-green-300 text-sm font-medium">
+                      {house.collectiveEffect}
+                    </p>
+                  </div>
+                )}
+
+                {/* Members Preview */}
+                {members.length > 0 && (
+                  <div className="pt-4 border-t border-gray-600">
+                    <p className="text-xs text-gray-400 mb-2">Thành viên:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {members.slice(0, 6).map((member) => (
+                        <button
+                          key={member.no}
+                          onClick={() => onPlayerClick(member.no)}
+                          className="px-2 py-1 bg-gray-700/50 hover:bg-gray-600/50 rounded text-xs text-white transition-colors"
+                          title={`${member.name} (@${member.username})`}
+                        >
+                          {member.name}
+                        </button>
+                      ))}
+                      {members.length > 6 && (
+                        <span className="px-2 py-1 text-gray-400 text-xs">
+                          +{members.length - 6} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 export const PlayerListPage = () => {
   const [players, setPlayers] = useState<PlayerSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -146,8 +385,10 @@ export const PlayerListPage = () => {
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [showTeamFilter, setShowTeamFilter] = useState(false);
 
-  // View mode: "players" or "teams"
-  const [viewMode, setViewMode] = useState<"players" | "teams">("players");
+  // View mode: "players", "teams", or "house-lore"
+  const [viewMode, setViewMode] = useState<"players" | "teams" | "house-lore">(
+    "players",
+  );
 
   // Team/Boss data
   const [teams, setTeams] = useState<TeamJson[]>([]);
@@ -237,6 +478,7 @@ export const PlayerListPage = () => {
                   isSymbiosis: char.isSymbiosis,
                   symbiosisType: char.symbiosisType,
                   symbiosisHost: char.symbiosisHost,
+                  tournament: char.tournament,
                 });
               }
             })
@@ -265,7 +507,9 @@ export const PlayerListPage = () => {
       // Reload teams data
       let teamsData: TeamJson[] = [];
       try {
-        const teamsRes = await fetch(getAssetPath("/data/battles/teams.json"), { cache: "no-store" });
+        const teamsRes = await fetch(getAssetPath("/data/battles/teams.json"), {
+          cache: "no-store",
+        });
         if (teamsRes.ok) {
           const teamsJson = await teamsRes.json();
           teamsData = teamsJson.teams || [];
@@ -325,6 +569,7 @@ export const PlayerListPage = () => {
                   isSymbiosis: char.isSymbiosis,
                   symbiosisType: char.symbiosisType,
                   symbiosisHost: char.symbiosisHost,
+                  tournament: char.tournament,
                 });
               }
             })
@@ -493,10 +738,17 @@ export const PlayerListPage = () => {
     if (selectedTeams.length > 0) {
       result = result.filter((p) => {
         // Handle "No Team" filter (using -1 as marker)
-        if (selectedTeams.includes(-1) && (p.team === undefined || p.team === null)) {
+        if (
+          selectedTeams.includes(-1) &&
+          (p.team === undefined || p.team === null)
+        ) {
           return true;
         }
-        return p.team !== undefined && p.team !== null && selectedTeams.includes(p.team);
+        return (
+          p.team !== undefined &&
+          p.team !== null &&
+          selectedTeams.includes(p.team)
+        );
       });
     }
 
@@ -626,6 +878,16 @@ export const PlayerListPage = () => {
               >
                 Teams
               </button>
+              <button
+                onClick={() => setViewMode("house-lore")}
+                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                  viewMode === "house-lore"
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-400 hover:text-white"
+                }`}
+              >
+                House Lore
+              </button>
             </div>
             <button
               onClick={refreshPlayers}
@@ -637,7 +899,7 @@ export const PlayerListPage = () => {
             </button>
           </div>
 
-          {/* Controls - Different for Players vs Teams */}
+          {/* Controls - Different for Players vs Teams vs House Lore */}
           {viewMode === "players" ? (
             /* Player Controls */
             <div className="flex flex-wrap gap-4 items-center justify-center overflow-visible">
@@ -876,12 +1138,20 @@ export const PlayerListPage = () => {
                             No Team
                           </span>
                           <span className="text-gray-400 text-xs">
-                            ({players.filter((p) => p.team === undefined || p.team === null).length})
+                            (
+                            {
+                              players.filter(
+                                (p) => p.team === undefined || p.team === null,
+                              ).length
+                            }
+                            )
                           </span>
                         </label>
                       )}
                       {availableTeams.map((team) => {
-                        const count = players.filter((p) => p.team === team).length;
+                        const count = players.filter(
+                          (p) => p.team === team,
+                        ).length;
                         const isSelected = selectedTeams.includes(team);
                         return (
                           <label
@@ -921,7 +1191,7 @@ export const PlayerListPage = () => {
                 {filteredPlayers.length} players found
               </span>
             </div>
-          ) : (
+          ) : viewMode === "teams" ? (
             /* Team Controls */
             <div className="flex flex-wrap gap-4 items-center justify-center">
               <div className="flex gap-2">
@@ -949,7 +1219,10 @@ export const PlayerListPage = () => {
                 <option value="no-boss">No Boss ({teamSummary.noBoss})</option>
               </select>
             </div>
-          )}
+          ) : viewMode === "house-lore" ? (
+            /* House Lore Controls */
+            <div className="flex flex-wrap gap-4 items-center justify-center"></div>
+          ) : null}
         </div>
       </header>
 
@@ -987,7 +1260,7 @@ export const PlayerListPage = () => {
                 </div>
               )}
             </>
-          ) : (
+          ) : viewMode === "teams" ? (
             <>
               {/* Team Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -1011,7 +1284,12 @@ export const PlayerListPage = () => {
                 </div>
               )}
             </>
-          )}
+          ) : viewMode === "house-lore" ? (
+            <HouseLoreSection
+              players={players}
+              onPlayerClick={handleSelectPlayer}
+            />
+          ) : null}
         </div>
       </div>
 
@@ -1348,7 +1626,7 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
         isSelected
           ? "border-teal-500 ring-2 ring-teal-500/50"
           : "border-gray-700 hover:border-gray-500"
-      }`}
+      } ${player.tournament?.status == "eliminated" ? "opacity-50 border-red-600" : ""}`}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-2">
@@ -1368,7 +1646,7 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
                 className="text-xs font-medium text-red-400 bg-red-400/20 px-2 py-0.5 rounded cursor-help relative group"
                 title={`${player.symbiosisType} → ${player.symbiosisHost}`}
               >
-                🦠 {player.symbiosisType} → {player.symbiosisHost}
+                {player.symbiosisType} → {player.symbiosisHost}
                 {/* Tooltip */}
                 <div className="absolute left-0 top-full mt-1 z-50 hidden group-hover:block">
                   <div className="bg-gray-900 border border-red-500/50 rounded-lg p-2 shadow-xl min-w-[150px] max-w-[250px]">
@@ -1386,29 +1664,27 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
               </span>
             )}
             {/* Badge for host character (has a parasite) */}
-            {player.isParasite &&
-              player.parasiteName && (
-                <span
-                  className="text-xs font-medium text-green-400 bg-green-400/20 px-2 py-0.5 rounded cursor-help relative group"
-                  title={`Bị ký sinh bởi ${player.parasiteName} (${player.parasiteType})`}
-                >
-                  🦠 {player.parasiteName} ({player.parasiteType}) →
-                  {/* Tooltip */}
-                  <div className="absolute left-0 top-full mt-1 z-50 hidden group-hover:block">
-                    <div className="bg-gray-900 border border-green-500/50 rounded-lg p-2 shadow-xl min-w-[150px] max-w-[250px]">
-                      <div className="text-xs text-green-300 font-semibold mb-1">
-                        Bị Ký Sinh bởi:
-                      </div>
-                      <div className="text-xs text-gray-300">
-                        Loại: {player.parasiteType}
-                      </div>
-                      <div className="text-xs text-gray-300">
-                        Ký sinh: {player.parasiteName}
-                      </div>
+            {player.isParasite && player.parasiteName && (
+              <span
+                className="text-xs font-medium text-green-400 bg-green-400/20 px-2 py-0.5 rounded cursor-help relative group"
+                title={`Bị ký sinh bởi ${player.parasiteName} (${player.parasiteType})`}
+              >
+                ({player.parasiteType}){/* Tooltip */}
+                <div className="absolute left-0 top-full mt-1 z-50 hidden group-hover:block">
+                  <div className="bg-gray-900 border border-green-500/50 rounded-lg p-2 shadow-xl min-w-[150px] max-w-[250px]">
+                    <div className="text-xs text-green-300 font-semibold mb-1">
+                      Bị Ký Sinh bởi:
+                    </div>
+                    <div className="text-xs text-gray-300">
+                      Loại: {player.parasiteType}
+                    </div>
+                    <div className="text-xs text-gray-300">
+                      Ký sinh: {player.parasiteName}
                     </div>
                   </div>
-                </span>
-              )}
+                </div>
+              </span>
+            )}
           </div>
           <h3 className="text-lg font-bold text-white truncate">
             {player.name}
@@ -1619,14 +1895,22 @@ const HierarchyTooltip = ({
             >
               {(item as NestedHouse).name}
             </span>
-            {!(item as NestedHouse).isLost && (
+            {/* Show stat badge if not lost, or if kinda_homeless (keeps stats) */}
+            {(!(item as NestedHouse).isLost ||
+              (item as NestedHouse).lostType === "kinda_homeless") && (
               <StatModifierBadge
                 name={(item as NestedHouse).name}
                 sourceType="house"
               />
             )}
             {(item as NestedHouse).isLost && (
-              <span className="text-red-400 text-[10px]">(đuổi)</span>
+              <span
+                className={`text-[10px] ${(item as NestedHouse).lostType === "kinda_homeless" ? "text-yellow-400" : "text-red-400"}`}
+              >
+                {(item as NestedHouse).lostType === "kinda_homeless"
+                  ? "(rời nhà - giữ stat)"
+                  : "(đuổi)"}
+              </span>
             )}
           </div>
           {/* Level 2: Sub-type */}
@@ -1653,6 +1937,7 @@ const StatModifiersTable = ({
   breakdown,
   baseStats,
   originalBaseStats,
+  tournamentInfo,
 }: {
   breakdown: EffectSourceBreakdown[];
   baseStats: {
@@ -1671,6 +1956,10 @@ const StatModifiersTable = ({
     biq: number;
     ma: number;
   };
+  tournamentInfo?: {
+    bracket?: string;
+    round?: string;
+  };
 }) => {
   const statKeys: Array<
     "strength" | "speed" | "durability" | "iq" | "biq" | "ma"
@@ -1685,6 +1974,7 @@ const StatModifiersTable = ({
     house_sub: "text-cyan-300",
     quirk: "text-purple-400",
     power: "text-red-400",
+    summon: "text-red-300",
     gear: "text-blue-400",
     weapon: "text-yellow-400",
     rune: "text-orange-400",
@@ -1698,6 +1988,11 @@ const StatModifiersTable = ({
 
   // Filter sources with stat changes
   const sourcesWithStats = breakdown.filter((s) => s.statChanges.length > 0);
+
+  // Filter sources with conditional effects (effects that trigger on win/lose/combat)
+  const sourcesWithConditionalEffects = breakdown.filter(
+    (s) => s.conditionalEffects && s.conditionalEffects.length > 0,
+  );
 
   // Calculate totals for each stat
   const totals = statKeys.map((statKey, idx) => {
@@ -1771,7 +2066,7 @@ const StatModifiersTable = ({
           {/* Original base stats row (before Inversion, if applicable) */}
           {originalBaseStats && (
             <tr className="border-b border-gray-700/50 bg-gray-700/30">
-              <td className="py-1.5 px-2 text-gray-400 italic">roll gốc</td>
+              <td className="py-1.5 px-2 text-gray-400 italic">Trước đó</td>
               {[
                 originalBaseStats.str,
                 originalBaseStats.spd,
@@ -1784,7 +2079,7 @@ const StatModifiersTable = ({
                   key={idx}
                   className="text-center py-1.5 px-1.5 text-gray-400 italic"
                 >
-                  {val}
+                  {val === 0 ? "-" : val}
                 </td>
               ))}
             </tr>
@@ -1793,7 +2088,7 @@ const StatModifiersTable = ({
           {/* Base stats row */}
           <tr className="border-b border-gray-700/50">
             <td className="py-1.5 px-2 text-gray-300">
-              {originalBaseStats ? "sau inversion" : "ban đầu"}
+              {originalBaseStats ? "Hiện tại" : "ban đầu"}
             </td>
             {statKeys.map((_, idx) => (
               <td key={idx} className="text-center py-1.5 px-1.5 text-gray-300">
@@ -1846,6 +2141,75 @@ const StatModifiersTable = ({
           </tr>
         </tbody>
       </table>
+
+      {/* Conditional Effects Section */}
+      {sourcesWithConditionalEffects.length > 0 && (
+        <div className="mt-4 pt-3 border-t border-gray-600">
+          <h4 className="text-xs text-yellow-400 font-medium mb-2 flex items-center gap-1">
+            <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+            Hiệu ứng điều kiện
+          </h4>
+          <div className="space-y-2">
+            {sourcesWithConditionalEffects.map((source, idx) => (
+              <div
+                key={idx}
+                className="bg-gray-700/30 rounded px-2 py-1.5 border-l-2 border-yellow-500/50"
+              >
+                <span
+                  className={`text-xs font-medium ${sourceTypeColors[source.type]}`}
+                >
+                  {source.name}
+                </span>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {source.conditionalEffects?.map((ce, ceIdx) => {
+                    // Check if this timing is currently active based on tournament info
+                    const isActive = (() => {
+                      if (!tournamentInfo) return false;
+                      const { bracket, round } = tournamentInfo;
+                      switch (ce.timing) {
+                        case "on_loser_bracket":
+                          return bracket === "loser";
+                        case "on_winner_bracket":
+                          return bracket === "winner";
+                        case "on_finals":
+                          return round === "final";
+                        case "on_round_16":
+                          return round === "16";
+                        case "on_round_8":
+                          return round === "8" || round === "quarter";
+                        case "on_round_32":
+                          return round === "32";
+                        case "on_round_64":
+                          return round === "64";
+                        case "on_round_128":
+                          return round === "128";
+                        case "on_round_256":
+                          return round === "256";
+                        default:
+                          return false;
+                      }
+                    })();
+
+                    return (
+                      <span
+                        key={ceIdx}
+                        className={`text-[10px] px-1.5 py-0.5 rounded border ${
+                          isActive
+                            ? "bg-green-900/50 text-green-300 border-green-500/50"
+                            : "bg-yellow-900/30 text-yellow-300 border-yellow-700/30"
+                        }`}
+                      >
+                        {isActive && <span className="mr-1">✓</span>}
+                        {ce.description}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -1867,6 +2231,19 @@ const PlayerDetailModal = ({
     string | null
   >(null);
   const [openHouseTooltip, setOpenHouseTooltip] = useState<string | null>(null);
+  const [avatarError, setAvatarError] = useState(false);
+  const [avatarLoaded, setAvatarLoaded] = useState(false);
+
+  // Reset avatar state when character changes
+  useEffect(() => {
+    setAvatarError(false);
+    setAvatarLoaded(false);
+  }, [character.no]);
+
+  // Try multiple image extensions
+  const getAvatarUrl = () => {
+    return getAssetPath(`/data/avatars/no${character.no}.png`);
+  };
 
   // Helper functions
   const hasArchetypeSubTypes = (arch: NestedArchetype) =>
@@ -1879,10 +2256,22 @@ const PlayerDetailModal = ({
     return EffectResolver.calculateCharacterEffects(character);
   }, [character]);
 
+  // Get tournament info for conditional effects checking
+  const tournamentInfo = useMemo(() => {
+    if (!character.tournament) return undefined;
+    return {
+      bracket: character.tournament.bracket,
+      round: character.tournament.round,
+    };
+  }, [character.tournament]);
+
   // Get effect breakdown for summary
   const effectBreakdown = useMemo(() => {
-    return EffectResolver.getCharacterEffectBreakdown(character);
-  }, [character]);
+    return EffectResolver.getCharacterEffectBreakdown(
+      character,
+      tournamentInfo,
+    );
+  }, [character, tournamentInfo]);
 
   if (isLoading) {
     return (
@@ -1990,202 +2379,309 @@ const PlayerDetailModal = ({
 
         {/* Content */}
         <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column - Basic Info & Stats */}
+          {/* Left Column - Avatar, Basic Info & Stats */}
           <div className="space-y-6">
-            {/* Basic Info */}
+            {/* Character Avatar */}
             <div className="bg-gray-700/50 rounded-lg p-4">
-              <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                <span className="text-teal-400">&#9733;</span> Basic Info
-              </h3>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="flex items-start justify-between">
-                  <span className="text-gray-400 text-sm">Race</span>
-                  <span className="text-amber-400 text-sm text-right">
-                    {character.race?.race || "-"}
-                    {character.race?.reincarnatorInfo && (
-                      <span className="text-amber-300 ml-1">
-                        {character.race.reincarnatorInfo}
-                      </span>
-                    )}
-                    <StatModifierBadge
-                      name={character.race?.race || ""}
-                      sourceType="race"
-                    />
+              <div className="flex justify-center">
+                <div className="w-[250px] h-[250px] lg:w-[300px] lg:h-[300px] rounded-lg overflow-hidden border-2 border-gray-600 bg-gray-800">
+                  {!avatarError ? (
+                    <>
+                      {!avatarLoaded && (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-8 w-8 border-2 border-purple-500 border-t-transparent" />
+                        </div>
+                      )}
+                      <img
+                        src={getAvatarUrl()}
+                        alt={`Avatar of ${character.name}`}
+                        className={`w-full h-full object-cover ${avatarLoaded ? "block" : "hidden"}`}
+                        onLoad={() => setAvatarLoaded(true)}
+                        onError={() => setAvatarError(true)}
+                      />
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 bg-gray-800/50">
+                      <span className="text-6xl mb-3">👤</span>
+                      <p className="text-sm text-center px-4">Chưa có avatar</p>
+                      <p className="text-xs text-gray-600 mt-1">
+                        no{character.no}.png
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Basic Info - Each item on separate row */}
+            <div className="bg-gray-700/50 rounded-lg p-4 space-y-2">
+              {/* Race */}
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400 text-sm min-w-[80px]">
+                  Race:
+                </span>
+                <span className="text-amber-400 text-sm">
+                  {character.race?.race || "-"}
+                  {character.race?.reincarnatorInfo && (
+                    <span className="text-amber-300 ml-1">
+                      {character.race.reincarnatorInfo}
+                    </span>
+                  )}
+                  <StatModifierBadge
+                    name={character.race?.race || ""}
+                    sourceType="race"
+                  />
+                </span>
+              </div>
+
+              {/* Sub-race */}
+              {character.race?.subRace && (
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400 text-sm min-w-[80px]">
+                    Sub-race:
+                  </span>
+                  <span className="text-amber-300 text-sm">
+                    {character.race.subRace}
+                    {character.race.subRace
+                      .split(/\s*\+\s*/)
+                      .map((subRace, idx) => (
+                        <StatModifierBadge
+                          key={idx}
+                          name={subRace.trim()}
+                          sourceType="sub_race"
+                        />
+                      ))}
                   </span>
                 </div>
-                {character.race?.subRace && (
-                  <div className="flex items-start justify-between">
-                    <span className="text-gray-400 text-sm">Sub-race</span>
-                    <span className="text-amber-300 text-sm text-right">
-                      {character.race.subRace}
-                      {character.race.subRace
-                        .split(/\s*\+\s*/)
-                        .map((subRace, idx) => (
-                          <StatModifierBadge
-                            key={idx}
-                            name={subRace.trim()}
-                            sourceType="sub_race"
-                          />
-                        ))}
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-start justify-between">
-                  <span className="text-gray-400 text-sm">Archetypes</span>
-                  <div className="text-right">
-                    {character.nestedArchetypes &&
-                    character.nestedArchetypes.length > 0 ? (
-                      <div className="flex flex-wrap gap-1 justify-end">
-                        {character.nestedArchetypes.map((arch, idx) => (
-                          <span
-                            key={idx}
-                            className="text-pink-400 text-sm inline-flex items-center relative"
-                          >
-                            {arch.name}
-                            <StatModifierBadge
-                              name={arch.name}
-                              sourceType="archetype"
+              )}
+
+              {/* Archetypes */}
+              <div className="flex items-start gap-2">
+                <span className="text-gray-400 text-sm min-w-[80px]">
+                  Archetype:
+                </span>
+                {character.nestedArchetypes &&
+                character.nestedArchetypes.length > 0 ? (
+                  <div className="flex flex-wrap gap-1">
+                    {character.nestedArchetypes.map((arch, idx) => (
+                      <span
+                        key={idx}
+                        className="text-pink-400 text-sm inline-flex items-center relative"
+                      >
+                        {arch.name}
+                        <StatModifierBadge
+                          name={arch.name}
+                          sourceType="archetype"
+                        />
+                        {hasArchetypeSubTypes(arch) && (
+                          <>
+                            <InfoButton
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setOpenArchetypeTooltip(
+                                  openArchetypeTooltip === arch.name
+                                    ? null
+                                    : arch.name,
+                                );
+                                setOpenHouseTooltip(null);
+                              }}
                             />
-                            {hasArchetypeSubTypes(arch) && (
-                              <>
-                                <InfoButton
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setOpenArchetypeTooltip(
-                                      openArchetypeTooltip === arch.name
-                                        ? null
-                                        : arch.name,
-                                    );
-                                    setOpenHouseTooltip(null);
-                                  }}
-                                />
-                                <HierarchyTooltip
-                                  isOpen={openArchetypeTooltip === arch.name}
-                                  onClose={() => setOpenArchetypeTooltip(null)}
-                                  item={arch}
-                                  type="archetype"
-                                />
-                              </>
-                            )}
-                            {idx < character.nestedArchetypes!.length - 1
-                              ? ","
-                              : ""}
-                          </span>
-                        ))}
-                      </div>
-                    ) : character.archetypes &&
-                      character.archetypes.length > 0 ? (
-                      <div className="flex flex-wrap gap-1 justify-end">
-                        {character.archetypes.map((archetype, idx) => (
-                          <span key={idx} className="text-pink-400 text-sm">
-                            {archetype}
-                            <StatModifierBadge
-                              name={archetype}
-                              sourceType="archetype"
+                            <HierarchyTooltip
+                              isOpen={openArchetypeTooltip === arch.name}
+                              onClose={() => setOpenArchetypeTooltip(null)}
+                              item={arch}
+                              type="archetype"
                             />
-                            {idx < character.archetypes.length - 1 ? "," : ""}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      <span className="text-pink-400 text-sm">-</span>
-                    )}
+                          </>
+                        )}
+                        {idx < character.nestedArchetypes!.length - 1
+                          ? ","
+                          : ""}
+                      </span>
+                    ))}
                   </div>
-                </div>
-                <div className="flex items-start justify-between">
-                  <span className="text-gray-400 text-sm">Houses</span>
-                  <div className="text-right">
-                    {character.nestedHouses &&
-                    character.nestedHouses.length > 0 ? (
-                      <div className="flex flex-wrap gap-1 justify-end">
-                        {character.nestedHouses.map((house, idx) => (
-                          <span
-                            key={idx}
-                            className={`text-sm inline-flex items-center relative ${
-                              house.isLost
-                                ? "text-gray-500 line-through"
-                                : "text-cyan-400"
-                            }`}
-                          >
-                            {house.name}
-                            {house.isLost && (
-                              <span className="ml-1 text-red-400 text-xs">
-                                (đuổi)
-                              </span>
-                            )}
-                            {!house.isLost && (
-                              <StatModifierBadge
-                                name={house.name}
-                                sourceType="house"
-                              />
-                            )}
-                            {hasHouseSubTypes(house) && !house.isLost && (
-                              <>
-                                <InfoButton
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setOpenHouseTooltip(
-                                      openHouseTooltip === house.name
-                                        ? null
-                                        : house.name,
-                                    );
-                                    setOpenArchetypeTooltip(null);
-                                  }}
-                                />
-                                <HierarchyTooltip
-                                  isOpen={openHouseTooltip === house.name}
-                                  onClose={() => setOpenHouseTooltip(null)}
-                                  item={house}
-                                  type="house"
-                                />
-                              </>
-                            )}
-                            {idx < character.nestedHouses!.length - 1
-                              ? ","
-                              : ""}
-                          </span>
-                        ))}
-                      </div>
-                    ) : character.houses && character.houses.length > 0 ? (
-                      <div className="flex flex-wrap gap-1 justify-end">
-                        {character.houses.map((house, idx) => (
-                          <span
-                            key={idx}
-                            className={`text-sm ${
-                              house.isLost
-                                ? "text-gray-500 line-through"
-                                : "text-cyan-400"
-                            }`}
-                          >
-                            {house.name}
-                            {house.isLost && (
-                              <span className="ml-1 text-red-400 text-xs">
-                                (đuổi)
-                              </span>
-                            )}
-                            {!house.isLost && (
-                              <StatModifierBadge
-                                name={house.name}
-                                sourceType="house"
-                              />
-                            )}
-                            {idx < character.houses.length - 1 ? "," : ""}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      <span className="text-cyan-400 text-sm">-</span>
-                    )}
+                ) : character.archetypes && character.archetypes.length > 0 ? (
+                  <div className="flex flex-wrap gap-1">
+                    {character.archetypes.map((archetype, idx) => (
+                      <span key={idx} className="text-pink-400 text-sm">
+                        {archetype}
+                        <StatModifierBadge
+                          name={archetype}
+                          sourceType="archetype"
+                        />
+                        {idx < character.archetypes.length - 1 ? "," : ""}
+                      </span>
+                    ))}
                   </div>
-                </div>
-                {character.isParasite && (
-                  <InfoItem
-                    label="Status"
-                    value="Ky Sinh"
-                    color="text-green-400"
-                  />
+                ) : (
+                  <span className="text-pink-400 text-sm">-</span>
                 )}
               </div>
+
+              {/* Houses */}
+              <div className="flex items-start gap-2">
+                <span className="text-gray-400 text-sm min-w-[80px]">
+                  House:
+                </span>
+                {character.nestedHouses && character.nestedHouses.length > 0 ? (
+                  <div className="flex flex-wrap gap-1">
+                    {character.nestedHouses.map((house, idx) => (
+                      <span
+                        key={idx}
+                        className={`text-sm inline-flex items-center relative ${
+                          house.isLost && house.lostType !== "kinda_homeless"
+                            ? "text-gray-500 line-through"
+                            : house.isLost &&
+                                house.lostType === "kinda_homeless"
+                              ? "text-yellow-500"
+                              : "text-cyan-400"
+                        }`}
+                      >
+                        {house.name}
+                        {house.isLost && (
+                          <span
+                            className={`ml-1 text-xs ${house.lostType === "kinda_homeless" ? "text-yellow-400" : "text-red-400"}`}
+                          >
+                            {house.lostType === "kinda_homeless"
+                              ? "(rời nhà)"
+                              : "(đuổi)"}
+                          </span>
+                        )}
+                        {(!house.isLost ||
+                          house.lostType === "kinda_homeless") && (
+                          <StatModifierBadge
+                            name={house.name}
+                            sourceType="house"
+                          />
+                        )}
+                        {hasHouseSubTypes(house) && !house.isLost && (
+                          <>
+                            <InfoButton
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setOpenHouseTooltip(
+                                  openHouseTooltip === house.name
+                                    ? null
+                                    : house.name,
+                                );
+                                setOpenArchetypeTooltip(null);
+                              }}
+                            />
+                            <HierarchyTooltip
+                              isOpen={openHouseTooltip === house.name}
+                              onClose={() => setOpenHouseTooltip(null)}
+                              item={house}
+                              type="house"
+                            />
+                          </>
+                        )}
+                        {idx < character.nestedHouses!.length - 1 ? "," : ""}
+                      </span>
+                    ))}
+                  </div>
+                ) : character.houses && character.houses.length > 0 ? (
+                  <div className="flex flex-wrap gap-1">
+                    {character.houses.map((house, idx) => (
+                      <span
+                        key={idx}
+                        className={`text-sm ${
+                          house.isLost
+                            ? "text-gray-500 line-through"
+                            : "text-cyan-400"
+                        }`}
+                      >
+                        {house.name}
+                        {house.isLost && (
+                          <span className="ml-1 text-red-400 text-xs">
+                            (đuổi)
+                          </span>
+                        )}
+                        {!house.isLost && (
+                          <StatModifierBadge
+                            name={house.name}
+                            sourceType="house"
+                          />
+                        )}
+                        {idx < character.houses.length - 1 ? "," : ""}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-cyan-400 text-sm">-</span>
+                )}
+              </div>
+
+              {/* Parasite Status */}
+              {character.isParasite && (
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400 text-sm min-w-[80px]">
+                    Ký sinh:
+                  </span>
+                  <span className="text-green-400 text-sm">Có</span>
+                </div>
+              )}
+
+              {/* Tournament Status */}
+              {character.tournament && (
+                <>
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-400 text-sm min-w-[80px]">
+                      Status:
+                    </span>
+                    <span
+                      className={`text-sm font-medium ${
+                        character.tournament.status === "champion"
+                          ? "text-yellow-400"
+                          : character.tournament.status === "eliminated"
+                            ? "text-red-400"
+                            : "text-green-400"
+                      }`}
+                    >
+                      {character.tournament.status === "champion"
+                        ? "Vô địch"
+                        : character.tournament.status === "eliminated"
+                          ? "Đã bị loại"
+                          : "Còn sống"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-400 text-sm min-w-[80px]">
+                      Vòng:
+                    </span>
+                    <span className="text-purple-400 text-sm">
+                      {character.tournament.round === "-"
+                        ? "-"
+                        : character.tournament.round === "quarter"
+                          ? "Tứ kết"
+                          : character.tournament.round === "semi"
+                            ? "Bán kết"
+                            : character.tournament.round === "final"
+                              ? "Chung kết"
+                              : `Vòng ${character.tournament.round}`}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-gray-400 text-sm min-w-[80px]">
+                      Nhánh:
+                    </span>
+                    <span
+                      className={`text-sm ${
+                        character.tournament.bracket === "winner"
+                          ? "text-green-400"
+                          : character.tournament.bracket === "loser"
+                            ? "text-orange-400"
+                            : "text-gray-400"
+                      }`}
+                    >
+                      {character.tournament.bracket === "winner"
+                        ? "Nhánh thắng"
+                        : character.tournament.bracket === "loser"
+                          ? "Nhánh thua"
+                          : "-"}
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Stats */}
@@ -2216,6 +2712,7 @@ const PlayerDetailModal = ({
                     breakdown={effectBreakdown}
                     baseStats={character.stats}
                     originalBaseStats={character.originalBaseStats}
+                    tournamentInfo={tournamentInfo}
                   />
                 </div>
               )}
@@ -2550,22 +3047,6 @@ const PlayerDetailModal = ({
     </div>
   );
 };
-
-// Info Item Helper Component
-const InfoItem = ({
-  label,
-  value,
-  color = "text-white",
-}: {
-  label: string;
-  value: string;
-  color?: string;
-}) => (
-  <div>
-    <p className="text-xs text-gray-400 mb-1">{label}</p>
-    <p className={`font-medium ${color}`}>{value}</p>
-  </div>
-);
 
 // Team Battle Card Component
 interface TeamBattleCardProps {
@@ -2919,7 +3400,9 @@ const BossDetailModal = ({ boss, onClose }: BossDetailModalProps) => {
           {/* Battle Rules */}
           {boss.rules && boss.rules.length > 0 && (
             <div className="mb-4 p-4 rounded-lg bg-purple-500/20 border border-purple-500/50">
-              <h4 className="text-purple-400 font-bold mb-2">⚔️ Battle Rules</h4>
+              <h4 className="text-purple-400 font-bold mb-2">
+                ⚔️ Battle Rules
+              </h4>
               <ul className="text-purple-300 text-sm space-y-1">
                 {boss.rules.map((rule, index) => (
                   <li key={index} className="flex items-start gap-2">

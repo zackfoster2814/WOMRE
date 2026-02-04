@@ -1,5 +1,8 @@
 No.57
 Name: NPC (npc867)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 

@@ -1,5 +1,8 @@
 No.88
 Name: Lowns (.lowns)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 

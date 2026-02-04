@@ -1,5 +1,8 @@
 No.12
 Name: ar2di
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 

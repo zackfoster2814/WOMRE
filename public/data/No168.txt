@@ -1,5 +1,8 @@
 No.168
 Name: HunggViEn (hunggvn)
+Status: Còn sống
+Vòng thi đấu: -
+Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
@@ -28,7 +31,7 @@ MA:1
 
 ```
 Houses: 
-+ Dothraki (Bị đuổi)
++ Dothraki (Bị đuổi vì Kinda Homeless)
 ```
 
 ```
