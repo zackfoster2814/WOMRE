@@ -38,7 +38,7 @@ Houses:
 2 Gear: 
  + 2 Normal gear:
   - Bò Khô
-  - Lover's Glover (Lover: Quý Trần Tường (wyug1234))
+  - Lover's Glover (Quý Trần Tường (wyug1234))
  + 0 Legacy gear:
   - 
 ```
@@ -73,4 +73,10 @@ Team: 5
 Lover:
 + Quý Trần Tường (wyug1234)
 + LTL (ltl.jr)
+```
+
+```
+PvP Reward:
+- +1 Spd
+- +1 Dur
 ```

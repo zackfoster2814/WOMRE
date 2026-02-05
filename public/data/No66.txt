@@ -19,7 +19,7 @@ Archetype:
 ``` 
 4 Quirk:  
 + Progessive
-+ Pure (Từ Sybaurafarming ) (Không Đai)
++ Pure (Từ Sybaurafarming) (Không Đai)
 + Raumanian (Từ Sybaurafarming)
 + Let me solo her (Từ Sybaurafarming)
 ```

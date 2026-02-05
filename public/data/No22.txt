@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Fasst Learner
++ Fast Learner
 + Let me solo her
 ```
 ```

@@ -20,7 +20,7 @@ Archetype:
 ``` 
 3 Quirk:  
 + Raumanian🍀(Hero of the Emirate🍀)
-+ Charming (Lover: Đừng Nhờn với Two Fingers, tặng: "")
++ Charming (Đừng Nhờn với Two Fingers, tặng: "")
 + Dextrous
 + Shining Brightly
 + Artistic (Từ Fingerthing)

@@ -40,7 +40,7 @@ Houses:
  + 3 Normal gear:
   - Kẹo
   - Storage Room Key 
-  - Ớt (Từ Storage Room Key )
+  - Ớt (Từ Storage Room Key)
   - Love Letter
  + 0 Legacy gear:
   - 

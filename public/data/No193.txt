@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 3 Quirk:  
-+ Graceful (Lover: baonine (baonine))
++ Graceful (baonine (baonine))
 + Artisan
 + Resilient
 ```

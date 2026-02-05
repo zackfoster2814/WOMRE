@@ -22,7 +22,7 @@ Archetype:
 ```
 ```
 Str: 1
-Spd: 9 (6 ban đầu, Nhận +3 từ Archetype)
+Spd: 6 (Nhận +3 từ Archetype)
 Dur: 7
 IQ: 3
 BIQ: 9

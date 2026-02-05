@@ -39,7 +39,7 @@ Houses:
 ```
 2 Gear: 
  + 2 Normal gear:
-  - Lover's Glover (Lover: ltq (tcltq))
+  - Lover's Glover (ltq (tcltq))
   - Knight's Armor 
  + 0 Legacy gear:
   - 

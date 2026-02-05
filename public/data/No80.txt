@@ -39,7 +39,7 @@ Houses:
  + 1 Normal gear:
   - Đá
  + 1 Legacy gear:
-  - Cursed Gnome's Doll (Từ Cha rdev)
+  - Cursed Gnome's Doll (Từ Char dev)
 ```
 
 ```

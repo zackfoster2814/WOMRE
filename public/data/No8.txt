@@ -21,7 +21,7 @@ Archetype:
 + Cowardly
 ```
 ```
-Str: 12 (ban đầu là 10, +2 từ House)
+Str: 10 (+2 từ House)
 Spd: 5
 Dur: 1
 IQ: 6

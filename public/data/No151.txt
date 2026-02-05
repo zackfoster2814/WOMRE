@@ -56,7 +56,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ AIDS (từ Cha rdev)
++ AIDS (từ Char dev)
 ```
 
 ```

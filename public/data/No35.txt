@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 1 Quirk:  
-+ Graceful (Lover: Lunacy (lunacy6545))
++ Graceful (Lunacy (lunacy6545))
 ```
 ```
 Str: 4

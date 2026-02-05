@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: ELf
-Sub-race: Moon Elf (Lover: Yui (duyanh_57789)) 
+Sub-race: Moon Elf (Yui (duyanh_57789)) 
 ```
 
 ```

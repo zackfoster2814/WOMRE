@@ -1,4 +1,21 @@
-import type { Character, CharacterStats, CharacterRace, Gear, GearItem, Weapon, Rune, RuneItem, PvPReward, LossableItem, NestedArchetype, NestedHouse, TournamentInfo, TournamentStatus, TournamentRound, TournamentBracket } from '../types/character';
+import type {
+  Character,
+  CharacterStats,
+  CharacterRace,
+  Gear,
+  GearItem,
+  Weapon,
+  Rune,
+  RuneItem,
+  PvPReward,
+  LossableItem,
+  NestedArchetype,
+  NestedHouse,
+  TournamentInfo,
+  TournamentStatus,
+  TournamentRound,
+  TournamentBracket,
+} from "../types/character";
 
 /**
  * Check if an item text contains "lost" markers
@@ -6,10 +23,10 @@ import type { Character, CharacterStats, CharacterRace, Gear, GearItem, Weapon, 
  */
 function isLostItem(text: string): boolean {
   const lostPatterns = [
-    /\(đã mất[^)]*\)/i,           // (Đã mất) or (đã mất do ...)
-    /\(mất do[^)]*\)/i,           // (Mất do ...)
+    /\(đã mất[^)]*\)/i, // (Đã mất) or (đã mất do ...)
+    /\(mất do[^)]*\)/i, // (Mất do ...)
   ];
-  return lostPatterns.some(pattern => pattern.test(text));
+  return lostPatterns.some((pattern) => pattern.test(text));
 }
 
 /**
@@ -18,7 +35,7 @@ function isLostItem(text: string): boolean {
 function parseLossableItem(text: string): LossableItem {
   return {
     name: text,
-    isLost: isLostItem(text)
+    isLost: isLostItem(text),
   };
 }
 
@@ -28,7 +45,7 @@ function parseLossableItem(text: string): LossableItem {
 function parseGearItem(text: string): GearItem {
   return {
     name: text,
-    isLost: isLostItem(text)
+    isLost: isLostItem(text),
   };
 }
 
@@ -38,7 +55,7 @@ function parseGearItem(text: string): GearItem {
 function parseRuneItem(text: string): RuneItem {
   return {
     name: text,
-    isLost: isLostItem(text)
+    isLost: isLostItem(text),
   };
 }
 
@@ -47,99 +64,99 @@ export class CharacterParser {
   // Map: sub-type -> parent archetype
   private static readonly ARCHETYPE_SUB_TYPE_MAP: Record<string, string> = {
     // Wibu sub-types (Wibu Wheel)
-    'Dược sư tự sự': 'Wibu',
-    'JJK': 'Wibu',
-    'Jojo': 'Wibu',
-    'My Hero Academia': 'Wibu',
-    'MHA': 'Wibu',
-    'One Piece': 'Wibu',
-    'Bleach': 'Wibu',
+    "Dược sư tự sự": "Wibu",
+    JJK: "Wibu",
+    Jojo: "Wibu",
+    "My Hero Academia": "Wibu",
+    MHA: "Wibu",
+    "One Piece": "Wibu",
+    Bleach: "Wibu",
     // Farmer sub-types (Farmer Wheel)
-    'Normal Farmer': 'Farmer',
-    'Aura Farmer': 'Farmer',
+    "Normal Farmer": "Farmer",
+    "Aura Farmer": "Farmer",
     // X sub-types (Hero X Wheel)
-    'Lin Ling': 'X',
-    'E-Soul': 'X',
-    'Ahu': 'X',
-    'Lucky Cyan': 'X',
-    'Loli': 'X',
-    'The Johnnies': 'X',
-    'Ghostblade': 'X',
-    'Dragon Boy': 'X',
-    'Queen': 'X',
+    "Lin Ling": "X",
+    "E-Soul": "X",
+    Ahu: "X",
+    "Lucky Cyan": "X",
+    Loli: "X",
+    "The Johnnies": "X",
+    Ghostblade: "X",
+    "Dragon Boy": "X",
+    Queen: "X",
     // Trickster sub-types (Trickster Wheel)
-    'Ace of Spades': 'Trickster',
-    'King of Diamonds': 'Trickster',
-    'Queen of Clubs': 'Trickster',
-    'Jack of 97': 'Trickster',
-    'Ten of Hearts': 'Trickster',
+    "Ace of Spades": "Trickster",
+    "King of Diamonds": "Trickster",
+    "Queen of Clubs": "Trickster",
+    "Jack of 97": "Trickster",
+    "Ten of Hearts": "Trickster",
     // Power Ranger sub-types (Power Ranger Wheel)
-    'Red': 'Power Ranger',
-    'Blue': 'Power Ranger',
-    'Black': 'Power Ranger',
-    'Yellow': 'Power Ranger',
-    'Pink': 'Power Ranger',
-    'Silver': 'Power Ranger',
+    Red: "Power Ranger",
+    Blue: "Power Ranger",
+    Black: "Power Ranger",
+    Yellow: "Power Ranger",
+    Pink: "Power Ranger",
+    Silver: "Power Ranger",
     // Superhero sub-types (Siêu Anh Hùng Wheel)
-    'Captain America': 'Superhero',
-    'Iron Man': 'Superhero',
-    'Batman': 'Superhero',
-    'Superman': 'Superhero',
-    'Wonder Woman': 'Superhero',
-    'Spiderman': 'Superhero',
-    'The Flash': 'Superhero',
-    'Hulk': 'Superhero',
+    "Captain America": "Superhero",
+    "Iron Man": "Superhero",
+    Batman: "Superhero",
+    Superman: "Superhero",
+    "Wonder Woman": "Superhero",
+    Spiderman: "Superhero",
+    "The Flash": "Superhero",
+    Hulk: "Superhero",
   };
 
   // Sub-sub-types: sub-types that have their own wheels
   // Map: sub-sub-type -> parent sub-type
   private static readonly ARCHETYPE_SUB_SUB_TYPE_MAP: Record<string, string> = {
     // JJK -> Domain Expansion Wheel
-    'Infinity': 'JJK',
-    'Malevolent Shrine': 'JJK',
-    'Idle Death Gamble': 'JJK',
-    'Self-Embodiment of Perfection': 'JJK',
-    'Coffin of the Iron Mountain': 'JJK',
-    'Coffin of Iron Mountain': 'JJK',
-    'Deadly Sentencing': 'JJK',
+    Infinity: "JJK",
+    "Malevolent Shrine": "JJK",
+    "Idle Death Gamble": "JJK",
+    "Self-Embodiment of Perfection": "JJK",
+    "Coffin of the Iron Mountain": "JJK",
+    "Coffin of Iron Mountain": "JJK",
+    "Deadly Sentencing": "JJK",
     // Jojo -> Stands Wheel
-    'Hey Ya!': 'Jojo',
-    'Tusk Act II': 'Jojo',
-    'The World': 'Jojo',
-    'King Crimson': 'Jojo',
-    'Golden Experience Requiem': 'Jojo',
+    "Hey Ya!": "Jojo",
+    "Tusk Act II": "Jojo",
+    "The World": "Jojo",
+    "King Crimson": "Jojo",
+    "Golden Experience Requiem": "Jojo",
     // MHA -> MHA Power Wheel
-    'Quirkless': 'My Hero Academia',
-    'IQ': 'My Hero Academia',
-    'Dark Shadow': 'My Hero Academia',
-    'Erasure': 'My Hero Academia',
-    'Heal': 'My Hero Academia',
-    'Half-Cold Half-Hot': 'My Hero Academia',
-    'Float': 'My Hero Academia',
-    'Hellflame': 'My Hero Academia',
-    'Rewind': 'My Hero Academia',
-    'Overhaul': 'My Hero Academia',
-    'One For All': 'My Hero Academia',
-    'All For One': 'My Hero Academia',
+    Quirkless: "My Hero Academia",
+    IQ: "My Hero Academia",
+    "Dark Shadow": "My Hero Academia",
+    Erasure: "My Hero Academia",
+    Heal: "My Hero Academia",
+    "Half-Cold Half-Hot": "My Hero Academia",
+    Float: "My Hero Academia",
+    Hellflame: "My Hero Academia",
+    Rewind: "My Hero Academia",
+    Overhaul: "My Hero Academia",
+    "One For All": "My Hero Academia",
+    "All For One": "My Hero Academia",
     // One Piece -> Haki Wheel
-    'Observation': 'One Piece',
-    'Armament': 'One Piece',
-    'Observation + Armament': 'One Piece',
-    'Observation + Armament + King Conqueror': 'One Piece',
+    Observation: "One Piece",
+    Armament: "One Piece",
+    "Observation + Armament": "One Piece",
+    "Observation + Armament + King Conqueror": "One Piece",
     // Bleach -> Bankai Wheel
-    'Shinuchi': 'Bleach',
-    'Zanka no Tachi': 'Bleach',
-    'Daiguren Hyorinmaru': 'Bleach',
-    'Katen Kyokotsu': 'Bleach',
-    'Katen Kyokotsu: Karamatsu Shinju': 'Bleach',
-    'Gangaku Kairo': 'Bleach',
+    Shinuchi: "Bleach",
+    "Zanka no Tachi": "Bleach",
+    "Daiguren Hyorinmaru": "Bleach",
+    "Katen Kyokotsu": "Bleach",
+    "Katen Kyokotsu: Karamatsu Shinju": "Bleach",
+    "Gangaku Kairo": "Bleach",
   };
 
   /**
    * Parse character text file content into Character object
    */
   static parseCharacterFile(content: string): Character {
-    const lines = content.split('\n').map(line => line.trim());
+    const lines = content.split("\n").map((line) => line.trim());
 
     const character: Partial<Character> = {};
 
@@ -154,7 +171,7 @@ export class CharacterParser {
     // Try to find Name line (could be line 0 or line 1)
     let nameLineIndex = -1;
     for (let i = 0; i < Math.min(3, lines.length); i++) {
-      if (lines[i].startsWith('Name:')) {
+      if (lines[i].startsWith("Name:")) {
         nameLineIndex = i;
         break;
       }
@@ -179,11 +196,11 @@ export class CharacterParser {
     }
 
     // Parse Ký Sinh (Parasite) - check if this is a Symbiosis character or a host
-    const kyShinhIndex = this.findSectionIndex(lines, 'Ký Sinh:');
+    const kyShinhIndex = this.findSectionIndex(lines, "Ký Sinh:");
     const parasiteResult = this.parseParasiteInfo(lines, kyShinhIndex);
 
     // Check if this character IS a Symbiosis (has "Ký Sinh: Yes" and no Race section)
-    const raceIndex = this.findSectionIndex(lines, 'Race:');
+    const raceIndex = this.findSectionIndex(lines, "Race:");
     const isSymbiosisChar = parasiteResult.isSymbiosis;
 
     if (isSymbiosisChar) {
@@ -194,7 +211,10 @@ export class CharacterParser {
       character.isParasite = false;
       character.parasiteInfo = [];
       // Set race as Symbiosis
-      character.race = { race: 'Symbiosis', subRace: parasiteResult.symbiosisType };
+      character.race = {
+        race: "Symbiosis",
+        subRace: parasiteResult.symbiosisType,
+      };
     } else {
       // This is a regular character (may or may not be a host)
       character.isParasite = parasiteResult.isParasite;
@@ -210,13 +230,13 @@ export class CharacterParser {
     }
 
     // Parse Archetypes (support multiple) - archetypes cannot be lost
-    const archetypeIndex = this.findSectionIndex(lines, 'Archetype:');
+    const archetypeIndex = this.findSectionIndex(lines, "Archetype:");
     const archetypeResult = this.parseNestedArchetypes(lines, archetypeIndex);
     character.archetypes = archetypeResult.flat;
     character.nestedArchetypes = archetypeResult.nested;
 
     // Parse Quirks
-    const quirkIndex = this.findSectionIndex(lines, 'Quirk:');
+    const quirkIndex = this.findSectionIndex(lines, "Quirk:");
     character.quirks = this.parseListValue(lines, quirkIndex);
 
     // Parse Stats
@@ -226,14 +246,14 @@ export class CharacterParser {
     character.originalBaseStats = this.parseOriginalBaseStats(lines);
 
     // Parse flags (e.g., Giant bonus already applied)
-    character.giantBonusApplied = this.parseFlag(lines, 'GiantBonusApplied');
+    character.giantBonusApplied = this.parseFlag(lines, "GiantBonusApplied");
 
     // Parse Houses - can have multiple, some may be lost (kicked out)
-    const houseIndex = this.findSectionIndex(lines, 'Houses:');
+    const houseIndex = this.findSectionIndex(lines, "Houses:");
     const houseResult = this.parseNestedHouses(lines, houseIndex);
-    character.houses = houseResult.flat.map(h => ({
+    character.houses = houseResult.flat.map((h) => ({
       name: h,
-      isLost: isLostItem(h)
+      isLost: isLostItem(h),
     }));
     character.nestedHouses = houseResult.nested;
 
@@ -247,15 +267,15 @@ export class CharacterParser {
     character.runes = this.parseRunes(lines);
 
     // Parse Powers
-    const powerIndex = this.findSectionIndex(lines, 'Power:');
+    const powerIndex = this.findSectionIndex(lines, "Power:");
     character.powers = this.parseListValue(lines, powerIndex);
 
     // Parse Character Development (support multiple)
-    const charDevIndex = this.findSectionIndex(lines, 'Char dev:');
+    const charDevIndex = this.findSectionIndex(lines, "Char dev:");
     character.charDevs = this.parseListValue(lines, charDevIndex);
 
     // Parse Team
-    const teamIndex = this.findSectionIndex(lines, 'Team:');
+    const teamIndex = this.findSectionIndex(lines, "Team:");
     if (teamIndex >= 0 && lines[teamIndex + 1]) {
       const teamMatch = lines[teamIndex + 1].match(/\d+/);
       if (teamMatch) {
@@ -264,9 +284,9 @@ export class CharacterParser {
     }
 
     // Parse Lover - lovers cannot be lost
-    const loverIndex = this.findSectionIndex(lines, 'Lover:');
-    const lovers = this.parseListValueAsStrings(lines, loverIndex);
-    character.lover = lovers[0];
+    const loverIndex = this.findSectionIndex(lines, "Lover:");
+    const lovers = this.parseListValue(lines, loverIndex);
+    character.lover = lovers;
 
     // Parse PvP Rewards
     character.pvpRewards = this.parsePvPRewards(lines);
@@ -278,7 +298,7 @@ export class CharacterParser {
   }
 
   private static findSectionIndex(lines: string[], keyword: string): number {
-    return lines.findIndex(line => line.includes(keyword));
+    return lines.findIndex((line) => line.includes(keyword));
   }
 
   /**
@@ -287,21 +307,25 @@ export class CharacterParser {
    */
   private static parseFlag(lines: string[], flagName: string): boolean {
     for (const line of lines) {
-      const match = line.match(new RegExp(`${flagName}:\\s*(yes|true)`, 'i'));
+      const match = line.match(new RegExp(`${flagName}:\\s*(yes|true)`, "i"));
       if (match) return true;
     }
     return false;
   }
 
-  private static parseParasiteInfo(lines: string[], startIndex: number): {
-    isParasite: boolean;        // This character is a HOST (has a parasite on them)
-    isSymbiosis: boolean;       // This character IS a parasite (Symbiosis)
+  private static parseParasiteInfo(
+    lines: string[],
+    startIndex: number,
+  ): {
+    isParasite: boolean; // This character is a HOST (has a parasite on them)
+    isSymbiosis: boolean; // This character IS a parasite (Symbiosis)
     info: string[];
-    symbiosisType?: string;     // Type of symbiosis (Mephisto, Diablo, 67, etc.)
-    symbiosisHost?: string;     // For Symbiosis: who they're attached to
-    parasiteName?: string;      // For Host: who is attached to them
+    symbiosisType?: string; // Type of symbiosis (Mephisto, Diablo, 67, etc.)
+    symbiosisHost?: string; // For Symbiosis: who they're attached to
+    parasiteName?: string; // For Host: who is attached to them
   } {
-    if (startIndex < 0) return { isParasite: false, info: [], isSymbiosis: false };
+    if (startIndex < 0)
+      return { isParasite: false, info: [], isSymbiosis: false };
 
     const info: string[] = [];
     let hasContent = false;
@@ -313,16 +337,20 @@ export class CharacterParser {
 
     // Check if this line contains "Yes" indicating this IS a Symbiosis character
     const kyShinhLine = lines[startIndex];
-    if (kyShinhLine && kyShinhLine.toLowerCase().includes('yes')) {
+    if (kyShinhLine && kyShinhLine.toLowerCase().includes("yes")) {
       isSymbiosis = true;
     }
 
-    for (let i = startIndex + 1; i < Math.min(startIndex + 10, lines.length); i++) {
+    for (
+      let i = startIndex + 1;
+      i < Math.min(startIndex + 10, lines.length);
+      i++
+    ) {
       const line = lines[i];
 
       // Stop at next section or code block end
-      if (line.startsWith('```') && i > startIndex + 1) break;
-      if (!line || line === '```') continue;
+      if (line.startsWith("```") && i > startIndex + 1) break;
+      if (!line || line === "```") continue;
 
       // Parse list items starting with + or -
       const match = line.match(/^[+\-*]\s*(.+)/);
@@ -356,7 +384,7 @@ export class CharacterParser {
             }
           }
         }
-      } else if (line === '+' || line === '-') {
+      } else if (line === "+" || line === "-") {
         // Just a + or - without content means placeholder
         continue;
       }
@@ -368,12 +396,12 @@ export class CharacterParser {
       isSymbiosis,
       symbiosisType,
       symbiosisHost,
-      parasiteName
+      parasiteName,
     };
   }
 
   private static parseRace(lines: string[], startIndex: number): CharacterRace {
-    const race: CharacterRace = { race: '' };
+    const race: CharacterRace = { race: "" };
 
     if (startIndex < 0) return race;
 
@@ -385,9 +413,11 @@ export class CharacterParser {
         const fullRace = raceMatch[1].trim();
 
         // Check if this is a Reincarnator - format: "Reincarnator (Name) -> NewRace"
-        const reincarnatorMatch = fullRace.match(/^Reincarnator\s*(\(.+\)\s*->\s*.*)$/i);
+        const reincarnatorMatch = fullRace.match(
+          /^Reincarnator\s*(\(.+\)\s*->\s*.*)$/i,
+        );
         if (reincarnatorMatch) {
-          race.race = 'Reincarnator';
+          race.race = "Reincarnator";
           race.reincarnatorInfo = reincarnatorMatch[1].trim();
         } else {
           race.race = fullRace;
@@ -397,7 +427,7 @@ export class CharacterParser {
       const subRaceMatch = line.match(/Sub-race:\s*(.+)/);
       if (subRaceMatch) {
         const subRace = subRaceMatch[1].trim();
-        if (subRace && subRace !== '-') {
+        if (subRace && subRace !== "-") {
           race.subRace = subRace;
         }
       }
@@ -406,17 +436,24 @@ export class CharacterParser {
     return race;
   }
 
-  private static parseListValue(lines: string[], startIndex: number): LossableItem[] {
+  private static parseListValue(
+    lines: string[],
+    startIndex: number,
+  ): LossableItem[] {
     if (startIndex < 0) return [];
 
     const values: LossableItem[] = [];
 
-    for (let i = startIndex + 1; i < Math.min(startIndex + 20, lines.length); i++) {
+    for (
+      let i = startIndex + 1;
+      i < Math.min(startIndex + 20, lines.length);
+      i++
+    ) {
       const line = lines[i];
 
       // Stop at next section or code block
-      if (line.startsWith('```') && i > startIndex + 1) break;
-      if (!line || line === '```') continue;
+      if (line.startsWith("```") && i > startIndex + 1) break;
+      if (!line || line === "```") continue;
 
       // Parse list items starting with + or -
       const match = line.match(/^[+\-*]\s*(.+)/);
@@ -431,17 +468,24 @@ export class CharacterParser {
     return values;
   }
 
-  private static parseListValueAsStrings(lines: string[], startIndex: number): string[] {
+  private static parseListValueAsStrings(
+    lines: string[],
+    startIndex: number,
+  ): string[] {
     if (startIndex < 0) return [];
 
     const values: string[] = [];
 
-    for (let i = startIndex + 1; i < Math.min(startIndex + 20, lines.length); i++) {
+    for (
+      let i = startIndex + 1;
+      i < Math.min(startIndex + 20, lines.length);
+      i++
+    ) {
       const line = lines[i];
 
       // Stop at next section or code block
-      if (line.startsWith('```') && i > startIndex + 1) break;
-      if (!line || line === '```') continue;
+      if (line.startsWith("```") && i > startIndex + 1) break;
+      if (!line || line === "```") continue;
 
       // Parse list items starting with + or -
       const match = line.match(/^[+\-*]\s*(.+)/);
@@ -475,7 +519,10 @@ export class CharacterParser {
    * - First -> after + is subType
    * - Second -> is subSubType
    */
-  private static parseNestedArchetypes(lines: string[], startIndex: number): {
+  private static parseNestedArchetypes(
+    lines: string[],
+    startIndex: number,
+  ): {
     flat: string[];
     nested: NestedArchetype[];
   } {
@@ -485,12 +532,16 @@ export class CharacterParser {
     const nested: NestedArchetype[] = [];
     let currentArchetype: NestedArchetype | null = null;
 
-    for (let i = startIndex + 1; i < Math.min(startIndex + 30, lines.length); i++) {
+    for (
+      let i = startIndex + 1;
+      i < Math.min(startIndex + 30, lines.length);
+      i++
+    ) {
       const line = lines[i];
 
       // Stop at next section or code block end
-      if (line.startsWith('```') && i > startIndex + 1) break;
-      if (!line || line === '```') continue;
+      if (line.startsWith("```") && i > startIndex + 1) break;
+      if (!line || line === "```") continue;
 
       // Main archetype: starts with + (e.g., "+ Wibu")
       const mainMatch = line.match(/^[+]\s*(.+)/);
@@ -500,14 +551,24 @@ export class CharacterParser {
 
         // Check if this is a sub-sub-type (e.g., "The World" is sub-sub of "Jojo")
         const subSubParent = this.ARCHETYPE_SUB_SUB_TYPE_MAP[name];
-        if (subSubParent && currentArchetype && currentArchetype.subType === subSubParent && !currentArchetype.subSubType) {
+        if (
+          subSubParent &&
+          currentArchetype &&
+          currentArchetype.subType === subSubParent &&
+          !currentArchetype.subSubType
+        ) {
           currentArchetype.subSubType = name;
           continue;
         }
 
         // Check if this is a sub-type of the current archetype
         const subParent = this.ARCHETYPE_SUB_TYPE_MAP[name];
-        if (subParent && currentArchetype && currentArchetype.name === subParent && !currentArchetype.subType) {
+        if (
+          subParent &&
+          currentArchetype &&
+          currentArchetype.name === subParent &&
+          !currentArchetype.subType
+        ) {
           currentArchetype.subType = name;
           continue;
         }
@@ -554,30 +615,30 @@ export class CharacterParser {
   // When we see one of these sub-types listed separately, we should merge it with the parent
   private static readonly HOUSE_SUB_TYPE_MAP: Record<string, string> = {
     // New London sub-types
-    'Thinkers': 'New London',
-    'Frostlanders': 'New London',
-    'New Londoners': 'New London',
-    'Winterhomers': 'New London',
-    'Wanderers': 'New London',
-    'Engineers': 'New London',
-    'Workers': 'New London',
-    'Children': 'New London',
-    'Faith Keepers': 'New London',
-    'Venturers': 'New London',
+    Thinkers: "New London",
+    Frostlanders: "New London",
+    "New Londoners": "New London",
+    Winterhomers: "New London",
+    Wanderers: "New London",
+    Engineers: "New London",
+    Workers: "New London",
+    Children: "New London",
+    "Faith Keepers": "New London",
+    Venturers: "New London",
     // House Stark dire wolves
-    'Grey Wind': 'House Stark',
-    'Lady': 'House Stark',
-    'Summer': 'House Stark',
-    'Shaggydog': 'House Stark',
-    'Ghost': 'House Stark',
-    'Nymeria': 'House Stark',
+    "Grey Wind": "House Stark",
+    Lady: "House Stark",
+    Summer: "House Stark",
+    Shaggydog: "House Stark",
+    Ghost: "House Stark",
+    Nymeria: "House Stark",
     // Golden Order shardbearers
-    'Godrick': 'Golden Order',
-    'Malenia': 'Golden Order',
-    'Radahn': 'Golden Order',
-    'Morgott': 'Golden Order',
-    'Mohg': 'Golden Order',
-    'Rykard': 'Golden Order',
+    Godrick: "Golden Order",
+    Malenia: "Golden Order",
+    Radahn: "Golden Order",
+    Morgott: "Golden Order",
+    Mohg: "Golden Order",
+    Rykard: "Golden Order",
   };
 
   /**
@@ -594,7 +655,10 @@ export class CharacterParser {
    *   + Thinkers
    * This will be merged into: New London -> Thinkers
    */
-  private static parseNestedHouses(lines: string[], startIndex: number): {
+  private static parseNestedHouses(
+    lines: string[],
+    startIndex: number,
+  ): {
     flat: string[];
     nested: NestedHouse[];
   } {
@@ -604,12 +668,16 @@ export class CharacterParser {
     const nested: NestedHouse[] = [];
     let currentHouse: NestedHouse | null = null;
 
-    for (let i = startIndex + 1; i < Math.min(startIndex + 20, lines.length); i++) {
+    for (
+      let i = startIndex + 1;
+      i < Math.min(startIndex + 20, lines.length);
+      i++
+    ) {
       const line = lines[i];
 
       // Stop at next section or code block end
-      if (line.startsWith('```') && i > startIndex + 1) break;
-      if (!line || line === '```') continue;
+      if (line.startsWith("```") && i > startIndex + 1) break;
+      if (!line || line === "```") continue;
 
       // Main house: starts with + (e.g., "+ New London")
       const mainMatch = line.match(/^[+]\s*(.+)/);
@@ -629,14 +697,19 @@ export class CharacterParser {
           currentHouse = {
             name: mainName,
             subType,
-            isLost: isLostItem(name)
+            isLost: isLostItem(name),
           };
           continue;
         }
 
         // Check if this is a known sub-type that should be merged with previous house
         const parentHouse = this.HOUSE_SUB_TYPE_MAP[name];
-        if (parentHouse && currentHouse && currentHouse.name === parentHouse && !currentHouse.subType) {
+        if (
+          parentHouse &&
+          currentHouse &&
+          currentHouse.name === parentHouse &&
+          !currentHouse.subType
+        ) {
           // This is a sub-type of the current house, merge it
           currentHouse.subType = name;
           continue;
@@ -674,7 +747,10 @@ export class CharacterParser {
             // Check if subType is lost (e.g., "Godrick (đã mất)")
             const subTypeIsLost = isLostItem(subValue);
             // Strip "(đã mất...)" from subType name for registry lookup
-            const cleanSubType = subValue.replace(/\s*\(đã mất[^)]*\)/gi, '').replace(/\s*\(mất do[^)]*\)/gi, '').trim();
+            const cleanSubType = subValue
+              .replace(/\s*\(đã mất[^)]*\)/gi, "")
+              .replace(/\s*\(mất do[^)]*\)/gi, "")
+              .trim();
             currentHouse.subType = cleanSubType;
             currentHouse.subTypeIsLost = subTypeIsLost;
           }
@@ -698,7 +774,7 @@ export class CharacterParser {
       dur: 0,
       iq: 0,
       biq: 0,
-      ma: 0
+      ma: 0,
     };
 
     for (const line of lines) {
@@ -728,7 +804,9 @@ export class CharacterParser {
    * Parse original base stats from annotations like "ban đầu là X"
    * Returns undefined if no original stats found
    */
-  private static parseOriginalBaseStats(lines: string[]): CharacterStats | undefined {
+  private static parseOriginalBaseStats(
+    lines: string[],
+  ): CharacterStats | undefined {
     const stats: Partial<CharacterStats> = {};
     let hasOriginal = false;
 
@@ -779,17 +857,17 @@ export class CharacterParser {
       dur: stats.dur ?? 0,
       iq: stats.iq ?? 0,
       biq: stats.biq ?? 0,
-      ma: stats.ma ?? 0
+      ma: stats.ma ?? 0,
     };
   }
 
   private static parseGear(lines: string[]): Gear {
     const gear: Gear = {
       normalGear: [],
-      legacyGear: []
+      legacyGear: [],
     };
 
-    const gearIndex = this.findSectionIndex(lines, 'Gear:');
+    const gearIndex = this.findSectionIndex(lines, "Gear:");
     if (gearIndex < 0) return gear;
 
     let inNormalGear = false;
@@ -798,19 +876,19 @@ export class CharacterParser {
     for (let i = gearIndex; i < Math.min(gearIndex + 30, lines.length); i++) {
       const line = lines[i];
 
-      if (line.includes('Normal gear:')) {
+      if (line.includes("Normal gear:")) {
         inNormalGear = true;
         inLegacyGear = false;
         continue;
       }
 
-      if (line.includes('Legacy gear:')) {
+      if (line.includes("Legacy gear:")) {
         inNormalGear = false;
         inLegacyGear = true;
         continue;
       }
 
-      if (line.startsWith('```') && i > gearIndex + 1) break;
+      if (line.startsWith("```") && i > gearIndex + 1) break;
 
       const itemMatch = line.match(/^[\-*]\s*(.+)/);
       if (itemMatch) {
@@ -831,19 +909,23 @@ export class CharacterParser {
   private static parseWeapons(lines: string[]): Weapon[] {
     const weapons: Weapon[] = [];
 
-    const weaponIndex = this.findSectionIndex(lines, 'Weapon');
+    const weaponIndex = this.findSectionIndex(lines, "Weapon");
     if (weaponIndex < 0) return weapons;
 
-    let weaponType: 'Normal' | 'Unique' | 'Legacy' = 'Normal';
+    let weaponType: "Normal" | "Unique" | "Legacy" = "Normal";
 
     // Determine weapon type from section header
-    if (lines[weaponIndex].includes('Unique')) weaponType = 'Unique';
-    if (lines[weaponIndex].includes('Legacy')) weaponType = 'Legacy';
+    if (lines[weaponIndex].includes("Unique")) weaponType = "Unique";
+    if (lines[weaponIndex].includes("Legacy")) weaponType = "Legacy";
 
-    for (let i = weaponIndex + 1; i < Math.min(weaponIndex + 15, lines.length); i++) {
+    for (
+      let i = weaponIndex + 1;
+      i < Math.min(weaponIndex + 15, lines.length);
+      i++
+    ) {
       const line = lines[i];
 
-      if (line.startsWith('```') && i > weaponIndex + 1) break;
+      if (line.startsWith("```") && i > weaponIndex + 1) break;
 
       const itemMatch = line.match(/^[+\-*]\s*(.+)/);
       if (itemMatch) {
@@ -858,8 +940,10 @@ export class CharacterParser {
           weapons.push({
             type: weaponType,
             name: name,
-            usable: usableMatch ? !usableMatch[1].includes('không dùng') : undefined,
-            isLost: lost || undefined
+            usable: usableMatch
+              ? !usableMatch[1].includes("không dùng")
+              : undefined,
+            isLost: lost || undefined,
           });
         }
       }
@@ -871,21 +955,25 @@ export class CharacterParser {
   private static parseRunes(lines: string[]): Rune {
     const rune: Rune = {
       runes: [],
-      runeword: undefined
+      runeword: undefined,
     };
 
-    const runeIndex = this.findSectionIndex(lines, 'Rune:');
+    const runeIndex = this.findSectionIndex(lines, "Rune:");
     if (runeIndex < 0) return rune;
 
-    for (let i = runeIndex + 1; i < Math.min(runeIndex + 10, lines.length); i++) {
+    for (
+      let i = runeIndex + 1;
+      i < Math.min(runeIndex + 10, lines.length);
+      i++
+    ) {
       const line = lines[i];
 
-      if (line.startsWith('```') && i > runeIndex + 1) break;
+      if (line.startsWith("```") && i > runeIndex + 1) break;
 
       const runeMatch = line.match(/^[+\-*]\s*(.+)/);
       if (runeMatch) {
         const runeName = runeMatch[1].trim();
-        if (runeName && !runeName.toLowerCase().includes('runeword')) {
+        if (runeName && !runeName.toLowerCase().includes("runeword")) {
           rune.runes.push(parseRuneItem(runeName));
         }
       }
@@ -893,7 +981,7 @@ export class CharacterParser {
       const runewordMatch = line.match(/Runeword:\s*(.+)/i);
       if (runewordMatch) {
         const runeword = runewordMatch[1].trim();
-        if (runeword && runeword !== 'Không' && runeword !== '-') {
+        if (runeword && runeword !== "Không" && runeword !== "-") {
           rune.runeword = runeword;
         }
       }
@@ -909,10 +997,12 @@ export class CharacterParser {
    * Vòng thi đấu: - / 256 / 128 / 64 / 32 / 16 / 8 / tứ kết / bán kết / chung kết
    * Nhánh thi đấu: - / thắng / thua
    */
-  private static parseTournamentInfo(lines: string[]): TournamentInfo | undefined {
-    let status: TournamentStatus = 'alive';
-    let round: TournamentRound = '-';
-    let bracket: TournamentBracket = '-';
+  private static parseTournamentInfo(
+    lines: string[],
+  ): TournamentInfo | undefined {
+    let status: TournamentStatus = "alive";
+    let round: TournamentRound = "-";
+    let bracket: TournamentBracket = "-";
     let pvpWins: number | undefined;
     let foundAny = false;
 
@@ -925,12 +1015,12 @@ export class CharacterParser {
       if (statusMatch) {
         foundAny = true;
         const statusStr = statusMatch[1].trim().toLowerCase();
-        if (statusStr.includes('vô địch') || statusStr === 'champion') {
-          status = 'champion';
-        } else if (statusStr.includes('loại') || statusStr === 'eliminated') {
-          status = 'eliminated';
+        if (statusStr.includes("vô địch") || statusStr === "champion") {
+          status = "champion";
+        } else if (statusStr.includes("loại") || statusStr === "eliminated") {
+          status = "eliminated";
         } else {
-          status = 'alive';
+          status = "alive";
         }
       }
 
@@ -939,20 +1029,20 @@ export class CharacterParser {
       if (roundMatch) {
         foundAny = true;
         const roundStr = roundMatch[1].trim().toLowerCase();
-        if (roundStr === '-' || roundStr === '') {
-          round = '-';
-        } else if (roundStr.includes('chung kết') || roundStr === 'final') {
-          round = 'final';
-        } else if (roundStr.includes('bán kết') || roundStr === 'semi') {
-          round = 'semi';
-        } else if (roundStr.includes('tứ kết') || roundStr === 'quarter') {
-          round = 'quarter';
+        if (roundStr === "-" || roundStr === "") {
+          round = "-";
+        } else if (roundStr.includes("chung kết") || roundStr === "final") {
+          round = "final";
+        } else if (roundStr.includes("bán kết") || roundStr === "semi") {
+          round = "semi";
+        } else if (roundStr.includes("tứ kết") || roundStr === "quarter") {
+          round = "quarter";
         } else {
           // Try to parse numeric round: 256, 128, 64, 32, 16, 8
           const numMatch = roundStr.match(/(\d+)/);
           if (numMatch) {
             const num = numMatch[1] as TournamentRound;
-            if (['256', '128', '64', '32', '16', '8'].includes(num)) {
+            if (["256", "128", "64", "32", "16", "8"].includes(num)) {
               round = num;
             }
           }
@@ -960,16 +1050,18 @@ export class CharacterParser {
       }
 
       // Parse Bracket (Nhánh thi đấu)
-      const bracketMatch = line.match(/^(?:Nhánh thi đấu|Nhánh|Bracket):\s*(.+)/i);
+      const bracketMatch = line.match(
+        /^(?:Nhánh thi đấu|Nhánh|Bracket):\s*(.+)/i,
+      );
       if (bracketMatch) {
         foundAny = true;
         const bracketStr = bracketMatch[1].trim().toLowerCase();
-        if (bracketStr.includes('thắng') || bracketStr === 'winner') {
-          bracket = 'winner';
-        } else if (bracketStr.includes('thua') || bracketStr === 'loser') {
-          bracket = 'loser';
+        if (bracketStr.includes("thắng") || bracketStr === "winner") {
+          bracket = "winner";
+        } else if (bracketStr.includes("thua") || bracketStr === "loser") {
+          bracket = "loser";
         } else {
-          bracket = '-';
+          bracket = "-";
         }
       }
 
@@ -988,20 +1080,20 @@ export class CharacterParser {
       status,
       round,
       bracket,
-      pvpWins
+      pvpWins,
     };
   }
 
   private static parsePvPRewards(lines: string[]): PvPReward[] {
     const rewards: PvPReward[] = [];
 
-    const pvpIndex = this.findSectionIndex(lines, 'PvP Reward');
+    const pvpIndex = this.findSectionIndex(lines, "PvP Reward:");
     if (pvpIndex < 0) return rewards;
 
     for (let i = pvpIndex + 1; i < Math.min(pvpIndex + 10, lines.length); i++) {
       const line = lines[i];
 
-      if (line.startsWith('```') && i > pvpIndex + 1) break;
+      if (line.startsWith("```") && i > pvpIndex + 1) break;
 
       const rewardMatch = line.match(/^[\-*]\s*(.+)/);
       if (rewardMatch) {
@@ -1009,7 +1101,7 @@ export class CharacterParser {
         if (reward) {
           rewards.push({
             description: reward,
-            applied: false
+            applied: true,
           });
         }
       }
@@ -1027,143 +1119,154 @@ export class CharacterParser {
     // Header
     lines.push(`No.${character.no}`);
     lines.push(`Name: ${character.name} (${character.username})`);
-    lines.push('');
+    lines.push("");
 
     // Ký Sinh
-    lines.push('```');
-    lines.push('Ký Sinh:');
-    lines.push(character.isParasite ? '+' : '+');
-    lines.push('```');
+    lines.push("```");
+    lines.push("Ký Sinh:");
+    lines.push(character.isParasite ? "+" : "+");
+    lines.push("```");
 
     // Race
-    lines.push('```');
-    lines.push(`Race: ${character.race.race || ''}`);
-    lines.push(`Sub-race: ${character.race.subRace || '-'}`);
-    lines.push('```');
-    lines.push('');
+    lines.push("```");
+    lines.push(`Race: ${character.race.race || ""}`);
+    lines.push(`Sub-race: ${character.race.subRace || "-"}`);
+    lines.push("```");
+    lines.push("");
 
     // Archetypes
-    lines.push('```');
+    lines.push("```");
     lines.push(`${character.archetypes?.length || 0} Archetype:`);
     if (character.archetypes && character.archetypes.length > 0) {
-      character.archetypes.forEach(a => lines.push(`+ ${a}`));
+      character.archetypes.forEach((a) => lines.push(`+ ${a}`));
     } else {
-      lines.push('+');
+      lines.push("+");
     }
-    lines.push('```');
+    lines.push("```");
 
     // Quirks
-    lines.push('```');
+    lines.push("```");
     lines.push(`${character.quirks.length} Quirk:`);
     if (character.quirks.length > 0) {
-      character.quirks.forEach(q => lines.push(`+ ${q.name}`));
+      character.quirks.forEach((q) => lines.push(`+ ${q.name}`));
     } else {
-      lines.push('+');
+      lines.push("+");
     }
-    lines.push('```');
+    lines.push("```");
 
     // Stats
-    lines.push('```');
-    lines.push(`Str: ${character.stats.str || ''}`);
-    lines.push(`Spd: ${character.stats.spd || ''}`);
-    lines.push(`Dur: ${character.stats.dur || ''}`);
-    lines.push(`IQ: ${character.stats.iq || ''}`);
-    lines.push(`BIQ: ${character.stats.biq || ''}`);
-    lines.push(`MA: ${character.stats.ma || ''}`);
-    lines.push('```');
-    lines.push('');
+    lines.push("```");
+    lines.push(`Str: ${character.stats.str || ""}`);
+    lines.push(`Spd: ${character.stats.spd || ""}`);
+    lines.push(`Dur: ${character.stats.dur || ""}`);
+    lines.push(`IQ: ${character.stats.iq || ""}`);
+    lines.push(`BIQ: ${character.stats.biq || ""}`);
+    lines.push(`MA: ${character.stats.ma || ""}`);
+    lines.push("```");
+    lines.push("");
 
     // Houses
-    lines.push('```');
-    lines.push('Houses:');
+    lines.push("```");
+    lines.push("Houses:");
     if (character.houses && character.houses.length > 0) {
-      character.houses.forEach(h => lines.push(`+ ${h.name}`));
+      character.houses.forEach((h) => lines.push(`+ ${h.name}`));
     } else {
-      lines.push('+');
+      lines.push("+");
     }
-    lines.push('```');
-    lines.push('');
+    lines.push("```");
+    lines.push("");
 
     // Gear
-    const totalGear = character.gear.normalGear.length + character.gear.legacyGear.length;
-    lines.push('```');
+    const totalGear =
+      character.gear.normalGear.length + character.gear.legacyGear.length;
+    lines.push("```");
     lines.push(`${totalGear} Gear:`);
     lines.push(` + ${character.gear.normalGear.length} Normal gear:`);
     if (character.gear.normalGear.length > 0) {
-      character.gear.normalGear.forEach(g => lines.push(`  - ${g.name}`));
+      character.gear.normalGear.forEach((g) => lines.push(`  - ${g.name}`));
     } else {
-      lines.push('  -');
+      lines.push("  -");
     }
     lines.push(` + ${character.gear.legacyGear.length} Legacy gear:`);
     if (character.gear.legacyGear.length > 0) {
-      character.gear.legacyGear.forEach(g => lines.push(`  - ${g.name}`));
+      character.gear.legacyGear.forEach((g) => lines.push(`  - ${g.name}`));
     } else {
-      lines.push('  -');
+      lines.push("  -");
     }
-    lines.push('```');
-    lines.push('');
+    lines.push("```");
+    lines.push("");
 
     // Weapons
-    lines.push('```');
+    lines.push("```");
     lines.push(`${character.weapons.length} Normal Weapon`);
     if (character.weapons.length > 0) {
-      character.weapons.forEach(w => {
-        const usableText = w.usable === false ? ' (không dùng được)' : w.usable === true ? ' (Dùng được)' : '';
+      character.weapons.forEach((w) => {
+        const usableText =
+          w.usable === false
+            ? " (không dùng được)"
+            : w.usable === true
+              ? " (Dùng được)"
+              : "";
         lines.push(`+ ${w.name}${usableText}`);
       });
     } else {
-      lines.push('+');
+      lines.push("+");
     }
-    lines.push('```');
-    lines.push('');
+    lines.push("```");
+    lines.push("");
 
     // Runes
-    lines.push('```');
+    lines.push("```");
     lines.push(`${character.runes.runes.length} Rune:`);
     if (character.runes.runes.length > 0) {
-      character.runes.runes.forEach(r => lines.push(`+ ${r.name}`));
+      character.runes.runes.forEach((r) => lines.push(`+ ${r.name}`));
     } else {
-      lines.push('+');
+      lines.push("+");
     }
-    lines.push(`Runeword: ${character.runes.runeword || 'Không'}`);
-    lines.push('```');
-    lines.push('');
+    lines.push(`Runeword: ${character.runes.runeword || "Không"}`);
+    lines.push("```");
+    lines.push("");
 
     // Powers
-    lines.push('```');
+    lines.push("```");
     lines.push(`${character.powers.length} Power:`);
     if (character.powers.length > 0) {
-      character.powers.forEach(p => lines.push(`+ ${p.name}`));
+      character.powers.forEach((p) => lines.push(`+ ${p.name}`));
     } else {
-      lines.push('+');
+      lines.push("+");
     }
-    lines.push('```');
-    lines.push('');
+    lines.push("```");
+    lines.push("");
 
     // Char devs
-    lines.push('```');
+    lines.push("```");
     lines.push(`${character.charDevs?.length || 0} Char dev:`);
     if (character.charDevs && character.charDevs.length > 0) {
-      character.charDevs.forEach(c => lines.push(`+ ${c.name}`));
+      character.charDevs.forEach((c) => lines.push(`+ ${c.name}`));
     } else {
-      lines.push('+');
+      lines.push("+");
     }
-    lines.push('```');
-    lines.push('');
+    lines.push("```");
+    lines.push("");
 
     // Team
-    lines.push('```');
-    lines.push(`Team: ${character.team || ''}`);
-    lines.push('```');
-    lines.push('');
+    lines.push("```");
+    lines.push(`Team: ${character.team || ""}`);
+    lines.push("```");
+    lines.push("");
 
     // Lover
-    lines.push('```');
-    lines.push('Lover:');
-    lines.push(`+ ${character.lover || ''}`);
-    lines.push('```');
+    lines.push("```");
+    lines.push("Lover:");
+    lines.push(`+ ${character.lover || ""}`);
+    lines.push("```");
 
-    return lines.join('\n');
+    lines.push("```");
+    lines.push("PvP Reward:");
+    lines.push(`+ ${character.pvpRewards || ""}`);
+    lines.push("```");
+
+    return lines.join("\n");
   }
 
   /**

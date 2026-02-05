@@ -41,7 +41,7 @@ Houses:
  + 0 Normal gear:
   - Beer (Từ Char Dev)
   - Spatula (Từ Char Dev)
-  - Lover's Glover (Lover: Roku da Poet (roku2807))(Từ Char Dev)
+  - Lover's Glover (Roku da Poet (roku2807))(Từ Char Dev)
  + 0 Legacy gear:
   - 
 ```

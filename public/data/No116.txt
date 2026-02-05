@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: Demi-God
-Sub-race: Creation (Favor: Quay lại 3 chỉ số Str - Spd - MA )
+Sub-race: Creation (Favor: Quay lại 3 chỉ số Str - Spd - MA)
 ```
 
 ```
@@ -47,7 +47,7 @@ Houses:
 
 ```
 2 Normal Weapon
-+ Long Bow (Không dùng được )
++ Long Bow (Không dùng được)
 + Rapier (Dùng được) (Từ Favor, được tặng)
 ```
 

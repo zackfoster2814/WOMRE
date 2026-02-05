@@ -40,7 +40,7 @@ Houses:
 ```
 1 Gear: 
  + 1 Normal gear:
-  - Lover's Glover (Lover: Ako Darling (mikukhang))
+  - Lover's Glover (Ako Darling (mikukhang))
  + 0 Legacy gear:
   - 
 ```

@@ -20,7 +20,7 @@ Archetype:
 3 Quirk:  
 + Herbalist
 + Training Restricted
-+ Fast Learner (Từ Cha rdev)
++ Fast Learner (Từ Char dev)
 ```
 ```
 Str: 2
@@ -63,7 +63,7 @@ Runeword: Không
 ```
 Char dev: 
 + Nghe Bài Thú Tội
-+ Seeking Wisdom (Từ Nghe Bài Thú Tội )
++ Seeking Wisdom (Từ Nghe Bài Thú Tội)
 ```
 
 ```

@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 1 Quirk:  
-+ Charming (Lover: KaTsumi - ChillWithCafe (katsumi3000))
++ Charming (KaTsumi - ChillWithCafe (katsumi3000))
 ```
 ```
 Str: 1

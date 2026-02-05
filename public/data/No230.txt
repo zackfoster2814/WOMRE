@@ -19,7 +19,7 @@ Archetype:
 ``` 
 2 Quirk:  
 + Progressive
-+ Charming (Lover: Dương Quá Quá (duongquaqua), tặng Critical Strike)
++ Charming (Dương Quá Quá (duongquaqua), tặng Critical Strike)
 ```
 ```
 Str:10

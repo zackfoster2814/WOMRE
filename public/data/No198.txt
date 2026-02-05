@@ -14,7 +14,7 @@ Sub-race:
 
 ```
 Archetype: 
-+ Loyal (Lover: KuSenpai (kusenpai))
++ Loyal (KuSenpai (kusenpai))
 + Machinists (Từ House)
 ```
 ``` 

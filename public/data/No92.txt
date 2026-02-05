@@ -14,7 +14,7 @@ Sub-race:
 
 ```
 Archetype: 
-+ Loyal (Lover: Johnny Joestar (newtransocial))
++ Loyal (Johnny Joestar (newtransocial))
 ```
 ``` 
 1 Quirk:  

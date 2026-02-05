@@ -65,7 +65,7 @@ Runeword:
 ```
 Char dev: 
 + Transmute: Chaos 
-+ Abused (Từ Transmute: Chaos )
++ Abused (Từ Transmute: Chaos)
 + Kinda Homeless
 ```
 

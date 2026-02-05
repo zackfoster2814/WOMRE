@@ -14,7 +14,7 @@ Sub-race: 100
 
 ```
 Archetype: 
-+ Loyal (Lover: Swem (.swem))
++ Loyal (Swem (.swem))
 ```
 ``` 
 1 Quirk:  

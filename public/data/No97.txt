@@ -14,7 +14,7 @@ Sub-race: Wereraven
 
 ```
 Archetype: 
-+ Loyal (Lover: Nega (thxwngs))
++ Loyal (Nega (thxwngs))
 ```
 ``` 
 1 Quirk:  

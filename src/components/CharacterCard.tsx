@@ -70,37 +70,49 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
               {character.race.race}
               {character.race.subRace && ` - ${character.race.subRace}`}
             </span>
-            {character.nestedArchetypes && character.nestedArchetypes.length > 0 ? (
-              character.nestedArchetypes.map((arch, i) => (
-                <span
-                  key={i}
-                  className="bg-green-500 px-3 py-1 rounded-full text-sm"
-                >
-                  {arch.name}
-                  {arch.subType && ` → ${arch.subType}`}
-                  {arch.subSubType && ` → ${arch.subSubType}`}
-                </span>
-              ))
-            ) : character.archetypes && character.archetypes.map((archetype, i) => (
-                <span
-                  key={i}
-                  className="bg-green-500 px-3 py-1 rounded-full text-sm"
-                >
-                  {archetype}
-                </span>
-              ))}
-            {character.nestedHouses && character.nestedHouses.length > 0 ? (
-              character.nestedHouses.filter(h => !h.isLost).map((house, idx) => (
-                <span key={idx} className="bg-yellow-600 px-3 py-1 rounded-full text-sm">
-                  {house.name}
-                  {house.subType && ` → ${house.subType}`}
-                </span>
-              ))
-            ) : character.houses && character.houses.filter(h => !h.isLost).map((house, idx) => (
-              <span key={idx} className="bg-yellow-600 px-3 py-1 rounded-full text-sm">
-                {house.name}
-              </span>
-            ))}
+            {character.nestedArchetypes && character.nestedArchetypes.length > 0
+              ? character.nestedArchetypes.map((arch, i) => (
+                  <span
+                    key={i}
+                    className="bg-green-500 px-3 py-1 rounded-full text-sm"
+                  >
+                    {arch.name}
+                    {arch.subType && ` → ${arch.subType}`}
+                    {arch.subSubType && ` → ${arch.subSubType}`}
+                  </span>
+                ))
+              : character.archetypes &&
+                character.archetypes.map((archetype, i) => (
+                  <span
+                    key={i}
+                    className="bg-green-500 px-3 py-1 rounded-full text-sm"
+                  >
+                    {archetype}
+                  </span>
+                ))}
+            {character.nestedHouses && character.nestedHouses.length > 0
+              ? character.nestedHouses
+                  .filter((h) => !h.isLost)
+                  .map((house, idx) => (
+                    <span
+                      key={idx}
+                      className="bg-yellow-600 px-3 py-1 rounded-full text-sm"
+                    >
+                      {house.name}
+                      {house.subType && ` → ${house.subType}`}
+                    </span>
+                  ))
+              : character.houses &&
+                character.houses
+                  .filter((h) => !h.isLost)
+                  .map((house, idx) => (
+                    <span
+                      key={idx}
+                      className="bg-yellow-600 px-3 py-1 rounded-full text-sm"
+                    >
+                      {house.name}
+                    </span>
+                  ))}
             {character.team && (
               <span className="bg-indigo-500 px-3 py-1 rounded-full text-sm">
                 Team {character.team}
@@ -171,11 +183,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                   <span
                     key={i}
                     className={`px-3 py-1 rounded-full text-sm ${
-                      quirk.isLost ? "bg-gray-100 text-gray-400 line-through" : "bg-gray-200"
+                      quirk.isLost
+                        ? "bg-gray-100 text-gray-400 line-through"
+                        : "bg-gray-200"
                     }`}
                   >
                     {quirk.name}
-                    {quirk.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                    {quirk.isLost && (
+                      <span className="text-red-400 text-xs ml-1">
+                        (đã mất)
+                      </span>
+                    )}
                   </span>
                 ))}
               </div>
@@ -190,10 +208,18 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                 {character.powers.map((power, i) => (
                   <li
                     key={i}
-                    className={power.isLost ? "text-gray-400 line-through" : "text-gray-700"}
+                    className={
+                      power.isLost
+                        ? "text-gray-400 line-through"
+                        : "text-gray-700"
+                    }
                   >
                     {power.name}
-                    {power.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                    {power.isLost && (
+                      <span className="text-red-400 text-xs ml-1">
+                        (đã mất)
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -201,48 +227,57 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
 
           {/* Gear */}
-          {character.gear && (character.gear.normalGear?.length > 0 ||
-            character.gear.legacyGear?.length > 0) && (
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">Gear</h3>
-              {character.gear.normalGear?.length > 0 && (
-                <div className="mb-3">
-                  <h4 className="font-semibold text-gray-700 mb-2">
-                    Normal Gear:
-                  </h4>
-                  <ul className="list-disc list-inside space-y-1">
-                    {character.gear.normalGear.map((item, i) => (
-                      <li
-                        key={i}
-                        className={`text-sm ${item.isLost ? "text-gray-400 line-through" : "text-gray-600"}`}
-                      >
-                        {item.name}
-                        {item.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {character.gear.legacyGear?.length > 0 && (
-                <div>
-                  <h4 className="font-semibold text-purple-700 mb-2">
-                    Legacy Gear:
-                  </h4>
-                  <ul className="list-disc list-inside space-y-1">
-                    {character.gear.legacyGear.map((item, i) => (
-                      <li
-                        key={i}
-                        className={`text-sm ${item.isLost ? "text-gray-400 line-through" : "text-purple-600"}`}
-                      >
-                        {item.name}
-                        {item.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
+          {character.gear &&
+            (character.gear.normalGear?.length > 0 ||
+              character.gear.legacyGear?.length > 0) && (
+              <div>
+                <h3 className="text-xl font-bold mb-3 text-gray-800">Gear</h3>
+                {character.gear.normalGear?.length > 0 && (
+                  <div className="mb-3">
+                    <h4 className="font-semibold text-gray-700 mb-2">
+                      Normal Gear:
+                    </h4>
+                    <ul className="list-disc list-inside space-y-1">
+                      {character.gear.normalGear.map((item, i) => (
+                        <li
+                          key={i}
+                          className={`text-sm ${item.isLost ? "text-gray-400 line-through" : "text-gray-600"}`}
+                        >
+                          {item.name}
+                          {item.isLost && (
+                            <span className="text-red-400 text-xs ml-1">
+                              (đã mất)
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {character.gear.legacyGear?.length > 0 && (
+                  <div>
+                    <h4 className="font-semibold text-purple-700 mb-2">
+                      Legacy Gear:
+                    </h4>
+                    <ul className="list-disc list-inside space-y-1">
+                      {character.gear.legacyGear.map((item, i) => (
+                        <li
+                          key={i}
+                          className={`text-sm ${item.isLost ? "text-gray-400 line-through" : "text-purple-600"}`}
+                        >
+                          {item.name}
+                          {item.isLost && (
+                            <span className="text-red-400 text-xs ml-1">
+                              (đã mất)
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
 
           {/* Weapons */}
           {character.weapons && character.weapons.length > 0 && (
@@ -289,7 +324,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     }`}
                   >
                     {rune.name}
-                    {rune.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                    {rune.isLost && (
+                      <span className="text-red-400 text-xs ml-1">
+                        (đã mất)
+                      </span>
+                    )}
                   </span>
                 ))}
               </div>
@@ -321,7 +360,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     }`}
                   >
                     {charDev.name}
-                    {charDev.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                    {charDev.isLost && (
+                      <span className="text-red-400 text-xs ml-1">
+                        (đã mất)
+                      </span>
+                    )}
                   </p>
                 ))}
               </div>
@@ -329,10 +372,28 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           )}
 
           {/* Lover */}
-          {character.lover && (
+          {character.lover && character.lover.length > 0 && (
             <div>
               <h3 className="text-xl font-bold mb-3 text-gray-800">Lover</h3>
-              <p className="text-pink-600">❤️ {character.lover}</p>
+              <div className="space-y-2">
+                {character.lover.map((loverName, idx) => (
+                  <p
+                    key={idx}
+                    className={
+                      loverName.isLost
+                        ? "text-pink-400 line-through"
+                        : "text-pink-600"
+                    }
+                  >
+                    ❤️ {loverName.name}
+                    {loverName.isLost && (
+                      <span className="text-red-400 text-xs ml-1">
+                        (đã mất)
+                      </span>
+                    )}
+                  </p>
+                ))}
+              </div>
             </div>
           )}
 
@@ -365,7 +426,13 @@ interface StatBarProps {
   color: string;
 }
 
-const StatBar: React.FC<StatBarProps> = ({ label, baseValue, totalValue, max, color }) => {
+const StatBar: React.FC<StatBarProps> = ({
+  label,
+  baseValue,
+  totalValue,
+  max,
+  color,
+}) => {
   const basePercentage = (baseValue / max) * 100;
   const totalPercentage = (totalValue / max) * 100;
   const diff = totalValue - baseValue;
@@ -377,12 +444,17 @@ const StatBar: React.FC<StatBarProps> = ({ label, baseValue, totalValue, max, co
         <span className="text-sm">
           <span className="text-gray-400">{baseValue}</span>
           <span className="text-gray-400 mx-1">→</span>
-          <span className={`font-bold ${diff > 0 ? 'text-green-600' : diff < 0 ? 'text-red-600' : 'text-gray-600'}`}>
+          <span
+            className={`font-bold ${diff > 0 ? "text-green-600" : diff < 0 ? "text-red-600" : "text-gray-600"}`}
+          >
             {totalValue}
           </span>
           {diff !== 0 && (
-            <span className={`text-xs ml-1 ${diff > 0 ? 'text-green-500' : 'text-red-500'}`}>
-              ({diff > 0 ? '+' : ''}{diff})
+            <span
+              className={`text-xs ml-1 ${diff > 0 ? "text-green-500" : "text-red-500"}`}
+            >
+              ({diff > 0 ? "+" : ""}
+              {diff})
             </span>
           )}
         </span>

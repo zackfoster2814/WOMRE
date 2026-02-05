@@ -38,9 +38,9 @@ Houses:
 4 Gear: 
  + 4 Normal gear:
   - Knight's Armor
-  - Xương sống lưỡi(Từ Cha rdev)
-  - Radio(Từ Cha rdev)
-  - Wooden Shield (Từ Cha rdev)
+  - Xương sống lưỡi (Từ Char dev)
+  - Radio (Từ Chardev)
+  - Wooden Shield (Từ Char dev)
  + 0 Legacy gear:
   - 
 ```

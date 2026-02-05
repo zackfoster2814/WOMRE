@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 1 Quirk:  
-+ Graceful (Lover: Ako Darling (mikukhang))
++ Graceful (Ako Darling (mikukhang))
 ```
 ```
 Str: 1

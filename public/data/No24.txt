@@ -32,7 +32,6 @@ MA: 10
 ```
 Houses: 
 + House Baratheon (Đã bị đá vì Kinda Homeless)
- -> +1 Str
 ```
 
 ```

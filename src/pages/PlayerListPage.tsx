@@ -88,7 +88,7 @@ interface PlayerSummary {
   weapons: Weapon[];
   runes: Rune;
   charDevs: LossableItem[];
-  lover?: string;
+  lover?: LossableItem[];
   pvpRewards?: PvPReward[];
   giantBonusApplied?: boolean;
   isParasite?: boolean;
@@ -3033,12 +3033,25 @@ const PlayerDetailModal = ({
             )}
 
             {/* Lover */}
-            {character.lover && (
+            {character.lover && character.lover.length > 0 && (
               <div className="bg-gray-700/50 rounded-lg p-4">
                 <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
                   <span className="text-pink-400">&#9829;</span> Lover
                 </h3>
-                <p className="text-pink-300">{character.lover}</p>
+                <div className="space-y-2">
+                  {character.lover.map((loverItem, idx) => (
+                    <p
+                      key={idx}
+                      className={
+                        loverItem.isLost
+                          ? "text-pink-400 line-through"
+                          : "text-pink-300"
+                      }
+                    >
+                      ❤️ {loverItem.name}
+                    </p>
+                  ))}
+                </div>
               </div>
             )}
           </div>

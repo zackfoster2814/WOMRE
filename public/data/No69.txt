@@ -62,8 +62,8 @@ Runeword: Không
 + 67
 + Enlarging
 + Frost Armor
-+ Mewing (Từ Cha rdev)
-+ Evasion (Từ Cha rdev)
++ Mewing (Từ Char dev)
++ Evasion (Từ Char dev)
 ```
 
 ```

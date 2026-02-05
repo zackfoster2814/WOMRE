@@ -18,7 +18,7 @@ export interface CharacterRace {
 
 export interface GearItem {
   name: string;
-  isLost?: boolean;  // Items marked as "đã mất" won't affect stats
+  isLost?: boolean; // Items marked as "đã mất" won't affect stats
 }
 
 export interface Gear {
@@ -27,15 +27,15 @@ export interface Gear {
 }
 
 export interface Weapon {
-  type: 'Normal' | 'Unique' | 'Legacy';
+  type: "Normal" | "Unique" | "Legacy";
   name: string;
   usable?: boolean;
-  isLost?: boolean;  // Items marked as "đã mất" won't affect stats
+  isLost?: boolean; // Items marked as "đã mất" won't affect stats
 }
 
 export interface RuneItem {
   name: string;
-  isLost?: boolean;  // Items marked as "đã mất" won't affect stats
+  isLost?: boolean; // Items marked as "đã mất" won't affect stats
 }
 
 export interface Rune {
@@ -46,27 +46,27 @@ export interface Rune {
 // Common interface for items that can be lost
 export interface LossableItem {
   name: string;
-  isLost?: boolean;  // Items marked as "đã mất" won't affect stats
+  isLost?: boolean; // Items marked as "đã mất" won't affect stats
 }
 
 // Nested archetype structure (e.g., Wibu -> Jojo -> The World)
 export interface NestedArchetype {
-  name: string;           // Main archetype (e.g., "Wibu")
-  subType?: string;       // Sub-type from wheel (e.g., "Jojo", "JJK", "Bleach")
-  subSubType?: string;    // Sub-sub-type (e.g., "The World", "Self-Embodiment of Perfection")
+  name: string; // Main archetype (e.g., "Wibu")
+  subType?: string; // Sub-type from wheel (e.g., "Jojo", "JJK", "Bleach")
+  subSubType?: string; // Sub-sub-type (e.g., "The World", "Self-Embodiment of Perfection")
 }
 
 // Nested house structure (e.g., New London -> Thinkers)
 export interface NestedHouse {
-  name: string;           // Main house (e.g., "New London", "House Stark")
-  subType?: string;       // Sub-type (e.g., "Thinkers", "Grey Wind", "Godrick")
+  name: string; // Main house (e.g., "New London", "House Stark")
+  subType?: string; // Sub-type (e.g., "Thinkers", "Grey Wind", "Godrick")
   subTypeIsLost?: boolean; // Sub-type can be lost (e.g., "Godrick (đã mất)")
   statBonuses?: string[]; // Stat bonuses from house (e.g., ["+2 Str", "+1 Spd", "+2 Dura"] for Tracen Academy)
-  isLost?: boolean;       // House can be lost (kicked out)
+  isLost?: boolean; // House can be lost (kicked out)
   // Loại mất nhà:
   // - 'kinda_homeless': Rời nhà nhưng vẫn giữ stat bonuses đã nhận
   // - 'no_more_home': Bị đuổi và mất tất cả bonuses từ nhà
-  lostType?: 'kinda_homeless' | 'no_more_home';
+  lostType?: "kinda_homeless" | "no_more_home";
 }
 
 export interface PvPReward {
@@ -75,15 +75,25 @@ export interface PvPReward {
 }
 
 // Tournament status types
-export type TournamentStatus = 'alive' | 'eliminated' | 'champion';
-export type TournamentRound = '-' | '256' | '128' | '64' | '32' | '16' | '8' | 'quarter' | 'semi' | 'final';
-export type TournamentBracket = '-' | 'winner' | 'loser';
+export type TournamentStatus = "alive" | "eliminated" | "champion";
+export type TournamentRound =
+  | "-"
+  | "256"
+  | "128"
+  | "64"
+  | "32"
+  | "16"
+  | "8"
+  | "quarter"
+  | "semi"
+  | "final";
+export type TournamentBracket = "-" | "winner" | "loser";
 
 export interface TournamentInfo {
-  status: TournamentStatus;       // còn sống / đã bị loại / vô địch
-  round: TournamentRound;         // vòng thi đấu hiện tại
-  bracket: TournamentBracket;     // nhánh thắng / thua
-  pvpWins?: number;               // số trận PvP thắng
+  status: TournamentStatus; // còn sống / đã bị loại / vô địch
+  round: TournamentRound; // vòng thi đấu hiện tại
+  bracket: TournamentBracket; // nhánh thắng / thua
+  pvpWins?: number; // số trận PvP thắng
 }
 
 export interface Character {
@@ -95,18 +105,18 @@ export interface Character {
   // Parasitic Status (for hosts who have a symbiote attached)
   isParasite: boolean;
   parasiteInfo?: string[];
-  parasiteName?: string;     // Name of the parasite attached (e.g., "Majin (majinlord666)")
-  parasiteType?: string;     // Type of parasite (e.g., "Mephisto", "Diablo", "67")
+  parasiteName?: string; // Name of the parasite attached (e.g., "Majin (majinlord666)")
+  parasiteType?: string; // Type of parasite (e.g., "Mephisto", "Diablo", "67")
 
   // Symbiosis Status (for the symbiote/parasite itself)
   isSymbiosis?: boolean;
-  symbiosisType?: string;  // e.g., "Mephisto", "Diablo"
-  symbiosisHost?: string;  // e.g., "Quý Trần Tường (wyug1234)"
+  symbiosisType?: string; // e.g., "Mephisto", "Diablo"
+  symbiosisHost?: string; // e.g., "Quý Trần Tường (wyug1234)"
 
   // Race & Class
   race: CharacterRace;
-  archetypes: string[];  // Support multiple archetypes (flat list for backward compat)
-  nestedArchetypes?: NestedArchetype[];  // Detailed archetype info with sub-types
+  archetypes: string[]; // Support multiple archetypes (flat list for backward compat)
+  nestedArchetypes?: NestedArchetype[]; // Detailed archetype info with sub-types
 
   // Quirks
   quirks: LossableItem[];
@@ -124,7 +134,7 @@ export interface Character {
 
   // Faction - can have multiple houses, some may be lost (kicked out)
   houses: LossableItem[];
-  nestedHouses?: NestedHouse[];  // Detailed house info with sub-types (e.g., New London -> Thinkers)
+  nestedHouses?: NestedHouse[]; // Detailed house info with sub-types (e.g., New London -> Thinkers)
 
   // Equipment
   gear: Gear;
@@ -137,11 +147,11 @@ export interface Character {
   powers: LossableItem[];
 
   // Character Development
-  charDevs: LossableItem[];  // Support multiple char devs
+  charDevs: LossableItem[]; // Support multiple char devs
 
   // Social
   team?: number;
-  lover?: string;
+  lover?: LossableItem[];
 
   // PvP Rewards
   pvpRewards?: PvPReward[];
@@ -156,10 +166,10 @@ export interface CharacterSummary {
   username: string;
   race: string;
   archetypes: string[];
-  nestedArchetypes?: NestedArchetype[];  // Detailed archetype info
+  nestedArchetypes?: NestedArchetype[]; // Detailed archetype info
   team?: number;
   house?: string;
-  nestedHouses?: NestedHouse[];  // Detailed house info
+  nestedHouses?: NestedHouse[]; // Detailed house info
 }
 
 export interface CharacterDatabase {

@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: Demi-God
-Sub-race: Creation (Favor: Roll lại 3 chỉ số Str, Dura và MA )
+Sub-race: Creation (Favor: Roll lại 3 chỉ số Str, Dura và MA)
 ```
 
 ```

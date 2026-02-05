@@ -62,7 +62,7 @@ Runeword:
 
 ```
 Char dev: 
-+ True Heir of the Emirate
++ True Heir of the Emirate🍀
 ```
 
 ```
@@ -77,5 +77,5 @@ Lover:
 ```
 PvP Reward:
 - +1 Dura
-- 1 IQ
+- +1 IQ
 ```

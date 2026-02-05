@@ -45,7 +45,7 @@ Houses:
 
 ```
 1 Normal Weapon
-+ Backhand Blade (Dùng được) (Đã mất do Cha rdev)
++ Backhand Blade (Dùng được) (Đã mất do Char dev)
 ```
 
 ``` 

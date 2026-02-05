@@ -21,7 +21,7 @@ Archetype:
 + Hydrate (Special Week)
 + Bloodthirsty
 + Brainrot
-+ Charming (Lover: Kaori (khanhnguyen1703) - tặng Sonic Scream)
++ Charming (Kaori (khanhnguyen1703) - tặng Sonic Scream)
 ```
 ```
 Str:4 ban đầu là 7

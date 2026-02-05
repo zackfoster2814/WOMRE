@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 1 Quirk:  
-+ Charming (Lover: Hero X (enatc0) )
++ Charming (Hero X (enatc0))
 ```
 ```
 Str: 8

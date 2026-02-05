@@ -14,7 +14,7 @@ Sub-race: High Elf (+2 Base IQ)
 
 ```
 Archetype: 
-+ Loyal (Lover: Zackie (zackfoster___))
++ Loyal (Zackie (zackfoster___))
 ```
 ``` 
 2 Quirk:  

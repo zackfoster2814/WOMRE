@@ -24,7 +24,7 @@ Archetype:
 Str: 7
 Spd: 4
 Dur: 5
-IQ: 10 (Ban đầu là 7, được +3 từ Archetype)
+IQ: 7 (được +3 từ Archetype)
 BIQ: 9
 MA: 1
 ```

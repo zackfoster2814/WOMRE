@@ -20,7 +20,7 @@ Archetype:
 3 Quirk:  
 + Weak-Knee
 + Patient(Từ House)
-+ Charming (Lover: LTL (ltl.jr)) (Từ Baguette )
++ Charming (LTL (ltl.jr)) (Từ Baguette)
 ```
 ```
 Str: 9

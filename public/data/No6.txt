@@ -24,7 +24,7 @@ Archetype:
 Str: 4
 Spd: 3
 Dur: 10
-IQ: 9 (Ban đầu là 7, được +2 từ Sub-race)
+IQ: 9 (được +2 từ Sub-race)
 BIQ: 3
 MA: 3
 ```

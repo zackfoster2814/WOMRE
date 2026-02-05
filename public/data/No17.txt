@@ -62,7 +62,7 @@ Runeword: Không
 Char dev: 
 + Blessed by Chaos
 + Become Woke
-+ True Heir of the Emirate\uD83C\uDF40
++ True Heir of the Emirate🍀
 ```
 
 ```

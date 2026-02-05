@@ -41,7 +41,7 @@ Houses:
 2 Gear: 
  + 2 Normal gear:
   - Ancient Protector
-  - Kẹo (từ Ban nhạc Ngọt đoàn kết )
+  - Kẹo (từ Ban nhạc Ngọt đoàn kết)
  + 0 Legacy gear:
   - 
 ```

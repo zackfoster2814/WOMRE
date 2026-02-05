@@ -20,7 +20,7 @@ Archetype:
 3 Quirk:  
 + Deaf
 + Brainrot
-+ Fast Learner (Từ Cha rdev)
++ Fast Learner (Từ Char dev)
 ```
 ```
 Str: 7

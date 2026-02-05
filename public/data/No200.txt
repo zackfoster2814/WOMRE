@@ -41,7 +41,7 @@ Houses: Targaryen
  + 0 Normal gear:
   - Baguette (từ Armed to the Teeth)
   - Frying Pan (Từ Armed to the Teeth)
-  - Cursed Charm (Từ Armed to the Teeth )
+  - Cursed Charm (Từ Armed to the Teeth)
  + 0 Legacy gear:
   - 
 ```

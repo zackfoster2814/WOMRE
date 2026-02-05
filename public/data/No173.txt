@@ -19,7 +19,7 @@ Archetype:
 ``` 
 2 Quirk:  
 + Generous
-+ Graceful (Lover: King Zalo (chi404))
++ Graceful (King Zalo (chi404))
 ```
 ```
 Str:1

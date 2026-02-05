@@ -43,7 +43,7 @@ Houses:
   - Thuốc Tráng Dương (Từ House)
   - Bò Khô (Từ House)
   - Đai Trinh Tiết
-  - Lover's Glover (Lover: kinbum)
+  - Lover's Glover (kinbum)
  + 0 Legacy gear:
   - 
 ```

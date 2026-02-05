@@ -14,7 +14,7 @@ Sub-race: Skeleton (Rồng)
 
 ```
 Archetype: 
-+ Loyal (Lover: Em Phốc Trắng (dick8704))
++ Loyal (Em Phốc Trắng (dick8704))
 ```
 ``` 
 1 Quirk:  
