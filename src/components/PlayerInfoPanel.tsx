@@ -3,7 +3,11 @@ import { Character, NestedArchetype, NestedHouse } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
-import type { CharacterEffects, CharacterStats as EffectStats, EffectSourceType } from "../effects/types";
+import type {
+  CharacterEffects,
+  CharacterStats as EffectStats,
+  EffectSourceType,
+} from "../effects/types";
 import { getAssetPath, getPlayerNumbers } from "../utils/basePath";
 
 // Initialize effect data once
@@ -87,7 +91,7 @@ export const PlayerInfoPanel = ({
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);
                 // Get first active house (not lost)
-                const activeHouse = char.houses?.find(h => !h.isLost);
+                const activeHouse = char.houses?.find((h) => !h.isLost);
                 return {
                   no: char.no || no,
                   name: char.name || `Player ${no}`,
@@ -414,7 +418,7 @@ const ClickableField = ({
 // Helper component to display stat modifier badge
 const StatModifierBadge = ({
   name,
-  sourceType
+  sourceType,
 }: {
   name: string;
   sourceType: EffectSourceType;
@@ -422,11 +426,7 @@ const StatModifierBadge = ({
   const summary = EffectResolver.getEffectSummary(name, sourceType);
   if (!summary) return null;
 
-  return (
-    <span className="text-[10px] text-emerald-400 ml-1">
-      ({summary})
-    </span>
-  );
+  return <span className="text-[10px] text-emerald-400 ml-1">({summary})</span>;
 };
 
 // Popup component to show full archetype/house hierarchy
@@ -435,23 +435,20 @@ const HierarchyPopup = ({
   onClose,
   title,
   items,
-  type
+  type,
 }: {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   items: NestedArchetype[] | NestedHouse[];
-  type: 'archetype' | 'house';
+  type: "archetype" | "house";
 }) => {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/60"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
       {/* Popup */}
       <div className="relative bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-4 min-w-[280px] max-w-[90vw] z-10">
         <div className="flex items-center justify-between mb-3">
@@ -460,22 +457,35 @@ const HierarchyPopup = ({
             onClick={onClose}
             className="text-gray-400 hover:text-white transition-colors"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
         <div className="space-y-3">
           {items.map((item, idx) => (
             <div key={idx} className="bg-gray-700/50 rounded-lg p-3">
-              {type === 'archetype' ? (
+              {type === "archetype" ? (
                 <div className="space-y-2">
                   {/* Level 1: Main archetype */}
                   <div className="flex items-center gap-2">
                     <span className="text-indigo-400 font-medium">
                       {(item as NestedArchetype).name}
                     </span>
-                    <StatModifierBadge name={(item as NestedArchetype).name} sourceType="archetype" />
+                    <StatModifierBadge
+                      name={(item as NestedArchetype).name}
+                      sourceType="archetype"
+                    />
                   </div>
                   {/* Level 2: Sub-type */}
                   {(item as NestedArchetype).subType && (
@@ -484,7 +494,10 @@ const HierarchyPopup = ({
                       <span className="text-pink-400">
                         {(item as NestedArchetype).subType}
                       </span>
-                      <StatModifierBadge name={(item as NestedArchetype).subType!} sourceType="archetype_sub" />
+                      <StatModifierBadge
+                        name={(item as NestedArchetype).subType!}
+                        sourceType="archetype_sub"
+                      />
                     </div>
                   )}
                   {/* Level 3: Sub-sub-type */}
@@ -494,7 +507,10 @@ const HierarchyPopup = ({
                       <span className="text-purple-400">
                         {(item as NestedArchetype).subSubType}
                       </span>
-                      <StatModifierBadge name={(item as NestedArchetype).subSubType!} sourceType="archetype_sub" />
+                      <StatModifierBadge
+                        name={(item as NestedArchetype).subSubType!}
+                        sourceType="archetype_sub"
+                      />
                     </div>
                   )}
                 </div>
@@ -502,22 +518,35 @@ const HierarchyPopup = ({
                 <div className="space-y-2">
                   {/* Level 1: Main house */}
                   <div className="flex items-center gap-2">
-                    <span className={`font-medium ${(item as NestedHouse).isLost ? 'text-gray-500 line-through' : 'text-yellow-400'}`}>
+                    <span
+                      className={`font-medium ${(item as NestedHouse).isLost ? "text-gray-500 line-through" : "text-yellow-400"}`}
+                    >
                       {(item as NestedHouse).name}
                     </span>
-                    {!(item as NestedHouse).isLost && <StatModifierBadge name={(item as NestedHouse).name} sourceType="house" />}
-                    {(item as NestedHouse).isLost && <span className="text-red-400 text-xs">(đuổi)</span>}
+                    {!(item as NestedHouse).isLost && (
+                      <StatModifierBadge
+                        name={(item as NestedHouse).name}
+                        sourceType="house"
+                      />
+                    )}
+                    {(item as NestedHouse).isLost && (
+                      <span className="text-red-400 text-xs">(đuổi)</span>
+                    )}
                   </div>
                   {/* Level 2: Sub-type */}
-                  {(item as NestedHouse).subType && !(item as NestedHouse).isLost && (
-                    <div className="flex items-center gap-2 ml-4">
-                      <span className="text-gray-500">→</span>
-                      <span className="text-cyan-400">
-                        {(item as NestedHouse).subType}
-                      </span>
-                      <StatModifierBadge name={(item as NestedHouse).subType!} sourceType="house_sub" />
-                    </div>
-                  )}
+                  {(item as NestedHouse).subType &&
+                    !(item as NestedHouse).isLost && (
+                      <div className="flex items-center gap-2 ml-4">
+                        <span className="text-gray-500">→</span>
+                        <span className="text-cyan-400">
+                          {(item as NestedHouse).subType}
+                        </span>
+                        <StatModifierBadge
+                          name={(item as NestedHouse).subType!}
+                          sourceType="house_sub"
+                        />
+                      </div>
+                    )}
                 </div>
               )}
             </div>
@@ -529,7 +558,11 @@ const HierarchyPopup = ({
 };
 
 // Info button component
-const InfoButton = ({ onClick }: { onClick: (e: React.MouseEvent) => void }) => (
+const InfoButton = ({
+  onClick,
+}: {
+  onClick: (e: React.MouseEvent) => void;
+}) => (
   <button
     onClick={onClick}
     className="ml-1 w-4 h-4 rounded-full bg-gray-600 hover:bg-indigo-500 text-gray-300 hover:text-white text-[10px] font-bold transition-colors inline-flex items-center justify-center"
@@ -555,13 +588,19 @@ const PlayerContent = ({
   ensureEffectsInitialized();
 
   // State for hierarchy popups
-  const [archetypePopup, setArchetypePopup] = useState<{ isOpen: boolean; archetype: NestedArchetype | null }>({
+  const [archetypePopup, setArchetypePopup] = useState<{
+    isOpen: boolean;
+    archetype: NestedArchetype | null;
+  }>({
     isOpen: false,
-    archetype: null
+    archetype: null,
   });
-  const [housePopup, setHousePopup] = useState<{ isOpen: boolean; house: NestedHouse | null }>({
+  const [housePopup, setHousePopup] = useState<{
+    isOpen: boolean;
+    house: NestedHouse | null;
+  }>({
     isOpen: false,
-    house: null
+    house: null,
   });
 
   // Calculate effects
@@ -578,7 +617,8 @@ const PlayerContent = ({
   );
 
   // Check if archetype has sub-types
-  const hasArchetypeSubTypes = (arch: NestedArchetype) => arch.subType || arch.subSubType;
+  const hasArchetypeSubTypes = (arch: NestedArchetype) =>
+    arch.subType || arch.subSubType;
   const hasHouseSubTypes = (house: NestedHouse) => house.subType;
 
   return (
@@ -664,7 +704,11 @@ const PlayerContent = ({
           <p className="text-cyan-400 text-sm mt-1">
             Sub-race: {character.race.subRace}
             {character.race.subRace.split(/\s*\+\s*/).map((subRace, idx) => (
-              <StatModifierBadge key={idx} name={subRace.trim()} sourceType="sub_race" />
+              <StatModifierBadge
+                key={idx}
+                name={subRace.trim()}
+                sourceType="sub_race"
+              />
             ))}
           </p>
         )}
@@ -696,10 +740,12 @@ const PlayerContent = ({
                   {arch.name}
                   <StatModifierBadge name={arch.name} sourceType="archetype" />
                   {hasArchetypeSubTypes(arch) && (
-                    <InfoButton onClick={(e) => {
-                      e.stopPropagation();
-                      setArchetypePopup({ isOpen: true, archetype: arch });
-                    }} />
+                    <InfoButton
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setArchetypePopup({ isOpen: true, archetype: arch });
+                      }}
+                    />
                   )}
                 </span>
               </div>
@@ -725,7 +771,9 @@ const PlayerContent = ({
         {archetypePopup.archetype && (
           <HierarchyPopup
             isOpen={archetypePopup.isOpen}
-            onClose={() => setArchetypePopup({ isOpen: false, archetype: null })}
+            onClose={() =>
+              setArchetypePopup({ isOpen: false, archetype: null })
+            }
             title={`${archetypePopup.archetype.name} Hierarchy`}
             items={[archetypePopup.archetype]}
             type="archetype"
@@ -740,7 +788,9 @@ const PlayerContent = ({
           onClick={onSpinAttribute ? () => onSpinAttribute("house") : undefined}
         >
           <div className="flex items-center justify-between">
-            <p className="text-gray-400 text-xs mb-1">Houses ({character.houses?.length || 0})</p>
+            <p className="text-gray-400 text-xs mb-1">
+              Houses ({character.houses?.length || 0})
+            </p>
             {onSpinAttribute && (
               <span className="text-gray-500 text-xs group-hover:text-purple-400 transition-colors">
                 🎡
@@ -754,15 +804,23 @@ const PlayerContent = ({
                   key={idx}
                   className={`${house.isLost ? "text-gray-500" : ""}`}
                 >
-                  <span className={`font-medium inline-flex items-center ${house.isLost ? "line-through text-gray-500" : "text-yellow-400"}`}>
+                  <span
+                    className={`font-medium inline-flex items-center ${house.isLost ? "line-through text-gray-500" : "text-yellow-400"}`}
+                  >
                     {house.name}
-                    {house.isLost && <span className="text-red-400 text-xs ml-1">(đuổi)</span>}
-                    {!house.isLost && <StatModifierBadge name={house.name} sourceType="house" />}
+                    {house.isLost && (
+                      <span className="text-red-400 text-xs ml-1">(đuổi)</span>
+                    )}
+                    {!house.isLost && (
+                      <StatModifierBadge name={house.name} sourceType="house" />
+                    )}
                     {hasHouseSubTypes(house) && !house.isLost && (
-                      <InfoButton onClick={(e) => {
-                        e.stopPropagation();
-                        setHousePopup({ isOpen: true, house });
-                      }} />
+                      <InfoButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setHousePopup({ isOpen: true, house });
+                        }}
+                      />
                     )}
                   </span>
                 </div>
@@ -776,8 +834,12 @@ const PlayerContent = ({
                   className={`font-medium ${house.isLost ? "text-gray-500 line-through" : "text-yellow-400"}`}
                 >
                   {house.name}
-                  {house.isLost && <span className="text-red-400 text-xs ml-1">(đuổi)</span>}
-                  {!house.isLost && <StatModifierBadge name={house.name} sourceType="house" />}
+                  {house.isLost && (
+                    <span className="text-red-400 text-xs ml-1">(đuổi)</span>
+                  )}
+                  {!house.isLost && (
+                    <StatModifierBadge name={house.name} sourceType="house" />
+                  )}
                 </p>
               ))}
             </div>
@@ -809,7 +871,8 @@ const PlayerContent = ({
         <div className="flex items-center justify-between mb-2">
           <p className="text-gray-400 text-xs">Stats</p>
           <p className="text-gray-400 text-xs">
-            Base: {baseTotal} → Total: <span className="text-green-400 font-medium">{totalStats}</span>
+            Base: {baseTotal} → Total:{" "}
+            <span className="text-green-400 font-medium">{totalStats}</span>
           </p>
         </div>
         <HexagonStats stats={stats} totalStats={characterEffects.totalStats} />
@@ -828,8 +891,12 @@ const PlayerContent = ({
                 className={`text-sm ${quirk.isLost ? "text-gray-500 line-through" : "text-white"}`}
               >
                 • {quirk.name}
-                {quirk.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
-                {!quirk.isLost && <StatModifierBadge name={quirk.name} sourceType="quirk" />}
+                {quirk.isLost && (
+                  <span className="text-red-400 text-xs ml-1">(đã mất)</span>
+                )}
+                {!quirk.isLost && (
+                  <StatModifierBadge name={quirk.name} sourceType="quirk" />
+                )}
               </p>
             ))}
           </div>
@@ -855,8 +922,12 @@ const PlayerContent = ({
                 }`}
               >
                 {power.name}
-                {power.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
-                {!power.isLost && <StatModifierBadge name={power.name} sourceType="power" />}
+                {power.isLost && (
+                  <span className="text-red-400 text-xs ml-1">(đã mất)</span>
+                )}
+                {!power.isLost && (
+                  <StatModifierBadge name={power.name} sourceType="power" />
+                )}
               </span>
             ))}
           </div>
@@ -899,7 +970,9 @@ const PlayerContent = ({
       <div className="bg-gray-700/50 rounded-lg p-3">
         <p className="text-gray-400 text-xs mb-2">
           Gear (
-          {(character.gear?.normalGear?.length || 0) + (character.gear?.legacyGear?.length || 0)})
+          {(character.gear?.normalGear?.length || 0) +
+            (character.gear?.legacyGear?.length || 0)}
+          )
         </p>
         {character.gear?.normalGear && character.gear.normalGear.length > 0 && (
           <div className="mb-2">
@@ -913,8 +986,12 @@ const PlayerContent = ({
                   className={`text-sm ${gear.isLost ? "text-gray-500 line-through" : "text-white"}`}
                 >
                   • {gear.name}
-                  {gear.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
-                  {!gear.isLost && <StatModifierBadge name={gear.name} sourceType="gear" />}
+                  {gear.isLost && (
+                    <span className="text-red-400 text-xs ml-1">(đã mất)</span>
+                  )}
+                  {!gear.isLost && (
+                    <StatModifierBadge name={gear.name} sourceType="gear" />
+                  )}
                 </p>
               ))}
             </div>
@@ -932,15 +1009,21 @@ const PlayerContent = ({
                   className={`text-sm ${gear.isLost ? "text-gray-500 line-through" : "text-yellow-400"}`}
                 >
                   • {gear.name}
-                  {gear.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
-                  {!gear.isLost && <StatModifierBadge name={gear.name} sourceType="gear" />}
+                  {gear.isLost && (
+                    <span className="text-red-400 text-xs ml-1">(đã mất)</span>
+                  )}
+                  {!gear.isLost && (
+                    <StatModifierBadge name={gear.name} sourceType="gear" />
+                  )}
                 </p>
               ))}
             </div>
           </div>
         )}
-        {(!character.gear?.normalGear || character.gear.normalGear.length === 0) &&
-          (!character.gear?.legacyGear || character.gear.legacyGear.length === 0) && (
+        {(!character.gear?.normalGear ||
+          character.gear.normalGear.length === 0) &&
+          (!character.gear?.legacyGear ||
+            character.gear.legacyGear.length === 0) && (
             <p className="text-gray-500 text-sm">-</p>
           )}
       </div>
@@ -962,8 +1045,12 @@ const PlayerContent = ({
                 }`}
               >
                 {rune.name}
-                {rune.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
-                {!rune.isLost && <StatModifierBadge name={rune.name} sourceType="rune" />}
+                {rune.isLost && (
+                  <span className="text-red-400 text-xs ml-1">(đã mất)</span>
+                )}
+                {!rune.isLost && (
+                  <StatModifierBadge name={rune.name} sourceType="rune" />
+                )}
               </span>
             ))}
           </div>
@@ -972,7 +1059,12 @@ const PlayerContent = ({
           Runeword:{" "}
           <span className="text-orange-400">
             {character.runes.runeword || "Không"}
-            {character.runes.runeword && <StatModifierBadge name={character.runes.runeword} sourceType="runeword" />}
+            {character.runes.runeword && (
+              <StatModifierBadge
+                name={character.runes.runeword}
+                sourceType="runeword"
+              />
+            )}
           </span>
         </p>
       </div>
@@ -990,7 +1082,9 @@ const PlayerContent = ({
                 className={`text-sm italic ${charDev.isLost ? "text-gray-500 line-through" : "text-white"}`}
               >
                 • {charDev.name}
-                {charDev.isLost && <span className="text-red-400 text-xs ml-1">(đã mất)</span>}
+                {charDev.isLost && (
+                  <span className="text-red-400 text-xs ml-1">(đã mất)</span>
+                )}
               </p>
             ))}
           </div>
@@ -999,7 +1093,7 @@ const PlayerContent = ({
         )}
       </div>
 
-      {/* Lover */}
+      {/* Lover 
       <div className="bg-gray-700/50 rounded-lg p-3">
         <p className="text-gray-400 text-xs mb-1">Lover</p>
         <p
@@ -1007,7 +1101,7 @@ const PlayerContent = ({
         >
           {character.lover || "-"}
         </p>
-      </div>
+      </div> */}
 
       {/* Save Button - Fixed at bottom */}
       {onSave && (
@@ -1092,11 +1186,35 @@ const HexagonStats = ({
   // 6 stats arranged in hexagon (starting from top, going clockwise)
   // Map base stat keys to effect stat keys
   const statConfig = [
-    { key: "str", effectKey: "strength", label: "STR", color: "#ef4444", angle: -90 },
-    { key: "spd", effectKey: "speed", label: "SPD", color: "#22c55e", angle: -30 },
-    { key: "dur", effectKey: "durability", label: "DUR", color: "#3b82f6", angle: 30 },
+    {
+      key: "str",
+      effectKey: "strength",
+      label: "STR",
+      color: "#ef4444",
+      angle: -90,
+    },
+    {
+      key: "spd",
+      effectKey: "speed",
+      label: "SPD",
+      color: "#22c55e",
+      angle: -30,
+    },
+    {
+      key: "dur",
+      effectKey: "durability",
+      label: "DUR",
+      color: "#3b82f6",
+      angle: 30,
+    },
     { key: "iq", effectKey: "iq", label: "IQ", color: "#eab308", angle: 90 },
-    { key: "biq", effectKey: "biq", label: "BIQ", color: "#a855f7", angle: 150 },
+    {
+      key: "biq",
+      effectKey: "biq",
+      label: "BIQ",
+      color: "#a855f7",
+      angle: 150,
+    },
     { key: "ma", effectKey: "ma", label: "MA", color: "#ec4899", angle: 210 },
   ];
 
@@ -1201,7 +1319,8 @@ const HexagonStats = ({
         {statConfig.map((s, idx) => {
           const labelPos = getPoint(s.angle, maxRadius + 22);
           const baseValue = stats[s.key as keyof typeof stats] || 0;
-          const totalValue = totalStats[s.effectKey as keyof typeof totalStats] || 0;
+          const totalValue =
+            totalStats[s.effectKey as keyof typeof totalStats] || 0;
           const diff = totalValue - baseValue;
           return (
             <g key={idx}>
@@ -1228,12 +1347,21 @@ const HexagonStats = ({
                 y={labelPos.y + 14}
                 textAnchor="middle"
                 className="text-[10px] font-bold"
-                style={{ fill: diff > 0 ? "#22c55e" : diff < 0 ? "#ef4444" : "#ffffff" }}
+                style={{
+                  fill: diff > 0 ? "#22c55e" : diff < 0 ? "#ef4444" : "#ffffff",
+                }}
               >
                 → {totalValue}
                 {diff !== 0 && (
-                  <tspan style={{ fill: diff > 0 ? "#22c55e" : "#ef4444", fontSize: "8px" }}>
-                    {" "}({diff > 0 ? "+" : ""}{diff})
+                  <tspan
+                    style={{
+                      fill: diff > 0 ? "#22c55e" : "#ef4444",
+                      fontSize: "8px",
+                    }}
+                  >
+                    {" "}
+                    ({diff > 0 ? "+" : ""}
+                    {diff})
                   </tspan>
                 )}
               </text>

@@ -1,4 +1,4 @@
-import { PvPReward } from "./../types/character";
+// import { PvPReward } from "./../types/character";
 /**
  * Effect Resolver
  *

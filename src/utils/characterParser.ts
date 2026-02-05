@@ -468,37 +468,37 @@ export class CharacterParser {
     return values;
   }
 
-  private static parseListValueAsStrings(
-    lines: string[],
-    startIndex: number,
-  ): string[] {
-    if (startIndex < 0) return [];
+  // private static parseListValueAsStrings(
+  //   lines: string[],
+  //   startIndex: number,
+  // ): string[] {
+  //   if (startIndex < 0) return [];
 
-    const values: string[] = [];
+  //   const values: string[] = [];
 
-    for (
-      let i = startIndex + 1;
-      i < Math.min(startIndex + 20, lines.length);
-      i++
-    ) {
-      const line = lines[i];
+  //   for (
+  //     let i = startIndex + 1;
+  //     i < Math.min(startIndex + 20, lines.length);
+  //     i++
+  //   ) {
+  //     const line = lines[i];
 
-      // Stop at next section or code block
-      if (line.startsWith("```") && i > startIndex + 1) break;
-      if (!line || line === "```") continue;
+  //     // Stop at next section or code block
+  //     if (line.startsWith("```") && i > startIndex + 1) break;
+  //     if (!line || line === "```") continue;
 
-      // Parse list items starting with + or -
-      const match = line.match(/^[+\-*]\s*(.+)/);
-      if (match) {
-        const value = match[1].trim();
-        if (value) {
-          values.push(value);
-        }
-      }
-    }
+  //     // Parse list items starting with + or -
+  //     const match = line.match(/^[+\-*]\s*(.+)/);
+  //     if (match) {
+  //       const value = match[1].trim();
+  //       if (value) {
+  //         values.push(value);
+  //       }
+  //     }
+  //   }
 
-    return values;
-  }
+  //   return values;
+  // }
 
   /**
    * Parse nested archetypes with sub-types
