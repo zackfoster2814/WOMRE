@@ -13,8 +13,8 @@ Sub-race:
 ```
 
 ```
-Archetype: Gambler
-+ 
+Archetype: 
++ Gambler
 ```
 ``` 
 1 Quirk:  

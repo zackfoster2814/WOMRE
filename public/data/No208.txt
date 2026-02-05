@@ -13,8 +13,8 @@ Sub-race: Đen
 ```
 
 ```
-Archetype: Glass Cannon 
-+ 
+Archetype: 
++ Glass Cannon 
 ```
 ``` 
 3 Quirk:  

@@ -30,7 +30,8 @@ MA:9(Ban đầu là 7, +2 từ Paladin)
 ```
 
 ```
-Houses: Shurima
+Houses: 
++ Shurima
 ```
 
 ```

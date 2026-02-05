@@ -13,7 +13,8 @@ Sub-race:
 ```
 
 ```
-Archetype: Blacksmith
+Archetype: 
++ Blacksmith
 + Herald (Từ Spatula)
 ```
 ``` 

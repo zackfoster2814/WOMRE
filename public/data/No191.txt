@@ -13,8 +13,8 @@ Sub-race: Wereraven
 ```
 
 ```
-Archetype: Femboy
-+ 
+Archetype: 
++ Femboy
 ```
 ``` 
 2 Quirk:  

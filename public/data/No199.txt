@@ -31,7 +31,8 @@ MA:10
 ```
 
 ```
-Houses: Uchiha
+Houses: 
++ Uchiha
 ```
 
 ```

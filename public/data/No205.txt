@@ -13,7 +13,8 @@ Sub-race:
 ```
 
 ```
-Archetype: Bookworm
+Archetype: 
++ Bookworm
 ```
 ``` 
 2 Quirk:  

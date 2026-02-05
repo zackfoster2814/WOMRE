@@ -13,8 +13,10 @@ Sub-race: Vàng
 ```
 
 ```
-Archetype: Conquerer
-+ Power Ranger (Silver)
+Archetype: 
++ Conquerer
++ Power Ranger 
+ -> Silver
 ```
 ``` 
 1 Quirk:  

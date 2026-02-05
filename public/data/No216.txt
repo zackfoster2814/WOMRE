@@ -13,8 +13,8 @@ Sub-race:
 ```
 
 ```
-Archetype: Pacifist
-+ 
+Archetype: 
++ Pacifist
 ```
 ``` 
 1 Quirk:  

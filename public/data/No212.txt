@@ -30,7 +30,8 @@ MA:9 (Được Quay)
 ```
 
 ```
-Houses: (Không được Quay)
+Houses: 
++ 
 ```
 
 ```

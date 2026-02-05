@@ -13,8 +13,8 @@ Sub-race: Ice Troll
 ```
 
 ```
-Archetype: Herald
-+ 
+Archetype: 
++ Herald
 ```
 ``` 
 1 Quirk:  

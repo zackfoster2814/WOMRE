@@ -31,8 +31,8 @@ MA:6 Cursed of 36k
 ```
 
 ```
-Houses: Naga (Đã rời đi)
-+ 
+Houses: 
++ Naga (Đã rời đi)
 ```
 
 ```

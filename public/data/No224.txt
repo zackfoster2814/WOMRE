@@ -13,8 +13,8 @@ Sub-race: Trắng
 ```
 
 ```
-Archetype: Glass Cannon
-+ 
+Archetype: 
++ Glass Cannon
 ```
 ``` 
 1 Quirk:  
