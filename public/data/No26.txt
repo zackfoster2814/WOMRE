@@ -63,9 +63,9 @@ Runeword: Không
 6 Power: 
 + Acid Breath(Từ Sub-race)
 + Mind Control(Từ Sub-race)
-+ Quas
-+ Wex
-+ Exort
++ Quas (Từ Archetype Invoker)
++ Wex (Từ Archetype Invoker)
++ Exort (Từ Archetype Invoker)
 + Fair Duel
 ```
 

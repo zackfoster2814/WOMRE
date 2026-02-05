@@ -60,6 +60,9 @@ Runeword: Không
 ```
 1 Power: 
 + Ice Hammer
++ Quas (Từ Archetype Invoker)
++ Wex (Từ Archetype Invoker)
++ Exort (Từ Archetype Invoker)
 ```
 
 ```

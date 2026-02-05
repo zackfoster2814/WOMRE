@@ -56,7 +56,10 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Clear Mind
++ Clear Mindw
++ Quas (Từ Archetype Invoker)
++ Wex (Từ Archetype Invoker)
++ Exort (Từ Archetype Invoker)
 ```
 
 ```

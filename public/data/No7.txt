@@ -26,8 +26,8 @@ Str: 7
 Spd: 5
 Dur: 6
 IQ: 7
-BIQ: 5 (ban đầu là 3, được +2 từ Sub-race)
-MA: 10 (ban đầu là 8, được +2 từ House)
+BIQ: 3 (ban đầu là 3, được +2 từ Sub-race)
+MA: 8 (ban đầu là 8, được +2 từ House)
 ```
 
 ```
