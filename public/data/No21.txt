@@ -54,7 +54,7 @@ Houses:
 2 Rune: 
 + Tir
 + Tir
-Runeword: Không
+Runeword: The Twin
 ```
 
 ```

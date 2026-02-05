@@ -56,7 +56,7 @@ Houses:
 2 Rune: 
 + Sol
 + Sol
-Runeword: Không
+Runeword: The Twin
 ```
 
 ```

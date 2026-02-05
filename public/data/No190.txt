@@ -13,14 +13,14 @@ Sub-race:
 ```
 
 ```
-Archetype: Follower of the Two Fingers
-+ 
+Archetype: 
++ Follower of the Two Fingers
 ```
 ``` 
 3 Quirk:  
-+ Brainrot
-+ Blind
-+ One Trick Pony
++ Brainrot (đã mất)
++ Blind (đã mất)
++ One Trick Pony (đã mất)
 ```
 ```
 Str:7
@@ -58,8 +58,8 @@ Runeword:
 
 ```
 0 Power: 
-+ (Từ House) (Đã mất khỏi quay)
-+ (Từ House) (Đã mất khỏi quay)
++ Cleaning Sins (Từ House) (Đã mất)
++ Quirkless (Từ House) (Đã mất khỏi quay)
 ```
 
 ```

@@ -53,9 +53,9 @@ Houses:
 
 ``` 
 2 Rune: (Từ Blacksmith) (Đã mất)
-+ Ort 
-+ Sol
-Runeword: Affection
++ Ort (Đã mất)
++ Sol (Đã mất)
+Runeword: Affection (Đã mất)
 ```
 
 ```

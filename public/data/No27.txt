@@ -21,9 +21,9 @@ Archetype:
 + One Trick Pony
 ```
 ```
-Str: 6 ban đầu là 5
-Spd: 6 ban đầu là 5
-Dur: 10 ban đầu 1
+Str: 6 (ban đầu là 5)
+Spd: 6 (ban đầu là 5)
+Dur: 10 ban đầu là 1
 IQ: 1
 BIQ: 4 ban đầu là 7
 MA: 7 ban đầu là 4
