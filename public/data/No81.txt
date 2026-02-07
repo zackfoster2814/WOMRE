@@ -40,7 +40,9 @@ Houses:
  + 5 Normal gear:
   - Fingerthing(Từ House)
   - Fishing Rod (Từ House)
-  - Golden Coin x3(Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
   - Đá
   - Healing Flasks
  + 0 Legacy gear:

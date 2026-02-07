@@ -1,4 +1,3 @@
-// import { PvPReward } from "./../types/character";
 /**
  * Effect Resolver
  *
@@ -20,6 +19,8 @@ import type {
 } from "./types";
 import { EffectRegistry } from "./registry";
 import type { Character } from "../types/character";
+import { HandlerRegistry } from "./handlers/registry";
+import type { ImmediateHandlerContext } from "./handlers/types";
 
 // ============================================================================
 // STAT UTILITIES
@@ -140,6 +141,32 @@ export function resolveStatTarget(
 // ============================================================================
 
 export class EffectResolver {
+  /**
+   * Normalize PvP reward name to match registry
+   * Data files may use abbreviated names like "+1 Spd" but registry has "+1 Speed"
+   */
+  private static normalizePvPRewardName(name: string): string {
+    // Map abbreviated stat names to full names used in registry
+    const statAbbreviations: Record<string, string> = {
+      'str': 'Strength',
+      'spd': 'Speed',
+      'dur': 'Durability',
+      'dura': 'Durability',
+    };
+
+    // Pattern: +/-NUMBER STAT_ABBREV (e.g., "+1 Spd", "+2 Dur")
+    const match = name.match(/^([+-]?\d+)\s+(\w+)$/i);
+    if (match) {
+      const value = match[1];
+      const stat = match[2].toLowerCase();
+      if (statAbbreviations[stat]) {
+        return `${value} ${statAbbreviations[stat]}`;
+      }
+    }
+
+    return name;
+  }
+
   /**
    * Parse stat bonus string into an Effect
    * Examples: "+4 Dura", "+6 Str", "-2 IQ", "+1 All"
@@ -519,8 +546,12 @@ export class EffectResolver {
       }
     }
 
+    // PvP Rewards
     for (const pvpReward of character.pvpRewards || []) {
-      const entry = EffectRegistry.get("pvp_reward", pvpReward.description);
+      // Normalize PvP reward name to match registry
+      // Data file may have abbreviated names like "+1 Spd" but registry has "+1 Speed"
+      const normalizedName = this.normalizePvPRewardName(pvpReward.description);
+      const entry = EffectRegistry.get("pvp_reward", normalizedName);
       if (entry) {
         sources.push({
           type: "pvp_reward",
@@ -886,6 +917,46 @@ export class EffectResolver {
           )
         ) {
           continue; // Skip this effect if conditions not met
+        }
+
+        // Process custom handler if present
+        if (effect.customHandler && character) {
+          const handlerResult = HandlerRegistry.executeImmediate(
+            effect.customHandler,
+            {
+              character,
+              baseStats,
+              currentStats: result.totalStats,
+              source,
+              effect,
+            } as ImmediateHandlerContext
+          );
+
+          if (handlerResult) {
+            // Apply stat modifiers from handler
+            if (handlerResult.statModifiers) {
+              for (const mod of handlerResult.statModifiers) {
+                result.statModifiers.push({
+                  stat: mod.stat,
+                  value: mod.value,
+                  isBase: mod.isBase || false,
+                  source: source.name,
+                });
+
+                if (mod.isBase) {
+                  result.baseStats[mod.stat] += mod.value;
+                } else {
+                  result.bonusStats[mod.stat] += mod.value;
+                }
+                result.totalStats[mod.stat] += mod.value;
+              }
+            }
+
+            // Skip default processing if handler says so
+            if (handlerResult.skipDefault) {
+              continue;
+            }
+          }
         }
 
         // Process stat modifiers

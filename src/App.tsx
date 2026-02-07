@@ -85,7 +85,7 @@ const Navigation = () => {
   const currentPage = navItems.find((item) => item.path === location.pathname);
 
   return (
-    <nav className="fixed top-4 left-4 z-[9999]" ref={menuRef}>
+    <nav className="fixed top-4 left-4 z-[2000]" ref={menuRef}>
       {/* Menu Button */}
       <button
         onClick={handleToggleMenu}

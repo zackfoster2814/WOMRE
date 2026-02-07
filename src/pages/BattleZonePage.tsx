@@ -1577,10 +1577,10 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
     loadData();
   }, []);
 
-  // Create boss lookup map
+  // Create boss lookup map (case-insensitive)
   const bossMap = useMemo(() => {
     const map = new Map<string, Boss>();
-    bosses.forEach((boss) => map.set(boss.name, boss));
+    bosses.forEach((boss) => map.set(boss.name.toLowerCase(), boss));
     return map;
   }, [bosses]);
 
@@ -1596,7 +1596,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
   // Build battle views (teams with their assigned bosses)
   const battles = useMemo(() => {
     return teams.map((team): BattleView => {
-      const boss = team.boss ? bossMap.get(team.boss) || null : null;
+      const boss = team.boss ? bossMap.get(team.boss.toLowerCase()) || null : null;
 
       // Match members with player data
       const playerData: PlayerData[] = [];

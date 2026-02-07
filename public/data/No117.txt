@@ -41,7 +41,9 @@ Houses:
  + 4 Normal gear:
   - Empty Stein (Từ House)
   - Spatula(Từ House)
-  - Golden Coin x3 (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
   - Radio
  + 0 Legacy gear:
   - 

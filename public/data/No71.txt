@@ -42,7 +42,9 @@ Houses:
  + 5 Normal gear:
   - Cursed Charm (Từ House)
   - Ancient Protector(Từ House)
-  - Golden Coinx3
+  - Golden Coin 
+  - Golden Coin 
+  - Golden Coin 
   - Spatula
   - Beer
  + 0 Legacy gear:

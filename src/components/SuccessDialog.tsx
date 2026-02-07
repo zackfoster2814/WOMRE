@@ -31,7 +31,7 @@ export const SuccessDialog = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-60 z-[100] flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black bg-opacity-60 z-[2001] flex items-center justify-center p-4"
       onClick={onClose}
     >
       <div
@@ -46,7 +46,9 @@ export const SuccessDialog = ({
 
         {/* Content */}
         <div className="p-6">
-          <p className="text-gray-200 text-base mb-4 whitespace-pre-wrap">{message}</p>
+          <p className="text-gray-200 text-base mb-4 whitespace-pre-wrap">
+            {message}
+          </p>
 
           {folderPath && (
             <div className="bg-gray-700 p-3 rounded mb-4">

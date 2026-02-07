@@ -16,6 +16,7 @@ import { registerUmaParentEffects } from './uma-parents';
 import { registerCharDevEffects } from './char-devs';
 import { registerSymbiosisEffects } from './symbiosis';
 import { registerPvPRewardEffects } from './pvp-rewards';
+import { initializeHandlers } from '../handlers';
 
 // Flags to prevent double registration
 let isInitialized = false;
@@ -43,6 +44,9 @@ export function initializeEffectData(): void {
   registerCharDevEffects();
   registerSymbiosisEffects();
   registerPvPRewardEffects();
+
+  // Initialize custom handlers
+  initializeHandlers();
 
   isInitialized = true;
   console.log('Effect data initialized successfully');

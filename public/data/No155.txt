@@ -38,7 +38,8 @@ Houses:
 ```
 3 Gear: 
  + 3 Normal gear:
-  - Golden Coin x3 (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
   - Golden Coin (Từ House)
   - Đá (Từ House)
  + 0 Legacy gear:

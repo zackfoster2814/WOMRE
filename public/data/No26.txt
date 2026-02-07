@@ -41,7 +41,9 @@ Houses:
  + 5 Normal gear:
   - Kuro's Charm (Từ House)
   - Buckler (Từ House)
-  - Golden Coin x3(Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
   - Knight's Armor
   - Fingerthing
  + 0 Legacy gear:

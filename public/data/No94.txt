@@ -40,7 +40,9 @@ Houses:
  + 4 Normal gear:
   - Fingerthing(Từ House)
   - Frying Pan(Từ House)
-  - Golden Coin x3 (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
   - Soap
  + 0 Legacy gear:
   - 

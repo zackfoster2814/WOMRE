@@ -173,6 +173,7 @@ defineEffect('power', 'My Power')
 | `on_finals` | Ở chung kết |
 | `on_pvp_win` | Khi thắng PvP |
 | `pve_only` | Chỉ PvE |
+| `pvp_only` | Chỉ PvP |
 
 ### Conditions
 

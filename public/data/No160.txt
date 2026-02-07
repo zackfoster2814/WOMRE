@@ -40,7 +40,9 @@ Houses:
 ```
 5 Gear: 
  + 5 Normal gear:
-  - Golden Coin x3(Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
   - Baguette (Từ House)
   - Cuộn khăn giấy (Từ House)
   - Buckler

@@ -945,7 +945,7 @@ export const PlayerListPage = () => {
 
                 {/* Race Filter Dropdown */}
                 {showRaceFilter && (
-                  <div className="absolute top-full right-0 mt-2 z-[9999] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
+                  <div className="absolute top-full right-0 mt-2 z-[2000] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-600">
                       <span className="text-white font-medium text-sm">
                         Filter by Race
@@ -1021,7 +1021,7 @@ export const PlayerListPage = () => {
 
                 {/* House Filter Dropdown */}
                 {showHouseFilter && (
-                  <div className="absolute top-full right-0 mt-2 z-[9999] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
+                  <div className="absolute top-full right-0 mt-2 z-[2000] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-600">
                       <span className="text-white font-medium text-sm">
                         Filter by House
@@ -1104,7 +1104,7 @@ export const PlayerListPage = () => {
 
                 {/* Team Filter Dropdown */}
                 {showTeamFilter && (
-                  <div className="absolute top-full right-0 mt-2 z-[9999] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[200px] max-h-[400px] overflow-y-auto">
+                  <div className="absolute top-full right-0 mt-2 z-[2000] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[200px] max-h-[400px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-600">
                       <span className="text-white font-medium text-sm">
                         Filter by Team

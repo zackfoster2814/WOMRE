@@ -43,7 +43,9 @@ Houses:
   - Mì tôm (Từ Artisan)
   - Thuốc Tráng Dương (Từ House)
   - Đai Trinh Tiết (Từ House)
-  - Golden Coin x3(Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
   - Radio
   - Love Letter
  + 0 Legacy gear:

@@ -39,7 +39,9 @@ Houses:
  + 3 Normal gear:
   - Cursed Coin (Từ House)
   - Kẹo (Từ House)
-  - Golden Coin x3 (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
  + 0 Legacy gear:
   - 
 ```
