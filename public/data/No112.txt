@@ -20,7 +20,7 @@ Archetype:
 ```
 ``` 
 1 Quirk:  
-+ Raumanian\uD83C\uDF40
++ Raumanian🍀
 ```
 ```
 Str: 1

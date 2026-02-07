@@ -61,7 +61,8 @@ Runeword: Không
 
 ```
 Char dev: 
-+ Metamorphosis (+0IQ)
++ Metamorphosis 
+  -> +0 IQ
 ```
 
 ```

@@ -14,11 +14,11 @@ Sub-race:
 
 ```
 Archetype: 
-+ Hero of the Emirate\uD83C\uDF40
++ Hero of the Emirate🍀
 ```
 ``` 
 3 Quirk:  
-+ Raumanian\uD83C\uDF40 (Hero of the Emirate\uD83C\uDF40)
++ Raumanian🍀 (Hero of the Emirate🍀)
 + Let me Solo Her
 + Brainrot (Từ Braindead)
 ```
@@ -57,7 +57,7 @@ Runeword: Không
 
 ```
 5 Power: 
-+ Railroad Realm \uD83C\uDF40 (Hero of the Emirate\uD83C\uDF40)
++ Railroad Realm🍀 (Hero of the Emirate🍀)
 + The Sand of Time
 + Spell Flux
 + Garlic Breath

@@ -8,8 +8,8 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton (Dwarf)
-Sub-race: 
+Race: Skeleton 
+Sub-race: Dwarf
 ```
 
 ```

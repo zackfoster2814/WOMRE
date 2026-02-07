@@ -426,7 +426,11 @@ const StatModifierBadge = ({
   const summary = EffectResolver.getEffectSummary(name, sourceType);
   if (!summary) return null;
 
-  return <span className="text-[10px] text-emerald-400 ml-1">({summary})</span>;
+  // Show friendlier text for conditional effects
+  const displayText = summary === "conditional" ? "có điều kiện" : summary;
+  const colorClass = summary === "conditional" ? "text-amber-400" : "text-emerald-400";
+
+  return <span className={`text-[10px] ${colorClass} ml-1`}>({displayText})</span>;
 };
 
 // Popup component to show full archetype/house hierarchy
@@ -667,21 +671,37 @@ const PlayerContent = ({
       )}
 
       {/* Parasite Info - for hosts who have parasites */}
-      {character.isParasite &&
-        !character.isSymbiosis &&
-        character.parasiteInfo &&
-        character.parasiteInfo.length > 0 && (
-          <div className="bg-green-900/30 border border-green-700/50 rounded-lg p-3">
-            <p className="text-green-400 text-xs mb-2">Parasites</p>
-            <div className="space-y-1">
-              {character.parasiteInfo.map((info, idx) => (
-                <p key={idx} className="text-white text-sm">
-                  • {info}
-                </p>
-              ))}
-            </div>
+      {character.isParasite && !character.isSymbiosis && (
+        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3">
+          <p className="text-red-400 text-xs mb-2">Ký Sinh Info</p>
+          <div className="space-y-2">
+            {/* Parasite Type */}
+            {character.parasiteType && (
+              <p className="text-white text-sm">
+                <span className="text-gray-400">Loại:</span>{" "}
+                <span className="text-red-300 font-medium">{character.parasiteType}</span>
+              </p>
+            )}
+            {/* Wrath Stacks (for Diablo) */}
+            {character.wrathStacks !== undefined && character.wrathStacks > 0 && (
+              <p className="text-white text-sm">
+                <span className="text-gray-400">Stack Wrath:</span>{" "}
+                <span className="text-orange-400 font-medium">{character.wrathStacks}</span>
+                <span className="text-gray-500 text-xs ml-2">
+                  (+{character.wrathStacks} STR/BIQ/MA)
+                </span>
+              </p>
+            )}
+            {/* Parasite Name */}
+            {character.parasiteName && (
+              <p className="text-white text-sm">
+                <span className="text-gray-400">Parasite:</span>{" "}
+                <span className="text-green-300">{character.parasiteName}</span>
+              </p>
+            )}
           </div>
-        )}
+        </div>
+      )}
 
       {/* Race & Sub-race - Clickable */}
       <div
@@ -955,7 +975,9 @@ const PlayerContent = ({
                 />
                 <span className="flex-1">
                   {weapon.name}
-                  <StatModifierBadge name={weapon.name} sourceType="weapon" />
+                  {weapon.usable !== false && (
+                    <StatModifierBadge name={weapon.name} sourceType="weapon" />
+                  )}
                 </span>
                 <span className="text-gray-500 text-xs">({weapon.type})</span>
               </p>
@@ -983,15 +1005,24 @@ const PlayerContent = ({
               {character.gear.normalGear.map((gear, idx) => (
                 <p
                   key={idx}
-                  className={`text-sm ${gear.isLost ? "text-gray-500 line-through" : "text-white"}`}
+                  className={`text-sm flex items-center gap-2 ${gear.isLost ? "text-gray-500 line-through" : "text-white"}`}
                 >
-                  • {gear.name}
-                  {gear.isLost && (
-                    <span className="text-red-400 text-xs ml-1">(đã mất)</span>
-                  )}
-                  {!gear.isLost && (
-                    <StatModifierBadge name={gear.name} sourceType="gear" />
-                  )}
+                  <span
+                    className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                      gear.isLost || gear.usable === false
+                        ? "bg-red-500"
+                        : "bg-green-500"
+                    }`}
+                  />
+                  <span className="flex-1">
+                    {gear.name}
+                    {gear.isLost && (
+                      <span className="text-red-400 text-xs ml-1">(đã mất)</span>
+                    )}
+                    {!gear.isLost && gear.usable !== false && (
+                      <StatModifierBadge name={gear.name} sourceType="gear" />
+                    )}
+                  </span>
                 </p>
               ))}
             </div>
@@ -1006,15 +1037,24 @@ const PlayerContent = ({
               {character.gear.legacyGear.map((gear, idx) => (
                 <p
                   key={idx}
-                  className={`text-sm ${gear.isLost ? "text-gray-500 line-through" : "text-yellow-400"}`}
+                  className={`text-sm flex items-center gap-2 ${gear.isLost ? "text-gray-500 line-through" : "text-yellow-400"}`}
                 >
-                  • {gear.name}
-                  {gear.isLost && (
-                    <span className="text-red-400 text-xs ml-1">(đã mất)</span>
-                  )}
-                  {!gear.isLost && (
-                    <StatModifierBadge name={gear.name} sourceType="gear" />
-                  )}
+                  <span
+                    className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                      gear.isLost || gear.usable === false
+                        ? "bg-red-500"
+                        : "bg-green-500"
+                    }`}
+                  />
+                  <span className="flex-1">
+                    {gear.name}
+                    {gear.isLost && (
+                      <span className="text-red-400 text-xs ml-1">(đã mất)</span>
+                    )}
+                    {!gear.isLost && gear.usable !== false && (
+                      <StatModifierBadge name={gear.name} sourceType="gear" />
+                    )}
+                  </span>
                 </p>
               ))}
             </div>
@@ -1093,7 +1133,44 @@ const PlayerContent = ({
         )}
       </div>
 
-      {/* Lover 
+      {/* PvP Rewards */}
+      {character.pvpRewards && character.pvpRewards.length > 0 && (
+        <div className="bg-gray-700/50 rounded-lg p-3">
+          <p className="text-gray-400 text-xs mb-2">
+            PvP Rewards ({character.pvpRewards.length})
+          </p>
+          <div className="space-y-1">
+            {character.pvpRewards.map((reward, idx) => (
+              <p
+                key={idx}
+                className={`text-sm flex items-center gap-2 ${
+                  reward.isLost ? "text-gray-500 line-through" : "text-green-400"
+                }`}
+              >
+                <span
+                  className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                    reward.isLost ? "bg-red-500" : "bg-green-500"
+                  }`}
+                />
+                <span className="flex-1">
+                  {reward.description}
+                  {reward.isLost && (
+                    <span className="text-red-400 text-xs ml-1">(đã mất)</span>
+                  )}
+                  {!reward.isLost && (
+                    <StatModifierBadge
+                      name={reward.description}
+                      sourceType="pvp_reward"
+                    />
+                  )}
+                </span>
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Lover
       <div className="bg-gray-700/50 rounded-lg p-3">
         <p className="text-gray-400 text-xs mb-1">Lover</p>
         <p

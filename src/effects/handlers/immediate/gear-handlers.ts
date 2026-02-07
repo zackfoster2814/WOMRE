@@ -393,6 +393,37 @@ registerImmediateHandler(
   '50/50 point flip'
 );
 
+// ============================================================================
+// CUỘN KHĂN GIẤY (Tissue Roll)
+// ============================================================================
+
+/**
+ * Cuộn khăn giấy - Conditional stat bonus based on Lover status
+ * If no Lover: +1 Durability
+ * If has Lover: +1 Speed
+ */
+registerImmediateHandler(
+  'cuon_khan_giay_lover_check',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const hasLover = ctx.character.lover && ctx.character.lover.length > 0;
+
+    if (hasLover) {
+      return {
+        statModifiers: [{ stat: 'speed', value: 1 }],
+        skipDefault: true,
+        description: '+1 Speed (Cuộn khăn giấy - có Lover)',
+      };
+    } else {
+      return {
+        statModifiers: [{ stat: 'durability', value: 1 }],
+        skipDefault: true,
+        description: '+1 Durability (Cuộn khăn giấy - không có Lover)',
+      };
+    }
+  },
+  'Conditional stat based on Lover status'
+);
+
 export function registerGearHandlers(): void {
   console.log('Gear handlers registered');
 }

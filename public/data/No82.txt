@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Impatient (PvP: +1 IQ, 1 Char Dev)
++ Impatient
 + Lucky (Max: không có)
 ```
 ```
@@ -75,4 +75,10 @@ Team: 21
 Lover:
 + KaTsumi - ChillWithCafe (katsumi3000)
 + Bưởi (ngbxxx)
+```
+
+```
+PvP Reward:
+- +1 IQ
+- +1 Char Dev
 ```

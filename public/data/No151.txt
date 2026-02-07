@@ -61,7 +61,8 @@ Runeword: Không
 
 ```
 Char dev: 
-+ Metamorphosis (+1 BIQ)
++ Metamorphosis 
+  -> +1 BIQ
 ```
 
 ```

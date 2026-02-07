@@ -43,9 +43,13 @@ function parseLossableItem(text: string): LossableItem {
  * Parse a gear item string into a GearItem
  */
 function parseGearItem(text: string): GearItem {
+  const usableMatch = text.match(/\((.+?)\)/);
   return {
     name: text,
     isLost: isLostItem(text),
+    usable: usableMatch
+      ? !usableMatch[1].toLowerCase().includes("không dùng")
+      : undefined,
   };
 }
 
@@ -221,6 +225,7 @@ export class CharacterParser {
       character.parasiteInfo = parasiteResult.info;
       character.parasiteName = parasiteResult.parasiteName;
       character.parasiteType = parasiteResult.symbiosisType; // Type of parasite attached
+      character.wrathStacks = parasiteResult.wrathStacks; // Diablo Wrath stacks
       character.isSymbiosis = false;
     }
 
@@ -323,6 +328,7 @@ export class CharacterParser {
     symbiosisType?: string; // Type of symbiosis (Mephisto, Diablo, 67, etc.)
     symbiosisHost?: string; // For Symbiosis: who they're attached to
     parasiteName?: string; // For Host: who is attached to them
+    wrathStacks?: number; // For Diablo: number of Wrath stacks
   } {
     if (startIndex < 0)
       return { isParasite: false, info: [], isSymbiosis: false };
@@ -334,6 +340,7 @@ export class CharacterParser {
     let symbiosisType: string | undefined;
     let symbiosisHost: string | undefined;
     let parasiteName: string | undefined;
+    let wrathStacks: number | undefined;
 
     // Check if this line contains "Yes" indicating this IS a Symbiosis character
     const kyShinhLine = lines[startIndex];
@@ -343,7 +350,7 @@ export class CharacterParser {
 
     for (
       let i = startIndex + 1;
-      i < Math.min(startIndex + 10, lines.length);
+      i < Math.min(startIndex + 15, lines.length);
       i++
     ) {
       const line = lines[i];
@@ -351,6 +358,13 @@ export class CharacterParser {
       // Stop at next section or code block end
       if (line.startsWith("```") && i > startIndex + 1) break;
       if (!line || line === "```") continue;
+
+      // Check for continuation line with Stack Wrath (-> Stack Wrath: X)
+      const wrathMatch = line.match(/^\s*->\s*Stack\s*Wrath:\s*(\d+)/i);
+      if (wrathMatch) {
+        wrathStacks = parseInt(wrathMatch[1]);
+        continue;
+      }
 
       // Parse list items starting with + or -
       const match = line.match(/^[+\-*]\s*(.+)/);
@@ -397,6 +411,7 @@ export class CharacterParser {
       symbiosisType,
       symbiosisHost,
       parasiteName,
+      wrathStacks,
     };
   }
 
@@ -443,10 +458,11 @@ export class CharacterParser {
     if (startIndex < 0) return [];
 
     const values: LossableItem[] = [];
+    let currentItem: string | null = null;
 
     for (
       let i = startIndex + 1;
-      i < Math.min(startIndex + 20, lines.length);
+      i < Math.min(startIndex + 30, lines.length);
       i++
     ) {
       const line = lines[i];
@@ -455,14 +471,33 @@ export class CharacterParser {
       if (line.startsWith("```") && i > startIndex + 1) break;
       if (!line || line === "```") continue;
 
+      // Check for continuation line (starts with -> or whitespace followed by ->)
+      const continuationMatch = line.match(/^\s*->\s*(.+)/);
+      if (continuationMatch && currentItem) {
+        // Append continuation to current item
+        currentItem += " -> " + continuationMatch[1].trim();
+        continue;
+      }
+
+      // If we have a pending item, save it before processing new item
+      if (currentItem) {
+        values.push(parseLossableItem(currentItem));
+        currentItem = null;
+      }
+
       // Parse list items starting with + or -
       const match = line.match(/^[+\-*]\s*(.+)/);
       if (match) {
         const value = match[1].trim();
         if (value) {
-          values.push(parseLossableItem(value));
+          currentItem = value;
         }
       }
+    }
+
+    // Don't forget the last item
+    if (currentItem) {
+      values.push(parseLossableItem(currentItem));
     }
 
     return values;
@@ -941,7 +976,7 @@ export class CharacterParser {
             type: weaponType,
             name: name,
             usable: usableMatch
-              ? !usableMatch[1].includes("không dùng")
+              ? !usableMatch[1].toLowerCase().includes("không dùng")
               : undefined,
             isLost: lost || undefined,
           });
@@ -1095,14 +1130,32 @@ export class CharacterParser {
 
       if (line.startsWith("```") && i > pvpIndex + 1) break;
 
-      const rewardMatch = line.match(/^[\-*]\s*(.+)/);
+      // Match lines starting with -, *, or +
+      const rewardMatch = line.match(/^[\-*+]\s*(.+)/);
       if (rewardMatch) {
-        const reward = rewardMatch[1].trim();
+        let reward = rewardMatch[1].trim();
         if (reward) {
-          rewards.push({
-            description: reward,
-            applied: true,
-          });
+          // Check if reward is lost
+          const lost = isLostItem(reward);
+
+          // Clean up the description: remove trailing commas, parentheses, etc.
+          reward = reward
+            .replace(/[,)]+$/, "") // Remove trailing comma or closing parenthesis
+            .replace(/\s*\(đã mất\)\s*/gi, "") // Remove "đã mất" marker
+            .trim();
+
+          // Normalize format: "+ 1 Power" -> "+1 Power", "1 Power" -> "+1 Power"
+          reward = reward
+            .replace(/^\+\s+/, "+") // "+ 1" -> "+1"
+            .replace(/^(\d)/, "+$1"); // "1 Power" -> "+1 Power"
+
+          if (reward) {
+            rewards.push({
+              description: reward,
+              applied: !lost,
+              isLost: lost || undefined,
+            });
+          }
         }
       }
     }

@@ -447,12 +447,53 @@ export const BossBattleRoom = ({
   // Let Me Solo Her - frozen after losing a round
   const [soloHerFrozen, setSoloHerFrozen] = useState(false);
 
+  // Total Stat Battle mode - dynamic totals with loser bonus
+  const [totalStatBossTotalBonus, setTotalStatBossTotalBonus] = useState(0);
+  const [totalStatTeamTotalBonus, setTotalStatTeamTotalBonus] = useState(0);
+  // Base weights for Total Stat Battle (set once from round 1, used for all rounds)
+  const [totalStatBaseWeights, setTotalStatBaseWeights] = useState<{boss: number, team: number} | null>(null);
+
   const [battleMessages, setBattleMessages] = useState<string[]>([]);
 
   const boss = battle.boss!;
 
-  // Boss image path
-  const bossImagePath = `/assets/BossAsset/${boss.id}.png`;
+  // Boss image extensions mapping
+  const bossImageExtensions: Record<number, string> = {
+    1: "jfif",
+    2: "png",
+    3: "png",
+    4: "jpg",
+    5: "png",
+    6: "jpeg",
+    7: "jpg",
+    8: "png",
+    9: "jpg",
+    10: "jpg",
+    11: "jpg",
+    12: "png",
+    13: "jpg",
+    14: "jpg",
+    15: "jpg",
+    16: "jpeg",
+    17: "jpg",
+    18: "png",
+    19: "jpg",
+    20: "jpg",
+    21: "jpg",
+    22: "jpg", // 22-1.jpg (default), also has 22-2.png
+    23: "jpg",
+    24: "jpg",
+    25: "jpg",
+    27: "gif",
+    28: "gif",
+    29: "png",
+    30: "png",
+    31: "jpg",
+    32: "png",
+  };
+
+  // Boss image path - use correct extension for each boss
+  const bossImagePath = `/assets/BossAsset/${boss.id}.${bossImageExtensions[boss.id] || "png"}`;
 
   // Check for "Let Me Solo Her" quirk
   const soloHerInfo = useMemo(() => {
@@ -924,6 +965,7 @@ export const BossBattleRoom = ({
         case "totalStatBattle": {
           isTotalStatBattle = true;
           totalStatBattleRounds = effect.rounds || 7;
+          // Vẫn áp dụng x2 cho bên cao hơn, nhưng trọng số cố định từ round 1 cho tất cả rounds
           specialDetails.push(effect.description);
           break;
         }
@@ -1362,14 +1404,50 @@ export const BossBattleRoom = ({
 
   // Spin wheel for current round
   const spinWheel = useCallback(() => {
-    if (currentRound >= 6 || isSpinning) return;
+    const maxRounds = specialRules.isTotalStatBattle ? specialRules.totalStatBattleRounds : 6;
+    if (currentRound >= maxRounds || isSpinning) return;
 
     setIsSpinning(true);
-    const stat = STAT_KEYS[currentRound];
-    const bossValue = bossStats[stat] || 0;
-    const teamValue = teamStats[stat] || 0;
 
-    const { bossWeight, teamWeight } = getWeightedValues(bossValue, teamValue);
+    let bossValue: number;
+    let teamValue: number;
+    let stat: keyof BossStats;
+
+    let bossWeight: number;
+    let teamWeight: number;
+
+    if (specialRules.isTotalStatBattle) {
+      // Total Stat Battle mode - compare sum of all stats
+      const baseBossTotal = (bossStats.str || 0) + (bossStats.spd || 0) + (bossStats.dur || 0) +
+                           (bossStats.iq || 0) + (bossStats.biq || 0) + (bossStats.ma || 0);
+      const baseTeamTotal = teamStats.str + teamStats.spd + teamStats.dur +
+                           teamStats.iq + teamStats.biq + teamStats.ma;
+
+      bossValue = baseBossTotal + totalStatBossTotalBonus;
+      teamValue = baseTeamTotal + totalStatTeamTotalBonus;
+      stat = "str"; // Use str as placeholder for total stat battle
+
+      // For Total Stat Battle: use fixed base weights from round 1 for all rounds
+      if (currentRound === 0 || !totalStatBaseWeights) {
+        // Round 1: calculate and save base weights
+        const baseWeights = getWeightedValues(baseBossTotal, baseTeamTotal);
+        setTotalStatBaseWeights({ boss: baseWeights.bossWeight, team: baseWeights.teamWeight });
+        bossWeight = baseWeights.bossWeight;
+        teamWeight = baseWeights.teamWeight;
+      } else {
+        // Subsequent rounds: use saved base weights
+        bossWeight = totalStatBaseWeights.boss;
+        teamWeight = totalStatBaseWeights.team;
+      }
+    } else {
+      stat = STAT_KEYS[currentRound];
+      bossValue = bossStats[stat] || 0;
+      teamValue = teamStats[stat] || 0;
+      const weights = getWeightedValues(bossValue, teamValue);
+      bossWeight = weights.bossWeight;
+      teamWeight = weights.teamWeight;
+    }
+
     const total = bossWeight + teamWeight;
 
     if (total === 0) {
@@ -1396,13 +1474,15 @@ export const BossBattleRoom = ({
 
     const bossAngle = (bossWeight / total) * 360;
     const spinRotations = 5 + Math.random() * 3;
-    // pointerPosition is where we want the pointer to land on the wheel (0 = start of boss slice)
+    // pointerPosition is where pointer will land (0 = start of boss slice at 3 o'clock)
     const pointerPosition = Math.random() * 360;
-    // To make pointer land at pointerPosition, wheel needs to rotate (360 - pointerPosition) from current position
-    // But we also need to account for current wheel position
-    const currentWheelPosition = (360 - (wheelRotation % 360) + 360) % 360;
-    const angleToTarget = (pointerPosition - currentWheelPosition + 360) % 360;
-    const totalRotation = spinRotations * 360 + (360 - angleToTarget);
+    // Determine winner first
+    let winner: "boss" | "team" = pointerPosition < bossAngle ? "boss" : "team";
+    // spinAngle makes wheel stop at correct position
+    // After rotating R degrees, pointer points to (360 - R % 360) % 360
+    // So to land at pointerPosition, we need R % 360 = (360 - pointerPosition) % 360
+    const spinAngle = (360 - pointerPosition + 360) % 360;
+    const totalRotation = spinRotations * 360 + spinAngle;
     const newWheelRotation = wheelRotation + totalRotation;
 
     // Animate rotation
@@ -1423,10 +1503,6 @@ export const BossBattleRoom = ({
     };
 
     requestAnimationFrame(animate);
-
-    // Determine winner based on where pointer lands
-    // Boss slice occupies 0 to bossAngle degrees (clockwise from 3 o'clock)
-    let winner: "boss" | "team" = pointerPosition < bossAngle ? "boss" : "team";
     let blocked = false;
     let bonusPoints = 0;
 
@@ -1477,10 +1553,26 @@ export const BossBattleRoom = ({
         if (boostOnTeamLoss > 0) {
           setDynamicBossBonus((prev) => prev + boostOnTeamLoss);
         }
+        // Total Stat Battle - loser gets +80 total stat bonus
+        if (specialRules.isTotalStatBattle) {
+          setTotalStatTeamTotalBonus((prev) => prev + 80);
+          setBattleMessages((prev) => [
+            ...prev,
+            `📈 Team thua round ${currentRound + 1} - nhận +80 Tổng Stat!`,
+          ]);
+        }
       }
 
       if (winner === "team") {
         setWinStreak((prev) => prev + 1);
+        // Total Stat Battle - loser gets +80 total stat bonus
+        if (specialRules.isTotalStatBattle) {
+          setTotalStatBossTotalBonus((prev) => prev + 80);
+          setBattleMessages((prev) => [
+            ...prev,
+            `📈 Boss thua round ${currentRound + 1} - nhận +80 Tổng Stat!`,
+          ]);
+        }
       } else {
         setWinStreak(0);
       }
@@ -1558,7 +1650,8 @@ export const BossBattleRoom = ({
         return;
       }
 
-      if (currentRound + 1 >= 6) {
+      const maxRounds = specialRules.isTotalStatBattle ? specialRules.totalStatBattleRounds : 6;
+      if (currentRound + 1 >= maxRounds) {
         if (boss.id === 10 && winStreak < 6 && !retryBattle) {
           setRetryBattle(true);
           setRetryPenalty(20);
@@ -1607,6 +1700,8 @@ export const BossBattleRoom = ({
     score,
     soloHerInfo,
     soloHerFrozen,
+    totalStatBossTotalBonus,
+    totalStatTeamTotalBonus,
   ]);
 
   // Start battle
@@ -1633,6 +1728,9 @@ export const BossBattleRoom = ({
     setRetryBattle(false);
     setRetryPenalty(0);
     setSelectedRound(null);
+    setTotalStatBossTotalBonus(0);
+    setTotalStatTeamTotalBonus(0);
+    setTotalStatBaseWeights(null);
   }, [
     specialRules.hasPreBattleWheel,
     preBattleWheelResult,
@@ -1670,90 +1768,159 @@ export const BossBattleRoom = ({
     setRemovedPlayers([]);
     setIsekaidPlayers([]);
     setSelectedRound(null);
+    setTotalStatBossTotalBonus(0);
+    setTotalStatTeamTotalBonus(0);
+    setTotalStatBaseWeights(null);
 
     const results: RoundResult[] = [];
     let rotation = 0;
     let dynamicBonus = 0;
     let streak = 0;
 
-    STAT_KEYS.forEach((stat, idx) => {
-      let bossValue = (bossStats[stat] || 0) + dynamicBonus;
-      const teamValue = teamStats[stat] || 0;
+    // Total Stat Battle mode
+    if (specialRules.isTotalStatBattle) {
+      const totalRounds = specialRules.totalStatBattleRounds || 7;
+      const baseBossTotal = (bossStats.str || 0) + (bossStats.spd || 0) + (bossStats.dur || 0) +
+                           (bossStats.iq || 0) + (bossStats.biq || 0) + (bossStats.ma || 0);
+      const baseTeamTotal = teamStats.str + teamStats.spd + teamStats.dur +
+                           teamStats.iq + teamStats.biq + teamStats.ma;
 
-      if (boss.id === 8 && idx > 0 && idx % 2 === 0) {
-        bossValue *= 2;
+      // Calculate fixed base weights from round 1 (with x2 for higher side)
+      const baseWeights = getWeightedValues(baseBossTotal, baseTeamTotal);
+      const fixedBossWeight = baseWeights.bossWeight;
+      const fixedTeamWeight = baseWeights.teamWeight;
+      setTotalStatBaseWeights({ boss: fixedBossWeight, team: fixedTeamWeight });
+
+      let bossBonus = 0;
+      let teamBonus = 0;
+
+      for (let idx = 0; idx < totalRounds; idx++) {
+        const bossValue = baseBossTotal + bossBonus;
+        const teamValue = baseTeamTotal + teamBonus;
+
+        // Use fixed weights for wheel (same every round)
+        const total = fixedBossWeight + fixedTeamWeight;
+
+        let winner: "boss" | "team" | "tie" = "tie";
+        let spinAngle = 0;
+
+        if (total > 0) {
+          const bossAngle = (fixedBossWeight / total) * 360;
+          // pointerPosition is where pointer will land (0 = start of boss slice)
+          const pointerPosition = Math.random() * 360;
+          winner = pointerPosition < bossAngle ? "boss" : "team";
+          // spinAngle makes wheel stop at correct position
+          spinAngle = (360 - pointerPosition + 360) % 360;
+        }
+
+        // Add extra full rotations + spinAngle
+        rotation += (5 + Math.random() * 3) * 360 + spinAngle;
+
+        // Loser gets +80 bonus for next rounds
+        if (winner === "boss") {
+          teamBonus += 80;
+        } else if (winner === "team") {
+          bossBonus += 80;
+        }
+
+        results.push({
+          stat: "str", // Placeholder for total stat battle
+          bossValue,
+          teamValue,
+          winner,
+          spinAngle,
+          blocked: false,
+          wheelRotation: rotation,
+        });
       }
 
-      const { bossWeight, teamWeight } = getWeightedValues(
-        bossValue,
-        teamValue,
-      );
-      const total = bossWeight + teamWeight;
+      setTotalStatBossTotalBonus(bossBonus);
+      setTotalStatTeamTotalBonus(teamBonus);
+    } else {
+      // Normal stat-by-stat battle
+      STAT_KEYS.forEach((stat, idx) => {
+        let bossValue = (bossStats[stat] || 0) + dynamicBonus;
+        const teamValue = teamStats[stat] || 0;
 
-      let winner: "boss" | "team" | "tie" = "tie";
-      let spinAngle = 0;
-      let blocked = false;
-      let bonusPoints = 0;
+        if (boss.id === 8 && idx > 0 && idx % 2 === 0) {
+          bossValue *= 2;
+        }
 
-      if (total > 0) {
-        const bossAngle = (bossWeight / total) * 360;
-        // pointerPosition is where we want the pointer to land on the wheel (0 = start of boss slice)
-        const pointerPosition = Math.random() * 360;
-        // To make pointer land at pointerPosition, wheel needs to rotate (360 - pointerPosition)
-        spinAngle = (360 - pointerPosition + 360) % 360;
-        // Determine winner based on where pointer lands
-        winner = pointerPosition < bossAngle ? "boss" : "team";
+        const { bossWeight, teamWeight } = getWeightedValues(
+          bossValue,
+          teamValue,
+        );
+        const total = bossWeight + teamWeight;
 
-        if (winner === "team" && specialRules.blockTeamScoreChance > 0) {
-          if (Math.random() * 100 < specialRules.blockTeamScoreChance) {
-            blocked = true;
+        let winner: "boss" | "team" | "tie" = "tie";
+        let spinAngle = 0;
+        let blocked = false;
+        let bonusPoints = 0;
+
+        if (total > 0) {
+          const bossAngle = (bossWeight / total) * 360;
+          // pointerPosition is where pointer will land on wheel (0 = start of boss slice at 3 o'clock)
+          const pointerPosition = Math.random() * 360;
+          winner = pointerPosition < bossAngle ? "boss" : "team";
+          // To make pointer land at pointerPosition after rotation:
+          // After rotating R degrees, pointer points to (360 - R % 360) % 360
+          // So we need (360 - R % 360) % 360 = pointerPosition
+          // Which means R % 360 = (360 - pointerPosition) % 360
+          spinAngle = (360 - pointerPosition + 360) % 360;
+
+          if (winner === "team" && specialRules.blockTeamScoreChance > 0) {
+            if (Math.random() * 100 < specialRules.blockTeamScoreChance) {
+              blocked = true;
+            }
+          }
+
+          if (
+            winner === "team" &&
+            stat === "spd" &&
+            specialRules.teamBonusOnStatWin?.stat === "spd"
+          ) {
+            bonusPoints = specialRules.teamBonusOnStatWin.bonusPoints;
           }
         }
 
-        if (
-          winner === "team" &&
-          stat === "spd" &&
-          specialRules.teamBonusOnStatWin?.stat === "spd"
-        ) {
-          bonusPoints = specialRules.teamBonusOnStatWin.bonusPoints;
-        }
-      }
+        // Add extra full rotations + spinAngle to reach target position
+        rotation += (5 + Math.random() * 3) * 360 + spinAngle;
 
-      rotation += (5 + Math.random() * 3) * 360 + spinAngle;
-
-      if (winner === "boss") {
-        dynamicBonus += specialRules.bossStatBoostOnWin || 0;
-        dynamicBonus += specialRules.bossStatBoostOnTeamLoss || 0;
-        streak = 0;
-      } else if (winner === "team") {
-        streak++;
-        if (boss.id === 26) {
-          const remainingRounds = 6 - (idx + 1);
-          if (remainingRounds > 0) {
-            dynamicBonus += Math.floor(60 / remainingRounds);
+        if (winner === "boss") {
+          dynamicBonus += specialRules.bossStatBoostOnWin || 0;
+          dynamicBonus += specialRules.bossStatBoostOnTeamLoss || 0;
+          streak = 0;
+        } else if (winner === "team") {
+          streak++;
+          if (boss.id === 26) {
+            const remainingRounds = 6 - (idx + 1);
+            if (remainingRounds > 0) {
+              dynamicBonus += Math.floor(60 / remainingRounds);
+            }
           }
         }
-      }
 
-      results.push({
-        stat,
-        bossValue,
-        teamValue,
-        winner,
-        spinAngle,
-        blocked,
-        bonusPoints: bonusPoints > 0 ? bonusPoints : undefined,
-        wheelRotation: rotation,
+        results.push({
+          stat,
+          bossValue,
+          teamValue,
+          winner,
+          spinAngle,
+          blocked,
+          bonusPoints: bonusPoints > 0 ? bonusPoints : undefined,
+          wheelRotation: rotation,
+        });
       });
-    });
 
-    setDynamicBossBonus(dynamicBonus);
+      setDynamicBossBonus(dynamicBonus);
+    }
 
+    const maxRounds = specialRules.isTotalStatBattle ? specialRules.totalStatBattleRounds : 6;
     let round = 0;
     const spinDuration = 2000; // 2 seconds per spin
 
     const animateRound = () => {
-      if (round >= 6) {
+      if (round >= maxRounds) {
         setBattleState("finished");
         return;
       }
@@ -1883,6 +2050,9 @@ export const BossBattleRoom = ({
     setBattleMessages([]);
     setSelectedRound(null);
     setSoloHerFrozen(false);
+    setTotalStatBossTotalBonus(0);
+    setTotalStatTeamTotalBonus(0);
+    setTotalStatBaseWeights(null);
   };
 
   // Handle pre-battle wheel spin
@@ -1909,6 +2079,14 @@ export const BossBattleRoom = ({
   // Get wheel values for display
   const getDisplayWheelValues = () => {
     if (displayResult) {
+      // For Total Stat Battle: use saved base weights if available
+      if (specialRules.isTotalStatBattle && totalStatBaseWeights) {
+        return {
+          bossWeight: totalStatBaseWeights.boss,
+          teamWeight: totalStatBaseWeights.team,
+          rotation: displayResult.wheelRotation,
+        };
+      }
       const { bossWeight, teamWeight } = getWeightedValues(
         displayResult.bossValue,
         displayResult.teamValue,
@@ -1919,13 +2097,35 @@ export const BossBattleRoom = ({
         rotation: displayResult.wheelRotation,
       };
     }
-    if (currentStat && battleState === "fighting") {
-      const bossValue = bossStats[currentStat] || 0;
-      const teamValue = teamStats[currentStat] || 0;
-      const { bossWeight, teamWeight } = getWeightedValues(
-        bossValue,
-        teamValue,
-      );
+    if (battleState === "fighting") {
+      // For Total Stat Battle: use saved base weights if available
+      if (specialRules.isTotalStatBattle && totalStatBaseWeights) {
+        return {
+          bossWeight: totalStatBaseWeights.boss,
+          teamWeight: totalStatBaseWeights.team,
+          rotation: wheelRotation
+        };
+      }
+
+      let bossValue: number;
+      let teamValue: number;
+
+      if (specialRules.isTotalStatBattle) {
+        // Total Stat Battle mode - compare sum of all stats (first round, no saved weights yet)
+        const baseBossTotal = (bossStats.str || 0) + (bossStats.spd || 0) + (bossStats.dur || 0) +
+                             (bossStats.iq || 0) + (bossStats.biq || 0) + (bossStats.ma || 0);
+        const baseTeamTotal = teamStats.str + teamStats.spd + teamStats.dur +
+                             teamStats.iq + teamStats.biq + teamStats.ma;
+        bossValue = baseBossTotal;
+        teamValue = baseTeamTotal;
+      } else if (currentStat) {
+        bossValue = bossStats[currentStat] || 0;
+        teamValue = teamStats[currentStat] || 0;
+      } else {
+        return { bossWeight: 50, teamWeight: 50, rotation: 0 };
+      }
+
+      const { bossWeight, teamWeight } = getWeightedValues(bossValue, teamValue);
       return { bossWeight, teamWeight, rotation: wheelRotation };
     }
     return { bossWeight: 50, teamWeight: 50, rotation: 0 };
@@ -2056,7 +2256,7 @@ export const BossBattleRoom = ({
                               : "border-gray-600 bg-gray-800/50 text-gray-500"
                       }`}
                     >
-                      {i < 6 ? STAT_LABELS[STAT_KEYS[i]] : `R${i + 1}`}
+                      {specialRules.isTotalStatBattle ? `R${i + 1}` : (i < 6 ? STAT_LABELS[STAT_KEYS[i]] : `R${i + 1}`)}
                     </button>
                   );
                 })}
@@ -2072,34 +2272,63 @@ export const BossBattleRoom = ({
                 />
 
                 {/* Current Round Info */}
-                {battleState === "fighting" && !isSpinning && currentStat && (
+                {battleState === "fighting" && !isSpinning && (currentStat || specialRules.isTotalStatBattle) && (
                   <div className="mt-4 text-center">
                     <div className="text-lg font-bold text-white mb-2">
-                      Round {currentRound + 1}: {STAT_FULL_LABELS[currentStat]}
+                      {specialRules.isTotalStatBattle
+                        ? `Round ${currentRound + 1}: Tổng Stat`
+                        : `Round ${currentRound + 1}: ${STAT_FULL_LABELS[currentStat!]}`}
                     </div>
                     <div className="flex justify-center gap-8 text-sm">
-                      <div>
-                        <span className="text-gray-400">Boss: </span>
-                        <span className="text-red-400 font-bold">
-                          {bossStats[currentStat] || 0}
-                        </span>
-                        {(bossStats[currentStat] || 0) >
-                          (teamStats[currentStat] || 0) &&
-                          !specialRules.noDoubleWeight && (
-                            <span className="text-yellow-400 ml-1">(x2)</span>
-                          )}
-                      </div>
-                      <div>
-                        <span className="text-gray-400">Team: </span>
-                        <span className="text-green-400 font-bold">
-                          {teamStats[currentStat] || 0}
-                        </span>
-                        {(teamStats[currentStat] || 0) >
-                          (bossStats[currentStat] || 0) &&
-                          !specialRules.noDoubleWeight && (
-                            <span className="text-yellow-400 ml-1">(x2)</span>
-                          )}
-                      </div>
+                      {specialRules.isTotalStatBattle ? (
+                        <>
+                          <div>
+                            <span className="text-gray-400">Boss Total: </span>
+                            <span className="text-red-400 font-bold">
+                              {((bossStats.str || 0) + (bossStats.spd || 0) + (bossStats.dur || 0) +
+                                (bossStats.iq || 0) + (bossStats.biq || 0) + (bossStats.ma || 0)) + totalStatBossTotalBonus}
+                            </span>
+                            {totalStatBossTotalBonus > 0 && (
+                              <span className="text-yellow-400 ml-1">(+{totalStatBossTotalBonus})</span>
+                            )}
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Team Total: </span>
+                            <span className="text-green-400 font-bold">
+                              {(teamStats.str + teamStats.spd + teamStats.dur +
+                                teamStats.iq + teamStats.biq + teamStats.ma) + totalStatTeamTotalBonus}
+                            </span>
+                            {totalStatTeamTotalBonus > 0 && (
+                              <span className="text-yellow-400 ml-1">(+{totalStatTeamTotalBonus})</span>
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div>
+                            <span className="text-gray-400">Boss: </span>
+                            <span className="text-red-400 font-bold">
+                              {bossStats[currentStat!] || 0}
+                            </span>
+                            {(bossStats[currentStat!] || 0) >
+                              (teamStats[currentStat!] || 0) &&
+                              !specialRules.noDoubleWeight && (
+                                <span className="text-yellow-400 ml-1">(x2)</span>
+                              )}
+                          </div>
+                          <div>
+                            <span className="text-gray-400">Team: </span>
+                            <span className="text-green-400 font-bold">
+                              {teamStats[currentStat!] || 0}
+                            </span>
+                            {(teamStats[currentStat!] || 0) >
+                              (bossStats[currentStat!] || 0) &&
+                              !specialRules.noDoubleWeight && (
+                                <span className="text-yellow-400 ml-1">(x2)</span>
+                              )}
+                          </div>
+                        </>
+                      )}
                     </div>
                     <button
                       onClick={spinWheel}
@@ -2115,17 +2344,17 @@ export const BossBattleRoom = ({
                   <div className="mt-4 text-center">
                     <div className="text-lg font-bold text-yellow-400 mb-2">
                       Round {selectedRound + 1}:{" "}
-                      {STAT_FULL_LABELS[displayResult.stat]}
+                      {specialRules.isTotalStatBattle ? "Tổng Stat" : STAT_FULL_LABELS[displayResult.stat]}
                     </div>
                     <div className="flex justify-center gap-8 text-sm">
                       <div>
-                        <span className="text-gray-400">Boss: </span>
+                        <span className="text-gray-400">{specialRules.isTotalStatBattle ? "Boss Total: " : "Boss: "}</span>
                         <span className="text-red-400 font-bold">
                           {displayResult.bossValue}
                         </span>
                       </div>
                       <div>
-                        <span className="text-gray-400">Team: </span>
+                        <span className="text-gray-400">{specialRules.isTotalStatBattle ? "Team Total: " : "Team: "}</span>
                         <span className="text-green-400 font-bold">
                           {displayResult.teamValue}
                         </span>

@@ -16,10 +16,16 @@ export function registerSymbiosisEffects() {
     .addStat('ma', 2)
     .register();
 
-  // 2. Diablo - +0 tất cả (có stack Wrath system)
+  // 2. Diablo - +0 base tất cả, nhưng có stack Wrath system
+  // Vật chủ nhận +1 Strength, +1 BIQ và +1 MA với mỗi Stack "Wrath" tồn tại trong người
   defineEffect('symbiosis', 'Diablo')
     .description('Vật chủ khởi đầu với 2 stack "Wrath". +1 STR/BIQ/MA mỗi stack.')
-    // Base stats từ Diablo là 0, effects đến từ Wrath stacks
+    .effect({
+      type: 'custom',
+      customHandler: 'diablo_wrath_stacks',
+      timing: 'immediate',
+      target: 'self'
+    })
     .register();
 
   // 3. Korrupt - +1 STR, +3 SPD, +0 DUR, +0 IQ, +1 BIQ, +3 MA

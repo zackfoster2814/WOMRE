@@ -102,33 +102,41 @@ registerImmediateHandler(
 );
 
 /**
- * Cheater - Multiple lovers check
+ * Cheater - Nếu có hơn 1 Lover, nhận +1 all stats
+ * Lover của bạn nhận -2 BIQ (handled separately as target: lover effect)
  */
 registerImmediateHandler(
   'cheater_multi_lover_check',
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const lover = ctx.character.lover as string | string[] | undefined;
+    const lover = ctx.character.lover;
     let loverCount = 0;
 
     if (lover) {
       if (Array.isArray(lover)) {
-        loverCount = lover.length;
-      } else if (typeof lover === 'string' && lover.trim() !== '') {
-        loverCount = 1;
+        // Filter out lost lovers
+        loverCount = lover.filter(l => !l.isLost).length;
       }
     }
 
-    if (loverCount >= 2) {
+    // Only get +1 all stats if more than 1 lover
+    if (loverCount > 1) {
       return {
-        statModifiers: [{ stat: 'biq', value: loverCount }],
+        statModifiers: [
+          { stat: 'strength', value: 1 },
+          { stat: 'speed', value: 1 },
+          { stat: 'durability', value: 1 },
+          { stat: 'iq', value: 1 },
+          { stat: 'biq', value: 1 },
+          { stat: 'ma', value: 1 },
+        ],
         skipDefault: true,
-        description: `+${loverCount} BIQ từ ${loverCount} lovers (Cheater)`,
+        description: `+1 All Stats từ Cheater (có ${loverCount} lovers)`,
       };
     }
 
     return { skipDefault: true };
   },
-  'BIQ bonus for multiple lovers'
+  '+1 All Stats if more than 1 lover'
 );
 
 /**

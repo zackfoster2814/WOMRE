@@ -77,6 +77,6 @@ Lover:
 
 ```
 PvP Reward:
-- 1 Gear
+- +1 Gear
 - +1 IQ
 ```

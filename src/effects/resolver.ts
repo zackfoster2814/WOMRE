@@ -146,19 +146,26 @@ export class EffectResolver {
    * Data files may use abbreviated names like "+1 Spd" but registry has "+1 Speed"
    */
   private static normalizePvPRewardName(name: string): string {
-    // Map abbreviated stat names to full names used in registry
+    // Map abbreviated/variant stat names to full names used in registry
     const statAbbreviations: Record<string, string> = {
-      'str': 'Strength',
-      'spd': 'Speed',
-      'dur': 'Durability',
-      'dura': 'Durability',
+      str: "Strength",
+      strength: "Strength",
+      spd: "Speed",
+      speed: "Speed",
+      dur: "Durability",
+      dura: "Durability",
+      durability: "Durability",
+      iq: "IQ",
+      biq: "BIQ",
+      ma: "Martial Arts",
+      "martial arts": "Martial Arts",
     };
 
     // Pattern: +/-NUMBER STAT_ABBREV (e.g., "+1 Spd", "+2 Dur")
-    const match = name.match(/^([+-]?\d+)\s+(\w+)$/i);
+    const match = name.match(/^([+-]?\d+)\s+(.+)$/i);
     if (match) {
       const value = match[1];
-      const stat = match[2].toLowerCase();
+      const stat = match[2].toLowerCase().trim();
       if (statAbbreviations[stat]) {
         return `${value} ${statAbbreviations[stat]}`;
       }
@@ -204,6 +211,61 @@ export class EffectResolver {
       timing: "immediate",
       target: "self",
     };
+  }
+
+  /**
+   * Parse charDev name to extract base name and metadata
+   * Format examples:
+   * - "Metamorphosis (Pennyworthy Deny AIDS) -> Nhận +7 Dura"
+   * - "Simple CharDev"
+   */
+  private static parseCharDevName(fullName: string): {
+    baseName: string;
+    denyAids: boolean;
+    statBonus: { stat: string; value: number } | null;
+  } {
+    let baseName = fullName;
+    let denyAids = false;
+    let statBonus: { stat: string; value: number } | null = null;
+
+    // Check for deny AIDS pattern
+    if (/\(.*deny\s*aids.*\)/i.test(fullName)) {
+      denyAids = true;
+    }
+
+    // Extract stat bonus from "-> Nhận +X Stat" or "-> +X Stat" pattern
+    const statBonusMatch = fullName.match(/->\s*(?:Nhận\s*)?\+(\d+)\s+(\w+)/i);
+    if (statBonusMatch) {
+      const value = parseInt(statBonusMatch[1]);
+      const statStr = statBonusMatch[2].toLowerCase();
+
+      // Map stat abbreviations
+      const statMap: Record<string, string> = {
+        str: "strength",
+        strength: "strength",
+        spd: "speed",
+        speed: "speed",
+        dur: "durability",
+        dura: "durability",
+        durability: "durability",
+        iq: "iq",
+        biq: "biq",
+        ma: "ma",
+      };
+
+      const stat = statMap[statStr];
+      if (stat) {
+        statBonus = { stat, value };
+      }
+    }
+
+    // Extract base name (before any parentheses or arrows)
+    const baseNameMatch = fullName.match(/^([^(->]+)/);
+    if (baseNameMatch) {
+      baseName = baseNameMatch[1].trim();
+    }
+
+    return { baseName, denyAids, statBonus };
   }
 
   /**
@@ -387,7 +449,10 @@ export class EffectResolver {
           name: gear.name,
           effects: entry.effects,
           rawDescription: entry.description,
-          isActive: true,
+          isActive: gear.usable !== false,
+          isDisabled: gear.usable === false,
+          disabledReason:
+            gear.usable === false ? "Không dùng được" : undefined,
         });
       }
     }
@@ -497,12 +562,50 @@ export class EffectResolver {
     // Character Development (skip lost items)
     for (const charDev of character.charDevs || []) {
       if (charDev.isLost) continue; // Skip lost items
-      const entry = EffectRegistry.get("char_dev", charDev.name);
+
+      // Parse charDev name to extract base name and metadata
+      // Format examples:
+      // - "Metamorphosis (Pennyworthy Deny AIDS) -> Nhận +7 Dura"
+      // - "Simple CharDev"
+      const parsed = this.parseCharDevName(charDev.name);
+
+      const entry = EffectRegistry.get("char_dev", parsed.baseName);
       if (entry) {
+        // Clone effects to avoid modifying original
+        let effects = [...entry.effects];
+
+        // Handle special cases based on metadata
+        if (parsed.baseName.toLowerCase() === "metamorphosis") {
+          // Filter out AIDS power grant if denied
+          if (parsed.denyAids) {
+            effects = effects.filter(e =>
+              !(e.type === "grant_power" &&
+                (e as { grantName?: string }).grantName?.toLowerCase() === "aids")
+            );
+          }
+
+          // Replace random stat handler with specific stat if provided
+          if (parsed.statBonus) {
+            effects = effects.filter(e =>
+              !(e.type === "custom" &&
+                (e as { customHandler?: string }).customHandler === "metamorphosis_random_stat")
+            );
+            // Add specific stat modifier
+            effects.push({
+              type: "stat_modifier",
+              stat: parsed.statBonus.stat as StatName,
+              value: parsed.statBonus.value,
+              isBase: true,
+              timing: "immediate",
+              target: "self",
+            });
+          }
+        }
+
         sources.push({
           type: "char_dev",
           name: charDev.name,
-          effects: entry.effects,
+          effects: effects,
           rawDescription: entry.description,
           isActive: true,
         });
@@ -546,8 +649,9 @@ export class EffectResolver {
       }
     }
 
-    // PvP Rewards
+    // PvP Rewards (skip lost rewards)
     for (const pvpReward of character.pvpRewards || []) {
+      if (pvpReward.isLost) continue; // Skip lost rewards
       // Normalize PvP reward name to match registry
       // Data file may have abbreviated names like "+1 Spd" but registry has "+1 Speed"
       const normalizedName = this.normalizePvPRewardName(pvpReward.description);
@@ -808,6 +912,33 @@ export class EffectResolver {
           }
           break;
 
+        case "bracket":
+          // Check bracket condition using character's tournament info
+          if (character?.tournament?.bracket && condition.bracket) {
+            if (condition.bracket === "finals") {
+              // Check if in finals
+              result = character.tournament.round === "final";
+            } else {
+              result = character.tournament.bracket === condition.bracket;
+            }
+          } else {
+            // No tournament info, condition not met
+            result = false;
+          }
+          break;
+
+        case "pvp_win_count":
+          // Check PvP win count condition
+          if (character && condition.winCount !== undefined) {
+            const pvpWins = character.tournament?.pvpWins || 0;
+            const operator = condition.winCountOperator || ">=";
+            result = this.compare(pvpWins, operator, condition.winCount);
+          } else {
+            // No character or win count, condition not met
+            result = false;
+          }
+          break;
+
         default:
           // Other condition types need combat context, skip for immediate
           result = true;
@@ -896,15 +1027,42 @@ export class EffectResolver {
             }
           }
         } else {
-          // No context - only process immediate effects
+          // No context - only process immediate effects and bracket-based effects
           if (effect.timing !== "immediate") {
-            // Store for later use in combat
-            result.combatEffects.push({
-              source,
-              effect,
-              isActive: true,
-            });
-            continue;
+            // Check if this is a bracket-based timing that should apply based on character's current bracket
+            const isBracketTiming =
+              effect.timing === "on_loser_bracket" ||
+              effect.timing === "on_winner_bracket";
+
+            if (isBracketTiming && character?.tournament?.bracket) {
+              const isLoserBracket = character.tournament.bracket === "loser";
+              const isWinnerBracket = character.tournament.bracket === "winner";
+
+              // Apply bracket-based effects if character is in the matching bracket
+              if (
+                (effect.timing === "on_loser_bracket" && isLoserBracket) ||
+                (effect.timing === "on_winner_bracket" && isWinnerBracket)
+              ) {
+                // Fall through to process this effect as immediate
+              } else {
+                // Not in matching bracket, store for later
+                result.combatEffects.push({
+                  source,
+                  effect,
+                  isActive: false,
+                  reason: `Requires ${effect.timing === "on_loser_bracket" ? "loser" : "winner"} bracket`,
+                });
+                continue;
+              }
+            } else {
+              // Store for later use in combat
+              result.combatEffects.push({
+                source,
+                effect,
+                isActive: true,
+              });
+              continue;
+            }
           }
         }
 
@@ -929,7 +1087,7 @@ export class EffectResolver {
               currentStats: result.totalStats,
               source,
               effect,
-            } as ImmediateHandlerContext
+            } as ImmediateHandlerContext,
           );
 
           if (handlerResult) {
@@ -959,11 +1117,13 @@ export class EffectResolver {
           }
         }
 
-        // Process stat modifiers
+        // Process stat modifiers (only for self target or no target specified)
+        // Skip effects that target "lover", "opponent", etc.
         if (
           effect.type === "stat_modifier" &&
           effect.stat &&
-          effect.value !== undefined
+          effect.value !== undefined &&
+          (!effect.target || effect.target === "self")
         ) {
           // For effects targeting 'lowest'/'highest' with isBase, use original baseStats to determine which stat
           // This ensures "Base Stat thấp nhất" looks at original base stats, not modified stats
@@ -1181,7 +1341,17 @@ export class EffectResolver {
     sourceName: string,
     sourceType: EffectSourceType,
   ): string {
-    const entry = EffectRegistry.get(sourceType, sourceName);
+    // For char_dev, parse the name to handle special formats like "Metamorphosis -> +1 BIQ"
+    let lookupName = sourceName;
+    let parsedStatBonus: { stat: string; value: number } | null = null;
+
+    if (sourceType === "char_dev") {
+      const parsed = this.parseCharDevName(sourceName);
+      lookupName = parsed.baseName;
+      parsedStatBonus = parsed.statBonus;
+    }
+
+    const entry = EffectRegistry.get(sourceType, lookupName);
     if (!entry) return "";
 
     const statChanges: string[] = [];
@@ -1203,9 +1373,27 @@ export class EffectResolver {
         e.conditions.length > 0,
     );
 
-    // If there are conditional effects, return description or "conditional" indicator
-    if (hasConditionalEffects) {
-      // Return empty to let the UI show just the name without misleading stat info
+    // Check if any effect uses custom handler (character-dependent)
+    const hasCustomHandler = entry.effects.some(
+      (e) => e.customHandler && e.timing === "immediate",
+    );
+
+    // If there are conditional effects or custom handlers, check if we have parsed stat bonus
+    if (hasConditionalEffects || hasCustomHandler) {
+      // If we have a parsed stat bonus from the charDev name, use that instead of "conditional"
+      if (parsedStatBonus) {
+        const statAbbrevMap: Record<string, string> = {
+          strength: "STR",
+          speed: "SPD",
+          durability: "DUR",
+          iq: "IQ",
+          biq: "BIQ",
+          ma: "MA",
+        };
+        const abbrev = statAbbrevMap[parsedStatBonus.stat] || parsedStatBonus.stat.toUpperCase();
+        return `+${parsedStatBonus.value} ${abbrev}`;
+      }
+      // Return conditional to let the UI show the effect is character-dependent
       return "conditional";
     }
 
@@ -1275,11 +1463,46 @@ export class EffectResolver {
       const conditionalEffects: ConditionalEffect[] = [];
 
       for (const effect of source.effects) {
-        // Collect immediate stat modifiers
+        // Check if this is a bracket-based timing that should be treated as immediate
+        const isBracketTiming =
+          effect.timing === "on_loser_bracket" ||
+          effect.timing === "on_winner_bracket";
+        const isInMatchingBracket =
+          isBracketTiming &&
+          character.tournament?.bracket &&
+          ((effect.timing === "on_loser_bracket" &&
+            character.tournament.bracket === "loser") ||
+            (effect.timing === "on_winner_bracket" &&
+              character.tournament.bracket === "winner"));
+
+        // Handle custom handlers - execute them and collect their stat modifiers
+        if (effect.customHandler && effect.timing === "immediate") {
+          const handlerResult = HandlerRegistry.executeImmediate(
+            effect.customHandler,
+            {
+              character,
+              baseStats,
+              currentStats: { ...baseStats },
+              source,
+              effect,
+            } as ImmediateHandlerContext,
+          );
+
+          if (handlerResult?.statModifiers) {
+            for (const mod of handlerResult.statModifiers) {
+              statChanges.push({ stat: mod.stat, value: mod.value });
+            }
+          }
+          continue; // Skip other processing for custom handler effects
+        }
+
+        // Collect immediate stat modifiers (or bracket-based if in matching bracket)
+        // Skip effects that target others (lover, opponent, etc.) - only show self effects
         if (
           effect.type === "stat_modifier" &&
-          effect.timing === "immediate" &&
-          effect.value !== undefined
+          (effect.timing === "immediate" || isInMatchingBracket) &&
+          effect.value !== undefined &&
+          (!effect.target || effect.target === "self")
         ) {
           // Check conditions before including in breakdown
           if (
@@ -1310,10 +1533,20 @@ export class EffectResolver {
             for (const stat of resolvedStats) {
               statChanges.push({ stat, value: effect.value });
             }
+          } else if (effect.stat === "odd" || effect.stat === "even") {
+            // Handle odd/even stat targets
+            const resolvedStats = resolveStatTarget(effect.stat, baseStats);
+            for (const stat of resolvedStats) {
+              statChanges.push({ stat, value: effect.value });
+            }
           }
         }
-        // Collect conditional/combat effects (non-immediate timing)
-        else if (effect.timing && effect.timing !== "immediate") {
+        // Collect conditional/combat effects (non-immediate timing, excluding bracket timing that's already handled)
+        else if (
+          effect.timing &&
+          effect.timing !== "immediate" &&
+          !isInMatchingBracket
+        ) {
           const timingLabel = timingLabels[effect.timing] || effect.timing;
           let effectDesc = timingLabel;
 
@@ -1352,7 +1585,7 @@ export class EffectResolver {
 
       if (statChanges.length > 0 || source.rawDescription) {
         // Merge duplicate stat changes (e.g., +1 BIQ and +2 BIQ from lowest -> +3 BIQ)
-        const mergedStatChanges: StatChange[] = [];
+        let mergedStatChanges: StatChange[] = [];
         for (const change of statChanges) {
           const existing = mergedStatChanges.find(
             (c) => c.stat === change.stat,
@@ -1362,6 +1595,15 @@ export class EffectResolver {
           } else {
             mergedStatChanges.push({ ...change });
           }
+        }
+
+        // Special case: Skeleton race has IQ locked at 1
+        // Filter out IQ modifiers from breakdown since they don't apply
+        const race = character.race?.race?.toLowerCase() || "";
+        if (race === "skeleton") {
+          mergedStatChanges = mergedStatChanges.filter(
+            (change) => change.stat !== "iq",
+          );
         }
 
         breakdown.push({

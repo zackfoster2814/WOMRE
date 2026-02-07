@@ -19,7 +19,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Impatient (PvP Reward: 1 Gear, 1 IQ) (đã mất)
++ Impatient (đã mất)
 + Fast Learner (đã mất)
 ```
 ```
@@ -76,4 +76,10 @@ Team: 15
 ```
 Lover:
 + 
+```
+
+```
+PvP Reward:
++ 1 Gear (đã mất)
++ 1 IQ (đã mất)
 ```

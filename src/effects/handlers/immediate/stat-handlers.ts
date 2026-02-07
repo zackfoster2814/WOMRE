@@ -74,29 +74,34 @@ function countItemsOfType(character: any, type: string): number {
 /**
  * Inversion - Đảo ngược tất cả base stats
  * Base stats bị đảo: Stat mới = 11 - Stat cũ
+ *
+ * NOTE: Tạm thời comment vì Inversion đã được tính tay trong data
  */
 registerImmediateHandler(
   'inversion_all_base_stats',
-  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // Tạm thời disable vì Inversion đã được tính tay trong data
+    // const mods: ImmediateHandlerResult['statModifiers'] = [];
+    //
+    // for (const stat of STAT_NAMES) {
+    //   const currentBase = ctx.baseStats[stat];
+    //   const newBase = 11 - currentBase;
+    //   const diff = newBase - currentBase;
+    //
+    //   if (diff !== 0) {
+    //     mods.push({ stat, value: diff, isBase: true });
+    //   }
+    // }
+    //
+    // return {
+    //   statModifiers: mods,
+    //   skipDefault: true,
+    //   description: 'Đảo ngược tất cả base stats (Stat = 11 - Stat cũ)',
+    // };
 
-    for (const stat of STAT_NAMES) {
-      const currentBase = ctx.baseStats[stat];
-      const newBase = 11 - currentBase;
-      const diff = newBase - currentBase;
-
-      if (diff !== 0) {
-        mods.push({ stat, value: diff, isBase: true });
-      }
-    }
-
-    return {
-      statModifiers: mods,
-      skipDefault: true,
-      description: 'Đảo ngược tất cả base stats (Stat = 11 - Stat cũ)',
-    };
+    return { skipDefault: true };
   },
-  'Đảo ngược tất cả base stats'
+  'Đảo ngược tất cả base stats (disabled - đã tính tay)'
 );
 
 /**
@@ -170,7 +175,8 @@ registerImmediateHandler(
 );
 
 /**
- * Overcome Habits - +1 All stats per quirk
+ * Overcome Habits - +1 to LOWEST BASE stat per quirk
+ * Uses baseStats (original stats from wheel spin) to determine lowest stat
  */
 registerImmediateHandler(
   'overcome_habits_per_quirk',
@@ -178,18 +184,16 @@ registerImmediateHandler(
     const quirkCount = countItemsOfType(ctx.character, 'quirk');
     if (quirkCount === 0) return { skipDefault: true };
 
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
-    for (const stat of STAT_NAMES) {
-      mods.push({ stat, value: quirkCount });
-    }
+    // Use baseStats to find lowest stat (stats from original wheel spin)
+    const lowestStat = findLowestStat(ctx.baseStats);
 
     return {
-      statModifiers: mods,
+      statModifiers: [{ stat: lowestStat, value: quirkCount }],
       skipDefault: true,
-      description: `+${quirkCount} All Stats từ ${quirkCount} quirk(s)`,
+      description: `+${quirkCount} ${lowestStat.toUpperCase()} (${quirkCount} Quirk, Overcome the Habits)`,
     };
   },
-  '+1 All stats per quirk'
+  '+1 lowest base stat per quirk'
 );
 
 /**
@@ -373,20 +377,37 @@ registerImmediateHandler(
 
 /**
  * Metamorphosis Random Stat
+ * Random 1 trong 6 hiệu ứng cố định: +1 Str, +7 Spd, +7 Dur, +0 IQ, +1 BIQ, +3 MA
  */
 registerImmediateHandler(
   'metamorphosis_random_stat',
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const randomStat = getRandomStat();
-    const value = Math.floor(Math.random() * 6) + 1; // 1-6
+    const options: { stat: StatName; label: string; value: number }[] = [
+      { stat: 'strength', label: 'STR', value: 1 },
+      { stat: 'speed', label: 'SPD', value: 7 },
+      { stat: 'durability', label: 'DUR', value: 7 },
+      { stat: 'iq', label: 'IQ', value: 0 },
+      { stat: 'biq', label: 'BIQ', value: 1 },
+      { stat: 'ma', label: 'MA', value: 3 },
+    ];
+    const chosen = options[Math.floor(Math.random() * options.length)];
+
+    // If value is 0, still return but with no actual modifier
+    if (chosen.value === 0) {
+      return {
+        statModifiers: [],
+        skipDefault: true,
+        description: `+0 ${chosen.label} từ Metamorphosis`,
+      };
+    }
 
     return {
-      statModifiers: [{ stat: randomStat, value, isBase: true }],
+      statModifiers: [{ stat: chosen.stat, value: chosen.value, isBase: true }],
       skipDefault: true,
-      description: `+${value} ${randomStat} từ Metamorphosis`,
+      description: `+${chosen.value} ${chosen.label} từ Metamorphosis`,
     };
   },
-  'Random stat bonus'
+  'Random stat bonus from fixed options'
 );
 
 /**
@@ -468,25 +489,8 @@ registerImmediateHandler(
   'Convert Speed to IQ'
 );
 
-/**
- * Escapade - Convert IQ to Strength
- */
-registerImmediateHandler(
-  'escapade_convert_iq_to_str',
-  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const iqValue = ctx.currentStats.iq;
-
-    return {
-      statModifiers: [
-        { stat: 'iq', value: -iqValue },
-        { stat: 'strength', value: iqValue },
-      ],
-      skipDefault: true,
-      description: `Convert ${iqValue} IQ to Strength`,
-    };
-  },
-  'Convert IQ to Strength'
-);
+// EscAPADe handler moved to power-handlers.ts
+// It only converts IQ BONUS (not base IQ) to Strength
 
 /**
  * Epiphany - Convert Power count to IQ
@@ -530,6 +534,30 @@ registerImmediateHandler(
     };
   },
   'BIQ bonus from AIDS and lovers'
+);
+
+/**
+ * Diablo Wrath Stacks - +1 STR/BIQ/MA per Wrath stack
+ * Vật chủ nhận +1 Strength, +1 BIQ và +1 MA với mỗi Stack "Wrath" tồn tại trong người
+ */
+registerImmediateHandler(
+  'diablo_wrath_stacks',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const wrathStacks = ctx.character.wrathStacks || 0;
+
+    if (wrathStacks === 0) return { skipDefault: true };
+
+    return {
+      statModifiers: [
+        { stat: 'strength', value: wrathStacks },
+        { stat: 'biq', value: wrathStacks },
+        { stat: 'ma', value: wrathStacks },
+      ],
+      skipDefault: true,
+      description: `+${wrathStacks} STR/BIQ/MA từ ${wrathStacks} Wrath stack(s)`,
+    };
+  },
+  '+1 STR/BIQ/MA per Wrath stack'
 );
 
 export function registerStatHandlers(): void {

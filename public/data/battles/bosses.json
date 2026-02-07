@@ -19,12 +19,6 @@
       ],
       "ruleEffects": [
         {
-          "type": "totalStatBattle",
-          "rounds": 7,
-          "target": "both",
-          "description": "So tổng 6 Party Stats với tổng Stat của Boss trong 7 round"
-        },
-        {
           "type": "statAboveThreshold",
           "threshold": 14,
           "bonusPerStat": 3,

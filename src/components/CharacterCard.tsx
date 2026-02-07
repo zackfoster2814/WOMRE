@@ -61,9 +61,14 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
           </div>
 
           <div className="mt-4 flex gap-2 flex-wrap">
-            {character.isParasite && (
+            {character.isParasite && character.parasiteType && (
               <span className="bg-red-500 px-3 py-1 rounded-full text-sm">
-                Ký Sinh
+                Ký Sinh: {character.parasiteType}
+                {character.wrathStacks !== undefined && character.wrathStacks > 0 && (
+                  <span className="ml-1 bg-red-700 px-2 py-0.5 rounded-full text-xs">
+                    Wrath: {character.wrathStacks}
+                  </span>
+                )}
               </span>
             )}
             <span className="bg-blue-500 px-3 py-1 rounded-full text-sm">
@@ -123,6 +128,34 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
         {/* Body */}
         <div className="p-6 space-y-6">
+          {/* Ký Sinh (Symbiosis) Info */}
+          {character.isParasite && character.parasiteType && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <h3 className="text-lg font-bold mb-2 text-red-800">Ký Sinh</h3>
+              <div className="space-y-1 text-sm">
+                <p>
+                  <span className="font-semibold text-red-700">Loại:</span>{" "}
+                  <span className="text-red-600">{character.parasiteType}</span>
+                </p>
+                {character.wrathStacks !== undefined && character.wrathStacks > 0 && (
+                  <p>
+                    <span className="font-semibold text-red-700">Stack Wrath:</span>{" "}
+                    <span className="text-red-600">{character.wrathStacks}</span>
+                    <span className="text-gray-500 text-xs ml-2">
+                      (+{character.wrathStacks} STR/BIQ/MA)
+                    </span>
+                  </p>
+                )}
+                {character.parasiteName && (
+                  <p>
+                    <span className="font-semibold text-red-700">Parasite:</span>{" "}
+                    <span className="text-red-600">{character.parasiteName}</span>
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Stats */}
           <div>
             <h3 className="text-xl font-bold mb-3 text-gray-800">

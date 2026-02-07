@@ -14,11 +14,11 @@ Sub-race: (Human)
 
 ```
 Archetype: 
-+ Hero of the Emirate\uD83C\uDF40
++ Hero of the Emirate🍀
 ```
 ``` 
 2 Quirk:  
-+ Raumanian\uD83C\uDF40 (Từ Archetype)
++ Raumanian🍀 (Từ Archetype)
 + Night Owl
 ```
 ```
@@ -58,7 +58,7 @@ Runeword: Không
 
 ```
 4 Power: 
-+ Railroad Realm \uD83C\uDF40 (Từ Archetype)
++ Railroad Realm🍀 (Từ Archetype)
 + Voidwalking
 + Overdrive
 + Cursed (Quay lại Dura)

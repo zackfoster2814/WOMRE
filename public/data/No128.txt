@@ -21,7 +21,7 @@ Archetype:
 ``` 
 3 Quirk:  
 + Cruelty
-+ Fast Leaner
++ Fast Learner
 + Night Owl
 ```
 ```

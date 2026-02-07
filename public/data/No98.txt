@@ -19,7 +19,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Fast Leaner (Từ Thinker)
++ Fast Learner (Từ Thinker)
 + Night Owl (Từ Thinker)
 ```
 ```

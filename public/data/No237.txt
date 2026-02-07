@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 1 Quirk:  
-+ Impatient (PvP: +1 Speed, +1 BIQ)
++ Impatient 
 ```
 ```
 Str:1
@@ -62,7 +62,8 @@ Runeword:
 
 ```
 Char dev: 
-+ Metamorphosis (Nhận +1 Strength)
++ Metamorphosis 
+  -> +1 Strength
 ```
 
 ```
@@ -72,4 +73,10 @@ Team:13
 ```
 Lover:
 + 
+```
+
+```
+PvP Reward:
+- +1 Speed
+- +1 BIQ
 ```

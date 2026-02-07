@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Raumanian\uD83C\uDF40 (Từ Hero of the Emirate)
++ Raumanian🍀 (Từ Hero of the Emirate)
 + Pure (Không có Gear)
 ```
 ```
@@ -56,7 +56,7 @@ Runeword: Không
 
 ```
 4 Power: 
-+ Railroad Realm \uD83C\uDF40(Từ Hero of the Emirate)
++ Railroad Realm 🍀(Từ Hero of the Emirate)
 + Mystifying Murmur
 + Healing Factor
 + Guidance

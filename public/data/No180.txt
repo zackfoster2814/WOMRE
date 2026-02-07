@@ -42,7 +42,7 @@ Houses:
 ```
 3 Gear: 
  + 3 Normal gear:
-  - Lover's Glove
+  - Lover's Glover
   - Shot glass
   - Kẹo
   - Spatula (từ Artisan)

@@ -20,7 +20,7 @@ Archetype:
 ``` 
 2 Quirk:  
 + Cautious 
-+ Impatient (PvP: +1 IQ, 1 Power)
++ Impatient 
 ```
 ```
 Str:5 ban đầu là 6 (Inversion)
@@ -63,7 +63,6 @@ Runeword: Không
 + Mewing
 + Luck Manipulation
 + Accelerating Sorcery
-+ AIDS (từ ltq (tcltq))
 ```
 
 ```
@@ -80,4 +79,9 @@ Team:5
 ```
 Lover:
 + ltq (tcltq)
+```
+```
+PvP Reward: 
+- +1 IQ, 
+- +1 Power
 ```

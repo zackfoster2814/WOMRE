@@ -21,7 +21,7 @@ Archetype:
 ``` 
 3 Quirk:  
 + One Trick Pony
-+ Fast Leaner (Từ House)
++ Fast Learner (Từ House)
 + Night Owl (Từ House)
 ```
 ```

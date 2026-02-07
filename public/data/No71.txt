@@ -87,5 +87,5 @@ Lover:
 ```
 PvP Reward:
 - +1 Dura
-- +1 Speed
+- +1 Spd
 ```

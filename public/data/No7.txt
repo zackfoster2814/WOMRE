@@ -6,6 +6,7 @@ Nhánh thi đấu: -
 ```
 Ký Sinh:
 + Loại: Diablo
+  -> Stack Wrath: 2
 + Parasite: Munchlax (mitxitieu005)
 ```
 ```

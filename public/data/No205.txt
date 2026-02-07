@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Impatient (PvP: +1MA, +1Str)
++ Impatient 
 + Artisan
 ```
 ```
@@ -80,4 +80,10 @@ Team:23
 ```
 Lover:
 + 
+```
+
+```
+Lover:
+- +1 MA
+- +1 Str
 ```

@@ -1986,12 +1986,15 @@ const StatModifiersTable = ({
     symbiosis: "text-red-300",
   };
 
-  // Filter sources with stat changes
-  const sourcesWithStats = breakdown.filter((s) => s.statChanges.length > 0);
+  // Filter sources with stat changes (exclude disabled sources like unusable weapons)
+  const sourcesWithStats = breakdown.filter(
+    (s) => s.statChanges.length > 0 && !s.isDisabled,
+  );
 
   // Filter sources with conditional effects (effects that trigger on win/lose/combat)
+  // Also exclude disabled sources
   const sourcesWithConditionalEffects = breakdown.filter(
-    (s) => s.conditionalEffects && s.conditionalEffects.length > 0,
+    (s) => s.conditionalEffects && s.conditionalEffects.length > 0 && !s.isDisabled,
   );
 
   // Calculate totals for each stat
@@ -2352,9 +2355,9 @@ const PlayerDetailModal = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-teal-600 px-6 py-4 flex items-center justify-between sticky top-0">
-          <div>
-            <div className="flex items-center gap-3 mb-1">
+        <div className="bg-gradient-to-r from-purple-600 to-teal-600 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-3 mb-1 flex-wrap">
               <span className="text-white/80 font-bold bg-white/20 px-3 py-1 rounded">
                 No.{character.no}
               </span>
@@ -2363,6 +2366,30 @@ const PlayerDetailModal = ({
                   Team {character.team}
                 </span>
               )}
+              {/* Archetype badges */}
+              {character.archetypes &&
+                character.archetypes.length > 0 &&
+                character.archetypes.map((arch, idx) => (
+                  <span
+                    key={`arch-${idx}`}
+                    className="text-white/90 font-medium bg-pink-500/40 px-2 py-0.5 rounded text-sm"
+                  >
+                    {arch}
+                  </span>
+                ))}
+              {/* House badges */}
+              {character.nestedHouses &&
+                character.nestedHouses.length > 0 &&
+                character.nestedHouses
+                  .filter((h) => !h.isLost)
+                  .map((house, idx) => (
+                    <span
+                      key={`house-${idx}`}
+                      className="text-white/90 font-medium bg-cyan-500/40 px-2 py-0.5 rounded text-sm"
+                    >
+                      {house.name}
+                    </span>
+                  ))}
             </div>
             <h2 className="text-2xl font-bold text-white">{character.name}</h2>
             {character.username && (
@@ -2371,7 +2398,7 @@ const PlayerDetailModal = ({
           </div>
           <button
             onClick={onClose}
-            className="text-white/70 hover:text-white text-3xl font-light transition-colors"
+            className="text-white/70 hover:text-white text-3xl font-light transition-colors flex-shrink-0 ml-4"
           >
             &times;
           </button>
@@ -3049,6 +3076,48 @@ const PlayerDetailModal = ({
                       }
                     >
                       ❤️ {loverItem.name}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* PvP Rewards */}
+            {character.pvpRewards && character.pvpRewards.length > 0 && (
+              <div className="bg-gray-700/50 rounded-lg p-4">
+                <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                  <span className="text-green-400">&#9733;</span> PvP Rewards (
+                  {character.pvpRewards.length})
+                </h3>
+                <div className="space-y-2">
+                  {character.pvpRewards.map((reward, idx) => (
+                    <p
+                      key={idx}
+                      className={`flex items-center gap-2 ${
+                        reward.isLost
+                          ? "text-gray-500 line-through"
+                          : "text-green-300"
+                      }`}
+                    >
+                      <span
+                        className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                          reward.isLost ? "bg-red-500" : "bg-green-500"
+                        }`}
+                      />
+                      <span className="flex-1">
+                        {reward.description}
+                        {reward.isLost && (
+                          <span className="ml-1 text-red-400 text-xs">
+                            (đã mất)
+                          </span>
+                        )}
+                        {!reward.isLost && (
+                          <StatModifierBadge
+                            name={reward.description}
+                            sourceType="pvp_reward"
+                          />
+                        )}
+                      </span>
                     </p>
                   ))}
                 </div>

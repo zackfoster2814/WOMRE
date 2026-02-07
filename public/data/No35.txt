@@ -5,7 +5,9 @@ Vòng thi đấu: -
 Nhánh thi đấu: -
 ```
 Ký Sinh:
-+ 
++ Loại: Diablo
+  -> Stack Wrath: 2
++ Parasite: Phùng Canh Mộ (faevandir)
 ```
 ```
 Race: Goblin

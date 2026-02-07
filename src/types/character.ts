@@ -19,6 +19,7 @@ export interface CharacterRace {
 export interface GearItem {
   name: string;
   isLost?: boolean; // Items marked as "đã mất" won't affect stats
+  usable?: boolean; // Items marked as "không dùng được" won't affect stats
 }
 
 export interface Gear {
@@ -72,6 +73,7 @@ export interface NestedHouse {
 export interface PvPReward {
   description: string;
   applied: boolean;
+  isLost?: boolean; // PvP rewards marked as "đã mất" won't affect stats
 }
 
 // Tournament status types
@@ -107,6 +109,7 @@ export interface Character {
   parasiteInfo?: string[];
   parasiteName?: string; // Name of the parasite attached (e.g., "Majin (majinlord666)")
   parasiteType?: string; // Type of parasite (e.g., "Mephisto", "Diablo", "67")
+  wrathStacks?: number; // For Diablo symbiosis: number of Wrath stacks (+1 STR/BIQ/MA per stack)
 
   // Symbiosis Status (for the symbiote/parasite itself)
   isSymbiosis?: boolean;

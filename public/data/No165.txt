@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Impatient (PvP Reward: Nhận 1 Power, +2 Stat thấp nhất)
++ Impatient
 + Slow Healer
 ```
 ```
@@ -73,4 +73,10 @@ Team: 28
 ```
 Lover:
 + 
+```
+
+```
+PvP Reward: 
++ 1 Power
++ 2 Stat thấp nhất
 ```

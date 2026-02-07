@@ -64,7 +64,8 @@ Runeword: Không
 
 ```
 Char dev: 
-+ Metamorphosis (7 Spd)
++ Metamorphosis 
+  -> +7 Spd
 ```
 
 ```
