@@ -556,8 +556,8 @@ export const PlayerListPage = () => {
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);
                 const username = char.username || "";
-                // Get team from teams.json mapping
-                const teamId = usernameToTeam.get(username.toLowerCase());
+                // Get team from teams.json mapping, fallback to player file
+                const teamId = usernameToTeam.get(username.toLowerCase()) ?? char.team;
                 playerList.push({
                   no: char.no || playerNo,
                   name: char.name || `Player ${playerNo}`,
@@ -650,7 +650,7 @@ export const PlayerListPage = () => {
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);
                 const username = char.username || "";
-                const teamId = usernameToTeam.get(username.toLowerCase());
+                const teamId = usernameToTeam.get(username.toLowerCase()) ?? char.team;
                 playerList.push({
                   no: char.no || playerNo,
                   name: char.name || `Player ${playerNo}`,

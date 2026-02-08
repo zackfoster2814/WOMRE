@@ -77,7 +77,7 @@ Char dev:
 ```
 
 ```
-Team:9
+Team: 9
 ```
 
 ```

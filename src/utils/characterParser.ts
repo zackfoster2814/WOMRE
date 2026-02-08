@@ -316,12 +316,12 @@ export class CharacterParser {
     const charDevIndex = this.findSectionIndex(lines, "Char dev:");
     character.charDevs = this.parseListValue(lines, charDevIndex);
 
-    // Parse Team
+    // Parse Team - format: "Team: 25" (number on same line)
     const teamIndex = this.findSectionIndex(lines, "Team:");
-    if (teamIndex >= 0 && lines[teamIndex + 1]) {
-      const teamMatch = lines[teamIndex + 1].match(/\d+/);
+    if (teamIndex >= 0) {
+      const teamMatch = lines[teamIndex].match(/Team:\s*(\d+)/);
       if (teamMatch) {
-        character.team = parseInt(teamMatch[0]);
+        character.team = parseInt(teamMatch[1]);
       }
     }
 

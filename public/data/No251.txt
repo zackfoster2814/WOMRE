@@ -62,7 +62,7 @@ Char dev: Too Horny (Được quay)
 ```
 
 ```
-Team:22
+Team: 22
 ```
 
 ```

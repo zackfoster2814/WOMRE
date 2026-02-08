@@ -65,7 +65,7 @@ Char dev: (Không được quay)
 ```
 
 ```
-Team:32
+Team: 32
 ```
 
 ```

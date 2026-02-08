@@ -68,7 +68,7 @@ Char dev:
 ```
 
 ```
-Team:5
+Team: 5
 ```
 
 ```

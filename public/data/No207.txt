@@ -71,7 +71,7 @@ Char dev: Training Arc
 ```
 
 ```
-Team:12
+Team: 12
 ```
 
 ```
