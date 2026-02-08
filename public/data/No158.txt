@@ -37,7 +37,7 @@ Houses:
 ```
 4 Gear: 
  + 4 Normal gear:
-  - Cần câu (Từ Archetype)
+  - Fishing Rod (Từ Archetype)
   - Knight's Armor
   - Ba Hoa Trắng
   - Silver Steed

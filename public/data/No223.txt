@@ -45,7 +45,7 @@ Houses:
 
 ```
 1 Normal Weapon
-+ Claymore (dùng được) (mất vì Creator's Reforge)
++ Claymore (dùng được) (Đã mất vì Creator's Reforge)
 + Hidden Blade (nhận từ Creator's Reforge)
 ```
 

@@ -8,7 +8,7 @@ Ký Sinh:
 + 
 ```
 ```
-Race: ELf
+Race: Elf
 Sub-race: Moon Elf (Yui (duyanh_57789)) 
 ```
 
@@ -33,7 +33,7 @@ MA:3
 
 ```
 Houses:
-+ Tyrell
++ House Tyrell
 ```
 
 ```

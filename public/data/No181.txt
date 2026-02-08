@@ -65,7 +65,7 @@ Runeword: Không
 Char dev: 
 + Final Reserves
 + Transmute: chaos
-+ Kungfu Trainning
++ Kungfu Training
 + Mad Scientist
 ```
 

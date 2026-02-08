@@ -35,6 +35,16 @@ const STAT_NAMES: StatName[] = [
   "ma",
 ];
 
+// Map StatName to CharacterStats key
+const STAT_NAME_TO_CHAR_KEY: Record<StatName, keyof import('../types/character').CharacterStats> = {
+  strength: 'str',
+  speed: 'spd',
+  durability: 'dur',
+  iq: 'iq',
+  biq: 'biq',
+  ma: 'ma',
+};
+
 /**
  * Convert character stats format to our format
  */
@@ -233,11 +243,11 @@ export class EffectResolver {
       denyAids = true;
     }
 
-    // Extract stat bonus from "-> Nhận +X Stat" or "-> +X Stat" pattern
-    const statBonusMatch = fullName.match(/->\s*(?:Nhận\s*)?\+(\d+)\s+(\w+)/i);
+    // Extract stat bonus from "-> Nhận +X Stat" or "-> +X Stat" or "-> -X All Stats" pattern
+    const statBonusMatch = fullName.match(/->\s*(?:Nhận\s*)?([+-]\d+)\s+([\w\s]+?)(?:\s*$|\s*\()/i);
     if (statBonusMatch) {
       const value = parseInt(statBonusMatch[1]);
-      const statStr = statBonusMatch[2].toLowerCase();
+      const statStr = statBonusMatch[2].trim().toLowerCase();
 
       // Map stat abbreviations
       const statMap: Record<string, string> = {
@@ -251,6 +261,8 @@ export class EffectResolver {
         iq: "iq",
         biq: "biq",
         ma: "ma",
+        "all stats": "all",
+        all: "all",
       };
 
       const stat = statMap[statStr];
@@ -294,6 +306,20 @@ export class EffectResolver {
           isActive: true,
         });
       }
+
+      // Reincarnator: also apply the actual race's effects
+      if (character.race.race === "Reincarnator" && character.race.actualRace) {
+        const actualRaceEntry = EffectRegistry.get("race", character.race.actualRace);
+        if (actualRaceEntry) {
+          sources.push({
+            type: "race",
+            name: character.race.actualRace,
+            effects: actualRaceEntry.effects,
+            rawDescription: actualRaceEntry.description,
+            isActive: true,
+          });
+        }
+      }
     }
 
     // Sub-race (may contain multiple sub-races separated by " + ")
@@ -334,6 +360,36 @@ export class EffectResolver {
           rawDescription: entry.description,
           isActive: true,
         });
+      }
+    }
+
+    // Archetype sub-types (from Wibu Wheel, etc.)
+    for (const nested of character.nestedArchetypes || []) {
+      // Look up subType (e.g., "Jojo", "JJK", "MHA", "Bleach")
+      if (nested.subType) {
+        const subEntry = EffectRegistry.get("archetype_sub", nested.subType);
+        if (subEntry) {
+          sources.push({
+            type: "archetype",
+            name: nested.subType,
+            effects: subEntry.effects,
+            rawDescription: subEntry.description,
+            isActive: true,
+          });
+        }
+      }
+      // Look up subSubType (e.g., "Tusk Act II", "The World", "IQ")
+      if (nested.subSubType) {
+        const subSubEntry = EffectRegistry.get("archetype_sub", nested.subSubType);
+        if (subSubEntry) {
+          sources.push({
+            type: "archetype",
+            name: nested.subSubType,
+            effects: subSubEntry.effects,
+            rawDescription: subSubEntry.description,
+            isActive: true,
+          });
+        }
       }
     }
 
@@ -481,7 +537,8 @@ export class EffectResolver {
         house.isLost && house.lostType === "kinda_homeless";
 
       // If house has explicit statBonuses (e.g., ["+2 Str", "+1 Spd", "+2 Dura"]), use those instead of registry effect
-      if (house.statBonuses && house.statBonuses.length > 0) {
+      // Skip if houseBonusApplied (stats already include house bonus, e.g. before Fate's Trick)
+      if (house.statBonuses && house.statBonuses.length > 0 && !character.houseBonusApplied) {
         const bonusEffects: Effect[] = [];
         for (const bonus of house.statBonuses) {
           const bonusEffect = this.parseStatBonus(bonus);
@@ -518,11 +575,15 @@ export class EffectResolver {
       const entry = EffectRegistry.get("house", house.name);
       if (entry) {
         // For kinda_homeless: only keep stat_modifier effects with immediate timing
-        const effectsToApply = isKindaHomeless
+        // For houseBonusApplied: skip stat_modifier effects (already pre-applied, e.g. before Fate's Trick)
+        let effectsToApply = isKindaHomeless
           ? entry.effects.filter(
               (e) => e.type === "stat_modifier" && e.timing === "immediate",
             )
           : entry.effects;
+        if (character.houseBonusApplied) {
+          effectsToApply = effectsToApply.filter((e) => e.type !== "stat_modifier");
+        }
 
         if (effectsToApply.length > 0) {
           sources.push({
@@ -557,11 +618,85 @@ export class EffectResolver {
       if (house.isLost || processedHouses.has(house.name)) continue;
       const entry = EffectRegistry.get("house", house.name);
       if (entry) {
+        const houseEffects = character.houseBonusApplied
+          ? entry.effects.filter((e) => e.type !== "stat_modifier")
+          : entry.effects;
         sources.push({
           type: "house",
           name: house.name,
-          effects: entry.effects,
+          effects: houseEffects,
           rawDescription: entry.description,
+          isActive: true,
+        });
+      }
+    }
+
+    // Chuyện Bộ Tộc - House tribal story effects
+    // Baratheon: all members get +1 all base stat (collective activation)
+    // Lannister (Dung - haruharu9127): traitor gets +2 all base stat
+    // Uchiha (2FaceCat - 2facecat.): traitor gets +2 all base stat
+    {
+      const activeHouseNames = (character.nestedHouses || [])
+        .filter((h) => !h.isLost || h.lostType === "kinda_homeless")
+        .map((h) => h.name);
+      // Fallback to regular houses
+      for (const h of character.houses || []) {
+        if (!h.isLost && !activeHouseNames.includes(h.name)) {
+          activeHouseNames.push(h.name);
+        }
+      }
+
+      if (activeHouseNames.includes("House Baratheon")) {
+        const allStatEffects: Effect[] = (["strength", "speed", "durability", "iq", "biq", "ma"] as const).map((stat) => ({
+          type: "stat_modifier" as const,
+          stat,
+          value: 1,
+          isBase: true,
+          timing: "immediate" as const,
+          target: "self" as const,
+        }));
+        sources.push({
+          type: "house",
+          name: "Chuyện bộ tộc - Nhà Baratheon",
+          effects: allStatEffects,
+          rawDescription: "+1 all base stat cho toàn bộ thành viên nhà Baratheon",
+          isActive: true,
+        });
+      }
+
+      const username = character.username?.toLowerCase() || "";
+      if (username === "haruharu9127") {
+        const allStatEffects: Effect[] = (["strength", "speed", "durability", "iq", "biq", "ma"] as const).map((stat) => ({
+          type: "stat_modifier" as const,
+          stat,
+          value: 2,
+          isBase: true,
+          timing: "immediate" as const,
+          target: "self" as const,
+        }));
+        sources.push({
+          type: "house",
+          name: "Chuyện bộ tộc - Nhà Lannister",
+          effects: allStatEffects,
+          rawDescription: "+2 all base stat (phản bội gia tộc)",
+          isActive: true,
+        });
+      }
+
+      if (username === "2facecat.") {
+        const allStatEffects: Effect[] = (["strength", "speed", "durability", "iq", "biq", "ma"] as const).map((stat) => ({
+          type: "stat_modifier" as const,
+          stat,
+          value: 2,
+          isBase: true,
+          timing: "immediate" as const,
+          target: "self" as const,
+        }));
+        sources.push({
+          type: "house",
+          name: "Chuyện bộ tộc - Nhà Uchiha",
+          effects: allStatEffects,
+          rawDescription: "+2 all base stat (phản bội gia tộc)",
           isActive: true,
         });
       }
@@ -618,6 +753,23 @@ export class EffectResolver {
                 (e as { customHandler?: string }).customHandler === "in_love_stat_bonus")
             );
             // Add specific stat modifier from data (e.g., "-> +2 IQ")
+            effects.push({
+              type: "stat_modifier",
+              stat: parsed.statBonus.stat as StatName,
+              value: parsed.statBonus.value,
+              timing: "immediate",
+              target: "self",
+            });
+          }
+        }
+
+        // Handle Creator's Limitation - replace custom handler with specific stat if provided in data
+        if (parsed.baseName.toLowerCase() === "creator's limitation") {
+          if (parsed.statBonus) {
+            effects = effects.filter(e =>
+              !(e.type === "custom" &&
+                (e as { customHandler?: string }).customHandler === "creators_limitation")
+            );
             effects.push({
               type: "stat_modifier",
               stat: parsed.statBonus.stat as StatName,
@@ -1227,6 +1379,12 @@ export class EffectResolver {
             // Apply stat modifiers from handler
             if (handlerResult.statModifiers) {
               for (const mod of handlerResult.statModifiers) {
+                // Skip base modifiers for stats marked as "(final)"
+                if (mod.isBase && character?.finalStats) {
+                  const fKey = STAT_NAME_TO_CHAR_KEY[mod.stat];
+                  if (fKey && character.finalStats[fKey]) continue;
+                }
+
                 result.statModifiers.push({
                   stat: mod.stat,
                   value: mod.value,
@@ -1271,6 +1429,12 @@ export class EffectResolver {
           );
 
           for (const stat of targetStats) {
+            // Skip base modifiers for stats marked as "(final)"
+            if (effect.isBase && character?.finalStats) {
+              const fKey = STAT_NAME_TO_CHAR_KEY[stat];
+              if (fKey && character.finalStats[fKey]) continue;
+            }
+
             result.statModifiers.push({
               stat,
               value: effect.value,
@@ -1782,6 +1946,15 @@ export class EffectResolver {
           mergedStatChanges = mergedStatChanges.filter(
             (change) => !(change.stat === "speed" && change.value > 0),
           );
+        }
+
+        // Filter out base modifiers for stats marked as "(final)" - base already pre-calculated
+        if (character.finalStats) {
+          mergedStatChanges = mergedStatChanges.filter((change) => {
+            if (!change.isBase) return true; // Non-base modifiers still apply
+            const key = STAT_NAME_TO_CHAR_KEY[change.stat];
+            return !(key && character.finalStats?.[key]);
+          });
         }
 
         // Update running stats with this source's changes (for subsequent handlers)

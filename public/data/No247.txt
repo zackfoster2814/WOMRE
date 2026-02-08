@@ -31,7 +31,7 @@ MA:1 (Không được quay)
 
 ```
 Houses: 
-+ Targaryen (Được quay) 
++ House Targaryen (Được quay) 
 ```
 
 ```

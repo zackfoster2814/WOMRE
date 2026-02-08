@@ -1018,4 +1018,44 @@ export function registerAllGearEffects() {
       target: 'self'
     })
     .register();
+
+  // ============================================================================
+  // INFINITY STONES (Legacy Gear - từ Infinity Gauntlet)
+  // ============================================================================
+
+  // Power Stone - +3 Strength
+  defineEffect('gear', 'Power Stone')
+    .description('+3 Strength. Khi bị loại, đá trở về Infinity Gauntlet.')
+    .addStat('strength', 3)
+    .register();
+
+  // Space Stone - +3 Speed
+  defineEffect('gear', 'Space Stone')
+    .description('+3 Speed. Khi bị loại, đá trở về Infinity Gauntlet.')
+    .addStat('speed', 3)
+    .register();
+
+  // Soul Stone - +3 Durability
+  defineEffect('gear', 'Soul Stone')
+    .description('+3 Durability. Khi bị loại, đá trở về Infinity Gauntlet.')
+    .addStat('durability', 3)
+    .register();
+
+  // Mind Stone - +3 IQ
+  defineEffect('gear', 'Mind Stone')
+    .description('+3 IQ. Khi bị loại, đá trở về Infinity Gauntlet.')
+    .addStat('iq', 3)
+    .register();
+
+  // Time Stone - +3 BIQ
+  defineEffect('gear', 'Time Stone')
+    .description('+3 BIQ. Khi bị loại, đá trở về Infinity Gauntlet.')
+    .addStat('biq', 3)
+    .register();
+
+  // Reality Stone - +3 MA
+  defineEffect('gear', 'Reality Stone')
+    .description('+3 MA. Khi bị loại, đá trở về Infinity Gauntlet.')
+    .addStat('ma', 3)
+    .register();
 }

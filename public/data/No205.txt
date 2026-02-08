@@ -32,7 +32,7 @@ MA:6
 
 ```
 Houses: 
-+ Lannister
++ House Lannister
 ```
 
 ```
@@ -83,7 +83,7 @@ Lover:
 ```
 
 ```
-Lover:
+PvP Reward:
 - +1 MA
 - +1 Str
 ```

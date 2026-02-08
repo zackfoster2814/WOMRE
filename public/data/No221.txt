@@ -33,13 +33,13 @@ MA:2
 
 ```
 Houses: 
-+ Tyrell
++ House Tyrell
 ```
 
 ```
 2 Gear: 
  + 2 Normal gear:
-  - Cần Câu
+  - Fishing Rod
   - Bia
  + 0 Legacy gear:
   - 

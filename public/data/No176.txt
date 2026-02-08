@@ -24,8 +24,8 @@ Archetype:
 + Bloodthirsty
 ```
 ```
-Str: 10(+5)
-Spd: 7 (ban đầu là 4, +3 từ Herald)
+Str: 10 (+5)
+Spd: 4 (+3 từ Herald)
 Dur: 6
 IQ: 4(-5)
 BIQ: 8

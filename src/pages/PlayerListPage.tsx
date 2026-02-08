@@ -76,6 +76,8 @@ interface PlayerSummary {
   username: string;
   race: string;
   subRace?: string;
+  isReincarnator?: boolean;
+  actualRace?: string;
   archetypes: string[];
   nestedArchetypes?: NestedArchetype[];
   quirks: LossableItem[];
@@ -146,11 +148,14 @@ interface HouseLoreData {
   traitor?: {
     name: string;
     username: string;
+    playerNo: number;
   };
   traitorEffect?: string;
   // Hiệu ứng cho toàn tộc (khi không có người phản bội hoặc hiệu ứng tập thể)
   collectiveEffect?: string;
-  tooltipPlaceholder?: boolean;
+  // Evidence images: prefix and count for houselore folder (e.g., prefix "lannister", count 3 -> lannister-1.png, lannister-2.png, lannister-3.png)
+  evidencePrefix?: string;
+  evidenceCount?: number;
   color: string;
   bgGradient: string;
   icon: string;
@@ -177,9 +182,11 @@ const HouseLoreSection = ({
       traitor: {
         name: "Dung",
         username: "haruharu9127",
+        playerNo: 160,
       },
       traitorEffect: "Đã kích hoạt: +2 all base stat (chỉ bản thân)",
-      tooltipPlaceholder: true,
+      evidencePrefix: "lannister",
+      evidenceCount: 3,
       color: "red",
       bgGradient: "from-red-900/80 to-amber-900/80",
       icon: "",
@@ -193,14 +200,29 @@ const HouseLoreSection = ({
       traitor: {
         name: "2FaceCat",
         username: "2facecat.",
+        playerNo: 226,
       },
       traitorEffect: "Đã kích hoạt: +2 all base stat (chỉ bản thân)",
-      tooltipPlaceholder: true,
+      evidencePrefix: "uchiha",
+      evidenceCount: 1,
       color: "purple",
       bgGradient: "from-purple-900/80 to-red-900/80",
       icon: "",
     },
   ];
+
+  const [evidenceModal, setEvidenceModal] = useState<{
+    houseName: string;
+    images: string[];
+  } | null>(null);
+
+  // Build evidence image URLs from prefix and count
+  const getEvidenceImages = (house: HouseLoreData): string[] => {
+    if (!house.evidencePrefix || !house.evidenceCount) return [];
+    return Array.from({ length: house.evidenceCount }, (_, i) =>
+      getAssetPath(`/data/houselore/${house.evidencePrefix}-${i + 1}.png`),
+    );
+  };
 
   // Find players belonging to each house
   const getHouseMembers = (houseName: string) => {
@@ -210,10 +232,10 @@ const HouseLoreSection = ({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-2">
       {/* Header */}
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-purple-300 mb-2">
+      <div className="text-center mb-2">
+        <h2 className="text-3xl font-bold text-purple-300 mb-1">
           Chuyện bộ tộc
         </h2>
       </div>
@@ -229,6 +251,7 @@ const HouseLoreSection = ({
                   house.traitor!.username.toLowerCase(),
               )
             : null;
+          const houseEvidence = getEvidenceImages(house);
 
           return (
             <div
@@ -254,108 +277,126 @@ const HouseLoreSection = ({
 
               {/* House Content */}
               <div className="p-6 space-y-4">
-                {/* Description */}
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  {house.description}
-                </p>
+                {/* Description - fixed height for alignment */}
+                <div className="flex items-center" style={{ minHeight: 60 }}>
+                  <p className="text-gray-300 text-sm leading-relaxed text-center w-full">
+                    {house.description}
+                  </p>
+                </div>
 
-                {/* Base Effect */}
-                <div className="bg-black/30 rounded-lg p-3">
+                {/* Base Effect - fixed height for alignment */}
+                <div
+                  className="bg-black/30 rounded-lg p-3 flex flex-col justify-center"
+                  style={{ minHeight: 72 }}
+                >
                   <p className="text-xs text-gray-400 mb-1">Hiệu ứng cơ bản:</p>
                   <p className={`text-${house.color}-300 font-medium text-sm`}>
                     {house.effect}
                   </p>
                 </div>
 
-                {/* Traitor Section - Người phản bội */}
-                {house.traitor ? (
-                  <div className="bg-gradient-to-r from-red-900/40 to-red-800/40 border-2 border-red-500/50 rounded-lg p-4 relative overflow-hidden">
-                    {/* Warning stripes background */}
-                    <div className="absolute inset-0 opacity-5">
-                      <div
-                        className="w-full h-full"
-                        style={{
-                          backgroundImage:
-                            "repeating-linear-gradient(45deg, transparent, transparent 10px, #ef4444 10px, #ef4444 20px)",
-                        }}
-                      ></div>
-                    </div>
-
-                    <div className="relative">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-2"></div>
-                        {house.tooltipPlaceholder && (
-                          <div className="group relative">
-                            <span className="text-gray-400 text-xs cursor-help border-b border-dotted border-gray-400">
-                              [Bằng chứng]
-                            </span>
-                            <div className="absolute bottom-full right-0 mb-2 hidden group-hover:block bg-gray-900 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-10">
-                              Hình ảnh sẽ được thêm sau
-                            </div>
-                          </div>
-                        )}
+                {/* Traitor / Collective Section - fixed height for alignment */}
+                <div style={{ minHeight: 240 }}>
+                  {house.traitor ? (
+                    <div className="bg-gradient-to-r from-red-900/40 to-red-800/40 border-2 border-red-500/50 rounded-lg p-4 relative overflow-hidden h-full">
+                      {/* Warning stripes background */}
+                      <div className="absolute inset-0 opacity-5">
+                        <div
+                          className="w-full h-full"
+                          style={{
+                            backgroundImage:
+                              "repeating-linear-gradient(45deg, transparent, transparent 10px, #ef4444 10px, #ef4444 20px)",
+                          }}
+                        ></div>
                       </div>
 
-                      <div className="flex items-center gap-3 bg-black/30 rounded-lg p-3">
-                        <div className="flex-1">
-                          <p className="text-red-300 font-bold text-lg">
-                            {house.traitor.name}
-                          </p>
-                          <p className="text-red-400/70 text-xs">
-                            @{house.traitor.username}
+                      <div className="relative">
+                        <div className="flex items-center justify-end mb-3">
+                          {houseEvidence.length > 0 && (
+                            <button
+                              onClick={() =>
+                                setEvidenceModal({
+                                  houseName: house.houseName,
+                                  images: houseEvidence,
+                                })
+                              }
+                              className="text-red-400 text-xs cursor-pointer border-b border-dotted border-red-400 hover:text-red-300 hover:border-red-300 transition-colors"
+                            >
+                              [Bằng chứng]
+                            </button>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-3 bg-black/30 rounded-lg p-3">
+                          {/* Traitor Avatar */}
+                          <img
+                            src={getAssetPath(
+                              `/data/avatars/no${house.traitor.playerNo}.png`,
+                            )}
+                            alt={house.traitor.name}
+                            className="w-14 h-14 rounded-full border-2 border-red-500/50 object-cover flex-shrink-0"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display =
+                                "none";
+                            }}
+                          />
+                          <div className="flex-1">
+                            <p className="text-red-300 font-bold text-lg">
+                              {house.traitor.name}
+                            </p>
+                            <p className="text-red-400/70 text-xs">
+                              @{house.traitor.username}
+                            </p>
+                          </div>
+                        </div>
+
+                        {traitorPlayer && (
+                          <button
+                            onClick={() => onPlayerClick(traitorPlayer.no)}
+                            className="mt-2 text-xs text-red-400 hover:text-red-300 underline"
+                          >
+                            Xem thông tin
+                          </button>
+                        )}
+
+                        <div className="mt-3 pt-3 border-t border-red-500/30">
+                          <p className="text-red-300 text-sm font-medium flex items-center gap-2">
+                            {house.traitorEffect}
                           </p>
                         </div>
                       </div>
-
-                      {traitorPlayer && (
-                        <button
-                          onClick={() => onPlayerClick(traitorPlayer.no)}
-                          className="mt-2 text-xs text-red-400 hover:text-red-300 underline"
-                        >
-                          Xem thông tin
-                        </button>
-                      )}
-
-                      <div className="mt-3 pt-3 border-t border-red-500/30">
-                        <p className="text-red-300 text-sm font-medium flex items-center gap-2">
-                          {house.traitorEffect}
-                        </p>
+                    </div>
+                  ) : (
+                    <div className="bg-gradient-to-r from-green-500/20 to-teal-500/20 border border-green-500/30 rounded-lg p-4 h-full flex flex-col justify-center">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-green-400 text-xs font-medium uppercase tracking-wider">
+                          Hiệu ứng toàn tộc
+                        </span>
                       </div>
+                      <p className="text-green-300 text-sm font-medium">
+                        {house.collectiveEffect}
+                      </p>
                     </div>
-                  </div>
-                ) : (
-                  <div className="bg-gradient-to-r from-green-500/20 to-teal-500/20 border border-green-500/30 rounded-lg p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-green-400 text-xs font-medium uppercase tracking-wider">
-                        Hiệu ứng toàn tộc
-                      </span>
-                    </div>
-                    <p className="text-green-300 text-sm font-medium">
-                      {house.collectiveEffect}
-                    </p>
-                  </div>
-                )}
+                  )}
+                </div>
 
-                {/* Members Preview */}
+                {/* Members List - Full names */}
                 {members.length > 0 && (
                   <div className="pt-4 border-t border-gray-600">
-                    <p className="text-xs text-gray-400 mb-2">Thành viên:</p>
+                    <p className="text-xs text-gray-400 mb-2">
+                      Thành viên ({members.length}):
+                    </p>
                     <div className="flex flex-wrap gap-2">
-                      {members.slice(0, 6).map((member) => (
+                      {members.map((member) => (
                         <button
                           key={member.no}
                           onClick={() => onPlayerClick(member.no)}
                           className="px-2 py-1 bg-gray-700/50 hover:bg-gray-600/50 rounded text-xs text-white transition-colors"
-                          title={`${member.name} (@${member.username})`}
+                          title={`No.${member.no} - ${member.name} (@${member.username})`}
                         >
-                          {member.name}
+                          {member.name} ({member.username})
                         </button>
                       ))}
-                      {members.length > 6 && (
-                        <span className="px-2 py-1 text-gray-400 text-xs">
-                          +{members.length - 6} more
-                        </span>
-                      )}
                     </div>
                   </div>
                 )}
@@ -364,6 +405,42 @@ const HouseLoreSection = ({
           );
         })}
       </div>
+
+      {/* Evidence Modal */}
+      {evidenceModal && (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center p-4"
+          style={{ zIndex: 9999 }}
+          onClick={() => setEvidenceModal(null)}
+        >
+          <div
+            className="bg-gray-900 border border-gray-600 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-red-400">
+                Bằng chứng - {evidenceModal.houseName}
+              </h3>
+              <button
+                onClick={() => setEvidenceModal(null)}
+                className="text-gray-400 hover:text-white text-2xl leading-none"
+              >
+                &times;
+              </button>
+            </div>
+            <div className="space-y-4">
+              {evidenceModal.images.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={img}
+                  alt={`Bằng chứng ${idx + 1}`}
+                  className="w-full rounded-lg border border-gray-700"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -375,7 +452,7 @@ export const PlayerListPage = () => {
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<
-    "no" | "name" | "race" | "team" | "totalStats"
+    "no" | "name" | "race" | "team" | "totalBaseStats" | "totalStats"
   >("no");
   const [selectedRaces, setSelectedRaces] = useState<string[]>([]);
   const [showRaceFilter, setShowRaceFilter] = useState(false);
@@ -384,6 +461,36 @@ export const PlayerListPage = () => {
   const [showHouseFilter, setShowHouseFilter] = useState(false);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [showTeamFilter, setShowTeamFilter] = useState(false);
+
+  const raceFilterRef = useRef<HTMLDivElement>(null);
+  const houseFilterRef = useRef<HTMLDivElement>(null);
+  const teamFilterRef = useRef<HTMLDivElement>(null);
+
+  // Close filter dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        raceFilterRef.current &&
+        !raceFilterRef.current.contains(e.target as Node)
+      ) {
+        setShowRaceFilter(false);
+      }
+      if (
+        houseFilterRef.current &&
+        !houseFilterRef.current.contains(e.target as Node)
+      ) {
+        setShowHouseFilter(false);
+      }
+      if (
+        teamFilterRef.current &&
+        !teamFilterRef.current.contains(e.target as Node)
+      ) {
+        setShowTeamFilter(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // View mode: "players", "teams", or "house-lore"
   const [viewMode, setViewMode] = useState<"players" | "teams" | "house-lore">(
@@ -456,6 +563,8 @@ export const PlayerListPage = () => {
                   username: username,
                   race: char.race?.race || "Unknown",
                   subRace: char.race?.subRace,
+                  isReincarnator: char.race?.race === "Reincarnator",
+                  actualRace: char.race?.actualRace,
                   archetypes: char.archetypes || [],
                   nestedArchetypes: char.nestedArchetypes,
                   quirks: char.quirks || [],
@@ -547,6 +656,8 @@ export const PlayerListPage = () => {
                   username: username,
                   race: char.race?.race || "Unknown",
                   subRace: char.race?.subRace,
+                  isReincarnator: char.race?.race === "Reincarnator",
+                  actualRace: char.race?.actualRace,
                   archetypes: char.archetypes || [],
                   nestedArchetypes: char.nestedArchetypes,
                   quirks: char.quirks || [],
@@ -769,16 +880,29 @@ export const PlayerListPage = () => {
           return a.race.localeCompare(b.race);
         case "team":
           return (a.team || 999) - (b.team || 999);
-        case "totalStats":
-          return getTotalStats(b.stats) - getTotalStats(a.stats); // Descending order
+        case "totalBaseStats":
+          return getTotalStats(b.stats) - getTotalStats(a.stats);
+        case "totalStats": {
+          const aTotalEffects = calculateTotalStats(a);
+          const bTotalEffects = calculateTotalStats(b);
+          const aSum = Object.values(aTotalEffects).reduce((s, v) => s + v, 0);
+          const bSum = Object.values(bTotalEffects).reduce((s, v) => s + v, 0);
+          return bSum - aSum;
+        }
         default:
           return a.no - b.no;
       }
     });
 
     return result;
-  }, [players, searchTerm, sortBy, selectedRaces, selectedTeams]);
-  // }, [players, searchTerm, sortBy, selectedRaces, selectedHouses]);
+  }, [
+    players,
+    searchTerm,
+    sortBy,
+    selectedRaces,
+    selectedTeams,
+    selectedHouses,
+  ]);
 
   // Create boss lookup map
   const bossMap = useMemo(() => {
@@ -919,10 +1043,11 @@ export const PlayerListPage = () => {
                 <option value="name">Sort by Name</option>
                 <option value="race">Sort by Race</option>
                 <option value="team">Sort by Team</option>
+                <option value="totalBaseStats">Sort by Total Base Stats</option>
                 <option value="totalStats">Sort by Total Stats</option>
               </select>
               {/* Race Filter Button */}
-              <div className="relative">
+              <div className="relative" ref={raceFilterRef}>
                 <button
                   onClick={() => {
                     setShowRaceFilter(!showRaceFilter);
@@ -998,7 +1123,7 @@ export const PlayerListPage = () => {
               </div>
 
               {/* House Filter Button */}
-              <div className="relative">
+              <div className="relative" ref={houseFilterRef}>
                 <button
                   onClick={() => {
                     setShowHouseFilter(!showHouseFilter);
@@ -1081,7 +1206,7 @@ export const PlayerListPage = () => {
               </div>
 
               {/* Team Filter Button */}
-              <div className="relative">
+              <div className="relative" ref={teamFilterRef}>
                 <button
                   onClick={() => {
                     setShowTeamFilter(!showTeamFilter);
@@ -1433,7 +1558,7 @@ const RaceStatsDialog = ({
           </div>
 
           {/* Summary */}
-          <div className="mt-4 pt-4 border-t border-gray-600">
+          <div className="mt-0 pt-2 border-t border-gray-600">
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Total Races</span>
               <span className="text-white font-medium">{raceStats.length}</span>
@@ -1700,6 +1825,9 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
       <div className="flex flex-wrap gap-2 mb-3">
         <span className="text-xs font-medium text-amber-400 bg-amber-400/20 px-2 py-1 rounded">
           {player.race || "Unknown Race"}
+          {player.isReincarnator && player.actualRace && (
+            <span className="text-amber-300 ml-1">→ {player.actualRace}</span>
+          )}
         </span>
         {player.archetypes &&
           player.archetypes.length > 0 &&
@@ -1995,7 +2123,8 @@ const StatModifiersTable = ({
   // Filter sources with conditional effects (effects that trigger on win/lose/combat)
   // Also exclude disabled sources
   const sourcesWithConditionalEffects = breakdown.filter(
-    (s) => s.conditionalEffects && s.conditionalEffects.length > 0 && !s.isDisabled,
+    (s) =>
+      s.conditionalEffects && s.conditionalEffects.length > 0 && !s.isDisabled,
   );
 
   // Calculate totals for each stat
@@ -2041,13 +2170,22 @@ const StatModifiersTable = ({
       <span className={color}>
         {prefix}
         {change.value}
-        {change.isBase && <span className="text-yellow-400 text-[9px] ml-0.5" title="Base stat modifier">B</span>}
+        {change.isBase && (
+          <span
+            className="text-yellow-400 text-[9px] ml-0.5"
+            title="Base stat modifier"
+          >
+            B
+          </span>
+        )}
       </span>
     );
   };
 
   // Format stat changes (may show multiple: base + bonus)
-  const formatStatChanges = (changes: { value: number; isBase?: boolean }[]) => {
+  const formatStatChanges = (
+    changes: { value: number; isBase?: boolean }[],
+  ) => {
     const nonZero = changes.filter((c) => c.value !== 0);
     if (nonZero.length === 0) return <span className="text-gray-600">-</span>;
     return (
@@ -2270,33 +2408,39 @@ const PlayerDetailModal = ({
   // Convert allPlayers to Character[] for cross-character effect resolution (e.g., Cheater debuff on lovers)
   const allCharacters = useMemo(() => {
     if (!allPlayers) return undefined;
-    return allPlayers.map((p): Character => ({
-      no: p.no,
-      name: p.name,
-      username: p.username,
-      isParasite: p.isParasite || false,
-      race: { race: p.race, subRace: p.subRace },
-      archetypes: p.archetypes || [],
-      nestedArchetypes: p.nestedArchetypes,
-      quirks: p.quirks || [],
-      stats: p.stats,
-      giantBonusApplied: p.giantBonusApplied,
-      houses: p.houses || [],
-      nestedHouses: p.nestedHouses,
-      gear: p.gear || { normalGear: [], legacyGear: [] },
-      weapons: p.weapons || [],
-      runes: p.runes || { runes: [] },
-      powers: p.powers || [],
-      charDevs: p.charDevs || [],
-      lover: p.lover,
-      pvpRewards: p.pvpRewards,
-    }));
+    return allPlayers.map(
+      (p): Character => ({
+        no: p.no,
+        name: p.name,
+        username: p.username,
+        isParasite: p.isParasite || false,
+        race: { race: p.race, subRace: p.subRace },
+        archetypes: p.archetypes || [],
+        nestedArchetypes: p.nestedArchetypes,
+        quirks: p.quirks || [],
+        stats: p.stats,
+        giantBonusApplied: p.giantBonusApplied,
+        houses: p.houses || [],
+        nestedHouses: p.nestedHouses,
+        gear: p.gear || { normalGear: [], legacyGear: [] },
+        weapons: p.weapons || [],
+        runes: p.runes || { runes: [] },
+        powers: p.powers || [],
+        charDevs: p.charDevs || [],
+        lover: p.lover,
+        pvpRewards: p.pvpRewards,
+      }),
+    );
   }, [allPlayers]);
 
   // Calculate total stats with effects
   const characterEffects = useMemo(() => {
     ensureEffectsInitialized();
-    return EffectResolver.calculateCharacterEffects(character, undefined, allCharacters);
+    return EffectResolver.calculateCharacterEffects(
+      character,
+      undefined,
+      allCharacters,
+    );
   }, [character, allCharacters]);
 
   // Get tournament info for conditional effects checking

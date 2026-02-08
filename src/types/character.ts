@@ -14,6 +14,8 @@ export interface CharacterRace {
   subRace?: string;
   // For Reincarnator: stores the full info like "(Nagi) -> Uma"
   reincarnatorInfo?: string;
+  // For Reincarnator: the actual race they transformed into (e.g., "Elf", "Goblin")
+  actualRace?: string;
 }
 
 export interface GearItem {
@@ -130,6 +132,14 @@ export interface Character {
   // Flag to indicate Giant race bonus has been pre-applied to stats
   // Used when stats were manually calculated (e.g., after Inversion)
   giantBonusApplied?: boolean;
+
+  // Flag to indicate House stat bonus has been pre-applied to stats
+  // Used when stats were manually calculated (e.g., after Fate's Trick)
+  houseBonusApplied?: boolean;
+
+  // Stats marked as "(final)" - these stats already include all bonuses
+  // and should not have additional base modifiers applied
+  finalStats?: Partial<Record<keyof CharacterStats, boolean>>;
 
   // Original base stats before effects like Inversion
   // Used to show the roll values for transparency

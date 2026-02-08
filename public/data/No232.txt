@@ -60,12 +60,12 @@ Runeword:
 ```
 
 ```
-Char dev: Become Vegetarian
-+ 
+Char dev: 
++ Become Vegetarian
 ```
 
 ```
-Team:16
+Team: 16
 ```
 
 ```

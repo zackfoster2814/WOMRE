@@ -41,7 +41,7 @@ Houses:
   - Shot Glass
   - Swift Boots
  + 0 Legacy gear:
-  - 
+  - Soul Stone
 ```
 
 ```

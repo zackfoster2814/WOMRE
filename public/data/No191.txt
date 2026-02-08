@@ -25,7 +25,7 @@ Archetype:
 ```
 Str:10
 Spd:6
-Dur:0 (Ban đầu là 1, Demoniac Pact)
+Dur:0 (Ban đầu là 1, Demonic Pact)
 IQ:2
 BIQ:5
 MA:5
@@ -68,7 +68,7 @@ Runeword:
 
 ```
 Char dev: 
-+ Demoniac Pact (Dura)
++ Demonic Pact (Dura)
 ```
 
 ```

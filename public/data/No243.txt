@@ -20,7 +20,7 @@ Archetype:
 ``` 
 2 Quirk:  
 + Let me solo her
-+ Shining Bightly
++ Shining Brightly
 ```
 ```
 Str:4 Cursed of 36k
@@ -33,7 +33,7 @@ MA:2Cursed of 36k
 
 ```
 Houses: 
-+ Targaryen
++ House Targaryen
 ```
 
 ```

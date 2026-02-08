@@ -23,12 +23,12 @@ Archetype:
 + Slow Healer
 ```
 ```
-Str:8 (Ban đầu là 7, +1 Từ Labourers)
-Spd:8
-Dur:7
-IQ:7
-BIQ:6
-MA:7
+Str: 7 (+1 Từ Labourers)
+Spd: 8
+Dur: 7
+IQ: 7
+BIQ: 6
+MA: 7
 ```
 
 ```
@@ -68,7 +68,7 @@ Char dev:
 ```
 
 ```
-Team:23
+Team: 23
 ```
 
 ```

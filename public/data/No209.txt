@@ -23,7 +23,7 @@ Archetype:
 ```
 ```
 Str:6
-Spd:5 (Ban đầu là 2, +3 từ Herald)
+Spd:2 (+3 từ Herald)
 Dur:5
 IQ:10
 BIQ:6

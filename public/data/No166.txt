@@ -25,7 +25,7 @@ Archetype:
 Str:4 (Re-spin từ Unborn, ban đầu là 6)
 Spd:6
 Dur:7
-IQ:9 (Ban đầu là 6, +3 từ Philosopher)
+IQ:6 (+3 từ Philosopher)
 BIQ:6
 MA:6
 ```

@@ -59,7 +59,7 @@ Runeword:
 ```
 1 Power: 
 + The Coast is Clear (Từ House)
-+ Love Wolf(Từ House)
++ Lone Wolf(Từ House)
 + Magma Strike
 ```
 
@@ -69,7 +69,7 @@ Char dev:
 ```
 
 ```
-Team:5
+Team: 5
 ```
 
 ```

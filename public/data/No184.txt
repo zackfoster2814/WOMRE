@@ -26,7 +26,7 @@ Spd: 6
 Dur: 9
 IQ: 8
 BIQ: 6
-MA: 11 (đã +2 từ Paladin, ban đầu là 9)
+MA: 9 (+2 từ Paladin)
 ```
 
 ```

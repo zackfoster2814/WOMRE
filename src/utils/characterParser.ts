@@ -30,6 +30,36 @@ function isLostItem(text: string): boolean {
 }
 
 /**
+ * Check if a house text indicates the house is no longer active
+ * Includes all patterns: bị đuổi, rời đi, đổi nhà, kinda homeless, no more home, đã mất
+ */
+function isLostHouse(text: string): boolean {
+  const lostPatterns = [
+    /\(đã mất[^)]*\)/i,
+    /\(mất do[^)]*\)/i,
+    /\(đã bị đuổi[^)]*\)/i,
+    /\(bị đuổi[^)]*\)/i,
+    /\(đuổi[^)]*\)/i,
+    /\(đã rời[^)]*\)/i,
+    /\(rời[^)]*\)/i,
+    /\(đổi nhà[^)]*\)/i,
+    /kinda\s*homeless/i,
+    /no\s*more\s*home/i,
+  ];
+  return lostPatterns.some((pattern) => pattern.test(text));
+}
+
+/**
+ * Clean house name by stripping annotations like (đã bị đuổi...), (nhận từ...), (từ...)
+ * Returns only the core house name
+ */
+function cleanHouseName(name: string): string {
+  return name
+    .replace(/\s*\([^)]*\)/g, '') // Remove all parenthesized annotations
+    .trim();
+}
+
+/**
  * Parse an item string into a LossableItem
  */
 function parseLossableItem(text: string): LossableItem {
@@ -250,15 +280,22 @@ export class CharacterParser {
     // Parse original base stats (before effects like Inversion)
     character.originalBaseStats = this.parseOriginalBaseStats(lines);
 
+    // Parse final stats (stats marked with "(final)" that already include all bonuses)
+    character.finalStats = this.parseFinalStats(lines);
+
     // Parse flags (e.g., Giant bonus already applied)
     character.giantBonusApplied = this.parseFlag(lines, "GiantBonusApplied");
+
+    // Detect houseBonusApplied from stat annotations containing "+X từ House"
+    character.houseBonusApplied = this.detectHouseBonusApplied(lines);
 
     // Parse Houses - can have multiple, some may be lost (kicked out)
     const houseIndex = this.findSectionIndex(lines, "Houses:");
     const houseResult = this.parseNestedHouses(lines, houseIndex);
-    character.houses = houseResult.flat.map((h) => ({
-      name: h,
-      isLost: isLostItem(h),
+    // Derive houses from nested (which has proper isLost detection)
+    character.houses = houseResult.nested.map((h) => ({
+      name: h.name,
+      isLost: h.isLost,
     }));
     character.nestedHouses = houseResult.nested;
 
@@ -314,6 +351,20 @@ export class CharacterParser {
     for (const line of lines) {
       const match = line.match(new RegExp(`${flagName}:\\s*(yes|true)`, "i"));
       if (match) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Detect if house bonus was pre-applied to stats
+   * Looks for "+X từ House" pattern in stat annotation lines
+   */
+  private static detectHouseBonusApplied(lines: string[]): boolean {
+    const statPattern = /^(Str|Spd|Dur|IQ|BIQ|MA):/i;
+    for (const line of lines) {
+      if (statPattern.test(line) && /\+\d+\s*từ\s*House/i.test(line)) {
+        return true;
+      }
     }
     return false;
   }
@@ -429,11 +480,24 @@ export class CharacterParser {
 
         // Check if this is a Reincarnator - format: "Reincarnator (Name) -> NewRace"
         const reincarnatorMatch = fullRace.match(
-          /^Reincarnator\s*(\(.+\)\s*->\s*.*)$/i,
+          /^Reincarnator\s*(.*)$/i,
         );
-        if (reincarnatorMatch) {
+        if (reincarnatorMatch && reincarnatorMatch[1].trim()) {
           race.race = "Reincarnator";
-          race.reincarnatorInfo = reincarnatorMatch[1].trim();
+          const info = reincarnatorMatch[1].trim();
+          race.reincarnatorInfo = info;
+          // Extract actual race: find -> outside parentheses
+          // e.g. "(Nasume) -> Elf" => "Elf", "(Zed) -> Vampire (Khẩu vị: Bắp Cải)" => "Vampire"
+          const afterParens = info.replace(/^\([^)]*\)\s*/, '');
+          const arrowMatch = afterParens.match(/^->\s*(.+)/);
+          if (arrowMatch) {
+            // Take the first word(s) before any parenthesized annotation
+            const actualRaceRaw = arrowMatch[1].trim();
+            const cleanRace = actualRaceRaw.replace(/\s*\(.*\)\s*$/, '').trim();
+            race.actualRace = cleanRace || actualRaceRaw;
+          }
+        } else if (fullRace.match(/^Reincarnator\s*$/i)) {
+          race.race = "Reincarnator";
         } else {
           race.race = fullRace;
         }
@@ -719,6 +783,11 @@ export class CharacterParser {
       if (mainMatch) {
         let name = mainMatch[1].trim();
 
+        // Detect if house is lost (bị đuổi, rời đi, đổi nhà, etc.)
+        const houseLost = isLostHouse(name);
+        // Clean the house name (strip annotations)
+        const cleanName = cleanHouseName(name);
+
         // Check for inline sub-type: "Golden Order (đổi nhà) -> Godrick"
         const inlineMatch = name.match(/^(.+?)\s*(?:\([^)]*\))?\s*->\s*(.+)$/);
         if (inlineMatch) {
@@ -726,19 +795,25 @@ export class CharacterParser {
           if (currentHouse) {
             nested.push(currentHouse);
           }
-          const mainName = inlineMatch[1].trim();
-          const subType = inlineMatch[2].trim();
+          const mainName = cleanHouseName(inlineMatch[1].trim());
+          const subType = cleanHouseName(inlineMatch[2].trim());
           flat.push(mainName);
+          const inlineLostType = /kinda\s*homeless/i.test(name)
+            ? "kinda_homeless" as const
+            : /no\s*more\s*home/i.test(name)
+              ? "no_more_home" as const
+              : undefined;
           currentHouse = {
             name: mainName,
             subType,
-            isLost: isLostItem(name),
+            isLost: houseLost,
+            lostType: inlineLostType,
           };
           continue;
         }
 
         // Check if this is a known sub-type that should be merged with previous house
-        const parentHouse = this.HOUSE_SUB_TYPE_MAP[name];
+        const parentHouse = this.HOUSE_SUB_TYPE_MAP[cleanName];
         if (
           parentHouse &&
           currentHouse &&
@@ -746,7 +821,7 @@ export class CharacterParser {
           !currentHouse.subType
         ) {
           // This is a sub-type of the current house, merge it
-          currentHouse.subType = name;
+          currentHouse.subType = cleanName;
           continue;
         }
 
@@ -755,9 +830,14 @@ export class CharacterParser {
           nested.push(currentHouse);
         }
 
-        if (name) {
-          flat.push(name);
-          currentHouse = { name, isLost: isLostItem(name) };
+        if (cleanName) {
+          flat.push(cleanName);
+          const lostType = /kinda\s*homeless/i.test(name)
+            ? "kinda_homeless" as const
+            : /no\s*more\s*home/i.test(name)
+              ? "no_more_home" as const
+              : undefined;
+          currentHouse = { name: cleanName, isLost: houseLost, lostType };
         }
         continue;
       }
@@ -894,6 +974,37 @@ export class CharacterParser {
       biq: stats.biq ?? 0,
       ma: stats.ma ?? 0,
     };
+  }
+
+  /**
+   * Parse stats marked with "(final)" - these already include all bonuses
+   * Returns undefined if no final stats found
+   */
+  private static parseFinalStats(
+    lines: string[],
+  ): Partial<Record<keyof CharacterStats, boolean>> | undefined {
+    const finalStats: Partial<Record<keyof CharacterStats, boolean>> = {};
+    let hasAny = false;
+
+    const statPatterns: Array<{ key: keyof CharacterStats; pattern: RegExp }> = [
+      { key: 'str', pattern: /Str:.*\(final\)/i },
+      { key: 'spd', pattern: /Spd:.*\(final\)/i },
+      { key: 'dur', pattern: /Dur:.*\(final\)/i },
+      { key: 'iq', pattern: /^IQ:.*\(final\)/i },
+      { key: 'biq', pattern: /BIQ:.*\(final\)/i },
+      { key: 'ma', pattern: /MA:.*\(final\)/i },
+    ];
+
+    for (const line of lines) {
+      for (const { key, pattern } of statPatterns) {
+        if (pattern.test(line)) {
+          finalStats[key] = true;
+          hasAny = true;
+        }
+      }
+    }
+
+    return hasAny ? finalStats : undefined;
   }
 
   private static parseGear(lines: string[]): Gear {

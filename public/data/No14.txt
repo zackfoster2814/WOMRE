@@ -47,7 +47,7 @@ Houses:
   - Magical Scroll
   - Ba Hoa Trắng
  + 0 Legacy gear:
-  - 
+  - Reality Stone
 ```
 
 ```

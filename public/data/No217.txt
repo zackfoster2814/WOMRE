@@ -33,7 +33,7 @@ MA:2 ban đầu là 9 (Inversion)
 
 ```
 Houses: 
-+ Tyrell
++ House Tyrell
 ```
 
 ```
@@ -82,6 +82,6 @@ Lover:
 ```
 ```
 PvP Reward: 
-- +1 IQ, 
+- +1 IQ
 - +1 Power
 ```

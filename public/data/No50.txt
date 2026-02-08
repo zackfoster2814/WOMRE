@@ -44,7 +44,7 @@ Houses:
   - Golden Coin (Lannister)
   - Golden Coin (Lannister)
  + 0 Legacy gear:
-  - 
+  - Time stone
 ```
 
 ```

@@ -1643,17 +1643,7 @@ export function registerAllPowerEffects() {
     .description("Buff: Có ít nhất 3 Power khác, +2 Strength và +2 Speed.")
     .weight(0.78)
     .effect({
-      type: "stat_modifier",
-      stat: "strength",
-      value: 2,
-      timing: "immediate",
-      target: "self",
-      customHandler: "groundwork_3_powers_check",
-    })
-    .effect({
-      type: "stat_modifier",
-      stat: "speed",
-      value: 2,
+      type: "custom",
       timing: "immediate",
       target: "self",
       customHandler: "groundwork_3_powers_check",

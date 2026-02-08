@@ -32,7 +32,7 @@ MA:0 Cursed of 36k
 
 ```
 Houses: 
-+ Tyrell
++ House Tyrell
 ```
 
 ```

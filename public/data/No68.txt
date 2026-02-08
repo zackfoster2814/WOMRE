@@ -39,7 +39,7 @@ Houses:
  + 1 Normal gear:
   - Ớt
  + 0 Legacy gear:
-  - 
+  - Power Stone
 ```
 
 ```

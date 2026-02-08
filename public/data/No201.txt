@@ -26,7 +26,7 @@ Spd:6
 Dur:5
 IQ:5
 BIQ:8
-MA:9(Ban đầu là 7, +2 từ Paladin)
+MA:7 (+2 từ Paladin)
 ```
 
 ```
@@ -67,7 +67,7 @@ Char dev:
 ```
 
 ```
-Team:28
+Team: 28
 ```
 
 ```

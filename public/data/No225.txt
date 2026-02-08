@@ -21,12 +21,12 @@ Archetype:
 + Brave
 ```
 ```
-Str:6
-Spd:5(Ban đầu là 2, +3 từ Herald)
-Dur:4
-IQ:5
-BIQ:9
-MA:7
+Str: 6
+Spd: 2 (+3 từ Herald)
+Dur: 4
+IQ: 5
+BIQ: 9
+MA: 7
 ```
 
 ```

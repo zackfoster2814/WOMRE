@@ -57,7 +57,7 @@ Runeword: Không
 
 ```
 2 Power: 
-+ AIDS (Từ Lover: KuSenpai (kusenpai))
++ AIDS (Từ KuSenpai (kusenpai))
 + Frost Armor
 + Uno Reverse Card
 ```

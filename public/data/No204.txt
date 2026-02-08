@@ -59,7 +59,7 @@ Runeword:
 
 ```
 1 Power: 
-+ Shirnking
++ Shrinking
 ```
 
 ```
