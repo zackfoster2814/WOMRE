@@ -461,6 +461,7 @@ export const PlayerListPage = () => {
   const [showHouseFilter, setShowHouseFilter] = useState(false);
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [showTeamFilter, setShowTeamFilter] = useState(false);
+  const [showRanking, setShowRanking] = useState(false);
 
   const raceFilterRef = useRef<HTMLDivElement>(null);
   const houseFilterRef = useRef<HTMLDivElement>(null);
@@ -910,6 +911,17 @@ export const PlayerListPage = () => {
     bosses.forEach((boss) => map.set(boss.name, boss));
     return map;
   }, [bosses]);
+
+  // Ranking: all players sorted by total stats (with effects) descending
+  const rankedPlayers = useMemo(() => {
+    return players
+      .map((p) => {
+        const totalEffects = calculateTotalStats(p);
+        const totalSum = Object.values(totalEffects).reduce((s, v) => s + v, 0);
+        return { ...p, totalSum };
+      })
+      .sort((a, b) => b.totalSum - a.totalSum);
+  }, [players]);
 
   // Create player lookup by username
   const playerByUsername = useMemo(() => {
@@ -1417,6 +1429,63 @@ export const PlayerListPage = () => {
           ) : null}
         </div>
       </div>
+
+      {/* Floating Ranking Button */}
+      {viewMode === "players" && (
+        <button
+          onClick={() => setShowRanking(!showRanking)}
+          className={`fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white text-xl font-bold transition-all hover:scale-110 ${
+            showRanking
+              ? "bg-red-600 hover:bg-red-500"
+              : "bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500"
+          }`}
+          style={{ zIndex: 1000 }}
+          title="Bảng xếp hạng"
+        >
+          {showRanking ? "✕" : "🏆"}
+        </button>
+      )}
+
+      {/* Ranking Panel */}
+      {showRanking && viewMode === "players" && (
+        <div
+          className="fixed bottom-24 right-6 w-80 max-h-[70vh] bg-gray-900 border border-gray-600 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+          style={{ zIndex: 999 }}
+        >
+          <div className="bg-gradient-to-r from-amber-600/80 to-orange-600/80 px-4 py-3 border-b border-gray-600">
+            <h3 className="text-white font-bold text-sm">Bảng xếp hạng - Total Stats</h3>
+            <p className="text-amber-200 text-xs">{rankedPlayers.length} players</p>
+          </div>
+          <div className="overflow-y-auto flex-1">
+            {rankedPlayers.map((player, idx) => (
+              <button
+                key={player.no}
+                onClick={() => handleSelectPlayer(player.no)}
+                className={`w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-gray-700/50 transition-colors border-b border-gray-800/50 ${
+                  idx < 3 ? "bg-amber-900/20" : ""
+                }`}
+              >
+                <span className={`w-8 text-right text-xs font-bold flex-shrink-0 ${
+                  idx === 0 ? "text-yellow-400" : idx === 1 ? "text-gray-300" : idx === 2 ? "text-amber-600" : "text-gray-500"
+                }`}>
+                  {idx + 1}.
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-xs font-medium truncate">
+                    {player.name}
+                  </p>
+                  <p className="text-gray-500 text-[10px] truncate">
+                    {player.username}
+                  </p>
+                </div>
+                <span className="text-teal-400 text-xs font-bold flex-shrink-0">
+                  {player.totalSum}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Player Detail Modal */}
       {selectedPlayer && (
