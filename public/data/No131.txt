@@ -21,7 +21,7 @@ Archetype:
 + Fast Learner
 ```
 ```
-Str: 1 (từ 8, do Blessed of Chaos)
+Str: 1 (ban đầu là 8, do Blessed of Chaos)
 Spd: 5
 Dur: 6
 IQ: 5

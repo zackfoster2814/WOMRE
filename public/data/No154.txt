@@ -25,7 +25,7 @@ Archetype:
 Str: 5
 Spd: 5
 Dur: 6
-IQ: 8 (Ban đầu là 6, +2 từ High-Elf)
+IQ: 6 (Ban đầu là 6, +2 từ High-Elf)
 BIQ: 6
 MA: 8
 ```
@@ -63,7 +63,7 @@ Runeword: The Twin
 
 ```
 Char dev: 
-+ Kina Homeless
++ Kinda Homeless
 ```
 
 ```

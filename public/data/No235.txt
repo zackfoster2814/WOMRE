@@ -31,7 +31,7 @@ MA:7
 
 ```
 Houses: 
-+ Stark
++ House Stark
  -> Lady
 ```
 

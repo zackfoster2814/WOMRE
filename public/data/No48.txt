@@ -60,13 +60,13 @@ Runeword: Không
 + Mind Control
 + Invulnerability
 + Acclerating Sorcery
++ Baldening
++ Bonk bonk bonk
 ```
 
 ```
 Char dev: 
 + No More Family
-+ Baldening
-+ Bonk bonk bonk
 ```
 
 ```

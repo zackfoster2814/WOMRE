@@ -48,8 +48,9 @@ Houses:
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon + 1 Unique Weapon: 
++ Saxophone (không dùng được)
++ Andúril (Dùng được)
 ```
 
 ``` 

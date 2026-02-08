@@ -29,7 +29,7 @@ Spd: 8
 Dur: 8
 IQ: 3
 BIQ: 8
-MA: 7 (Ban đầu là 5, nhận +2 từ Paladin)
+MA: 5 (nhận +2 từ Paladin)
 ```
 
 ```

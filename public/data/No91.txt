@@ -53,7 +53,7 @@ Houses:
 2 Rune: 
 + Ort
 + Sol
-Runeword: Không
+Runeword: Affection
 ```
 
 ```

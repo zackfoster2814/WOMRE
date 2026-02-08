@@ -38,6 +38,7 @@ Houses:
 ```
 3 Gear: 
  + 3 Normal gear:
+  - Golden Coin 
   - Golden Coin (Từ House)
   - Golden Coin (Từ House)
   - Golden Coin (Từ House)

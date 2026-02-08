@@ -25,16 +25,17 @@ Archetype:
 ```
 ```
 Str: 7
-Spd: 4 (Ban đầu là 1, +3 từ Sub-race Lythari)
+Spd: 1 ( +3 từ Sub-race Lythari)
 Dur: 7
-IQ: 12 (Ban đầu là 9, +3 từ Archetype Philosopher)
+IQ: 9 (+3 từ Archetype Philosopher)
 BIQ: 9
 MA: 6
 ```
 
 ```
 Houses: 
-+ House Stark (Lady)
++ House Stark 
+  -> Lady
 ```
 
 ```

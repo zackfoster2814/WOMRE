@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: Elf
-Sub-race: Wood elf
+Sub-race: Wood Elf
 ```
 
 ```
@@ -62,7 +62,7 @@ Runeword: Không
 + Fragrant
 + Analysis Sins
 + Power Negation
-+ Quas (Wood elf)
++ Quas (Wood Elf)
 ```
 
 ```

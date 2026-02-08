@@ -58,7 +58,7 @@ Runeword: Không
 + Invulnerability
 + Red Shift/LP1211-M
 + Misty Step Ahead
-+ Critical Strike (Từ)
++ Critical Strike (Từ Hidden Blade)
 ```
 
 ```

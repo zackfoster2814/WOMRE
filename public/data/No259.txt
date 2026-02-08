@@ -59,11 +59,11 @@ Runeword: Không
 ```
 2 Power: 
 + Quas
++ Guidance
 ```
 
 ```
 Char dev: 
-+ Guidance
 + Too Edgy
 ```
 

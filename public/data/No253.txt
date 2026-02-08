@@ -47,7 +47,7 @@ Houses:
 
 ```
 0 Normal Weapon
-+ Slingshot (khong6 dùng được)
++ Slingshot (Không dùng được)
 ```
 
 ``` 

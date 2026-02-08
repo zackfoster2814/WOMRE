@@ -25,7 +25,7 @@ Str: 6
 Spd: 1
 Dur: 2
 IQ: 8
-BIQ: 10 (Ban đầu là 8, +2 từ Sub-race)
+BIQ: 8 (+2 từ Sub-race)
 MA: 1
 ```
 

@@ -64,7 +64,7 @@ Runeword: Không
 ```
 Char dev: 
 + Armed to the Teeth
-+ Lost an Arm
++ Lost an Arm (PvP Reward)
 ```
 
 ```

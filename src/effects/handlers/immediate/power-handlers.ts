@@ -527,6 +527,47 @@ registerImmediateHandler(
   '+1 point on marked round win'
 );
 
+// ============================================================================
+// MHA POWER HANDLERS
+// ============================================================================
+
+/**
+ * MHA IQ Power - +7 IQ
+ * (Biến mất khi thua round IQ - handled in combat)
+ */
+registerImmediateHandler(
+  'mha_iq_power',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      statModifiers: [{ stat: 'iq', value: 7 }],
+      skipDefault: true,
+      description: '+7 IQ (MHA Power)',
+    };
+  },
+  '+7 IQ from MHA IQ Power'
+);
+
+/**
+ * MHA Hellflame - +1 all stats (base)
+ * Sau 2 combat thắng -> +1 thêm. Thua -> reset về +1.
+ * (Stacking handled in combat)
+ */
+registerImmediateHandler(
+  'mha_hellflame',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    for (const stat of STAT_NAMES) {
+      mods.push({ stat, value: 1 });
+    }
+    return {
+      statModifiers: mods,
+      skipDefault: true,
+      description: '+1 All Stats (MHA Hellflame)',
+    };
+  },
+  '+1 all stats from MHA Hellflame'
+);
+
 export function registerPowerHandlers(): void {
   console.log('Power handlers registered');
 }

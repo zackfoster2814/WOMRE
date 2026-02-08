@@ -61,7 +61,7 @@ Runeword:
 + Exort
 + Rampage
 + Voidwalking
-+ Clearmind
++ Clear mind
 ```
 
 ```

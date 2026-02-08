@@ -48,7 +48,7 @@ Houses:
 
 ```
 1 Normal Weapon
-+ Magical Staff - dùng được (mất cmnl luôn do It is What it is)
++ Magical Staff (dùng được) (Mất do It is What it is)
 ```
 
 ``` 

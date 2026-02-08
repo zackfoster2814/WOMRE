@@ -19,6 +19,7 @@ Archetype:
 ``` 
 1 Quirk:  
 + Brainrot
++ Fast Learner
 ```
 ```
 Str: 5

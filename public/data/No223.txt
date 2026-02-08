@@ -14,11 +14,11 @@ Sub-race:
 
 ```
 Archetype: 
-+ Loyal (iu anh Mèo)
++ Loyal 
 ```
 ``` 
 2 Quirk:  
-+ Charming (Bú power Evasion từ anh Moè)
++ Charming (nhận power Evasion từ Anh Mèo (meowtea))
 + Patient
 ```
 ```

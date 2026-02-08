@@ -26,7 +26,7 @@ Archetype:
 Str: 2
 Spd: 8
 Dur: 6
-IQ: 7
+IQ: 0 (ban đầu là 7 - Too Horny)
 BIQ: 3
 MA: 1
 ```

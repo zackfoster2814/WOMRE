@@ -58,12 +58,13 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Detect Thoughts
++ Detect Thoughts (đã mất - tặng cho Julianus (khoi7435))
 ```
 
 ```
 Char dev: 
-+ In Love (Zackie (zackfoster___)) (+2 IQ)
++ In Love (Zackie (zackfoster___)) 
+  -> +2 IQ
 ```
 
 ```

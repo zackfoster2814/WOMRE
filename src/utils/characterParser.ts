@@ -947,11 +947,33 @@ export class CharacterParser {
     const weaponIndex = this.findSectionIndex(lines, "Weapon");
     if (weaponIndex < 0) return weapons;
 
-    let weaponType: "Normal" | "Unique" | "Legacy" = "Normal";
+    // Parse header to determine weapon counts per type
+    // Formats: "1 Normal Weapon + 1 Unique Weapon:", "2 Normal Weapon", "1 Unique Weapon"
+    const header = lines[weaponIndex];
+    let normalCount = 0;
+    let uniqueCount = 0;
+    let legacyCount = 0;
 
-    // Determine weapon type from section header
-    if (lines[weaponIndex].includes("Unique")) weaponType = "Unique";
-    if (lines[weaponIndex].includes("Legacy")) weaponType = "Legacy";
+    // Match patterns like "1 Normal Weapon", "2 Unique Weapon", etc.
+    const normalMatch = header.match(/(\d+)\s*Normal\s*Weapon/i);
+    const uniqueMatch = header.match(/(\d+)\s*Unique\s*Weapon/i);
+    const legacyMatch = header.match(/(\d+)\s*Legacy\s*Weapon/i);
+
+    if (normalMatch) normalCount = parseInt(normalMatch[1], 10);
+    if (uniqueMatch) uniqueCount = parseInt(uniqueMatch[1], 10);
+    if (legacyMatch) legacyCount = parseInt(legacyMatch[1], 10);
+
+    // If no specific counts found, fall back to simple detection
+    if (normalCount === 0 && uniqueCount === 0 && legacyCount === 0) {
+      if (header.includes("Unique")) uniqueCount = 99;
+      else if (header.includes("Legacy")) legacyCount = 99;
+      else normalCount = 99;
+    }
+
+    // Track how many of each type have been assigned
+    let normalAssigned = 0;
+    let uniqueAssigned = 0;
+    let legacyAssigned = 0;
 
     for (
       let i = weaponIndex + 1;
@@ -971,6 +993,19 @@ export class CharacterParser {
           const name = weaponText;
           // Check if weapon is lost
           const lost = isLostItem(weaponText);
+
+          // Assign type based on order: Normal first, then Unique, then Legacy
+          let weaponType: "Normal" | "Unique" | "Legacy" = "Normal";
+          if (normalAssigned < normalCount) {
+            weaponType = "Normal";
+            normalAssigned++;
+          } else if (uniqueAssigned < uniqueCount) {
+            weaponType = "Unique";
+            uniqueAssigned++;
+          } else if (legacyAssigned < legacyCount) {
+            weaponType = "Legacy";
+            legacyAssigned++;
+          }
 
           weapons.push({
             type: weaponType,

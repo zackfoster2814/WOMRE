@@ -23,7 +23,7 @@ Archetype:
 + Brave
 ```
 ```
-Str: 6 (ban đầu là 5, +1 từ Labourers)
+Str: 6 (+1 từ Labourers)
 Spd: 1
 Dur: 1 (Blessed by Chaos, ban đầu là 10)
 IQ: 9
@@ -57,7 +57,7 @@ Runeword: Không
 
 ```
 5 Power: 
-+ Fancy Feet(Từ Sub-race)
++ Fancy Feet (Từ Sub-race)
 + Ballet Dancing
 + Luck Manipulation
 + Homeguard

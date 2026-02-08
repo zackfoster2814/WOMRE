@@ -292,6 +292,67 @@ registerImmediateHandler(
   'Advantage on tie coinflip'
 );
 
+/**
+ * Charming - Lover tặng 1 Power. Nếu lover không có Power → +1 all stats (lover -1 all stats)
+ * Cross-reference lover trong allCharacters để tự xác định.
+ */
+registerImmediateHandler(
+  'charming_steal_power_from_lover',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const quirkName = ctx.source.name || '';
+
+    if (!ctx.allCharacters || ctx.allCharacters.length === 0) {
+      return { skipDefault: true, description: 'Charming: không thể tìm lover (no allCharacters)' };
+    }
+
+    // Extract lover name from quirk name parentheses: "Charming (LoverName ...)"
+    const loverMatch = quirkName.match(/charming\s*\(([^)]+)\)/i);
+    if (!loverMatch) {
+      return { skipDefault: true, description: 'Charming: không tìm thấy tên lover trong quirk' };
+    }
+
+    // Clean up lover string - remove metadata like "(Từ Baguette)", "tặng: X", etc.
+    let loverStr = loverMatch[1].toLowerCase()
+      .replace(/\s*\(từ\s+[^)]*\)/gi, '')  // Remove "(Từ ...)"
+      .replace(/\s*,?\s*tặng[:\s].*/gi, '') // Remove "tặng: ..."
+      .replace(/\s*-?\s*nhận\s+power.*/gi, '') // Remove "nhận power ..."
+      .replace(/\s*-?\s*bú\s+power.*/gi, '') // Remove "bú power ..."
+      .trim();
+
+    // Find the lover character
+    const loverChar = ctx.allCharacters.find((c) => {
+      const username = c.username?.toLowerCase() || '';
+      const name = c.name?.toLowerCase() || '';
+      return (username && loverStr.includes(username)) || (name && loverStr.includes(name));
+    });
+
+    if (!loverChar) {
+      return { skipDefault: true, description: `Charming: không tìm thấy lover "${loverStr}"` };
+    }
+
+    // Check if lover has any (non-lost) powers
+    const loverPowers = (loverChar.powers || []).filter((p: any) => !p.isLost);
+    if (loverPowers.length === 0) {
+      // Lover has no power → +1 all stats for self
+      const mods: ImmediateHandlerResult['statModifiers'] = [];
+      for (const stat of STAT_NAMES) {
+        mods.push({ stat, value: 1 });
+      }
+      return {
+        statModifiers: mods,
+        skipDefault: true,
+        description: `+1 All Stats (${loverChar.name} không có Power)`,
+      };
+    } else {
+      return {
+        skipDefault: true,
+        description: `${loverChar.name} đã tặng Power`,
+      };
+    }
+  },
+  'Steal power from lover, +1 all stats if no power'
+);
+
 export function registerQuirkHandlers(): void {
   console.log('Quirk handlers registered');
 }

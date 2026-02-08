@@ -1912,4 +1912,8 @@ export function registerAllPowerEffects() {
       target: "self",
     })
     .register();
+
+  // MHA Power Wheel, JJK, Jojo, One Piece, Bleach, etc. powers
+  // are registered under "archetype_sub" in archetypes.ts.
+  // The resolver falls back to archetype_sub when a power isn't found under "power" type.
 }

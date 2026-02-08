@@ -24,7 +24,7 @@ Archetype:
 ```
 Str: 5
 Spd: 3
-Dur: 2 (Ban đầu là 1, +1 từ Frostlanders)
+Dur: 1 (+1 từ Frostlanders)
 IQ: 4
 BIQ: 6
 MA: 8
@@ -33,7 +33,6 @@ MA: 8
 ```
 Houses: 
 + New London
-+ Frostlanders
 ```
 
 ```

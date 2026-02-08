@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Traning Restricted (Từ Sub-race)
++ Training Restricted (Từ Sub-race)
 + Lazy
 ```
 ```

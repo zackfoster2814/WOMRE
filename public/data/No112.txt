@@ -14,8 +14,9 @@ Sub-race: Regular Troll
 
 ```
 Archetype: 
-+ Wibu My Hero Academia
-+ IQ
++ Wibu 
+  -> My Hero Academia
+    -> IQ
 + Fisher
 ```
 ``` 
@@ -33,7 +34,8 @@ MA: 9
 
 ```
 Houses: 
-+ House Stark (Nymeria)
++ House Stark 
+  -> Nymeria
 ```
 
 ```
@@ -68,6 +70,7 @@ Runeword: Không
 + Drunken Boxing
 + Gaze of the Abyss
 + The Sand of Time
++ IQ 
 ```
 
 ```

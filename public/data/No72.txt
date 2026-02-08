@@ -26,7 +26,7 @@ Spd: 7
 Dur: 4 (Ban đầu là 1, Reroll thành 4)
 IQ: 4
 BIQ: 8
-MA: 3 (Ban đầu là 3, Reroll thành 1, +2 từ Paladin)
+MA: 1 (Ban đầu là 3, Reroll thành 1, +2 từ Paladin)
 ```
 
 ```

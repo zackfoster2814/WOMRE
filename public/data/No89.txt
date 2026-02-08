@@ -15,11 +15,11 @@ Sub-race: 50
 ```
 Archetype: 
 + Invoker
++ Edgelord (từ Too Edgy)
 ```
 ``` 
 2 Quirk:  
 + Progressive
-+ Edgelord
 ```
 ```
 Str: 10

@@ -1299,6 +1299,7 @@ export const PlayerListPage = () => {
           character={selectedPlayer}
           isLoading={isLoadingDetail}
           onClose={() => setSelectedPlayer(null)}
+          allPlayers={players}
         />
       )}
 
@@ -2013,8 +2014,8 @@ const StatModifiersTable = ({
                 : baseStats.ma;
 
     const bonusValue = sourcesWithStats.reduce((sum, source) => {
-      const change = source.statChanges.find((c) => c.stat === statKey);
-      return sum + (change?.value || 0);
+      const changes = source.statChanges.filter((c) => c.stat === statKey);
+      return sum + changes.reduce((s, c) => s + (c.value || 0), 0);
     }, 0);
 
     return {
@@ -2024,25 +2025,36 @@ const StatModifiersTable = ({
     };
   });
 
-  // Get stat value for a source
-  const getStatValue = (
+  // Get all stat changes for a source and stat (may have both base and non-base)
+  const getStatChanges = (
     source: EffectSourceBreakdown,
     statKey: string,
-  ): number | null => {
-    const change = source.statChanges.find((c) => c.stat === statKey);
-    return change ? change.value : null;
+  ): { value: number; isBase?: boolean }[] => {
+    return source.statChanges.filter((c) => c.stat === statKey);
   };
 
-  // Format stat value with color
-  const formatStatValue = (value: number | null) => {
-    if (value === null || value === 0)
-      return <span className="text-gray-600">-</span>;
-    const color = value > 0 ? "text-green-400" : "text-red-400";
-    const prefix = value > 0 ? "+" : "";
+  // Format a single stat change
+  const formatSingleChange = (change: { value: number; isBase?: boolean }) => {
+    const color = change.value > 0 ? "text-green-400" : "text-red-400";
+    const prefix = change.value > 0 ? "+" : "";
     return (
       <span className={color}>
         {prefix}
-        {value}
+        {change.value}
+        {change.isBase && <span className="text-yellow-400 text-[9px] ml-0.5" title="Base stat modifier">B</span>}
+      </span>
+    );
+  };
+
+  // Format stat changes (may show multiple: base + bonus)
+  const formatStatChanges = (changes: { value: number; isBase?: boolean }[]) => {
+    const nonZero = changes.filter((c) => c.value !== 0);
+    if (nonZero.length === 0) return <span className="text-gray-600">-</span>;
+    return (
+      <span className="flex flex-col items-center gap-0">
+        {nonZero.map((c, i) => (
+          <span key={i}>{formatSingleChange(c)}</span>
+        ))}
       </span>
     );
   };
@@ -2111,7 +2123,7 @@ const StatModifiersTable = ({
               </td>
               {statKeys.map((statKey) => (
                 <td key={statKey} className="text-center py-1.5 px-1.5">
-                  {formatStatValue(getStatValue(source, statKey))}
+                  {formatStatChanges(getStatChanges(source, statKey))}
                 </td>
               ))}
             </tr>
@@ -2222,12 +2234,14 @@ interface PlayerDetailModalProps {
   character: Character;
   isLoading: boolean;
   onClose: () => void;
+  allPlayers?: PlayerSummary[];
 }
 
 const PlayerDetailModal = ({
   character,
   isLoading,
   onClose,
+  allPlayers,
 }: PlayerDetailModalProps) => {
   const [showBreakdown, setShowBreakdown] = useState(false);
   const [openArchetypeTooltip, setOpenArchetypeTooltip] = useState<
@@ -2253,11 +2267,37 @@ const PlayerDetailModal = ({
     arch.subType || arch.subSubType;
   const hasHouseSubTypes = (house: NestedHouse) => house.subType;
 
+  // Convert allPlayers to Character[] for cross-character effect resolution (e.g., Cheater debuff on lovers)
+  const allCharacters = useMemo(() => {
+    if (!allPlayers) return undefined;
+    return allPlayers.map((p): Character => ({
+      no: p.no,
+      name: p.name,
+      username: p.username,
+      isParasite: p.isParasite || false,
+      race: { race: p.race, subRace: p.subRace },
+      archetypes: p.archetypes || [],
+      nestedArchetypes: p.nestedArchetypes,
+      quirks: p.quirks || [],
+      stats: p.stats,
+      giantBonusApplied: p.giantBonusApplied,
+      houses: p.houses || [],
+      nestedHouses: p.nestedHouses,
+      gear: p.gear || { normalGear: [], legacyGear: [] },
+      weapons: p.weapons || [],
+      runes: p.runes || { runes: [] },
+      powers: p.powers || [],
+      charDevs: p.charDevs || [],
+      lover: p.lover,
+      pvpRewards: p.pvpRewards,
+    }));
+  }, [allPlayers]);
+
   // Calculate total stats with effects
   const characterEffects = useMemo(() => {
     ensureEffectsInitialized();
-    return EffectResolver.calculateCharacterEffects(character);
-  }, [character]);
+    return EffectResolver.calculateCharacterEffects(character, undefined, allCharacters);
+  }, [character, allCharacters]);
 
   // Get tournament info for conditional effects checking
   const tournamentInfo = useMemo(() => {
@@ -2273,8 +2313,9 @@ const PlayerDetailModal = ({
     return EffectResolver.getCharacterEffectBreakdown(
       character,
       tournamentInfo,
+      allCharacters,
     );
-  }, [character, tournamentInfo]);
+  }, [character, tournamentInfo, allCharacters]);
 
   if (isLoading) {
     return (

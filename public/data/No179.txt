@@ -38,7 +38,7 @@ Houses:
 ```
 2 Gear: 
  + 0 Normal gear:
-  - Kuro's Charms
+  - Kuro's Charm
   - Cuộn khăn giấy
  + 0 Legacy gear:
   - 

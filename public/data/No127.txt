@@ -20,7 +20,7 @@ Archetype:
 ```
 ``` 
 3 Quirk:  
-+ Cautions
++ Cautious
 + Independent
 + Slow Healer
 ```

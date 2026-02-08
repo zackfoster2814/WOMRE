@@ -26,7 +26,7 @@ Str: 8
 Spd: 5
 Dur: 8
 IQ: 5
-BIQ: 11 (Ban đầu là 10, +1 từ Lords)
+BIQ: 10 (+1 từ Lords)
 MA: 1
 ```
 

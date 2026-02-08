@@ -14,7 +14,7 @@ Sub-race:
 
 ```
 Archetype: 
-+ Loyal (cá trê vượt thác nhé hehe (huypui))
++ Loyal 
 ```
 ``` 
 1 Quirk:  
@@ -59,7 +59,7 @@ Runeword: Không
 ```
 2 Power: 
 + Hand Washing
-+ Let Pump Some Iron
++ Let's Pump Some Iron!
 ```
 
 ```

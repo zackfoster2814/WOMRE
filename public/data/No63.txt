@@ -40,8 +40,8 @@ Houses:
 ```
 3 Gear: 
  + 3 Normal gear:
-  - Mì Tôm(Từ Quỉrk)
-  - Đai Trinh Tiết(Từ Quỉrk)
+  - Mì Tôm (Từ Quirk)
+  - Đai Trinh Tiết (Từ Quirk)
   - Golden Coin
  + 0 Legacy gear:
   - 
@@ -60,7 +60,7 @@ Runeword: Không
 
 ```
 4 Power: 
-+ Artist
++ Artist (đã mất - cho An Hoàng (leetch1311))
 + Red Shift/LP
 + Sybaurafarming
 + The Coast is Clear!

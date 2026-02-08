@@ -27,7 +27,7 @@ Archetype:
 ```
 ```
 Str: 6
-Spd: 7 (Ban đầu là 4, +3 từ Conquerer)
+Spd: 4 (+3 từ Conquerer)
 Dur: 10
 IQ: 7
 BIQ: 8

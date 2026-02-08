@@ -19,7 +19,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Impatient (+1IQ +1MA)
++ Impatient 
 + Training Restricted
 + Fit (Từ Baguette)
 ```
@@ -76,4 +76,10 @@ Team:
 ```
 Lover:
 + 
+```
+
+```
+PvP Reward:
+- +1 IQ
+- +1 MA
 ```

@@ -62,7 +62,7 @@ Runeword:
 ```
 0 Power: 
 + Hydrate
-+ Sonic Scream 
++ Sonic Scream (đã mất - tặng cho Kaori (khanhnguyen1703))
 ```
 
 ```

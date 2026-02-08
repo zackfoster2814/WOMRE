@@ -20,7 +20,7 @@ Archetype:
 5 Quirk:  
 + Artistic (Từ Sub-race)
 + Generous (Từ Sub-race)
-+ Impatient (Từ Sub-race)
++ Impatient (Từ Sub-race) (Brainrot nên không nhận được PvP Rewards)
 + Brainrot
 + Progressive (Từ Baguette)
 ```

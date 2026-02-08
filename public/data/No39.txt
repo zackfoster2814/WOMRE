@@ -45,7 +45,7 @@ Houses:
 
 ```
 1 Unique Weapon
-+ Rhitta - dùng được
++ Rhitta (dùng được)
 ```
 
 ``` 

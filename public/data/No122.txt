@@ -23,7 +23,7 @@ Archetype:
 ```
 ```
 Str: 5
-Spd: 5 (ban đầu là 2,+3 từ Conquerer)
+Spd: 2 (+3 từ Conquerer)
 Dur: 4
 IQ: 5
 BIQ: 5
@@ -58,7 +58,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Critical Strike (+16%) (Từ Bloodthrist Dagger)
++ Critical Strike (+16%) (Từ Bloodthrist Dagger) (Đã mất do tặng cho Billz (zabillz))
 ```
 
 ```

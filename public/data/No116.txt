@@ -23,12 +23,12 @@ Archetype:
 + Athletic
 ```
 ```
-Str: 10 ban đầu là 3 (Re-spin từ Favor)
-Spd: 3 ban đầu là 5 (Re-spin từ Favor)
+Str: 10 (ban đầu là 3 (Re-spin từ Favor))
+Spd: 3 (ban đầu là 5 (Re-spin từ Favor))
 Dur: 10
 IQ: 7
 BIQ: 10
-MA: 6 ban đầu là 1 (Re-spin từ Favor)
+MA: 6 (ban đầu là 1 (Re-spin từ Favor))
 ```
 
 ```

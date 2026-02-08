@@ -58,6 +58,7 @@ Runeword: Không
 ```
 1 Power: 
 + Arcana Blast
++ AIDS (từ Swem)
 ```
 
 ```

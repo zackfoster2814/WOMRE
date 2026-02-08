@@ -39,10 +39,6 @@ function findLowestStat(stats: Record<StatName, number>): StatName {
 //   return highest;
 // }
 
-function getRandomStat(): StatName {
-  return STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
-}
-
 function countItemsOfType(character: any, type: string): number {
   switch (type) {
     case 'power':
@@ -123,32 +119,66 @@ registerImmediateHandler(
 );
 
 /**
- * In Love - Stat bonus từ việc có lover
+ * In Love - +2 vào stat cao nhất của lover
+ * Nếu data đã ghi sẵn stat bonus (-> +2 IQ), handler này sẽ bị replace trong resolver.
+ * Handler này chỉ chạy khi KHÔNG có stat bonus ghi sẵn - tự tìm lover's highest stat.
  */
 registerImmediateHandler(
   'in_love_stat_bonus',
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const lover = ctx.character.lover as string | string[] | undefined;
-    let hasLover = false;
-    if (lover) {
-      if (Array.isArray(lover)) {
-        hasLover = lover.length > 0;
-      } else if (typeof lover === 'string') {
-        hasLover = lover.trim() !== '';
+    const lovers = ctx.character.lover;
+    if (!lovers || !Array.isArray(lovers) || lovers.length === 0) {
+      return { skipDefault: true, description: 'Không có lover' };
+    }
+
+    if (!ctx.allCharacters || ctx.allCharacters.length === 0) {
+      return { skipDefault: true, description: 'Không thể tìm lover (no allCharacters)' };
+    }
+
+    // Find the first lover in allCharacters
+    let loverChar: any = null;
+    for (const lover of lovers) {
+      if (lover.isLost) continue;
+      const loverName = lover.name.toLowerCase();
+      loverChar = ctx.allCharacters.find((c) => {
+        const username = c.username?.toLowerCase() || '';
+        const name = c.name?.toLowerCase() || '';
+        return (username && loverName.includes(username)) || (name && loverName.includes(name));
+      });
+      if (loverChar) break;
+    }
+
+    if (!loverChar || !loverChar.stats) {
+      return { skipDefault: true, description: 'Không tìm thấy lover trong danh sách' };
+    }
+
+    // Find lover's highest stat
+    const statMapping: Record<string, StatName> = {
+      strength: 'strength',
+      speed: 'speed',
+      durability: 'durability',
+      iq: 'iq',
+      biq: 'biq',
+      ma: 'ma',
+    };
+
+    let highestStat: StatName = 'strength';
+    let highestValue = -1;
+    for (const [key, statName] of Object.entries(statMapping)) {
+      const val = loverChar.stats[key] ?? 0;
+      if (val > highestValue) {
+        highestValue = val;
+        highestStat = statName;
       }
     }
 
-    if (!hasLover) return { skipDefault: true };
-
-    // +2 to a random stat when in love
-    const randomStat = getRandomStat();
     return {
-      statModifiers: [{ stat: randomStat, value: 2 }],
+      statModifiers: [{ stat: highestStat, value: 2 }],
       skipDefault: true,
-      description: `+2 ${randomStat} từ In Love`,
+      description: `+2 ${highestStat.toUpperCase()} từ In Love (stat cao nhất của lover)`,
     };
   },
-  'Stat bonus khi có lover'
+  '+2 vào stat cao nhất của lover'
 );
 
 /**
@@ -513,27 +543,61 @@ registerImmediateHandler(
 
 /**
  * Femboy Lover AIDS Count
+ * Với mỗi Lover có "AIDS", nhận +1 all stats. (Tính cả các Lover đã chết)
  */
 registerImmediateHandler(
   'femboy_lover_aids_count',
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    // Check if character has AIDS power
-    const hasAIDS = (ctx.character.powers || []).some(
-      (p: any) => !p.isLost && p.name.toLowerCase().includes('aids')
-    );
+    const lovers = ctx.character.lover || [];
+    if (lovers.length === 0) return { skipDefault: true };
 
-    if (!hasAIDS) return { skipDefault: true };
+    // Need allCharacters to check if lovers have AIDS
+    if (!ctx.allCharacters || ctx.allCharacters.length === 0) {
+      return { skipDefault: true };
+    }
 
-    const loverCount = countItemsOfType(ctx.character, 'lover');
-    if (loverCount === 0) return { skipDefault: true };
+    // Count lovers who have AIDS power (including dead/lost lovers)
+    let loversWithAIDS = 0;
+    for (const lover of lovers) {
+      const loverName = lover.name.toLowerCase();
+      // Find lover in allCharacters by matching username or name
+      const loverChar = ctx.allCharacters.find((c) => {
+        const username = c.username?.toLowerCase() || '';
+        const name = c.name?.toLowerCase() || '';
+        return (
+          (username && loverName.includes(username)) ||
+          (name && loverName.includes(name))
+        );
+      });
+
+      if (loverChar) {
+        // Check if this lover has AIDS power (don't skip lost AIDS - still counts)
+        const loverHasAIDS = (loverChar.powers || []).some(
+          (p: any) => p.name.toLowerCase().includes('aids')
+        );
+        if (loverHasAIDS) loversWithAIDS++;
+      }
+    }
+
+    if (loversWithAIDS === 0) {
+      return {
+        skipDefault: true,
+        description: `0 Lover có AIDS (${lovers.length} lover(s) checked)`,
+      };
+    }
+
+    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    for (const stat of STAT_NAMES) {
+      mods.push({ stat, value: loversWithAIDS });
+    }
 
     return {
-      statModifiers: [{ stat: 'biq', value: loverCount * 2 }],
+      statModifiers: mods,
       skipDefault: true,
-      description: `+${loverCount * 2} BIQ từ AIDS và ${loverCount} lover(s)`,
+      description: `+${loversWithAIDS} All Stats từ ${loversWithAIDS} Lover(s) có AIDS`,
     };
   },
-  'BIQ bonus from AIDS and lovers'
+  '+1 All Stats per Lover with AIDS'
 );
 
 /**

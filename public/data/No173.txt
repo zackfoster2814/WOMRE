@@ -32,7 +32,8 @@ MA:10
 
 ```
 Houses: 
-+ House Stark (Summer)
++ House Stark 
+  -> Summer
 ```
 
 ```

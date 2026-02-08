@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: Angel
-Sub-race: Archeangels
+Sub-race: Archangels
 ```
 
 ```
@@ -32,7 +32,8 @@ MA: 10
 
 ```
 Houses: 
-+ 
++ The Shire 
+  -> +4 Speed
 ```
 
 ```

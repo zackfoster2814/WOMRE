@@ -270,8 +270,9 @@ export class EffectResolver {
 
   /**
    * Gather all effect sources from a character
+   * @param allCharacters - Optional list of all characters, used to resolve cross-character effects (e.g., Cheater debuff on lovers)
    */
-  static gatherEffectSources(character: Character): EffectSource[] {
+  static gatherEffectSources(character: Character, allCharacters?: Character[]): EffectSource[] {
     const sources: EffectSource[] = [];
 
     // Race
@@ -306,9 +307,14 @@ export class EffectResolver {
       for (const subRace of subRaces) {
         const subRaceEntry = EffectRegistry.get("sub_race", subRace);
         if (subRaceEntry) {
+          // For Goblin sub-races that are just numbers, display as "X goblins"
+          let displayName = subRace;
+          if (character.race?.race?.toLowerCase() === "goblin" && /^\d+$/.test(subRace)) {
+            displayName = `${subRace} goblins`;
+          }
           sources.push({
             type: "sub_race",
-            name: subRace,
+            name: displayName,
             effects: subRaceEntry.effects,
             rawDescription: subRaceEntry.description,
             isActive: true,
@@ -367,7 +373,9 @@ export class EffectResolver {
         continue; // Skip normal power lookup
       }
 
-      const entry = EffectRegistry.get("power", power.name);
+      const entry = EffectRegistry.get("power", power.name)
+        // Fallback: some powers come from wheels (MHA, JJK, Jojo, etc.) and are registered as archetype_sub
+        || EffectRegistry.get("archetype_sub", power.name);
       if (entry) {
         sources.push({
           type: "power",
@@ -602,6 +610,24 @@ export class EffectResolver {
           }
         }
 
+        // Handle In Love - replace custom handler with specific stat if provided in data
+        if (parsed.baseName.toLowerCase() === "in love") {
+          if (parsed.statBonus) {
+            effects = effects.filter(e =>
+              !(e.type === "custom" &&
+                (e as { customHandler?: string }).customHandler === "in_love_stat_bonus")
+            );
+            // Add specific stat modifier from data (e.g., "-> +2 IQ")
+            effects.push({
+              type: "stat_modifier",
+              stat: parsed.statBonus.stat as StatName,
+              value: parsed.statBonus.value,
+              timing: "immediate",
+              target: "self",
+            });
+          }
+        }
+
         sources.push({
           type: "char_dev",
           name: charDev.name,
@@ -664,6 +690,79 @@ export class EffectResolver {
           rawDescription: entry.description,
           isActive: true,
         });
+      }
+    }
+
+    // Cross-character effects: Gather effects targeting "lover" from characters who list this character as lover
+    // e.g., Cheater quirk applies -2 BIQ to their lovers
+    if (allCharacters && allCharacters.length > 0) {
+      const myUsername = character.username?.toLowerCase() || "";
+      const myName = character.name?.toLowerCase() || "";
+
+      for (const other of allCharacters) {
+        if (other.no === character.no) continue; // Skip self
+
+        // Check if this character is listed as a lover of 'other'
+        const isLoverOfOther = other.lover?.some((l) => {
+          if (l.isLost) return false;
+          const loverStr = l.name.toLowerCase();
+          return (
+            (myUsername && loverStr.includes(myUsername)) ||
+            (myName && loverStr.includes(myName))
+          );
+        });
+
+        if (!isLoverOfOther) continue;
+
+        // Gather all effect sources from 'other' and find effects with target: "lover"
+        const otherSources = this.gatherEffectSources(other); // No allCharacters to avoid recursion
+        for (const otherSource of otherSources) {
+          const loverEffects = otherSource.effects.filter(
+            (e) => e.target === "lover" && e.timing === "immediate",
+          );
+          if (loverEffects.length > 0) {
+            sources.push({
+              type: otherSource.type,
+              name: `${otherSource.name} (từ ${other.name})`,
+              effects: loverEffects.map((e) => ({ ...e, target: "self" })), // Convert target to self so they get applied
+              rawDescription: `Debuff từ lover: ${other.name}`,
+              isActive: otherSource.isActive !== false,
+            });
+          }
+        }
+
+        // Charming quirk: if 'other' has Charming quirk mentioning this character,
+        // and the lover (this character) has no power → -1 all stats debuff
+        for (const quirk of other.quirks || []) {
+          if (quirk.isLost) continue;
+          const qName = quirk.name.toLowerCase();
+          if (!qName.startsWith("charming")) continue;
+
+          // Check if this quirk mentions the current character
+          const mentionsMe =
+            (myUsername && qName.includes(myUsername)) ||
+            (myName && qName.includes(myName));
+          if (!mentionsMe) continue;
+
+          // Cross-reference: check if this character (the lover) has any non-lost powers
+          const myPowers = (character.powers || []).filter((p) => !p.isLost);
+          if (myPowers.length === 0) {
+            const debuffEffects: Effect[] = STAT_NAMES.map((stat) => ({
+              type: "stat_modifier" as const,
+              stat,
+              value: -1,
+              timing: "immediate" as const,
+              target: "self" as const,
+            }));
+            sources.push({
+              type: "quirk",
+              name: `Charming (từ ${other.name})`,
+              effects: debuffEffects,
+              rawDescription: `-1 All Stats (tặng stats cho ${other.name} vì không có Power)`,
+              isActive: true,
+            });
+          }
+        }
       }
     }
 
@@ -905,8 +1004,14 @@ export class EffectResolver {
 
         case "has_lover":
           // Check if character has a lover (used to determine virginity loss)
+          // character.lover is LossableItem[] - empty array or array with empty names means no lover
           if (character) {
-            result = !!character.lover;
+            const lovers = character.lover;
+            if (Array.isArray(lovers)) {
+              result = lovers.some((l) => !l.isLost && l.name.trim() !== "");
+            } else {
+              result = !!lovers && String(lovers).trim() !== "";
+            }
           } else {
             result = false;
           }
@@ -939,6 +1044,32 @@ export class EffectResolver {
           }
           break;
 
+        case "has_item":
+          // Check if character has a specific item type (e.g., weapon)
+          if (character) {
+            if (condition.itemType === "weapon") {
+              // Has at least one non-lost weapon
+              result = (character.weapons || []).some((w) => !w.isLost);
+            } else if (condition.itemType === "lover") {
+              result = (character.lover || []).some((l) => !l.isLost && l.name.trim() !== "");
+            } else if (condition.itemType === "power") {
+              if (condition.itemName) {
+                result = (character.powers || []).some(
+                  (p) =>
+                    !p.isLost &&
+                    p.name.toLowerCase().includes(condition.itemName!.toLowerCase()),
+                );
+              } else {
+                result = (character.powers || []).some((p) => !p.isLost);
+              }
+            } else {
+              result = true; // Unknown item type, default to true
+            }
+          } else {
+            result = false;
+          }
+          break;
+
         default:
           // Other condition types need combat context, skip for immediate
           result = true;
@@ -966,6 +1097,7 @@ export class EffectResolver {
     baseStats: CharacterStats,
     context?: { isPvE?: boolean },
     character?: Character,
+    allCharacters?: Character[],
   ): CharacterEffects {
     const result: CharacterEffects = {
       statModifiers: [],
@@ -1087,6 +1219,7 @@ export class EffectResolver {
               currentStats: result.totalStats,
               source,
               effect,
+              allCharacters,
             } as ImmediateHandlerContext,
           );
 
@@ -1309,14 +1442,16 @@ export class EffectResolver {
   static calculateCharacterEffects(
     character: Character,
     context?: { isPvE?: boolean },
+    allCharacters?: Character[],
   ): CharacterEffects {
-    const sources = this.gatherEffectSources(character);
+    const sources = this.gatherEffectSources(character, allCharacters);
     const baseStats = convertStats(character.stats);
     const result = this.resolveImmediateEffects(
       sources,
       baseStats,
       context,
       character,
+      allCharacters,
     );
 
     // Special case: Skeleton race has IQ locked at 1
@@ -1328,6 +1463,15 @@ export class EffectResolver {
       result.totalStats.iq = 1;
       result.baseStats.iq = 1;
       result.bonusStats.iq = 0;
+    }
+
+    // Special case: Slow Metabolism - Speed cannot increase, only decrease
+    if (result.immunities.includes("speed_increase")) {
+      if (result.bonusStats.speed > 0) {
+        // Remove positive speed bonus
+        result.totalStats.speed -= result.bonusStats.speed;
+        result.bonusStats.speed = 0;
+      }
     }
 
     return result;
@@ -1351,7 +1495,11 @@ export class EffectResolver {
       parsedStatBonus = parsed.statBonus;
     }
 
-    const entry = EffectRegistry.get(sourceType, lookupName);
+    let entry = EffectRegistry.get(sourceType, lookupName);
+    // Fallback: powers from wheels (MHA, JJK, etc.) are registered as archetype_sub
+    if (!entry && sourceType === "power") {
+      entry = EffectRegistry.get("archetype_sub", lookupName);
+    }
     if (!entry) return "";
 
     const statChanges: string[] = [];
@@ -1428,12 +1576,25 @@ export class EffectResolver {
   static getCharacterEffectBreakdown(
     character: Character,
     _tournamentInfo?: { bracket?: string; round?: string },
+    allCharacters?: Character[],
   ): EffectSourceBreakdown[] {
-    const sources = this.gatherEffectSources(character);
+    const sources = this.gatherEffectSources(character, allCharacters);
     const breakdown: EffectSourceBreakdown[] = [];
 
     // Get character's base stats for condition checking
     const baseStats = convertStats(character.stats);
+
+    // Track accumulated stats across sources (for handlers like EscAPADe that need current totals)
+    const runningStats: Record<StatName, number> = { ...baseStats };
+
+    // Pre-check immunities from all sources (e.g., Slow Metabolism: speed_increase)
+    const hasSpeedIncreaseImmunity = sources.some((s) =>
+      s.effects.some(
+        (e) =>
+          e.type === "immunity" &&
+          e.immuneTo?.includes("speed_increase"),
+      ),
+    );
 
     // Map timing to Vietnamese display text
     const timingLabels: Record<string, string> = {
@@ -1482,16 +1643,24 @@ export class EffectResolver {
             {
               character,
               baseStats,
-              currentStats: { ...baseStats },
+              currentStats: { ...runningStats },
               source,
               effect,
+              allCharacters,
             } as ImmediateHandlerContext,
           );
 
           if (handlerResult?.statModifiers) {
             for (const mod of handlerResult.statModifiers) {
-              statChanges.push({ stat: mod.stat, value: mod.value });
+              statChanges.push({ stat: mod.stat, value: mod.value, isBase: mod.isBase });
             }
+          }
+          // If handler returned a description but no stat modifiers, show as conditional info
+          if (handlerResult?.description && (!handlerResult.statModifiers || handlerResult.statModifiers.length === 0)) {
+            conditionalEffects.push({
+              timing: "immediate",
+              description: handlerResult.description,
+            });
           }
           continue; // Skip other processing for custom handler effects
         }
@@ -1517,7 +1686,7 @@ export class EffectResolver {
 
           if (effect.stat === "all") {
             for (const stat of STAT_NAMES) {
-              statChanges.push({ stat, value: effect.value });
+              statChanges.push({ stat, value: effect.value, isBase: effect.isBase });
             }
           } else if (
             effect.stat &&
@@ -1526,18 +1695,19 @@ export class EffectResolver {
             statChanges.push({
               stat: effect.stat as StatName,
               value: effect.value,
+              isBase: effect.isBase,
             });
           } else if (effect.stat === "lowest" || effect.stat === "highest") {
             // Resolve dynamic stat targets using base stats
             const resolvedStats = resolveStatTarget(effect.stat, baseStats);
             for (const stat of resolvedStats) {
-              statChanges.push({ stat, value: effect.value });
+              statChanges.push({ stat, value: effect.value, isBase: effect.isBase });
             }
           } else if (effect.stat === "odd" || effect.stat === "even") {
             // Handle odd/even stat targets
             const resolvedStats = resolveStatTarget(effect.stat, baseStats);
             for (const stat of resolvedStats) {
-              statChanges.push({ stat, value: effect.value });
+              statChanges.push({ stat, value: effect.value, isBase: effect.isBase });
             }
           }
         }
@@ -1584,11 +1754,11 @@ export class EffectResolver {
       }
 
       if (statChanges.length > 0 || source.rawDescription) {
-        // Merge duplicate stat changes (e.g., +1 BIQ and +2 BIQ from lowest -> +3 BIQ)
+        // Merge duplicate stat changes, keeping base and non-base separate
         let mergedStatChanges: StatChange[] = [];
         for (const change of statChanges) {
           const existing = mergedStatChanges.find(
-            (c) => c.stat === change.stat,
+            (c) => c.stat === change.stat && !!c.isBase === !!change.isBase,
           );
           if (existing) {
             existing.value += change.value;
@@ -1604,6 +1774,19 @@ export class EffectResolver {
           mergedStatChanges = mergedStatChanges.filter(
             (change) => change.stat !== "iq",
           );
+        }
+
+        // Special case: Slow Metabolism - Speed cannot increase
+        // Filter out positive speed modifiers from breakdown
+        if (hasSpeedIncreaseImmunity) {
+          mergedStatChanges = mergedStatChanges.filter(
+            (change) => !(change.stat === "speed" && change.value > 0),
+          );
+        }
+
+        // Update running stats with this source's changes (for subsequent handlers)
+        for (const change of mergedStatChanges) {
+          runningStats[change.stat] += change.value;
         }
 
         breakdown.push({
@@ -1630,6 +1813,7 @@ export class EffectResolver {
 export interface StatChange {
   stat: StatName;
   value: number;
+  isBase?: boolean;
 }
 
 export interface ConditionalEffect {

@@ -58,8 +58,8 @@ Runeword: Không
 
 ```
 2 Power: 
-+ Poison Breath(Từ House)
-+ Luck Manipulation(Từ House)
++ Poison Breath (Từ House)
++ Luck Manipulation (Từ House)
 ```
 
 ```

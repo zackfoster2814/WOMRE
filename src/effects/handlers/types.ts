@@ -20,6 +20,7 @@ export interface ImmediateHandlerContext {
   currentStats: CharacterStats;
   source: EffectSource;
   effect: Effect;
+  allCharacters?: Character[]; // For cross-character lookups (e.g., Femboy checking if lover has AIDS)
 }
 
 /**
