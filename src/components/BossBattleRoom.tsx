@@ -85,7 +85,12 @@ interface PlayerData {
   username: string;
   stats: CharacterStats;
   baseStats?: CharacterStats;
-  statModifiers?: { stat: string; value: number; isBase: boolean; source: string }[];
+  statModifiers?: {
+    stat: string;
+    value: number;
+    isBase: boolean;
+    source: string;
+  }[];
   team?: number;
   quirks?: string[];
   race?: string;
@@ -981,14 +986,7 @@ const D20Wheel = ({ config }: { config: D20WheelConfig }) => {
       cancelAnimationFrame(animationRef.current);
     }
     requestAnimationFrame(animate);
-  }, [
-    spinning,
-    finished,
-    targetNumber,
-    wheelSize,
-    drawWheel,
-    onComplete,
-  ]);
+  }, [spinning, finished, targetNumber, wheelSize, drawWheel, onComplete]);
 
   useEffect(() => {
     if (!autoSpin || allowManualInput) return;
@@ -1141,8 +1139,12 @@ const PlayerCard = ({
   const statBreakdown = useMemo(() => {
     if (!player.statModifiers || !player.baseStats) return null;
     const statNameMap: Record<string, keyof CharacterStats> = {
-      strength: "str", speed: "spd", durability: "dur",
-      iq: "iq", biq: "biq", ma: "ma",
+      strength: "str",
+      speed: "spd",
+      durability: "dur",
+      iq: "iq",
+      biq: "biq",
+      ma: "ma",
     };
     // Group by source
     const sourceMap = new Map<string, Record<keyof CharacterStats, number>>();
@@ -1150,7 +1152,14 @@ const PlayerCard = ({
       const mapped = statNameMap[m.stat];
       if (!mapped) return;
       if (!sourceMap.has(m.source)) {
-        sourceMap.set(m.source, { str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0 });
+        sourceMap.set(m.source, {
+          str: 0,
+          spd: 0,
+          dur: 0,
+          iq: 0,
+          biq: 0,
+          ma: 0,
+        });
       }
       sourceMap.get(m.source)![mapped] += m.value;
     });
@@ -1160,9 +1169,7 @@ const PlayerCard = ({
   return (
     <div
       className={`bg-gray-800/90 rounded-lg p-2 border-2 transition-all ${
-        isInactive
-          ? "border-gray-600 opacity-50"
-          : "border-teal-500/50"
+        isInactive ? "border-gray-600 opacity-50" : "border-teal-500/50"
       }`}
     >
       <div className="flex justify-between items-start mb-1">
@@ -1209,7 +1216,10 @@ const PlayerCard = ({
       {/* Action Buttons */}
       <div className="flex gap-1 mt-1">
         <button
-          onClick={(e) => { e.stopPropagation(); onToggleDisable(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleDisable();
+          }}
           className={`flex-1 text-[10px] py-0.5 rounded transition-colors ${
             isDisabled
               ? "bg-green-600/30 text-green-400 hover:bg-green-600/50"
@@ -1218,12 +1228,15 @@ const PlayerCard = ({
         >
           {isDisabled ? "Enable" : "Disable"}
         </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); setShowDetail(!showDetail); }}
+        {/* <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowDetail(!showDetail);
+          }}
           className="flex-1 text-[10px] py-0.5 rounded bg-blue-600/30 text-blue-400 hover:bg-blue-600/50 transition-colors"
         >
           {showDetail ? "Ẩn" : "Chi tiết"}
-        </button>
+        </button> */}
       </div>
 
       {/* Stat Detail Panel */}
@@ -1241,31 +1254,40 @@ const PlayerCard = ({
             </div>
           </div>
           {/* Modifier rows grouped by source */}
-          {Array.from(statBreakdown.sources.entries()).map(([source, bonuses]) => {
-            const hasAny = STAT_KEYS.some((s) => bonuses[s] !== 0);
-            if (!hasAny) return null;
-            return (
-              <div key={source} className="flex justify-between text-gray-400 py-0.5">
-                <span className="truncate mr-2 max-w-[120px]" title={source}>{source}</span>
-                <div className="flex gap-2 shrink-0">
-                  {STAT_KEYS.map((stat) => (
-                    <span
-                      key={stat}
-                      className={`w-7 text-center ${
-                        bonuses[stat] > 0
-                          ? "text-green-400"
-                          : bonuses[stat] < 0
-                          ? "text-red-400"
-                          : "text-gray-600"
-                      }`}
-                    >
-                      {bonuses[stat] !== 0 ? `${bonuses[stat] > 0 ? "+" : ""}${bonuses[stat]}` : "-"}
-                    </span>
-                  ))}
+          {Array.from(statBreakdown.sources.entries()).map(
+            ([source, bonuses]) => {
+              const hasAny = STAT_KEYS.some((s) => bonuses[s] !== 0);
+              if (!hasAny) return null;
+              return (
+                <div
+                  key={source}
+                  className="flex justify-between text-gray-400 py-0.5"
+                >
+                  <span className="truncate mr-2 max-w-[120px]" title={source}>
+                    {source}
+                  </span>
+                  <div className="flex gap-2 shrink-0">
+                    {STAT_KEYS.map((stat) => (
+                      <span
+                        key={stat}
+                        className={`w-7 text-center ${
+                          bonuses[stat] > 0
+                            ? "text-green-400"
+                            : bonuses[stat] < 0
+                              ? "text-red-400"
+                              : "text-gray-600"
+                        }`}
+                      >
+                        {bonuses[stat] !== 0
+                          ? `${bonuses[stat] > 0 ? "+" : ""}${bonuses[stat]}`
+                          : "-"}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            },
+          )}
           {/* Total row */}
           <div className="flex justify-between text-white border-t border-gray-700 pt-1 mt-1 font-semibold">
             <span>Total</span>
@@ -1326,7 +1348,9 @@ export const BossBattleRoom = ({
 
   // Multi-phase
   const [currentPhase, setCurrentPhase] = useState(1);
-  const [phaseScores, setPhaseScores] = useState<{ boss: number; team: number }[]>([]);
+  const [phaseScores, setPhaseScores] = useState<
+    { boss: number; team: number }[]
+  >([]);
 
   // Isekai'd players
   const [isekaidPlayers, setIsekaidPlayers] = useState<number[]>([]);
@@ -2171,27 +2195,48 @@ export const BossBattleRoom = ({
     };
 
     // Check PvE-only penalties (Wereseal, weapon steal) - applied per-player before multiplier
-    const hasWereseal = !specialRules.disablePvEOnly && activePlayers.some(
-      (p) => p.subRace?.toLowerCase() === "wereseal",
-    );
+    const hasWereseal =
+      !specialRules.disablePvEOnly &&
+      activePlayers.some((p) => p.subRace?.toLowerCase() === "wereseal");
     const weresealPenalty = hasWereseal ? 100 : 0;
 
     // Pre-calculate weapon bonuses to subtract per player (Soul of Cinder steals them)
     const weaponStatNameMap: Record<string, keyof BossStats> = {
-      strength: "str", speed: "spd", durability: "dur",
-      iq: "iq", biq: "biq", ma: "ma",
+      strength: "str",
+      speed: "spd",
+      durability: "dur",
+      iq: "iq",
+      biq: "biq",
+      ma: "ma",
     };
-    const getPlayerWeaponBonuses = (player: PlayerData): Record<keyof BossStats, number> => {
-      const bonuses: Record<keyof BossStats, number> = { str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0 };
+    const getPlayerWeaponBonuses = (
+      player: PlayerData,
+    ): Record<keyof BossStats, number> => {
+      const bonuses: Record<keyof BossStats, number> = {
+        str: 0,
+        spd: 0,
+        dur: 0,
+        iq: 0,
+        biq: 0,
+        ma: 0,
+      };
       if (!specialRules.stealPvEEffects) return bonuses;
       const weapons = player.weapons || [];
       weapons.forEach((weaponName) => {
         const entry = EffectRegistry.get("weapon", weaponName);
         if (!entry) return;
         entry.effects.forEach((eff) => {
-          if (eff.type === "stat_modifier" && eff.timing === "immediate" && eff.target === "self" && eff.stat && eff.value) {
+          if (
+            eff.type === "stat_modifier" &&
+            eff.timing === "immediate" &&
+            eff.target === "self" &&
+            eff.stat &&
+            eff.value
+          ) {
             if (eff.stat === "all") {
-              (Object.keys(bonuses) as (keyof BossStats)[]).forEach((k) => { bonuses[k] += eff.value!; });
+              (Object.keys(bonuses) as (keyof BossStats)[]).forEach((k) => {
+                bonuses[k] += eff.value!;
+              });
             } else {
               const mapped = weaponStatNameMap[eff.stat];
               if (mapped) bonuses[mapped] += eff.value!;
@@ -2211,11 +2256,15 @@ export const BossBattleRoom = ({
         const player = soloHerInfo.soloPlayer;
         const mult = soloHerInfo.multiplier;
         const wb = getPlayerWeaponBonuses(player);
-        totals.str = ((player.stats.str || 0) - weresealPenalty - wb.str) * mult;
-        totals.spd = ((player.stats.spd || 0) - weresealPenalty - wb.spd) * mult;
-        totals.dur = ((player.stats.dur || 0) - weresealPenalty - wb.dur) * mult;
+        totals.str =
+          ((player.stats.str || 0) - weresealPenalty - wb.str) * mult;
+        totals.spd =
+          ((player.stats.spd || 0) - weresealPenalty - wb.spd) * mult;
+        totals.dur =
+          ((player.stats.dur || 0) - weresealPenalty - wb.dur) * mult;
         totals.iq = ((player.stats.iq || 0) - weresealPenalty - wb.iq) * mult;
-        totals.biq = ((player.stats.biq || 0) - weresealPenalty - wb.biq) * mult;
+        totals.biq =
+          ((player.stats.biq || 0) - weresealPenalty - wb.biq) * mult;
         totals.ma = ((player.stats.ma || 0) - weresealPenalty - wb.ma) * mult;
       }
     } else {
@@ -2368,11 +2417,20 @@ export const BossBattleRoom = ({
     // Soul of Cinder: steal weapon effects from team → apply stat bonuses to boss
     if (specialRules.stealPvEEffects) {
       const statNameMap: Record<string, keyof BossStats> = {
-        strength: "str", speed: "spd", durability: "dur",
-        iq: "iq", biq: "biq", ma: "ma",
+        strength: "str",
+        speed: "spd",
+        durability: "dur",
+        iq: "iq",
+        biq: "biq",
+        ma: "ma",
       };
       const weaponBonuses: Record<keyof BossStats, number> = {
-        str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0,
+        str: 0,
+        spd: 0,
+        dur: 0,
+        iq: 0,
+        biq: 0,
+        ma: 0,
       };
 
       battle.playerData.forEach((player) => {
@@ -2381,11 +2439,19 @@ export const BossBattleRoom = ({
           const entry = EffectRegistry.get("weapon", weaponName);
           if (!entry) return;
           entry.effects.forEach((eff) => {
-            if (eff.type === "stat_modifier" && eff.timing === "immediate" && eff.target === "self" && eff.stat && eff.value) {
+            if (
+              eff.type === "stat_modifier" &&
+              eff.timing === "immediate" &&
+              eff.target === "self" &&
+              eff.stat &&
+              eff.value
+            ) {
               if (eff.stat === "all") {
-                (Object.keys(weaponBonuses) as (keyof BossStats)[]).forEach((k) => {
-                  weaponBonuses[k] += eff.value!;
-                });
+                (Object.keys(weaponBonuses) as (keyof BossStats)[]).forEach(
+                  (k) => {
+                    weaponBonuses[k] += eff.value!;
+                  },
+                );
               } else {
                 const mapped = statNameMap[eff.stat];
                 if (mapped) weaponBonuses[mapped] += eff.value!;
@@ -2423,13 +2489,23 @@ export const BossBattleRoom = ({
     if (!specialRules.stealPvEEffects) return null;
 
     const statNameMap: Record<string, keyof BossStats> = {
-      strength: "str", speed: "spd", durability: "dur",
-      iq: "iq", biq: "biq", ma: "ma",
+      strength: "str",
+      speed: "spd",
+      durability: "dur",
+      iq: "iq",
+      biq: "biq",
+      ma: "ma",
     };
     const totalBonuses: Record<keyof BossStats, number> = {
-      str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0,
+      str: 0,
+      spd: 0,
+      dur: 0,
+      iq: 0,
+      biq: 0,
+      ma: 0,
     };
-    const weaponList: { player: string; weapon: string; bonuses: string[] }[] = [];
+    const weaponList: { player: string; weapon: string; bonuses: string[] }[] =
+      [];
 
     battle.playerData.forEach((player) => {
       const weapons = player.weapons || [];
@@ -2438,12 +2514,20 @@ export const BossBattleRoom = ({
         if (!entry) return;
         const bonuses: string[] = [];
         entry.effects.forEach((eff) => {
-          if (eff.type === "stat_modifier" && eff.timing === "immediate" && eff.target === "self" && eff.stat && eff.value) {
+          if (
+            eff.type === "stat_modifier" &&
+            eff.timing === "immediate" &&
+            eff.target === "self" &&
+            eff.stat &&
+            eff.value
+          ) {
             if (eff.stat === "all") {
               bonuses.push(`All Stats +${eff.value}`);
-              (Object.keys(totalBonuses) as (keyof BossStats)[]).forEach((k) => {
-                totalBonuses[k] += eff.value!;
-              });
+              (Object.keys(totalBonuses) as (keyof BossStats)[]).forEach(
+                (k) => {
+                  totalBonuses[k] += eff.value!;
+                },
+              );
             } else {
               const mapped = statNameMap[eff.stat];
               if (mapped) {
@@ -3051,14 +3135,20 @@ export const BossBattleRoom = ({
           setBo3Round(null);
 
           // Check end of battle
-          const maxRounds = specialRules.isTotalStatBattle ? specialRules.totalStatBattleRounds : 6;
+          const maxRounds = specialRules.isTotalStatBattle
+            ? specialRules.totalStatBattleRounds
+            : 6;
           if (currentRound + 1 >= maxRounds) {
             setBattleState("finished");
           }
           return;
         } else {
           // BO3 continues - wait for user to click Spin again
-          setBo3Round({ ...currentBO3, bossWins: newBossWins, teamWins: newTeamWins });
+          setBo3Round({
+            ...currentBO3,
+            bossWins: newBossWins,
+            teamWins: newTeamWins,
+          });
           setIsSpinning(false);
           return;
         }
@@ -3134,7 +3224,9 @@ export const BossBattleRoom = ({
 
       if (boss.id === 15) {
         // Count team wins including current round (roundResults is stale)
-        const simonTeamWins = roundResults.filter((r) => r.winner === "team").length + (winner === "team" ? 1 : 0);
+        const simonTeamWins =
+          roundResults.filter((r) => r.winner === "team").length +
+          (winner === "team" ? 1 : 0);
         if (simonTeamWins >= 3 && removedPlayers.length === 0) {
           const toRemove = activePlayers.slice(0, 3);
           setRemovedPlayers(toRemove.map((p) => p.no));
@@ -3143,7 +3235,9 @@ export const BossBattleRoom = ({
             `⚔️ Simon đã loại bỏ 3 thành viên: ${toRemove.map((p) => p.name).join(", ")}`,
           ]);
         }
-        const prevTeamWins = roundResults.filter((r) => r.winner === "team").length;
+        const prevTeamWins = roundResults.filter(
+          (r) => r.winner === "team",
+        ).length;
         if (winner === "team" && prevTeamWins === 0) {
           setDynamicBossBonus((prev) => prev + 3);
           setBattleMessages((prev) => [
@@ -3185,23 +3279,37 @@ export const BossBattleRoom = ({
 
       // Capra Demon (boss 16): conditional effects after 4 rounds (IQ = round index 3)
       if (boss.id === 16 && currentRound === 3 && !capraEffect) {
-        const teamPts = score.team + (winner === "team" && !blocked ? 1 : 0) + (bonusPoints || 0);
+        const teamPts =
+          score.team +
+          (winner === "team" && !blocked ? 1 : 0) +
+          (bonusPoints || 0);
         if (teamPts <= 1) {
           setCapraEffect({
-            biqBonus: -50, iqBonus: 0, replayIQ: false,
-            biqBO3: false, maBO3: true,
-            biqLossPenalty: 3, biqWinBonusTeamScore: false,
+            biqBonus: -50,
+            iqBonus: 0,
+            replayIQ: false,
+            biqBO3: false,
+            maBO3: true,
+            biqLossPenalty: 3,
+            biqWinBonusTeamScore: false,
           });
-          setDynamicBossStatChanges((prev) => ({ ...prev, biq: (prev.biq || 0) - 50 }));
+          setDynamicBossStatChanges((prev) => ({
+            ...prev,
+            biq: (prev.biq || 0) - 50,
+          }));
           setBattleMessages((prev) => [
             ...prev,
             `🐐 Capra Demon: Team ≤1 điểm! BIQ -50, thua BIQ = -3 điểm, MA thành BO3.`,
           ]);
         } else if (teamPts === 2) {
           setCapraEffect({
-            biqBonus: 0, iqBonus: 0, replayIQ: false,
-            biqBO3: true, maBO3: false,
-            biqLossPenalty: 0, biqWinBonusTeamScore: false,
+            biqBonus: 0,
+            iqBonus: 0,
+            replayIQ: false,
+            biqBO3: true,
+            maBO3: false,
+            biqLossPenalty: 0,
+            biqWinBonusTeamScore: false,
           });
           setBattleMessages((prev) => [
             ...prev,
@@ -3209,11 +3317,18 @@ export const BossBattleRoom = ({
           ]);
         } else if (teamPts === 3) {
           setCapraEffect({
-            biqBonus: 0, iqBonus: 25, replayIQ: true,
-            biqBO3: false, maBO3: false,
-            biqLossPenalty: 0, biqWinBonusTeamScore: false,
+            biqBonus: 0,
+            iqBonus: 25,
+            replayIQ: true,
+            biqBO3: false,
+            maBO3: false,
+            biqLossPenalty: 0,
+            biqWinBonusTeamScore: false,
           });
-          setDynamicBossStatChanges((prev) => ({ ...prev, iq: (prev.iq || 0) + 25 }));
+          setDynamicBossStatChanges((prev) => ({
+            ...prev,
+            iq: (prev.iq || 0) + 25,
+          }));
           setBattleMessages((prev) => [
             ...prev,
             `🐐 Capra Demon: Team 3 điểm! IQ +25, đánh lại Round IQ!`,
@@ -3224,11 +3339,18 @@ export const BossBattleRoom = ({
         } else {
           // teamPts >= 4
           setCapraEffect({
-            biqBonus: 50, iqBonus: 0, replayIQ: false,
-            biqBO3: false, maBO3: true,
-            biqLossPenalty: 0, biqWinBonusTeamScore: true,
+            biqBonus: 50,
+            iqBonus: 0,
+            replayIQ: false,
+            biqBO3: false,
+            maBO3: true,
+            biqLossPenalty: 0,
+            biqWinBonusTeamScore: true,
           });
-          setDynamicBossStatChanges((prev) => ({ ...prev, biq: (prev.biq || 0) + 50 }));
+          setDynamicBossStatChanges((prev) => ({
+            ...prev,
+            biq: (prev.biq || 0) + 50,
+          }));
           setBattleMessages((prev) => [
             ...prev,
             `🐐 Capra Demon: Team ≥4 điểm! BIQ +50, thắng BIQ = nhận điểm bằng team, MA thành BO3.`,
@@ -3273,7 +3395,9 @@ export const BossBattleRoom = ({
           ]);
         } else if (boss.id === 22 && currentPhase === 1 && newTeamScore >= 4) {
           // newTeamScore includes this round's result (score.team is stale)
-          const newBossScore = score.boss + (winner === "boss" ? specialRules.bossPointsPerWin : 0);
+          const newBossScore =
+            score.boss +
+            (winner === "boss" ? specialRules.bossPointsPerWin : 0);
           setCurrentPhase(2);
           setPhaseScores([{ boss: newBossScore, team: newTeamScore }]);
           setCurrentRound(0);
@@ -3487,7 +3611,10 @@ export const BossBattleRoom = ({
 
       for (let idx = 0; idx < STAT_KEYS.length; idx++) {
         const stat = STAT_KEYS[idx];
-        let bossValue = (bossStats[stat] || 0) + dynamicBonus + (autoCapraStatChanges[stat] || 0);
+        let bossValue =
+          (bossStats[stat] || 0) +
+          dynamicBonus +
+          (autoCapraStatChanges[stat] || 0);
         const teamValue = teamStats[stat] || 0;
 
         if (boss.id === 8 && idx > 0 && idx % 2 === 0) {
@@ -3495,10 +3622,11 @@ export const BossBattleRoom = ({
         }
 
         // Capra Demon: check if this round needs BO3
-        const needsBO3 = boss.id === 16 && autoCapraEffect && (
-          (stat === "biq" && autoCapraEffect.biqBO3) ||
-          (stat === "ma" && autoCapraEffect.maBO3)
-        );
+        const needsBO3 =
+          boss.id === 16 &&
+          autoCapraEffect &&
+          ((stat === "biq" && autoCapraEffect.biqBO3) ||
+            (stat === "ma" && autoCapraEffect.maBO3));
 
         if (needsBO3) {
           // Simulate BO3: first to 2 wins
@@ -3507,7 +3635,10 @@ export const BossBattleRoom = ({
           let lastResult: RoundResult | null = null;
 
           while (bo3BossWins < 2 && bo3TeamWins < 2) {
-            const { bossWeight, teamWeight } = getWeightedValues(bossValue, teamValue);
+            const { bossWeight, teamWeight } = getWeightedValues(
+              bossValue,
+              teamValue,
+            );
             const total = bossWeight + teamWeight;
             let subWinner: "boss" | "team" | "tie" = "tie";
             let subSpinAngle = 0;
@@ -3517,7 +3648,11 @@ export const BossBattleRoom = ({
               const targetRotation = extraRotations * 360 + Math.random() * 360;
               rotation += targetRotation;
               const finalRotation = rotation % 360;
-              subWinner = getPvEWheelWinner(finalRotation, bossWeight, teamWeight);
+              subWinner = getPvEWheelWinner(
+                finalRotation,
+                bossWeight,
+                teamWeight,
+              );
               subSpinAngle = finalRotation;
             }
 
@@ -3545,9 +3680,10 @@ export const BossBattleRoom = ({
             }
             if (bo3Winner === "boss" && autoCapraEffect.biqWinBonusTeamScore) {
               // Boss nhận điểm bằng team score (thay thế điểm thắng bình thường, -1 vì bossPointsPerWin đã cộng)
-              const currentTeamScore = results.filter(
-                (r) => r.winner === "team" && !r.blocked
-              ).length + results.reduce((acc, r) => acc + (r.bonusPoints || 0), 0);
+              const currentTeamScore =
+                results.filter((r) => r.winner === "team" && !r.blocked)
+                  .length +
+                results.reduce((acc, r) => acc + (r.bonusPoints || 0), 0);
               if (currentTeamScore > 1) {
                 lastResult!.bossBonusPoints = currentTeamScore - 1;
               }
@@ -3615,9 +3751,10 @@ export const BossBattleRoom = ({
             }
             if (winner === "boss" && autoCapraEffect.biqWinBonusTeamScore) {
               // Boss nhận điểm bằng team score (thay thế điểm thắng, -1 vì bossPointsPerWin đã cộng)
-              const currentTeamScore = results.filter(
-                (r) => r.winner === "team" && !r.blocked
-              ).length + results.reduce((acc, r) => acc + (r.bonusPoints || 0), 0);
+              const currentTeamScore =
+                results.filter((r) => r.winner === "team" && !r.blocked)
+                  .length +
+                results.reduce((acc, r) => acc + (r.bonusPoints || 0), 0);
               if (currentTeamScore > 1) {
                 autoBossBonusPoints = currentTeamScore - 1;
               }
@@ -3638,27 +3775,40 @@ export const BossBattleRoom = ({
 
           // Capra Demon: after IQ round (idx=3), apply conditional effects
           if (boss.id === 16 && idx === 3) {
-            const teamPts = results.filter((r) => r.winner === "team" && !r.blocked).length
-              + results.reduce((acc, r) => acc + (r.bonusPoints || 0), 0);
+            const teamPts =
+              results.filter((r) => r.winner === "team" && !r.blocked).length +
+              results.reduce((acc, r) => acc + (r.bonusPoints || 0), 0);
 
             if (teamPts <= 1) {
               autoCapraEffect = {
-                biqBonus: -50, iqBonus: 0, replayIQ: false,
-                biqBO3: false, maBO3: true,
-                biqLossPenalty: 3, biqWinBonusTeamScore: false,
+                biqBonus: -50,
+                iqBonus: 0,
+                replayIQ: false,
+                biqBO3: false,
+                maBO3: true,
+                biqLossPenalty: 3,
+                biqWinBonusTeamScore: false,
               };
               autoCapraStatChanges.biq = -50;
             } else if (teamPts === 2) {
               autoCapraEffect = {
-                biqBonus: 0, iqBonus: 0, replayIQ: false,
-                biqBO3: true, maBO3: false,
-                biqLossPenalty: 0, biqWinBonusTeamScore: false,
+                biqBonus: 0,
+                iqBonus: 0,
+                replayIQ: false,
+                biqBO3: true,
+                maBO3: false,
+                biqLossPenalty: 0,
+                biqWinBonusTeamScore: false,
               };
             } else if (teamPts === 3) {
               autoCapraEffect = {
-                biqBonus: 0, iqBonus: 25, replayIQ: true,
-                biqBO3: false, maBO3: false,
-                biqLossPenalty: 0, biqWinBonusTeamScore: false,
+                biqBonus: 0,
+                iqBonus: 25,
+                replayIQ: true,
+                biqBO3: false,
+                maBO3: false,
+                biqLossPenalty: 0,
+                biqWinBonusTeamScore: false,
               };
               autoCapraStatChanges.iq = 25;
               // Replay IQ round: remove current IQ result and redo
@@ -3668,9 +3818,13 @@ export const BossBattleRoom = ({
             } else {
               // teamPts >= 4
               autoCapraEffect = {
-                biqBonus: 50, iqBonus: 0, replayIQ: false,
-                biqBO3: false, maBO3: true,
-                biqLossPenalty: 0, biqWinBonusTeamScore: true,
+                biqBonus: 50,
+                iqBonus: 0,
+                replayIQ: false,
+                biqBO3: false,
+                maBO3: true,
+                biqLossPenalty: 0,
+                biqWinBonusTeamScore: true,
               };
               autoCapraStatChanges.biq = 50;
             }
@@ -4407,12 +4561,21 @@ export const BossBattleRoom = ({
                     Vũ khí cướp từ tổ đội:
                   </p>
                   {stolenWeaponInfo.weaponList.map((w, idx) => (
-                    <p key={idx} className="text-[10px] text-orange-300 leading-tight pl-2">
+                    <p
+                      key={idx}
+                      className="text-[10px] text-orange-300 leading-tight pl-2"
+                    >
                       {w.player}: {w.weapon} ({w.bonuses.join(", ")})
                     </p>
                   ))}
                   <p className="text-[11px] text-orange-400 font-semibold">
-                    Tổng bonus: {(Object.entries(stolenWeaponInfo.totalBonuses) as [string, number][])
+                    Tổng bonus:{" "}
+                    {(
+                      Object.entries(stolenWeaponInfo.totalBonuses) as [
+                        string,
+                        number,
+                      ][]
+                    )
                       .filter(([, v]) => v !== 0)
                       .map(([k, v]) => `${k.toUpperCase()} +${v}`)
                       .join(", ") || "Không có"}
@@ -4499,14 +4662,16 @@ export const BossBattleRoom = ({
                     isSpinning={isSpinning}
                   />
                   {/* Spin button in wheel center */}
-                  {battleState === "fighting" && !isSpinning && (currentStat || specialRules.isTotalStatBattle) && (
-                    <button
-                      onClick={spinWheel}
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold text-xs transition-all transform hover:scale-110 shadow-lg z-20 border-2 border-white/30"
-                    >
-                      Spin!
-                    </button>
-                  )}
+                  {battleState === "fighting" &&
+                    !isSpinning &&
+                    (currentStat || specialRules.isTotalStatBattle) && (
+                      <button
+                        onClick={spinWheel}
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold text-xs transition-all transform hover:scale-110 shadow-lg z-20 border-2 border-white/30"
+                      >
+                        Spin!
+                      </button>
+                    )}
                 </div>
 
                 {/* Current Round Info */}
@@ -4520,7 +4685,8 @@ export const BossBattleRoom = ({
                           : `Round ${currentRound + 1}: ${STAT_FULL_LABELS[currentStat!]}`}
                         {bo3Round && (
                           <span className="ml-2 text-sm text-yellow-400 font-semibold">
-                            (BO3: Boss {bo3Round.bossWins} - {bo3Round.teamWins} Team)
+                            (BO3: Boss {bo3Round.bossWins} - {bo3Round.teamWins}{" "}
+                            Team)
                           </span>
                         )}
                       </div>
@@ -4669,8 +4835,7 @@ export const BossBattleRoom = ({
                             onClick={() => replayRound(selectedRound)}
                             className="px-4 py-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white text-sm font-bold rounded transition-all"
                           >
-                            Đấu lại Round{" "}
-                            {selectedRound + 1}
+                            Đấu lại Round {selectedRound + 1}
                           </button>
                         )}
                     </div>
