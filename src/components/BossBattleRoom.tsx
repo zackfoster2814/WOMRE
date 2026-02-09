@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { CharacterStats } from "../types/character";
 import { playTickSound, playDefaultWinSound } from "../utils/audio";
+import { EffectRegistry } from "../effects/registry";
 
 // Types
 interface BossStats {
@@ -83,6 +84,8 @@ interface PlayerData {
   name: string;
   username: string;
   stats: CharacterStats;
+  baseStats?: CharacterStats;
+  statModifiers?: { stat: string; value: number; isBase: boolean; source: string }[];
   team?: number;
   quirks?: string[];
   race?: string;
@@ -1123,6 +1126,7 @@ const PlayerCard = ({
   isHypnotized: boolean;
   isIsekai: boolean;
 }) => {
+  const [showDetail, setShowDetail] = useState(false);
   const isInactive =
     isDisabled || isFrozen || isRemoved || isHypnotized || isIsekai;
   const totalStats =
@@ -1133,18 +1137,37 @@ const PlayerCard = ({
     player.stats.biq +
     player.stats.ma;
 
+  // Group stat modifiers by source for detail view
+  const statBreakdown = useMemo(() => {
+    if (!player.statModifiers || !player.baseStats) return null;
+    const statNameMap: Record<string, keyof CharacterStats> = {
+      strength: "str", speed: "spd", durability: "dur",
+      iq: "iq", biq: "biq", ma: "ma",
+    };
+    // Group by source
+    const sourceMap = new Map<string, Record<keyof CharacterStats, number>>();
+    player.statModifiers.forEach((m) => {
+      const mapped = statNameMap[m.stat];
+      if (!mapped) return;
+      if (!sourceMap.has(m.source)) {
+        sourceMap.set(m.source, { str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0 });
+      }
+      sourceMap.get(m.source)![mapped] += m.value;
+    });
+    return { baseStats: player.baseStats, sources: sourceMap };
+  }, [player.statModifiers, player.baseStats]);
+
   return (
     <div
-      className={`bg-gray-800/90 rounded-lg p-3 border-2 transition-all cursor-pointer ${
+      className={`bg-gray-800/90 rounded-lg p-2 border-2 transition-all ${
         isInactive
           ? "border-gray-600 opacity-50"
-          : "border-teal-500/50 hover:border-teal-400"
+          : "border-teal-500/50"
       }`}
-      onClick={onToggleDisable}
     >
-      <div className="flex justify-between items-start mb-2">
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
+      <div className="flex justify-between items-start mb-1">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1">
             <span className="text-xs text-teal-400 font-mono">
               #{player.no}
             </span>
@@ -1182,6 +1205,80 @@ const PlayerCard = ({
           </div>
         ))}
       </div>
+
+      {/* Action Buttons */}
+      <div className="flex gap-1 mt-1">
+        <button
+          onClick={(e) => { e.stopPropagation(); onToggleDisable(); }}
+          className={`flex-1 text-[10px] py-0.5 rounded transition-colors ${
+            isDisabled
+              ? "bg-green-600/30 text-green-400 hover:bg-green-600/50"
+              : "bg-red-600/30 text-red-400 hover:bg-red-600/50"
+          }`}
+        >
+          {isDisabled ? "Enable" : "Disable"}
+        </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); setShowDetail(!showDetail); }}
+          className="flex-1 text-[10px] py-0.5 rounded bg-blue-600/30 text-blue-400 hover:bg-blue-600/50 transition-colors"
+        >
+          {showDetail ? "Ẩn" : "Chi tiết"}
+        </button>
+      </div>
+
+      {/* Stat Detail Panel */}
+      {showDetail && statBreakdown && (
+        <div className="mt-1 bg-gray-900/80 rounded p-2 text-[10px] max-h-40 overflow-y-auto border border-gray-600">
+          {/* Base stats row */}
+          <div className="flex justify-between text-gray-300 border-b border-gray-700 pb-1 mb-1">
+            <span className="font-semibold text-yellow-400">Base Stats</span>
+            <div className="flex gap-2">
+              {STAT_KEYS.map((stat) => (
+                <span key={stat} className="w-7 text-center text-yellow-300">
+                  {statBreakdown.baseStats[stat]}
+                </span>
+              ))}
+            </div>
+          </div>
+          {/* Modifier rows grouped by source */}
+          {Array.from(statBreakdown.sources.entries()).map(([source, bonuses]) => {
+            const hasAny = STAT_KEYS.some((s) => bonuses[s] !== 0);
+            if (!hasAny) return null;
+            return (
+              <div key={source} className="flex justify-between text-gray-400 py-0.5">
+                <span className="truncate mr-2 max-w-[120px]" title={source}>{source}</span>
+                <div className="flex gap-2 shrink-0">
+                  {STAT_KEYS.map((stat) => (
+                    <span
+                      key={stat}
+                      className={`w-7 text-center ${
+                        bonuses[stat] > 0
+                          ? "text-green-400"
+                          : bonuses[stat] < 0
+                          ? "text-red-400"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      {bonuses[stat] !== 0 ? `${bonuses[stat] > 0 ? "+" : ""}${bonuses[stat]}` : "-"}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+          {/* Total row */}
+          <div className="flex justify-between text-white border-t border-gray-700 pt-1 mt-1 font-semibold">
+            <span>Total</span>
+            <div className="flex gap-2">
+              {STAT_KEYS.map((stat) => (
+                <span key={stat} className="w-7 text-center text-cyan-400">
+                  {player.stats[stat]}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -1229,7 +1326,7 @@ export const BossBattleRoom = ({
 
   // Multi-phase
   const [currentPhase, setCurrentPhase] = useState(1);
-  const [, setPhaseScores] = useState<{ boss: number; team: number }[]>([]);
+  const [phaseScores, setPhaseScores] = useState<{ boss: number; team: number }[]>([]);
 
   // Isekai'd players
   const [isekaidPlayers, setIsekaidPlayers] = useState<number[]>([]);
@@ -1255,6 +1352,13 @@ export const BossBattleRoom = ({
     bo3RoundRef.current = val;
     _setBo3Round(val);
   }, []);
+
+  // Auto fight cancellation
+  const autoFightCancelledRef = useRef(false);
+  const handleClose = useCallback(() => {
+    autoFightCancelledRef.current = true;
+    onClose();
+  }, [onClose]);
 
   // Win streak
   const [winStreak, setWinStreak] = useState(0);
@@ -1792,6 +1896,7 @@ export const BossBattleRoom = ({
     let hasCrit = false;
     let hasEvasion = false;
     let disablePvEOnly = false;
+    let stealPvEEffects = false;
     const specialDetails: string[] = [];
 
     if (!boss.ruleEffects || boss.ruleEffects.length === 0) {
@@ -1988,6 +2093,18 @@ export const BossBattleRoom = ({
           specialDetails.push(effect.description);
           break;
         }
+
+        case "stealWeaponEffects": {
+          stealPvEEffects = true;
+          specialDetails.push(effect.description);
+          break;
+        }
+
+        case "disableWeaponEffects": {
+          disablePvEOnly = true;
+          specialDetails.push(effect.description);
+          break;
+        }
       }
     });
 
@@ -2030,6 +2147,7 @@ export const BossBattleRoom = ({
       hasCrit,
       hasEvasion,
       disablePvEOnly,
+      stealPvEEffects,
       bossStatBoostOnWin,
       bossStatBoostOnTeamLoss,
       teamBonusOnStatWin: teamBonusOnStatWin
@@ -2052,32 +2170,73 @@ export const BossBattleRoom = ({
       ma: 0,
     };
 
+    // Check PvE-only penalties (Wereseal, weapon steal) - applied per-player before multiplier
+    const hasWereseal = !specialRules.disablePvEOnly && activePlayers.some(
+      (p) => p.subRace?.toLowerCase() === "wereseal",
+    );
+    const weresealPenalty = hasWereseal ? 100 : 0;
+
+    // Pre-calculate weapon bonuses to subtract per player (Soul of Cinder steals them)
+    const weaponStatNameMap: Record<string, keyof BossStats> = {
+      strength: "str", speed: "spd", durability: "dur",
+      iq: "iq", biq: "biq", ma: "ma",
+    };
+    const getPlayerWeaponBonuses = (player: PlayerData): Record<keyof BossStats, number> => {
+      const bonuses: Record<keyof BossStats, number> = { str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0 };
+      if (!specialRules.stealPvEEffects) return bonuses;
+      const weapons = player.weapons || [];
+      weapons.forEach((weaponName) => {
+        const entry = EffectRegistry.get("weapon", weaponName);
+        if (!entry) return;
+        entry.effects.forEach((eff) => {
+          if (eff.type === "stat_modifier" && eff.timing === "immediate" && eff.target === "self" && eff.stat && eff.value) {
+            if (eff.stat === "all") {
+              (Object.keys(bonuses) as (keyof BossStats)[]).forEach((k) => { bonuses[k] += eff.value!; });
+            } else {
+              const mapped = weaponStatNameMap[eff.stat];
+              if (mapped) bonuses[mapped] += eff.value!;
+            }
+          }
+        });
+      });
+      return bonuses;
+    };
+
     if (soloHerInfo.active && soloHerInfo.soloPlayer) {
-      // x8 stats - solo player fights the boss alone
-      // If solo player is disabled/frozen/isekai'd, stats = 0
+      // Solo Her: penalties applied to player stats BEFORE multiplier
       const soloPlayerIsActive = activePlayers.some(
         (p) => p.no === soloHerInfo.soloPlayer!.no,
       );
       if (soloPlayerIsActive) {
         const player = soloHerInfo.soloPlayer;
         const mult = soloHerInfo.multiplier;
-        totals.str = (player.stats.str || 0) * mult;
-        totals.spd = (player.stats.spd || 0) * mult;
-        totals.dur = (player.stats.dur || 0) * mult;
-        totals.iq = (player.stats.iq || 0) * mult;
-        totals.biq = (player.stats.biq || 0) * mult;
-        totals.ma = (player.stats.ma || 0) * mult;
+        const wb = getPlayerWeaponBonuses(player);
+        totals.str = ((player.stats.str || 0) - weresealPenalty - wb.str) * mult;
+        totals.spd = ((player.stats.spd || 0) - weresealPenalty - wb.spd) * mult;
+        totals.dur = ((player.stats.dur || 0) - weresealPenalty - wb.dur) * mult;
+        totals.iq = ((player.stats.iq || 0) - weresealPenalty - wb.iq) * mult;
+        totals.biq = ((player.stats.biq || 0) - weresealPenalty - wb.biq) * mult;
+        totals.ma = ((player.stats.ma || 0) - weresealPenalty - wb.ma) * mult;
       }
-      // else: totals stay at 0 - solo player is disabled
     } else {
       activePlayers.forEach((player) => {
-        totals.str += player.stats.str || 0;
-        totals.spd += player.stats.spd || 0;
-        totals.dur += player.stats.dur || 0;
-        totals.iq += player.stats.iq || 0;
-        totals.biq += player.stats.biq || 0;
-        totals.ma += player.stats.ma || 0;
+        const wb = getPlayerWeaponBonuses(player);
+        totals.str += (player.stats.str || 0) - wb.str;
+        totals.spd += (player.stats.spd || 0) - wb.spd;
+        totals.dur += (player.stats.dur || 0) - wb.dur;
+        totals.iq += (player.stats.iq || 0) - wb.iq;
+        totals.biq += (player.stats.biq || 0) - wb.biq;
+        totals.ma += (player.stats.ma || 0) - wb.ma;
       });
+      // Wereseal: -100 all stats applied once to team total (not per-player)
+      if (hasWereseal) {
+        totals.str -= weresealPenalty;
+        totals.spd -= weresealPenalty;
+        totals.dur -= weresealPenalty;
+        totals.iq -= weresealPenalty;
+        totals.biq -= weresealPenalty;
+        totals.ma -= weresealPenalty;
+      }
     }
 
     if (ruleBonus.teamBonus > 0) {
@@ -2110,19 +2269,6 @@ export const BossBattleRoom = ({
       totals.ma -= retryPenalty;
     }
 
-    // Apply Wereseal team penalty: -100 all stats (PvE only, target: team)
-    const hasWereseal = activePlayers.some(
-      (p) => p.subRace?.toLowerCase() === "wereseal",
-    );
-    if (hasWereseal && !specialRules.disablePvEOnly) {
-      totals.str -= 100;
-      totals.spd -= 100;
-      totals.dur -= 100;
-      totals.iq -= 100;
-      totals.biq -= 100;
-      totals.ma -= 100;
-    }
-
     return totals;
   }, [
     activePlayers,
@@ -2131,6 +2277,7 @@ export const BossBattleRoom = ({
     preBattleWheelResult,
     retryPenalty,
     specialRules.disablePvEOnly,
+    specialRules.stealPvEEffects,
   ]);
 
   // Calculate boss stats
@@ -2218,6 +2365,44 @@ export const BossBattleRoom = ({
       stats.ma = (stats.ma || 0) + boost;
     }
 
+    // Soul of Cinder: steal weapon effects from team → apply stat bonuses to boss
+    if (specialRules.stealPvEEffects) {
+      const statNameMap: Record<string, keyof BossStats> = {
+        strength: "str", speed: "spd", durability: "dur",
+        iq: "iq", biq: "biq", ma: "ma",
+      };
+      const weaponBonuses: Record<keyof BossStats, number> = {
+        str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0,
+      };
+
+      battle.playerData.forEach((player) => {
+        const weapons = player.weapons || [];
+        weapons.forEach((weaponName) => {
+          const entry = EffectRegistry.get("weapon", weaponName);
+          if (!entry) return;
+          entry.effects.forEach((eff) => {
+            if (eff.type === "stat_modifier" && eff.timing === "immediate" && eff.target === "self" && eff.stat && eff.value) {
+              if (eff.stat === "all") {
+                (Object.keys(weaponBonuses) as (keyof BossStats)[]).forEach((k) => {
+                  weaponBonuses[k] += eff.value!;
+                });
+              } else {
+                const mapped = statNameMap[eff.stat];
+                if (mapped) weaponBonuses[mapped] += eff.value!;
+              }
+            }
+          });
+        });
+      });
+
+      stats.str = (stats.str || 0) + weaponBonuses.str;
+      stats.spd = (stats.spd || 0) + weaponBonuses.spd;
+      stats.dur = (stats.dur || 0) + weaponBonuses.dur;
+      stats.iq = (stats.iq || 0) + weaponBonuses.iq;
+      stats.biq = (stats.biq || 0) + weaponBonuses.biq;
+      stats.ma = (stats.ma || 0) + weaponBonuses.ma;
+    }
+
     return stats;
   }, [
     boss.stats,
@@ -2230,12 +2415,63 @@ export const BossBattleRoom = ({
     battle.playerData,
     currentRound,
     currentPhase,
+    specialRules.stealPvEEffects,
   ]);
+
+  // Calculate stolen weapon info for display
+  const stolenWeaponInfo = useMemo(() => {
+    if (!specialRules.stealPvEEffects) return null;
+
+    const statNameMap: Record<string, keyof BossStats> = {
+      strength: "str", speed: "spd", durability: "dur",
+      iq: "iq", biq: "biq", ma: "ma",
+    };
+    const totalBonuses: Record<keyof BossStats, number> = {
+      str: 0, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0,
+    };
+    const weaponList: { player: string; weapon: string; bonuses: string[] }[] = [];
+
+    battle.playerData.forEach((player) => {
+      const weapons = player.weapons || [];
+      weapons.forEach((weaponName) => {
+        const entry = EffectRegistry.get("weapon", weaponName);
+        if (!entry) return;
+        const bonuses: string[] = [];
+        entry.effects.forEach((eff) => {
+          if (eff.type === "stat_modifier" && eff.timing === "immediate" && eff.target === "self" && eff.stat && eff.value) {
+            if (eff.stat === "all") {
+              bonuses.push(`All Stats +${eff.value}`);
+              (Object.keys(totalBonuses) as (keyof BossStats)[]).forEach((k) => {
+                totalBonuses[k] += eff.value!;
+              });
+            } else {
+              const mapped = statNameMap[eff.stat];
+              if (mapped) {
+                bonuses.push(`${mapped.toUpperCase()} +${eff.value}`);
+                totalBonuses[mapped] += eff.value!;
+              }
+            }
+          }
+        });
+        if (bonuses.length > 0) {
+          weaponList.push({ player: player.name, weapon: weaponName, bonuses });
+        }
+      });
+    });
+
+    return { weaponList, totalBonuses };
+  }, [specialRules.stealPvEEffects, battle.playerData]);
 
   // Calculate battle score
   const score = useMemo(() => {
     let bossScore = specialRules.bossStartingPoints;
     let teamScore = specialRules.teamStartingPoints;
+
+    // Carry over score from previous phases (Aatrox phase 2)
+    phaseScores.forEach((ps) => {
+      bossScore += ps.boss;
+      teamScore += ps.team;
+    });
 
     roundResults.forEach((r) => {
       if (r.winner === "boss") {
@@ -2243,7 +2479,6 @@ export const BossBattleRoom = ({
 
         if (boss.id === 22 && currentPhase === 2 && teamScore > 0) {
           teamScore -= 1;
-          bossScore -= specialRules.bossPointsPerWin;
         }
       } else if (r.winner === "team") {
         if (!r.blocked) {
@@ -2284,7 +2519,7 @@ export const BossBattleRoom = ({
     }
 
     return { boss: bossScore, team: teamScore };
-  }, [roundResults, specialRules, boss.id, currentPhase]);
+  }, [roundResults, specialRules, boss.id, currentPhase, phaseScores]);
 
   // Determine final winner
   const finalWinner = useMemo(() => {
@@ -2311,8 +2546,8 @@ export const BossBattleRoom = ({
       return "boss";
     }
 
-    if (score.boss > score.team) return "boss";
     if (score.team >= specialRules.teamPointsToWin) return "team";
+    if (score.boss > score.team) return "boss";
     if (score.team > score.boss) return "team";
     return "tie";
   }, [
@@ -2898,9 +3133,18 @@ export const BossBattleRoom = ({
       }
 
       if (boss.id === 15) {
-        removePlayersForSimon();
-        const teamWins = roundResults.filter((r) => r.winner === "team").length;
-        if (winner === "team" && teamWins === 0) {
+        // Count team wins including current round (roundResults is stale)
+        const simonTeamWins = roundResults.filter((r) => r.winner === "team").length + (winner === "team" ? 1 : 0);
+        if (simonTeamWins >= 3 && removedPlayers.length === 0) {
+          const toRemove = activePlayers.slice(0, 3);
+          setRemovedPlayers(toRemove.map((p) => p.no));
+          setBattleMessages((prev) => [
+            ...prev,
+            `⚔️ Simon đã loại bỏ 3 thành viên: ${toRemove.map((p) => p.name).join(", ")}`,
+          ]);
+        }
+        const prevTeamWins = roundResults.filter((r) => r.winner === "team").length;
+        if (winner === "team" && prevTeamWins === 0) {
           setDynamicBossBonus((prev) => prev + 3);
           setBattleMessages((prev) => [
             ...prev,
@@ -3016,22 +3260,22 @@ export const BossBattleRoom = ({
         // Calculate actual current streak including this round
         // (winStreak state is stale here because setWinStreak hasn't rendered yet)
         const actualStreak = winner === "team" ? winStreak + 1 : 0;
-        if (boss.id === 10 && actualStreak < 6 && !retryBattle) {
+        if (boss.id === 10 && actualStreak < 6) {
           setRetryBattle(true);
-          setRetryPenalty(4);
+          setRetryPenalty((prev) => prev + 4);
           setCurrentRound(0);
           setRoundResults([]);
           setWinStreak(0);
+          const newPenalty = retryPenalty + 4;
           setBattleMessages((prev) => [
             ...prev,
-            `💀 Rolling Skeletons: Không thắng 6 round liên tiếp! Đánh lại với -4 All Party Stats!`,
+            `💀 Rolling Skeletons: Không thắng 6 round liên tiếp! Đánh lại với -${newPenalty} All Party Stats!`,
           ]);
-        } else if (boss.id === 22 && currentPhase === 1 && score.team >= 4) {
+        } else if (boss.id === 22 && currentPhase === 1 && newTeamScore >= 4) {
+          // newTeamScore includes this round's result (score.team is stale)
+          const newBossScore = score.boss + (winner === "boss" ? specialRules.bossPointsPerWin : 0);
           setCurrentPhase(2);
-          setPhaseScores((prev) => [
-            ...prev,
-            { boss: score.boss, team: score.team },
-          ]);
+          setPhaseScores([{ boss: newBossScore, team: newTeamScore }]);
           setCurrentRound(0);
           setRoundResults([]);
           setWheelRotation(0);
@@ -3119,6 +3363,7 @@ export const BossBattleRoom = ({
       return;
     }
 
+    autoFightCancelledRef.current = false;
     setBattleState("fighting");
     setCurrentRound(0);
     setRoundResults([]);
@@ -3435,29 +3680,29 @@ export const BossBattleRoom = ({
 
       setDynamicBossBonus(dynamicBonus);
 
-      // Rolling Skeletons: if not 6 consecutive wins, retry with -4 All Party Stats
-      if (boss.id === 10 && streak < 6) {
-        const penalty = 4;
-        setRetryBattle(true);
-        setRetryPenalty(penalty);
-        setBattleMessages((prev) => [
-          ...prev,
-          `💀 Rolling Skeletons: Không thắng 6 round liên tiếp! Đánh lại với -4 All Party Stats!`,
-        ]);
-
-        // Check partyStatMinimum: if any party stat < 20 after penalty, team auto-loses
-        const penalizedStats = STAT_KEYS.map(
-          (s) => (teamStats[s] || 0) - penalty,
-        );
-        const minPenalizedStat = Math.min(...penalizedStats);
-        if (minPenalizedStat < 20) {
-          // Team auto-loses - don't play retry rounds
+      // Rolling Skeletons: retry until 6 consecutive wins, or stat < 20, or score loss
+      if (boss.id === 10) {
+        let totalPenalty = 0;
+        while (streak < 6) {
+          totalPenalty += 4;
           setBattleMessages((prev) => [
             ...prev,
-            `💀 Party Stat dưới 20 sau penalty - Tổ đội thua!`,
+            `💀 Rolling Skeletons: Không thắng 6 round liên tiếp! Đánh lại với -${totalPenalty} All Party Stats!`,
           ]);
-          // Keep first battle results so UI shows what happened
-        } else {
+
+          // Check partyStatMinimum: if any party stat < 20 after penalty, team auto-loses
+          const penalizedStats = STAT_KEYS.map(
+            (s) => (teamStats[s] || 0) - totalPenalty,
+          );
+          const minPenalizedStat = Math.min(...penalizedStats);
+          if (minPenalizedStat < 20) {
+            setBattleMessages((prev) => [
+              ...prev,
+              `💀 Party Stat dưới 20 sau penalty - Tổ đội thua!`,
+            ]);
+            break;
+          }
+
           // Recalculate with penalty applied
           results.length = 0;
           rotation = 0;
@@ -3466,7 +3711,7 @@ export const BossBattleRoom = ({
 
           STAT_KEYS.forEach((stat) => {
             const bossValue = (bossStats[stat] || 0) + dynamicBonus;
-            const teamValue = (teamStats[stat] || 0) - penalty;
+            const teamValue = (teamStats[stat] || 0) - totalPenalty;
 
             const { bossWeight, teamWeight } = getWeightedValues(
               bossValue,
@@ -3504,6 +3749,8 @@ export const BossBattleRoom = ({
 
           setDynamicBossBonus(dynamicBonus);
         }
+        setRetryBattle(true);
+        setRetryPenalty(totalPenalty);
       }
 
       // Aatrox: if team won phase 1, compute phase 2 with +8 boss stats and drain scoring
@@ -3564,6 +3811,7 @@ export const BossBattleRoom = ({
     const spinDuration = 2000; // 2 seconds per spin
 
     const animateRound = () => {
+      if (autoFightCancelledRef.current) return;
       if (round >= maxRounds) {
         setBattleState("finished");
         return;
@@ -3571,6 +3819,14 @@ export const BossBattleRoom = ({
 
       // Aatrox phase transition: switch to phase 2 at round 6
       if (boss.id === 22 && round === phase2StartRound && maxRounds > 6) {
+        // Calculate phase 1 score to carry over
+        let p1Boss = specialRules.bossStartingPoints;
+        let p1Team = specialRules.teamStartingPoints;
+        results.slice(0, 6).forEach((r) => {
+          if (r.winner === "boss") p1Boss += specialRules.bossPointsPerWin;
+          else if (r.winner === "team") p1Team += 1 + (r.bonusPoints || 0);
+        });
+        setPhaseScores([{ boss: p1Boss, team: p1Team }]);
         setCurrentPhase(2);
         setRoundResults([]);
         setWheelRotation(0);
@@ -3601,6 +3857,7 @@ export const BossBattleRoom = ({
       let lastAutoWinner: "boss" | "team" | null = null;
 
       const animate = () => {
+        if (autoFightCancelledRef.current) return;
         const elapsed = Date.now() - startTime;
         const progress = Math.min(elapsed / spinDuration, 1);
         const easeOut = 1 - Math.pow(1 - progress, 3);
@@ -4023,7 +4280,7 @@ export const BossBattleRoom = ({
   return (
     <div
       className="fixed inset-0 bg-black flex flex-col z-[2001]"
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         className="flex-1 flex flex-col min-h-0"
@@ -4038,30 +4295,38 @@ export const BossBattleRoom = ({
             <h2 className="text-xl font-bold text-white">
               Team {battle.teamId} vs {boss.name}
             </h2>
+            {soloHerInfo.active && soloHerInfo.soloPlayer && (
+              <div className="bg-yellow-900/40 px-3 py-1 rounded-lg border border-yellow-500/50 flex items-center gap-2">
+                <span className="text-yellow-400 font-bold text-sm">
+                  {soloHerInfo.soloPlayer.name} - Let Me Solo Her [ACTIVE]
+                </span>
+                <span className="text-gray-300 text-xs">
+                  x{soloHerInfo.multiplier} stats
+                </span>
+              </div>
+            )}
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-6 text-lg">
-              <div className="text-center">
-                <span className="text-red-400 font-bold text-2xl">
-                  {score.boss}
-                </span>
-                <span className="text-gray-400 text-sm ml-2">Boss</span>
-              </div>
-              <span className="text-gray-500">:</span>
-              <div className="text-center">
-                <span className="text-green-400 font-bold text-2xl">
-                  {score.team}
-                </span>
-                <span className="text-gray-400 text-sm ml-2">Team</span>
-              </div>
+          <div className="flex items-center gap-6 text-lg mr-[16%]">
+            <div className="text-center">
+              <span className="text-red-400 font-bold text-2xl">
+                {score.boss}
+              </span>
+              <span className="text-gray-400 text-sm ml-2">Boss</span>
             </div>
-            <button
-              onClick={onClose}
-              className="text-white/70 hover:text-white text-3xl font-light transition-colors ml-4"
-            >
-              &times;
-            </button>
+            <span className="text-gray-500">:</span>
+            <div className="text-center">
+              <span className="text-green-400 font-bold text-2xl">
+                {score.team}
+              </span>
+              <span className="text-gray-400 text-sm ml-2">Team</span>
+            </div>
           </div>
+          <button
+            onClick={handleClose}
+            className="text-white/70 hover:text-white text-3xl font-light transition-colors"
+          >
+            &times;
+          </button>
         </div>
 
         {/* Main Content */}
@@ -4133,6 +4398,25 @@ export const BossBattleRoom = ({
                       {detail}
                     </p>
                   ))}
+                </div>
+              )}
+              {/* Stolen Weapons Info */}
+              {stolenWeaponInfo && stolenWeaponInfo.weaponList.length > 0 && (
+                <div className="border-t border-gray-600 pt-1 mt-1 space-y-0.5">
+                  <p className="text-[11px] text-orange-400 font-bold">
+                    Vũ khí cướp từ tổ đội:
+                  </p>
+                  {stolenWeaponInfo.weaponList.map((w, idx) => (
+                    <p key={idx} className="text-[10px] text-orange-300 leading-tight pl-2">
+                      {w.player}: {w.weapon} ({w.bonuses.join(", ")})
+                    </p>
+                  ))}
+                  <p className="text-[11px] text-orange-400 font-semibold">
+                    Tổng bonus: {(Object.entries(stolenWeaponInfo.totalBonuses) as [string, number][])
+                      .filter(([, v]) => v !== 0)
+                      .map(([k, v]) => `${k.toUpperCase()} +${v}`)
+                      .join(", ") || "Không có"}
+                  </p>
                 </div>
               )}
               {/* Reward / Punishment */}
@@ -4207,12 +4491,23 @@ export const BossBattleRoom = ({
 
               {/* Wheel */}
               <div className="flex-1 flex flex-col items-center justify-center">
-                <PvEWheel
-                  bossWeight={wheelValues.bossWeight}
-                  teamWeight={wheelValues.teamWeight}
-                  rotation={wheelValues.rotation}
-                  isSpinning={isSpinning}
-                />
+                <div className="relative">
+                  <PvEWheel
+                    bossWeight={wheelValues.bossWeight}
+                    teamWeight={wheelValues.teamWeight}
+                    rotation={wheelValues.rotation}
+                    isSpinning={isSpinning}
+                  />
+                  {/* Spin button in wheel center */}
+                  {battleState === "fighting" && !isSpinning && (currentStat || specialRules.isTotalStatBattle) && (
+                    <button
+                      onClick={spinWheel}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold text-xs transition-all transform hover:scale-110 shadow-lg z-20 border-2 border-white/30"
+                    >
+                      Spin!
+                    </button>
+                  )}
+                </div>
 
                 {/* Current Round Info */}
                 {battleState === "fighting" &&
@@ -4302,12 +4597,6 @@ export const BossBattleRoom = ({
                           </>
                         )}
                       </div>
-                      <button
-                        onClick={spinWheel}
-                        className="mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-lg transition-all transform hover:scale-105"
-                      >
-                        Spin!
-                      </button>
                     </div>
                   )}
 
@@ -4384,19 +4673,6 @@ export const BossBattleRoom = ({
                             {selectedRound + 1}
                           </button>
                         )}
-                    </div>
-                  </div>
-                )}
-
-                {/* Let Me Solo Her Notification */}
-                {soloHerInfo.active && soloHerInfo.soloPlayer && (
-                  <div className="mt-4 p-3 rounded-lg border-2 text-center bg-yellow-900/30 border-yellow-500/50">
-                    <div className="font-bold text-lg text-yellow-400">
-                      {soloHerInfo.soloPlayer.name} - Let Me Solo Her [ACTIVE]
-                    </div>
-                    <div className="text-sm text-gray-300 mt-1">
-                      x{soloHerInfo.multiplier} stats - Solo boss! Thắng: nhận
-                      Archetype Gigachad
                     </div>
                   </div>
                 )}
@@ -4489,7 +4765,7 @@ export const BossBattleRoom = ({
             </div>
 
             {/* Player Cards */}
-            <div className="flex-1 min-h-0 overflow-y-auto">
+            <div className="mt-auto overflow-y-auto shrink-0">
               <div className="grid grid-cols-4 gap-3">
                 {battle.playerData.slice(0, 8).map((player) => (
                   <PlayerCard

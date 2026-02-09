@@ -51,11 +51,16 @@ interface PlayerData {
   name: string;
   username: string;
   stats: CharacterStats;
+  baseStats?: CharacterStats;
+  statModifiers?: { stat: string; value: number; isBase: boolean; source: string }[];
   team?: number;
   quirks?: string[];
   race?: string;
   subRace?: string;
   archetypes?: string[];
+  powers?: string[];
+  weapons?: string[];
+  gear?: string[];
 }
 
 interface TeamMemberJson {
@@ -1559,11 +1564,31 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                     name: char.name || `Player ${i}`,
                     username: char.username || "",
                     stats: pveStats,
+                    baseStats: {
+                      str: effects.baseStats.strength,
+                      spd: effects.baseStats.speed,
+                      dur: effects.baseStats.durability,
+                      iq: effects.baseStats.iq,
+                      biq: effects.baseStats.biq,
+                      ma: effects.baseStats.ma,
+                    },
+                    statModifiers: effects.statModifiers.map(m => ({
+                      stat: m.stat,
+                      value: m.value,
+                      isBase: m.isBase,
+                      source: m.source,
+                    })),
                     team: char.team,
                     quirks: char.quirks.map((q) => q.name),
                     race: char.race?.race,
                     subRace: char.race?.subRace,
                     archetypes: char.archetypes,
+                    powers: char.powers?.filter(p => !p.isLost).map(p => p.name) || [],
+                    weapons: char.weapons?.filter(w => !w.isLost && w.usable !== false).map(w => w.name) || [],
+                    gear: [
+                      ...(char.gear?.normalGear || []).filter(g => !g.isLost).map(g => g.name),
+                      ...(char.gear?.legacyGear || []).filter(g => !g.isLost).map(g => g.name),
+                    ],
                   });
                 }
               })
