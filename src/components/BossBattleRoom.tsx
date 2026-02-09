@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { CharacterStats } from "../types/character";
+import { playTickSound, playDefaultWinSound } from "../utils/audio";
 
 // Types
 interface BossStats {
@@ -85,6 +86,7 @@ interface PlayerData {
   team?: number;
   quirks?: string[];
   race?: string;
+  subRace?: string;
   powers?: string[];
   gear?: string[];
   weapons?: string[];
@@ -131,6 +133,7 @@ interface RoundResult {
   winner: "boss" | "team" | "tie";
   spinAngle: number;
   blocked?: boolean;
+  bossBonusPoints?: number;
   bonusPoints?: number;
   wheelRotation: number;
 }
@@ -159,7 +162,8 @@ interface BossBattleRoomProps {
   seasonRaceCounts?: SeasonRaceCounts;
 }
 
-// PvE Wheel Component
+// PvE Wheel Component - uses same logic as WheelCanvas
+// Pointer at top (270°), rotation stored as degrees, winner determined by angle math
 const PvEWheel = ({
   bossWeight,
   teamWeight,
@@ -198,94 +202,80 @@ const PvEWheel = ({
     const bossAngle = (bossWeight / total) * Math.PI * 2;
     const teamAngle = (teamWeight / total) * Math.PI * 2;
 
-    // Start angle: 0 degrees (3 o'clock position) - pointer is on the right
-    const startAngle = 0;
-
-    // Save context and apply rotation
+    // Draw wheel rotated
     ctx.save();
     ctx.translate(centerX, centerY);
     ctx.rotate((rotation * Math.PI) / 180);
     ctx.translate(-centerX, -centerY);
 
-    // Draw boss slice (red) - starts from right (3 o'clock)
+    // Boss slice (red) - starts at angle 0
     ctx.fillStyle = "#dc2626";
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
-    ctx.arc(centerX, centerY, radius, startAngle, startAngle + bossAngle);
+    ctx.arc(centerX, centerY, radius, 0, bossAngle);
     ctx.closePath();
     ctx.fill();
 
-    // Draw team slice (green)
+    // Team slice (green)
     ctx.fillStyle = "#16a34a";
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
-    ctx.arc(
-      centerX,
-      centerY,
-      radius,
-      startAngle + bossAngle,
-      startAngle + bossAngle + teamAngle,
-    );
+    ctx.arc(centerX, centerY, radius, bossAngle, bossAngle + teamAngle);
     ctx.closePath();
     ctx.fill();
 
-    // Draw borders
+    // Borders between slices
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 3;
-    // Line at start (right)
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.lineTo(centerX + radius, centerY);
+    ctx.stroke();
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.lineTo(
-      centerX + radius * Math.cos(startAngle),
-      centerY + radius * Math.sin(startAngle),
+      centerX + radius * Math.cos(bossAngle),
+      centerY + radius * Math.sin(bossAngle),
     );
     ctx.stroke();
 
-    // Line between boss and team
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY);
-    ctx.lineTo(
-      centerX + radius * Math.cos(startAngle + bossAngle),
-      centerY + radius * Math.sin(startAngle + bossAngle),
-    );
-    ctx.stroke();
-
-    // Draw outer circle
+    // Outer circle
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Draw labels (inside the rotated context so they spin with wheel)
+    // Labels
     ctx.font = "bold 14px Arial";
     ctx.fillStyle = "#ffffff";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
+    ctx.shadowColor = "#000000";
+    ctx.shadowBlur = 4;
 
-    // Boss label - centered in boss slice
-    const bossLabelAngle = startAngle + bossAngle / 2;
     const labelRadius = radius * 0.6;
+    const bossLabelAngle = bossAngle / 2;
     ctx.fillText(
       "BOSS",
       centerX + labelRadius * Math.cos(bossLabelAngle),
       centerY + labelRadius * Math.sin(bossLabelAngle),
     );
 
-    // Team label - centered in team slice
-    const teamLabelAngle = startAngle + bossAngle + teamAngle / 2;
+    const teamLabelAngle = bossAngle + teamAngle / 2;
     ctx.fillText(
       "TEAM",
       centerX + labelRadius * Math.cos(teamLabelAngle),
       centerY + labelRadius * Math.sin(teamLabelAngle),
     );
+    ctx.shadowBlur = 0;
 
     ctx.restore();
 
-    // Draw center circle (outside rotation context)
+    // Center circle (outside rotation)
     ctx.fillStyle = "#1f2937";
     ctx.beginPath();
-    ctx.arc(centerX, centerY, 30, 0, Math.PI * 2);
+    ctx.arc(centerX, centerY, 25, 0, Math.PI * 2);
     ctx.fill();
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 3;
@@ -300,12 +290,816 @@ const PvEWheel = ({
         height={300}
         className={`${isSpinning ? "animate-pulse" : ""}`}
       />
-      {/* Pointer - positioned on the right (3 o'clock), pointing LEFT into the wheel */}
+      {/* Pointer at top (270° / 12 o'clock), pointing DOWN into the wheel */}
       <div
-        className="absolute top-1/2 right-0 -translate-y-1/2"
+        className="absolute top-0 left-1/2 -translate-x-1/2"
         style={{ zIndex: 10 }}
       >
-        <div className="w-0 h-0 border-t-[15px] border-b-[15px] border-r-[25px] border-t-transparent border-b-transparent border-r-yellow-400 drop-shadow-lg" />
+        <div className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-[25px] border-l-transparent border-r-transparent border-t-yellow-400 drop-shadow-lg" />
+      </div>
+    </div>
+  );
+};
+
+// Determine which slice the pointer lands on (same logic as WheelCanvas)
+// Pointer is at 270° (top). Wheel items: boss slice (0 to bossAngleDeg), team slice (bossAngleDeg to 360)
+function getPvEWheelWinner(
+  rotation: number,
+  bossWeight: number,
+  teamWeight: number,
+): "boss" | "team" {
+  const total = bossWeight + teamWeight;
+  if (total === 0) return "tie" as "boss"; // fallback
+  const bossAngleDeg = (bossWeight / total) * 360;
+  // Pointer at 270° (top). The angle on the wheel the pointer points to:
+  const pointerAngle = 270;
+  const adjustedAngle = (pointerAngle - (rotation % 360) + 360) % 360;
+  // Boss slice: 0 to bossAngleDeg, Team slice: bossAngleDeg to 360
+  return adjustedAngle < bossAngleDeg ? "boss" : "team";
+}
+
+// Player Selection Wheel - multi-slice wheel for selecting players
+interface PlayerWheelConfig {
+  players: PlayerData[];
+  targetPlayerNo: number; // pre-determined winner
+  effectType: "freeze" | "isekai" | "vante" | "hypnotize";
+  onComplete: (player: PlayerData) => void;
+  autoSpin?: boolean; // if false, show button to spin manually
+}
+
+const PlayerSelectionWheel = ({ config }: { config: PlayerWheelConfig }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [spinning, setSpinning] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const rotationRef = useRef(0);
+  const animationRef = useRef<number | null>(null);
+
+  const {
+    players,
+    targetPlayerNo,
+    effectType,
+    onComplete,
+    autoSpin = true,
+  } = config;
+
+  const effectLabels: Record<string, string> = {
+    freeze: "Đóng băng",
+    isekai: "Isekai",
+    vante: "Văn Tế",
+  };
+
+  const effectEmojis: Record<string, string> = {
+    freeze: "❄️",
+    isekai: "💀",
+    vante: "📜",
+    hypnotize: "🌀",
+  };
+
+  const colors = [
+    "#dc2626",
+    "#2563eb",
+    "#16a34a",
+    "#d97706",
+    "#9333ea",
+    "#0891b2",
+    "#e11d48",
+    "#4f46e5",
+    "#059669",
+    "#c026d3",
+    "#ea580c",
+    "#0d9488",
+    "#7c3aed",
+    "#db2777",
+    "#2dd4bf",
+    "#fbbf24",
+  ];
+
+  const drawWheel = useCallback(
+    (currentRotation: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = Math.min(centerX, centerY) - 10;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (players.length === 0) return;
+
+      const sliceAngle = (Math.PI * 2) / players.length;
+
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate((currentRotation * Math.PI) / 180);
+      ctx.translate(-centerX, -centerY);
+
+      players.forEach((player, i) => {
+        const startAngle = i * sliceAngle;
+        const endAngle = (i + 1) * sliceAngle;
+
+        // Draw slice
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fill();
+
+        // Border
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(
+          centerX + radius * Math.cos(startAngle),
+          centerY + radius * Math.sin(startAngle),
+        );
+        ctx.stroke();
+
+        // Label
+        const midAngle = startAngle + sliceAngle / 2;
+        const labelRadius = radius * 0.65;
+        ctx.save();
+        ctx.translate(
+          centerX + labelRadius * Math.cos(midAngle),
+          centerY + labelRadius * Math.sin(midAngle),
+        );
+        ctx.rotate(midAngle);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 11px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.shadowColor = "#000000";
+        ctx.shadowBlur = 3;
+        const displayName =
+          player.name.length > 10
+            ? player.name.substring(0, 10) + "..."
+            : player.name;
+        ctx.fillText(displayName, 0, 0);
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      });
+
+      // Outer circle
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+
+      // Center circle
+      ctx.fillStyle = "#1f2937";
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    },
+    [players],
+  );
+
+  // Initial draw
+  useEffect(() => {
+    drawWheel(0);
+  }, [drawWheel]);
+
+  const startSpin = useCallback(() => {
+    if (spinning || finished) return;
+    setSpinning(true);
+
+    const targetIndex = players.findIndex((p) => p.no === targetPlayerNo);
+    if (targetIndex === -1) {
+      onComplete(players[0]);
+      return;
+    }
+
+    // Calculate target angle so pointer (270°) lands on target slice
+    const sliceAngle = 360 / players.length;
+    const targetSliceCenter = targetIndex * sliceAngle + sliceAngle / 2;
+    // Pointer at 270° (top). We need: (270 - finalRotation) % 360 = targetSliceCenter
+    const baseTargetRotation = (270 - targetSliceCenter + 360) % 360;
+    const extraRotations = 5 + Math.floor(Math.random() * 3);
+    const targetRotation = extraRotations * 360 + baseTargetRotation;
+
+    const spinDuration = 4000 + Math.random() * 2000;
+    const startTime = Date.now();
+    const startRotation = rotationRef.current;
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / spinDuration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const currentRotation = startRotation + targetRotation * easeOut;
+      rotationRef.current = currentRotation % 360;
+      drawWheel(currentRotation % 360);
+
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        setSpinning(false);
+        setFinished(true);
+        playDefaultWinSound();
+        const selectedPlayer = players[targetIndex];
+        // Delay slightly so user can see the result
+        setTimeout(() => {
+          onComplete(selectedPlayer);
+        }, 1500);
+      }
+    };
+
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+    requestAnimationFrame(animate);
+  }, [spinning, finished, players, targetPlayerNo, drawWheel, onComplete]);
+
+  // Auto-start spin (only if autoSpin is true)
+  useEffect(() => {
+    if (!autoSpin) return;
+    const timer = setTimeout(startSpin, 500);
+    return () => clearTimeout(timer);
+  }, [startSpin, autoSpin]);
+
+  useEffect(() => {
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
+
+  const targetPlayer = players.find((p) => p.no === targetPlayerNo);
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="bg-gray-900 rounded-2xl p-6 border-2 border-yellow-500/50 shadow-2xl">
+        <div className="text-center mb-4">
+          <span className="text-2xl">{effectEmojis[effectType]}</span>
+          <h3 className="text-xl font-bold text-yellow-400 mt-1">
+            {effectLabels[effectType]}
+          </h3>
+          <p className="text-gray-400 text-sm">Chọn mục tiêu...</p>
+        </div>
+        <div className="relative">
+          <canvas ref={canvasRef} width={300} height={300} />
+          {/* Pointer at top */}
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2"
+            style={{ zIndex: 10 }}
+          >
+            <div className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-[25px] border-l-transparent border-r-transparent border-t-yellow-400 drop-shadow-lg" />
+          </div>
+        </div>
+        {!autoSpin && !spinning && !finished && (
+          <div className="text-center mt-4">
+            <button
+              onClick={startSpin}
+              className="px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-lg transition-all text-lg"
+            >
+              Quay
+            </button>
+          </div>
+        )}
+        {finished && targetPlayer && (
+          <div className="text-center mt-4 animate-pulse">
+            <span className="text-lg font-bold text-white">
+              {effectEmojis[effectType]} {targetPlayer.name}
+            </span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// Binary Wheel Component (50/50 choices like block/not block)
+interface BinaryWheelConfig {
+  options: [string, string]; // Two options
+  colors: [string, string]; // Colors for each option
+  weights?: [number, number]; // Visual/probability weights (default [1,1] = 50/50)
+  targetIndex: number; // Pre-determined winner (0 or 1)
+  title: string;
+  emoji: string;
+  onComplete: (selectedIndex: number) => void;
+  autoSpin?: boolean;
+}
+
+const BinaryWheel = ({ config }: { config: BinaryWheelConfig }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [spinning, setSpinning] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const rotationRef = useRef(0);
+  const animationRef = useRef<number | null>(null);
+
+  const {
+    options,
+    colors,
+    weights = [1, 1],
+    targetIndex,
+    title,
+    emoji,
+    onComplete,
+    autoSpin = true,
+  } = config;
+
+  // Calculate slice angles based on weights
+  const totalWeight = weights[0] + weights[1];
+  const sliceAngles = [
+    (weights[0] / totalWeight) * Math.PI * 2,
+    (weights[1] / totalWeight) * Math.PI * 2,
+  ];
+
+  const drawWheel = useCallback(
+    (currentRotation: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = Math.min(centerX, centerY) - 10;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate((currentRotation * Math.PI) / 180);
+      ctx.translate(-centerX, -centerY);
+
+      let currentAngle = 0;
+      options.forEach((option, i) => {
+        const startAngle = currentAngle;
+        const endAngle = currentAngle + sliceAngles[i];
+
+        ctx.fillStyle = colors[i];
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(
+          centerX + radius * Math.cos(startAngle),
+          centerY + radius * Math.sin(startAngle),
+        );
+        ctx.stroke();
+
+        const midAngle = startAngle + sliceAngles[i] / 2;
+        const labelRadius = radius * 0.6;
+        ctx.save();
+        ctx.translate(
+          centerX + labelRadius * Math.cos(midAngle),
+          centerY + labelRadius * Math.sin(midAngle),
+        );
+        ctx.rotate(midAngle);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 16px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.shadowColor = "#000000";
+        ctx.shadowBlur = 3;
+        ctx.fillText(option, 0, 0);
+        ctx.shadowBlur = 0;
+        ctx.restore();
+
+        currentAngle = endAngle;
+      });
+
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+
+      ctx.fillStyle = "#1f2937";
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    },
+    [options, colors, sliceAngles],
+  );
+
+  useEffect(() => {
+    drawWheel(0);
+  }, [drawWheel]);
+
+  const startSpin = useCallback(() => {
+    if (spinning || finished) return;
+    setSpinning(true);
+
+    // Calculate random position within the target slice (with padding to avoid edges)
+    const sliceAnglesDeg = sliceAngles.map((a) => (a * 180) / Math.PI);
+    let targetSliceStart = 0;
+    for (let i = 0; i < targetIndex; i++) {
+      targetSliceStart += sliceAnglesDeg[i];
+    }
+    const sliceSize = sliceAnglesDeg[targetIndex];
+    const padding = Math.min(sliceSize * 0.1, 5); // 10% padding or max 5 degrees
+    const randomOffset = padding + Math.random() * (sliceSize - 2 * padding);
+    const targetAngle = targetSliceStart + randomOffset;
+    const baseTargetRotation = (270 - targetAngle + 360) % 360;
+    const extraRotations = 5 + Math.floor(Math.random() * 5);
+    const targetRotation = extraRotations * 360 + baseTargetRotation;
+
+    const spinDuration = 3000 + Math.random() * 1500;
+    const startTime = Date.now();
+    const startRotation = rotationRef.current;
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / spinDuration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const currentRotation = startRotation + targetRotation * easeOut;
+      rotationRef.current = currentRotation % 360;
+      drawWheel(currentRotation % 360);
+
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        setSpinning(false);
+        setFinished(true);
+        playDefaultWinSound();
+        setTimeout(() => {
+          onComplete(targetIndex);
+        }, 1500);
+      }
+    };
+
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+    requestAnimationFrame(animate);
+  }, [spinning, finished, targetIndex, drawWheel, onComplete]);
+
+  useEffect(() => {
+    if (!autoSpin) return;
+    const timer = setTimeout(startSpin, 500);
+    return () => clearTimeout(timer);
+  }, [startSpin, autoSpin]);
+
+  useEffect(() => {
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="bg-gray-900 rounded-2xl p-6 border-2 border-yellow-500/50 shadow-2xl">
+        <div className="text-center mb-4">
+          <span className="text-2xl">{emoji}</span>
+          <h3 className="text-xl font-bold text-yellow-400 mt-1">{title}</h3>
+        </div>
+        <div className="relative">
+          <canvas ref={canvasRef} width={300} height={300} />
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2"
+            style={{ zIndex: 10 }}
+          >
+            <div className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-[25px] border-l-transparent border-r-transparent border-t-yellow-400 drop-shadow-lg" />
+          </div>
+        </div>
+        {!autoSpin && !spinning && !finished && (
+          <div className="text-center mt-4">
+            <button
+              onClick={startSpin}
+              className="px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-lg transition-all text-lg"
+            >
+              Quay
+            </button>
+          </div>
+        )}
+        {finished && (
+          <div className="text-center mt-4 animate-pulse">
+            <span className="text-lg font-bold text-white">
+              {emoji} {options[targetIndex]}
+            </span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// D20 Wheel Config
+interface D20WheelConfig {
+  wheelSize: number;
+  targetNumber: number; // Pre-determined result (1-based)
+  title: string;
+  emoji: string;
+  onComplete: (selectedNumber: number) => void;
+  autoSpin?: boolean;
+  allowManualInput?: boolean; // For Raphael - let user type a number
+}
+
+// D20 Wheel Component - numbered wheel with 20 slices
+const D20Wheel = ({ config }: { config: D20WheelConfig }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [spinning, setSpinning] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const [manualValue, setManualValue] = useState("");
+  const rotationRef = useRef(0);
+  const animationRef = useRef<number | null>(null);
+
+  const {
+    wheelSize,
+    targetNumber,
+    title,
+    emoji,
+    onComplete,
+    autoSpin = true,
+    allowManualInput = false,
+  } = config;
+
+  // Generate colors for slices
+  const sliceColors = useMemo(() => {
+    const colors: string[] = [];
+    for (let i = 0; i < wheelSize; i++) {
+      const hue = (i * 360) / wheelSize;
+      colors.push(`hsl(${hue}, 70%, 45%)`);
+    }
+    return colors;
+  }, [wheelSize]);
+
+  const sliceAngle = (2 * Math.PI) / wheelSize;
+
+  const drawWheel = useCallback(
+    (currentRotation: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = Math.min(centerX, centerY) - 10;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate((currentRotation * Math.PI) / 180);
+      ctx.translate(-centerX, -centerY);
+
+      for (let i = 0; i < wheelSize; i++) {
+        const startAngle = i * sliceAngle;
+        const endAngle = (i + 1) * sliceAngle;
+
+        // Fill slice
+        ctx.fillStyle = sliceColors[i];
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fill();
+
+        // Slice border
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(
+          centerX + radius * Math.cos(startAngle),
+          centerY + radius * Math.sin(startAngle),
+        );
+        ctx.stroke();
+
+        // Number label
+        const midAngle = startAngle + sliceAngle / 2;
+        const labelRadius = radius * 0.7;
+        ctx.save();
+        ctx.translate(
+          centerX + labelRadius * Math.cos(midAngle),
+          centerY + labelRadius * Math.sin(midAngle),
+        );
+        ctx.rotate(midAngle + Math.PI / 2);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 14px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.shadowColor = "#000000";
+        ctx.shadowBlur = 3;
+        ctx.fillText(String(i + 1), 0, 0);
+        ctx.shadowBlur = 0;
+        ctx.restore();
+      }
+
+      // Outer border
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+
+      // Center circle
+      ctx.fillStyle = "#1f2937";
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, 18, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    },
+    [wheelSize, sliceAngle, sliceColors],
+  );
+
+  useEffect(() => {
+    if (!allowManualInput) {
+      drawWheel(0);
+    }
+  }, [drawWheel, allowManualInput]);
+
+  const startSpin = useCallback(() => {
+    if (spinning || finished) return;
+    setSpinning(true);
+
+    // Calculate random position within target slice
+    const sliceAngleDeg = 360 / wheelSize;
+    const targetSliceStart = (targetNumber - 1) * sliceAngleDeg;
+    const padding = Math.min(sliceAngleDeg * 0.15, 3);
+    const randomOffset =
+      padding + Math.random() * (sliceAngleDeg - 2 * padding);
+    const targetAngle = targetSliceStart + randomOffset;
+    const baseTargetRotation = (270 - targetAngle + 360) % 360;
+    const extraRotations = 6 + Math.floor(Math.random() * 5);
+    const targetRotation = extraRotations * 360 + baseTargetRotation;
+
+    const spinDuration = 4000 + Math.random() * 2000;
+    const startTime = Date.now();
+    const startRotation = rotationRef.current;
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / spinDuration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const currentRotation = startRotation + targetRotation * easeOut;
+      rotationRef.current = currentRotation % 360;
+      drawWheel(currentRotation % 360);
+
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        setSpinning(false);
+        setFinished(true);
+        playDefaultWinSound();
+        setTimeout(() => {
+          onComplete(targetNumber);
+        }, 1500);
+      }
+    };
+
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+    }
+    requestAnimationFrame(animate);
+  }, [
+    spinning,
+    finished,
+    targetNumber,
+    wheelSize,
+    drawWheel,
+    onComplete,
+  ]);
+
+  useEffect(() => {
+    if (!autoSpin || allowManualInput) return;
+    const timer = setTimeout(startSpin, 500);
+    return () => clearTimeout(timer);
+  }, [startSpin, autoSpin, allowManualInput]);
+
+  useEffect(() => {
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
+
+  const handleManualSubmit = () => {
+    const num = parseInt(manualValue);
+    if (num >= 1 && num <= wheelSize) {
+      setFinished(true);
+      playDefaultWinSound();
+      setTimeout(() => {
+        onComplete(num);
+      }, 500);
+    }
+  };
+
+  // Manual input mode (Raphael)
+  if (allowManualInput) {
+    return (
+      <div
+        className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="bg-gray-900 rounded-2xl p-8 border-2 border-purple-500/50 shadow-2xl min-w-[350px]">
+          <div className="text-center mb-6">
+            <span className="text-3xl">{emoji}</span>
+            <h3 className="text-xl font-bold text-purple-400 mt-2">{title}</h3>
+            <p className="text-gray-400 text-sm mt-1">
+              Nhập số từ 1 đến {wheelSize}
+            </p>
+          </div>
+          {!finished ? (
+            <div className="flex flex-col items-center gap-4">
+              <input
+                type="number"
+                min={1}
+                max={wheelSize}
+                value={manualValue}
+                onChange={(e) => setManualValue(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleManualSubmit()}
+                className="w-24 text-center text-3xl font-bold bg-gray-800 border-2 border-purple-500 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-purple-400"
+                autoFocus
+              />
+              <button
+                onClick={handleManualSubmit}
+                disabled={
+                  !manualValue ||
+                  parseInt(manualValue) < 1 ||
+                  parseInt(manualValue) > wheelSize
+                }
+                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all text-lg"
+              >
+                Xác nhận
+              </button>
+            </div>
+          ) : (
+            <div className="text-center animate-pulse">
+              <span className="text-3xl font-bold text-yellow-400">
+                {emoji} Số {manualValue}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Spin wheel mode (Elder Brain)
+  return (
+    <div
+      className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="bg-gray-900 rounded-2xl p-6 border-2 border-yellow-500/50 shadow-2xl">
+        <div className="text-center mb-4">
+          <span className="text-2xl">{emoji}</span>
+          <h3 className="text-xl font-bold text-yellow-400 mt-1">{title}</h3>
+        </div>
+        <div className="relative">
+          <canvas ref={canvasRef} width={350} height={350} />
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2"
+            style={{ zIndex: 10 }}
+          >
+            <div className="w-0 h-0 border-l-[15px] border-r-[15px] border-t-[25px] border-l-transparent border-r-transparent border-t-yellow-400 drop-shadow-lg" />
+          </div>
+        </div>
+        {!autoSpin && !spinning && !finished && (
+          <div className="text-center mt-4">
+            <button
+              onClick={startSpin}
+              className="px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-lg transition-all text-lg"
+            >
+              Quay
+            </button>
+          </div>
+        )}
+        {finished && (
+          <div className="text-center mt-4 animate-pulse">
+            <span className="text-2xl font-bold text-yellow-400">
+              {emoji} Số {targetNumber}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -428,6 +1222,7 @@ export const BossBattleRoom = ({
     number: number;
     effect: string;
     description: string;
+    startingPoints?: number;
   } | null>(null);
   const [showPreBattleWheel, setShowPreBattleWheel] = useState(false);
   const [preBattleWheelSpinning, setPreBattleWheelSpinning] = useState(false);
@@ -438,22 +1233,89 @@ export const BossBattleRoom = ({
 
   // Isekai'd players
   const [isekaidPlayers, setIsekaidPlayers] = useState<number[]>([]);
+  const [vantePlayers, setVantePlayers] = useState<number[]>([]);
+
+  // Capra Demon (boss 16) conditional effects after 4 rounds
+  const [capraEffect, setCapraEffect] = useState<{
+    biqBonus: number;
+    iqBonus: number;
+    replayIQ: boolean;
+    biqBO3: boolean;
+    maBO3: boolean;
+    biqLossPenalty: number;
+    biqWinBonusTeamScore: boolean;
+  } | null>(null);
+  const [bo3Round, _setBo3Round] = useState<{
+    stat: keyof BossStats;
+    bossWins: number;
+    teamWins: number;
+  } | null>(null);
+  const bo3RoundRef = useRef(bo3Round);
+  const setBo3Round = useCallback((val: typeof bo3Round) => {
+    bo3RoundRef.current = val;
+    _setBo3Round(val);
+  }, []);
 
   // Win streak
   const [winStreak, setWinStreak] = useState(0);
   const [retryBattle, setRetryBattle] = useState(false);
   const [retryPenalty, setRetryPenalty] = useState(0);
 
-  // Let Me Solo Her - frozen after losing a round
-  const [soloHerFrozen, setSoloHerFrozen] = useState(false);
-
   // Total Stat Battle mode - dynamic totals with loser bonus
   const [totalStatBossTotalBonus, setTotalStatBossTotalBonus] = useState(0);
   const [totalStatTeamTotalBonus, setTotalStatTeamTotalBonus] = useState(0);
   // Base weights for Total Stat Battle (set once from round 1, used for all rounds)
-  const [totalStatBaseWeights, setTotalStatBaseWeights] = useState<{boss: number, team: number} | null>(null);
+  const [totalStatBaseWeights, setTotalStatBaseWeights] = useState<{
+    boss: number;
+    team: number;
+  } | null>(null);
 
   const [battleMessages, setBattleMessages] = useState<string[]>([]);
+
+  // Refs to track latest state for async closures (avoid stale closure in auto-battle)
+  const frozenPlayersRef = useRef<FrozenPlayer[]>([]);
+  const manuallyDisabledPlayersRef = useRef<number[]>([]);
+  const removedPlayersRef = useRef<number[]>([]);
+  const isekaidPlayersRef = useRef<number[]>([]);
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    frozenPlayersRef.current = frozenPlayers;
+  }, [frozenPlayers]);
+  useEffect(() => {
+    manuallyDisabledPlayersRef.current = manuallyDisabledPlayers;
+  }, [manuallyDisabledPlayers]);
+  useEffect(() => {
+    removedPlayersRef.current = removedPlayers;
+  }, [removedPlayers]);
+  useEffect(() => {
+    isekaidPlayersRef.current = isekaidPlayers;
+  }, [isekaidPlayers]);
+  const vantePlayersRef = useRef<number[]>([]);
+  useEffect(() => {
+    vantePlayersRef.current = vantePlayers;
+  }, [vantePlayers]);
+
+  // Player selection wheel state
+  const [playerWheelConfig, setPlayerWheelConfig] =
+    useState<PlayerWheelConfig | null>(null);
+  const playerWheelKeyRef = useRef(0);
+  const playerWheelResolveRef = useRef<((player: PlayerData) => void) | null>(
+    null,
+  );
+
+  // Binary wheel state (for 50/50 decisions like Radagon block)
+  const [binaryWheelConfig, setBinaryWheelConfig] =
+    useState<BinaryWheelConfig | null>(null);
+  const binaryWheelKeyRef = useRef(0);
+  const binaryWheelResolveRef = useRef<((index: number) => void) | null>(null);
+
+  // D20 wheel state (for pre-battle number wheel)
+  const [d20WheelConfig, setD20WheelConfig] = useState<D20WheelConfig | null>(
+    null,
+  );
+  const d20WheelKeyRef = useRef(0);
+  const d20WheelResolveRef = useRef<((num: number) => void) | null>(null);
 
   const boss = battle.boss!;
 
@@ -480,7 +1342,7 @@ export const BossBattleRoom = ({
     19: "jpg",
     20: "jpg",
     21: "jpg",
-    22: "jpg", // 22-1.jpg (default), also has 22-2.png
+    22: "jpg", // Aatrox: 22-1.jpg (phase 1), 22-2.png (phase 2)
     23: "jpg",
     24: "jpg",
     25: "jpg",
@@ -493,7 +1355,11 @@ export const BossBattleRoom = ({
   };
 
   // Boss image path - use correct extension for each boss
-  const bossImagePath = `/assets/BossAsset/${boss.id}.${bossImageExtensions[boss.id] || "png"}`;
+  // Aatrox (id 22) has separate images per phase: 22-1.jpg, 22-2.png
+  const bossImagePath =
+    boss.id === 22
+      ? `/assets/BossAsset/22-${currentPhase}.${currentPhase === 1 ? "jpg" : "png"}`
+      : `/assets/BossAsset/${boss.id}.${bossImageExtensions[boss.id] || "png"}`;
 
   // Check for "Let Me Solo Her" quirk
   const soloHerInfo = useMemo(() => {
@@ -539,6 +1405,116 @@ export const BossBattleRoom = ({
         : [...prev, playerNo],
     );
   }, []);
+
+  // Show player selection wheel and return promise of selected player
+  const spinPlayerWheel = useCallback(
+    (
+      candidatePlayers: PlayerData[],
+      effectType: "freeze" | "isekai" | "vante" | "hypnotize",
+      autoSpin: boolean = true,
+    ): Promise<PlayerData> => {
+      return new Promise((resolve) => {
+        if (candidatePlayers.length === 0) {
+          return;
+        }
+        if (candidatePlayers.length === 1) {
+          // Only one candidate, skip wheel
+          resolve(candidatePlayers[0]);
+          return;
+        }
+        const randomIdx = Math.floor(Math.random() * candidatePlayers.length);
+        const targetPlayer = candidatePlayers[randomIdx];
+        playerWheelResolveRef.current = resolve;
+        playerWheelKeyRef.current += 1;
+        setPlayerWheelConfig({
+          players: candidatePlayers,
+          targetPlayerNo: targetPlayer.no,
+          effectType,
+          autoSpin,
+          onComplete: (player: PlayerData) => {
+            setPlayerWheelConfig(null);
+            playerWheelResolveRef.current = null;
+            resolve(player);
+          },
+        });
+      });
+    },
+    [],
+  );
+
+  // Show binary wheel (50/50) and return promise of selected index
+  const spinBinaryWheel = useCallback(
+    (
+      options: [string, string],
+      wheelColors: [string, string],
+      title: string,
+      emoji: string,
+      autoSpin: boolean = true,
+      chance: number = 0.5,
+      weights?: [number, number],
+    ): Promise<number> => {
+      return new Promise((resolve) => {
+        // const targetIndex = Math.random() < chance ? 0 : 1;
+        const targetIndex = weights
+          ? weightedPick(weights)
+          : Math.random() < chance
+            ? 0
+            : 1;
+        binaryWheelResolveRef.current = resolve;
+        binaryWheelKeyRef.current += 1;
+        setBinaryWheelConfig({
+          options,
+          colors: wheelColors,
+          weights,
+          targetIndex,
+          title,
+          emoji,
+          autoSpin,
+          onComplete: (selectedIndex: number) => {
+            setBinaryWheelConfig(null);
+            binaryWheelResolveRef.current = null;
+            resolve(selectedIndex);
+          },
+        });
+      });
+    },
+    [],
+  );
+  // set weight for each option and pick based on weight
+  function weightedPick([w0, w1]: [number, number]) {
+    const total = w0 + w1;
+    const r = Math.random() * total;
+    return r < w0 ? 0 : 1;
+  }
+  const spinD20Wheel = useCallback(
+    (
+      wheelSize: number,
+      title: string,
+      emoji: string,
+      autoSpin: boolean = true,
+      allowManualInput: boolean = false,
+    ): Promise<number> => {
+      return new Promise((resolve) => {
+        const targetNumber = Math.floor(Math.random() * wheelSize) + 1;
+        d20WheelResolveRef.current = resolve;
+        d20WheelKeyRef.current += 1;
+        setD20WheelConfig({
+          wheelSize,
+          targetNumber,
+          title,
+          emoji,
+          autoSpin,
+          allowManualInput,
+          onComplete: (selectedNumber: number) => {
+            setD20WheelConfig(null);
+            d20WheelResolveRef.current = null;
+            resolve(selectedNumber);
+          },
+        });
+      });
+    },
+    [],
+  );
 
   // Check for boss-specific rule conditions
   const bossRuleChecks = useMemo(() => {
@@ -691,6 +1667,25 @@ export const BossBattleRoom = ({
           break;
         }
 
+        case "hasArchetype": {
+          const targetArchetype = effect.race?.toLowerCase();
+          const hasArch = targetArchetype
+            ? activePlayers.some((p) =>
+                p.archetypes?.some((a) => a.toLowerCase() === targetArchetype),
+              )
+            : false;
+
+          if (hasArch && effect.bonus) {
+            if (effect.target === "boss") {
+              bossBonus += effect.bonus;
+            } else {
+              teamBonus += effect.bonus;
+            }
+            details.push(effect.description);
+          }
+          break;
+        }
+
         case "uniqueRaces": {
           const races = activePlayers
             .map((p) => p.race?.toLowerCase())
@@ -794,6 +1789,9 @@ export const BossBattleRoom = ({
     let isMirrorScoring = false;
     let isTotalStatBattle = false;
     let totalStatBattleRounds = 6;
+    let hasCrit = false;
+    let hasEvasion = false;
+    let disablePvEOnly = false;
     const specialDetails: string[] = [];
 
     if (!boss.ruleEffects || boss.ruleEffects.length === 0) {
@@ -812,6 +1810,9 @@ export const BossBattleRoom = ({
         isMirrorScoring,
         isTotalStatBattle,
         totalStatBattleRounds,
+        hasCrit,
+        hasEvasion,
+        disablePvEOnly,
       };
     }
 
@@ -969,6 +1970,24 @@ export const BossBattleRoom = ({
           specialDetails.push(effect.description);
           break;
         }
+
+        case "disablePvEOnly": {
+          disablePvEOnly = true;
+          specialDetails.push(effect.description);
+          break;
+        }
+
+        case "bossHasEffect": {
+          const effects = (effect.effects as string[]) || [];
+          if (effects.includes("Crit")) {
+            hasCrit = true;
+          }
+          if (effects.includes("Evasion")) {
+            hasEvasion = true;
+          }
+          specialDetails.push(effect.description);
+          break;
+        }
       }
     });
 
@@ -978,6 +1997,9 @@ export const BossBattleRoom = ({
           preBattleWheelResult.description.match(/-?\d+/)?.[0] || "0",
         );
         teamStartingPoints += value;
+      }
+      if (preBattleWheelResult.startingPoints) {
+        teamStartingPoints += preBattleWheelResult.startingPoints;
       }
     }
 
@@ -1005,6 +2027,9 @@ export const BossBattleRoom = ({
       isMirrorScoring,
       isTotalStatBattle,
       totalStatBattleRounds,
+      hasCrit,
+      hasEvasion,
+      disablePvEOnly,
       bossStatBoostOnWin,
       bossStatBoostOnTeamLoss,
       teamBonusOnStatWin: teamBonusOnStatWin
@@ -1028,10 +2053,12 @@ export const BossBattleRoom = ({
     };
 
     if (soloHerInfo.active && soloHerInfo.soloPlayer) {
-      // If solo player is frozen (lost a round), all stats become 0
-      if (soloHerFrozen) {
-        // Stats stay at 0
-      } else {
+      // x8 stats - solo player fights the boss alone
+      // If solo player is disabled/frozen/isekai'd, stats = 0
+      const soloPlayerIsActive = activePlayers.some(
+        (p) => p.no === soloHerInfo.soloPlayer!.no,
+      );
+      if (soloPlayerIsActive) {
         const player = soloHerInfo.soloPlayer;
         const mult = soloHerInfo.multiplier;
         totals.str = (player.stats.str || 0) * mult;
@@ -1041,6 +2068,7 @@ export const BossBattleRoom = ({
         totals.biq = (player.stats.biq || 0) * mult;
         totals.ma = (player.stats.ma || 0) * mult;
       }
+      // else: totals stay at 0 - solo player is disabled
     } else {
       activePlayers.forEach((player) => {
         totals.str += player.stats.str || 0;
@@ -1082,14 +2110,27 @@ export const BossBattleRoom = ({
       totals.ma -= retryPenalty;
     }
 
+    // Apply Wereseal team penalty: -100 all stats (PvE only, target: team)
+    const hasWereseal = activePlayers.some(
+      (p) => p.subRace?.toLowerCase() === "wereseal",
+    );
+    if (hasWereseal && !specialRules.disablePvEOnly) {
+      totals.str -= 100;
+      totals.spd -= 100;
+      totals.dur -= 100;
+      totals.iq -= 100;
+      totals.biq -= 100;
+      totals.ma -= 100;
+    }
+
     return totals;
   }, [
     activePlayers,
     soloHerInfo,
-    soloHerFrozen,
     ruleBonus.teamBonus,
     preBattleWheelResult,
     retryPenalty,
+    specialRules.disablePvEOnly,
   ]);
 
   // Calculate boss stats
@@ -1107,7 +2148,9 @@ export const BossBattleRoom = ({
     }
 
     if (boss.id === 12 && boss.stats.str === null) {
+      // Find player with highest total base stats
       let highestTotal = 0;
+      let highestPlayer = battle.playerData[0];
       battle.playerData.forEach((player) => {
         const total =
           (player.stats.str || 0) +
@@ -1116,17 +2159,20 @@ export const BossBattleRoom = ({
           (player.stats.iq || 0) +
           (player.stats.biq || 0) +
           (player.stats.ma || 0);
-        if (total > highestTotal) highestTotal = total;
+        if (total > highestTotal) {
+          highestTotal = total;
+          highestPlayer = player;
+        }
       });
+      // Each stat of that player x team size
       const multiplier = battle.playerData.length;
-      const statValue = Math.floor(highestTotal / 6) * multiplier;
       return {
-        str: statValue,
-        spd: statValue,
-        dur: statValue,
-        iq: statValue,
-        biq: statValue,
-        ma: statValue,
+        str: (highestPlayer.stats.str || 0) * multiplier,
+        spd: (highestPlayer.stats.spd || 0) * multiplier,
+        dur: (highestPlayer.stats.dur || 0) * multiplier,
+        iq: (highestPlayer.stats.iq || 0) * multiplier,
+        biq: (highestPlayer.stats.biq || 0) * multiplier,
+        ma: (highestPlayer.stats.ma || 0) * multiplier,
       };
     }
 
@@ -1207,8 +2253,11 @@ export const BossBattleRoom = ({
           }
         }
       }
+      if (r.bossBonusPoints) {
+        bossScore += r.bossBonusPoints;
+      }
 
-      if (specialRules.bossAlwaysScoresPoints > 0) {
+      if (specialRules.bossAlwaysScoresPoints > 0 && r.winner !== "boss") {
         bossScore += specialRules.bossAlwaysScoresPoints;
       }
 
@@ -1262,8 +2311,8 @@ export const BossBattleRoom = ({
       return "boss";
     }
 
-    if (score.team >= specialRules.teamPointsToWin) return "team";
     if (score.boss > score.team) return "boss";
+    if (score.team >= specialRules.teamPointsToWin) return "team";
     if (score.team > score.boss) return "team";
     return "tie";
   }, [
@@ -1298,37 +2347,68 @@ export const BossBattleRoom = ({
     [specialRules.noDoubleWeight],
   );
 
-  // Freeze a random player
-  const freezeRandomPlayer = useCallback(() => {
-    const immunePlayers =
-      (bossRuleChecks.freezeImmunePlayers as number[]) || [];
-    const freezablePlayers = activePlayers.filter(
-      (p) => !immunePlayers.includes(p.no),
-    );
+  // Freeze a random player, excludeNos allows excluding players already frozen in this batch
+  // Uses refs instead of activePlayers to avoid stale closure in auto-battle mode
+  const freezeRandomPlayer = useCallback(
+    async (
+      autoSpin: boolean = true,
+      excludeNos: number[] = [],
+    ): Promise<number | null> => {
+      const immunePlayers =
+        (bossRuleChecks.freezeImmunePlayers as number[]) || [];
+      // Build fresh active players list from refs to avoid stale closure
+      const currentFrozen = frozenPlayersRef.current;
+      const currentDisabled = manuallyDisabledPlayersRef.current;
+      const currentRemoved = removedPlayersRef.current;
+      const currentIsekai = isekaidPlayersRef.current;
+      const freezablePlayers = battle.playerData.filter(
+        (p) =>
+          !currentFrozen.some((f) => f.playerNo === p.no) &&
+          !currentRemoved.includes(p.no) &&
+          !currentIsekai.includes(p.no) &&
+          !currentDisabled.includes(p.no) &&
+          !immunePlayers.includes(p.no) &&
+          !excludeNos.includes(p.no),
+      );
 
-    if (freezablePlayers.length > 0) {
-      const randomIdx = Math.floor(Math.random() * freezablePlayers.length);
-      const playerToFreeze = freezablePlayers[randomIdx];
-      setFrozenPlayers((prev) => [
-        ...prev,
-        {
-          playerNo: playerToFreeze.no,
-          name: playerToFreeze.name,
-          frozenAtRound: currentRound,
-        },
-      ]);
-      setBattleMessages((prev) => [
-        ...prev,
-        `❄️ ${playerToFreeze.name} đã bị Caligo đóng băng!`,
-      ]);
-    }
-  }, [activePlayers, bossRuleChecks.freezeImmunePlayers, currentRound]);
+      if (freezablePlayers.length > 0) {
+        const playerToFreeze = await spinPlayerWheel(
+          freezablePlayers,
+          "freeze",
+          autoSpin,
+        );
+        setFrozenPlayers((prev) => {
+          const updated = [
+            ...prev,
+            {
+              playerNo: playerToFreeze.no,
+              name: playerToFreeze.name,
+              frozenAtRound: currentRound,
+            },
+          ];
+          frozenPlayersRef.current = updated;
+          return updated;
+        });
+        setBattleMessages((prev) => [
+          ...prev,
+          `❄️ ${playerToFreeze.name} đã bị Caligo đóng băng!`,
+        ]);
+        return playerToFreeze.no;
+      }
+      return null;
+    },
+    [
+      battle.playerData,
+      bossRuleChecks.freezeImmunePlayers,
+      currentRound,
+      spinPlayerWheel,
+    ],
+  );
 
   // Isekai a random player
-  const isekaiRandomPlayer = useCallback(() => {
+  const isekaiRandomPlayer = useCallback(async () => {
     if (activePlayers.length > 0) {
-      const randomIdx = Math.floor(Math.random() * activePlayers.length);
-      const playerToIsekai = activePlayers[randomIdx];
+      const playerToIsekai = await spinPlayerWheel(activePlayers, "isekai");
       setIsekaidPlayers((prev) => [...prev, playerToIsekai.no]);
       setBattleMessages((prev) => [
         ...prev,
@@ -1336,7 +2416,7 @@ export const BossBattleRoom = ({
       ]);
       setDynamicBossBonus((prev) => prev + 2);
     }
-  }, [activePlayers]);
+  }, [activePlayers, spinPlayerWheel]);
 
   // Remove players
   const removePlayersForSimon = useCallback(() => {
@@ -1352,7 +2432,7 @@ export const BossBattleRoom = ({
   }, [activePlayers, roundResults, removedPlayers.length]);
 
   // Spin pre-battle wheel
-  const spinPreBattleWheel = useCallback(() => {
+  const spinPreBattleWheel = useCallback(async () => {
     const wheelEffect = boss.ruleEffects?.find(
       (e) => e.type === "preBattleWheel",
     );
@@ -1360,36 +2440,42 @@ export const BossBattleRoom = ({
 
     setPreBattleWheelSpinning(true);
 
-    setTimeout(() => {
-      const wheelSize = wheelEffect.wheelSize || 20;
-      const result = Math.floor(Math.random() * wheelSize) + 1;
+    const wheelSize = wheelEffect.wheelSize || 20;
+    const isManualInput = boss.id === 21; // Raphael - allow manual input
 
-      let selectedOutcome = wheelEffect.outcomes![0];
-      for (const outcome of wheelEffect.outcomes!) {
-        if (result >= outcome.range[0] && result <= outcome.range[1]) {
-          selectedOutcome = outcome;
-          break;
-        }
+    const result = await spinD20Wheel(
+      wheelSize,
+      `${boss.name} - Vòng quay 1-${wheelSize}`,
+      "🎰",
+      false,
+      isManualInput,
+    );
+
+    let selectedOutcome = wheelEffect.outcomes![0];
+    for (const outcome of wheelEffect.outcomes!) {
+      if (result >= outcome.range[0] && result <= outcome.range[1]) {
+        selectedOutcome = outcome;
+        break;
       }
+    }
 
-      setPreBattleWheelResult({
-        number: result,
-        effect: selectedOutcome.effect,
-        description: selectedOutcome.description,
-      });
-      setPreBattleWheelSpinning(false);
-      setBattleMessages((prev) => [
-        ...prev,
-        `🎰 Vòng quay: ${result} - ${selectedOutcome.description}`,
-      ]);
-    }, 2000);
-  }, [boss.ruleEffects]);
+    setPreBattleWheelResult({
+      number: result,
+      effect: selectedOutcome.effect,
+      description: selectedOutcome.description,
+      startingPoints: selectedOutcome.startingPoints,
+    });
+    setPreBattleWheelSpinning(false);
+    setBattleMessages((prev) => [
+      ...prev,
+      `🎰 Vòng quay: ${result} - ${selectedOutcome.description}`,
+    ]);
+  }, [boss.ruleEffects, boss.id, boss.name, spinD20Wheel]);
 
-  // Hypnotize player
-  const hypnotizePlayer = useCallback(() => {
+  // Hypnotize player - uses player selection wheel
+  const hypnotizePlayer = useCallback(async () => {
     if (activePlayers.length > 0 && !hypnotizedPlayer) {
-      const randomIdx = Math.floor(Math.random() * activePlayers.length);
-      const player = activePlayers[randomIdx];
+      const player = await spinPlayerWheel(activePlayers, "freeze", false);
       setHypnotizedPlayer({
         playerNo: player.no,
         name: player.name,
@@ -1400,12 +2486,49 @@ export const BossBattleRoom = ({
         `🌀 Kafka đã thôi miên ${player.name}! Stats của họ chuyển sang cho Kafka.`,
       ]);
     }
-  }, [activePlayers, hypnotizedPlayer]);
+  }, [activePlayers, hypnotizedPlayer, spinPlayerWheel]);
 
   // Spin wheel for current round
   const spinWheel = useCallback(() => {
-    const maxRounds = specialRules.isTotalStatBattle ? specialRules.totalStatBattleRounds : 6;
+    const maxRounds = specialRules.isTotalStatBattle
+      ? specialRules.totalStatBattleRounds
+      : 6;
     if (currentRound >= maxRounds || isSpinning) return;
+
+    // Rolling Skeletons: if any party stat < 20, team auto-loses
+    if (boss.id === 10) {
+      const minStat = Math.min(
+        teamStats.str,
+        teamStats.spd,
+        teamStats.dur,
+        teamStats.iq,
+        teamStats.biq,
+        teamStats.ma,
+      );
+      if (minStat < 20) {
+        setBattleMessages((prev) => [
+          ...prev,
+          `💀 Party Stat dưới 20 - Tổ đội thua!`,
+        ]);
+        setBattleState("finished");
+        return;
+      }
+    }
+
+    // Capra Demon BO3: activate if needed (first spin of a BO3 round)
+    if (boss.id === 16 && capraEffect && !bo3Round) {
+      const nextStat = STAT_KEYS[currentRound];
+      if (
+        (nextStat === "biq" && capraEffect.biqBO3) ||
+        (nextStat === "ma" && capraEffect.maBO3)
+      ) {
+        setBo3Round({ stat: nextStat, bossWins: 0, teamWins: 0 });
+        setBattleMessages((prev) => [
+          ...prev,
+          `🐐 Round ${STAT_LABELS[nextStat]} thành BO3! Quay 3 lần, bên nào thắng 2 lần thì thắng.`,
+        ]);
+      }
+    }
 
     setIsSpinning(true);
 
@@ -1418,10 +2541,20 @@ export const BossBattleRoom = ({
 
     if (specialRules.isTotalStatBattle) {
       // Total Stat Battle mode - compare sum of all stats
-      const baseBossTotal = (bossStats.str || 0) + (bossStats.spd || 0) + (bossStats.dur || 0) +
-                           (bossStats.iq || 0) + (bossStats.biq || 0) + (bossStats.ma || 0);
-      const baseTeamTotal = teamStats.str + teamStats.spd + teamStats.dur +
-                           teamStats.iq + teamStats.biq + teamStats.ma;
+      const baseBossTotal =
+        (bossStats.str || 0) +
+        (bossStats.spd || 0) +
+        (bossStats.dur || 0) +
+        (bossStats.iq || 0) +
+        (bossStats.biq || 0) +
+        (bossStats.ma || 0);
+      const baseTeamTotal =
+        teamStats.str +
+        teamStats.spd +
+        teamStats.dur +
+        teamStats.iq +
+        teamStats.biq +
+        teamStats.ma;
 
       bossValue = baseBossTotal + totalStatBossTotalBonus;
       teamValue = baseTeamTotal + totalStatTeamTotalBonus;
@@ -1431,7 +2564,10 @@ export const BossBattleRoom = ({
       if (currentRound === 0 || !totalStatBaseWeights) {
         // Round 1: calculate and save base weights
         const baseWeights = getWeightedValues(baseBossTotal, baseTeamTotal);
-        setTotalStatBaseWeights({ boss: baseWeights.bossWeight, team: baseWeights.teamWeight });
+        setTotalStatBaseWeights({
+          boss: baseWeights.bossWeight,
+          team: baseWeights.teamWeight,
+        });
         bossWeight = baseWeights.bossWeight;
         teamWeight = baseWeights.teamWeight;
       } else {
@@ -1440,7 +2576,8 @@ export const BossBattleRoom = ({
         teamWeight = totalStatBaseWeights.team;
       }
     } else {
-      stat = STAT_KEYS[currentRound];
+      // BO3: use the BO3 stat instead of current round stat
+      stat = bo3Round ? bo3Round.stat : STAT_KEYS[currentRound];
       bossValue = bossStats[stat] || 0;
       teamValue = teamStats[stat] || 0;
       const weights = getWeightedValues(bossValue, teamValue);
@@ -1472,74 +2609,247 @@ export const BossBattleRoom = ({
       return;
     }
 
-    const bossAngle = (bossWeight / total) * 360;
-    const spinRotations = 5 + Math.random() * 3;
-    // pointerPosition is where pointer will land (0 = start of boss slice at 3 o'clock)
-    const pointerPosition = Math.random() * 360;
-    // Determine winner first
-    let winner: "boss" | "team" = pointerPosition < bossAngle ? "boss" : "team";
-    // spinAngle makes wheel stop at correct position
-    // After rotating R degrees, pointer points to (360 - R % 360) % 360
-    // So to land at pointerPosition, we need R % 360 = (360 - pointerPosition) % 360
-    const spinAngle = (360 - pointerPosition + 360) % 360;
-    const totalRotation = spinRotations * 360 + spinAngle;
-    const newWheelRotation = wheelRotation + totalRotation;
+    // Normal spin (also used for each BO3 sub-round - user clicks Spin each time)
+    const spinDuration = 5000 + Math.random() * 3000; // 5-8 seconds
+    const extraRotations = 5 + Math.floor(Math.random() * 3); // 5-7 full rotations
+    const targetRotation = extraRotations * 360 + Math.random() * 360;
 
-    // Animate rotation
     const startRotation = wheelRotation;
     const startTime = Date.now();
-    const duration = 3000;
+    let lastWinner: "boss" | "team" | null = null;
 
     const animate = () => {
       const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.min(elapsed / spinDuration, 1);
       const easeOut = 1 - Math.pow(1 - progress, 3);
-      const currentRotation = startRotation + totalRotation * easeOut;
-      setWheelRotation(currentRotation);
+      const currentRotation = startRotation + targetRotation * easeOut;
+      setWheelRotation(currentRotation % 360);
+
+      // Tick sound when crossing between boss/team slices
+      const currentWinner = getPvEWheelWinner(
+        currentRotation % 360,
+        bossWeight,
+        teamWeight,
+      );
+      if (lastWinner !== null && currentWinner !== lastWinner) {
+        playTickSound();
+      }
+      lastWinner = currentWinner;
 
       if (progress < 1) {
         requestAnimationFrame(animate);
+      } else {
+        // Animation complete - determine winner from final position
+        const finalRotation = currentRotation % 360;
+        const winner = getPvEWheelWinner(finalRotation, bossWeight, teamWeight);
+        playDefaultWinSound();
+        onSpinComplete(winner, stat, bossValue, teamValue, finalRotation);
       }
     };
 
     requestAnimationFrame(animate);
-    let blocked = false;
-    let bonusPoints = 0;
+  }, [
+    currentRound,
+    isSpinning,
+    bossStats,
+    teamStats,
+    getWeightedValues,
+    specialRules,
+    wheelRotation,
+    totalStatBossTotalBonus,
+    totalStatTeamTotalBonus,
+    totalStatBaseWeights,
+    boss.id,
+  ]);
 
-    if (winner === "team" && specialRules.blockTeamScoreChance > 0) {
-      if (Math.random() * 100 < specialRules.blockTeamScoreChance) {
-        blocked = true;
+  // Replay a specific round (re-spin)
+  const replayRound = useCallback((roundIndex: number) => {
+    setRoundResults((prev) => prev.slice(0, roundIndex));
+    setCurrentRound(roundIndex);
+    setSelectedRound(null);
+    setIsSpinning(false);
+    setBattleState("fighting");
+  }, []);
+
+  // Handle spin result after animation completes
+  const onSpinComplete = useCallback(
+    async (
+      winner: "boss" | "team",
+      stat: keyof BossStats,
+      bossValue: number,
+      teamValue: number,
+      finalRotation: number,
+    ) => {
+      let blocked = false;
+      let bonusPoints = 0;
+
+      if (winner === "team" && specialRules.blockTeamScoreChance > 0) {
+        // Show 50/50 wheel for Radagon block
+        const blockResult = await spinBinaryWheel(
+          ["Chặn", "Không chặn"],
+          ["#dc2626", "#16a34a"],
+          "Radagon chặn?",
+          "",
+          false,
+        );
+        if (blockResult === 0) {
+          blocked = true;
+          setBattleMessages((prev) => [
+            ...prev,
+            `🛡️ Radagon đã chặn team ghi điểm round ${currentRound + 1}!`,
+          ]);
+        }
+      }
+
+      // Ca Cao Crit: Ca Cao thắng, 20% nhận thêm 1 điểm (boss ghi 2 thay vì 1)
+      let bossBonusPoints = 0;
+      if (winner === "boss" && specialRules.hasCrit) {
+        const critResult = await spinBinaryWheel(
+          ["Crit!", "Không"],
+          ["#f59e0b", "#6b7280"],
+          "Ca Cao Crit?",
+          "⚔️",
+          false,
+          0.2,
+          [1, 4],
+        );
+        if (critResult === 0) {
+          bossBonusPoints += 1;
+          setBattleMessages((prev) => [
+            ...prev,
+            `⚔️ CRIT! Ca Cao nhận thêm 1 điểm round ${currentRound + 1}!`,
+          ]);
+        }
+      }
+
+      // Ca Cao Evasion: Ca Cao thua, 20% né được (Ca Cao cũng nhận 1 điểm)
+      if (winner === "team" && specialRules.hasEvasion) {
+        const evasionResult = await spinBinaryWheel(
+          ["Né!", "Không"],
+          ["#22c55e", "#6b7280"],
+          "Ca Cao Evasion?",
+          "💨",
+          false,
+          0.2,
+          [1, 4],
+        );
+        if (evasionResult === 0) {
+          bossBonusPoints += 1;
+          setBattleMessages((prev) => [
+            ...prev,
+            `💨 EVASION! Ca Cao né được round ${currentRound + 1}! Ca Cao nhận 1 điểm.`,
+          ]);
+        }
+      }
+
+      if (
+        winner === "team" &&
+        stat === "spd" &&
+        specialRules.teamBonusOnStatWin?.stat === "spd"
+      ) {
+        bonusPoints = specialRules.teamBonusOnStatWin.bonusPoints;
         setBattleMessages((prev) => [
           ...prev,
-          `🛡️ Radagon đã chặn team ghi điểm round ${currentRound + 1}!`,
+          `⚡ Team thắng round Speed - nhận +${bonusPoints} điểm bonus!`,
         ]);
       }
-    }
 
-    if (
-      winner === "team" &&
-      stat === "spd" &&
-      specialRules.teamBonusOnStatWin?.stat === "spd"
-    ) {
-      bonusPoints = specialRules.teamBonusOnStatWin.bonusPoints;
-      setBattleMessages((prev) => [
-        ...prev,
-        `⚡ Team thắng round Speed - nhận +${bonusPoints} điểm bonus!`,
-      ]);
-    }
+      const result: RoundResult = {
+        stat,
+        bossValue,
+        teamValue,
+        winner,
+        spinAngle: finalRotation,
+        blocked,
+        bossBonusPoints: bossBonusPoints > 0 ? bossBonusPoints : undefined,
+        bonusPoints: bonusPoints > 0 ? bonusPoints : undefined,
+        wheelRotation: finalRotation,
+      };
 
-    const result: RoundResult = {
-      stat,
-      bossValue,
-      teamValue,
-      winner,
-      spinAngle: pointerPosition,
-      blocked,
-      bonusPoints: bonusPoints > 0 ? bonusPoints : undefined,
-      wheelRotation: newWheelRotation,
-    };
+      // BO3 mode: track sub-round wins, user clicks Spin each time
+      // Use ref to avoid stale closure (bo3Round may have been set in the same spinWheel call)
+      const currentBO3 = bo3RoundRef.current;
+      if (currentBO3 && (winner === "boss" || winner === "team")) {
+        const newBossWins = currentBO3.bossWins + (winner === "boss" ? 1 : 0);
+        const newTeamWins = currentBO3.teamWins + (winner === "team" ? 1 : 0);
+        setBattleMessages((prev) => [
+          ...prev,
+          `🐐 BO3 ${STAT_LABELS[currentBO3.stat]} lần ${newBossWins + newTeamWins}: ${winner === "boss" ? "Boss" : "Team"} thắng! (Boss ${newBossWins} - ${newTeamWins} Team)`,
+        ]);
 
-    setTimeout(() => {
+        if (newBossWins >= 2 || newTeamWins >= 2) {
+          // BO3 decided
+          const bo3Winner = newBossWins >= 2 ? "boss" : "team";
+          const finalResult: RoundResult = {
+            ...result,
+            winner: bo3Winner,
+          };
+
+          // Capra BIQ special scoring
+          if (boss.id === 16 && capraEffect && currentBO3.stat === "biq") {
+            if (bo3Winner === "team" && capraEffect.biqLossPenalty > 0) {
+              finalResult.bossBonusPoints = -capraEffect.biqLossPenalty;
+              setBattleMessages((prev) => [
+                ...prev,
+                `🐐 Capra Demon thua BIQ - mất ${capraEffect.biqLossPenalty} điểm!`,
+              ]);
+            }
+            if (bo3Winner === "boss" && capraEffect.biqWinBonusTeamScore) {
+              const teamPts = score.team;
+              if (teamPts > 1) {
+                finalResult.bossBonusPoints = teamPts - 1;
+                setBattleMessages((prev) => [
+                  ...prev,
+                  `🐐 Capra Demon thắng BIQ - nhận ${teamPts} điểm (bằng team)!`,
+                ]);
+              }
+            }
+          }
+
+          setRoundResults((prev) => [...prev, finalResult]);
+          setCurrentRound((prev) => prev + 1);
+          setIsSpinning(false);
+          setBattleMessages((prev) => [
+            ...prev,
+            `🐐 BO3 ${STAT_LABELS[currentBO3.stat]}: ${bo3Winner === "boss" ? "Boss" : "Team"} thắng BO3!`,
+          ]);
+          setBo3Round(null);
+
+          // Check end of battle
+          const maxRounds = specialRules.isTotalStatBattle ? specialRules.totalStatBattleRounds : 6;
+          if (currentRound + 1 >= maxRounds) {
+            setBattleState("finished");
+          }
+          return;
+        } else {
+          // BO3 continues - wait for user to click Spin again
+          setBo3Round({ ...currentBO3, bossWins: newBossWins, teamWins: newTeamWins });
+          setIsSpinning(false);
+          return;
+        }
+      }
+
+      // Capra Demon: BIQ special scoring for normal (non-BO3) rounds
+      if (boss.id === 16 && capraEffect && stat === "biq") {
+        if (winner === "team" && capraEffect.biqLossPenalty > 0) {
+          result.bossBonusPoints = -capraEffect.biqLossPenalty;
+          setBattleMessages((prev) => [
+            ...prev,
+            `🐐 Capra Demon thua BIQ - mất ${capraEffect.biqLossPenalty} điểm!`,
+          ]);
+        }
+        if (winner === "boss" && capraEffect.biqWinBonusTeamScore) {
+          const teamPts = score.team;
+          if (teamPts > 1) {
+            result.bossBonusPoints = teamPts - 1;
+            setBattleMessages((prev) => [
+              ...prev,
+              `🐐 Capra Demon thắng BIQ - nhận ${teamPts} điểm (bằng team)!`,
+            ]);
+          }
+        }
+      }
+
       setRoundResults((prev) => [...prev, result]);
       setCurrentRound((prev) => prev + 1);
       setIsSpinning(false);
@@ -1553,7 +2863,6 @@ export const BossBattleRoom = ({
         if (boostOnTeamLoss > 0) {
           setDynamicBossBonus((prev) => prev + boostOnTeamLoss);
         }
-        // Total Stat Battle - loser gets +80 total stat bonus
         if (specialRules.isTotalStatBattle) {
           setTotalStatTeamTotalBonus((prev) => prev + 80);
           setBattleMessages((prev) => [
@@ -1565,7 +2874,6 @@ export const BossBattleRoom = ({
 
       if (winner === "team") {
         setWinStreak((prev) => prev + 1);
-        // Total Stat Battle - loser gets +80 total stat bonus
         if (specialRules.isTotalStatBattle) {
           setTotalStatBossTotalBonus((prev) => prev + 80);
           setBattleMessages((prev) => [
@@ -1577,24 +2885,16 @@ export const BossBattleRoom = ({
         setWinStreak(0);
       }
 
-      // Let Me Solo Her - freeze solo player if they lose a round
-      if (soloHerInfo.active && winner === "boss" && !soloHerFrozen) {
-        setSoloHerFrozen(true);
-        setBattleMessages((prev) => [
-          ...prev,
-          `❄️ ${soloHerInfo.soloPlayer?.name} đã bị đóng băng! Stats = 0 cho các round còn lại.`,
-        ]);
-      }
-
       if (boss.id === 6 && currentRound >= 0) {
-        freezeRandomPlayer();
+        // After each round: team wins = freeze 1, boss wins = freeze 2
+        const frozenNo = await freezeRandomPlayer(false);
         if (winner === "boss") {
-          freezeRandomPlayer();
+          await freezeRandomPlayer(false, frozenNo !== null ? [frozenNo] : []);
         }
       }
 
       if (boss.id === 24 && winner === "boss") {
-        isekaiRandomPlayer();
+        await isekaiRandomPlayer();
       }
 
       if (boss.id === 15) {
@@ -1622,10 +2922,16 @@ export const BossBattleRoom = ({
       }
 
       if (boss.id === 25 && winner === "boss") {
-        // Pick a random player to receive "Văn Tế"
-        if (activePlayers.length > 0) {
-          const randomIdx = Math.floor(Math.random() * activePlayers.length);
-          const selectedPlayer = activePlayers[randomIdx];
+        const vanteEligible = battle.playerData.filter(
+          (p) =>
+            !frozenPlayers.some((f) => f.playerNo === p.no) &&
+            !removedPlayers.includes(p.no) &&
+            !isekaidPlayers.includes(p.no) &&
+            !vantePlayers.includes(p.no),
+        );
+        if (vanteEligible.length > 0) {
+          const selectedPlayer = await spinPlayerWheel(vanteEligible, "vante");
+          setVantePlayers((prev) => [...prev, selectedPlayer.no]);
           setBattleMessages((prev) => [
             ...prev,
             `📜 ${selectedPlayer.name} nhận "Văn Tế"!`,
@@ -1633,7 +2939,60 @@ export const BossBattleRoom = ({
         }
       }
 
-      // Check for early win condition (customWinCondition)
+      // Capra Demon (boss 16): conditional effects after 4 rounds (IQ = round index 3)
+      if (boss.id === 16 && currentRound === 3 && !capraEffect) {
+        const teamPts = score.team + (winner === "team" && !blocked ? 1 : 0) + (bonusPoints || 0);
+        if (teamPts <= 1) {
+          setCapraEffect({
+            biqBonus: -50, iqBonus: 0, replayIQ: false,
+            biqBO3: false, maBO3: true,
+            biqLossPenalty: 3, biqWinBonusTeamScore: false,
+          });
+          setDynamicBossStatChanges((prev) => ({ ...prev, biq: (prev.biq || 0) - 50 }));
+          setBattleMessages((prev) => [
+            ...prev,
+            `🐐 Capra Demon: Team ≤1 điểm! BIQ -50, thua BIQ = -3 điểm, MA thành BO3.`,
+          ]);
+        } else if (teamPts === 2) {
+          setCapraEffect({
+            biqBonus: 0, iqBonus: 0, replayIQ: false,
+            biqBO3: true, maBO3: false,
+            biqLossPenalty: 0, biqWinBonusTeamScore: false,
+          });
+          setBattleMessages((prev) => [
+            ...prev,
+            `🐐 Capra Demon: Team 2 điểm! Round BIQ thành BO3.`,
+          ]);
+        } else if (teamPts === 3) {
+          setCapraEffect({
+            biqBonus: 0, iqBonus: 25, replayIQ: true,
+            biqBO3: false, maBO3: false,
+            biqLossPenalty: 0, biqWinBonusTeamScore: false,
+          });
+          setDynamicBossStatChanges((prev) => ({ ...prev, iq: (prev.iq || 0) + 25 }));
+          setBattleMessages((prev) => [
+            ...prev,
+            `🐐 Capra Demon: Team 3 điểm! IQ +25, đánh lại Round IQ!`,
+          ]);
+          // Replay IQ round
+          replayRound(3);
+          return;
+        } else {
+          // teamPts >= 4
+          setCapraEffect({
+            biqBonus: 50, iqBonus: 0, replayIQ: false,
+            biqBO3: false, maBO3: true,
+            biqLossPenalty: 0, biqWinBonusTeamScore: true,
+          });
+          setDynamicBossStatChanges((prev) => ({ ...prev, biq: (prev.biq || 0) + 50 }));
+          setBattleMessages((prev) => [
+            ...prev,
+            `🐐 Capra Demon: Team ≥4 điểm! BIQ +50, thắng BIQ = nhận điểm bằng team, MA thành BO3.`,
+          ]);
+        }
+      }
+
+      // Check for early win condition
       const newTeamScore =
         score.team +
         (winner === "team" && !blocked ? 1 : 0) +
@@ -1650,20 +3009,24 @@ export const BossBattleRoom = ({
         return;
       }
 
-      const maxRounds = specialRules.isTotalStatBattle ? specialRules.totalStatBattleRounds : 6;
+      const maxRounds = specialRules.isTotalStatBattle
+        ? specialRules.totalStatBattleRounds
+        : 6;
       if (currentRound + 1 >= maxRounds) {
-        if (boss.id === 10 && winStreak < 6 && !retryBattle) {
+        // Calculate actual current streak including this round
+        // (winStreak state is stale here because setWinStreak hasn't rendered yet)
+        const actualStreak = winner === "team" ? winStreak + 1 : 0;
+        if (boss.id === 10 && actualStreak < 6 && !retryBattle) {
           setRetryBattle(true);
-          setRetryPenalty(20);
+          setRetryPenalty(4);
           setCurrentRound(0);
           setRoundResults([]);
           setWinStreak(0);
           setBattleMessages((prev) => [
             ...prev,
-            `💀 Rolling Skeletons: Không thắng 6 round liên tiếp! Đánh lại với -20 All Party Stats!`,
+            `💀 Rolling Skeletons: Không thắng 6 round liên tiếp! Đánh lại với -4 All Party Stats!`,
           ]);
         } else if (boss.id === 22 && currentPhase === 1 && score.team >= 4) {
-          // Aatrox phase transition - team won phase 1, move to phase 2
           setCurrentPhase(2);
           setPhaseScores((prev) => [
             ...prev,
@@ -1680,40 +3043,34 @@ export const BossBattleRoom = ({
           setBattleState("finished");
         }
       }
-    }, 3000);
-  }, [
-    currentRound,
-    isSpinning,
-    bossStats,
-    teamStats,
-    getWeightedValues,
-    specialRules,
-    boss.id,
-    freezeRandomPlayer,
-    isekaiRandomPlayer,
-    removePlayersForSimon,
-    roundResults,
-    winStreak,
-    retryBattle,
-    wheelRotation,
-    currentPhase,
-    score,
-    soloHerInfo,
-    soloHerFrozen,
-    totalStatBossTotalBonus,
-    totalStatTeamTotalBonus,
-  ]);
+    },
+    [
+      specialRules,
+      boss.id,
+      freezeRandomPlayer,
+      spinBinaryWheel,
+      isekaiRandomPlayer,
+      removePlayersForSimon,
+      roundResults,
+      winStreak,
+      retryBattle,
+      currentRound,
+      currentPhase,
+      score,
+      activePlayers,
+      spinPlayerWheel,
+      capraEffect,
+      bo3Round,
+      replayRound,
+    ],
+  );
 
   // Start battle
-  const startBattle = useCallback(() => {
+  const startBattle = useCallback(async () => {
     if (specialRules.hasPreBattleWheel && !preBattleWheelResult) {
       setBattleState("preBattle");
       setShowPreBattleWheel(true);
       return;
-    }
-
-    if (boss.id === 9) {
-      hypnotizePlayer();
     }
 
     setBattleState("fighting");
@@ -1724,6 +3081,7 @@ export const BossBattleRoom = ({
     setFrozenPlayers([]);
     setRemovedPlayers([]);
     setIsekaidPlayers([]);
+    setVantePlayers([]);
     setWinStreak(0);
     setRetryBattle(false);
     setRetryPenalty(0);
@@ -1731,6 +3089,12 @@ export const BossBattleRoom = ({
     setTotalStatBossTotalBonus(0);
     setTotalStatTeamTotalBonus(0);
     setTotalStatBaseWeights(null);
+    setCapraEffect(null);
+    setBo3Round(null);
+
+    if (boss.id === 9) {
+      await hypnotizePlayer();
+    }
   }, [
     specialRules.hasPreBattleWheel,
     preBattleWheelResult,
@@ -1748,15 +3112,11 @@ export const BossBattleRoom = ({
   }, []);
 
   // Auto-spin all rounds
-  const autoFight = useCallback(() => {
+  const autoFight = useCallback(async () => {
     if (specialRules.hasPreBattleWheel && !preBattleWheelResult) {
       setBattleState("preBattle");
       setShowPreBattleWheel(true);
       return;
-    }
-
-    if (boss.id === 9) {
-      hypnotizePlayer();
     }
 
     setBattleState("fighting");
@@ -1767,10 +3127,37 @@ export const BossBattleRoom = ({
     setFrozenPlayers([]);
     setRemovedPlayers([]);
     setIsekaidPlayers([]);
+    setVantePlayers([]);
     setSelectedRound(null);
     setTotalStatBossTotalBonus(0);
     setTotalStatTeamTotalBonus(0);
     setTotalStatBaseWeights(null);
+    setCapraEffect(null);
+    setBo3Round(null);
+
+    if (boss.id === 9) {
+      await hypnotizePlayer();
+    }
+
+    // Rolling Skeletons: if any party stat < 20, team auto-loses immediately
+    if (boss.id === 10) {
+      const minStat = Math.min(
+        teamStats.str,
+        teamStats.spd,
+        teamStats.dur,
+        teamStats.iq,
+        teamStats.biq,
+        teamStats.ma,
+      );
+      if (minStat < 20) {
+        setBattleMessages((prev) => [
+          ...prev,
+          `💀 Party Stat dưới 20 - Tổ đội thua!`,
+        ]);
+        setBattleState("finished");
+        return;
+      }
+    }
 
     const results: RoundResult[] = [];
     let rotation = 0;
@@ -1780,10 +3167,20 @@ export const BossBattleRoom = ({
     // Total Stat Battle mode
     if (specialRules.isTotalStatBattle) {
       const totalRounds = specialRules.totalStatBattleRounds || 7;
-      const baseBossTotal = (bossStats.str || 0) + (bossStats.spd || 0) + (bossStats.dur || 0) +
-                           (bossStats.iq || 0) + (bossStats.biq || 0) + (bossStats.ma || 0);
-      const baseTeamTotal = teamStats.str + teamStats.spd + teamStats.dur +
-                           teamStats.iq + teamStats.biq + teamStats.ma;
+      const baseBossTotal =
+        (bossStats.str || 0) +
+        (bossStats.spd || 0) +
+        (bossStats.dur || 0) +
+        (bossStats.iq || 0) +
+        (bossStats.biq || 0) +
+        (bossStats.ma || 0);
+      const baseTeamTotal =
+        teamStats.str +
+        teamStats.spd +
+        teamStats.dur +
+        teamStats.iq +
+        teamStats.biq +
+        teamStats.ma;
 
       // Calculate fixed base weights from round 1 (with x2 for higher side)
       const baseWeights = getWeightedValues(baseBossTotal, baseTeamTotal);
@@ -1805,16 +3202,18 @@ export const BossBattleRoom = ({
         let spinAngle = 0;
 
         if (total > 0) {
-          const bossAngle = (fixedBossWeight / total) * 360;
-          // pointerPosition is where pointer will land (0 = start of boss slice)
-          const pointerPosition = Math.random() * 360;
-          winner = pointerPosition < bossAngle ? "boss" : "team";
-          // spinAngle makes wheel stop at correct position
-          spinAngle = (360 - pointerPosition + 360) % 360;
+          // Use same approach as spinWheel: random target rotation, determine winner from final angle
+          const extraRotations = 5 + Math.floor(Math.random() * 3);
+          const targetRotation = extraRotations * 360 + Math.random() * 360;
+          rotation += targetRotation;
+          const finalRotation = rotation % 360;
+          winner = getPvEWheelWinner(
+            finalRotation,
+            fixedBossWeight,
+            fixedTeamWeight,
+          );
+          spinAngle = finalRotation;
         }
-
-        // Add extra full rotations + spinAngle
-        rotation += (5 + Math.random() * 3) * 360 + spinAngle;
 
         // Loser gets +80 bonus for next rounds
         if (winner === "boss") {
@@ -1838,84 +3237,329 @@ export const BossBattleRoom = ({
       setTotalStatTeamTotalBonus(teamBonus);
     } else {
       // Normal stat-by-stat battle
-      STAT_KEYS.forEach((stat, idx) => {
-        let bossValue = (bossStats[stat] || 0) + dynamicBonus;
+      let autoCapraEffect: typeof capraEffect = null;
+      let autoCapraStatChanges: Record<string, number> = {};
+
+      for (let idx = 0; idx < STAT_KEYS.length; idx++) {
+        const stat = STAT_KEYS[idx];
+        let bossValue = (bossStats[stat] || 0) + dynamicBonus + (autoCapraStatChanges[stat] || 0);
         const teamValue = teamStats[stat] || 0;
 
         if (boss.id === 8 && idx > 0 && idx % 2 === 0) {
           bossValue *= 2;
         }
 
-        const { bossWeight, teamWeight } = getWeightedValues(
-          bossValue,
-          teamValue,
+        // Capra Demon: check if this round needs BO3
+        const needsBO3 = boss.id === 16 && autoCapraEffect && (
+          (stat === "biq" && autoCapraEffect.biqBO3) ||
+          (stat === "ma" && autoCapraEffect.maBO3)
         );
-        const total = bossWeight + teamWeight;
 
-        let winner: "boss" | "team" | "tie" = "tie";
-        let spinAngle = 0;
-        let blocked = false;
-        let bonusPoints = 0;
+        if (needsBO3) {
+          // Simulate BO3: first to 2 wins
+          let bo3BossWins = 0;
+          let bo3TeamWins = 0;
+          let lastResult: RoundResult | null = null;
 
-        if (total > 0) {
-          const bossAngle = (bossWeight / total) * 360;
-          // pointerPosition is where pointer will land on wheel (0 = start of boss slice at 3 o'clock)
-          const pointerPosition = Math.random() * 360;
-          winner = pointerPosition < bossAngle ? "boss" : "team";
-          // To make pointer land at pointerPosition after rotation:
-          // After rotating R degrees, pointer points to (360 - R % 360) % 360
-          // So we need (360 - R % 360) % 360 = pointerPosition
-          // Which means R % 360 = (360 - pointerPosition) % 360
-          spinAngle = (360 - pointerPosition + 360) % 360;
+          while (bo3BossWins < 2 && bo3TeamWins < 2) {
+            const { bossWeight, teamWeight } = getWeightedValues(bossValue, teamValue);
+            const total = bossWeight + teamWeight;
+            let subWinner: "boss" | "team" | "tie" = "tie";
+            let subSpinAngle = 0;
 
-          if (winner === "team" && specialRules.blockTeamScoreChance > 0) {
-            if (Math.random() * 100 < specialRules.blockTeamScoreChance) {
-              blocked = true;
+            if (total > 0) {
+              const extraRotations = 5 + Math.floor(Math.random() * 3);
+              const targetRotation = extraRotations * 360 + Math.random() * 360;
+              rotation += targetRotation;
+              const finalRotation = rotation % 360;
+              subWinner = getPvEWheelWinner(finalRotation, bossWeight, teamWeight);
+              subSpinAngle = finalRotation;
+            }
+
+            if (subWinner === "boss") bo3BossWins++;
+            else if (subWinner === "team") bo3TeamWins++;
+
+            lastResult = {
+              stat,
+              bossValue,
+              teamValue,
+              winner: subWinner,
+              spinAngle: subSpinAngle,
+              wheelRotation: rotation,
+            };
+          }
+
+          // BO3 winner
+          const bo3Winner = bo3BossWins >= 2 ? "boss" : "team";
+          lastResult!.winner = bo3Winner;
+
+          // Capra BIQ special scoring
+          if (stat === "biq" && autoCapraEffect) {
+            if (bo3Winner === "team" && autoCapraEffect.biqLossPenalty > 0) {
+              lastResult!.bossBonusPoints = -autoCapraEffect.biqLossPenalty;
+            }
+            if (bo3Winner === "boss" && autoCapraEffect.biqWinBonusTeamScore) {
+              // Boss nhận điểm bằng team score (thay thế điểm thắng bình thường, -1 vì bossPointsPerWin đã cộng)
+              const currentTeamScore = results.filter(
+                (r) => r.winner === "team" && !r.blocked
+              ).length + results.reduce((acc, r) => acc + (r.bonusPoints || 0), 0);
+              if (currentTeamScore > 1) {
+                lastResult!.bossBonusPoints = currentTeamScore - 1;
+              }
             }
           }
 
-          if (
-            winner === "team" &&
-            stat === "spd" &&
-            specialRules.teamBonusOnStatWin?.stat === "spd"
-          ) {
-            bonusPoints = specialRules.teamBonusOnStatWin.bonusPoints;
+          if (bo3Winner === "boss") {
+            dynamicBonus += specialRules.bossStatBoostOnWin || 0;
+            dynamicBonus += specialRules.bossStatBoostOnTeamLoss || 0;
+            streak = 0;
+          } else {
+            streak++;
           }
-        }
 
-        // Add extra full rotations + spinAngle to reach target position
-        rotation += (5 + Math.random() * 3) * 360 + spinAngle;
+          results.push(lastResult!);
+        } else {
+          // Normal round
+          const { bossWeight, teamWeight } = getWeightedValues(
+            bossValue,
+            teamValue,
+          );
+          const total = bossWeight + teamWeight;
 
-        if (winner === "boss") {
-          dynamicBonus += specialRules.bossStatBoostOnWin || 0;
-          dynamicBonus += specialRules.bossStatBoostOnTeamLoss || 0;
-          streak = 0;
-        } else if (winner === "team") {
-          streak++;
-          if (boss.id === 26) {
-            const remainingRounds = 6 - (idx + 1);
-            if (remainingRounds > 0) {
-              dynamicBonus += Math.floor(60 / remainingRounds);
+          let winner: "boss" | "team" | "tie" = "tie";
+          let spinAngle = 0;
+          let blocked = false;
+          let bonusPoints = 0;
+
+          if (total > 0) {
+            const extraRotations = 5 + Math.floor(Math.random() * 3);
+            const targetRotation = extraRotations * 360 + Math.random() * 360;
+            rotation += targetRotation;
+            const finalRotation = rotation % 360;
+            winner = getPvEWheelWinner(finalRotation, bossWeight, teamWeight);
+            spinAngle = finalRotation;
+
+            if (
+              winner === "team" &&
+              stat === "spd" &&
+              specialRules.teamBonusOnStatWin?.stat === "spd"
+            ) {
+              bonusPoints = specialRules.teamBonusOnStatWin.bonusPoints;
+            }
+          }
+
+          if (winner === "boss") {
+            dynamicBonus += specialRules.bossStatBoostOnWin || 0;
+            dynamicBonus += specialRules.bossStatBoostOnTeamLoss || 0;
+            streak = 0;
+          } else if (winner === "team") {
+            streak++;
+            if (boss.id === 26) {
+              const remainingRounds = 6 - (idx + 1);
+              if (remainingRounds > 0) {
+                dynamicBonus += Math.floor(60 / remainingRounds);
+              }
+            }
+          }
+
+          // Capra Demon: BIQ special scoring for normal (non-BO3) rounds
+          let autoBossBonusPoints: number | undefined;
+          if (boss.id === 16 && autoCapraEffect && stat === "biq") {
+            if (winner === "team" && autoCapraEffect.biqLossPenalty > 0) {
+              autoBossBonusPoints = -autoCapraEffect.biqLossPenalty;
+            }
+            if (winner === "boss" && autoCapraEffect.biqWinBonusTeamScore) {
+              // Boss nhận điểm bằng team score (thay thế điểm thắng, -1 vì bossPointsPerWin đã cộng)
+              const currentTeamScore = results.filter(
+                (r) => r.winner === "team" && !r.blocked
+              ).length + results.reduce((acc, r) => acc + (r.bonusPoints || 0), 0);
+              if (currentTeamScore > 1) {
+                autoBossBonusPoints = currentTeamScore - 1;
+              }
+            }
+          }
+
+          results.push({
+            stat,
+            bossValue,
+            teamValue,
+            winner,
+            spinAngle,
+            blocked,
+            bonusPoints: bonusPoints > 0 ? bonusPoints : undefined,
+            bossBonusPoints: autoBossBonusPoints,
+            wheelRotation: rotation,
+          });
+
+          // Capra Demon: after IQ round (idx=3), apply conditional effects
+          if (boss.id === 16 && idx === 3) {
+            const teamPts = results.filter((r) => r.winner === "team" && !r.blocked).length
+              + results.reduce((acc, r) => acc + (r.bonusPoints || 0), 0);
+
+            if (teamPts <= 1) {
+              autoCapraEffect = {
+                biqBonus: -50, iqBonus: 0, replayIQ: false,
+                biqBO3: false, maBO3: true,
+                biqLossPenalty: 3, biqWinBonusTeamScore: false,
+              };
+              autoCapraStatChanges.biq = -50;
+            } else if (teamPts === 2) {
+              autoCapraEffect = {
+                biqBonus: 0, iqBonus: 0, replayIQ: false,
+                biqBO3: true, maBO3: false,
+                biqLossPenalty: 0, biqWinBonusTeamScore: false,
+              };
+            } else if (teamPts === 3) {
+              autoCapraEffect = {
+                biqBonus: 0, iqBonus: 25, replayIQ: true,
+                biqBO3: false, maBO3: false,
+                biqLossPenalty: 0, biqWinBonusTeamScore: false,
+              };
+              autoCapraStatChanges.iq = 25;
+              // Replay IQ round: remove current IQ result and redo
+              results.pop(); // Remove IQ result
+              idx = 2; // Will become 3 after for loop increment, replaying IQ
+              continue;
+            } else {
+              // teamPts >= 4
+              autoCapraEffect = {
+                biqBonus: 50, iqBonus: 0, replayIQ: false,
+                biqBO3: false, maBO3: true,
+                biqLossPenalty: 0, biqWinBonusTeamScore: true,
+              };
+              autoCapraStatChanges.biq = 50;
             }
           }
         }
-
-        results.push({
-          stat,
-          bossValue,
-          teamValue,
-          winner,
-          spinAngle,
-          blocked,
-          bonusPoints: bonusPoints > 0 ? bonusPoints : undefined,
-          wheelRotation: rotation,
-        });
-      });
+      }
 
       setDynamicBossBonus(dynamicBonus);
+
+      // Rolling Skeletons: if not 6 consecutive wins, retry with -4 All Party Stats
+      if (boss.id === 10 && streak < 6) {
+        const penalty = 4;
+        setRetryBattle(true);
+        setRetryPenalty(penalty);
+        setBattleMessages((prev) => [
+          ...prev,
+          `💀 Rolling Skeletons: Không thắng 6 round liên tiếp! Đánh lại với -4 All Party Stats!`,
+        ]);
+
+        // Check partyStatMinimum: if any party stat < 20 after penalty, team auto-loses
+        const penalizedStats = STAT_KEYS.map(
+          (s) => (teamStats[s] || 0) - penalty,
+        );
+        const minPenalizedStat = Math.min(...penalizedStats);
+        if (minPenalizedStat < 20) {
+          // Team auto-loses - don't play retry rounds
+          setBattleMessages((prev) => [
+            ...prev,
+            `💀 Party Stat dưới 20 sau penalty - Tổ đội thua!`,
+          ]);
+          // Keep first battle results so UI shows what happened
+        } else {
+          // Recalculate with penalty applied
+          results.length = 0;
+          rotation = 0;
+          dynamicBonus = 0;
+          streak = 0;
+
+          STAT_KEYS.forEach((stat) => {
+            const bossValue = (bossStats[stat] || 0) + dynamicBonus;
+            const teamValue = (teamStats[stat] || 0) - penalty;
+
+            const { bossWeight, teamWeight } = getWeightedValues(
+              bossValue,
+              teamValue,
+            );
+            const total = bossWeight + teamWeight;
+
+            let winner: "boss" | "team" | "tie" = "tie";
+            let spinAngle = 0;
+
+            if (total > 0) {
+              const extraRotations = 5 + Math.floor(Math.random() * 3);
+              const targetRotation = extraRotations * 360 + Math.random() * 360;
+              rotation += targetRotation;
+              const finalRotation = rotation % 360;
+              winner = getPvEWheelWinner(finalRotation, bossWeight, teamWeight);
+              spinAngle = finalRotation;
+            }
+
+            if (winner === "boss") {
+              streak = 0;
+            } else if (winner === "team") {
+              streak++;
+            }
+
+            results.push({
+              stat,
+              bossValue,
+              teamValue,
+              winner,
+              spinAngle,
+              wheelRotation: rotation,
+            });
+          });
+
+          setDynamicBossBonus(dynamicBonus);
+        }
+      }
+
+      // Aatrox: if team won phase 1, compute phase 2 with +8 boss stats and drain scoring
+      if (boss.id === 22) {
+        let phase1TeamScore = 0;
+        results.forEach((r) => {
+          if (r.winner === "team" && !r.blocked) {
+            phase1TeamScore += 1 + (r.bonusPoints || 0);
+          }
+        });
+
+        if (phase1TeamScore >= 4) {
+          const aatroxBoost = 8;
+          dynamicBonus = 0;
+          rotation = 0; // Reset rotation for phase 2 wheel
+
+          STAT_KEYS.forEach((stat) => {
+            const bossValue =
+              (bossStats[stat] || 0) + aatroxBoost + dynamicBonus;
+            const teamValue = teamStats[stat] || 0;
+
+            const { bossWeight, teamWeight } = getWeightedValues(
+              bossValue,
+              teamValue,
+            );
+            const total = bossWeight + teamWeight;
+
+            let winner: "boss" | "team" | "tie" = "tie";
+            let spinAngle = 0;
+
+            if (total > 0) {
+              const extraRotations = 5 + Math.floor(Math.random() * 3);
+              const targetRotation = extraRotations * 360 + Math.random() * 360;
+              rotation += targetRotation;
+              const finalRotation = rotation % 360;
+              winner = getPvEWheelWinner(finalRotation, bossWeight, teamWeight);
+              spinAngle = finalRotation;
+            }
+
+            results.push({
+              stat,
+              bossValue,
+              teamValue,
+              winner,
+              spinAngle,
+              wheelRotation: rotation,
+            });
+          });
+        }
+      }
     }
 
-    const maxRounds = specialRules.isTotalStatBattle ? specialRules.totalStatBattleRounds : 6;
+    // Determine total rounds to animate
+    const maxRounds = results.length;
+    // Phase 2 starts at round index 6 for Aatrox (boss.id === 22)
+    const phase2StartRound = boss.id === 22 ? 6 : -1;
     let round = 0;
     const spinDuration = 2000; // 2 seconds per spin
 
@@ -1925,12 +3569,36 @@ export const BossBattleRoom = ({
         return;
       }
 
-      setCurrentRound(round);
+      // Aatrox phase transition: switch to phase 2 at round 6
+      if (boss.id === 22 && round === phase2StartRound && maxRounds > 6) {
+        setCurrentPhase(2);
+        setRoundResults([]);
+        setWheelRotation(0);
+        setBattleMessages((prev) => [
+          ...prev,
+          `⚔️ Aatrox hồi sinh! Phase 2 bắt đầu - Aatrox nhận +8 All Stats và hút điểm thay vì ghi điểm!`,
+        ]);
+        // Delay to let React render phase transition (image change, boss stats update)
+        setTimeout(animateRound, 2000);
+        return;
+      }
+
+      // For Aatrox phase 2, display round index relative to phase start
+      const displayRound =
+        phase2StartRound >= 0 && round >= phase2StartRound
+          ? round - phase2StartRound
+          : round;
+      setCurrentRound(displayRound);
       setIsSpinning(true);
 
-      const startRotation = round === 0 ? 0 : results[round - 1].wheelRotation;
+      const startRotation =
+        round === 0 || round === phase2StartRound
+          ? 0
+          : results[round - 1].wheelRotation;
       const endRotation = results[round].wheelRotation;
       const startTime = Date.now();
+
+      let lastAutoWinner: "boss" | "team" | null = null;
 
       const animate = () => {
         const elapsed = Date.now() - startTime;
@@ -1938,73 +3606,196 @@ export const BossBattleRoom = ({
         const easeOut = 1 - Math.pow(1 - progress, 3);
         const currentRotation =
           startRotation + (endRotation - startRotation) * easeOut;
-        setWheelRotation(currentRotation);
+        setWheelRotation(currentRotation % 360);
+
+        // Tick sound when crossing between boss/team slices
+        const roundResult = results[round];
+        const roundBossWeight = specialRules.isTotalStatBattle
+          ? totalStatBaseWeights?.boss ||
+            getWeightedValues(roundResult.bossValue, roundResult.teamValue)
+              .bossWeight
+          : getWeightedValues(roundResult.bossValue, roundResult.teamValue)
+              .bossWeight;
+        const roundTeamWeight = specialRules.isTotalStatBattle
+          ? totalStatBaseWeights?.team ||
+            getWeightedValues(roundResult.bossValue, roundResult.teamValue)
+              .teamWeight
+          : getWeightedValues(roundResult.bossValue, roundResult.teamValue)
+              .teamWeight;
+        const currentWinner = getPvEWheelWinner(
+          currentRotation % 360,
+          roundBossWeight,
+          roundTeamWeight,
+        );
+        if (lastAutoWinner !== null && currentWinner !== lastAutoWinner) {
+          playTickSound();
+        }
+        lastAutoWinner = currentWinner;
 
         if (progress < 1) {
           requestAnimationFrame(animate);
         } else {
           // Spin complete, show result
-          setRoundResults(results.slice(0, round + 1));
+          playDefaultWinSound();
+          // For Aatrox phase 2, only show results from phase 2 start
+          const sliceStart =
+            phase2StartRound >= 0 && round >= phase2StartRound
+              ? phase2StartRound
+              : 0;
+          setRoundResults(results.slice(sliceStart, round + 1));
           setIsSpinning(false);
 
           const currentResult = results[round];
 
-          // Apply boss-specific effects
-          if (boss.id === 6) {
-            // Caligo freeze effect
-            freezeRandomPlayer();
-            if (currentResult.winner === "boss") {
-              freezeRandomPlayer();
-            }
-          }
-
-          if (boss.id === 24 && currentResult.winner === "boss") {
-            // Collector isekai effect
-            isekaiRandomPlayer();
-          }
-
-          if (boss.id === 25 && currentResult.winner === "boss") {
-            // Văn Tế effect - pick random player
-            const currentActivePlayers = battle.playerData.filter(
-              (p) =>
-                !frozenPlayers.some((f) => f.playerNo === p.no) &&
-                !removedPlayers.includes(p.no) &&
-                !isekaidPlayers.includes(p.no),
-            );
-            if (currentActivePlayers.length > 0) {
-              const randomIdx = Math.floor(
-                Math.random() * currentActivePlayers.length,
+          // Apply boss-specific effects (async for wheel spins)
+          const applyEffectsAndContinue = async () => {
+            // Radagon block wheel - show after team wins a round
+            if (
+              currentResult.winner === "team" &&
+              specialRules.blockTeamScoreChance > 0
+            ) {
+              const blockResult = await spinBinaryWheel(
+                ["Chặn", "Không chặn"],
+                ["#dc2626", "#16a34a"],
+                "Radagon chặn?",
+                "🛡️",
+                false,
               );
-              const selectedPlayer = currentActivePlayers[randomIdx];
+              if (blockResult === 0) {
+                currentResult.blocked = true;
+                setBattleMessages((prev) => [
+                  ...prev,
+                  `🛡️ Radagon đã chặn team ghi điểm round ${round + 1}!`,
+                ]);
+                // Update displayed results
+                const sliceStartBlock =
+                  phase2StartRound >= 0 && round >= phase2StartRound
+                    ? phase2StartRound
+                    : 0;
+                setRoundResults([...results.slice(sliceStartBlock, round + 1)]);
+              }
+            }
+
+            // Ca Cao Crit wheel - Ca Cao thắng, 20% nhận thêm 1 điểm
+            if (currentResult.winner === "boss" && specialRules.hasCrit) {
+              const critResult = await spinBinaryWheel(
+                ["Crit!", "Không"],
+                ["#f59e0b", "#6b7280"],
+                "Ca Cao Crit?",
+                "⚔️",
+                false,
+                0.2,
+                [1, 4],
+              );
+              if (critResult === 0) {
+                currentResult.bossBonusPoints =
+                  (currentResult.bossBonusPoints || 0) + 1;
+                setBattleMessages((prev) => [
+                  ...prev,
+                  `⚔️ CRIT! Ca Cao nhận thêm 1 điểm round ${round + 1}!`,
+                ]);
+                const sliceStartCrit =
+                  phase2StartRound >= 0 && round >= phase2StartRound
+                    ? phase2StartRound
+                    : 0;
+                setRoundResults([...results.slice(sliceStartCrit, round + 1)]);
+              }
+            }
+
+            // Ca Cao Evasion wheel - Ca Cao thua, 20% né (Ca Cao cũng nhận 1 điểm)
+            if (currentResult.winner === "team" && specialRules.hasEvasion) {
+              const evasionResult = await spinBinaryWheel(
+                ["Né!", "Không"],
+                ["#22c55e", "#6b7280"],
+                "Ca Cao Evasion?",
+                "💨",
+                false,
+                0.2,
+                [1, 4],
+              );
+              if (evasionResult === 0) {
+                currentResult.bossBonusPoints =
+                  (currentResult.bossBonusPoints || 0) + 1;
+                setBattleMessages((prev) => [
+                  ...prev,
+                  `💨 EVASION! Ca Cao né được round ${round + 1}! Ca Cao nhận 1 điểm.`,
+                ]);
+                const sliceStartEvade =
+                  phase2StartRound >= 0 && round >= phase2StartRound
+                    ? phase2StartRound
+                    : 0;
+                setRoundResults([...results.slice(sliceStartEvade, round + 1)]);
+              }
+            }
+
+            if (boss.id === 6 && round >= 0) {
+              // After each round: team wins = freeze 1, boss wins = freeze 2
+              const frozenNo = await freezeRandomPlayer(false);
+              if (currentResult.winner === "boss") {
+                await freezeRandomPlayer(
+                  false,
+                  frozenNo !== null ? [frozenNo] : [],
+                );
+              }
+            }
+
+            if (boss.id === 24 && currentResult.winner === "boss") {
+              // Collector isekai effect
+              await isekaiRandomPlayer();
+            }
+
+            if (boss.id === 25 && currentResult.winner === "boss") {
+              // Văn Tế effect - pick player via wheel (disabled players CAN receive, but no duplicates)
+              const currentVante = vantePlayersRef.current;
+              const vanteEligible = battle.playerData.filter(
+                (p) =>
+                  !frozenPlayersRef.current.some((f) => f.playerNo === p.no) &&
+                  !removedPlayersRef.current.includes(p.no) &&
+                  !isekaidPlayersRef.current.includes(p.no) &&
+                  !currentVante.includes(p.no),
+              );
+              if (vanteEligible.length > 0) {
+                const selectedPlayer = await spinPlayerWheel(
+                  vanteEligible,
+                  "vante",
+                );
+                setVantePlayers((prev) => {
+                  const updated = [...prev, selectedPlayer.no];
+                  vantePlayersRef.current = updated;
+                  return updated;
+                });
+                setBattleMessages((prev) => [
+                  ...prev,
+                  `📜 ${selectedPlayer.name} nhận "Văn Tế"!`,
+                ]);
+              }
+            }
+
+            // Check early win condition
+            let teamScore = 0;
+            results.slice(0, round + 1).forEach((r) => {
+              if (r.winner === "team" && !r.blocked) {
+                teamScore += 1 + (r.bonusPoints || 0);
+              }
+            });
+            if (
+              specialRules.teamPointsToWin < 4 &&
+              teamScore >= specialRules.teamPointsToWin
+            ) {
               setBattleMessages((prev) => [
                 ...prev,
-                `📜 ${selectedPlayer.name} nhận "Văn Tế"!`,
+                `🏆 Team đạt ${specialRules.teamPointsToWin} điểm - Chiến thắng!`,
               ]);
+              setBattleState("finished");
+              return;
             }
-          }
 
-          // Check early win condition
-          let teamScore = 0;
-          results.slice(0, round + 1).forEach((r) => {
-            if (r.winner === "team" && !r.blocked) {
-              teamScore += 1 + (r.bonusPoints || 0);
-            }
-          });
-          if (
-            specialRules.teamPointsToWin < 4 &&
-            teamScore >= specialRules.teamPointsToWin
-          ) {
-            setBattleMessages((prev) => [
-              ...prev,
-              `🏆 Team đạt ${specialRules.teamPointsToWin} điểm - Chiến thắng!`,
-            ]);
-            setBattleState("finished");
-            return;
-          }
+            round++;
+            // Wait a bit before next round
+            setTimeout(animateRound, 500);
+          };
 
-          round++;
-          // Wait a bit before next round
-          setTimeout(animateRound, 500);
+          applyEffectsAndContinue();
         }
       };
 
@@ -2021,11 +3812,18 @@ export const BossBattleRoom = ({
     preBattleWheelResult,
     hypnotizePlayer,
     freezeRandomPlayer,
+    spinBinaryWheel,
     isekaiRandomPlayer,
     battle.playerData,
     frozenPlayers,
     removedPlayers,
     isekaidPlayers,
+    spinPlayerWheel,
+    capraEffect,
+    bo3Round,
+    currentRound,
+    isSpinning,
+    wheelRotation,
   ]);
 
   // Reset battle
@@ -2041,18 +3839,24 @@ export const BossBattleRoom = ({
     setRemovedPlayers([]);
     setPreBattleWheelResult(null);
     setShowPreBattleWheel(false);
+    setPreBattleWheelSpinning(false);
     setCurrentPhase(1);
     setPhaseScores([]);
     setIsekaidPlayers([]);
+    setVantePlayers([]);
     setWinStreak(0);
     setRetryBattle(false);
     setRetryPenalty(0);
     setBattleMessages([]);
     setSelectedRound(null);
-    setSoloHerFrozen(false);
     setTotalStatBossTotalBonus(0);
     setTotalStatTeamTotalBonus(0);
     setTotalStatBaseWeights(null);
+    setManuallyDisabledPlayers([]);
+    setPlayerWheelConfig(null);
+    playerWheelResolveRef.current = null;
+    setCapraEffect(null);
+    setBo3Round(null);
   };
 
   // Handle pre-battle wheel spin
@@ -2069,6 +3873,71 @@ export const BossBattleRoom = ({
     preBattleWheelResult,
     preBattleWheelSpinning,
     spinPreBattleWheel,
+  ]);
+
+  // Export battle history to JSON
+  const exportBattleHistory = useCallback(() => {
+    const history = {
+      timestamp: new Date().toISOString(),
+      teamId: battle.teamId,
+      boss: {
+        id: boss.id,
+        name: boss.name,
+        stats: bossStats,
+      },
+      team: {
+        members: battle.playerData.map((p) => ({
+          no: p.no,
+          name: p.name,
+          username: p.username,
+          stats: p.stats,
+          race: p.race,
+          quirks: p.quirks,
+          disabled: manuallyDisabledPlayers.includes(p.no),
+        })),
+        totalStats: teamStats,
+      },
+      soloHer: soloHerInfo.active
+        ? {
+            player: soloHerInfo.soloPlayer?.name,
+            multiplier: soloHerInfo.multiplier,
+          }
+        : null,
+      rounds: roundResults.map((r, idx) => ({
+        round: idx + 1,
+        stat: STAT_LABELS[r.stat] || r.stat,
+        bossValue: r.bossValue,
+        teamValue: r.teamValue,
+        winner: r.winner,
+        blocked: r.blocked || false,
+        bossBonusPoints: r.bossBonusPoints || 0,
+        bonusPoints: r.bonusPoints || 0,
+      })),
+      finalScore: score,
+      winner: finalWinner,
+      battleMessages,
+    };
+
+    const blob = new Blob([JSON.stringify(history, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `battle-team${battle.teamId}-vs-${boss.name.replace(/\s+/g, "_")}-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [
+    battle,
+    boss,
+    bossStats,
+    teamStats,
+    roundResults,
+    score,
+    finalWinner,
+    battleMessages,
+    soloHerInfo,
+    manuallyDisabledPlayers,
   ]);
 
   // Get current stat for wheel display
@@ -2103,7 +3972,7 @@ export const BossBattleRoom = ({
         return {
           bossWeight: totalStatBaseWeights.boss,
           teamWeight: totalStatBaseWeights.team,
-          rotation: wheelRotation
+          rotation: wheelRotation,
         };
       }
 
@@ -2112,10 +3981,20 @@ export const BossBattleRoom = ({
 
       if (specialRules.isTotalStatBattle) {
         // Total Stat Battle mode - compare sum of all stats (first round, no saved weights yet)
-        const baseBossTotal = (bossStats.str || 0) + (bossStats.spd || 0) + (bossStats.dur || 0) +
-                             (bossStats.iq || 0) + (bossStats.biq || 0) + (bossStats.ma || 0);
-        const baseTeamTotal = teamStats.str + teamStats.spd + teamStats.dur +
-                             teamStats.iq + teamStats.biq + teamStats.ma;
+        const baseBossTotal =
+          (bossStats.str || 0) +
+          (bossStats.spd || 0) +
+          (bossStats.dur || 0) +
+          (bossStats.iq || 0) +
+          (bossStats.biq || 0) +
+          (bossStats.ma || 0);
+        const baseTeamTotal =
+          teamStats.str +
+          teamStats.spd +
+          teamStats.dur +
+          teamStats.iq +
+          teamStats.biq +
+          teamStats.ma;
         bossValue = baseBossTotal;
         teamValue = baseTeamTotal;
       } else if (currentStat) {
@@ -2125,7 +4004,10 @@ export const BossBattleRoom = ({
         return { bossWeight: 50, teamWeight: 50, rotation: 0 };
       }
 
-      const { bossWeight, teamWeight } = getWeightedValues(bossValue, teamValue);
+      const { bossWeight, teamWeight } = getWeightedValues(
+        bossValue,
+        teamValue,
+      );
       return { bossWeight, teamWeight, rotation: wheelRotation };
     }
     return { bossWeight: 50, teamWeight: 50, rotation: 0 };
@@ -2207,9 +4089,66 @@ export const BossBattleRoom = ({
               />
             </div>
 
+            {/* Boss Info Panel */}
+            <div className="mt-2 bg-gray-800/80 rounded-lg p-3 border border-gray-700 max-h-48 overflow-y-auto">
+              <h4 className="text-red-400 text-xs font-bold mb-2">
+                Boss Info:
+              </h4>
+              {/* Boss Stats */}
+              <div className="grid grid-cols-6 gap-1 text-center text-xs mb-2">
+                {(["str", "spd", "dur", "iq", "biq", "ma"] as const).map(
+                  (stat) => (
+                    <div key={stat} className="bg-gray-700/50 rounded p-1">
+                      <div className="text-gray-400 text-[10px]">
+                        {stat.toUpperCase()}
+                      </div>
+                      <div className="text-red-400 font-bold">
+                        {bossStats[stat] ?? "?"}
+                      </div>
+                    </div>
+                  ),
+                )}
+              </div>
+              {/* Rules */}
+              {boss.rules && boss.rules.length > 0 && (
+                <div className="space-y-1 mb-2">
+                  {boss.rules.map((rule, idx) => (
+                    <p
+                      key={idx}
+                      className="text-[11px] text-gray-300 leading-tight"
+                    >
+                      {rule}
+                    </p>
+                  ))}
+                </div>
+              )}
+              {/* Applied Bonuses */}
+              {ruleBonus.details.length > 0 && (
+                <div className="border-t border-gray-600 pt-1 mt-1 space-y-0.5">
+                  {ruleBonus.details.map((detail, idx) => (
+                    <p
+                      key={idx}
+                      className="text-[11px] text-yellow-400 leading-tight"
+                    >
+                      {detail}
+                    </p>
+                  ))}
+                </div>
+              )}
+              {/* Reward / Punishment */}
+              <div className="border-t border-gray-600 pt-1 mt-1 space-y-0.5">
+                <p className="text-[11px] text-green-400 leading-tight">
+                  Reward: {boss.reward}
+                </p>
+                <p className="text-[11px] text-red-300 leading-tight">
+                  Punishment: {boss.punishment}
+                </p>
+              </div>
+            </div>
+
             {/* Battle Messages */}
             {battleMessages.length > 0 && (
-              <div className="mt-4 bg-gray-800/80 rounded-lg p-3 border border-gray-700 max-h-32 overflow-y-auto">
+              <div className="mt-2 bg-gray-800/80 rounded-lg p-3 border border-gray-700 max-h-32 overflow-y-auto">
                 <h4 className="text-gray-400 text-xs font-bold mb-2">
                   Battle Log:
                 </h4>
@@ -2256,7 +4195,11 @@ export const BossBattleRoom = ({
                               : "border-gray-600 bg-gray-800/50 text-gray-500"
                       }`}
                     >
-                      {specialRules.isTotalStatBattle ? `R${i + 1}` : (i < 6 ? STAT_LABELS[STAT_KEYS[i]] : `R${i + 1}`)}
+                      {specialRules.isTotalStatBattle
+                        ? `R${i + 1}`
+                        : i < 6
+                          ? STAT_LABELS[STAT_KEYS[i]]
+                          : `R${i + 1}`}
                     </button>
                   );
                 })}
@@ -2272,89 +4215,128 @@ export const BossBattleRoom = ({
                 />
 
                 {/* Current Round Info */}
-                {battleState === "fighting" && !isSpinning && (currentStat || specialRules.isTotalStatBattle) && (
-                  <div className="mt-4 text-center">
-                    <div className="text-lg font-bold text-white mb-2">
-                      {specialRules.isTotalStatBattle
-                        ? `Round ${currentRound + 1}: Tổng Stat`
-                        : `Round ${currentRound + 1}: ${STAT_FULL_LABELS[currentStat!]}`}
-                    </div>
-                    <div className="flex justify-center gap-8 text-sm">
-                      {specialRules.isTotalStatBattle ? (
-                        <>
-                          <div>
-                            <span className="text-gray-400">Boss Total: </span>
-                            <span className="text-red-400 font-bold">
-                              {((bossStats.str || 0) + (bossStats.spd || 0) + (bossStats.dur || 0) +
-                                (bossStats.iq || 0) + (bossStats.biq || 0) + (bossStats.ma || 0)) + totalStatBossTotalBonus}
-                            </span>
-                            {totalStatBossTotalBonus > 0 && (
-                              <span className="text-yellow-400 ml-1">(+{totalStatBossTotalBonus})</span>
-                            )}
-                          </div>
-                          <div>
-                            <span className="text-gray-400">Team Total: </span>
-                            <span className="text-green-400 font-bold">
-                              {(teamStats.str + teamStats.spd + teamStats.dur +
-                                teamStats.iq + teamStats.biq + teamStats.ma) + totalStatTeamTotalBonus}
-                            </span>
-                            {totalStatTeamTotalBonus > 0 && (
-                              <span className="text-yellow-400 ml-1">(+{totalStatTeamTotalBonus})</span>
-                            )}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div>
-                            <span className="text-gray-400">Boss: </span>
-                            <span className="text-red-400 font-bold">
-                              {bossStats[currentStat!] || 0}
-                            </span>
-                            {(bossStats[currentStat!] || 0) >
-                              (teamStats[currentStat!] || 0) &&
-                              !specialRules.noDoubleWeight && (
-                                <span className="text-yellow-400 ml-1">(x2)</span>
+                {battleState === "fighting" &&
+                  !isSpinning &&
+                  (currentStat || specialRules.isTotalStatBattle) && (
+                    <div className="mt-4 text-center">
+                      <div className="text-lg font-bold text-white mb-2">
+                        {specialRules.isTotalStatBattle
+                          ? `Round ${currentRound + 1}: Tổng Stat`
+                          : `Round ${currentRound + 1}: ${STAT_FULL_LABELS[currentStat!]}`}
+                        {bo3Round && (
+                          <span className="ml-2 text-sm text-yellow-400 font-semibold">
+                            (BO3: Boss {bo3Round.bossWins} - {bo3Round.teamWins} Team)
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex justify-center gap-8 text-sm">
+                        {specialRules.isTotalStatBattle ? (
+                          <>
+                            <div>
+                              <span className="text-gray-400">
+                                Boss Total:{" "}
+                              </span>
+                              <span className="text-red-400 font-bold">
+                                {(bossStats.str || 0) +
+                                  (bossStats.spd || 0) +
+                                  (bossStats.dur || 0) +
+                                  (bossStats.iq || 0) +
+                                  (bossStats.biq || 0) +
+                                  (bossStats.ma || 0) +
+                                  totalStatBossTotalBonus}
+                              </span>
+                              {totalStatBossTotalBonus > 0 && (
+                                <span className="text-yellow-400 ml-1">
+                                  (+{totalStatBossTotalBonus})
+                                </span>
                               )}
-                          </div>
-                          <div>
-                            <span className="text-gray-400">Team: </span>
-                            <span className="text-green-400 font-bold">
-                              {teamStats[currentStat!] || 0}
-                            </span>
-                            {(teamStats[currentStat!] || 0) >
-                              (bossStats[currentStat!] || 0) &&
-                              !specialRules.noDoubleWeight && (
-                                <span className="text-yellow-400 ml-1">(x2)</span>
+                            </div>
+                            <div>
+                              <span className="text-gray-400">
+                                Team Total:{" "}
+                              </span>
+                              <span className="text-green-400 font-bold">
+                                {teamStats.str +
+                                  teamStats.spd +
+                                  teamStats.dur +
+                                  teamStats.iq +
+                                  teamStats.biq +
+                                  teamStats.ma +
+                                  totalStatTeamTotalBonus}
+                              </span>
+                              {totalStatTeamTotalBonus > 0 && (
+                                <span className="text-yellow-400 ml-1">
+                                  (+{totalStatTeamTotalBonus})
+                                </span>
                               )}
-                          </div>
-                        </>
-                      )}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div>
+                              <span className="text-gray-400">Boss: </span>
+                              <span className="text-red-400 font-bold">
+                                {bossStats[currentStat!] || 0}
+                              </span>
+                              {(bossStats[currentStat!] || 0) >
+                                (teamStats[currentStat!] || 0) &&
+                                !specialRules.noDoubleWeight && (
+                                  <span className="text-yellow-400 ml-1">
+                                    (x2)
+                                  </span>
+                                )}
+                            </div>
+                            <div>
+                              <span className="text-gray-400">Team: </span>
+                              <span className="text-green-400 font-bold">
+                                {teamStats[currentStat!] || 0}
+                              </span>
+                              {(teamStats[currentStat!] || 0) >
+                                (bossStats[currentStat!] || 0) &&
+                                !specialRules.noDoubleWeight && (
+                                  <span className="text-yellow-400 ml-1">
+                                    (x2)
+                                  </span>
+                                )}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <button
+                        onClick={spinWheel}
+                        className="mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-lg transition-all transform hover:scale-105"
+                      >
+                        Spin!
+                      </button>
                     </div>
-                    <button
-                      onClick={spinWheel}
-                      className="mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-lg transition-all transform hover:scale-105"
-                    >
-                      Spin!
-                    </button>
-                  </div>
-                )}
+                  )}
 
                 {/* Selected Round Info */}
                 {selectedRound !== null && displayResult && (
                   <div className="mt-4 text-center">
                     <div className="text-lg font-bold text-yellow-400 mb-2">
                       Round {selectedRound + 1}:{" "}
-                      {specialRules.isTotalStatBattle ? "Tổng Stat" : STAT_FULL_LABELS[displayResult.stat]}
+                      {specialRules.isTotalStatBattle
+                        ? "Tổng Stat"
+                        : STAT_FULL_LABELS[displayResult.stat]}
                     </div>
                     <div className="flex justify-center gap-8 text-sm">
                       <div>
-                        <span className="text-gray-400">{specialRules.isTotalStatBattle ? "Boss Total: " : "Boss: "}</span>
+                        <span className="text-gray-400">
+                          {specialRules.isTotalStatBattle
+                            ? "Boss Total: "
+                            : "Boss: "}
+                        </span>
                         <span className="text-red-400 font-bold">
                           {displayResult.bossValue}
                         </span>
                       </div>
                       <div>
-                        <span className="text-gray-400">{specialRules.isTotalStatBattle ? "Team Total: " : "Team: "}</span>
+                        <span className="text-gray-400">
+                          {specialRules.isTotalStatBattle
+                            ? "Team Total: "
+                            : "Team: "}
+                        </span>
                         <span className="text-green-400 font-bold">
                           {displayResult.teamValue}
                         </span>
@@ -2372,19 +4354,50 @@ export const BossBattleRoom = ({
                       }`}
                     >
                       {displayResult.winner === "boss"
-                        ? "BOSS WIN"
+                        ? displayResult.bossBonusPoints
+                          ? `BOSS WIN ${displayResult.bossBonusPoints > 0 ? "+" : ""}${displayResult.bossBonusPoints}`
+                          : "BOSS WIN"
                         : displayResult.winner === "team"
                           ? displayResult.blocked
                             ? "BLOCKED"
-                            : "TEAM WIN"
+                            : displayResult.bossBonusPoints
+                              ? `TEAM WIN (Boss ${displayResult.bossBonusPoints > 0 ? "+" : ""}${displayResult.bossBonusPoints})`
+                              : "TEAM WIN"
                           : "TIE"}
                     </div>
-                    <button
-                      onClick={() => setSelectedRound(null)}
-                      className="mt-2 px-4 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded transition-all"
-                    >
-                      Back to Current
-                    </button>
+                    <div className="mt-2 flex gap-2 justify-center">
+                      <button
+                        onClick={() => setSelectedRound(null)}
+                        className="px-4 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded transition-all"
+                      >
+                        Back to Current
+                      </button>
+                      {selectedRound !== null &&
+                        !isSpinning &&
+                        (battleState === "fighting" ||
+                          battleState === "finished") && (
+                          <button
+                            onClick={() => replayRound(selectedRound)}
+                            className="px-4 py-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white text-sm font-bold rounded transition-all"
+                          >
+                            Đấu lại Round{" "}
+                            {selectedRound + 1}
+                          </button>
+                        )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Let Me Solo Her Notification */}
+                {soloHerInfo.active && soloHerInfo.soloPlayer && (
+                  <div className="mt-4 p-3 rounded-lg border-2 text-center bg-yellow-900/30 border-yellow-500/50">
+                    <div className="font-bold text-lg text-yellow-400">
+                      {soloHerInfo.soloPlayer.name} - Let Me Solo Her [ACTIVE]
+                    </div>
+                    <div className="text-sm text-gray-300 mt-1">
+                      x{soloHerInfo.multiplier} stats - Solo boss! Thắng: nhận
+                      Archetype Gigachad
+                    </div>
                   </div>
                 )}
 
@@ -2416,30 +4429,24 @@ export const BossBattleRoom = ({
                 )}
 
                 {/* Pre-Battle Wheel */}
-                {battleState === "preBattle" && showPreBattleWheel && (
-                  <div className="mt-4 text-center">
-                    {preBattleWheelSpinning ? (
-                      <div className="text-purple-400 animate-pulse">
-                        Pre-Battle Wheel Spinning...
+                {battleState === "preBattle" &&
+                  showPreBattleWheel &&
+                  preBattleWheelResult && (
+                    <div className="mt-4 text-center">
+                      <div className="text-yellow-400 font-bold text-lg">
+                        🎰 Kết quả: Số {preBattleWheelResult.number}
                       </div>
-                    ) : preBattleWheelResult ? (
-                      <div>
-                        <div className="text-yellow-400 font-bold">
-                          Result: {preBattleWheelResult.number}
-                        </div>
-                        <div className="text-gray-300">
-                          {preBattleWheelResult.description}
-                        </div>
-                        <button
-                          onClick={continueAfterPreBattleWheel}
-                          className="mt-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-lg"
-                        >
-                          Continue
-                        </button>
+                      <div className="text-gray-300 mt-1">
+                        {preBattleWheelResult.description}
                       </div>
-                    ) : null}
-                  </div>
-                )}
+                      <button
+                        onClick={continueAfterPreBattleWheel}
+                        className="mt-3 px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-bold rounded-lg transition-all"
+                      >
+                        Tiếp tục
+                      </button>
+                    </div>
+                  )}
 
                 {/* Finished State */}
                 {battleState === "finished" && (
@@ -2462,12 +4469,20 @@ export const BossBattleRoom = ({
                     <div className="text-white mb-4">
                       Final Score: {score.team} - {score.boss}
                     </div>
-                    <button
-                      onClick={resetBattle}
-                      className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-lg"
-                    >
-                      Battle Again
-                    </button>
+                    <div className="flex gap-3 justify-center">
+                      <button
+                        onClick={resetBattle}
+                        className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-lg"
+                      >
+                        Battle Again
+                      </button>
+                      <button
+                        onClick={exportBattleHistory}
+                        className="px-6 py-2 bg-gradient-to-r from-gray-600 to-gray-500 hover:from-gray-500 hover:to-gray-400 text-white font-bold rounded-lg transition-all"
+                      >
+                        Export JSON
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -2562,6 +4577,25 @@ export const BossBattleRoom = ({
           </div>
         </div>
       </div>
+
+      {/* Player Selection Wheel Overlay */}
+      {playerWheelConfig && (
+        <PlayerSelectionWheel
+          key={playerWheelKeyRef.current}
+          config={playerWheelConfig}
+        />
+      )}
+
+      {/* Binary Wheel Overlay (50/50 decisions) */}
+      {binaryWheelConfig && (
+        <BinaryWheel
+          key={binaryWheelKeyRef.current}
+          config={binaryWheelConfig}
+        />
+      )}
+      {d20WheelConfig && (
+        <D20Wheel key={d20WheelKeyRef.current} config={d20WheelConfig} />
+      )}
     </div>
   );
 };

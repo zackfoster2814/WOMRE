@@ -120,7 +120,10 @@
       "members": [
         { "name": "Yami", "username": "yami2233" },
         { "name": "tophate", "username": "d233tvu" },
-        { "name": "Adrian Fahrenheit Țepeș", "username": "adrian_the_gigachad" },
+        {
+          "name": "Adrian Fahrenheit Țepeș",
+          "username": "adrian_the_gigachad"
+        },
         { "name": "Mr. C.B.", "username": "dogefear" },
         { "name": "ngọn cỏ ven sông", "username": "ngon_co_ven_duong" },
         { "name": "Trung Kiên", "username": "trungkien1412" },
@@ -258,7 +261,7 @@
       "boss": "The Elder Brain",
       "members": [
         { "name": "Asumi Kurenai", "username": "weaboololi" },
-        { "name": "Ca Cao", "username": "Catos" },
+        { "name": "Ca Cao", "username": "Catos CaCao" },
         { "name": "nhatdog", "username": "nhatdog" },
         { "name": "trantrinhtri", "username": "trantrinhtri" },
         { "name": "Koroo", "username": "koroo_51" },
@@ -277,7 +280,7 @@
         { "name": "Bộ PC", "username": "conchocaobangbopc" },
         { "name": "Vilhelm", "username": "Vilhelm" },
         { "name": "NhờnNnNn", "username": "nhonnnnn" },
-        { "name": "Cô Fulun", "username": "cofulun" }
+        { "name": "Cô Fulun`", "username": "cofulun" }
       ]
     },
     {
@@ -299,7 +302,7 @@
       "boss": "Capra Demon",
       "members": [
         { "name": "Đừng Nhờn với Two Fingers", "username": "dabotnhondc1nam" },
-        { "name": "Fami", "username": "Fami" },
+        { "name": "Fami", "username": "Catos Fami" },
         { "name": "Sâm bổ lượng Châu Đốc", "username": "ginkka" },
         { "name": "catfish", "username": "catfish0140" },
         { "name": "zun", "username": "zuniee" },

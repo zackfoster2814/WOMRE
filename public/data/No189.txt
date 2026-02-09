@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: Human
-Sub-race: Da đen
+Sub-race: Đen
 ```
 
 ```

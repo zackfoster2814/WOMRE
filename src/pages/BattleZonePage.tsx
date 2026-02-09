@@ -54,6 +54,8 @@ interface PlayerData {
   team?: number;
   quirks?: string[];
   race?: string;
+  subRace?: string;
+  archetypes?: string[];
 }
 
 interface TeamMemberJson {
@@ -103,10 +105,8 @@ export const BattleZonePage = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
               <div className="relative z-10">
-                <div className="text-6xl mb-4">🤖</div>
                 <h2 className="text-3xl font-bold text-white mb-2">PvE</h2>
                 <p className="text-gray-400">Player vs Environment</p>
-                <p className="text-sm text-gray-500 mt-2">(Coming Soon)</p>
               </div>
             </button>
 
@@ -116,7 +116,6 @@ export const BattleZonePage = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-orange-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
               <div className="relative z-10">
-                <div className="text-6xl mb-4">⚔️</div>
                 <h2 className="text-3xl font-bold text-white mb-2">PvP</h2>
                 <p className="text-gray-400">Player vs Player</p>
               </div>
@@ -1353,7 +1352,9 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       <div className="text-3xl font-bold text-blue-400">
                         {currentP1Val}
                         {currentP1Val > currentP2Val && (
-                          <span className="text-yellow-400 text-lg ml-1">×2={currentP1Val * 2}</span>
+                          <span className="text-yellow-400 text-lg ml-1">
+                            ×2={currentP1Val * 2}
+                          </span>
                         )}
                       </div>
                       <div className="text-sm text-gray-400">
@@ -1366,7 +1367,9 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       <div className="text-3xl font-bold text-red-400">
                         {currentP2Val}
                         {currentP2Val > currentP1Val && (
-                          <span className="text-yellow-400 text-lg ml-1">×2={currentP2Val * 2}</span>
+                          <span className="text-yellow-400 text-lg ml-1">
+                            ×2={currentP2Val * 2}
+                          </span>
                         )}
                       </div>
                       <div className="text-sm text-gray-400">
@@ -1506,6 +1509,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
     "with-boss",
   );
   const [battleView, setBattleView] = useState<BattleView | null>(null);
+  const [battleSessionId, setBattleSessionId] = useState(0);
 
   // Load data on mount
   useEffect(() => {
@@ -1558,6 +1562,8 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                     team: char.team,
                     quirks: char.quirks.map((q) => q.name),
                     race: char.race?.race,
+                    subRace: char.race?.subRace,
+                    archetypes: char.archetypes,
                   });
                 }
               })
@@ -1596,7 +1602,9 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
   // Build battle views (teams with their assigned bosses)
   const battles = useMemo(() => {
     return teams.map((team): BattleView => {
-      const boss = team.boss ? bossMap.get(team.boss.toLowerCase()) || null : null;
+      const boss = team.boss
+        ? bossMap.get(team.boss.toLowerCase()) || null
+        : null;
 
       // Match members with player data
       const playerData: PlayerData[] = [];
@@ -1659,9 +1667,10 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
     );
   };
 
-  // Start battle
+  // Start battle - increment session ID to force fresh component state
   const startBattle = (battle: BattleView) => {
     if (!battle.boss) return;
+    setBattleSessionId((prev) => prev + 1);
     setBattleView(battle);
   };
 
@@ -1852,9 +1861,10 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
         )}
       </div>
 
-      {/* Battle Room Modal */}
+      {/* Battle Room Modal - key forces fresh state on each open */}
       {battleView && battleView.boss && (
         <BossBattleRoom
+          key={`battle-${battleView.teamId}-${battleSessionId}`}
           battle={battleView}
           onClose={() => setBattleView(null)}
           seasonRaceCounts={seasonRaceCounts}

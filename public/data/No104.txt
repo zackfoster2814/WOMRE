@@ -1,4 +1,4 @@
-No.
+No.104
 Name: 1037 (.huy._)
 Status: Còn sống
 Vòng thi đấu: -
@@ -26,7 +26,7 @@ Archetype:
 ```
 ```
 Str: 7
-Spd: 7 (Ban đầu là 4, +3 từ Archetype)
+Spd: 4 (+3 từ Archetype)
 Dur: 9
 IQ: 4
 BIQ: 7

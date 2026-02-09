@@ -33,7 +33,7 @@
           "description": "Team +3 All Stats (có Human)"
         },
         {
-          "type": "hasRace",
+          "type": "hasArchetype",
           "race": "Gigachad",
           "bonus": 3,
           "target": "team",
@@ -208,22 +208,23 @@
         "ma": 10
       },
       "rules": [
-        "Caligo đóng băng một thành viên trong tổ đội sau 1 round so stat, khiến người đồng đội không thể đóng góp trong phần còn lại của trận chiến nữa.",
-        "Khi thắng Round, Caligo đóng băng thêm 1 người nữa.",
+        "Round đầu tiên (STR) không đóng băng ai.",
+        "Từ Round 2 (SPD) trở đi: Team thắng thì đóng băng 1 người, Boss thắng thì đóng băng 2 người.",
         "Thành viên có Race thuộc chủng tộc từ Dragon trở lên sẽ không thể bị đóng băng."
       ],
       "ruleEffects": [
         {
           "type": "freezeAfterRound",
           "freezeCount": 1,
+          "startFromRound": 1,
           "target": "team",
-          "description": "Caligo đóng băng 1 thành viên sau mỗi round"
+          "description": "Từ round 2 trở đi: team thắng = đóng băng 1, boss thắng = đóng băng 2"
         },
         {
           "type": "freezeOnBossWin",
           "freezeCount": 1,
           "target": "team",
-          "description": "Caligo đóng băng thêm 1 người khi thắng round"
+          "description": "Boss thắng round: đóng băng thêm 1 người (tổng 2)"
         },
         {
           "type": "freezeImmunity",
@@ -313,7 +314,7 @@
       "rules": [
         "Spooky Spooky Skeleton.",
         "Không nhân đôi để cấu thành trọng số của cả hai bên khi combat.",
-        "Nếu bạn không thắng liên tiếp (Chuỗi) 6 round, đánh lại Combat lần nữa với All Party Stats -20.",
+        "Nếu bạn không thắng liên tiếp (Chuỗi) 6 round, đánh lại Combat lần nữa với All Party Stats -4.",
         "Nếu có bất kỳ 1 Party Stat nào dưới 20, tổ đội bạn thua."
       ],
       "ruleEffects": [
@@ -325,9 +326,9 @@
         {
           "type": "winStreakRequired",
           "streakCount": 6,
-          "penaltyStats": -20,
+          "penaltyStats": -4,
           "target": "team",
-          "description": "Phải thắng 6 round liên tiếp, nếu không đánh lại với -20 All Party Stats"
+          "description": "Phải thắng 6 round liên tiếp, nếu không đánh lại với -4 All Party Stats (tổng -24)"
         },
         {
           "type": "partyStatMinimum",
@@ -414,9 +415,7 @@
         "biq": 33,
         "ma": 40
       },
-      "rules": [
-        "Mỗi Round bạn thua, Night King nhận +8 All Stats."
-      ],
+      "rules": ["Mỗi Round bạn thua, Night King nhận +8 All Stats."],
       "ruleEffects": [
         {
           "type": "bossStatBoostOnTeamLoss",
@@ -439,9 +438,7 @@
         "biq": 28,
         "ma": 41
       },
-      "rules": [
-        "Radagon có 50% chặn bạn ghi điểm."
-      ],
+      "rules": ["Radagon có 50% chặn bạn ghi điểm."],
       "ruleEffects": [
         {
           "type": "blockTeamScore",
@@ -496,11 +493,11 @@
       "id": 16,
       "name": "Capra Demon",
       "stats": {
-        "str": 25,
-        "spd": 35,
-        "dur": 45,
-        "iq": 25,
-        "biq": 50,
+        "str": 9925,
+        "spd": 9935,
+        "dur": 9945,
+        "iq": 9925,
+        "biq": 10,
         "ma": 30
       },
       "rules": [
@@ -663,10 +660,30 @@
           "type": "preBattleWheel",
           "wheelSize": 20,
           "outcomes": [
-            { "range": [1, 1], "effect": "teamStartingPoints", "value": -2, "description": "Team -2 điểm khởi đầu" },
-            { "range": [20, 20], "effect": "teamStartingPoints", "value": 2, "description": "Team +2 điểm khởi đầu" },
-            { "range": [2, 9], "effect": "teamStats", "value": -3, "description": "Party Stats -3 All" },
-            { "range": [10, 19], "effect": "teamStats", "value": 3, "description": "Party Stats +3 All" }
+            {
+              "range": [1, 1],
+              "effect": "teamStartingPoints",
+              "value": -2,
+              "description": "Team -2 điểm khởi đầu"
+            },
+            {
+              "range": [20, 20],
+              "effect": "teamStartingPoints",
+              "value": 2,
+              "description": "Team +2 điểm khởi đầu"
+            },
+            {
+              "range": [2, 9],
+              "effect": "teamStats",
+              "value": -3,
+              "description": "Party Stats -3 All"
+            },
+            {
+              "range": [10, 19],
+              "effect": "teamStats",
+              "value": 3,
+              "description": "Party Stats +3 All"
+            }
           ],
           "target": "team",
           "description": "Quay vòng quay 1-20 trước trận để xác định buff/debuff"
@@ -698,10 +715,31 @@
           "type": "preBattleWheel",
           "wheelSize": 20,
           "outcomes": [
-            { "range": [1, 1], "effect": "bossStats", "value": 666, "description": "Raphael All Stats = 666" },
-            { "range": [20, 20], "effect": "bossStats", "value": -66, "description": "Raphael -66 All Stats" },
-            { "range": [2, 9], "effect": "removeGearAfter", "startingPoints": 1, "description": "Tước Gear sau trận, +1 điểm khởi đầu" },
-            { "range": [10, 19], "effect": "giveGearAfter", "gear": "Golden Coin", "count": 2, "description": "+2 Golden Coin sau trận" }
+            {
+              "range": [1, 1],
+              "effect": "bossStats",
+              "value": 666,
+              "description": "Raphael All Stats = 666"
+            },
+            {
+              "range": [20, 20],
+              "effect": "bossStats",
+              "value": -66,
+              "description": "Raphael -66 All Stats"
+            },
+            {
+              "range": [2, 9],
+              "effect": "removeGearAfter",
+              "startingPoints": 1,
+              "description": "Tước Gear sau trận, +1 điểm khởi đầu"
+            },
+            {
+              "range": [10, 19],
+              "effect": "giveGearAfter",
+              "gear": "Golden Coin",
+              "count": 2,
+              "description": "+2 Golden Coin sau trận"
+            }
           ],
           "target": "both",
           "description": "Quay vòng quay 1-20 trước trận để xác định hiệu ứng"
@@ -937,9 +975,7 @@
         "biq": 25,
         "ma": 25
       },
-      "rules": [
-        "Mambo."
-      ],
+      "rules": ["Mambo."],
       "ruleEffects": [
         {
           "type": "mambo",
