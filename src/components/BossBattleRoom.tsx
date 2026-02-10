@@ -354,6 +354,7 @@ const PlayerSelectionWheel = ({ config }: { config: PlayerWheelConfig }) => {
     freeze: "Đóng băng",
     isekai: "Isekai",
     vante: "Văn Tế",
+    hypnotize: "Thôi miên",
   };
 
   const effectEmojis: Record<string, string> = {
@@ -489,9 +490,14 @@ const PlayerSelectionWheel = ({ config }: { config: PlayerWheelConfig }) => {
 
     // Calculate target angle so pointer (270°) lands on target slice
     const sliceAngle = 360 / players.length;
-    const targetSliceCenter = targetIndex * sliceAngle + sliceAngle / 2;
-    // Pointer at 270° (top). We need: (270 - finalRotation) % 360 = targetSliceCenter
-    const baseTargetRotation = (270 - targetSliceCenter + 360) % 360;
+    const sliceStart = targetIndex * sliceAngle;
+
+    // Random position within the target slice
+    const randomOffset = Math.random() * sliceAngle;
+    const targetSlicePosition = sliceStart + randomOffset;
+
+    // Pointer at 270° (top). We need: (270 - finalRotation) % 360 = targetSlicePosition
+    const baseTargetRotation = (270 - targetSlicePosition + 360) % 360;
     const extraRotations = 5 + Math.floor(Math.random() * 3);
     const targetRotation = extraRotations * 360 + baseTargetRotation;
 
@@ -1373,6 +1379,11 @@ export const BossBattleRoom = ({
   const d20WheelKeyRef = useRef(0);
   const d20WheelResolveRef = useRef<((num: number) => void) | null>(null);
 
+  // Tie-break result
+  const [tieBreakResult, setTieBreakResult] = useState<"team" | "boss" | null>(
+    null,
+  );
+
   const boss = battle.boss!;
 
   // Boss image extensions mapping
@@ -2236,7 +2247,6 @@ export const BossBattleRoom = ({
       totals.biq += value;
       totals.ma += value;
     }
-
     if (retryPenalty > 0) {
       totals.str -= retryPenalty;
       totals.spd -= retryPenalty;
@@ -2245,7 +2255,6 @@ export const BossBattleRoom = ({
       totals.biq -= retryPenalty;
       totals.ma -= retryPenalty;
     }
-
     return totals;
   }, [
     activePlayers,
@@ -2259,7 +2268,28 @@ export const BossBattleRoom = ({
 
   // Calculate boss stats
   const bossStats = useMemo(() => {
-    let totalBonus = ruleBonus.bossBonus + dynamicBossBonus;
+    let totalBonus = ruleBonus.bossBonus;
+
+    // Laerys (26): Bonus only applies to remaining rounds AFTER next round
+    let laerysBonusByRound: Record<number, number> = {};
+    if (boss.id === 26) {
+      // Calculate bonus from each team win separately
+      // Each win grants 60 points divided by remaining rounds at that time
+      // But bonus only applies to rounds AFTER the next one (round + 2 onwards)
+      roundResults.forEach((result, idx) => {
+        if (result.winner === "team") {
+          const remainingRoundsAfterThisWin = 6 - (idx + 1);
+          if (remainingRoundsAfterThisWin > 0) {
+            laerysBonusByRound[idx] = Math.floor(
+              60 / remainingRoundsAfterThisWin,
+            );
+          }
+        }
+      });
+      // Don't add to totalBonus, will apply separately per stat
+    } else {
+      totalBonus += dynamicBossBonus;
+    }
 
     if (preBattleWheelResult?.effect === "bossStats") {
       const value = parseInt(
@@ -2305,20 +2335,57 @@ export const BossBattleRoom = ({
       return { str: bossTotal, spd: 0, dur: 0, iq: 0, biq: 0, ma: 0 };
     }
 
-    const stats: BossStats = {
-      str:
-        (boss.stats.str || 0) + totalBonus + (dynamicBossStatChanges.str || 0),
-      spd:
-        (boss.stats.spd || 0) + totalBonus + (dynamicBossStatChanges.spd || 0),
-      dur:
-        (boss.stats.dur || 0) + totalBonus + (dynamicBossStatChanges.dur || 0),
-      iq: (boss.stats.iq || 0) + totalBonus + (dynamicBossStatChanges.iq || 0),
-      biq:
-        (boss.stats.biq || 0) + totalBonus + (dynamicBossStatChanges.biq || 0),
-      ma: (boss.stats.ma || 0) + totalBonus + (dynamicBossStatChanges.ma || 0),
+    // Helper to calculate Laerys bonus for a specific stat
+    const getLaerysStatBonus = (statIndex: number): number => {
+      if (boss.id !== 26) return 0;
+      let bonus = 0;
+      // Apply bonus from each round win that affects this stat
+      // Bonus from round i only applies to stats >= i + 2
+      Object.entries(laerysBonusByRound).forEach(
+        ([roundIdxStr, roundBonus]) => {
+          const roundIdx = parseInt(roundIdxStr);
+          if (statIndex >= roundIdx + 1) {
+            bonus += roundBonus;
+          }
+        },
+      );
+      return bonus;
     };
 
-    if (boss.id === 8 && currentRound > 0 && currentRound % 2 === 0) {
+    const stats: BossStats = {
+      str:
+        (boss.stats.str || 0) +
+        totalBonus +
+        (dynamicBossStatChanges.str || 0) +
+        getLaerysStatBonus(0),
+      spd:
+        (boss.stats.spd || 0) +
+        totalBonus +
+        (dynamicBossStatChanges.spd || 0) +
+        getLaerysStatBonus(1),
+      dur:
+        (boss.stats.dur || 0) +
+        totalBonus +
+        (dynamicBossStatChanges.dur || 0) +
+        getLaerysStatBonus(2),
+      iq:
+        (boss.stats.iq || 0) +
+        totalBonus +
+        (dynamicBossStatChanges.iq || 0) +
+        getLaerysStatBonus(3),
+      biq:
+        (boss.stats.biq || 0) +
+        totalBonus +
+        (dynamicBossStatChanges.biq || 0) +
+        getLaerysStatBonus(4),
+      ma:
+        (boss.stats.ma || 0) +
+        totalBonus +
+        (dynamicBossStatChanges.ma || 0) +
+        getLaerysStatBonus(5),
+    };
+
+    if (boss.id === 8 && (currentRound === 2 || currentRound === 5)) {
       const effect = boss.ruleEffects?.find(
         (e) => e.type === "doubleStatsEveryNRounds",
       );
@@ -2410,6 +2477,7 @@ export const BossBattleRoom = ({
     currentRound,
     currentPhase,
     specialRules.stealPvEEffects,
+    roundResults,
   ]);
 
   // Calculate stolen weapon info for display
@@ -2561,6 +2629,11 @@ export const BossBattleRoom = ({
     if (score.team >= specialRules.teamPointsToWin) return "team";
     if (score.boss > score.team) return "boss";
     if (score.team > score.boss) return "team";
+
+    // Tie: use tie-break result if available, otherwise trigger tie-break wheel
+    if (tieBreakResult) {
+      return tieBreakResult;
+    }
     return "tie";
   }, [
     battleState,
@@ -2569,7 +2642,25 @@ export const BossBattleRoom = ({
     specialRules.isMirrorScoring,
     boss.id,
     teamStats,
+    tieBreakResult,
   ]);
+
+  // Trigger tie-break wheel when final result is a tie
+  useEffect(() => {
+    if (finalWinner === "tie" && !tieBreakResult) {
+      // Trigger tie-break wheel
+      spinBinaryWheel(
+        ["Team 🔵", "Boss 👹"],
+        ["#3b82f6", "#ef4444"],
+        "Tie-Break! 🎰",
+        "⚖️",
+        true, // autoSpin
+        0.5, // 50/50 chance
+      ).then((selectedIndex) => {
+        setTieBreakResult(selectedIndex === 0 ? "team" : "boss");
+      });
+    }
+  }, [finalWinner, tieBreakResult, spinBinaryWheel]);
 
   // Calculate weighted values
   // Stat âm sẽ được coi là 0 để tính tỉ lệ wheel
@@ -2722,7 +2813,7 @@ export const BossBattleRoom = ({
   // Hypnotize player - uses player selection wheel
   const hypnotizePlayer = useCallback(async () => {
     if (activePlayers.length > 0 && !hypnotizedPlayer) {
-      const player = await spinPlayerWheel(activePlayers, "freeze", false);
+      const player = await spinPlayerWheel(activePlayers, "hypnotize", false);
       setHypnotizedPlayer({
         playerNo: player.no,
         name: player.name,
@@ -3408,7 +3499,7 @@ export const BossBattleRoom = ({
   }, []);
 
   // Auto-spin all rounds
-  const autoFight = useCallback(async () => {
+  /** const autoFight = useCallback(async () => {
     if (specialRules.hasPreBattleWheel && !preBattleWheelResult) {
       setBattleState("preBattle");
       setShowPreBattleWheel(true);
@@ -4163,7 +4254,7 @@ export const BossBattleRoom = ({
     currentRound,
     isSpinning,
     wheelRotation,
-  ]);
+  ]); **/
 
   // Reset battle
   const resetBattle = () => {
@@ -4196,6 +4287,7 @@ export const BossBattleRoom = ({
     playerWheelResolveRef.current = null;
     setCapraEffect(null);
     setBo3Round(null);
+    setTieBreakResult(null);
   };
 
   // Handle pre-battle wheel spin
@@ -4442,14 +4534,14 @@ export const BossBattleRoom = ({
                 Boss Info:
               </h4>
               {/* Boss Stats */}
-              <div className="grid grid-cols-6 gap-1 text-center text-xs mb-2">
+              <div className="grid grid-cols-6 gap-0.5 text-center text-[10px] mb-2">
                 {(["str", "spd", "dur", "iq", "biq", "ma"] as const).map(
                   (stat) => (
-                    <div key={stat} className="bg-gray-700/50 rounded p-1">
-                      <div className="text-gray-400 text-[10px]">
+                    <div key={stat} className="bg-gray-700/50 rounded p-0.5">
+                      <div className="text-gray-400 text-[8px]">
                         {stat.toUpperCase()}
                       </div>
-                      <div className="text-red-400 font-bold">
+                      <div className="text-red-400 font-bold text-[10px]">
                         {bossStats[stat] ?? "?"}
                       </div>
                     </div>
@@ -4778,14 +4870,14 @@ export const BossBattleRoom = ({
                         onClick={startBattle}
                         className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-bold rounded-lg transition-all transform hover:scale-105"
                       >
-                        Manual Battle
+                        Start Battle
                       </button>
-                      <button
+                      {/* <button
                         onClick={autoFight}
                         className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-bold rounded-lg transition-all transform hover:scale-105"
                       >
                         Auto Fight
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 )}

@@ -74,7 +74,7 @@
         {
           "type": "teamBonusOnStatWin",
           "stat": "spd",
-          "points": 5,
+          "bonusPoints": 4,
           "target": "team",
           "description": "Team +5 điểm khi thắng round Speed"
         }
