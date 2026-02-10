@@ -1136,35 +1136,35 @@ const PlayerCard = ({
     player.stats.ma;
 
   // Group stat modifiers by source for detail view
-  const statBreakdown = useMemo(() => {
-    if (!player.statModifiers || !player.baseStats) return null;
-    const statNameMap: Record<string, keyof CharacterStats> = {
-      strength: "str",
-      speed: "spd",
-      durability: "dur",
-      iq: "iq",
-      biq: "biq",
-      ma: "ma",
-    };
-    // Group by source
-    const sourceMap = new Map<string, Record<keyof CharacterStats, number>>();
-    player.statModifiers.forEach((m) => {
-      const mapped = statNameMap[m.stat];
-      if (!mapped) return;
-      if (!sourceMap.has(m.source)) {
-        sourceMap.set(m.source, {
-          str: 0,
-          spd: 0,
-          dur: 0,
-          iq: 0,
-          biq: 0,
-          ma: 0,
-        });
-      }
-      sourceMap.get(m.source)![mapped] += m.value;
-    });
-    return { baseStats: player.baseStats, sources: sourceMap };
-  }, [player.statModifiers, player.baseStats]);
+  // const statBreakdown = useMemo(() => {
+  //   if (!player.statModifiers || !player.baseStats) return null;
+  //   const statNameMap: Record<string, keyof CharacterStats> = {
+  //     strength: "str",
+  //     speed: "spd",
+  //     durability: "dur",
+  //     iq: "iq",
+  //     biq: "biq",
+  //     ma: "ma",
+  //   };
+  //   // Group by source
+  //   const sourceMap = new Map<string, Record<keyof CharacterStats, number>>();
+  //   player.statModifiers.forEach((m) => {
+  //     const mapped = statNameMap[m.stat];
+  //     if (!mapped) return;
+  //     if (!sourceMap.has(m.source)) {
+  //       sourceMap.set(m.source, {
+  //         str: 0,
+  //         spd: 0,
+  //         dur: 0,
+  //         iq: 0,
+  //         biq: 0,
+  //         ma: 0,
+  //       });
+  //     }
+  //     sourceMap.get(m.source)![mapped] += m.value;
+  //   });
+  //   return { baseStats: player.baseStats, sources: sourceMap };
+  // }, [player.statModifiers, player.baseStats]);
 
   return (
     <div
@@ -1228,79 +1228,7 @@ const PlayerCard = ({
         >
           {isDisabled ? "Enable" : "Disable"}
         </button>
-        {/* <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowDetail(!showDetail);
-          }}
-          className="flex-1 text-[10px] py-0.5 rounded bg-blue-600/30 text-blue-400 hover:bg-blue-600/50 transition-colors"
-        >
-          {showDetail ? "Ẩn" : "Chi tiết"}
-        </button> */}
       </div>
-
-      {/* Stat Detail Panel */}
-      {statBreakdown && (
-        <div className="mt-1 bg-gray-900/80 rounded p-2 text-[10px] max-h-40 overflow-y-auto border border-gray-600">
-          {/* Base stats row */}
-          <div className="flex justify-between text-gray-300 border-b border-gray-700 pb-1 mb-1">
-            <span className="font-semibold text-yellow-400">Base Stats</span>
-            <div className="flex gap-2">
-              {STAT_KEYS.map((stat) => (
-                <span key={stat} className="w-7 text-center text-yellow-300">
-                  {statBreakdown.baseStats[stat]}
-                </span>
-              ))}
-            </div>
-          </div>
-          {/* Modifier rows grouped by source */}
-          {Array.from(statBreakdown.sources.entries()).map(
-            ([source, bonuses]) => {
-              const hasAny = STAT_KEYS.some((s) => bonuses[s] !== 0);
-              if (!hasAny) return null;
-              return (
-                <div
-                  key={source}
-                  className="flex justify-between text-gray-400 py-0.5"
-                >
-                  <span className="truncate mr-2 max-w-[120px]" title={source}>
-                    {source}
-                  </span>
-                  <div className="flex gap-2 shrink-0">
-                    {STAT_KEYS.map((stat) => (
-                      <span
-                        key={stat}
-                        className={`w-7 text-center ${
-                          bonuses[stat] > 0
-                            ? "text-green-400"
-                            : bonuses[stat] < 0
-                              ? "text-red-400"
-                              : "text-gray-600"
-                        }`}
-                      >
-                        {bonuses[stat] !== 0
-                          ? `${bonuses[stat] > 0 ? "+" : ""}${bonuses[stat]}`
-                          : "-"}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              );
-            },
-          )}
-          {/* Total row */}
-          <div className="flex justify-between text-white border-t border-gray-700 pt-1 mt-1 font-semibold">
-            <span>Total</span>
-            <div className="flex gap-2">
-              {STAT_KEYS.map((stat) => (
-                <span key={stat} className="w-7 text-center text-cyan-400">
-                  {player.stats[stat]}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
