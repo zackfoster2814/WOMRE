@@ -1124,7 +1124,7 @@ const PlayerCard = ({
   isHypnotized: boolean;
   isIsekai: boolean;
 }) => {
-  const [showDetail, setShowDetail] = useState(false);
+  const [showDetail] = useState(false);
   const isInactive =
     isDisabled || isFrozen || isRemoved || isHypnotized || isIsekai;
   const totalStats =
