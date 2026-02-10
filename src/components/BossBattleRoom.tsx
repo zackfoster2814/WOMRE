@@ -1124,7 +1124,7 @@ const PlayerCard = ({
   isHypnotized: boolean;
   isIsekai: boolean;
 }) => {
-  const [showDetail] = useState(false);
+  // const [showDetail, setShowDetail] = useState(false);
   const isInactive =
     isDisabled || isFrozen || isRemoved || isHypnotized || isIsekai;
   const totalStats =
@@ -1240,7 +1240,7 @@ const PlayerCard = ({
       </div>
 
       {/* Stat Detail Panel */}
-      {showDetail && statBreakdown && (
+      {statBreakdown && (
         <div className="mt-1 bg-gray-900/80 rounded p-2 text-[10px] max-h-40 overflow-y-auto border border-gray-600">
           {/* Base stats row */}
           <div className="flex justify-between text-gray-300 border-b border-gray-700 pb-1 mb-1">
