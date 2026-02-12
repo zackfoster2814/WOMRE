@@ -74,11 +74,19 @@ interface TeamJson {
   members: TeamMemberJson[];
 }
 
+interface BattleResult {
+  outcome: "win" | "lose";
+  rounds: Record<string, "win" | "lose" | "tie" | null>;
+  tiebreak?: "win" | "lose" | null;
+  notes?: string;
+}
+
 interface BattleView {
   teamId: number;
   boss: Boss | null;
   members: TeamMemberJson[];
   playerData: PlayerData[];
+  result?: BattleResult | null;
 }
 
 export const BattleZonePage = () => {
@@ -1505,16 +1513,37 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
 };
 
 // PvE Battle Page Component
+const STAT_KEYS = ["str", "spd", "dur", "iq", "biq", "ma"] as const;
+const STAT_LABELS: Record<string, string> = {
+  str: "STR",
+  spd: "SPD",
+  dur: "DUR",
+  iq: "IQ",
+  biq: "BIQ",
+  ma: "MA",
+};
+
 const PvEBattlePage = ({ onBack }: BattleModeProps) => {
   const [bosses, setBosses] = useState<Boss[]>([]);
   const [teams, setTeams] = useState<TeamJson[]>([]);
   const [allPlayers, setAllPlayers] = useState<PlayerData[]>([]);
+  const [battleResults, setBattleResults] = useState<Map<number, BattleResult>>(
+    new Map(),
+  );
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState<"all" | "with-boss" | "no-boss">(
     "with-boss",
   );
   const [battleView, setBattleView] = useState<BattleView | null>(null);
   const [battleSessionId, setBattleSessionId] = useState(0);
+  const [devMode, setDevMode] = useState(false);
+  const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState<BattleResult>({
+    outcome: "win",
+    rounds: { str: null, spd: null, dur: null, iq: null, biq: null, ma: null },
+    tiebreak: null,
+    notes: "",
+  });
 
   // Load data on mount
   useEffect(() => {
@@ -1529,6 +1558,15 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
         const teamRes = await fetch("/data/battles/teams.json");
         const teamData = await teamRes.json();
         setTeams(teamData.teams || []);
+
+        // Load battle results
+        const battleRes = await fetch("/data/battles/team-battles.json");
+        const battleData = await battleRes.json();
+        const resultsMap = new Map<number, BattleResult>();
+        (battleData.battles || []).forEach((b: { teamId: number; result: BattleResult | null }) => {
+          if (b.result) resultsMap.set(b.teamId, b.result);
+        });
+        setBattleResults(resultsMap);
 
         // Load all players from individual files (like TeamBattlePage)
         // Initialize effects for PvE stat calculation
@@ -1645,9 +1683,10 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
         boss,
         members: team.members,
         playerData,
+        result: battleResults.get(team.id) || null,
       };
     });
-  }, [teams, bossMap, playerByUsername]);
+  }, [teams, bossMap, playerByUsername, battleResults]);
 
   // Filter battles
   const filteredBattles = useMemo(() => {
@@ -1667,6 +1706,77 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
     const noBoss = battles.filter((b) => b.boss === null).length;
     return { total: battles.length, withBoss, noBoss };
   }, [battles]);
+
+  // Dev mode toggle (Ctrl+Shift+D)
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === "D") {
+        e.preventDefault();
+        setDevMode((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  // Open edit form for a team
+  const openEditForm = useCallback(
+    (teamId: number) => {
+      const existing = battleResults.get(teamId);
+      if (existing) {
+        setEditForm({ ...existing, rounds: { ...existing.rounds } });
+      } else {
+        setEditForm({
+          outcome: "win",
+          rounds: {
+            str: null,
+            spd: null,
+            dur: null,
+            iq: null,
+            biq: null,
+            ma: null,
+          },
+          tiebreak: null,
+          notes: "",
+        });
+      }
+      setEditingTeamId(teamId);
+    },
+    [battleResults],
+  );
+
+  // Save battle result
+  const saveResult = useCallback(async () => {
+    if (editingTeamId === null) return;
+    const newResults = new Map(battleResults);
+    newResults.set(editingTeamId, { ...editForm });
+    setBattleResults(newResults);
+    setEditingTeamId(null);
+
+    // Save to team-battles.json via Tauri FS
+    try {
+      const res = await fetch("/data/battles/team-battles.json");
+      const data = await res.json();
+      const battles = data.battles || [];
+      const idx = battles.findIndex(
+        (b: { teamId: number }) => b.teamId === editingTeamId,
+      );
+      if (idx >= 0) {
+        battles[idx].result = { ...editForm };
+      }
+      data.battles = battles;
+
+      const { isTauri } = await import("../utils/tauriStorage");
+      if (isTauri()) {
+        const { writeTextFile } = await import("@tauri-apps/plugin-fs");
+        const { resolveResource } = await import("@tauri-apps/api/path");
+        const path = await resolveResource("data/battles/team-battles.json");
+        await writeTextFile(path, JSON.stringify(data, null, 2));
+      }
+    } catch (err) {
+      console.error("Failed to save result:", err);
+    }
+  }, [editingTeamId, editForm, battleResults]);
 
   // Count races in entire season (for Sigrun boss effect)
   const seasonRaceCounts = useMemo(() => {
@@ -1736,6 +1846,11 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
           </button>
 
           <div className="flex gap-2">
+            {devMode && (
+              <span className="px-3 py-1 bg-yellow-600/80 rounded-full text-yellow-200 text-sm font-medium animate-pulse">
+                DEV MODE
+              </span>
+            )}
             <span className="px-3 py-1 bg-purple-600/80 rounded-full text-white text-sm font-medium">
               Total: {summary.total}
             </span>
@@ -1776,18 +1891,31 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
               (sum, p) => sum + getTotalStats(p.stats),
               0,
             );
+            const result = battle.result;
 
             return (
               <div
                 key={battle.teamId}
                 className={`bg-gray-800/90 backdrop-blur-sm border-2 rounded-xl overflow-hidden transition-all hover:scale-[1.02] ${
-                  hasBoss ? "border-red-500/50" : "border-gray-600"
+                  result
+                    ? result.outcome === "win"
+                      ? "border-green-500/50"
+                      : "border-red-500/50"
+                    : hasBoss
+                      ? "border-red-500/50"
+                      : "border-gray-600"
                 }`}
               >
                 {/* Card Header */}
                 <div
                   className={`px-4 py-3 ${
-                    hasBoss ? "bg-red-600/20" : "bg-gray-700/50"
+                    result
+                      ? result.outcome === "win"
+                        ? "bg-green-600/20"
+                        : "bg-red-600/20"
+                      : hasBoss
+                        ? "bg-red-600/20"
+                        : "bg-gray-700/50"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -1798,6 +1926,17 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                       <span className="text-white font-medium">
                         Team {battle.teamId}
                       </span>
+                      {result && (
+                        <span
+                          className={`px-2 py-0.5 rounded text-xs font-bold ${
+                            result.outcome === "win"
+                              ? "bg-green-500/30 text-green-300 border border-green-500/50"
+                              : "bg-red-500/30 text-red-300 border border-red-500/50"
+                          }`}
+                        >
+                          {result.outcome === "win" ? "WIN" : "LOSE"}
+                        </span>
+                      )}
                     </div>
                     <span className="text-gray-400 text-sm">
                       {battle.members.length} members
@@ -1817,24 +1956,66 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                 <div className="px-4 py-3">
                   {hasBoss && battle.boss ? (
                     <>
-                      {/* Stats Comparison */}
+                      {/* Stats Comparison + Round Results */}
                       <div className="grid grid-cols-6 gap-1 text-center text-xs mb-3">
-                        {(
-                          ["str", "spd", "dur", "iq", "biq", "ma"] as const
-                        ).map((stat) => (
-                          <div
-                            key={stat}
-                            className="bg-gray-700/50 rounded p-1"
-                          >
-                            <div className="text-gray-400 text-[10px]">
-                              {stat.toUpperCase()}
+                        {STAT_KEYS.map((stat) => {
+                          const roundResult = result?.rounds[stat];
+                          return (
+                            <div
+                              key={stat}
+                              className={`rounded p-1 ${
+                                roundResult === "win"
+                                  ? "bg-green-900/50 border border-green-500/30"
+                                  : roundResult === "lose"
+                                    ? "bg-red-900/50 border border-red-500/30"
+                                    : roundResult === "tie"
+                                      ? "bg-yellow-900/50 border border-yellow-500/30"
+                                      : "bg-gray-700/50"
+                              }`}
+                            >
+                              <div className="text-gray-400 text-[10px]">
+                                {STAT_LABELS[stat]}
+                              </div>
+                              <div className="text-red-400 font-bold text-xs">
+                                {battle.boss!.stats[stat] ?? "?"}
+                              </div>
+                              {roundResult && (
+                                <div
+                                  className={`text-[10px] font-bold mt-0.5 ${
+                                    roundResult === "win"
+                                      ? "text-green-400"
+                                      : roundResult === "lose"
+                                        ? "text-red-400"
+                                        : "text-yellow-400"
+                                  }`}
+                                >
+                                  {roundResult === "win"
+                                    ? "W"
+                                    : roundResult === "lose"
+                                      ? "L"
+                                      : "T"}
+                                </div>
+                              )}
                             </div>
-                            <div className="text-red-400 font-bold text-xs">
-                              {battle.boss!.stats[stat] ?? "?"}
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
+
+                      {/* Tiebreak */}
+                      {result?.tiebreak && (
+                        <div className="text-center text-xs mb-2">
+                          <span className="text-gray-400">Tie-break: </span>
+                          <span
+                            className={`font-bold ${
+                              result.tiebreak === "win"
+                                ? "text-green-400"
+                                : "text-red-400"
+                            }`}
+                          >
+                            {result.tiebreak === "win" ? "Win" : "Lose"}
+                          </span>
+                        </div>
+                      )}
 
                       {/* Total Stats */}
                       <div className="text-center text-sm mb-3">
@@ -1847,11 +2028,37 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                         </span>
                       </div>
 
-                      {/* Reward Preview */}
-                      <div className="text-xs text-gray-400 mb-3 line-clamp-2">
-                        <span className="text-green-400">Reward:</span>{" "}
-                        {battle.boss.reward}
-                      </div>
+                      {/* Result Notes */}
+                      {result?.notes && (
+                        <div className="text-xs text-gray-300 mb-3 bg-gray-700/30 rounded p-2 whitespace-pre-line">
+                          {result.notes}
+                        </div>
+                      )}
+
+                      {/* Reward/Punishment based on result */}
+                      {result ? (
+                        <div className="text-xs text-gray-400 mb-3 line-clamp-2">
+                          <span
+                            className={
+                              result.outcome === "win"
+                                ? "text-green-400"
+                                : "text-red-400"
+                            }
+                          >
+                            {result.outcome === "win"
+                              ? "Reward:"
+                              : "Punishment:"}
+                          </span>{" "}
+                          {result.outcome === "win"
+                            ? battle.boss.reward
+                            : battle.boss.punishment}
+                        </div>
+                      ) : (
+                        <div className="text-xs text-gray-400 mb-3 line-clamp-2">
+                          <span className="text-green-400">Reward:</span>{" "}
+                          {battle.boss.reward}
+                        </div>
+                      )}
 
                       {/* Battle Button */}
                       {battle.playerData.length > 0 && (
@@ -1866,6 +2073,16 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                         <p className="text-center text-yellow-500 text-xs">
                           No player data found
                         </p>
+                      )}
+
+                      {/* Dev Mode: Edit Result Button */}
+                      {devMode && (
+                        <button
+                          onClick={() => openEditForm(battle.teamId)}
+                          className="w-full mt-2 px-4 py-2 bg-yellow-600/30 hover:bg-yellow-600/50 border border-yellow-500/50 text-yellow-300 font-medium rounded-lg transition-all text-sm"
+                        >
+                          {result ? "Edit Result" : "Add Result"}
+                        </button>
                       )}
                     </>
                   ) : (
@@ -1885,6 +2102,165 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
           </div>
         )}
       </div>
+
+      {/* Dev Mode: Edit Result Dialog */}
+      {editingTeamId !== null && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]">
+          <div className="bg-gray-900 border border-yellow-500/50 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+            <h3 className="text-lg font-bold text-yellow-400 mb-4">
+              Edit Result - Team {editingTeamId}
+            </h3>
+
+            {/* Outcome */}
+            <div className="mb-4">
+              <label className="text-sm text-gray-400 block mb-1">
+                Outcome
+              </label>
+              <div className="flex gap-2">
+                {(["win", "lose"] as const).map((o) => (
+                  <button
+                    key={o}
+                    onClick={() =>
+                      setEditForm((prev) => ({ ...prev, outcome: o }))
+                    }
+                    className={`flex-1 px-3 py-2 rounded font-bold text-sm transition-all ${
+                      editForm.outcome === o
+                        ? o === "win"
+                          ? "bg-green-600 text-white"
+                          : "bg-red-600 text-white"
+                        : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+                    }`}
+                  >
+                    {o === "win" ? "WIN" : "LOSE"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Round Results */}
+            <div className="mb-4">
+              <label className="text-sm text-gray-400 block mb-2">
+                Rounds
+              </label>
+              <div className="space-y-2">
+                {STAT_KEYS.map((stat) => (
+                  <div key={stat} className="flex items-center gap-2">
+                    <span className="text-gray-300 text-sm w-10 font-medium">
+                      {STAT_LABELS[stat]}
+                    </span>
+                    <div className="flex gap-1 flex-1">
+                      {(
+                        [
+                          { val: "win" as const, label: "W", color: "green" },
+                          { val: "lose" as const, label: "L", color: "red" },
+                          { val: "tie" as const, label: "T", color: "yellow" },
+                          { val: null, label: "-", color: "gray" },
+                        ] as const
+                      ).map((opt) => (
+                        <button
+                          key={opt.label}
+                          onClick={() =>
+                            setEditForm((prev) => ({
+                              ...prev,
+                              rounds: { ...prev.rounds, [stat]: opt.val },
+                            }))
+                          }
+                          className={`flex-1 px-2 py-1 rounded text-xs font-bold transition-all ${
+                            editForm.rounds[stat] === opt.val
+                              ? `bg-${opt.color}-600 text-white`
+                              : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+                          }`}
+                          style={
+                            editForm.rounds[stat] === opt.val
+                              ? {
+                                  backgroundColor:
+                                    opt.color === "green"
+                                      ? "#16a34a"
+                                      : opt.color === "red"
+                                        ? "#dc2626"
+                                        : opt.color === "yellow"
+                                          ? "#ca8a04"
+                                          : "#4b5563",
+                                  color: "white",
+                                }
+                              : undefined
+                          }
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Tiebreak */}
+            <div className="mb-4">
+              <label className="text-sm text-gray-400 block mb-1">
+                Tie-break
+              </label>
+              <div className="flex gap-2">
+                {(
+                  [
+                    { val: "win" as const, label: "Win" },
+                    { val: "lose" as const, label: "Lose" },
+                    { val: null, label: "None" },
+                  ] as const
+                ).map((opt) => (
+                  <button
+                    key={opt.label}
+                    onClick={() =>
+                      setEditForm((prev) => ({ ...prev, tiebreak: opt.val }))
+                    }
+                    className={`flex-1 px-3 py-1.5 rounded text-sm font-medium transition-all ${
+                      editForm.tiebreak === opt.val
+                        ? opt.val === "win"
+                          ? "bg-green-600 text-white"
+                          : opt.val === "lose"
+                            ? "bg-red-600 text-white"
+                            : "bg-gray-600 text-white"
+                        : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Notes */}
+            <div className="mb-4">
+              <label className="text-sm text-gray-400 block mb-1">Notes</label>
+              <textarea
+                value={editForm.notes || ""}
+                onChange={(e) =>
+                  setEditForm((prev) => ({ ...prev, notes: e.target.value }))
+                }
+                placeholder="Ghi chú (người bị isekai, gear nhận, v.v.)"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-y"
+                rows={3}
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setEditingTeamId(null)}
+                className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium text-sm transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveResult}
+                className="flex-1 px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-white rounded-lg font-bold text-sm transition-all"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Battle Room Modal - key forces fresh state on each open */}
       {battleView && battleView.boss && (

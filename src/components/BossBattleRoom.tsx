@@ -1244,6 +1244,15 @@ export const BossBattleRoom = ({
   onClose,
   seasonRaceCounts,
 }: BossBattleRoomProps) => {
+  // Disable body scroll when PvE battle room is open
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   const [battleState, setBattleState] = useState<
     "idle" | "preBattle" | "fighting" | "finished"
   >("idle");
@@ -1264,10 +1273,19 @@ export const BossBattleRoom = ({
     Partial<BossStats>
   >({});
 
+  // Pontiff Sulyvahn stat multipliers (for permanent doubling)
+  const [pontiffMultipliers, setPontiffMultipliers] = useState<
+    Record<string, number>
+  >({});
+
   // Freeze mechanics
   const [frozenPlayers, setFrozenPlayers] = useState<FrozenPlayer[]>([]);
   const [hypnotizedPlayer, setHypnotizedPlayer] =
     useState<HypnotizedPlayer | null>(null);
+  const [showHypnotizeDialog, setShowHypnotizeDialog] = useState(false);
+  const hypnotizeResolveRef = useRef<((player: PlayerData) => void) | null>(
+    null,
+  );
   const [removedPlayers, setRemovedPlayers] = useState<number[]>([]);
 
   // Pre-battle wheel
@@ -1385,6 +1403,17 @@ export const BossBattleRoom = ({
   );
 
   const boss = battle.boss!;
+
+  // Pontiff Sulyvahn - apply permanent doubling at specific rounds
+  useEffect(() => {
+    if (boss.id === 8) {
+      if (currentRound === 2) {
+        setPontiffMultipliers((prev) => ({ ...prev, dur: 2 }));
+      } else if (currentRound === 5) {
+        setPontiffMultipliers((prev) => ({ ...prev, ma: 2 }));
+      }
+    }
+  }, [currentRound, boss.id]);
 
   // Boss image extensions mapping
   const bossImageExtensions: Record<number, string> = {
@@ -1817,19 +1846,6 @@ export const BossBattleRoom = ({
         }
       }
     });
-
-    if (hypnotizedPlayer && boss.id === 9) {
-      const hpStats = hypnotizedPlayer.stats;
-      const totalStats =
-        (hpStats.str || 0) +
-        (hpStats.spd || 0) +
-        (hpStats.dur || 0) +
-        (hpStats.iq || 0) +
-        (hpStats.biq || 0) +
-        (hpStats.ma || 0);
-      bossBonus += Math.floor(totalStats / 6);
-      details.push(`Kafka nhận stats từ ${hypnotizedPlayer.name}`);
-    }
 
     return { bossBonus, teamBonus, details };
   }, [
@@ -2385,17 +2401,13 @@ export const BossBattleRoom = ({
         getLaerysStatBonus(5),
     };
 
-    if (boss.id === 8 && (currentRound === 2 || currentRound === 5)) {
-      const effect = boss.ruleEffects?.find(
-        (e) => e.type === "doubleStatsEveryNRounds",
-      );
-      if (effect) {
-        stats.str = (stats.str || 0) * 2;
-        stats.spd = (stats.spd || 0) * 2;
-        stats.dur = (stats.dur || 0) * 2;
-        stats.iq = (stats.iq || 0) * 2;
-        stats.biq = (stats.biq || 0) * 2;
-        stats.ma = (stats.ma || 0) * 2;
+    // Pontiff Sulyvahn: apply permanent stat multipliers
+    if (boss.id === 8) {
+      if (pontiffMultipliers.dur) {
+        stats.dur = (stats.dur || 0) * pontiffMultipliers.dur;
+      }
+      if (pontiffMultipliers.ma) {
+        stats.ma = (stats.ma || 0) * pontiffMultipliers.ma;
       }
     }
 
@@ -2464,6 +2476,16 @@ export const BossBattleRoom = ({
       stats.ma = (stats.ma || 0) + weaponBonuses.ma;
     }
 
+    // Kafka: transfer hypnotized player stats per-stat
+    if (hypnotizedPlayer && boss.id === 9) {
+      stats.str = (stats.str || 0) + (hypnotizedPlayer.stats.str || 0);
+      stats.spd = (stats.spd || 0) + (hypnotizedPlayer.stats.spd || 0);
+      stats.dur = (stats.dur || 0) + (hypnotizedPlayer.stats.dur || 0);
+      stats.iq = (stats.iq || 0) + (hypnotizedPlayer.stats.iq || 0);
+      stats.biq = (stats.biq || 0) + (hypnotizedPlayer.stats.biq || 0);
+      stats.ma = (stats.ma || 0) + (hypnotizedPlayer.stats.ma || 0);
+    }
+
     return stats;
   }, [
     boss.stats,
@@ -2478,6 +2500,8 @@ export const BossBattleRoom = ({
     currentPhase,
     specialRules.stealPvEEffects,
     roundResults,
+    pontiffMultipliers,
+    hypnotizedPlayer,
   ]);
 
   // Calculate stolen weapon info for display
@@ -2810,21 +2834,28 @@ export const BossBattleRoom = ({
     ]);
   }, [boss.ruleEffects, boss.id, boss.name, spinD20Wheel]);
 
-  // Hypnotize player - uses player selection wheel
-  const hypnotizePlayer = useCallback(async () => {
-    if (activePlayers.length > 0 && !hypnotizedPlayer) {
-      const player = await spinPlayerWheel(activePlayers, "hypnotize", false);
-      setHypnotizedPlayer({
-        playerNo: player.no,
-        name: player.name,
-        stats: { ...player.stats },
-      });
-      setBattleMessages((prev) => [
-        ...prev,
-        `🌀 Kafka đã thôi miên ${player.name}! Stats của họ chuyển sang cho Kafka.`,
-      ]);
-    }
-  }, [activePlayers, hypnotizedPlayer, spinPlayerWheel]);
+  // Hypnotize player - uses dialog to select player
+  const hypnotizePlayer = useCallback((): Promise<void> => {
+    if (activePlayers.length === 0 || hypnotizedPlayer)
+      return Promise.resolve();
+    return new Promise((resolve) => {
+      hypnotizeResolveRef.current = (player: PlayerData) => {
+        setHypnotizedPlayer({
+          playerNo: player.no,
+          name: player.name,
+          stats: { ...player.stats },
+        });
+        setBattleMessages((prev) => [
+          ...prev,
+          `🌀 Kafka đã thôi miên ${player.name}! Stats của họ chuyển sang cho Kafka.`,
+        ]);
+        setShowHypnotizeDialog(false);
+        hypnotizeResolveRef.current = null;
+        resolve();
+      };
+      setShowHypnotizeDialog(true);
+    });
+  }, [activePlayers, hypnotizedPlayer]);
 
   // Spin wheel for current round
   const spinWheel = useCallback(() => {
@@ -5038,6 +5069,50 @@ export const BossBattleRoom = ({
           </div>
         </div>
       </div>
+
+      {/* Kafka Hypnotize Player Dialog */}
+      {showHypnotizeDialog && (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="bg-gray-900 border border-purple-500/50 rounded-xl p-6 max-w-lg w-full mx-4 shadow-2xl shadow-purple-500/20">
+            <h3 className="text-xl font-bold text-purple-400 text-center mb-2">
+              🌀 Kafka - Thôi Miên
+            </h3>
+            <p className="text-gray-400 text-center text-sm mb-4">
+              Chọn người chơi bị Kafka thôi miên
+            </p>
+            <div className="grid grid-cols-2 gap-3 max-h-80 overflow-y-auto">
+              {activePlayers.map((player) => (
+                <button
+                  key={player.no}
+                  onClick={() => hypnotizeResolveRef.current?.(player)}
+                  className="flex items-center gap-3 p-3 bg-gray-800 hover:bg-purple-900/50 border border-gray-700 hover:border-purple-500 rounded-lg transition-all duration-200 text-left group"
+                >
+                  <div className="w-10 h-10 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 font-bold text-sm shrink-0">
+                    {player.no}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-white font-medium truncate group-hover:text-purple-300 transition-colors">
+                      {player.name}
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Total:{" "}
+                      {(player.stats.str || 0) +
+                        (player.stats.spd || 0) +
+                        (player.stats.dur || 0) +
+                        (player.stats.iq || 0) +
+                        (player.stats.biq || 0) +
+                        (player.stats.ma || 0)}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Player Selection Wheel Overlay */}
       {playerWheelConfig && (

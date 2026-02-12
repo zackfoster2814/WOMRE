@@ -46,12 +46,12 @@ Houses:
 ```
 1 Unique Weapon
 + Infinity Gauntlet
- - Power - [Sami (saminoceda)]
- - Space - [...?? (_1469)]
- - Soul  - [Wohlhabend (wohlhabend_)]
- - Mind  - [Em Phốc Trắng (dick8704)]
- - Time  - [LocK (lock485)]
- - Reality - [Syren (syren1412)]
+ -> Power - [Sami (saminoceda)]
+ -> Space - [...?? (_1469)]
+ -> Soul  - [Wohlhabend (wohlhabend_)]
+ -> Mind  - [Em Phốc Trắng (dick8704)]
+ -> Time  - [LocK (lock485)]
+ -> Reality - [Syren (syren1412)]
 ```
 
 ``` 
