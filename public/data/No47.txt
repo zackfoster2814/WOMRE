@@ -26,7 +26,7 @@ Spd: 1
 Dur: 2
 IQ: 6
 BIQ: 6
-MA: 7
+MA: 7 (+2 từ House)
 ```
 
 ```

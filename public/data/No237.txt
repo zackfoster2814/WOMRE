@@ -35,11 +35,15 @@ Houses:
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+5 Gear:
+ + 5 Normal gear:
+  - Buckler (Từ PvE)
+  - Radio (Từ PvE)
+  - Gold Pine Resin (Từ PvE)
+  - Wine (Từ PvE)
+  - Ớt (Từ PvE)
  + 0 Legacy gear:
-  - 
+  -
 ```
 
 ```
@@ -54,10 +58,15 @@ Runeword:
 ```
 
 ```
-1 Power:  
+8 Power:
 + Powerful Strike (Từ Vũ Khí)
 + Exort
 + AIDS (Từ Char Dev)
++ Body Enhancing (Từ PvE)
++ U=ma2 (Từ PvE)
++ Arcana Blast (Từ PvE)
++ Encroaching Shadow (Từ PvE)
++ Bash (Từ PvE)
 ```
 
 ```
@@ -80,3 +89,15 @@ PvP Reward:
 - +1 Speed
 - +1 BIQ
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: The Collector
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: nhận 5 Gear và 5 Power
+```
+======

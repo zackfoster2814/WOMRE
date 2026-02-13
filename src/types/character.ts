@@ -22,6 +22,7 @@ export interface GearItem {
   name: string;
   isLost?: boolean; // Items marked as "đã mất" won't affect stats
   usable?: boolean; // Items marked as "không dùng được" won't affect stats
+  subEffects?: string[]; // Sub-effects like "-> +1 all stats" from Creator's Cat Ring
 }
 
 export interface Gear {

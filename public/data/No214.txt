@@ -23,7 +23,7 @@ Archetype:
 + Artistic
 ```
 ```
-Str:8 (Ban đầu là 6, +2 Từ Atreides)
+Str:6 (+2 Từ Atreides)
 Spd:5
 Dur:6
 IQ:6

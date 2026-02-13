@@ -36,9 +36,14 @@ Houses:
 ```
 
 ```
-2 Gear: 
- + 1 Normal gear:
+7 Gear:
+ + 6 Normal gear:
   - Leather Jacket
+  - Buckler (Từ PvE)
+  - Radio (Từ PvE)
+  - Gold Pine Resin (Từ PvE)
+  - Wine (Từ PvE)
+  - Ớt (Từ PvE)
  + 1 Legacy gear:
   - Skull of the Balance Dragon
 ```
@@ -55,11 +60,16 @@ Runeword: Không
 ```
 
 ```
-4 Power: 
+9 Power:
 + Fragrant (Từ House)
-+ Critical Strike(Từ House)
++ Critical Strike (Từ House)
 + AIDS
 + Healing Factor
++ Body Enhancing (Từ PvE)
++ U=ma2 (Từ PvE)
++ Arcana Blast (Từ PvE)
++ Encroaching Shadow (Từ PvE)
++ Bash (Từ PvE)
 ```
 
 ```
@@ -73,5 +83,17 @@ Team: 13
 
 ```
 Lover:
-+ 
++
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: The Collector
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: nhận 5 Gear và 5 Power
+```
+======

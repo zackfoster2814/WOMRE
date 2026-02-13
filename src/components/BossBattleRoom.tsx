@@ -2099,6 +2099,19 @@ export const BossBattleRoom = ({
       }
     }
 
+    // Misty Step Ahead: +1 starting point if any team member has this power
+    if (
+      !disablePvEOnly &&
+      battle.playerData.some((p) =>
+        p.powers?.some(
+          (pw) => pw.toLowerCase() === "misty step ahead",
+        ),
+      )
+    ) {
+      teamStartingPoints += 1;
+      specialDetails.push("Team +1 điểm khởi đầu (Misty Step Ahead)");
+    }
+
     const bossStatBoostOnWin =
       boss.ruleEffects.find((e) => e.type === "bossStatBoostOnWin")?.bonus || 0;
     const bossStatBoostOnTeamLoss =
@@ -2136,7 +2149,7 @@ export const BossBattleRoom = ({
           }
         : null,
     };
-  }, [boss.ruleEffects, activePlayers, bossRuleChecks, preBattleWheelResult]);
+  }, [boss.ruleEffects, activePlayers, bossRuleChecks, preBattleWheelResult, battle.playerData]);
 
   // Calculate team total stats
   const teamStats = useMemo(() => {

@@ -35,12 +35,17 @@ Houses:
 ```
 
 ```
-2 Gear: 
- + 2 Normal gear:
+7 Gear:
+ + 7 Normal gear:
   - Healing Flasks
   - Love Letter
+  - Buckler (Từ PvE)
+  - Radio (Từ PvE)
+  - Gold Pine Resin (Từ PvE)
+  - Wine (Từ PvE)
+  - Ớt (Từ PvE)
  + 0 Legacy gear:
-  - 
+  -
 ```
 
 ```
@@ -55,9 +60,13 @@ Runeword: Không
 ```
 
 ```
-2 Power: 
+6 Power:
 + Detect Thoughts (Được KaTsumi - ChillWithCafe (katsumi3000) tặng)
 + Body Enhancing
++ U=ma2 (Từ PvE)
++ Arcana Blast (Từ PvE)
++ Encroaching Shadow (Từ PvE)
++ Bash (Từ PvE)
 ```
 
 ```
@@ -73,3 +82,15 @@ Team: 13
 Lover:
 + KaTsumi - ChillWithCafe (katsumi3000) (tặng Detect Thoughts)
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: The Collector
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: nhận 5 Gear và 5 Power (trùng Body Enhancing nên không nhận thêm)
+```
+======

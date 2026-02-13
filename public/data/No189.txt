@@ -28,7 +28,7 @@ Spd:2
 Dur:5
 IQ:6
 BIQ:1
-MA:10 (Ban đầu là 8, +2 từ House)
+MA:8 (+2 từ House)
 ```
 
 ```

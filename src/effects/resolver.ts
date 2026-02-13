@@ -1786,6 +1786,8 @@ export class EffectResolver {
     for (const source of sources) {
       const statChanges: StatChange[] = [];
       const conditionalEffects: ConditionalEffect[] = [];
+      const executedHandlers = new Set<string>(); // Track executed custom handlers to avoid duplicates
+      let customHandlerDisplayName: string | null = null; // Override source name with handler description
 
       for (const effect of source.effects) {
         // Check if this is a bracket-based timing that should be treated as immediate
@@ -1801,7 +1803,10 @@ export class EffectResolver {
               character.tournament.bracket === "winner"));
 
         // Handle custom handlers - execute them and collect their stat modifiers
-        if (effect.customHandler && effect.timing === "immediate") {
+        // Skip if already executed this handler for this source (e.g., same handler on both immediate and pve_only)
+        if (effect.customHandler && (effect.timing === "immediate" || effect.timing === "pve_only" || effect.timing === "pvp_only")) {
+          if (executedHandlers.has(effect.customHandler)) continue;
+          executedHandlers.add(effect.customHandler);
           const handlerResult = HandlerRegistry.executeImmediate(
             effect.customHandler,
             {
@@ -1817,6 +1822,10 @@ export class EffectResolver {
           if (handlerResult?.statModifiers) {
             for (const mod of handlerResult.statModifiers) {
               statChanges.push({ stat: mod.stat, value: mod.value, isBase: mod.isBase });
+            }
+            // Use handler description as display name when it has stat modifiers
+            if (handlerResult.description) {
+              customHandlerDisplayName = handlerResult.description;
             }
           }
           // If handler returned a description but no stat modifiers, show as conditional info
@@ -1964,7 +1973,7 @@ export class EffectResolver {
 
         breakdown.push({
           type: source.type,
-          name: source.name,
+          name: customHandlerDisplayName || source.name,
           statChanges: mergedStatChanges,
           description: source.rawDescription,
           isActive: source.isActive !== false,

@@ -357,15 +357,10 @@ export class CharacterParser {
 
   /**
    * Detect if house bonus was pre-applied to stats
-   * Looks for "+X từ House" pattern in stat annotation lines
+   * "+X từ House" annotations are notes only — stats are base values, bonus NOT pre-applied
+   * Always returns false so effect system applies house bonuses normally
    */
-  private static detectHouseBonusApplied(lines: string[]): boolean {
-    const statPattern = /^(Str|Spd|Dur|IQ|BIQ|MA):/i;
-    for (const line of lines) {
-      if (statPattern.test(line) && /\+\d+\s*từ\s*House/i.test(line)) {
-        return true;
-      }
-    }
+  private static detectHouseBonusApplied(_lines: string[]): boolean {
     return false;
   }
 
@@ -1035,6 +1030,19 @@ export class CharacterParser {
       }
 
       if (line.startsWith("```") && i > gearIndex + 1) break;
+
+      // Check for sub-effect lines like "-> +1 all stats" — attach to last gear item
+      const subEffectMatch = line.match(/^->\s*(.+)/);
+      if (subEffectMatch) {
+        const subEffect = subEffectMatch[1].trim();
+        const lastList = inLegacyGear ? gear.legacyGear : inNormalGear ? gear.normalGear : null;
+        if (lastList && lastList.length > 0) {
+          const lastItem = lastList[lastList.length - 1];
+          if (!lastItem.subEffects) lastItem.subEffects = [];
+          lastItem.subEffects.push(subEffect);
+        }
+        continue;
+      }
 
       const itemMatch = line.match(/^[\-*]\s*(.+)/);
       if (itemMatch) {

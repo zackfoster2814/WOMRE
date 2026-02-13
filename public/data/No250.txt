@@ -69,5 +69,17 @@ Team: 29 (Được quay)
 
 ```
 Lover:
-+ 
++
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Brock
+- Kết quả: Lose
+- Tỉ số: 0-6
+- Punishment: Không bị phạt
+```
+======

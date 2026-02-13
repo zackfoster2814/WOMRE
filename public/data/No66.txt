@@ -38,11 +38,16 @@ Houses:
 ```
 
 ```
-1 Gear: 
- + 1 Normal gear:
+6 Gear:
+ + 6 Normal gear:
   - Bò khô (từ House)
+  - Buckler (Từ PvE)
+  - Radio (Từ PvE)
+  - Gold Pine Resin (Từ PvE)
+  - Wine (Từ PvE)
+  - Ớt (Từ PvE)
  + 0 Legacy gear:
-  - 
+  -
 ```
 
 ```
@@ -58,8 +63,13 @@ Runeword: Không
 ```
 
 ```
-1 Power: 
+6 Power:
 + Sybaurafarming
++ Body Enhancing (Từ PvE)
++ U=ma2 (Từ PvE)
++ Arcana Blast (Từ PvE)
++ Encroaching Shadow (Từ PvE)
++ Bash (Từ PvE)
 ```
 
 ```
@@ -73,5 +83,17 @@ Team: 13
 
 ```
 Lover:
-+ 
++
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: The Collector
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: nhận 5 Gear và 5 Power
+```
+======

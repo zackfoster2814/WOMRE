@@ -36,12 +36,16 @@ Houses:
 ```
 
 ```
-2 Gear: 
- + 2 Normal gear:
+6 Gear:
+ + 6 Normal gear:
   - Gold Pine Resin
   - Thuốc tráng dương
+  - Buckler (Từ PvE)
+  - Radio (Từ PvE)
+  - Wine (Từ PvE)
+  - Ớt (Từ PvE)
  + 0 Legacy gear:
-  - 
+  -
 ```
 
 ```
@@ -56,8 +60,13 @@ Runeword: Không
 ```
 
 ```
-0 Power: 
+5 Power:
 + Divine Smite (từ Paladin)
++ Body Enhancing (Từ PvE)
++ U=ma2 (Từ PvE)
++ Arcana Blast (Từ PvE)
++ Encroaching Shadow (Từ PvE)
++ Bash (Từ PvE)
 ```
 
 ```
@@ -71,5 +80,17 @@ Team: 13
 
 ```
 Lover:
-+ 
++
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: The Collector
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: nhận 5 Power và 4 Gear (trùng Gold Pine Resin nên không nhận thêm)
+```
+======

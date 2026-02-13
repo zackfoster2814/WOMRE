@@ -6,642 +6,546 @@
     {
       "teamId": 1,
       "teamName": "Team 1",
-      "lair": "The Ringed City",
-      "teamMembers": [],
-      "boss": {
-        "name": "Slave Knight Gael",
-        "stats": { "str": 60, "spd": 35, "dur": 51, "iq": 39, "biq": 26, "ma": 32 },
-        "description": "Với mỗi Stat cao hơn 14 mà một player trong tổ đội bạn có, Gael nhận +3 All Stats. Nếu team bạn có ít nhất 1 Human, nhận +3 All Party Stats. Nếu team bạn có ít nhất 1 Gigachad, nhận +3 All Party Stats."
-      },
-      "reward": {
-        "description": "Toàn bộ tổ đội nhận +1 All Stats, +1 Stat thấp nhất",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội bạn -1 All Stats",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "0 : 6"
+      }
     },
     {
       "teamId": 2,
       "teamName": "Team 2",
-      "lair": "Ashina",
-      "teamMembers": [],
-      "boss": {
-        "name": "Isshin the Sword Saint",
-        "stats": { "str": 58, "spd": 38, "dur": 45, "iq": 42, "biq": 60, "ma": 60 },
-        "description": "Isshin nhận 2 điểm/round thắng thay vì 1. Thắng Round Speed sẽ khiến tổ đội bạn được 5 điểm."
-      },
-      "reward": {
-        "description": "Toàn bộ tổ đội nhận 1 Gear \"Glock\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội bạn nhận Quirk \"Impatient\" nhưng không được nhận 2 PvP Reward mặc định",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "other",
+          "spd": "other",
+          "dur": "other",
+          "iq": "other",
+          "biq": "other",
+          "ma": "other"
+        },
+        "tiebreak": null,
+        "notes": "Thua 4 lần liên tiếp, có stat có tổng dưới 20 -> Thua combat."
+      }
     },
     {
       "teamId": 3,
       "teamName": "Team 3",
-      "lair": "Ginnungagap",
-      "teamMembers": [],
-      "boss": {
-        "name": "Allfather",
-        "stats": { "str": 60, "spd": 42, "dur": 40, "iq": 57, "biq": 56, "ma": 22 },
-        "description": "Với mỗi thành viên trong tổ đội dưới 3 Base IQ, -1 điểm khởi đầu."
-      },
-      "reward": {
-        "description": "Isekai 2 người có tổng Base Stats thấp nhất của tổ đội",
-        "details": []
-      },
-      "punishment": {
-        "description": "Isekai toàn bộ tổ đội",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "win",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "1 : 5\nNice try"
+      }
     },
     {
       "teamId": 4,
       "teamName": "Team 4",
-      "lair": "Rotted Swamp of the Brain",
-      "teamMembers": [],
-      "boss": {
-        "name": "67 Final Boss",
-        "stats": { "str": 6, "spd": 7, "dur": 7, "iq": 6, "biq": 7, "ma": 7 },
-        "description": "Chỉ cần có Stat 6 dùng canh stat 7 của bất kỳ thành viên nào trong tổ đội, tổ đội bạn -1 điểm khởi đầu đầu. Nếu tổ đội của bạn có trên 67 chỉ số ở 1 stat, Hắn lập tức +6 hay 7 điểm gì đó."
-      },
-      "reward": {
-        "description": "Tổ đội bạn nhận power 67",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội bạn nhận power 67",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "win",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "4 : 6"
+      }
     },
     {
       "teamId": 5,
       "teamName": "Team 5",
-      "lair": "Cave",
-      "teamMembers": [],
-      "boss": {
-        "name": "Mu Fanbase",
-        "stats": { "str": 7, "spd": 47, "dur": 7, "iq": 37, "biq": 7, "ma": 37 },
-        "description": "Glory glory Man United. Với mỗi round MU Fanbase thắng, All Stats của MU Fanbase được +7."
-      },
-      "reward": {
-        "description": "Tất cả thành viên trong tổ đội của bạn nhận +1 Stat cao nhất",
-        "details": []
-      },
-      "punishment": {
-        "description": "Team bạn nhận Power \"Glory glory Man\"",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "1 : 5\nReward (dành cho R2D): +1 vào Base Stat thấp nhất 10 lần."
+      }
     },
     {
       "teamId": 6,
       "teamName": "Team 6",
-      "lair": "Limveld",
-      "teamMembers": [],
-      "boss": {
-        "name": "Caligo Miasma Of Night",
-        "stats": { "str": 40, "spd": 28, "dur": 48, "iq": 26, "biq": 22, "ma": 10 },
-        "description": "Caligo đóng băng một thành viên trong tổ đội sau 1 round so stat, khiến người đồng đội không thể đóng góp trong phần còn lại của trận chiến nữa."
-      },
-      "reward": {
-        "description": "Team bạn nhận Power \"Cold Mirage\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "1 Base Stat của team bạn biến thành 0",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "3 : 4\nLmao thua cả Mambo"
+      }
     },
     {
       "teamId": 7,
       "teamName": "Team 7",
-      "lair": "Inner Earth",
-      "teamMembers": [],
-      "boss": {
-        "name": "Brock",
-        "stats": { "str": 51, "spd": 53, "dur": 68, "iq": 45, "biq": 45, "ma": 68 },
-        "description": "Một tảng đá siêu khô."
-      },
-      "reward": {
-        "description": "Tổ đội bạn nhận +2 All Stats",
-        "details": []
-      },
-      "punishment": {
-        "description": "Không bị phạt",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "win",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "win",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "2 : 4"
+      }
     },
     {
       "teamId": 8,
       "teamName": "Team 8",
-      "lair": "Irithyll of the Boreal Valley",
-      "teamMembers": [],
-      "boss": {
-        "name": "Pontiff Sulyvahn",
-        "stats": { "str": 28, "spd": 35, "dur": 27, "iq": 36, "biq": 34, "ma": 27 },
-        "description": "Pontiff Sulyvahn cứ mỗi 2 Round sẽ được nhân đôi Stat ở Round tiếp theo."
-      },
-      "reward": {
-        "description": "Tổ đội bạn nhận \"Dual Wielder\" và lập tức nhận 1 vũ khí",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội bạn bị tước vũ khí",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "lose",
+          "spd": "win",
+          "dur": "win",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": "win",
+        "notes": "4 : 4\n"
+      }
     },
     {
       "teamId": 9,
       "teamName": "Team 9",
-      "lair": "Stellaron Hunter Hideout",
-      "teamMembers": [],
-      "boss": {
-        "name": "Kafka",
-        "stats": { "str": 36, "spd": 36, "dur": 37, "iq": 37, "biq": 38, "ma": 38 },
-        "description": "Kafka sẽ thôi miên 1 thành viên ngẫu nhiên của tổ đội, toàn bộ chỉ số của người chơi này sẽ bị loại bỏ tổ đội của bạn và chuyển sang cho Boss Kafka."
-      },
-      "reward": {
-        "description": "Nhận Gear \"Stellaron Hunter's Member Card\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Mỗi người trong tổ đội chịu 1 hiệu ứng ngẫu nhiên",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "win",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "1 : 5\nTổ đội bạn mất 3 Power.\nQuý Trần Tường giữ lại Power \"Quas\"\nMemento Duelist giữ lại Power \"Void Walking\"\nNikki mất hết\nbanhtiuuu mất hết\nU36hetvi giữ lại Power \"U=ma2\""
+      }
     },
     {
       "teamId": 10,
       "teamName": "Team 10",
-      "lair": "Tomb of the Giant",
-      "teamMembers": [],
-      "boss": {
-        "name": "Rolling Skeletons",
-        "stats": { "str": 20, "spd": 20, "dur": 20, "iq": 20, "biq": 20, "ma": 20 },
-        "description": "Spooky Spooky Skeleton. Không nhân đôi để cấu thành trong số của cả hai bên khi combat."
-      },
-      "reward": {
-        "description": "Team bạn nhận +2 Stat thấp nhất",
-        "details": []
-      },
-      "punishment": {
-        "description": "Team bạn nhận -2 Stat thấp nhất",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "win",
+          "iq": "win",
+          "biq": "win",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "6 : 0"
+      }
     },
     {
       "teamId": 11,
       "teamName": "Team 11",
-      "lair": "Sovngarde",
-      "teamMembers": [],
-      "boss": {
-        "name": "Alduin",
-        "stats": { "str": 55, "spd": 52, "dur": 41, "iq": 38, "biq": 31, "ma": 35 },
-        "description": "Alduin khởi đầu trận với 1 điểm."
-      },
-      "reward": {
-        "description": "Tổ đội bạn nhận Power \"Sovngarde's Blessing\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Team bạn mất toàn bộ Char Dev",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "win",
+          "iq": "win",
+          "biq": "win",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "6 : 0"
+      }
     },
     {
       "teamId": 12,
       "teamName": "Team 12",
-      "lair": "The Final Ante",
-      "teamMembers": [],
-      "boss": {
-        "name": "Violet Vessel",
-        "stats": { "str": 0, "spd": 0, "dur": 0, "iq": 0, "biq": 0, "ma": 0 },
-        "description": "Stat của Violet Vessel = Base Stat của người chơi có tổng Base Stat cao nhất trong tổ đội của bạn x Số người chơi trong tổ đội. Tổ đội của bạn chiến thắng khi giành được 2 điểm."
-      },
-      "reward": {
-        "description": "Tổ đội nhận +1 vào Base Stat thấp nhất 10 lần",
-        "details": []
-      },
-      "punishment": {
-        "description": "Không bị phạt",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "win",
+          "iq": "win",
+          "biq": "lose",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "5 : 1"
+      }
     },
     {
       "teamId": 13,
       "teamName": "Team 13",
-      "lair": "Beyond the Wall",
-      "teamMembers": [],
-      "boss": {
-        "name": "Night King",
-        "stats": { "str": 28, "spd": 36, "dur": 42, "iq": 35, "biq": 33, "ma": 40 },
-        "description": "Mỗi Round bạn thua, Night King nhận +8 All Stats."
-      },
-      "reward": {
-        "description": "Bạn nhận Archetype \"Bravest of the Brave\", bỏ Archetype NPC",
-        "details": []
-      },
-      "punishment": {
-        "description": "Bạn nhận Archetype \"NPC\"",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "win",
+          "iq": "win",
+          "biq": "win",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "5 : 1\nNo.196 - Blaster bị Isekai\nReward: 5 Power + 5 Gear"
+      }
     },
     {
       "teamId": 14,
       "teamName": "Team 14",
-      "lair": "Erdtree",
-      "teamMembers": [],
-      "boss": {
-        "name": "Radagon of The Golden Order",
-        "stats": { "str": 35, "spd": 37, "dur": 39, "iq": 41, "biq": 28, "ma": 41 },
-        "description": "Radagon có 50% chặn bạn ghi điểm."
-      },
-      "reward": {
-        "description": "Bạn nhận Power \"Golden Parry\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Stat cao nhất của bạn giảm nửa, Stat thấp nhất của bạn biến thành 0",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "win",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "2 : 4\nHero X (enatc0) - (5) Nhận Creator's Limitation (-1 All Stats)\nĐóm con (pinz2223) - (1) Mất toàn bộ Power.\nSeefish (seefish._80347) - (3) Mất toàn bộ Archetype và Quirk.\nĐào viên họa gia (long2222sla) - (5) Nhận Creator's Limitation (-1 All Stats)\n2FaceCat (2facecat.) - (4) Không bị phạt.\n.hor1zon - (3) Mất toàn bộ Archetype và Quirk. (Cursed 36 hồi lại 1 All Base Stats)\nPilèy (piley.) - (4) Không bị phạt.\nCornmann(cornmann_69401_87403) - (3) Mất toàn bộ Archetype và Quirk. (Cursed 36 hồi lại 1 All Base Stats)"
+      }
     },
     {
       "teamId": 15,
       "teamName": "Team 15",
-      "lair": "The Abyss",
-      "teamMembers": [],
-      "boss": {
-        "name": "Simon",
-        "stats": { "str": 33, "spd": 33, "dur": 33, "iq": 33, "biq": 33, "ma": 33 },
-        "description": "Simon vô hiệu hoá tất cả hiệu ứng [PvE Only] của tổ đội bạn. Khi tổ đội của bạn có round thắng đầu tiên, Simon sẽ nhận +3 All Stats. Khi tổ đội của bạn thắng 3 round đầu, Simon sẽ xoá bỏ 3 thành viên trong tổ đội của bạn (3 thành viên đó không thể đóng góp trong phần còn lại của trận chiến)."
-      },
-      "reward": {
-        "description": "Tổ đội nhận Power \"Artist\" và nhận +1 vào tất cả Stat",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội bạn mất 3 Power (nếu có thể)",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "win",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "win",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "2 : 6\n Ca Cao né ở round SPD, crit ở round MA"
+      }
     },
     {
       "teamId": 16,
       "teamName": "Team 16",
-      "lair": "Lower Undead Burg Ruin",
-      "teamMembers": [],
-      "boss": {
-        "name": "Capra Demon",
-        "stats": { "str": 25, "spd": 35, "dur": 45, "iq": 25, "biq": 50, "ma": 30 },
-        "description": "Sau 4 round, tuỳ vào số điểm của tổ đội bạn mà sẽ kích hiệu ứng: Dưới hoặc bằng 1 điểm: BIQ của Capra Demon giảm 50, thua round này sẽ khiến hắn mất 3 điểm, Round MA."
-      },
-      "reward": {
-        "description": "Tổ đội nhận Power \"4 Hit Combo\" và +3 BIQ",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội nhận Power \"4 Hit Combo\" và -3 BIQ",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "win",
+          "ma": "lose"
+        },
+        "tiebreak": "win",
+        "notes": "3 : 3"
+      }
     },
     {
       "teamId": 17,
       "teamName": "Team 17",
-      "lair": "Flower Field",
-      "teamMembers": [],
-      "boss": {
-        "name": "Sky Dancer",
-        "stats": { "str": 33, "spd": 67, "dur": 33, "iq": 67, "biq": 33, "ma": 67 },
-        "description": "Vũ Công Bầu Trời giáng xuống vòng quay."
-      },
-      "reward": {
-        "description": "Team bạn nhận +1 All Stats và Power \"Ballet\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Team bạn nhận Power \"Ballet Dancing\"",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "win",
+          "spd": "lose",
+          "dur": "win",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "3 : 4\nPower đã mất:\n - V1ncc mất Sybaurafarming và Red Shift/LP\n - We are Charlie Kirk mất Divine Lightning và Water Breathing\n - Warmbunny mất hết\n - litelonglon  mất Magma Strike và Dominator\n - HuyMei  mất hết\n - Silver Chariot  mất AID và Frost Armor\n - E4zyyyy  mất hết\n - thợ lặn mất hết"
+      }
     },
     {
       "teamId": 18,
       "teamName": "Team 18",
-      "lair": "The Great Hollow",
-      "teamMembers": [],
-      "boss": {
-        "name": "Dreglord",
-        "stats": { "str": 240, "spd": 0, "dur": 0, "iq": 0, "biq": 0, "ma": 0 },
-        "description": "Cộng tổng 6 Party Stats của bạn lại đấm nhau 7 round với tổng Stat của hắn. (so Tổng Stat 2 bên 7 round) Với mỗi Round thua, nhận +80 Tổng Stat cho bên thua."
-      },
-      "reward": {
-        "description": "Base Strength team bạn +5",
-        "details": []
-      },
-      "punishment": {
-        "description": "Base Strength team bạn -5",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "1 : 6"
+      }
     },
     {
       "teamId": 19,
       "teamName": "Team 19",
-      "lair": "Kiln of The First Flame",
-      "teamMembers": [],
-      "boss": {
-        "name": "Soul of Cinder",
-        "stats": { "str": 63, "spd": 54, "dur": 47, "iq": 62, "biq": 62, "ma": 50 },
-        "description": "Soul of Cinder nhận toàn bộ hiệu ứng từ vũ khí của tổ đội, tổ đội bạn thì không và bị vô hiệu hóa nếu có [PvE Only]"
-      },
-      "reward": {
-        "description": "Tổ đội bạn nhận Archetype \"Cinderheart\", nếu đã có thì +2 All Stats",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội bạn bị đuổi khỏi House",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "win",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "4 : 2"
+      }
     },
     {
       "teamId": 20,
       "teamName": "Team 20",
-      "lair": "Baldur's Gate",
-      "teamMembers": [],
-      "boss": {
-        "name": "The Elder Brain",
-        "stats": { "str": 80, "spd": 0, "dur": 80, "iq": 80, "biq": 55, "ma": 0 },
-        "description": "Trước trận chiến, quay 1 vòng quay gồm 20 số: Số 01 sẽ tặng All Stats của Raphael lên 666."
-      },
-      "reward": {
-        "description": "Tổ đội bạn nhận từ 1 -> 20 Power (Cho toàn tổ đội)",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội bạn bị mất từ 1 -> 20 Power. Nếu không đủ Power thì mất hết",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "lose",
+          "iq": "win",
+          "biq": "win",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "5 : 1"
+      }
     },
     {
       "teamId": 21,
       "teamName": "Team 21",
-      "lair": "House of Hope",
-      "teamMembers": [],
-      "boss": {
-        "name": "Raphael",
-        "stats": { "str": 66, "spd": 66, "dur": 66, "iq": 66, "biq": 66, "ma": 66 },
-        "description": "Trước trận chiến, quay 1 vòng quay gồm 20 số."
-      },
-      "reward": {
-        "description": "Team bạn mỗi người nhận 6 Gear \"Golden Coin\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Team bạn mỗi người nhận Gear \"Khung\"",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "2 : 4\n Dura về 0"
+      }
     },
     {
       "teamId": 22,
       "teamName": "Team 22",
-      "lair": "Runeterra",
-      "teamMembers": [],
-      "boss": {
-        "name": "Aatrox World Ender",
-        "stats": { "str": 60, "spd": 28, "dur": 34, "iq": 48, "biq": 45, "ma": 25 },
-        "description": "Aatrox có hai mạng. Bạn cần thắng 1 trận rồi 1 trận nữa trước hắn. (12 Round) Aatrox hút 1 điểm của team bạn với mỗi round hắn thắng ở trận 2 thay vì ghi 1 điểm."
-      },
-      "reward": {
-        "description": "Tổ đội Bạn nhận Gear \"Darkin Blade\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội bạn mất hết Vũ khí, Power và Gear. -2 All Stats",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "win",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "2 : 8\n Đánh caro 2 lần, -2 vào stat thấp nhất"
+      }
     },
     {
       "teamId": 23,
       "teamName": "Team 23",
-      "lair": "Falconia",
-      "teamMembers": [],
-      "boss": {
-        "name": "Griffith",
-        "stats": { "str": 200, "spd": 200, "dur": 200, "iq": 200, "biq": 200, "ma": 200 },
-        "description": "Tổ đội Bạn chiến thắng khi giành được 1 điểm"
-      },
-      "reward": {
-        "description": "Tổ đội bạn nhận +2 All Stats",
-        "details": []
-      },
-      "punishment": {
-        "description": "Không bị phạt",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "win",
+          "iq": "win",
+          "biq": "lose",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "5 : 4\nWin BO3 round MA 2-0"
+      }
     },
     {
       "teamId": 24,
       "teamName": "Team 24",
-      "lair": "Hamlet",
-      "teamMembers": [],
-      "boss": {
-        "name": "The Collector",
-        "stats": { "str": 30, "spd": 30, "dur": 30, "iq": 30, "biq": 30, "ma": 30 },
-        "description": "Với mỗi Round bạn thua, The Collector Isekai 1 người ngẫu nhiên trong team bạn. Người đó bị loại và không thể đóng góp trong phần còn lại của trận chiến."
-      },
-      "reward": {
-        "description": "Với mỗi round team bạn thắng, giảm 1 hồn của The Collector",
-        "details": []
-      },
-      "punishment": {
-        "description": "Chọn 1 trong những người còn sống của tổ đội để Isekai",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "win",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "1 : 5\nDành cho Ako Darling (mikukhang)\nTổ đội bạn nhận Archetype \"Cinderheart\", nếu đã có rồi, nhận +1 All Stats"
+      }
     },
     {
       "teamId": 25,
       "teamName": "Team 25",
-      "lair": "Vilhelm Fantasy's World",
-      "teamMembers": [],
-      "boss": {
-        "name": "The Unblinking Gaze",
-        "stats": { "str": 35, "spd": 35, "dur": 35, "iq": 35, "biq": 35, "ma": 35 },
-        "description": "Với mỗi Round tổ đội bạn thua, 1 Player ngẫu nhiên lập tức nhận \"Văn Tế\". Văn Tế bị loại bỏ khỏi vòng quay gear."
-      },
-      "reward": {
-        "description": "Mỗi thành viên tổ đội nhận 8 điểm chỉ số chia đều cho 4 chỉ số thấp nhất của họ. (Về cơ bản là +2 lmaoo)",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội thua bị Re-Spin toàn bộ Stat, mỗi người",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "parry",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "1 : 4\nNgoại trừ NPC: Stat cao nhất của bạn giảm nửa (làm tròn lên), Stat thấp nhất của bạn biến thành 0.\nCho NPC: nhận Power \"Golden Parry\" \n"
+      }
     },
     {
       "teamId": 26,
       "teamName": "Team 26",
-      "lair": "Kwan's Fantasy's World",
-      "teamMembers": [],
-      "boss": {
-        "name": "Laerys the Unknown",
-        "stats": { "str": 3, "spd": 3, "dur": 3, "iq": 3, "biq": 3, "ma": 3 },
-        "description": "Mỗi khi tổ đội thắng 1 round, Laerys nhận 60 điểm chỉ số chia đều cho tất cả những round chưa đánh. Tổ đội sẽ mặc định thua tie-break."
-      },
-      "reward": {
-        "description": "Tổ đội nhận +2 All Stats",
-        "details": []
-      },
-      "punishment": {
-        "description": "Xóa toàn bộ Quirk và Archetype của cả tổ đội",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "1 : 2\nGOAT Karu lên tiếng"
+      }
     },
     {
       "teamId": 27,
       "teamName": "Team 27",
-      "lair": "Polish",
-      "teamMembers": [],
-      "boss": {
-        "name": "Polish Cow",
-        "stats": { "str": 10, "spd": 10, "dur": 10, "iq": 10, "biq": 10, "ma": 10 },
-        "description": "Trong trận chiến, mở bài nhạc \"Điệu nhảy bò Ba Lan\". Với 1 người bị điếc trong tổ đội của bạn, bò nhận +20 All Stats."
-      },
-      "reward": {
-        "description": "Nhận 1 trong 2 Combo Gear sau: [TBD]",
-        "details": []
-      },
-      "punishment": {
-        "description": "Nhận 1 trong 2 Combo Gear sau: [TBD]",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "win",
+        "rounds": {
+          "str": "win",
+          "spd": "win",
+          "dur": "win",
+          "iq": "win",
+          "biq": "win",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "6 : 0\n+1 Vào: \n1.Dura\n2.Spd\n3.Str\n4.Biq\n5.Iq\n6.Spd\n7.Iq"
+      }
     },
     {
       "teamId": 28,
       "teamName": "Team 28",
-      "lair": "Mambo",
-      "teamMembers": [],
-      "boss": {
-        "name": "Mambo",
-        "stats": { "str": 25, "spd": 25, "dur": 25, "iq": 25, "biq": 25, "ma": 25 },
-        "description": "Mambo."
-      },
-      "reward": {
-        "description": "Mambo.",
-        "details": []
-      },
-      "punishment": {
-        "description": "Mambo!",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "win",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "1 : 5"
+      }
     },
     {
       "teamId": 29,
       "teamName": "Team 29",
-      "lair": "Cầu Giấy",
-      "teamMembers": [],
-      "boss": {
-        "name": "Ca Cao the World Eater",
-        "stats": { "str": 48, "spd": 36, "dur": 50, "iq": 52, "biq": 39, "ma": 45 },
-        "description": "Ca Cao vô hiệu hóa toàn bộ hiệu ứng [PvE Only]. Ca Cao có hiệu ứng của Crit và Evasion."
-      },
-      "reward": {
-        "description": "Tổ đội nhận \"Creator Favor\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Tổ đội nhận \"Creator Limitation\"",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "0 : 6\nKhông bị phạt"
+      }
     },
     {
       "teamId": 30,
       "teamName": "Team 30",
-      "lair": "Council of Valkyries",
-      "teamMembers": [],
-      "boss": {
-        "name": "Sigrun",
-        "stats": { "str": 33, "spd": 40, "dur": 33, "iq": 30, "biq": 41, "ma": 29 },
-        "description": "Với mỗi Angel và God có trong mùa, Sigrun nhận +1 all stats. (Tối đa +10 all stats). Nếu tổ đội có ít nhất 1 God hoặc 1 Angel, tổ đội nhận 1 điểm khởi đầu."
-      },
-      "reward": {
-        "description": "Tổ đội nhận Power \"Valkyrie's Blessing\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Toàn bộ tổ đội bị mất 2 Power (nếu có thể)",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "0:12\nTổ đội bạn nhận Quirk \"Impatient\" nhưng không được nhận 2 PvP Reward mặc định của nó."
+      }
     },
     {
       "teamId": 31,
       "teamName": "Team 31",
-      "lair": "Fountainhead Palace",
-      "teamMembers": [],
-      "boss": {
-        "name": "Divine Dragon",
-        "stats": { "str": 30, "spd": 30, "dur": 30, "iq": 30, "biq": 30, "ma": 30 },
-        "description": "Divine Dragon sẽ luôn nhận được 1 điểm mỗi round bất kể thắng hay thua. (Tổ đội vẫn sẽ nhận 1 điểm khi thắng round)."
-      },
-      "reward": {
-        "description": "Tổ đội nhận +1 Base MA",
-        "details": []
-      },
-      "punishment": {
-        "description": "Chỉ số thấp nhất của tổ đội sẽ bị kéo xuống 0",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "win",
+          "spd": "lose",
+          "dur": "win",
+          "iq": "lose",
+          "biq": "win",
+          "ma": "win"
+        },
+        "tiebreak": null,
+        "notes": "4 : 2\ncuongboi (cuongboi) (Nhận Văn Tế)\nChocopie (chubedan5923) (Nhận Văn Tế)"
+      }
     },
     {
       "teamId": 32,
       "teamName": "Team 32",
-      "lair": "The Void",
-      "teamMembers": [],
-      "boss": {
-        "name": "Baron Nashor",
-        "stats": { "str": 45, "spd": 45, "dur": 45, "iq": 45, "biq": 45, "ma": 45 },
-        "description": "Cứ 2 round 1 lần, Baron sẽ nhận 2 điểm nếu kết quả của chúng là so le. (Thua - Thắng hoặc Thắng - Thua)."
-      },
-      "reward": {
-        "description": "Tổ đội nhận Gear \"Baron Buff\"",
-        "details": []
-      },
-      "punishment": {
-        "description": "Toàn bộ tổ đội bị -2 vào chỉ số thấp nhất",
-        "details": []
-      },
-      "result": null
+      "result": {
+        "outcome": "lose",
+        "rounds": {
+          "str": "lose",
+          "spd": "lose",
+          "dur": "lose",
+          "iq": "lose",
+          "biq": "lose",
+          "ma": "lose"
+        },
+        "tiebreak": null,
+        "notes": "7 : -1"
+      }
     }
   ]
 }

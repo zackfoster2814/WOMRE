@@ -450,6 +450,12 @@ export function registerAllGearEffects() {
       target: 'self',
       customHandler: 'keo_ot_combo'
     })
+    .effect({
+      type: 'custom',
+      timing: 'pve_only',
+      target: 'self',
+      customHandler: 'keo_ot_combo'
+    })
     .register();
 
   // 39. Ớt
@@ -459,6 +465,12 @@ export function registerAllGearEffects() {
     .effect({
       type: 'custom',
       timing: 'immediate',
+      target: 'self',
+      customHandler: 'keo_ot_combo'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'pve_only',
       target: 'self',
       customHandler: 'keo_ot_combo'
     })
@@ -801,12 +813,18 @@ export function registerAllGearEffects() {
 
   // 9. Creator's Cat Ring
   defineEffect('gear', "Creator's Cat Ring")
-    .description("Nhận Creator's Favor 1-3 lần.")
+    .description("Nhận Creator's Favor 1-3 lần. Mỗi lần +1 All Stats.")
     .weight(9.09)
     .tier(1)
     .effect({
       type: 'custom',
       timing: 'immediate',
+      target: 'self',
+      customHandler: 'creator_cat_ring_favor'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'pve_only',
       target: 'self',
       customHandler: 'creator_cat_ring_favor'
     })

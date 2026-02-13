@@ -69,5 +69,17 @@ Team: 13
 
 ```
 Lover:
-+ 
++
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: The Collector
+- Kết quả: Win (Team)
+- Tỉ số: 5-1
+- Bị Isekai trong trận
+```
+======

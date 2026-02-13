@@ -52,7 +52,12 @@ interface PlayerData {
   username: string;
   stats: CharacterStats;
   baseStats?: CharacterStats;
-  statModifiers?: { stat: string; value: number; isBase: boolean; source: string }[];
+  statModifiers?: {
+    stat: string;
+    value: number;
+    isBase: boolean;
+    source: string;
+  }[];
   team?: number;
   quirks?: string[];
   race?: string;
@@ -76,7 +81,7 @@ interface TeamJson {
 
 interface BattleResult {
   outcome: "win" | "lose";
-  rounds: Record<string, "win" | "lose" | "tie" | null>;
+  rounds: Record<string, "win" | "lose" | "tie" | "parry" | "other" | null>;
   tiebreak?: "win" | "lose" | null;
   notes?: string;
 }
@@ -1563,9 +1568,11 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
         const battleRes = await fetch("/data/battles/team-battles.json");
         const battleData = await battleRes.json();
         const resultsMap = new Map<number, BattleResult>();
-        (battleData.battles || []).forEach((b: { teamId: number; result: BattleResult | null }) => {
-          if (b.result) resultsMap.set(b.teamId, b.result);
-        });
+        (battleData.battles || []).forEach(
+          (b: { teamId: number; result: BattleResult | null }) => {
+            if (b.result) resultsMap.set(b.teamId, b.result);
+          },
+        );
         setBattleResults(resultsMap);
 
         // Load all players from individual files (like TeamBattlePage)
@@ -1610,7 +1617,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                       biq: effects.baseStats.biq,
                       ma: effects.baseStats.ma,
                     },
-                    statModifiers: effects.statModifiers.map(m => ({
+                    statModifiers: effects.statModifiers.map((m) => ({
                       stat: m.stat,
                       value: m.value,
                       isBase: m.isBase,
@@ -1621,11 +1628,21 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                     race: char.race?.race,
                     subRace: char.race?.subRace,
                     archetypes: char.archetypes,
-                    powers: char.powers?.filter(p => !p.isLost).map(p => p.name) || [],
-                    weapons: char.weapons?.filter(w => !w.isLost && w.usable !== false).map(w => w.name) || [],
+                    powers:
+                      char.powers
+                        ?.filter((p) => !p.isLost)
+                        .map((p) => p.name) || [],
+                    weapons:
+                      char.weapons
+                        ?.filter((w) => !w.isLost && w.usable !== false)
+                        .map((w) => w.name) || [],
                     gear: [
-                      ...(char.gear?.normalGear || []).filter(g => !g.isLost).map(g => g.name),
-                      ...(char.gear?.legacyGear || []).filter(g => !g.isLost).map(g => g.name),
+                      ...(char.gear?.normalGear || [])
+                        .filter((g) => !g.isLost)
+                        .map((g) => g.name),
+                      ...(char.gear?.legacyGear || [])
+                        .filter((g) => !g.isLost)
+                        .map((g) => g.name),
                     ],
                   });
                 }
@@ -1672,6 +1689,16 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
       // Match members with player data
       const playerData: PlayerData[] = [];
       team.members.forEach((member) => {
+        if (member.username === "__dummy__") {
+          playerData.push({
+            no: 9999,
+            name: "Dummy",
+            username: "__dummy__",
+            stats: { str: 3, spd: 3, dur: 3, iq: 3, biq: 3, ma: 3 },
+            baseStats: { str: 3, spd: 3, dur: 3, iq: 3, biq: 3, ma: 3 },
+          });
+          return;
+        }
         const player = playerByUsername.get(member.username.toLowerCase());
         if (player) {
           playerData.push(player);
@@ -1970,7 +1997,10 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                                     ? "bg-red-900/50 border border-red-500/30"
                                     : roundResult === "tie"
                                       ? "bg-yellow-900/50 border border-yellow-500/30"
-                                      : "bg-gray-700/50"
+                                      : roundResult === "parry" ||
+                                          roundResult === "other"
+                                        ? "bg-gray-700/50 border border-yellow-500/30"
+                                        : "bg-gray-700/50"
                               }`}
                             >
                               <div className="text-gray-400 text-[10px]">
@@ -1993,7 +2023,11 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                                     ? "W"
                                     : roundResult === "lose"
                                       ? "L"
-                                      : "T"}
+                                      : roundResult === "parry"
+                                        ? "P"
+                                        : roundResult === "other"
+                                          ? "O"
+                                          : "T"}
                                 </div>
                               )}
                             </div>
@@ -2063,10 +2097,11 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
                       {/* Battle Button */}
                       {battle.playerData.length > 0 && (
                         <button
+                          disabled
                           onClick={() => startBattle(battle)}
-                          className="w-full px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg text-sm"
+                          className="w-full px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-lg transition-all transform shadow-lg text-sm"
                         >
-                          Enter Lair Battle
+                          Battle done!
                         </button>
                       )}
                       {battle.playerData.length === 0 && (
@@ -2139,9 +2174,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
 
             {/* Round Results */}
             <div className="mb-4">
-              <label className="text-sm text-gray-400 block mb-2">
-                Rounds
-              </label>
+              <label className="text-sm text-gray-400 block mb-2">Rounds</label>
               <div className="space-y-2">
                 {STAT_KEYS.map((stat) => (
                   <div key={stat} className="flex items-center gap-2">

@@ -39,7 +39,9 @@ Houses:
  + 0 Normal gear:
   - 
  + 0 Legacy gear:
-  - Creator's Cat Ring(Từ House)(2 Favor: Nhận +1 all stat, Nhận +1 all stats)
+  - Creator's Cat Ring(Từ House)
+    -> +1 all stats
+    -> +1 all stats
 ```
 
 ```

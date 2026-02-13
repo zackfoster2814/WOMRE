@@ -25,7 +25,7 @@ Archetype:
 ```
 ```
 Str: 3
-Spd: 10
+Spd: 10 (+2 từ House)
 Dur: 7
 IQ: 1
 BIQ: 9
