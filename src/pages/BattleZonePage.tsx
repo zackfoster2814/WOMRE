@@ -231,6 +231,7 @@ const PvPBattlePage = ({ onBack }: PvPBattlePageProps) => {
 
 interface BattleModeProps {
   onBack: () => void;
+  isWebView?: boolean;
 }
 
 // Race tier for tie-breaker (lower tier number = stronger race, wins tie)
@@ -1528,7 +1529,7 @@ const STAT_LABELS: Record<string, string> = {
   ma: "MA",
 };
 
-const PvEBattlePage = ({ onBack }: BattleModeProps) => {
+export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
   const [bosses, setBosses] = useState<Boss[]>([]);
   const [teams, setTeams] = useState<TeamJson[]>([]);
   const [allPlayers, setAllPlayers] = useState<PlayerData[]>([]);
@@ -1867,12 +1868,12 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={onBack}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-medium transition-colors flex items-center gap-2"
+            className={`${!isWebView ? "" : "hidden"} px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-medium transition-colors flex items-center gap-2`}
           >
             <span>←</span> Back
           </button>
 
-          <div className="flex gap-2">
+          <div className={`${!isWebView ? "" : "hidden"} flex gap-2`}>
             {devMode && (
               <span className="px-3 py-1 bg-yellow-600/80 rounded-full text-yellow-200 text-sm font-medium animate-pulse">
                 DEV MODE
@@ -1890,7 +1891,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value as typeof filterType)}
-            className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            className={`${!isWebView ? "" : "hidden"} px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500`}
           >
             <option value="all">All Teams ({summary.total})</option>
             <option value="with-boss">Has Boss ({summary.withBoss})</option>
@@ -1898,7 +1899,7 @@ const PvEBattlePage = ({ onBack }: BattleModeProps) => {
           </select>
         </div>
 
-        <div className="text-center mb-8">
+        <div className={`${!isWebView ? "" : "hidden"} text-center mb-8`}>
           <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 mb-4">
             Lair Battle
           </h1>

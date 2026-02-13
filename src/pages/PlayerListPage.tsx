@@ -28,6 +28,8 @@ import {
   clearPlayerNumbersCache,
 } from "../utils/basePath";
 import { isTauri } from "../utils/localStorage";
+import { PvEBattlePage } from "./BattleZonePage";
+import { BattleType } from "../types";
 
 // Check if running in web-only mode
 const isWebOnly = !isTauri();
@@ -102,25 +104,6 @@ interface PlayerSummary {
   symbiosisHost?: string;
   // Tournament status
   tournament?: TournamentInfo;
-}
-
-// Types for team/boss data
-interface BossStats {
-  str: number | null;
-  spd: number | null;
-  dur: number | null;
-  iq: number | null;
-  biq: number | null;
-  ma: number | null;
-}
-
-interface Boss {
-  id: number;
-  name: string;
-  stats: BossStats;
-  rules?: string[];
-  reward: string;
-  punishment: string;
 }
 
 interface TeamMemberJson {
@@ -466,6 +449,8 @@ export const PlayerListPage = () => {
   const raceFilterRef = useRef<HTMLDivElement>(null);
   const houseFilterRef = useRef<HTMLDivElement>(null);
   const teamFilterRef = useRef<HTMLDivElement>(null);
+  // @ts-ignore
+  const [battleType, setBattleType] = useState<BattleType | null>(null);
 
   // Close filter dropdowns when clicking outside
   useEffect(() => {
@@ -498,14 +483,6 @@ export const PlayerListPage = () => {
     "players",
   );
 
-  // Team/Boss data
-  const [teams, setTeams] = useState<TeamJson[]>([]);
-  const [bosses, setBosses] = useState<Boss[]>([]);
-  const [selectedBoss, setSelectedBoss] = useState<Boss | null>(null);
-  const [teamFilterType, setTeamFilterType] = useState<
-    "all" | "with-boss" | "no-boss"
-  >("all");
-
   // Load all data on mount
   useEffect(() => {
     const loadData = async () => {
@@ -514,21 +491,6 @@ export const PlayerListPage = () => {
       // Load teams and bosses data
       let teamsData: TeamJson[] = [];
       try {
-        const [teamsRes, bossesRes] = await Promise.all([
-          fetch(getAssetPath("/data/battles/teams.json")),
-          fetch(getAssetPath("/data/battles/bosses.json")),
-        ]);
-
-        if (teamsRes.ok) {
-          const teamsJson = await teamsRes.json();
-          teamsData = teamsJson.teams || [];
-          setTeams(teamsData);
-        }
-
-        if (bossesRes.ok) {
-          const bossesData = await bossesRes.json();
-          setBosses(bossesData.bosses || []);
-        }
       } catch (error) {
         console.error("Failed to load team/boss data:", error);
       }
@@ -557,7 +519,8 @@ export const PlayerListPage = () => {
                 const char = CharacterParser.parseCharacterFile(content);
                 const username = char.username || "";
                 // Get team from teams.json mapping, fallback to player file
-                const teamId = usernameToTeam.get(username.toLowerCase()) ?? char.team;
+                const teamId =
+                  usernameToTeam.get(username.toLowerCase()) ?? char.team;
                 playerList.push({
                   no: char.no || playerNo,
                   name: char.name || `Player ${playerNo}`,
@@ -623,7 +586,6 @@ export const PlayerListPage = () => {
         if (teamsRes.ok) {
           const teamsJson = await teamsRes.json();
           teamsData = teamsJson.teams || [];
-          setTeams(teamsData);
         }
       } catch (error) {
         console.error("Failed to reload teams:", error);
@@ -650,7 +612,8 @@ export const PlayerListPage = () => {
                 const content = await response.text();
                 const char = CharacterParser.parseCharacterFile(content);
                 const username = char.username || "";
-                const teamId = usernameToTeam.get(username.toLowerCase()) ?? char.team;
+                const teamId =
+                  usernameToTeam.get(username.toLowerCase()) ?? char.team;
                 playerList.push({
                   no: char.no || playerNo,
                   name: char.name || `Player ${playerNo}`,
@@ -905,13 +868,6 @@ export const PlayerListPage = () => {
     selectedHouses,
   ]);
 
-  // Create boss lookup map
-  const bossMap = useMemo(() => {
-    const map = new Map<string, Boss>();
-    bosses.forEach((boss) => map.set(boss.name, boss));
-    return map;
-  }, [bosses]);
-
   // Ranking: all players sorted by total stats (with effects) descending
   const rankedPlayers = useMemo(() => {
     return players
@@ -922,59 +878,6 @@ export const PlayerListPage = () => {
       })
       .sort((a, b) => b.totalSum - a.totalSum);
   }, [players]);
-
-  // Create player lookup by username
-  const playerByUsername = useMemo(() => {
-    const map = new Map<string, PlayerSummary>();
-    players.forEach((p) => {
-      if (p.username) map.set(p.username.toLowerCase(), p);
-    });
-    return map;
-  }, [players]);
-
-  // Build team views with boss and player data
-  const teamViews = useMemo(() => {
-    return teams.map((team) => {
-      const boss = team.boss ? bossMap.get(team.boss) || null : null;
-      const memberData: PlayerSummary[] = [];
-      team.members.forEach((member) => {
-        const player = playerByUsername.get(member.username.toLowerCase());
-        if (player) memberData.push(player);
-      });
-      return { ...team, bossData: boss, memberData };
-    });
-  }, [teams, bossMap, playerByUsername]);
-
-  // Filter teams
-  const filteredTeams = useMemo(() => {
-    switch (teamFilterType) {
-      case "with-boss":
-        return teamViews.filter((t) => t.bossData !== null);
-      case "no-boss":
-        return teamViews.filter((t) => t.bossData === null);
-      default:
-        return teamViews;
-    }
-  }, [teamViews, teamFilterType]);
-
-  // Team summary
-  const teamSummary = useMemo(() => {
-    const withBoss = teamViews.filter((t) => t.bossData !== null).length;
-    const noBoss = teamViews.filter((t) => t.bossData === null).length;
-    return { total: teamViews.length, withBoss, noBoss };
-  }, [teamViews]);
-
-  // Helper to calculate total stats
-  const getTotalStatsHelper = (stats: CharacterStats | BossStats) => {
-    return (
-      (stats.str || 0) +
-      (stats.spd || 0) +
-      (stats.dur || 0) +
-      (stats.iq || 0) +
-      (stats.biq || 0) +
-      (stats.ma || 0)
-    );
-  };
 
   return (
     <div
@@ -1330,32 +1233,7 @@ export const PlayerListPage = () => {
             </div>
           ) : viewMode === "teams" ? (
             /* Team Controls */
-            <div className="flex flex-wrap gap-4 items-center justify-center">
-              <div className="flex gap-2">
-                <span className="px-3 py-1 bg-purple-600/80 rounded-full text-white text-sm font-medium">
-                  Total: {teamSummary.total}
-                </span>
-                <span className="px-3 py-1 bg-red-600/80 rounded-full text-white text-sm font-medium">
-                  Fighting Boss: {teamSummary.withBoss}
-                </span>
-                <span className="px-3 py-1 bg-gray-600/80 rounded-full text-white text-sm font-medium">
-                  No Boss: {teamSummary.noBoss}
-                </span>
-              </div>
-              <select
-                value={teamFilterType}
-                onChange={(e) =>
-                  setTeamFilterType(e.target.value as typeof teamFilterType)
-                }
-                className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
-              >
-                <option value="all">All Teams ({teamSummary.total})</option>
-                <option value="with-boss">
-                  Fighting Boss ({teamSummary.withBoss})
-                </option>
-                <option value="no-boss">No Boss ({teamSummary.noBoss})</option>
-              </select>
-            </div>
+            <div className="flex flex-wrap gap-4 items-center justify-center"></div>
           ) : viewMode === "house-lore" ? (
             /* House Lore Controls */
             <div className="flex flex-wrap gap-4 items-center justify-center"></div>
@@ -1398,29 +1276,7 @@ export const PlayerListPage = () => {
               )}
             </>
           ) : viewMode === "teams" ? (
-            <>
-              {/* Team Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {filteredTeams.map((team) => (
-                  <TeamBattleCard
-                    key={team.id}
-                    team={team}
-                    onBossClick={() =>
-                      team.bossData && setSelectedBoss(team.bossData)
-                    }
-                    getTotalStats={getTotalStatsHelper}
-                    onMemberClick={handleSelectPlayer}
-                  />
-                ))}
-              </div>
-
-              {/* No teams message */}
-              {filteredTeams.length === 0 && (
-                <div className="text-center py-20">
-                  <p className="text-gray-400 text-xl">No teams found</p>
-                </div>
-              )}
-            </>
+            <PvEBattlePage onBack={() => setBattleType(null)} isWebView />
           ) : viewMode === "house-lore" ? (
             <HouseLoreSection
               players={players}
@@ -1453,8 +1309,12 @@ export const PlayerListPage = () => {
           style={{ zIndex: 999 }}
         >
           <div className="bg-gradient-to-r from-amber-600/80 to-orange-600/80 px-4 py-3 border-b border-gray-600">
-            <h3 className="text-white font-bold text-sm">Bảng xếp hạng - Total Stats</h3>
-            <p className="text-amber-200 text-xs">{rankedPlayers.length} players</p>
+            <h3 className="text-white font-bold text-sm">
+              Bảng xếp hạng - Total Stats
+            </h3>
+            <p className="text-amber-200 text-xs">
+              {rankedPlayers.length} players
+            </p>
           </div>
           <div className="overflow-y-auto flex-1">
             {rankedPlayers.map((player, idx) => (
@@ -1465,9 +1325,17 @@ export const PlayerListPage = () => {
                   idx < 3 ? "bg-amber-900/20" : ""
                 }`}
               >
-                <span className={`w-8 text-right text-xs font-bold flex-shrink-0 ${
-                  idx === 0 ? "text-yellow-400" : idx === 1 ? "text-gray-300" : idx === 2 ? "text-amber-600" : "text-gray-500"
-                }`}>
+                <span
+                  className={`w-8 text-right text-xs font-bold flex-shrink-0 ${
+                    idx === 0
+                      ? "text-yellow-400"
+                      : idx === 1
+                        ? "text-gray-300"
+                        : idx === 2
+                          ? "text-amber-600"
+                          : "text-gray-500"
+                  }`}
+                >
                   {idx + 1}.
                 </span>
                 <div className="flex-1 min-w-0">
@@ -1507,12 +1375,12 @@ export const PlayerListPage = () => {
       )}
 
       {/* Boss Detail Modal */}
-      {selectedBoss && (
+      {/* {selectedBoss && (
         <BossDetailModal
           boss={selectedBoss}
           onClose={() => setSelectedBoss(null)}
         />
-      )}
+      )} */}
     </div>
   );
 };
@@ -3383,390 +3251,3 @@ const PlayerDetailModal = ({
     </div>
   );
 };
-
-// Team Battle Card Component
-interface TeamBattleCardProps {
-  team: TeamJson & { bossData: Boss | null; memberData: PlayerSummary[] };
-  onBossClick: () => void;
-  getTotalStats: (stats: CharacterStats | BossStats) => number;
-  onMemberClick: (playerNo: number) => void;
-}
-
-const TeamBattleCard = ({
-  team,
-  onBossClick,
-  getTotalStats,
-  onMemberClick,
-}: TeamBattleCardProps) => {
-  const hasBoss = team.bossData !== null;
-  const bossTotalStats = team.bossData ? getTotalStats(team.bossData.stats) : 0;
-  const MAX_TEAM_MEMBERS = 8;
-
-  // Calculate team total stats
-  const teamTotalStats = useMemo(() => {
-    return team.memberData.reduce((sum, p) => sum + getTotalStats(p.stats), 0);
-  }, [team.memberData, getTotalStats]);
-
-  // Determine battle status
-  const battleStatus = hasBoss
-    ? teamTotalStats > bossTotalStats
-      ? "winning"
-      : teamTotalStats < bossTotalStats
-        ? "losing"
-        : "even"
-    : "pending";
-
-  return (
-    <div
-      className={`bg-gradient-to-br from-gray-800/95 to-gray-900/95 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl ${
-        hasBoss ? "ring-2 ring-red-500/30" : "ring-1 ring-gray-700"
-      }`}
-    >
-      {/* Header */}
-      <div className="px-5 py-4 border-b border-gray-700/50">
-        <div className="flex items-center justify-between">
-          {/* Left: Team Info */}
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center shadow-lg">
-              <span className="text-2xl font-black text-white">{team.id}</span>
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-lg font-bold text-white">Team {team.id}</h3>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-gray-700 text-gray-400">
-                  {team.members.length}/{MAX_TEAM_MEMBERS}
-                </span>
-              </div>
-              {hasBoss ? (
-                <button
-                  className="text-sm text-red-400 hover:text-red-300 font-medium flex items-center gap-1 transition-colors"
-                  onClick={onBossClick}
-                >
-                  <span>vs</span>
-                  <span className="underline decoration-dotted">
-                    {team.bossData!.name}
-                  </span>
-                  <span className="text-xs">&#8599;</span>
-                </button>
-              ) : (
-                <span className="text-sm text-gray-500">Chua co Boss</span>
-              )}
-            </div>
-          </div>
-
-          {/* Right: Stats Comparison */}
-          {hasBoss && (
-            <div className="flex items-center gap-3 text-sm">
-              <div className="text-right">
-                <div className="text-gray-500 text-xs">Team</div>
-                <div className="text-green-400 font-bold text-lg">
-                  {teamTotalStats}
-                </div>
-              </div>
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                  battleStatus === "winning"
-                    ? "bg-green-500/20 text-green-400"
-                    : battleStatus === "losing"
-                      ? "bg-red-500/20 text-red-400"
-                      : "bg-yellow-500/20 text-yellow-400"
-                }`}
-              >
-                {battleStatus === "winning"
-                  ? ">"
-                  : battleStatus === "losing"
-                    ? "<"
-                    : "="}
-              </div>
-              <div className="text-left">
-                <div className="text-gray-500 text-xs">Boss</div>
-                <div className="text-red-400 font-bold text-lg">
-                  {bossTotalStats}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Content - Always visible */}
-      <div className="px-5 py-4 space-y-4">
-        {/* Boss Stats Row */}
-        {hasBoss && team.bossData && (
-          <div className="bg-red-500/10 rounded-xl p-4 border border-red-500/20">
-            <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-semibold text-red-400">
-                Boss: {team.bossData.name}
-              </h4>
-              <span className="text-xs text-gray-500">
-                Total: {bossTotalStats}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              {[
-                {
-                  label: "STR",
-                  value: team.bossData.stats.str,
-                  color: "text-red-400",
-                },
-                {
-                  label: "SPD",
-                  value: team.bossData.stats.spd,
-                  color: "text-yellow-400",
-                },
-                {
-                  label: "DUR",
-                  value: team.bossData.stats.dur,
-                  color: "text-blue-400",
-                },
-                {
-                  label: "IQ",
-                  value: team.bossData.stats.iq,
-                  color: "text-purple-400",
-                },
-                {
-                  label: "BIQ",
-                  value: team.bossData.stats.biq,
-                  color: "text-pink-400",
-                },
-                {
-                  label: "MA",
-                  value: team.bossData.stats.ma,
-                  color: "text-orange-400",
-                },
-              ].map((stat) => (
-                <div key={stat.label} className="flex-1 text-center">
-                  <div
-                    className={`${stat.color} text-[10px] font-medium opacity-70`}
-                  >
-                    {stat.label}
-                  </div>
-                  <div className="text-white font-bold">
-                    {stat.value ?? "?"}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* No Boss Placeholder */}
-        {!hasBoss && (
-          <div className="bg-gray-700/30 rounded-xl p-6 border border-dashed border-gray-600 text-center">
-            <div className="text-gray-500 text-4xl mb-2">?</div>
-            <p className="text-gray-500 text-sm">Chua duoc phan cong Boss</p>
-          </div>
-        )}
-
-        {/* Rewards Row */}
-        {hasBoss && team.bossData && (
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-green-500/10 rounded-lg p-3 border border-green-500/20">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-green-400">&#10003;</span>
-                <span className="text-green-400 text-xs font-semibold">
-                  THANG
-                </span>
-              </div>
-              <p className="text-green-300/90 text-sm leading-relaxed">
-                {team.bossData.reward}
-              </p>
-            </div>
-            <div className="bg-red-500/10 rounded-lg p-3 border border-red-500/20">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-red-400">&#10007;</span>
-                <span className="text-red-400 text-xs font-semibold">THUA</span>
-              </div>
-              <p className="text-red-300/90 text-sm leading-relaxed">
-                {team.bossData.punishment}
-              </p>
-            </div>
-          </div>
-        )}
-
-        {/* Team Members */}
-        <div>
-          <h4 className="text-sm font-semibold text-gray-400 mb-3 flex items-center gap-2">
-            <span>&#9733;</span> Thanh vien ({team.members.length}/
-            {MAX_TEAM_MEMBERS})
-          </h4>
-          <div className="grid grid-cols-2 gap-2">
-            {/* Filled slots */}
-            {team.members.map((member, idx) => {
-              const playerData = team.memberData.find(
-                (p) =>
-                  p.username.toLowerCase() === member.username.toLowerCase(),
-              );
-              return (
-                <div
-                  key={idx}
-                  className="flex items-center gap-3 bg-gray-700/40 hover:bg-gray-700/60 rounded-lg px-3 py-2 cursor-pointer transition-colors"
-                  onClick={() => playerData && onMemberClick(playerData.no)}
-                >
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500/30 to-cyan-500/30 flex items-center justify-center text-teal-400 text-xs font-bold">
-                    {playerData ? playerData.no : "?"}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-white text-sm font-medium truncate">
-                      {member.name}
-                    </div>
-                    <div className="text-gray-500 text-xs truncate">
-                      @{member.username}
-                    </div>
-                  </div>
-                  {playerData && (
-                    <div className="text-teal-400 text-xs font-bold">
-                      {getTotalStats(playerData.stats)}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-            {/* Empty slots */}
-            {Array.from({ length: MAX_TEAM_MEMBERS - team.members.length }).map(
-              (_, idx) => (
-                <div
-                  key={`empty-${idx}`}
-                  className="flex items-center gap-3 bg-gray-800/30 rounded-lg px-3 py-2 border border-dashed border-gray-700"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-gray-700/30 flex items-center justify-center text-gray-600 text-xs">
-                    +
-                  </div>
-                  <span className="text-gray-600 text-sm">Slot trong</span>
-                </div>
-              ),
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Boss Detail Modal
-interface BossDetailModalProps {
-  boss: Boss;
-  onClose: () => void;
-}
-
-const BossDetailModal = ({ boss, onClose }: BossDetailModalProps) => {
-  const totalStats =
-    (boss.stats.str || 0) +
-    (boss.stats.spd || 0) +
-    (boss.stats.dur || 0) +
-    (boss.stats.iq || 0) +
-    (boss.stats.biq || 0) +
-    (boss.stats.ma || 0);
-
-  return (
-    <div
-      className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4"
-      onClick={onClose}
-    >
-      <div
-        className="bg-gray-800/95 backdrop-blur-sm border border-red-500/50 rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="bg-gradient-to-r from-red-600 to-orange-600 px-6 py-4 flex items-center justify-between sticky top-0">
-          <div>
-            <p className="text-white/70 text-sm">Boss #{boss.id}</p>
-            <h2 className="text-xl font-bold text-white">{boss.name}</h2>
-          </div>
-          <button
-            onClick={onClose}
-            className="text-white/70 hover:text-white text-3xl font-light transition-colors"
-          >
-            &times;
-          </button>
-        </div>
-
-        {/* Stats */}
-        <div className="p-6">
-          <h3 className="text-lg font-bold text-white mb-3">Stats</h3>
-          <div className="grid grid-cols-6 gap-3 text-center mb-4">
-            <BossStatBadgeLarge
-              label="STR"
-              value={boss.stats.str}
-              color="text-red-400"
-            />
-            <BossStatBadgeLarge
-              label="SPD"
-              value={boss.stats.spd}
-              color="text-yellow-400"
-            />
-            <BossStatBadgeLarge
-              label="DUR"
-              value={boss.stats.dur}
-              color="text-blue-400"
-            />
-            <BossStatBadgeLarge
-              label="IQ"
-              value={boss.stats.iq}
-              color="text-purple-400"
-            />
-            <BossStatBadgeLarge
-              label="BIQ"
-              value={boss.stats.biq}
-              color="text-pink-400"
-            />
-            <BossStatBadgeLarge
-              label="MA"
-              value={boss.stats.ma}
-              color="text-orange-400"
-            />
-          </div>
-          <div className="text-center mb-6">
-            <span className="text-gray-400">Total: </span>
-            <span className="text-2xl font-bold text-white">{totalStats}</span>
-          </div>
-
-          {/* Reward */}
-          <div className="mb-4 p-4 rounded-lg bg-green-500/20 border border-green-500/50">
-            <h4 className="text-green-400 font-bold mb-2">Reward (Win)</h4>
-            <p className="text-green-300 text-sm">{boss.reward}</p>
-          </div>
-
-          {/* Punishment */}
-          <div className="mb-4 p-4 rounded-lg bg-red-500/20 border border-red-500/50">
-            <h4 className="text-red-400 font-bold mb-2">Punishment (Lose)</h4>
-            <p className="text-red-300 text-sm">{boss.punishment}</p>
-          </div>
-
-          {/* Battle Rules */}
-          {boss.rules && boss.rules.length > 0 && (
-            <div className="mb-4 p-4 rounded-lg bg-purple-500/20 border border-purple-500/50">
-              <h4 className="text-purple-400 font-bold mb-2">
-                ⚔️ Battle Rules
-              </h4>
-              <ul className="text-purple-300 text-sm space-y-1">
-                {boss.rules.map((rule, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-purple-400">•</span>
-                    <span>{rule}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Larger Stat Badge for Boss Modal
-const BossStatBadgeLarge = ({
-  label,
-  value,
-  color,
-}: {
-  label: string;
-  value: number | null;
-  color: string;
-}) => (
-  <div className="bg-gray-700/50 rounded-lg px-3 py-2">
-    <div className={`text-sm font-medium ${color}`}>{label}</div>
-    <div className="text-white font-bold text-xl">{value ?? "?"}</div>
-  </div>
-);
