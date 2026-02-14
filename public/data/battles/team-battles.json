@@ -517,7 +517,7 @@
       "teamId": 31,
       "teamName": "Team 31",
       "result": {
-        "outcome": "lose",
+        "outcome": "win",
         "rounds": {
           "str": "win",
           "spd": "lose",
