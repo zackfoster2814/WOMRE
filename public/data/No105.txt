@@ -59,6 +59,7 @@ Runeword: Không
 ```
 1 Power: 
 + Cold Breeze
++ 67
 ```
 
 ```
@@ -83,6 +84,7 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 6-0
 - Reward: 
+  + Nhận power 67
 - Punishment: 
 ```
 ======

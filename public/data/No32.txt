@@ -62,6 +62,7 @@ Runeword: Không
 2 Power: 
 + Lightning Enchant (Từ Frying Pan)
 + Healing Factor
++ 67 (từ PvE Reward)
 ```
 
 ```
@@ -86,6 +87,8 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 6-0
 - Reward: 
+  + Nhận power 67
+  + +1 vào stat thấp nhất (IQ)
 - Punishment: 
 ```
 ======

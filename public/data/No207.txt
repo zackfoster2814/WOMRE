@@ -87,6 +87,9 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Reward: 
+  + Nhận +1 all stats
+  + +1 stat cao nhất (dura)
+  + +1 stat thấp nhất (ma)
 - Punishment: 
 ```
 ======

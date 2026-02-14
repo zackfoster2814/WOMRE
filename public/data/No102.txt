@@ -61,6 +61,7 @@ Runeword: Không
 + Armor Piercing (Từ The Angel's Finger Bone)
 + Wex
 + Dominator
++ 67 (từ PvE Reward)
 ```
 
 ```
@@ -85,6 +86,8 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 6-0
 - Reward: 
+  + Nhận power 67
+  + +1 vào stat thấp nhất (spd)
 - Punishment: 
 ```
 ======

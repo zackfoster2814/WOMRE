@@ -936,6 +936,12 @@ export const PlayerListPage = () => {
               <span className={isLoading ? "animate-spin" : ""}>&#8635;</span>{" "}
               Refresh
             </button>
+            <button
+              onClick={() => { window.location.hash = "#/bracket"; }}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white font-medium transition-colors"
+            >
+              PvP Bracket
+            </button>
           </div>
 
           {/* Controls - Different for Players vs Teams vs House Lore */}

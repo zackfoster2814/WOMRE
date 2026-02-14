@@ -11,6 +11,7 @@ import { WheelPage } from "./pages/WheelPage";
 import { PlayerListPage } from "./pages/PlayerListPage";
 import { BattleZonePage } from "./pages/BattleZonePage";
 import { PvPTournamentPage } from "./pages/PvPTournamentPage";
+import { PublicBracketPage } from "./pages/PublicBracketPage";
 import { WikiPage } from "./pages/WikiPage";
 // import { TeamBattlePage } from "./pages/TeamBattlePage";
 import { isTauri } from "./utils/localStorage";
@@ -139,8 +140,9 @@ function App() {
       <Routes>
         {isWebOnly ? (
           <>
-            {/* Web-only mode: only allow /players, redirect everything else */}
+            {/* Web-only mode: only allow /players and /bracket */}
             <Route path="/players" element={<PlayerListPage />} />
+            <Route path="/bracket" element={<PublicBracketPage />} />
             <Route path="*" element={<Navigate to="/players" replace />} />
           </>
         ) : (
@@ -151,6 +153,7 @@ function App() {
             {/* <Route path="/battles" element={<TeamBattlePage />} /> */}
             <Route path="/battle" element={<BattleZonePage />} />
             <Route path="/pvp-tournament" element={<PvPTournamentPage />} />
+            <Route path="/bracket" element={<PublicBracketPage />} />
             <Route path="/wiki" element={<WikiPage />} />
           </>
         )}

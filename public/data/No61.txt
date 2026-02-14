@@ -63,6 +63,7 @@ Runeword: Không
 + Quas (Từ Archetype Invoker)
 + Wex (Từ Archetype Invoker)
 + Exort (Từ Archetype Invoker)
++ 67 (từ PvE Reward)
 ```
 
 ```
@@ -87,6 +88,8 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 6-0
 - Reward: 
+  + Nhận power 67
+  + +1 vào stat thấp nhất (IQ)
 - Punishment: 
 ```
 ======
