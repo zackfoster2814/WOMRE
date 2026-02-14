@@ -2325,6 +2325,7 @@ const PlayerDetailModal = ({
   const [openHouseTooltip, setOpenHouseTooltip] = useState<string | null>(null);
   const [avatarError, setAvatarError] = useState(false);
   const [avatarLoaded, setAvatarLoaded] = useState(false);
+  const [activeTab, setActiveTab] = useState<"info" | "battlelog">("info");
 
   // Reset avatar state when character changes
   useEffect(() => {
@@ -2473,7 +2474,7 @@ const PlayerDetailModal = ({
       onClick={onClose}
     >
       <div
-        className="bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+        className="bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-xl max-w-4xl w-full h-[90vh] flex flex-col shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -2526,7 +2527,38 @@ const PlayerDetailModal = ({
           </button>
         </div>
 
-        {/* Content */}
+        {/* Tab Bar */}
+        <div className="flex border-b border-gray-700 bg-gray-800/80 sticky top-[72px] z-10">
+          <button
+            onClick={() => setActiveTab("info")}
+            className={`px-6 py-3 text-sm font-medium transition-colors ${
+              activeTab === "info"
+                ? "text-white border-b-2 border-purple-400"
+                : "text-gray-400 hover:text-gray-200"
+            }`}
+          >
+            Info
+          </button>
+          <button
+            onClick={() => setActiveTab("battlelog")}
+            className={`px-6 py-3 text-sm font-medium transition-colors flex items-center gap-2 ${
+              activeTab === "battlelog"
+                ? "text-white border-b-2 border-orange-400"
+                : "text-gray-400 hover:text-gray-200"
+            }`}
+          >
+            Battle Log
+            {character.battleLog && character.battleLog.length > 0 && (
+              <span className="bg-orange-500/20 text-orange-300 text-xs px-1.5 py-0.5 rounded">
+                {character.battleLog.length}
+              </span>
+            )}
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto">
+        {/* Tab Content: Info */}
+        {activeTab === "info" && (
         <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Left Column - Avatar, Basic Info & Stats */}
           <div className="space-y-6">
@@ -3245,7 +3277,99 @@ const PlayerDetailModal = ({
                 </div>
               </div>
             )}
+
           </div>
+        </div>
+        )}
+
+        {/* Tab Content: Battle Log */}
+        {activeTab === "battlelog" && (
+        <div className="p-6">
+          <div className="bg-gray-700/50 rounded-lg p-4">
+            {character.battleLog && character.battleLog.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-gray-400 border-b border-gray-600">
+                      <th className="text-left py-2 px-2">#</th>
+                      <th className="text-left py-2 px-2">Loại</th>
+                      <th className="text-left py-2 px-2">Vòng</th>
+                      <th className="text-left py-2 px-2">Đối thủ</th>
+                      <th className="text-left py-2 px-2">Kết quả</th>
+                      <th className="text-left py-2 px-2">Tỉ số</th>
+                      <th className="text-left py-2 px-2">Reward/Punishment</th>
+                      <th className="text-left py-2 px-2">Note</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {character.battleLog.map((entry, idx) => {
+                      const isWin = entry.result.toLowerCase().includes("win");
+                      const isLose = entry.result.toLowerCase().includes("lose");
+                      return (
+                        <tr
+                          key={idx}
+                          className="border-b border-gray-700/50 hover:bg-gray-600/30"
+                        >
+                          <td className="py-2 px-2 text-gray-400">{idx + 1}</td>
+                          <td className="py-2 px-2">
+                            <span
+                              className={`px-2 py-0.5 rounded text-xs font-bold ${
+                                entry.type === "PvE"
+                                  ? "bg-purple-500/20 text-purple-300"
+                                  : "bg-blue-500/20 text-blue-300"
+                              }`}
+                            >
+                              {entry.type}
+                            </span>
+                          </td>
+                          <td className="py-2 px-2 text-gray-400">
+                            {entry.round || "-"}
+                          </td>
+                          <td className="py-2 px-2 text-white font-medium">
+                            {entry.opponent}
+                          </td>
+                          <td className="py-2 px-2">
+                            <span
+                              className={`px-2 py-0.5 rounded text-xs font-bold ${
+                                isWin
+                                  ? "bg-green-500/20 text-green-300"
+                                  : isLose
+                                    ? "bg-red-500/20 text-red-300"
+                                    : "bg-gray-500/20 text-gray-300"
+                              }`}
+                            >
+                              {entry.result}
+                            </span>
+                          </td>
+                          <td className="py-2 px-2 text-gray-300">
+                            {entry.score}
+                          </td>
+                          <td className="py-2 px-2 text-gray-300 text-xs">
+                            {entry.reward && (
+                              <span className="text-green-300">{entry.reward}</span>
+                            )}
+                            {entry.punishment && (
+                              <span className="text-red-300">{entry.punishment}</span>
+                            )}
+                            {!entry.reward && !entry.punishment && "-"}
+                          </td>
+                          <td className="py-2 px-2 text-gray-400 text-xs">
+                            {entry.note || "-"}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-gray-500 italic text-sm">
+                Player chưa có lịch sử đấu
+              </p>
+            )}
+          </div>
+        </div>
+        )}
         </div>
       </div>
     </div>

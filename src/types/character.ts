@@ -172,6 +172,20 @@ export interface Character {
 
   // Tournament Status
   tournament?: TournamentInfo;
+
+  // Battle Log
+  battleLog?: BattleLogEntry[];
+}
+
+export interface BattleLogEntry {
+  type: string;        // "PvE" | "PvP"
+  round?: string;      // Vòng đấu (PvP only)
+  opponent: string;    // Đối thủ
+  result: string;      // "Win" | "Lose"
+  score: string;       // "5-1"
+  reward?: string;     // Reward nếu win
+  punishment?: string; // Punishment nếu lose
+  note?: string;       // Ghi chú thêm
 }
 
 export interface CharacterSummary {

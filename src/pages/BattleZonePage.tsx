@@ -6,6 +6,7 @@ import { EffectResolver } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { BossBattleRoom } from "../components/BossBattleRoom";
+import { getAssetPath } from "../utils/basePath";
 
 // Initialize effect data
 let effectsInitialized = false;
@@ -1556,17 +1557,17 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
     const loadData = async () => {
       try {
         // Load bosses
-        const bossRes = await fetch("/data/battles/bosses.json");
+        const bossRes = await fetch(getAssetPath("/data/battles/bosses.json"));
         const bossData = await bossRes.json();
         setBosses(bossData.bosses || []);
 
         // Load teams
-        const teamRes = await fetch("/data/battles/teams.json");
+        const teamRes = await fetch(getAssetPath("/data/battles/teams.json"));
         const teamData = await teamRes.json();
         setTeams(teamData.teams || []);
 
         // Load battle results
-        const battleRes = await fetch("/data/battles/team-battles.json");
+        const battleRes = await fetch(getAssetPath("/data/battles/team-battles.json"));
         const battleData = await battleRes.json();
         const resultsMap = new Map<number, BattleResult>();
         (battleData.battles || []).forEach(
@@ -1783,7 +1784,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
 
     // Save to team-battles.json via Tauri FS
     try {
-      const res = await fetch("/data/battles/team-battles.json");
+      const res = await fetch(getAssetPath("/data/battles/team-battles.json"));
       const data = await res.json();
       const battles = data.battles || [];
       const idx = battles.findIndex(

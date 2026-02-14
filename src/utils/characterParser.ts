@@ -13,6 +13,7 @@ import type {
   NestedHouse,
   TournamentInfo,
   TournamentStatus,
+  BattleLogEntry,
   TournamentRound,
   TournamentBracket,
 } from "../types/character";
@@ -335,6 +336,9 @@ export class CharacterParser {
 
     // Parse Tournament Status
     character.tournament = this.parseTournamentInfo(lines);
+
+    // Parse Battle Log
+    character.battleLog = this.parseBattleLog(lines);
 
     return character as Character;
   }
@@ -1186,6 +1190,75 @@ export class CharacterParser {
    * Vòng thi đấu: - / 256 / 128 / 64 / 32 / 16 / 8 / tứ kết / bán kết / chung kết
    * Nhánh thi đấu: - / thắng / thua
    */
+  private static parseBattleLog(lines: string[]): BattleLogEntry[] | undefined {
+    const entries: BattleLogEntry[] = [];
+
+    // Find "Battle Log:" marker
+    const logIndex = lines.findIndex((l) => l === "Battle Log:");
+    if (logIndex < 0) return undefined;
+
+    let currentEntry: Partial<BattleLogEntry> | null = null;
+    const extraLines: string[] = [];
+
+    for (let i = logIndex + 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (line === "======") break;
+      if (line === "```" || line === "") continue;
+
+      // Battle type header (e.g., "PvE:", "PvP:")
+      const typeMatch = line.match(/^(PvE|PvP):$/i);
+      if (typeMatch) {
+        // Save previous entry
+        if (currentEntry?.type) {
+          if (extraLines.length > 0) {
+            currentEntry.note = [currentEntry.note, ...extraLines].filter(Boolean).join("; ");
+          }
+          entries.push(currentEntry as BattleLogEntry);
+          extraLines.length = 0;
+        }
+        currentEntry = { type: typeMatch[1], opponent: "", result: "", score: "" };
+        continue;
+      }
+
+      if (!currentEntry) continue;
+
+      // Parse fields
+      const fieldMatch = line.match(/^-\s*(.+?):\s*(.+)$/);
+      if (fieldMatch) {
+        const key = fieldMatch[1].toLowerCase();
+        const value = fieldMatch[2].trim();
+        if (key === "đối thủ") {
+          currentEntry.opponent = value;
+        } else if (key === "kết quả") {
+          currentEntry.result = value;
+        } else if (key === "tỉ số") {
+          currentEntry.score = value;
+        } else if (key === "reward") {
+          currentEntry.reward = value;
+        } else if (key === "punishment") {
+          currentEntry.punishment = value;
+        } else if (key === "vòng") {
+          currentEntry.round = value;
+        } else if (key === "note") {
+          currentEntry.note = value;
+        }
+      } else if (line.startsWith("-")) {
+        // Extra lines without key:value format (e.g., "- Bị Isekai trong trận")
+        extraLines.push(line.replace(/^-\s*/, ""));
+      }
+    }
+
+    // Save last entry
+    if (currentEntry?.type) {
+      if (extraLines.length > 0) {
+        currentEntry.note = [currentEntry.note, ...extraLines].filter(Boolean).join("; ");
+      }
+      entries.push(currentEntry as BattleLogEntry);
+    }
+
+    return entries.length > 0 ? entries : undefined;
+  }
+
   private static parseTournamentInfo(
     lines: string[],
   ): TournamentInfo | undefined {
