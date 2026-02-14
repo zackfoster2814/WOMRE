@@ -62,6 +62,7 @@ Runeword: Không
 + Luck Manipulation
 + Homeguard
 + Magama Strike
++ Ballet Dancing (từ PvE reward)
 ```
 
 ```
@@ -79,3 +80,17 @@ Team: 10
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Sky Dancer
+- Kết quả: Win
+- Tỉ số: 6-0
+- Reward: 
+  + Nhận Power Ballet Dancing
+  + +1 All stats
+- Punishment: 
+```
+======

@@ -61,10 +61,10 @@ Runeword: Không
 
 ```
 4 Power: 
-+ Drunken Boxing
++ Drunken Boxing (Đã mất do PvE punishment)
 + Quas
-+ Metamagic
-+ Critical Strike
++ Metamagic (Đã mất do PvE punishment)
++ Critical Strike (Đã mất do PvE punishment)
 ```
 
 ```
@@ -83,3 +83,15 @@ Lover:
 + ar2di
 + Euoid (euoid)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Simon
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: Mất 3 Power, giữ lại Power "Quas"
+```
+======

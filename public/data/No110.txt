@@ -58,10 +58,10 @@ Runeword: Không
 
 ```
 4 Power: 
-+ Railroad Realm🍀 (Từ Archetype)
++ Railroad Realm🍀 (Từ Archetype) (Đã mất do PvE punishment)
 + Voidwalking
-+ Overdrive
-+ Cursed (Quay lại Dura)
++ Overdrive (Đã mất do PvE punishment)
++ Cursed (Quay lại Dura) (Đã mất do PvE punishment)
 ```
 
 ```
@@ -77,3 +77,15 @@ Team: 9
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Simon
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: Mất 3 Power, giữ lại Power "Void Walking"
+```
+======

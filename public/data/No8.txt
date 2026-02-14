@@ -75,3 +75,16 @@ Team: 26
 Lover:
 + PYBB113 (quang03022)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Griffith
+- Kết quả: Win
+- Tỉ số: 1-2
+- Reward: 
+- Punishment: 
+- Note: GOAT Karu lên tiếng
+```
+======

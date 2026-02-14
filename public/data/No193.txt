@@ -77,3 +77,15 @@ Team: 30
 Lover:
 + baonine (baonine) (Đơn Phương)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Isshin the Sword Saint
+- Kết quả: Lose
+- Tỉ số: 0-12
+- Reward: 
+- Punishment: Nhận Quirk "Impatient" nhưng không được nhận 2 PvP Reward mặc định của nó
+```
+======

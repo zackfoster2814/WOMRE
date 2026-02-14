@@ -85,3 +85,15 @@ PvP Reward:
 - +1 Spd
 - +1 Dura
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Polish cow
+- Kết quả: Win
+- Tỉ số: 3-3
+- Reward: 
+- Punishment: 
+```
+======

@@ -75,3 +75,15 @@ Team: 7
 Lover:
 + Hayato (hayatoo_o)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Pontiff Sulyvahn
+- Kết quả: Lose
+- Tỉ số: 2-4
+- Reward: 
+- Punishment: 
+```
+======

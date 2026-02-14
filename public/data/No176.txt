@@ -80,3 +80,15 @@ Team: 16
 Lover:
 + Roku da Poet (roku2807)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Polish cow
+- Kết quả: Win
+- Tỉ số: 3-3
+- Reward: 
+- Punishment: 
+```
+======

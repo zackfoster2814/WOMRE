@@ -63,10 +63,10 @@ Runeword:
 
 ```
 1 Power:  
-+ Railroad Realm 🍀 (Hero of the Emirate🍀)
++ Railroad Realm 🍀 (Hero of the Emirate🍀) (Đã mất do PvE punishment)
 + U=ma2 (Từ Đừng Nhờn với Two Fingers)
-+ Burning Hand (Từ Sub-race)
-+ The Coast is Clear!
++ Burning Hand (Từ Sub-race) (Đã mất do PvE punishment)
++ The Coast is Clear! (Đã mất do PvE punishment)
 ```
 
 ```
@@ -84,3 +84,15 @@ Team: 9
 Lover:
 + Đừng Nhờn với Two Fingers
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Simon
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: Mất 3 Power, giữ lại Power "U=ma2"
+```
+======

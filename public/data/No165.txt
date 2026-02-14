@@ -80,3 +80,15 @@ PvP Reward:
 + 1 Power
 + 2 Stat thấp nhất
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Night King
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: 
+```
+======

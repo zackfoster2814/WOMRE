@@ -85,3 +85,15 @@ PvP Reward:
 - +1 IQ
 - +1 Power
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Violet Vessel
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: 
+```
+======

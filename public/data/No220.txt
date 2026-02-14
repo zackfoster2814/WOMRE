@@ -55,9 +55,9 @@ Runeword:
 
 ```
 3 Power: 
-+ Artist
-+ Lightning Enchant
-+ Night Vision
++ Artist (Đã mất do PvE punishment)
++ Lightning Enchant (Đã mất do PvE punishment)
++ Night Vision (Đã mất do PvE punishment)
 ```
 
 ```
@@ -73,3 +73,15 @@ Team: 9
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Simon
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: Mất hết Power
+```
+======

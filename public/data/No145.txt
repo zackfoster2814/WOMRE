@@ -59,7 +59,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Mind Control
++ Mind Control (Đã mất do PvE punishment)
 ```
 
 ```
@@ -75,3 +75,15 @@ Team: 9
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Simon
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: Mất hết Power
+```
+======

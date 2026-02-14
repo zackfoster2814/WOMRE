@@ -81,3 +81,15 @@ Team: 20
 Lover:
 + King Zalo (chi404)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: The Elder Brain
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: 
+- Punishment: 
+```
+======

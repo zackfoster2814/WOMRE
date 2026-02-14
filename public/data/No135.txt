@@ -81,3 +81,15 @@ Team: 11
 Lover:
 + Mặc Quyên (hodrick_.)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: 67 Final Boss
+- Kết quả: Win
+- Tỉ số: 6-0
+- Reward: 
+- Punishment: 
+```
+======

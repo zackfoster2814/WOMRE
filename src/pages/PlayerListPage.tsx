@@ -2049,6 +2049,7 @@ const StatModifiersTable = ({
     char_dev: "text-teal-400",
     pvp_reward: "text-green-400",
     pve_punishment: "text-red-500",
+    pve_reward: "text-green-400",
     lover: "text-pink-300",
     symbiosis: "text-red-300",
   };

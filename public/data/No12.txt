@@ -21,9 +21,9 @@ Archetype:
 + Impatient
 ```
 ```
-Str: 2
-Spd: 1
-Dur: 1
+Str: 5
+Spd: 5
+Dur: 4
 IQ: 6
 BIQ: 6
 MA: 4
@@ -80,3 +80,15 @@ PvP Reward:
 - +1 Spd
 - +1 Dur
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Violet Vessel
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: +1 vào Base Stat thấp nhất 10 lần
+- Punishment: 
+```
+======

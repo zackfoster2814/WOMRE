@@ -80,3 +80,15 @@ Team: 32
 Lover:
 + Yui (duyanh_57789)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Alduin
+- Kết quả: Lose
+- Tỉ số: 7--1
+- Reward: 
+- Punishment: 
+```
+======

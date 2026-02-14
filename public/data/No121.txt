@@ -73,3 +73,16 @@ Team: 15
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Ca Cao the World Eater
+- Kết quả: Lose
+- Tỉ số: 2-6
+- Reward: 
+- Punishment: 
+- Note: Ca Cao né ở round SPD, crit ở round MA
+```
+======

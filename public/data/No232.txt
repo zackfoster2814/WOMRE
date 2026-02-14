@@ -72,3 +72,15 @@ Team: 16
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Polish cow
+- Kết quả: Win
+- Tỉ số: 3-3
+- Reward: 
+- Punishment: 
+```
+======

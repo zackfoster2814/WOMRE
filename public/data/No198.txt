@@ -75,3 +75,15 @@ Team: 17
 Lover:
 + KuSenpai (kusenpai)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Sigrun
+- Kết quả: Lose
+- Tỉ số: 3-4
+- Reward: 
+- Punishment: Mất Power AID và Frost Armor
+```
+======

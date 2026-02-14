@@ -75,3 +75,15 @@ Team: 27
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Mu Fanbase
+- Kết quả: Win
+- Tỉ số: 6-0
+- Reward: +1 IQ
+- Punishment: 
+```
+======

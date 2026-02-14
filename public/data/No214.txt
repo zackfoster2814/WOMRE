@@ -25,7 +25,7 @@ Archetype:
 ```
 Str:6 (+2 Từ Atreides)
 Spd:5
-Dur:6
+Dur:0
 IQ:6
 BIQ:4
 MA:3
@@ -79,3 +79,15 @@ PvP Reward:
 - +1 Dura
 - +1 IQ
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Caligo Miasma Of Night
+- Kết quả: Lose
+- Tỉ số: 2-4
+- Reward: 
+- Punishment: Dura về 0
+```
+======

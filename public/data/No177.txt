@@ -25,7 +25,7 @@ Archetype:
 ```
 Str: 1
 Spd: 2 (+3 từ Herald)
-Dur: 1
+Dur: 0
 IQ: 2
 BIQ: 1
 MA: 1
@@ -86,3 +86,15 @@ Team: 21
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Caligo Miasma Of Night
+- Kết quả: Lose
+- Tỉ số: 2-4
+- Reward: 
+- Punishment: Dura về 0
+```
+======

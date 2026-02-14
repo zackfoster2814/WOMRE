@@ -59,6 +59,7 @@ Runeword: Không
 2 Power: 
 + Blood Frenzy (Từ Moon Elf)
 + Thunder Orb
++ Ballet Dancing (từ PvE reward)
 ```
 
 ```
@@ -74,3 +75,17 @@ Team: 10
 Lover:
 + Ako Darling (mikukhang)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Sky Dancer
+- Kết quả: Win
+- Tỉ số: 6-0
+- Reward: 
+  + Nhận Power Ballet Dancing
+  + +1 All stats
+- Punishment: 
+```
+======

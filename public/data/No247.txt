@@ -72,3 +72,15 @@ Team: 32
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Alduin
+- Kết quả: Lose
+- Tỉ số: 7--1
+- Reward: 
+- Punishment: 
+```
+======

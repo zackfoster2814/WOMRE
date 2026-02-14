@@ -80,3 +80,15 @@ PvP Reward:
 - +1 Gear
 - +1 IQ
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Laerys the Unknown
+- Kết quả: Win
+- Tỉ số: 4-2
+- Reward: 
+- Punishment: 
+```
+======

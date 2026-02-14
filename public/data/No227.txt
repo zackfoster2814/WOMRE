@@ -74,3 +74,15 @@ Team: 12
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Slave Knight Gael
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: 
+- Punishment: 
+```
+======

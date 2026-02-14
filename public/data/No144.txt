@@ -74,3 +74,17 @@ Team: 8
 Lover:
 + TheViet (c9ru5)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Allfather
+- Kết quả: Win
+- Tỉ số: 4-4
+- Reward: 
+  + +4 Str
+  + +4 IQ
+- Punishment: 
+```
+======

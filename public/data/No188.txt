@@ -80,3 +80,15 @@ Team: 24
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Soul of Cinder
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: Nhận Archetype "Cinderheart", nếu đã có rồi, nhận +1 All Stats
+```
+======

@@ -80,3 +80,15 @@ Team: 17
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Sigrun
+- Kết quả: Lose
+- Tỉ số: 3-4
+- Reward: 
+- Punishment: Mất Power Divine Lightning và Water Breathing
+```
+======

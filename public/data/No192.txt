@@ -77,3 +77,15 @@ Team: 28
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Night King
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: 
+```
+======

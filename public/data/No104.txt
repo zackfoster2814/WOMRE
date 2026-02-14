@@ -79,3 +79,15 @@ Team: 11
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: 67 Final Boss
+- Kết quả: Win
+- Tỉ số: 6-0
+- Reward: 
+- Punishment: 
+```
+======

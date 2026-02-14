@@ -87,3 +87,16 @@ PvP Reward:
 - +1 MA
 - +1 Str
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Capra Demon
+- Kết quả: Win
+- Tỉ số: 5-4
+- Reward: 
+- Punishment: 
+- Note: Win BO3 round MA 2-0
+```
+======

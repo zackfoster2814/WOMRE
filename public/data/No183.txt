@@ -24,7 +24,7 @@ Archetype:
 ```
 Str: 2
 Spd: 6
-Dur: 9 (+2 từ House)
+Dur: 0 (+2 từ House)
 IQ: 9
 BIQ: 1
 MA: 1
@@ -75,3 +75,15 @@ Team: 21
 Lover:
 + Trung Kiên (trungkien1412)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Caligo Miasma Of Night
+- Kết quả: Lose
+- Tỉ số: 2-4
+- Reward: 
+- Punishment: Dura về 0
+```
+======

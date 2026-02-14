@@ -77,3 +77,15 @@ Team: 18
 Lover:
 + ...?? (_1469)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Raphael
+- Kết quả: Lose
+- Tỉ số: 1-6
+- Reward: 
+- Punishment: 
+```
+======

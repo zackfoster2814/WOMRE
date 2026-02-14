@@ -79,3 +79,15 @@ Team: 17
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Sigrun
+- Kết quả: Lose
+- Tỉ số: 3-4
+- Reward: 
+- Punishment: Mất Power Sybaurafarming và Red Shift/LP
+```
+======

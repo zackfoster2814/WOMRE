@@ -76,3 +76,16 @@ Team: 14
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Kafka
+- Kết quả: Lose
+- Tỉ số: 2-4
+- Reward: 
+- Punishment: Mất toàn bộ Archetype và Quirk
+- Note: (3)
+```
+======

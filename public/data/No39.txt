@@ -77,3 +77,15 @@ Team: 19
 Lover:
 + Quý Trần Tường (wyug1234)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Laerys the Unknown
+- Kết quả: Win
+- Tỉ số: 4-2
+- Reward: 
+- Punishment: 
+```
+======

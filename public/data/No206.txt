@@ -75,3 +75,15 @@ Team: 20
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: The Elder Brain
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: 
+- Punishment: 
+```
+======

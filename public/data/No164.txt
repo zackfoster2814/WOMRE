@@ -77,3 +77,15 @@ Team: 25
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Radagon of The Golden Order
+- Kết quả: Lose
+- Tỉ số: 1-4
+- Reward: 
+- Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
+```
+======

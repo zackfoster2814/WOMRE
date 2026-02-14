@@ -74,3 +74,15 @@ Team: 28
 Lover:
 + Yamakun (yamakunson)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Night King
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: 
+```
+======

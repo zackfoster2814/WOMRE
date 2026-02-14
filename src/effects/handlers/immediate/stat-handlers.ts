@@ -4,18 +4,25 @@
  * Handlers xử lý các effect liên quan đến stat calculation.
  */
 
-import { registerImmediateHandler } from '../registry';
-import type { ImmediateHandlerContext, ImmediateHandlerResult } from '../types';
-import type { StatName } from '../../types';
+import { registerImmediateHandler } from "../registry";
+import type { ImmediateHandlerContext, ImmediateHandlerResult } from "../types";
+import type { StatName } from "../../types";
 
-const STAT_NAMES: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
+const STAT_NAMES: StatName[] = [
+  "strength",
+  "speed",
+  "durability",
+  "iq",
+  "biq",
+  "ma",
+];
 
 // ============================================================================
 // UTILITY FUNCTIONS
 // ============================================================================
 
 function findLowestStat(stats: Record<StatName, number>): StatName {
-  let lowest: StatName = 'strength';
+  let lowest: StatName = "strength";
   let lowestValue = stats.strength;
   for (const stat of STAT_NAMES) {
     if (stats[stat] < lowestValue) {
@@ -41,19 +48,24 @@ function findLowestStat(stats: Record<StatName, number>): StatName {
 
 function countItemsOfType(character: any, type: string): number {
   switch (type) {
-    case 'power':
+    case "power":
       return (character.powers || []).filter((p: any) => !p.isLost).length;
-    case 'quirk':
+    case "quirk":
       return (character.quirks || []).filter((q: any) => !q.isLost).length;
-    case 'weapon':
+    case "weapon":
       return (character.weapons || []).filter((w: any) => !w.isLost).length;
-    case 'gear':
-      const normalGear = (character.gear?.normalGear || []).filter((g: any) => !g.isLost);
-      const legacyGear = (character.gear?.legacyGear || []).filter((g: any) => !g.isLost);
+    case "gear":
+      const normalGear = (character.gear?.normalGear || []).filter(
+        (g: any) => !g.isLost,
+      );
+      const legacyGear = (character.gear?.legacyGear || []).filter(
+        (g: any) => !g.isLost,
+      );
       return normalGear.length + legacyGear.length;
-    case 'rune':
-      return (character.runes?.runes || []).filter((r: any) => !r.isLost).length;
-    case 'lover':
+    case "rune":
+      return (character.runes?.runes || []).filter((r: any) => !r.isLost)
+        .length;
+    case "lover":
       if (Array.isArray(character.lover)) {
         return character.lover.length;
       }
@@ -74,7 +86,7 @@ function countItemsOfType(character: any, type: string): number {
  * NOTE: Tạm thời comment vì Inversion đã được tính tay trong data
  */
 registerImmediateHandler(
-  'inversion_all_base_stats',
+  "inversion_all_base_stats",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // Tạm thời disable vì Inversion đã được tính tay trong data
     // const mods: ImmediateHandlerResult['statModifiers'] = [];
@@ -97,25 +109,25 @@ registerImmediateHandler(
 
     return { skipDefault: true };
   },
-  'Đảo ngược tất cả base stats (disabled - đã tính tay)'
+  "Đảo ngược tất cả base stats (disabled - đã tính tay)",
 );
 
 /**
  * Graceful - +1 BIQ per lover
  */
 registerImmediateHandler(
-  'graceful_biq_per_lover',
+  "graceful_biq_per_lover",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const loverCount = countItemsOfType(ctx.character, 'lover');
+    const loverCount = countItemsOfType(ctx.character, "lover");
     if (loverCount === 0) return { skipDefault: true };
 
     return {
-      statModifiers: [{ stat: 'biq', value: loverCount }],
+      statModifiers: [{ stat: "biq", value: loverCount }],
       skipDefault: true,
       description: `+${loverCount} BIQ từ ${loverCount} lover(s)`,
     };
   },
-  '+1 BIQ per lover'
+  "+1 BIQ per lover",
 );
 
 /**
@@ -124,15 +136,18 @@ registerImmediateHandler(
  * Handler này chỉ chạy khi KHÔNG có stat bonus ghi sẵn - tự tìm lover's highest stat.
  */
 registerImmediateHandler(
-  'in_love_stat_bonus',
+  "in_love_stat_bonus",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const lovers = ctx.character.lover;
     if (!lovers || !Array.isArray(lovers) || lovers.length === 0) {
-      return { skipDefault: true, description: 'Không có lover' };
+      return { skipDefault: true, description: "Không có lover" };
     }
 
     if (!ctx.allCharacters || ctx.allCharacters.length === 0) {
-      return { skipDefault: true, description: 'Không thể tìm lover (no allCharacters)' };
+      return {
+        skipDefault: true,
+        description: "Không thể tìm lover (no allCharacters)",
+      };
     }
 
     // Find the first lover in allCharacters
@@ -141,28 +156,34 @@ registerImmediateHandler(
       if (lover.isLost) continue;
       const loverName = lover.name.toLowerCase();
       loverChar = ctx.allCharacters.find((c) => {
-        const username = c.username?.toLowerCase() || '';
-        const name = c.name?.toLowerCase() || '';
-        return (username && loverName.includes(username)) || (name && loverName.includes(name));
+        const username = c.username?.toLowerCase() || "";
+        const name = c.name?.toLowerCase() || "";
+        return (
+          (username && loverName.includes(username)) ||
+          (name && loverName.includes(name))
+        );
       });
       if (loverChar) break;
     }
 
     if (!loverChar || !loverChar.stats) {
-      return { skipDefault: true, description: 'Không tìm thấy lover trong danh sách' };
+      return {
+        skipDefault: true,
+        description: "Không tìm thấy lover trong danh sách",
+      };
     }
 
     // Find lover's highest stat
     const statMapping: Record<string, StatName> = {
-      strength: 'strength',
-      speed: 'speed',
-      durability: 'durability',
-      iq: 'iq',
-      biq: 'biq',
-      ma: 'ma',
+      strength: "strength",
+      speed: "speed",
+      durability: "durability",
+      iq: "iq",
+      biq: "biq",
+      ma: "ma",
     };
 
-    let highestStat: StatName = 'strength';
+    let highestStat: StatName = "strength";
     let highestValue = -1;
     for (const [key, statName] of Object.entries(statMapping)) {
       const val = loverChar.stats[key] ?? 0;
@@ -178,19 +199,19 @@ registerImmediateHandler(
       description: `+2 ${highestStat.toUpperCase()} từ In Love (stat cao nhất của lover)`,
     };
   },
-  '+2 vào stat cao nhất của lover'
+  "+2 vào stat cao nhất của lover",
 );
 
 /**
  * 100 Girlfriends - +1 All stats per lover
  */
 registerImmediateHandler(
-  '100_girlfriends_stat_bonus',
+  "100_girlfriends_stat_bonus",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const loverCount = countItemsOfType(ctx.character, 'lover');
+    const loverCount = countItemsOfType(ctx.character, "lover");
     if (loverCount === 0) return { skipDefault: true };
 
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    const mods: ImmediateHandlerResult["statModifiers"] = [];
     for (const stat of STAT_NAMES) {
       mods.push({ stat, value: loverCount });
     }
@@ -201,7 +222,7 @@ registerImmediateHandler(
       description: `+${loverCount} All Stats từ ${loverCount} lover(s)`,
     };
   },
-  '+1 All stats per lover'
+  "+1 All stats per lover",
 );
 
 /**
@@ -209,9 +230,9 @@ registerImmediateHandler(
  * Uses baseStats (original stats from wheel spin) to determine lowest stat
  */
 registerImmediateHandler(
-  'overcome_habits_per_quirk',
+  "overcome_habits_per_quirk",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const quirkCount = countItemsOfType(ctx.character, 'quirk');
+    const quirkCount = countItemsOfType(ctx.character, "quirk");
     if (quirkCount === 0) return { skipDefault: true };
 
     // Use baseStats to find lowest stat (stats from original wheel spin)
@@ -223,16 +244,16 @@ registerImmediateHandler(
       description: `+${quirkCount} ${lowestStat.toUpperCase()} (${quirkCount} Quirk, Overcome the Habits)`,
     };
   },
-  '+1 lowest base stat per quirk'
+  "+1 lowest base stat per quirk",
 );
 
 /**
  * Quirkful Grant - +1 per quirk to a stat
  */
 registerImmediateHandler(
-  'quirkful_grant_per_quirk',
+  "quirkful_grant_per_quirk",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const quirkCount = countItemsOfType(ctx.character, 'quirk');
+    const quirkCount = countItemsOfType(ctx.character, "quirk");
     if (quirkCount === 0) return { skipDefault: true };
 
     // Grant to lowest stat
@@ -243,38 +264,38 @@ registerImmediateHandler(
       description: `+${quirkCount} ${lowestStat} từ ${quirkCount} quirk(s)`,
     };
   },
-  '+1 per quirk to lowest stat'
+  "+1 per quirk to lowest stat",
 );
 
 /**
  * Frost Fingers - +1 per gear
  */
 registerImmediateHandler(
-  'frost_fingers_per_gear',
+  "frost_fingers_per_gear",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const gearCount = countItemsOfType(ctx.character, 'gear');
+    const gearCount = countItemsOfType(ctx.character, "gear");
     if (gearCount === 0) return { skipDefault: true };
 
     return {
-      statModifiers: [{ stat: 'iq', value: gearCount }],
+      statModifiers: [{ stat: "iq", value: gearCount }],
       skipDefault: true,
       description: `+${gearCount} IQ từ ${gearCount} gear(s)`,
     };
   },
-  '+1 IQ per gear'
+  "+1 IQ per gear",
 );
 
 /**
  * Iron Man - gear bonus
  */
 registerImmediateHandler(
-  'iron_man_gear_bonus',
+  "iron_man_gear_bonus",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const gearCount = countItemsOfType(ctx.character, 'gear');
+    const gearCount = countItemsOfType(ctx.character, "gear");
     if (gearCount === 0) return { skipDefault: true };
 
     // +1 All per gear
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    const mods: ImmediateHandlerResult["statModifiers"] = [];
     for (const stat of STAT_NAMES) {
       mods.push({ stat, value: gearCount });
     }
@@ -285,64 +306,69 @@ registerImmediateHandler(
       description: `+${gearCount} All Stats từ ${gearCount} gear(s)`,
     };
   },
-  '+1 All per gear'
+  "+1 All per gear",
 );
 
 /**
  * W Speed - +1 Speed per 5 base stat total
  */
 registerImmediateHandler(
-  'w_speed_per_5_base',
+  "w_speed_per_5_base",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const totalBase = STAT_NAMES.reduce((sum, stat) => sum + ctx.baseStats[stat], 0);
+    const totalBase = STAT_NAMES.reduce(
+      (sum, stat) => sum + ctx.baseStats[stat],
+      0,
+    );
     const bonus = Math.floor(totalBase / 5);
 
     if (bonus === 0) return { skipDefault: true };
 
     return {
-      statModifiers: [{ stat: 'speed', value: bonus }],
+      statModifiers: [{ stat: "speed", value: bonus }],
       skipDefault: true,
       description: `+${bonus} Speed (từ ${totalBase} total base stats / 5)`,
     };
   },
-  '+1 Speed per 5 base stat total'
+  "+1 Speed per 5 base stat total",
 );
 
 /**
  * Mid Stats Five - Set all stats to 5
  */
-registerImmediateHandler(
-  'mid_stats_five',
-  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+// registerImmediateHandler(
+//   'mid_stats_five',
+//   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+//     const mods: ImmediateHandlerResult['statModifiers'] = [];
 
-    for (const stat of STAT_NAMES) {
-      const diff = 5 - ctx.baseStats[stat];
-      if (diff !== 0) {
-        mods.push({ stat, value: diff, isBase: true });
-      }
-    }
+//     for (const stat of STAT_NAMES) {
+//       const diff = 5 - ctx.baseStats[stat];
+//       if (diff !== 0) {
+//         mods.push({ stat, value: diff, isBase: true });
+//       }
+//     }
 
-    return {
-      statModifiers: mods,
-      skipDefault: true,
-      description: 'Set tất cả base stats về 5',
-    };
-  },
-  'Set all base stats to 5'
-);
+//     return {
+//       statModifiers: mods,
+//       skipDefault: true,
+//       description: 'Set tất cả base stats về 5',
+//     };
+//   },
+//   'Set all base stats to 5'
+// );
 
 /**
  * Ascended - Top 2 stats get +3
  */
 registerImmediateHandler(
-  'ascended_top_2_stats',
+  "ascended_top_2_stats",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // Find top 2 stats
-    const sorted = [...STAT_NAMES].sort((a, b) => ctx.currentStats[b] - ctx.currentStats[a]);
+    const sorted = [...STAT_NAMES].sort(
+      (a, b) => ctx.currentStats[b] - ctx.currentStats[a],
+    );
     const top2 = sorted.slice(0, 2);
 
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    const mods: ImmediateHandlerResult["statModifiers"] = [];
     for (const stat of top2) {
       mods.push({ stat, value: 3 });
     }
@@ -350,23 +376,23 @@ registerImmediateHandler(
     return {
       statModifiers: mods,
       skipDefault: true,
-      description: `+3 to top 2 stats: ${top2.join(', ')}`,
+      description: `+3 to top 2 stats: ${top2.join(", ")}`,
     };
   },
-  '+3 to top 2 stats'
+  "+3 to top 2 stats",
 );
 
 /**
  * Mang Bản Chân - +1 All if all base stats are 1
  */
 registerImmediateHandler(
-  'mang_ban_chan_stats_1',
+  "mang_ban_chan_stats_1",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const allOnes = STAT_NAMES.every(stat => ctx.baseStats[stat] === 1);
+    const allOnes = STAT_NAMES.every((stat) => ctx.baseStats[stat] === 1);
 
     if (!allOnes) return { skipDefault: true };
 
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    const mods: ImmediateHandlerResult["statModifiers"] = [];
     for (const stat of STAT_NAMES) {
       mods.push({ stat, value: 5 });
     }
@@ -374,19 +400,19 @@ registerImmediateHandler(
     return {
       statModifiers: mods,
       skipDefault: true,
-      description: '+5 All Stats (tất cả base stats là 1)',
+      description: "+5 All Stats (tất cả base stats là 1)",
     };
   },
-  '+5 All if all base stats are 1'
+  "+5 All if all base stats are 1",
 );
 
 /**
  * Bohemians - Stats 9 or 9
  */
 registerImmediateHandler(
-  'bohemians_stats_99',
+  "bohemians_stats_99",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    const mods: ImmediateHandlerResult["statModifiers"] = [];
 
     for (const stat of STAT_NAMES) {
       // Set to either 9 or 9 (both are 9 lol, but the concept is "9 or 9")
@@ -399,10 +425,10 @@ registerImmediateHandler(
     return {
       statModifiers: mods,
       skipDefault: true,
-      description: 'Set tất cả stats về 9',
+      description: "Set tất cả stats về 9",
     };
   },
-  'Set all stats to 9'
+  "Set all stats to 9",
 );
 
 /**
@@ -410,15 +436,15 @@ registerImmediateHandler(
  * Random 1 trong 6 hiệu ứng cố định: +1 Str, +7 Spd, +7 Dur, +0 IQ, +1 BIQ, +3 MA
  */
 registerImmediateHandler(
-  'metamorphosis_random_stat',
+  "metamorphosis_random_stat",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const options: { stat: StatName; label: string; value: number }[] = [
-      { stat: 'strength', label: 'STR', value: 1 },
-      { stat: 'speed', label: 'SPD', value: 7 },
-      { stat: 'durability', label: 'DUR', value: 7 },
-      { stat: 'iq', label: 'IQ', value: 0 },
-      { stat: 'biq', label: 'BIQ', value: 1 },
-      { stat: 'ma', label: 'MA', value: 3 },
+      { stat: "strength", label: "STR", value: 1 },
+      { stat: "speed", label: "SPD", value: 7 },
+      { stat: "durability", label: "DUR", value: 7 },
+      { stat: "iq", label: "IQ", value: 0 },
+      { stat: "biq", label: "BIQ", value: 1 },
+      { stat: "ma", label: "MA", value: 3 },
     ];
     const chosen = options[Math.floor(Math.random() * options.length)];
 
@@ -437,17 +463,17 @@ registerImmediateHandler(
       description: `+${chosen.value} ${chosen.label} từ Metamorphosis`,
     };
   },
-  'Random stat bonus from fixed options'
+  "Random stat bonus from fixed options",
 );
 
 /**
  * Mad Scientist Random Size
  */
 registerImmediateHandler(
-  'mad_scientist_random_size',
+  "mad_scientist_random_size",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // Random +1 to +6 to each stat
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    const mods: ImmediateHandlerResult["statModifiers"] = [];
 
     for (const stat of STAT_NAMES) {
       const value = Math.floor(Math.random() * 6) + 1;
@@ -457,66 +483,66 @@ registerImmediateHandler(
     return {
       statModifiers: mods,
       skipDefault: true,
-      description: 'Random +1 to +6 to each stat',
+      description: "Random +1 to +6 to each stat",
     };
   },
-  'Random +1 to +6 to each stat'
+  "Random +1 to +6 to each stat",
 );
 
 /**
  * Promised Consort - Stats based on lover's stats
  */
 registerImmediateHandler(
-  'promised_consort_lover_stat',
+  "promised_consort_lover_stat",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This needs access to lover's character data which we don't have here
     // Return empty for now - would need to be handled at a higher level
     return {
       skipDefault: true,
-      description: 'Stats based on lover (cần data lover)',
+      description: "Stats based on lover (cần data lover)",
     };
   },
-  'Stats based on lover stats'
+  "Stats based on lover stats",
 );
 
 /**
  * Kinetics - Convert Speed to Strength
  */
 registerImmediateHandler(
-  'kinetics_speed_to_str',
+  "kinetics_speed_to_str",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const speedValue = ctx.currentStats.speed;
 
     return {
       statModifiers: [
-        { stat: 'speed', value: -speedValue },
-        { stat: 'strength', value: speedValue },
+        { stat: "speed", value: -speedValue },
+        { stat: "strength", value: speedValue },
       ],
       skipDefault: true,
       description: `Convert ${speedValue} Speed to Strength`,
     };
   },
-  'Convert Speed to Strength'
+  "Convert Speed to Strength",
 );
 
 /**
  * Sagacity - Convert Speed to IQ
  */
 registerImmediateHandler(
-  'sagacity_speed_to_iq',
+  "sagacity_speed_to_iq",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const speedValue = ctx.currentStats.speed;
 
     return {
       statModifiers: [
-        { stat: 'speed', value: -speedValue },
-        { stat: 'iq', value: speedValue },
+        { stat: "speed", value: -speedValue },
+        { stat: "iq", value: speedValue },
       ],
       skipDefault: true,
       description: `Convert ${speedValue} Speed to IQ`,
     };
   },
-  'Convert Speed to IQ'
+  "Convert Speed to IQ",
 );
 
 // EscAPADe handler moved to power-handlers.ts
@@ -526,19 +552,19 @@ registerImmediateHandler(
  * Epiphany - Convert Power count to IQ
  */
 registerImmediateHandler(
-  'epiphany_power_to_iq',
+  "epiphany_power_to_iq",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const powerCount = countItemsOfType(ctx.character, 'power');
+    const powerCount = countItemsOfType(ctx.character, "power");
 
     if (powerCount === 0) return { skipDefault: true };
 
     return {
-      statModifiers: [{ stat: 'iq', value: powerCount }],
+      statModifiers: [{ stat: "iq", value: powerCount }],
       skipDefault: true,
       description: `+${powerCount} IQ từ ${powerCount} power(s)`,
     };
   },
-  '+1 IQ per power'
+  "+1 IQ per power",
 );
 
 /**
@@ -546,7 +572,7 @@ registerImmediateHandler(
  * Với mỗi Lover có "AIDS", nhận +1 all stats. (Tính cả các Lover đã chết)
  */
 registerImmediateHandler(
-  'femboy_lover_aids_count',
+  "femboy_lover_aids_count",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const lovers = ctx.character.lover || [];
     if (lovers.length === 0) return { skipDefault: true };
@@ -562,8 +588,8 @@ registerImmediateHandler(
       const loverName = lover.name.toLowerCase();
       // Find lover in allCharacters by matching username or name
       const loverChar = ctx.allCharacters.find((c) => {
-        const username = c.username?.toLowerCase() || '';
-        const name = c.name?.toLowerCase() || '';
+        const username = c.username?.toLowerCase() || "";
+        const name = c.name?.toLowerCase() || "";
         return (
           (username && loverName.includes(username)) ||
           (name && loverName.includes(name))
@@ -572,8 +598,8 @@ registerImmediateHandler(
 
       if (loverChar) {
         // Check if this lover has AIDS power (don't skip lost AIDS - still counts)
-        const loverHasAIDS = (loverChar.powers || []).some(
-          (p: any) => p.name.toLowerCase().includes('aids')
+        const loverHasAIDS = (loverChar.powers || []).some((p: any) =>
+          p.name.toLowerCase().includes("aids"),
         );
         if (loverHasAIDS) loversWithAIDS++;
       }
@@ -586,7 +612,7 @@ registerImmediateHandler(
       };
     }
 
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    const mods: ImmediateHandlerResult["statModifiers"] = [];
     for (const stat of STAT_NAMES) {
       mods.push({ stat, value: loversWithAIDS });
     }
@@ -597,7 +623,7 @@ registerImmediateHandler(
       description: `+${loversWithAIDS} All Stats từ ${loversWithAIDS} Lover(s) có AIDS`,
     };
   },
-  '+1 All Stats per Lover with AIDS'
+  "+1 All Stats per Lover with AIDS",
 );
 
 /**
@@ -605,7 +631,7 @@ registerImmediateHandler(
  * Vật chủ nhận +1 Strength, +1 BIQ và +1 MA với mỗi Stack "Wrath" tồn tại trong người
  */
 registerImmediateHandler(
-  'diablo_wrath_stacks',
+  "diablo_wrath_stacks",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const wrathStacks = ctx.character.wrathStacks || 0;
 
@@ -613,18 +639,18 @@ registerImmediateHandler(
 
     return {
       statModifiers: [
-        { stat: 'strength', value: wrathStacks },
-        { stat: 'biq', value: wrathStacks },
-        { stat: 'ma', value: wrathStacks },
+        { stat: "strength", value: wrathStacks },
+        { stat: "biq", value: wrathStacks },
+        { stat: "ma", value: wrathStacks },
       ],
       skipDefault: true,
       description: `+${wrathStacks} STR/BIQ/MA từ ${wrathStacks} Wrath stack(s)`,
     };
   },
-  '+1 STR/BIQ/MA per Wrath stack'
+  "+1 STR/BIQ/MA per Wrath stack",
 );
 
 export function registerStatHandlers(): void {
   // All handlers are registered via registerImmediateHandler calls above
-  console.log('Stat handlers registered');
+  console.log("Stat handlers registered");
 }

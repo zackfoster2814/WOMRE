@@ -83,3 +83,16 @@ PvP Reward:
 + 1 Gear (đã mất)
 + 1 IQ (đã mất)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Ca Cao the World Eater
+- Kết quả: Lose
+- Tỉ số: 2-6
+- Reward: 
+- Punishment: 
+- Note: Ca Cao né ở round SPD, crit ở round MA
+```
+======

@@ -75,3 +75,15 @@ Team: 5
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Violet Vessel
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Reward: 
+- Punishment: 
+```
+======

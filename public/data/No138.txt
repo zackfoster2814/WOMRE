@@ -76,3 +76,16 @@ Team: 6
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Mambo
+- Kết quả: Lose
+- Tỉ số: 3-4
+- Reward: 
+- Punishment: 
+- Note: Lmao thua cả Mambo
+```
+======

@@ -74,3 +74,16 @@ Team: 14
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Kafka
+- Kết quả: Lose
+- Tỉ số: 2-4
+- Reward: 
+- Punishment: 
+- Note: (4) Không bị phạt
+```
+======

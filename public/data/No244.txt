@@ -78,3 +78,16 @@ Team: 14
 Lover:
 + kinbum
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Kafka
+- Kết quả: Lose
+- Tỉ số: 2-4
+- Reward: 
+- Punishment: Mất toàn bộ Archetype và Quirk (Cursed 36 hồi lại 1 All Base Stats)
+- Note: (3)
+```
+======

@@ -8,42 +8,42 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Human
-Sub-race: Vàng
+Race: Demi-God
+Sub-race: Cursed Sword
 ```
 
 ```
 Archetype: 
-+ Hand Fighter
++ Masochist
 ```
 ``` 
 1 Quirk:  
-+ Pure 
++ Under the Weather
 ```
 ```
-Str:5
-Spd:1
+Str:6
+Spd:6
 Dur:2
-IQ:9
-BIQ:5
-MA:6
+IQ:5
+BIQ: 10 (+2 từ Atreides)
+MA:1
 ```
 
 ```
-Houses:
-+ Roundtable Hold
+Houses: 
++ Atreides
 ```
 
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
+1 Gear: 
+ + 1 Normal gear:
+  - Empty Stein
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
+0 Weapon
 + 
 ```
 
@@ -54,8 +54,9 @@ Runeword:
 ```
 
 ```
-0 Power: 
-+ 
+2 Power:  
++ Spell Flux
++ Seismic
 ```
 
 ```
@@ -64,12 +65,12 @@ Char dev:
 ```
 
 ```
-Team: 13
+Team:
 ```
 
 ```
 Lover:
-+
++ 
 ```
 
 
@@ -80,6 +81,6 @@ PvE:
 - Đối thủ: The Collector
 - Kết quả: Win (Team)
 - Tỉ số: 5-1
-- Bị Isekai trong trận
+- Bị Isekai trong trận (đã Isekai)
 ```
 ======

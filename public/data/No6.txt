@@ -77,3 +77,15 @@ Team: 27
 Lover:
 + Chovy Golden Roader (moimoi6820)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Mu Fanbase
+- Kết quả: Win
+- Tỉ số: 6-0
+- Reward: +1 Dur
+- Punishment: 
+```
+======

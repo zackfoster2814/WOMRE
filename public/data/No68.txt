@@ -73,3 +73,15 @@ Team: 31
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: The Unblinking Gaze
+- Kết quả: Win
+- Tỉ số: 4-2
+- Reward: 
+- Punishment: 
+```
+======

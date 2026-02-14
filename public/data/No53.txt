@@ -75,3 +75,16 @@ Team: 22
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Baron Nashor
+- Kết quả: Lose
+- Tỉ số: 2-8
+- Reward: 
+- Punishment: -2 vào stat thấp nhất
+- Note: Đánh caro 2 lần
+```
+======

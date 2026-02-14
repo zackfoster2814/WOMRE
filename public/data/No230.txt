@@ -78,3 +78,15 @@ Team: 27
 Lover:
 + Dương Quá Quá (duongquaqua)
 ```
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Mu Fanbase
+- Kết quả: Win
+- Tỉ số: 6-0
+- Reward: +1 Spd
+- Punishment: 
+```
+======
