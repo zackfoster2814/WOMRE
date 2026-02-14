@@ -3,6 +3,7 @@ import { CharacterParser } from "../utils/characterParser";
 import { Character } from "../types/character";
 import { WheelCanvas } from "../components/WheelCanvas";
 import { WheelItem } from "../types";
+import { getAssetPath } from "../utils/basePath";
 
 interface TournamentPlayer {
   id: number;
@@ -55,7 +56,7 @@ export const PvPTournamentPage = () => {
         // Load No*.txt files until we have 256 non-Symbiosis players
         while (allPlayers.length < maxPlayers && fileIndex <= 400) {
           try {
-            const response = await fetch(`/data/No${fileIndex}.txt`);
+            const response = await fetch(getAssetPath(`/data/No${fileIndex}.txt`));
             if (response.ok) {
               const content = await response.text();
               const character = CharacterParser.parseCharacterFile(content);

@@ -319,7 +319,7 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
 
         for (let i = 1; i <= 260; i++) {
           fetchPromises.push(
-            fetch(`/data/No${i}.txt`)
+            fetch(getAssetPath(`/data/No${i}.txt`))
               .then(async (response) => {
                 if (response.ok) {
                   const content = await response.text();
@@ -909,7 +909,7 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
 
         for (let i = 1; i <= 260; i++) {
           fetchPromises.push(
-            fetch(`/data/No${i}.txt`)
+            fetch(getAssetPath(`/data/No${i}.txt`))
               .then(async (response) => {
                 if (response.ok) {
                   const content = await response.text();
@@ -1586,7 +1586,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
 
         for (let i = 1; i <= 260; i++) {
           fetchPromises.push(
-            fetch(`/data/No${i}.txt`)
+            fetch(getAssetPath(`/data/No${i}.txt`))
               .then(async (response) => {
                 if (response.ok) {
                   const content = await response.text();
