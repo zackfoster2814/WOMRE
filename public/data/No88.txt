@@ -1,7 +1,7 @@
 No.88
 Name: Lowns (.lowns)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -24,7 +24,7 @@ Archetype:
 Str: 2
 Spd: 8 (Ban đầu là 8, +3 từ Herald)
 Dur: 7
-IQ: 3
+IQ: 0 (Ban đầu là 3, về 0 do PvE Punishment)
 BIQ: 3
 MA: 8
 ```
@@ -71,3 +71,15 @@ Team: 4
 Lover:
 + 
 ```
+
+
+======
+Battle Log: 
+```
+PvE:
+- Đối thủ: Divine Dragon
+- Kết quả: Lose
+- Tỉ số: 6-4 
+- Punishment: 
+ + Chỉ số thấp nhất của team bị kéo xuống 0
+======

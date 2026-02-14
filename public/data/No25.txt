@@ -1,7 +1,7 @@
 No.25
 Name: Roku da Poet (roku2807)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -21,7 +21,7 @@ Archetype:
 + Cheater
 ```
 ```
-Str: 10
+Str: 5 (ban đầu là 10, trừ do PvE Punishment)
 Spd: 7
 Dur: 2
 IQ: 5
@@ -73,3 +73,14 @@ Team: 1
 Lover:
 + Lunar (huyvp1412)
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Dreglord
+- Kết quả: Lose
+- Tỉ số: 0-6
+- Punishment: -5 base Str
+======

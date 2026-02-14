@@ -1,7 +1,7 @@
 No.87
 Name: KaTsumi - ChillWithCafe (katsumi3000)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -21,7 +21,7 @@ Archetype:
 + Open-minded
 ```
 ```
-Str: 8
+Str: 3 (ban đầu là 8, trừ do PvE Punishment)
 Spd: 4
 Dur: 1
 IQ: 1
@@ -77,3 +77,14 @@ Lover:
 + Thang (thang0458)
 + Zackie (zackfoster___)
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Dreglord
+- Kết quả: Lose
+- Tỉ số: 0-6
+- Punishment: -5 base Str
+======

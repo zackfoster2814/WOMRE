@@ -1,7 +1,7 @@
 No.166
 Name: sarah (sarahaxtroll)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -22,12 +22,12 @@ Archetype:
 + Brainrot (Từ Braindead)
 ```
 ```
-Str:4 (Re-spin từ Unborn, ban đầu là 6)
-Spd:6
-Dur:7
-IQ:6 (+3 từ Philosopher)
-BIQ:6
-MA:6
+Str: -1 (ban đầu là 4, trừ do PvE Punishment) (Respin do rune unborn - trước đó nữa là 6)
+Spd: 6
+Dur: 7
+IQ: 6 (+3 từ Philosopher)
+BIQ: 6
+MA: 6
 ```
 
 ```
@@ -74,3 +74,14 @@ Team: 1
 Lover:
 + 
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Dreglord
+- Kết quả: Lose
+- Tỉ số: 0-6
+- Punishment: -5 base Str
+======

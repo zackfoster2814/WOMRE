@@ -1,7 +1,7 @@
 No.103
 Name: Kẹo Con (su167)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:

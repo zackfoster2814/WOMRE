@@ -1,7 +1,7 @@
 No.199
 Name: LazyMan (cuongcao)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -22,7 +22,7 @@ Archetype:
 + Cheater
 ```
 ```
-Str:9
+Str:4 (ban đầu là 9, trừ do PvE Punishment)
 Spd:3
 Dur:5
 IQ:4
@@ -72,3 +72,14 @@ Team: 1
 Lover:
 + 
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Dreglord
+- Kết quả: Lose
+- Tỉ số: 0-6
+- Punishment: -5 base Str
+======

@@ -1,7 +1,7 @@
 No.46
 Name: Yui (duyanh_57789)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -25,7 +25,7 @@ Archetype:
 Str: 1
 Spd: 9
 Dur: 1
-IQ: 10
+IQ: 0 (Ban đầu là 10, về 0 do PvE Punishment)
 BIQ: 10
 MA: 5
 ```
@@ -76,3 +76,15 @@ Team: 4
 Lover:
 + 
 ```
+
+
+======
+Battle Log: 
+```
+PvE:
+- Đối thủ: Divine Dragon
+- Kết quả: Lose
+- Tỉ số: 6-4 
+- Punishment: 
+ + Chỉ số thấp nhất của team bị kéo xuống 0
+======

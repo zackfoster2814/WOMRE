@@ -918,6 +918,38 @@ export class EffectResolver {
       }
     }
 
+    // PvE Punishments (from battle log, e.g., "-2 Str")
+    if (character.pvePunishments && character.pvePunishments.length > 0) {
+      const abbrevToStat: Record<string, StatName> = {
+        str: "strength", spd: "speed", dur: "durability",
+        iq: "iq", biq: "biq", ma: "ma",
+      };
+      const punishEffects: Effect[] = [];
+      const descriptions: string[] = [];
+      for (const p of character.pvePunishments) {
+        const statName = abbrevToStat[p.stat];
+        if (statName) {
+          punishEffects.push({
+            type: "stat_modifier",
+            stat: statName,
+            value: p.value,
+            timing: "immediate",
+            target: "self",
+          });
+          descriptions.push(`${p.value} ${p.stat.toUpperCase()}`);
+        }
+      }
+      if (punishEffects.length > 0) {
+        sources.push({
+          type: "pve_punishment",
+          name: `PvE Punishment (${descriptions.join(", ")})`,
+          effects: punishEffects,
+          rawDescription: `PvE Punishment: ${descriptions.join(", ")}`,
+          isActive: true,
+        });
+      }
+    }
+
     return sources;
   }
 

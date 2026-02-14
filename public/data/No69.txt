@@ -1,7 +1,7 @@
 No.69
 Name: Nốt Ruồi Lệch Pha (cooku_35645)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -26,7 +26,7 @@ Archetype:
 Str: 5
 Spd: 10
 Dur: 4
-IQ: 6
+IQ: 0 (Ban đầu là 6, về 0 do PvE Punishment)
 BIQ: 6
 MA: 10
 ```
@@ -79,3 +79,15 @@ Team: 4
 Lover:
 + 
 ```
+
+
+======
+Battle Log: 
+```
+PvE:
+- Đối thủ: Divine Dragon
+- Kết quả: Lose
+- Tỉ số: 6-4 
+- Punishment: 
+ + Chỉ số thấp nhất của team bị kéo xuống 0
+======

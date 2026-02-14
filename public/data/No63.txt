@@ -1,7 +1,7 @@
 No.63
 Name: V1ncc (vinhbang)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:

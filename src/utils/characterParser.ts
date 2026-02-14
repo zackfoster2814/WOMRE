@@ -56,7 +56,7 @@ function isLostHouse(text: string): boolean {
  */
 function cleanHouseName(name: string): string {
   return name
-    .replace(/\s*\([^)]*\)/g, '') // Remove all parenthesized annotations
+    .replace(/\s*\([^)]*\)/g, "") // Remove all parenthesized annotations
     .trim();
 }
 
@@ -340,6 +340,68 @@ export class CharacterParser {
     // Parse Battle Log
     character.battleLog = this.parseBattleLog(lines);
 
+    // Extract PvE stat modifiers from battle log (punishment/reward)
+    if (character.battleLog) {
+      const statMap: Record<string, string> = {
+        str: "str",
+        strength: "str",
+        spd: "spd",
+        speed: "spd",
+        dur: "dur",
+        dura: "dur",
+        durability: "dur",
+        iq: "iq",
+        biq: "biq",
+        ma: "ma",
+        all: "all",
+      };
+      const punishments: { stat: string; value: number }[] = [];
+
+      for (const entry of character.battleLog) {
+        // Process both punishment and reward fields
+        const fields = [entry.punishment, entry.reward].filter(Boolean);
+        for (const field of fields) {
+          // Split multi-line items (joined by "; ")
+          const items = field!.split(/;\s*/);
+          for (const item of items) {
+            // Format 1: "-X vào stat ... (STAT)", e.g., "-2 vào stat thấp nhất (Str)"
+            const specificMatch = item.match(
+              /([+-]?\d+)\s+vào\s+stat\s+.+?\((\w+)\)/i,
+            );
+            if (specificMatch) {
+              const value = parseInt(specificMatch[1]);
+              const stat = statMap[specificMatch[2].toLowerCase()];
+              if (stat && stat !== "all") {
+                punishments.push({ stat, value });
+              }
+              continue;
+            }
+            // Format 2: "-X All Stats" or "+X All Stats"
+            const allMatch = item.match(/([+-]?\d+)\s+All\s+Stats/i);
+            if (allMatch) {
+              const value = parseInt(allMatch[1]);
+              for (const s of ["str", "spd", "dur", "iq", "biq", "ma"]) {
+                punishments.push({ stat: s, value });
+              }
+              continue;
+            }
+            // Format 3: "+X STAT" or "-X STAT", e.g., "+2 Str", "-1 MA"
+            const simpleMatch = item.match(/([+-]\d+)\s+(\w+)/i);
+            if (simpleMatch) {
+              const value = parseInt(simpleMatch[1]);
+              const stat = statMap[simpleMatch[2].toLowerCase()];
+              if (stat && stat !== "all") {
+                punishments.push({ stat, value });
+              }
+            }
+          }
+        }
+      }
+      if (punishments.length > 0) {
+        character.pvePunishments = punishments;
+      }
+    }
+
     return character as Character;
   }
 
@@ -478,21 +540,19 @@ export class CharacterParser {
         const fullRace = raceMatch[1].trim();
 
         // Check if this is a Reincarnator - format: "Reincarnator (Name) -> NewRace"
-        const reincarnatorMatch = fullRace.match(
-          /^Reincarnator\s*(.*)$/i,
-        );
+        const reincarnatorMatch = fullRace.match(/^Reincarnator\s*(.*)$/i);
         if (reincarnatorMatch && reincarnatorMatch[1].trim()) {
           race.race = "Reincarnator";
           const info = reincarnatorMatch[1].trim();
           race.reincarnatorInfo = info;
           // Extract actual race: find -> outside parentheses
           // e.g. "(Nasume) -> Elf" => "Elf", "(Zed) -> Vampire (Khẩu vị: Bắp Cải)" => "Vampire"
-          const afterParens = info.replace(/^\([^)]*\)\s*/, '');
+          const afterParens = info.replace(/^\([^)]*\)\s*/, "");
           const arrowMatch = afterParens.match(/^->\s*(.+)/);
           if (arrowMatch) {
             // Take the first word(s) before any parenthesized annotation
             const actualRaceRaw = arrowMatch[1].trim();
-            const cleanRace = actualRaceRaw.replace(/\s*\(.*\)\s*$/, '').trim();
+            const cleanRace = actualRaceRaw.replace(/\s*\(.*\)\s*$/, "").trim();
             race.actualRace = cleanRace || actualRaceRaw;
           }
         } else if (fullRace.match(/^Reincarnator\s*$/i)) {
@@ -798,9 +858,9 @@ export class CharacterParser {
           const subType = cleanHouseName(inlineMatch[2].trim());
           flat.push(mainName);
           const inlineLostType = /kinda\s*homeless/i.test(name)
-            ? "kinda_homeless" as const
+            ? ("kinda_homeless" as const)
             : /no\s*more\s*home/i.test(name)
-              ? "no_more_home" as const
+              ? ("no_more_home" as const)
               : undefined;
           currentHouse = {
             name: mainName,
@@ -832,9 +892,9 @@ export class CharacterParser {
         if (cleanName) {
           flat.push(cleanName);
           const lostType = /kinda\s*homeless/i.test(name)
-            ? "kinda_homeless" as const
+            ? ("kinda_homeless" as const)
             : /no\s*more\s*home/i.test(name)
-              ? "no_more_home" as const
+              ? ("no_more_home" as const)
               : undefined;
           currentHouse = { name: cleanName, isLost: houseLost, lostType };
         }
@@ -892,22 +952,22 @@ export class CharacterParser {
     };
 
     for (const line of lines) {
-      const strMatch = line.match(/Str:\s*(\d+)/i);
+      const strMatch = line.match(/Str:\s*(-?\d+)/i);
       if (strMatch) stats.str = parseInt(strMatch[1]);
 
-      const spdMatch = line.match(/Spd:\s*(\d+)/i);
+      const spdMatch = line.match(/Spd:\s*(-?\d+)/i);
       if (spdMatch) stats.spd = parseInt(spdMatch[1]);
 
-      const durMatch = line.match(/Dur:\s*(\d+)/i);
+      const durMatch = line.match(/Dur:\s*(-?\d+)/i);
       if (durMatch) stats.dur = parseInt(durMatch[1]);
 
-      const iqMatch = line.match(/^IQ:\s*(\d+)/i);
+      const iqMatch = line.match(/^IQ:\s*(-?\d+)/i);
       if (iqMatch) stats.iq = parseInt(iqMatch[1]);
 
-      const biqMatch = line.match(/BIQ:\s*(\d+)/i);
+      const biqMatch = line.match(/BIQ:\s*(-?\d+)/i);
       if (biqMatch) stats.biq = parseInt(biqMatch[1]);
 
-      const maMatch = line.match(/MA:\s*(\d+)/i);
+      const maMatch = line.match(/MA:\s*(-?\d+)/i);
       if (maMatch) stats.ma = parseInt(maMatch[1]);
     }
 
@@ -985,14 +1045,15 @@ export class CharacterParser {
     const finalStats: Partial<Record<keyof CharacterStats, boolean>> = {};
     let hasAny = false;
 
-    const statPatterns: Array<{ key: keyof CharacterStats; pattern: RegExp }> = [
-      { key: 'str', pattern: /Str:.*\(final\)/i },
-      { key: 'spd', pattern: /Spd:.*\(final\)/i },
-      { key: 'dur', pattern: /Dur:.*\(final\)/i },
-      { key: 'iq', pattern: /^IQ:.*\(final\)/i },
-      { key: 'biq', pattern: /BIQ:.*\(final\)/i },
-      { key: 'ma', pattern: /MA:.*\(final\)/i },
-    ];
+    const statPatterns: Array<{ key: keyof CharacterStats; pattern: RegExp }> =
+      [
+        { key: "str", pattern: /Str:.*\(final\)/i },
+        { key: "spd", pattern: /Spd:.*\(final\)/i },
+        { key: "dur", pattern: /Dur:.*\(final\)/i },
+        { key: "iq", pattern: /^IQ:.*\(final\)/i },
+        { key: "biq", pattern: /BIQ:.*\(final\)/i },
+        { key: "ma", pattern: /MA:.*\(final\)/i },
+      ];
 
     for (const line of lines) {
       for (const { key, pattern } of statPatterns) {
@@ -1039,7 +1100,11 @@ export class CharacterParser {
       const subEffectMatch = line.match(/^->\s*(.+)/);
       if (subEffectMatch) {
         const subEffect = subEffectMatch[1].trim();
-        const lastList = inLegacyGear ? gear.legacyGear : inNormalGear ? gear.normalGear : null;
+        const lastList = inLegacyGear
+          ? gear.legacyGear
+          : inNormalGear
+            ? gear.normalGear
+            : null;
         if (lastList && lastList.length > 0) {
           const lastItem = lastList[lastList.length - 1];
           if (!lastItem.subEffects) lastItem.subEffects = [];
@@ -1187,7 +1252,7 @@ export class CharacterParser {
    * Parse Tournament Info
    * Format in file (standalone lines at top):
    * Status: Còn sống / Đã bị loại / Vô địch
-   * Vòng thi đấu: - / 256 / 128 / 64 / 32 / 16 / 8 / tứ kết / bán kết / chung kết
+   * Vòng thi đấu: 256 / 256 / 128 / 64 / 32 / 16 / 8 / tứ kết / bán kết / chung kết
    * Nhánh thi đấu: - / thắng / thua
    */
   private static parseBattleLog(lines: string[]): BattleLogEntry[] | undefined {
@@ -1199,6 +1264,16 @@ export class CharacterParser {
 
     let currentEntry: Partial<BattleLogEntry> | null = null;
     const extraLines: string[] = [];
+    let currentMultiLineField: "reward" | "punishment" | null = null;
+    const multiLineItems: string[] = [];
+
+    const flushMultiLine = () => {
+      if (currentEntry && currentMultiLineField && multiLineItems.length > 0) {
+        currentEntry[currentMultiLineField] = multiLineItems.join("; ");
+      }
+      currentMultiLineField = null;
+      multiLineItems.length = 0;
+    };
 
     for (let i = logIndex + 1; i < lines.length; i++) {
       const line = lines[i];
@@ -1208,23 +1283,39 @@ export class CharacterParser {
       // Battle type header (e.g., "PvE:", "PvP:")
       const typeMatch = line.match(/^(PvE|PvP):$/i);
       if (typeMatch) {
+        flushMultiLine();
         // Save previous entry
         if (currentEntry?.type) {
           if (extraLines.length > 0) {
-            currentEntry.note = [currentEntry.note, ...extraLines].filter(Boolean).join("; ");
+            currentEntry.note = [currentEntry.note, ...extraLines]
+              .filter(Boolean)
+              .join("; ");
           }
           entries.push(currentEntry as BattleLogEntry);
           extraLines.length = 0;
         }
-        currentEntry = { type: typeMatch[1], opponent: "", result: "", score: "" };
+        currentEntry = {
+          type: typeMatch[1],
+          opponent: "",
+          result: "",
+          score: "",
+        };
         continue;
       }
 
       if (!currentEntry) continue;
 
+      // Multi-line sub-items (+ prefix under Reward/Punishment)
+      const subItemMatch = line.match(/^\+\s*(.+)/);
+      if (subItemMatch && currentMultiLineField) {
+        multiLineItems.push(subItemMatch[1].trim());
+        continue;
+      }
+
       // Parse fields
-      const fieldMatch = line.match(/^-\s*(.+?):\s*(.+)$/);
+      const fieldMatch = line.match(/^-\s*(.+?):\s*(.*)$/);
       if (fieldMatch) {
+        flushMultiLine();
         const key = fieldMatch[1].toLowerCase();
         const value = fieldMatch[2].trim();
         if (key === "đối thủ") {
@@ -1234,24 +1325,38 @@ export class CharacterParser {
         } else if (key === "tỉ số") {
           currentEntry.score = value;
         } else if (key === "reward") {
-          currentEntry.reward = value;
+          if (value) {
+            currentEntry.reward = value;
+          } else {
+            // Multi-line reward — following lines start with "+"
+            currentMultiLineField = "reward";
+          }
         } else if (key === "punishment") {
-          currentEntry.punishment = value;
+          if (value) {
+            currentEntry.punishment = value;
+          } else {
+            // Multi-line punishment
+            currentMultiLineField = "punishment";
+          }
         } else if (key === "vòng") {
           currentEntry.round = value;
         } else if (key === "note") {
           currentEntry.note = value;
         }
       } else if (line.startsWith("-")) {
+        flushMultiLine();
         // Extra lines without key:value format (e.g., "- Bị Isekai trong trận")
         extraLines.push(line.replace(/^-\s*/, ""));
       }
     }
 
     // Save last entry
+    flushMultiLine();
     if (currentEntry?.type) {
       if (extraLines.length > 0) {
-        currentEntry.note = [currentEntry.note, ...extraLines].filter(Boolean).join("; ");
+        currentEntry.note = [currentEntry.note, ...extraLines]
+          .filter(Boolean)
+          .join("; ");
       }
       entries.push(currentEntry as BattleLogEntry);
     }

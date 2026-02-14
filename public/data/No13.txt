@@ -1,7 +1,7 @@
 No.13
 Name: zed (zed9179)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:

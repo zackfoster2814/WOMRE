@@ -1,7 +1,7 @@
 No.95
 Name: AtKo (ame_tako)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:

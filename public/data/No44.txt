@@ -1,7 +1,7 @@
 No.44
 Name: MasMerterserker (azzapp36)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -39,28 +39,28 @@ Houses:
 ```
 2 Gear: 
  + 2 Normal gear:
-  - Wooden Shield
-  - Cursed Charm
+  - Wooden Shield (Đã mất do thua PvE)
+  - Cursed Charm (Đã mất do thua PvE)
  + 0 Legacy gear:
   - 
 ```
 
 ```
 1 Normal Weapon
-+ Rapier
++ Rapier (Đã mất do thua PvE)
 ```
 
 ``` 
 1 Rune: 
-+ Ral
++ Ral (Đã mất do thua PvE)
 Runeword: Không
 ```
 
 ```
 3 Power: 
-+ Overdrive
-+ Cold Breeze
-+ Clear Mind
++ Overdrive (Đã mất do thua PvE)
++ Cold Breeze (Đã mất do thua PvE)
++ Clear Mind (Đã mất do thua PvE)
 ```
 
 ```
@@ -82,3 +82,15 @@ PvP Reward:
 - +1 IQ
 - +1 Str
 ```
+
+======
+Battle Log: 
+```
+PvE:
+- Đối thủ: Aatrox World Ender
+- Kết quả: Lose
+- Tỉ số: 0-6
+- Punishment: 
+ + Mất hết Vũ khí, Power và Gear
+ + -1 All Stats
+======

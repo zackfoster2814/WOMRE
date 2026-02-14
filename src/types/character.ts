@@ -175,6 +175,9 @@ export interface Character {
 
   // Battle Log
   battleLog?: BattleLogEntry[];
+
+  // PvE Punishments (parsed from battle log, e.g., "-2 Str")
+  pvePunishments?: { stat: string; value: number }[];
 }
 
 export interface BattleLogEntry {

@@ -1,7 +1,7 @@
 No.58
 Name: Boy lắc đầu (huntervu)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:

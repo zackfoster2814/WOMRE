@@ -1,7 +1,7 @@
 No.15
 Name: Hung Nguyen (hung_nguyen98)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:

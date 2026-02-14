@@ -271,6 +271,7 @@ export type EffectSourceType =
   | 'house'
   | 'char_dev'
   | 'pvp_reward'
+  | 'pve_punishment'
   | 'lover'
   | 'symbiosis';
 

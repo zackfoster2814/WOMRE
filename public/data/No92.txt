@@ -1,7 +1,7 @@
 No.92
 Name: PYBB113 (quang03022)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -21,7 +21,7 @@ Archetype:
 + Lucky (Max: Dura)
 ```
 ```
-Str: 6
+Str: 1 (ban đầu là 6, trừ do PvE Punishment)
 Spd: 5
 Dur: 10 (Quirk Lucky)
 IQ: 3
@@ -75,3 +75,14 @@ Team: 1
 Lover:
 + Johnny Joestar (newtransocial)
 ```
+
+
+======
+Battle Log:
+```
+PvE:
+- Đối thủ: Dreglord
+- Kết quả: Lose
+- Tỉ số: 0-6
+- Punishment: -5 base Str
+======

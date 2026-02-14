@@ -1,7 +1,7 @@
 No.164
 Name: Note (note8442)
 Status: Còn sống
-Vòng thi đấu: -
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
