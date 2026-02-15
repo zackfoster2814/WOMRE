@@ -90,7 +90,7 @@ PvE:
 - Tỉ số: 6-0
 - Reward: 
   + Nhận power 67
-  + +1 vào stat thấp nhất (spd)
+  + +1 vào stat thấp nhất (IQ)
 - Punishment: 
 ```
 ======
