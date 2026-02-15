@@ -184,9 +184,7 @@ const StatModifiersTable = ({
           {/* Original base stats row (before Inversion, if applicable) */}
           {originalBaseStats && (
             <tr className="border-b border-gray-700/50 bg-gray-700/30">
-              <td className="py-1.5 px-2 text-gray-400 italic">
-                Tr\u01b0\u1edbc \u0111\u00f3
-              </td>
+              <td className="py-1.5 px-2 text-gray-400 italic">Trước đó</td>
               {[
                 originalBaseStats.str,
                 originalBaseStats.spd,
@@ -263,90 +261,124 @@ const StatModifiersTable = ({
       </table>
 
       {/* All Effects Inventory */}
-      {breakdown.length > 0 && (() => {
-        // Group all sources by type
-        const grouped = new Map<EffectSourceType, EffectSourceBreakdown[]>();
-        for (const source of breakdown) {
-          const list = grouped.get(source.type) || [];
-          list.push(source);
-          grouped.set(source.type, list);
-        }
+      {breakdown.length > 0 &&
+        (() => {
+          // Group all sources by type
+          const grouped = new Map<EffectSourceType, EffectSourceBreakdown[]>();
+          for (const source of breakdown) {
+            const list = grouped.get(source.type) || [];
+            list.push(source);
+            grouped.set(source.type, list);
+          }
 
-        // Display order
-        const typeOrder: EffectSourceType[] = [
-          "race", "sub_race", "archetype", "archetype_sub", "quirk",
-          "power", "summon", "weapon", "gear", "rune", "runeword",
-          "house", "house_sub", "char_dev", "pvp_reward", "pve_reward",
-          "pve_punishment", "lover", "symbiosis",
-        ];
+          // Display order
+          const typeOrder: EffectSourceType[] = [
+            "race",
+            "sub_race",
+            "archetype",
+            "archetype_sub",
+            "quirk",
+            "power",
+            "summon",
+            "weapon",
+            "gear",
+            "rune",
+            "runeword",
+            "house",
+            "house_sub",
+            "char_dev",
+            "pvp_reward",
+            "pve_reward",
+            "pve_punishment",
+            "lover",
+            "symbiosis",
+          ];
 
-        const formatStatSummary = (source: EffectSourceBreakdown) => {
-          const nonZero = source.statChanges.filter((c) => c.value !== 0);
-          if (nonZero.length === 0) return null;
-          return nonZero.map((c) => {
-            const statLabel = c.stat === "strength" ? "STR"
-              : c.stat === "speed" ? "SPD"
-              : c.stat === "durability" ? "DUR"
-              : c.stat === "iq" ? "IQ"
-              : c.stat === "biq" ? "BIQ" : "MA";
-            const prefix = c.value > 0 ? "+" : "";
-            return `${prefix}${c.value} ${statLabel}`;
-          }).join(", ");
-        };
+          const formatStatSummary = (source: EffectSourceBreakdown) => {
+            const nonZero = source.statChanges.filter((c) => c.value !== 0);
+            if (nonZero.length === 0) return null;
+            return nonZero
+              .map((c) => {
+                const statLabel =
+                  c.stat === "strength"
+                    ? "STR"
+                    : c.stat === "speed"
+                      ? "SPD"
+                      : c.stat === "durability"
+                        ? "DUR"
+                        : c.stat === "iq"
+                          ? "IQ"
+                          : c.stat === "biq"
+                            ? "BIQ"
+                            : "MA";
+                const prefix = c.value > 0 ? "+" : "";
+                return `${prefix}${c.value} ${statLabel}`;
+              })
+              .join(", ");
+          };
 
-        return (
-          <div className="mt-4 pt-3 border-t border-gray-600">
-            <h4 className="text-xs text-gray-300 font-medium mb-2">
-              Tất cả hiệu ứng
-            </h4>
-            <div className="space-y-2">
-              {typeOrder.map((type) => {
-                const sources = grouped.get(type);
-                if (!sources || sources.length === 0) return null;
-                return (
-                  <div key={type}>
-                    <div className={`text-[10px] font-bold uppercase tracking-wider ${sourceTypeColors[type]} mb-0.5`}>
-                      {sourceTypeLabels[type]}
-                    </div>
-                    <div className="space-y-0.5">
-                      {sources.map((source, idx) => {
-                        const statSummary = formatStatSummary(source);
-                        return (
-                          <div
-                            key={idx}
-                            className={`flex items-start gap-1.5 text-[11px] px-1.5 py-0.5 rounded ${
-                              source.isDisabled
-                                ? "bg-gray-800/50 opacity-50 line-through"
-                                : "bg-gray-700/30"
-                            }`}
-                          >
-                            <span className={`${sourceTypeColors[source.type]} shrink-0`}>
-                              {source.name}
-                            </span>
-                            {statSummary && (
-                              <span className="text-gray-400 shrink-0">
-                                ({statSummary})
+          return (
+            <div className="mt-4 pt-3 border-t border-gray-600">
+              <h4 className="text-xs text-gray-300 font-medium mb-2">
+                Tất cả hiệu ứng
+              </h4>
+              <div className="space-y-2">
+                {typeOrder.map((type) => {
+                  const sources = grouped.get(type);
+                  if (!sources || sources.length === 0) return null;
+                  return (
+                    <div key={type}>
+                      <div
+                        className={`text-[10px] font-bold uppercase tracking-wider ${sourceTypeColors[type]} mb-0.5`}
+                      >
+                        {sourceTypeLabels[type]}
+                      </div>
+                      <div className="space-y-0.5">
+                        {sources.map((source, idx) => {
+                          const statSummary = formatStatSummary(source);
+                          return (
+                            <div
+                              key={idx}
+                              className={`flex items-start gap-1.5 text-[11px] px-1.5 py-0.5 rounded ${
+                                source.isDisabled
+                                  ? "bg-gray-800/50 opacity-50 line-through"
+                                  : "bg-gray-700/30"
+                              }`}
+                            >
+                              <span
+                                className={`${sourceTypeColors[source.type]} shrink-0`}
+                              >
+                                {source.name}
                               </span>
-                            )}
-                            {source.description && !statSummary && (
-                              <span className="text-gray-500 truncate" title={source.description}>
-                                {source.description}
-                              </span>
-                            )}
-                            {source.isDisabled && (
-                              <span className="text-red-500 text-[9px]">[OFF]</span>
-                            )}
-                          </div>
-                        );
-                      })}
+                              {statSummary && (
+                                <span className="text-gray-400 shrink-0">
+                                  ({statSummary})
+                                </span>
+                              )}
+                              {source.description && !statSummary && (
+                                <span
+                                  className="text-gray-500 truncate"
+                                  title={source.description}
+                                >
+                                  {source.description}
+                                </span>
+                              )}
+                              {source.isDisabled && (
+                                <span className="text-red-500 text-[9px]">
+                                  [OFF]
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        );
-      })()}
+          );
+        })()}
 
       {/* Conditional Effects Section */}
       {sourcesWithConditionalEffects.length > 0 && (

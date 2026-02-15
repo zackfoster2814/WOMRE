@@ -36,13 +36,16 @@ const STAT_NAMES: StatName[] = [
 ];
 
 // Map StatName to CharacterStats key
-const STAT_NAME_TO_CHAR_KEY: Record<StatName, keyof import('../types/character').CharacterStats> = {
-  strength: 'str',
-  speed: 'spd',
-  durability: 'dur',
-  iq: 'iq',
-  biq: 'biq',
-  ma: 'ma',
+const STAT_NAME_TO_CHAR_KEY: Record<
+  StatName,
+  keyof import("../types/character").CharacterStats
+> = {
+  strength: "str",
+  speed: "spd",
+  durability: "dur",
+  iq: "iq",
+  biq: "biq",
+  ma: "ma",
 };
 
 /**
@@ -244,7 +247,9 @@ export class EffectResolver {
     }
 
     // Extract stat bonus from "-> Nhận +X Stat" or "-> +X Stat" or "-> -X All Stats" pattern
-    const statBonusMatch = fullName.match(/->\s*(?:Nhận\s*)?([+-]\d+)\s+([\w\s]+?)(?:\s*$|\s*\()/i);
+    const statBonusMatch = fullName.match(
+      /->\s*(?:Nhận\s*)?([+-]\d+)\s+([\w\s]+?)(?:\s*$|\s*\()/i,
+    );
     if (statBonusMatch) {
       const value = parseInt(statBonusMatch[1]);
       const statStr = statBonusMatch[2].trim().toLowerCase();
@@ -284,7 +289,10 @@ export class EffectResolver {
    * Gather all effect sources from a character
    * @param allCharacters - Optional list of all characters, used to resolve cross-character effects (e.g., Cheater debuff on lovers)
    */
-  static gatherEffectSources(character: Character, allCharacters?: Character[]): EffectSource[] {
+  static gatherEffectSources(
+    character: Character,
+    allCharacters?: Character[],
+  ): EffectSource[] {
     const sources: EffectSource[] = [];
 
     // Race
@@ -309,7 +317,10 @@ export class EffectResolver {
 
       // Reincarnator: also apply the actual race's effects
       if (character.race.race === "Reincarnator" && character.race.actualRace) {
-        const actualRaceEntry = EffectRegistry.get("race", character.race.actualRace);
+        const actualRaceEntry = EffectRegistry.get(
+          "race",
+          character.race.actualRace,
+        );
         if (actualRaceEntry) {
           sources.push({
             type: "race",
@@ -335,7 +346,12 @@ export class EffectResolver {
         if (subRaceEntry) {
           // For Goblin sub-races that are just numbers, display as "X goblins"
           let displayName = subRace;
-          if (character.race?.race?.toLowerCase() === "goblin" && /^\d+$/.test(subRace)) {
+          if (
+            character.race?.race &&
+            (character.race.race.toLowerCase() === "goblin" ||
+              character.race.race.toLowerCase().includes("reincarnator")) &&
+            /^\d+$/.test(subRace)
+          ) {
             displayName = `${subRace} goblins`;
           }
           sources.push({
@@ -383,7 +399,10 @@ export class EffectResolver {
       }
       // Look up subSubType (e.g., "Tusk Act II", "The World", "IQ")
       if (nested.subSubType) {
-        const subSubEntry = EffectRegistry.get("archetype_sub", nested.subSubType);
+        const subSubEntry = EffectRegistry.get(
+          "archetype_sub",
+          nested.subSubType,
+        );
         if (subSubEntry) {
           nestedArchetypeSubNames.add(nested.subSubType);
           sources.push({
@@ -433,10 +452,12 @@ export class EffectResolver {
         continue; // Skip normal power lookup
       }
 
-      const entry = EffectRegistry.get("power", power.name)
+      const entry =
+        EffectRegistry.get("power", power.name) ||
         // Fallback: some powers come from wheels (MHA, JJK, Jojo, etc.) and are registered as archetype_sub
         // But skip if already added from nestedArchetypes to avoid duplicate effects
-        || (!nestedArchetypeSubNames.has(power.name) && EffectRegistry.get("archetype_sub", power.name));
+        (!nestedArchetypeSubNames.has(power.name) &&
+          EffectRegistry.get("archetype_sub", power.name));
       if (entry) {
         sources.push({
           type: "power",
@@ -520,8 +541,7 @@ export class EffectResolver {
           rawDescription: entry.description,
           isActive: gear.usable !== false,
           isDisabled: gear.usable === false,
-          disabledReason:
-            gear.usable === false ? "Không dùng được" : undefined,
+          disabledReason: gear.usable === false ? "Không dùng được" : undefined,
         });
       }
     }
@@ -543,7 +563,11 @@ export class EffectResolver {
 
       // If house has explicit statBonuses (e.g., ["+2 Str", "+1 Spd", "+2 Dura"]), use those instead of registry effect
       // Skip if houseBonusApplied (stats already include house bonus, e.g. before Fate's Trick)
-      if (house.statBonuses && house.statBonuses.length > 0 && !character.houseBonusApplied) {
+      if (
+        house.statBonuses &&
+        house.statBonuses.length > 0 &&
+        !character.houseBonusApplied
+      ) {
         const bonusEffects: Effect[] = [];
         for (const bonus of house.statBonuses) {
           const bonusEffect = this.parseStatBonus(bonus);
@@ -587,7 +611,9 @@ export class EffectResolver {
             )
           : entry.effects;
         if (character.houseBonusApplied) {
-          effectsToApply = effectsToApply.filter((e) => e.type !== "stat_modifier");
+          effectsToApply = effectsToApply.filter(
+            (e) => e.type !== "stat_modifier",
+          );
         }
 
         if (effectsToApply.length > 0) {
@@ -652,7 +678,9 @@ export class EffectResolver {
       }
 
       if (activeHouseNames.includes("House Baratheon")) {
-        const allStatEffects: Effect[] = (["strength", "speed", "durability", "iq", "biq", "ma"] as const).map((stat) => ({
+        const allStatEffects: Effect[] = (
+          ["strength", "speed", "durability", "iq", "biq", "ma"] as const
+        ).map((stat) => ({
           type: "stat_modifier" as const,
           stat,
           value: 1,
@@ -664,14 +692,17 @@ export class EffectResolver {
           type: "house",
           name: "Chuyện bộ tộc - Nhà Baratheon",
           effects: allStatEffects,
-          rawDescription: "+1 all base stat cho toàn bộ thành viên nhà Baratheon",
+          rawDescription:
+            "+1 all base stat cho toàn bộ thành viên nhà Baratheon",
           isActive: true,
         });
       }
 
       const username = character.username?.toLowerCase() || "";
       if (username === "haruharu9127") {
-        const allStatEffects: Effect[] = (["strength", "speed", "durability", "iq", "biq", "ma"] as const).map((stat) => ({
+        const allStatEffects: Effect[] = (
+          ["strength", "speed", "durability", "iq", "biq", "ma"] as const
+        ).map((stat) => ({
           type: "stat_modifier" as const,
           stat,
           value: 2,
@@ -689,7 +720,9 @@ export class EffectResolver {
       }
 
       if (username === "2facecat.") {
-        const allStatEffects: Effect[] = (["strength", "speed", "durability", "iq", "biq", "ma"] as const).map((stat) => ({
+        const allStatEffects: Effect[] = (
+          ["strength", "speed", "durability", "iq", "biq", "ma"] as const
+        ).map((stat) => ({
           type: "stat_modifier" as const,
           stat,
           value: 2,
@@ -726,17 +759,25 @@ export class EffectResolver {
         if (parsed.baseName.toLowerCase() === "metamorphosis") {
           // Filter out AIDS power grant if denied
           if (parsed.denyAids) {
-            effects = effects.filter(e =>
-              !(e.type === "grant_power" &&
-                (e as { grantName?: string }).grantName?.toLowerCase() === "aids")
+            effects = effects.filter(
+              (e) =>
+                !(
+                  e.type === "grant_power" &&
+                  (e as { grantName?: string }).grantName?.toLowerCase() ===
+                    "aids"
+                ),
             );
           }
 
           // Replace random stat handler with specific stat if provided
           if (parsed.statBonus) {
-            effects = effects.filter(e =>
-              !(e.type === "custom" &&
-                (e as { customHandler?: string }).customHandler === "metamorphosis_random_stat")
+            effects = effects.filter(
+              (e) =>
+                !(
+                  e.type === "custom" &&
+                  (e as { customHandler?: string }).customHandler ===
+                    "metamorphosis_random_stat"
+                ),
             );
             // Add specific stat modifier
             effects.push({
@@ -753,9 +794,13 @@ export class EffectResolver {
         // Handle In Love - replace custom handler with specific stat if provided in data
         if (parsed.baseName.toLowerCase() === "in love") {
           if (parsed.statBonus) {
-            effects = effects.filter(e =>
-              !(e.type === "custom" &&
-                (e as { customHandler?: string }).customHandler === "in_love_stat_bonus")
+            effects = effects.filter(
+              (e) =>
+                !(
+                  e.type === "custom" &&
+                  (e as { customHandler?: string }).customHandler ===
+                    "in_love_stat_bonus"
+                ),
             );
             // Add specific stat modifier from data (e.g., "-> +2 IQ")
             effects.push({
@@ -771,9 +816,13 @@ export class EffectResolver {
         // Handle Creator's Limitation - replace custom handler with specific stat if provided in data
         if (parsed.baseName.toLowerCase() === "creator's limitation") {
           if (parsed.statBonus) {
-            effects = effects.filter(e =>
-              !(e.type === "custom" &&
-                (e as { customHandler?: string }).customHandler === "creators_limitation")
+            effects = effects.filter(
+              (e) =>
+                !(
+                  e.type === "custom" &&
+                  (e as { customHandler?: string }).customHandler ===
+                    "creators_limitation"
+                ),
             );
             effects.push({
               type: "stat_modifier",
@@ -906,14 +955,16 @@ export class EffectResolver {
           // 1. Quirk text says "nhận power" or "tặng" (e.g. "tặng Sonic Scream", "nhận power Evasion")
           if (/nhận\s+power|tặng/i.test(qName)) continue;
           // 2. Lover has a lost power that mentions the Charming player's name
-          const otherName = other.name?.toLowerCase() || '';
-          const otherUsername = other.username?.toLowerCase() || '';
+          const otherName = other.name?.toLowerCase() || "";
+          const otherUsername = other.username?.toLowerCase() || "";
           const gaveAwayPower = (character.powers || []).some((p) => {
             if (!p.isLost) return false;
-            const pName = (p.name || '').toLowerCase();
-            return (otherName && pName.includes(otherName)) ||
-                   (otherUsername && pName.includes(otherUsername)) ||
-                   /tặng|charming/i.test(pName);
+            const pName = (p.name || "").toLowerCase();
+            return (
+              (otherName && pName.includes(otherName)) ||
+              (otherUsername && pName.includes(otherUsername)) ||
+              /tặng|charming/i.test(pName)
+            );
           });
           if (gaveAwayPower) continue;
 
@@ -942,8 +993,12 @@ export class EffectResolver {
     // PvE Results (from battle log, e.g., "-2 Str" or "+1 All Stats")
     if (character.pvePunishments && character.pvePunishments.length > 0) {
       const abbrevToStat: Record<string, StatName> = {
-        str: "strength", spd: "speed", dur: "durability",
-        iq: "iq", biq: "biq", ma: "ma",
+        str: "strength",
+        spd: "speed",
+        dur: "durability",
+        iq: "iq",
+        biq: "biq",
+        ma: "ma",
       };
       const rewardEffects: Effect[] = [];
       const rewardDescs: string[] = [];
@@ -1274,13 +1329,17 @@ export class EffectResolver {
               // Has at least one non-lost weapon
               result = (character.weapons || []).some((w) => !w.isLost);
             } else if (condition.itemType === "lover") {
-              result = (character.lover || []).some((l) => !l.isLost && l.name.trim() !== "");
+              result = (character.lover || []).some(
+                (l) => !l.isLost && l.name.trim() !== "",
+              );
             } else if (condition.itemType === "power") {
               if (condition.itemName) {
                 result = (character.powers || []).some(
                   (p) =>
                     !p.isLost &&
-                    p.name.toLowerCase().includes(condition.itemName!.toLowerCase()),
+                    p.name
+                      .toLowerCase()
+                      .includes(condition.itemName!.toLowerCase()),
                 );
               } else {
                 result = (character.powers || []).some((p) => !p.isLost);
@@ -1773,7 +1832,9 @@ export class EffectResolver {
           biq: "BIQ",
           ma: "MA",
         };
-        const abbrev = statAbbrevMap[parsedStatBonus.stat] || parsedStatBonus.stat.toUpperCase();
+        const abbrev =
+          statAbbrevMap[parsedStatBonus.stat] ||
+          parsedStatBonus.stat.toUpperCase();
         return `+${parsedStatBonus.value} ${abbrev}`;
       }
       // Return conditional to let the UI show the effect is character-dependent
@@ -1825,9 +1886,7 @@ export class EffectResolver {
     // Pre-check immunities from all sources (e.g., Slow Metabolism: speed_increase)
     const hasSpeedIncreaseImmunity = sources.some((s) =>
       s.effects.some(
-        (e) =>
-          e.type === "immunity" &&
-          e.immuneTo?.includes("speed_increase"),
+        (e) => e.type === "immunity" && e.immuneTo?.includes("speed_increase"),
       ),
     );
 
@@ -1875,7 +1934,12 @@ export class EffectResolver {
 
         // Handle custom handlers - execute them and collect their stat modifiers
         // Skip if already executed this handler for this source (e.g., same handler on both immediate and pve_only)
-        if (effect.customHandler && (effect.timing === "immediate" || effect.timing === "pve_only" || effect.timing === "pvp_only")) {
+        if (
+          effect.customHandler &&
+          (effect.timing === "immediate" ||
+            effect.timing === "pve_only" ||
+            effect.timing === "pvp_only")
+        ) {
           if (executedHandlers.has(effect.customHandler)) continue;
           executedHandlers.add(effect.customHandler);
           const handlerResult = HandlerRegistry.executeImmediate(
@@ -1892,7 +1956,11 @@ export class EffectResolver {
 
           if (handlerResult?.statModifiers) {
             for (const mod of handlerResult.statModifiers) {
-              statChanges.push({ stat: mod.stat, value: mod.value, isBase: mod.isBase });
+              statChanges.push({
+                stat: mod.stat,
+                value: mod.value,
+                isBase: mod.isBase,
+              });
             }
             // Use handler description as display name when it has stat modifiers
             if (handlerResult.description) {
@@ -1900,7 +1968,11 @@ export class EffectResolver {
             }
           }
           // If handler returned a description but no stat modifiers, show as conditional info
-          if (handlerResult?.description && (!handlerResult.statModifiers || handlerResult.statModifiers.length === 0)) {
+          if (
+            handlerResult?.description &&
+            (!handlerResult.statModifiers ||
+              handlerResult.statModifiers.length === 0)
+          ) {
             conditionalEffects.push({
               timing: "immediate",
               description: handlerResult.description,
@@ -1930,7 +2002,11 @@ export class EffectResolver {
 
           if (effect.stat === "all") {
             for (const stat of STAT_NAMES) {
-              statChanges.push({ stat, value: effect.value, isBase: effect.isBase });
+              statChanges.push({
+                stat,
+                value: effect.value,
+                isBase: effect.isBase,
+              });
             }
           } else if (
             effect.stat &&
@@ -1945,13 +2021,21 @@ export class EffectResolver {
             // Resolve dynamic stat targets using base stats
             const resolvedStats = resolveStatTarget(effect.stat, baseStats);
             for (const stat of resolvedStats) {
-              statChanges.push({ stat, value: effect.value, isBase: effect.isBase });
+              statChanges.push({
+                stat,
+                value: effect.value,
+                isBase: effect.isBase,
+              });
             }
           } else if (effect.stat === "odd" || effect.stat === "even") {
             // Handle odd/even stat targets
             const resolvedStats = resolveStatTarget(effect.stat, baseStats);
             for (const stat of resolvedStats) {
-              statChanges.push({ stat, value: effect.value, isBase: effect.isBase });
+              statChanges.push({
+                stat,
+                value: effect.value,
+                isBase: effect.isBase,
+              });
             }
           }
         }
