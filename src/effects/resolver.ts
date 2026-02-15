@@ -897,8 +897,20 @@ export class EffectResolver {
             (myName && qName.includes(myName));
           if (!mentionsMe) continue;
 
-          // If the Charming quirk already received a power, no debuff for the lover
-          if (/nhận\s+power/i.test(qName)) continue;
+          // Check if a power was already given to the Charming player:
+          // 1. Quirk text says "nhận power" or "tặng" (e.g. "tặng Sonic Scream", "nhận power Evasion")
+          if (/nhận\s+power|tặng/i.test(qName)) continue;
+          // 2. Lover has a lost power that mentions the Charming player's name
+          const otherName = other.name?.toLowerCase() || '';
+          const otherUsername = other.username?.toLowerCase() || '';
+          const gaveAwayPower = (character.powers || []).some((p) => {
+            if (!p.isLost) return false;
+            const pName = (p.name || '').toLowerCase();
+            return (otherName && pName.includes(otherName)) ||
+                   (otherUsername && pName.includes(otherUsername)) ||
+                   /tặng|charming/i.test(pName);
+          });
+          if (gaveAwayPower) continue;
 
           // Cross-reference: check if this character (the lover) has any non-lost powers
           const myPowers = (character.powers || []).filter((p) => !p.isLost);

@@ -59,7 +59,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Sonic Scream  (đã mất do tặng Toast (toast_4274))
++ Sonic Scream  (đã mất - tặng cho Toast (toast_4274))
 ```
 
 ```
