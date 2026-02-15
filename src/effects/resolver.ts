@@ -884,7 +884,8 @@ export class EffectResolver {
         }
 
         // Charming quirk: if 'other' has Charming quirk mentioning this character,
-        // and the lover (this character) has no power → -1 all stats debuff
+        // and the lover (this character) had no power to give → -1 all stats debuff
+        // If quirk says "nhận power" → lover already gave power, no debuff
         for (const quirk of other.quirks || []) {
           if (quirk.isLost) continue;
           const qName = quirk.name.toLowerCase();
@@ -895,6 +896,9 @@ export class EffectResolver {
             (myUsername && qName.includes(myUsername)) ||
             (myName && qName.includes(myName));
           if (!mentionsMe) continue;
+
+          // If the Charming quirk already received a power, no debuff for the lover
+          if (/nhận\s+power/i.test(qName)) continue;
 
           // Cross-reference: check if this character (the lover) has any non-lost powers
           const myPowers = (character.powers || []).filter((p) => !p.isLost);

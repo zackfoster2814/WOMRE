@@ -330,6 +330,14 @@ registerImmediateHandler(
       return { skipDefault: true, description: `Charming: không tìm thấy lover "${loverStr}"` };
     }
 
+    // If quirk already says "nhận power" → power was already given, no stat change
+    if (/nhận\s+power/i.test(quirkName)) {
+      return {
+        skipDefault: true,
+        description: `${loverChar.name} đã tặng Power`,
+      };
+    }
+
     // Check if lover has any (non-lost) powers
     const loverPowers = (loverChar.powers || []).filter((p: any) => !p.isLost);
     if (loverPowers.length === 0) {

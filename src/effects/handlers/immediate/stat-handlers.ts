@@ -124,7 +124,7 @@ registerImmediateHandler(
     return {
       statModifiers: [{ stat: "biq", value: loverCount }],
       skipDefault: true,
-      description: `+${loverCount} BIQ từ ${loverCount} lover(s)`,
+      description: `Graceful`,
     };
   },
   "+1 BIQ per lover",
@@ -620,7 +620,7 @@ registerImmediateHandler(
     return {
       statModifiers: mods,
       skipDefault: true,
-      description: `+${loversWithAIDS} All Stats từ ${loversWithAIDS} Lover(s) có AIDS`,
+      description: `Femboy`,
     };
   },
   "+1 All Stats per Lover with AIDS",

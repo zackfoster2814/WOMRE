@@ -81,9 +81,11 @@ Lover:
 Battle Log: 
 ```
 PvE:
-- Đối thủ: Rolling Skeletons
+- Đối thủ: Aatrox World Ender
 - Kết quả: Lose
-- Tỉ số: x-x (thua do luật thi đấu)
+- Tỉ số: 0-6
 - Punishment: 
-  + -2 vào stat thấp nhất (MA)
+ + Mất hết Vũ khí, Power và Gear
+ + -1 All Stats
+```
 ======

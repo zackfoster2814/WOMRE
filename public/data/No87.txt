@@ -45,7 +45,7 @@ Houses:
 ```
 
 ```
-2 Unique Weapon
+1 Normal Weapon + 1 Unique Weapon: 
 + Backhand Blade (dùng được)
 + Diamond Sword (dùng được)
 ```

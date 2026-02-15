@@ -93,4 +93,5 @@ PvE:
 - Punishment: 
  + Mất hết Vũ khí, Power và Gear
  + -1 All Stats
+```
 ======
