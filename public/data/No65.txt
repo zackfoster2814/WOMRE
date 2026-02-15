@@ -14,12 +14,12 @@ Sub-race:
 
 ```
 Archetype: 
-+ 2 Ngón
++ 2 Ngón (Đã mất do PvE Punishment)
 ```
 ``` 
 2 Quirk:  
-+ Fit
-+ Deaf
++ Fit (Đã mất do PvE Punishment)
++ Deaf (Đã mất do PvE Punishment)
 ```
 ```
 Str: 6

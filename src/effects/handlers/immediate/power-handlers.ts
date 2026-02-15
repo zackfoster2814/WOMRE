@@ -4,11 +4,18 @@
  * Handlers cho các Power effects.
  */
 
-import { registerImmediateHandler } from '../registry';
-import type { ImmediateHandlerContext, ImmediateHandlerResult } from '../types';
-import type { StatName } from '../../types';
+import { registerImmediateHandler } from "../registry";
+import type { ImmediateHandlerContext, ImmediateHandlerResult } from "../types";
+import type { StatName } from "../../types";
 
-const STAT_NAMES: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
+const STAT_NAMES: StatName[] = [
+  "strength",
+  "speed",
+  "durability",
+  "iq",
+  "biq",
+  "ma",
+];
 
 // ============================================================================
 // INVOKER POWERS (Quas/Wex/Exort)
@@ -18,28 +25,28 @@ const STAT_NAMES: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 
  * Check if character has all 3 Invoker orbs
  */
 registerImmediateHandler(
-  'quas_wex_exort_check',
+  "quas_wex_exort_check",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const powers = (ctx.character.powers || []).filter((p: any) => !p.isLost);
     const powerNames = powers.map((p: any) => p.name);
 
-    const hasQuas = powerNames.includes('Quas');
-    const hasWex = powerNames.includes('Wex');
-    const hasExort = powerNames.includes('Exort');
+    const hasQuas = powerNames.includes("Quas");
+    const hasWex = powerNames.includes("Wex");
+    const hasExort = powerNames.includes("Exort");
 
     if (hasQuas && hasWex && hasExort) {
       return {
         skipDefault: false, // Allow the grant_archetype effect to proceed
-        description: 'Invoker unlocked (has Quas+Wex+Exort)',
+        description: "Invoker unlocked (has Quas+Wex+Exort)",
       };
     }
 
     return {
       skipDefault: true,
-      description: 'Missing orbs for Invoker',
+      description: "Missing orbs for Invoker",
     };
   },
-  'Check for Invoker orbs combination'
+  "Check for Invoker orbs combination",
 );
 
 // ============================================================================
@@ -50,7 +57,7 @@ registerImmediateHandler(
  * EscAPADe - Convert IQ bonus to Strength
  */
 registerImmediateHandler(
-  'escapade_convert_iq_to_str',
+  "escapade_convert_iq_to_str",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const baseIQ = ctx.baseStats.iq;
     const currentIQ = ctx.currentStats.iq;
@@ -59,8 +66,8 @@ registerImmediateHandler(
     if (iqBonus > 0) {
       return {
         statModifiers: [
-          { stat: 'iq', value: -iqBonus },
-          { stat: 'strength', value: iqBonus },
+          { stat: "iq", value: -iqBonus },
+          { stat: "strength", value: iqBonus },
         ],
         skipDefault: true,
         description: `Convert +${iqBonus} IQ to +${iqBonus} Strength (EscAPADe)`,
@@ -69,23 +76,23 @@ registerImmediateHandler(
 
     return { skipDefault: true };
   },
-  'Convert IQ bonus to Strength'
+  "Convert IQ bonus to Strength",
 );
 
 /**
  * Weapon Enhancing - +1 to each buff from weapon, -1 to each debuff
  */
 registerImmediateHandler(
-  'weapon_enhancing_modify',
+  "weapon_enhancing_modify",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This would need to track weapon stat bonuses
     // For now, just mark as passive
     return {
       skipDefault: true,
-      description: 'Weapon stats enhanced (passive)',
+      description: "Weapon stats enhanced (passive)",
     };
   },
-  'Enhance weapon stats'
+  "Enhance weapon stats",
 );
 
 // ============================================================================
@@ -96,9 +103,11 @@ registerImmediateHandler(
  * Quirkful - Grant 1 Power per Quirk
  */
 registerImmediateHandler(
-  'quirkful_grant_per_quirk',
+  "quirkful_grant_per_quirk",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const quirkCount = (ctx.character.quirks || []).filter((q: any) => !q.isLost).length;
+    const quirkCount = (ctx.character.quirks || []).filter(
+      (q: any) => !q.isLost,
+    ).length;
 
     if (quirkCount > 0) {
       return {
@@ -109,31 +118,35 @@ registerImmediateHandler(
 
     return { skipDefault: true };
   },
-  'Grant Powers based on Quirk count'
+  "Grant Powers based on Quirk count",
 );
 
 /**
  * Quirkless - Remove all Quirks
  */
 registerImmediateHandler(
-  'quirkless_remove_all_quirks',
+  "quirkless_remove_all_quirks",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This would need to actually remove quirks
     return {
       skipDefault: true,
-      description: 'All quirks removed',
+      description: "All quirks removed",
     };
   },
-  'Remove all quirks'
+  "Remove all quirks",
 );
 
 /**
  * Sybaurafarming - Base stats > 5 become 5, gain 1 Quirk per stat changed
  */
 registerImmediateHandler(
-  'sybaurafarming_effect',
+  "sybaurafarming_effect",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const modifiers: Array<{ stat: StatName; value: number; isBase?: boolean }> = [];
+    const modifiers: Array<{
+      stat: StatName;
+      value: number;
+      isBase?: boolean;
+    }> = [];
     let statsChanged = 0;
 
     for (const stat of STAT_NAMES) {
@@ -154,7 +167,7 @@ registerImmediateHandler(
 
     return { skipDefault: true };
   },
-  'Cap high stats and grant Quirks'
+  "Cap high stats and grant Quirks",
 );
 
 // ============================================================================
@@ -165,54 +178,56 @@ registerImmediateHandler(
  * Groundwork - +2 Str/Spd if has at least 3 other Powers
  */
 registerImmediateHandler(
-  'groundwork_3_powers_check',
+  "groundwork_3_powers_check",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const powerCount = (ctx.character.powers || []).filter((p: any) => !p.isLost).length;
+    const powerCount = (ctx.character.powers || []).filter(
+      (p: any) => !p.isLost,
+    ).length;
 
     // Need at least 3 OTHER powers (not counting Groundwork itself)
     if (powerCount >= 4) {
       return {
         statModifiers: [
-          { stat: 'strength', value: 2 },
-          { stat: 'speed', value: 2 },
+          { stat: "strength", value: 2 },
+          { stat: "speed", value: 2 },
         ],
         skipDefault: true,
-        description: '+2 Strength, +2 Speed (has 3+ Powers)',
+        description: "Groundwork",
       };
     }
 
     return { skipDefault: true };
   },
-  '+2 Str/Spd with 3+ Powers'
+  "+2 Str/Spd with 3+ Powers",
 );
 
 /**
  * Fist Fighting - Remove weapon
  */
 registerImmediateHandler(
-  'fist_fighting_remove_weapon',
+  "fist_fighting_remove_weapon",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This would need to mark weapons as lost
     return {
       skipDefault: true,
-      description: 'Weapons removed for Fist Fighting',
+      description: "Weapons removed for Fist Fighting",
     };
   },
-  'Remove weapons'
+  "Remove weapons",
 );
 
 /**
  * Master of War - Unlock all weapons
  */
 registerImmediateHandler(
-  'master_of_war_unlock_all_weapons',
+  "master_of_war_unlock_all_weapons",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     return {
       skipDefault: true,
-      description: 'All weapons now usable',
+      description: "All weapons now usable",
     };
   },
-  'Unlock all weapons'
+  "Unlock all weapons",
 );
 
 // ============================================================================
@@ -223,31 +238,31 @@ registerImmediateHandler(
  * Gate to Heaven - Bonus from Round 32 onwards in winner bracket
  */
 registerImmediateHandler(
-  'gate_to_heaven_round_check',
+  "gate_to_heaven_round_check",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This needs round info which isn't available here
     // The actual check should be in combat handler
     return {
       skipDefault: true,
-      description: '+1 all stats from Round 32 (passive)',
+      description: "+1 all stats from Round 32 (passive)",
     };
   },
-  '+1 all stats from Round 32'
+  "+1 all stats from Round 32",
 );
 
 /**
  * Luck Manipulation - Round 64 check
  */
 registerImmediateHandler(
-  'luck_manipulation_round_64_check',
+  "luck_manipulation_round_64_check",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This needs round info
     return {
       skipDefault: true,
-      description: 'Luck Manipulation bonus (passive)',
+      description: "Luck Manipulation bonus (passive)",
     };
   },
-  'Luck bonus from Round 64'
+  "Luck bonus from Round 64",
 );
 
 // ============================================================================
@@ -255,21 +270,28 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'spear_of_fire_2_rune_check',
+  "spear_of_fire_2_rune_check",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const weapons = ctx.character.weapons || [];
-    const equippedWeapon = weapons.find((w: any) => !w.isLost && w.equipped) as any;
+    const equippedWeapon = weapons.find(
+      (w: any) => !w.isLost && w.equipped,
+    ) as any;
 
-    if (equippedWeapon && equippedWeapon.runes && Array.isArray(equippedWeapon.runes) && equippedWeapon.runes.length >= 2) {
+    if (
+      equippedWeapon &&
+      equippedWeapon.runes &&
+      Array.isArray(equippedWeapon.runes) &&
+      equippedWeapon.runes.length >= 2
+    ) {
       return {
         skipDefault: false,
-        description: '+1 starting point (weapon has 2+ runes)',
+        description: "+1 starting point (weapon has 2+ runes)",
       };
     }
 
     return { skipDefault: true };
   },
-  '+1 point if weapon has 2 runes'
+  "+1 point if weapon has 2 runes",
 );
 
 // ============================================================================
@@ -277,27 +299,27 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'enhanced_hearing_instrument_check',
+  "enhanced_hearing_instrument_check",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is a combat-time check
     return {
       skipDefault: true,
-      description: 'Instrument weakness (passive)',
+      description: "Instrument weakness (passive)",
     };
   },
-  '-1 all vs instrument'
+  "-1 all vs instrument",
 );
 
 registerImmediateHandler(
-  'enhanced_hearing_sound_power_check',
+  "enhanced_hearing_sound_power_check",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is a combat-time check
     return {
       skipDefault: true,
-      description: 'Sound power weakness (passive)',
+      description: "Sound power weakness (passive)",
     };
   },
-  '-2 all vs sound power'
+  "-2 all vs sound power",
 );
 
 // ============================================================================
@@ -305,7 +327,7 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'aids_spread_to_lover',
+  "aids_spread_to_lover",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const lover = ctx.character.lover as string | string[] | undefined;
     const hasLover = lover && (Array.isArray(lover) ? lover.length > 0 : true);
@@ -313,13 +335,13 @@ registerImmediateHandler(
     if (hasLover) {
       return {
         skipDefault: true,
-        description: 'AIDS spreads to lover(s)',
+        description: "AIDS spreads to lover(s)",
       };
     }
 
     return { skipDefault: true };
   },
-  'Spread AIDS to lover'
+  "Spread AIDS to lover",
 );
 
 // ============================================================================
@@ -327,15 +349,15 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'lone_wolf_check',
+  "lone_wolf_check",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is checked after combat
     return {
       skipDefault: true,
-      description: 'Lone Wolf power check (after combat)',
+      description: "Lone Wolf power check (after combat)",
     };
   },
-  'Check for other Lone Wolf users'
+  "Check for other Lone Wolf users",
 );
 
 // ============================================================================
@@ -343,27 +365,27 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'garlic_breath_check',
+  "garlic_breath_check",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // Check if has 3+ Breath powers
     const powers = (ctx.character.powers || []).filter((p: any) => !p.isLost);
-    const breathPowers = powers.filter((p: any) => p.name.includes('Breath'));
+    const breathPowers = powers.filter((p: any) => p.name.includes("Breath"));
 
     if (breathPowers.length >= 3) {
       return {
-        statModifiers: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+        statModifiers: STAT_NAMES.map((stat) => ({ stat, value: 1 })),
         skipDefault: true,
-        description: '+1 all stats (has 3+ Breath powers)',
+        description: "+1 all stats (has 3+ Breath powers)",
       };
     }
 
     // Otherwise it's a combat check vs Vampire
     return {
       skipDefault: true,
-      description: '+1 all stats vs Vampire (combat)',
+      description: "+1 all stats vs Vampire (combat)",
     };
   },
-  '+1 all vs Vampire or with 3 Breath powers'
+  "+1 all vs Vampire or with 3 Breath powers",
 );
 
 // ============================================================================
@@ -371,15 +393,15 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'odin_blessing_convert_to_highest',
+  "odin_blessing_convert_to_highest",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This triggers after combat loss
     return {
       skipDefault: true,
-      description: '+2 Strength converts to highest stat on loss',
+      description: "+2 Strength converts to highest stat on loss",
     };
   },
-  'Convert Strength bonus to highest stat on loss'
+  "Convert Strength bonus to highest stat on loss",
 );
 
 // ============================================================================
@@ -387,15 +409,15 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'zoltraak_double_biq_round',
+  "zoltraak_double_biq_round",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is a combat mechanic
     return {
       skipDefault: true,
-      description: 'BIQ round plays twice',
+      description: "BIQ round plays twice",
     };
   },
-  'Double BIQ round'
+  "Double BIQ round",
 );
 
 // ============================================================================
@@ -403,15 +425,15 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'uno_reverse_card_swap_debuffs',
+  "uno_reverse_card_swap_debuffs",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is a combat mechanic
     return {
       skipDefault: true,
-      description: 'Debuffs are swapped between players',
+      description: "Debuffs are swapped between players",
     };
   },
-  'Swap debuffs with opponent'
+  "Swap debuffs with opponent",
 );
 
 // ============================================================================
@@ -419,15 +441,15 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'fancy_feet_disable_rune',
+  "fancy_feet_disable_rune",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is a combat mechanic
     return {
       skipDefault: true,
-      description: 'Opponent runes disabled',
+      description: "Opponent runes disabled",
     };
   },
-  'Disable opponent runes'
+  "Disable opponent runes",
 );
 
 // ============================================================================
@@ -435,7 +457,7 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'memory_alter_disable_in_combat_power',
+  "memory_alter_disable_in_combat_power",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is a combat mechanic
     return {
@@ -443,7 +465,7 @@ registerImmediateHandler(
       description: 'Disable opponent "during combat" power',
     };
   },
-  'Disable in-combat power'
+  "Disable in-combat power",
 );
 
 // ============================================================================
@@ -451,15 +473,15 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'frost_fingers_per_gear',
+  "frost_fingers_per_gear",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is a combat debuff
     return {
       skipDefault: true,
-      description: '-1 highest stat per gear (max 5)',
+      description: "-1 highest stat per gear (max 5)",
     };
   },
-  '-1 highest stat per gear'
+  "-1 highest stat per gear",
 );
 
 // ============================================================================
@@ -467,15 +489,15 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'guidance_fewer_powers_check',
+  "guidance_fewer_powers_check",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is a combat check
     return {
       skipDefault: true,
-      description: '+1 to 2 random stats if opponent has fewer powers',
+      description: "+1 to 2 random stats if opponent has fewer powers",
     };
   },
-  '+1 to 2 stats if opponent has fewer powers'
+  "+1 to 2 stats if opponent has fewer powers",
 );
 
 // ============================================================================
@@ -483,15 +505,15 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'stat_absorption_opponent_highest',
+  "stat_absorption_opponent_highest",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This triggers after combat win
     return {
       skipDefault: true,
-      description: '+1 to opponent highest stat on win',
+      description: "+1 to opponent highest stat on win",
     };
   },
-  '+1 to opponent highest stat'
+  "+1 to opponent highest stat",
 );
 
 // ============================================================================
@@ -499,15 +521,15 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'bucking_bronco_ma_round_win',
+  "bucking_bronco_ma_round_win",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This triggers after winning MA round and combat
     return {
       skipDefault: true,
-      description: '+1 MA if won MA round and combat (stacks)',
+      description: "+1 MA if won MA round and combat (stacks)",
     };
   },
-  '+1 MA on MA round win'
+  "+1 MA on MA round win",
 );
 
 // ============================================================================
@@ -515,16 +537,17 @@ registerImmediateHandler(
 // ============================================================================
 
 registerImmediateHandler(
-  'hunters_mark_random_round',
+  "hunters_mark_random_round",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     // This is a combat mechanic
-    const randomRound = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+    const randomRound =
+      STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
     return {
       skipDefault: true,
       description: `Hunter's Mark on ${randomRound} round`,
     };
   },
-  '+1 point on marked round win'
+  "+1 point on marked round win",
 );
 
 // ============================================================================
@@ -536,15 +559,15 @@ registerImmediateHandler(
  * (Biến mất khi thua round IQ - handled in combat)
  */
 registerImmediateHandler(
-  'mha_iq_power',
+  "mha_iq_power",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     return {
-      statModifiers: [{ stat: 'iq', value: 7 }],
+      statModifiers: [{ stat: "iq", value: 7 }],
       skipDefault: true,
-      description: '+7 IQ (MHA Power)',
+      description: "+7 IQ (MHA Power)",
     };
   },
-  '+7 IQ from MHA IQ Power'
+  "+7 IQ from MHA IQ Power",
 );
 
 /**
@@ -553,21 +576,21 @@ registerImmediateHandler(
  * (Stacking handled in combat)
  */
 registerImmediateHandler(
-  'mha_hellflame',
+  "mha_hellflame",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    const mods: ImmediateHandlerResult["statModifiers"] = [];
     for (const stat of STAT_NAMES) {
       mods.push({ stat, value: 1 });
     }
     return {
       statModifiers: mods,
       skipDefault: true,
-      description: '+1 All Stats (MHA Hellflame)',
+      description: "+1 All Stats (MHA Hellflame)",
     };
   },
-  '+1 all stats from MHA Hellflame'
+  "+1 all stats from MHA Hellflame",
 );
 
 export function registerPowerHandlers(): void {
-  console.log('Power handlers registered');
+  console.log("Power handlers registered");
 }

@@ -36,13 +36,15 @@ Houses:
 ```
 
 ```
-5 Gear: 
- + 5 Normal gear:
+7 Gear:
+ + 7 Normal gear:
   - Thuốc Tráng dương (Lannister)
   - Fingerthing (Lannister)
   - Golden Coin (Lannister)
   - Golden Coin (Lannister)
   - Golden Coin (Lannister)
+  - Empty Stein
+  - Wine
  + 0 Legacy gear:
   - Time stone
 ```
@@ -93,7 +95,7 @@ PvE:
 - Đối thủ: Polish cow
 - Kết quả: Win
 - Tỉ số: 3-3
-- Reward: 
-- Punishment: 
+- Reward: Nhận Empty Stein và Wine
+- Punishment:
 ```
 ======

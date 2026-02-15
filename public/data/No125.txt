@@ -17,9 +17,10 @@ Archetype:
 + Hero Grave Keeper
 ```
 ``` 
-1 Quirk:  
+3 Quirk:
 + Brainrot
 + Fast Learner
++ Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
 Str: 5

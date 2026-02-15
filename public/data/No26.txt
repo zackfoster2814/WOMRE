@@ -63,12 +63,12 @@ Runeword: Không
 
 ```
 6 Power: 
-+ Acid Breath(Từ Sub-race)
-+ Mind Control(Từ Sub-race)
-+ Quas (Từ Archetype Invoker)
-+ Wex (Từ Archetype Invoker)
-+ Exort (Từ Archetype Invoker)
-+ Fair Duel
++ Acid Breath(Từ Sub-race) (Đã mất do PvE Punishment)
++ Mind Control(Từ Sub-race) (Đã mất do PvE Punishment)
++ Quas (Từ Archetype Invoker) (Đã mất do PvE Punishment)
++ Wex (Từ Archetype Invoker) (Đã mất do PvE Punishment)
++ Exort (Từ Archetype Invoker) (Đã mất do PvE Punishment)
++ Fair Duel (Đã mất do PvE Punishment)
 ```
 
 ```

@@ -17,10 +17,11 @@ Archetype:
 + Follower of the Two Fingers
 ```
 ``` 
-3 Quirk:  
+4 Quirk:
 + Brainrot (đã mất)
 + Blind (đã mất)
 + One Trick Pony (đã mất)
++ Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
 Str:7

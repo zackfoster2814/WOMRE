@@ -69,7 +69,7 @@ Runeword:
 
 ```
 Char dev: 
-+ No more Family
++ No more Family (Đã mất do PvE Punishment)
 ```
 
 ```
@@ -89,6 +89,6 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 7--1
 - Reward: 
-- Punishment: 
+- Punishment: Mất toàn bộ chardev
 ```
 ======

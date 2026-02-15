@@ -17,9 +17,10 @@ Archetype:
 + Hero of the Emirate
 ```
 ``` 
-2 Quirk:  
+3 Quirk:
 + Raumanian🍀 (Từ Hero of the Emirate)
 + Pure (Không có Gear)
++ Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
 Str: 5

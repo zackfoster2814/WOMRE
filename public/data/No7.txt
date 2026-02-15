@@ -85,7 +85,8 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 2-4
 - Reward: 
-- Punishment: Nhận Creator's Limitation (-1 All Stats)
-- Note: (5)
+- Punishment: Nhận Creator's Limitation 
+  + Nhận -1 All Stats
+- Note: 
 ```
 ======

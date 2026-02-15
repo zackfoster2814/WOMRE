@@ -22,7 +22,7 @@ Archetype:
 ```
 ```
 Str: 2
-Spd: 8 (Ban đầu là 8, +3 từ Herald)
+Spd: 8 (+3 từ Herald)
 Dur: 7
 IQ: 0 (Ban đầu là 3, về 0 do PvE Punishment)
 BIQ: 3

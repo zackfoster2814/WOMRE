@@ -46,7 +46,7 @@ Houses:
 
 ```
 1 Unique Weapon
-+ Medusa's Head
++ Medusa's Head (Đã mất do PvE Punishment)
 ```
 
 ``` 
@@ -91,6 +91,7 @@ PvE:
 - Tỉ số: 2-6
 - Reward: 
 - Punishment: 
+  + Mất vũ khí
 - Note: Ca Cao né ở round SPD, crit ở round MA
 ```
 ======

@@ -17,8 +17,9 @@ Archetype:
 + Loyal 
 ```
 ``` 
-1 Quirk:  
+2 Quirk:
 + Patient
++ Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
 Str: 5

@@ -82,6 +82,7 @@ PvE:
 - Tỉ số: 2-6
 - Reward: 
 - Punishment: 
+  + Nhận -1 All stats
 - Note: Ca Cao né ở round SPD, crit ở round MA
 ```
 ======

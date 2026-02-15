@@ -39,11 +39,13 @@ Houses:
 ```
 
 ```
-1 Gear: 
- + 1 Normal gear:
+3 Gear:
+ + 3 Normal gear:
   - Fishing's Rod
+  - Empty Stein
+  - Wine
  + 0 Legacy gear:
-  - 
+  -
 ```
 
 ```
@@ -84,7 +86,7 @@ PvE:
 - Đối thủ: Polish cow
 - Kết quả: Win
 - Tỉ số: 3-3
-- Reward: 
-- Punishment: 
+- Reward: Nhận Empty Stein và Wine
+- Punishment:
 ```
 ======

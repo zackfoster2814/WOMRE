@@ -14,22 +14,22 @@ Sub-race: God
 
 ```
 Archetype: 
-+ Cursed of 36k
-+ Summoner
++ Cursed of 36k (Đã mất do PvE Punishment)
++ Summoner (Đã mất do PvE Punishment)
 ```
 ``` 
 3 Quirk:  
-+ Cautious
-+ Herbalist
-+ Cheater
++ Cautious (Đã mất do PvE Punishment)
++ Herbalist (Đã mất do PvE Punishment)
++ Cheater (Đã mất do PvE Punishment)
 ```
 ```
-Str:8 Cursed of 36k
-Spd:9 Cursed of 36k
-Dur:6 Cursed of 36k
+Str:9 
+Spd:10 
+Dur:7 
 IQ:1 (Cố định)
-BIQ:3 Cursed of 36k
-MA:4 Cursed of 36k
+BIQ:4 
+MA:5 
 ```
 
 ```
@@ -88,6 +88,6 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: Mất toàn bộ Archetype và Quirk (Cursed 36 hồi lại 1 All Base Stats)
-- Note: (3)
+- Note: 
 ```
 ======

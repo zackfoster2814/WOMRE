@@ -17,10 +17,11 @@ Archetype:
 + Edgelord
 ```
 ``` 
-3 Quirk:  
+4 Quirk:
 + Graceful (baonine (baonine))
 + Artisan
 + Resilient
++ Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
 Str:4

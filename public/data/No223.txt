@@ -17,9 +17,10 @@ Archetype:
 + Loyal 
 ```
 ``` 
-2 Quirk:  
+3 Quirk:
 + Charming (nhận power Evasion từ Anh Mèo (meowtea))
 + Patient
++ Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
 Str: 10

@@ -18,8 +18,9 @@ Archetype:
 + Conquerer
 ```
 ``` 
-1 Quirk:  
+2 Quirk:
 + Fit
++ Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
 Str: 5

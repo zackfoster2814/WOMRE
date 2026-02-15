@@ -13,8 +13,9 @@ Sub-race: Đen
 ```
 
 ```
-Archetype: 
+Archetype:
 + Skeleton Slayer
++ NPC
 ```
 ``` 
 2 Quirk:  
@@ -88,7 +89,7 @@ PvE:
 - Đối thủ: Night King
 - Kết quả: Lose
 - Tỉ số: 1-5
-- Reward: 
-- Punishment: 
+- Reward:
+- Punishment: Nhận Archetype NPC
 ```
 ======

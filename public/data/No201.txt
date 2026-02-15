@@ -13,8 +13,9 @@ Sub-race:
 ```
 
 ```
-Archetype: 
+Archetype:
 + Paladin
++ NPC
 ```
 ``` 
 1 Quirk:  
@@ -84,7 +85,7 @@ PvE:
 - Đối thủ: Night King
 - Kết quả: Lose
 - Tỉ số: 1-5
-- Reward: 
-- Punishment: 
+- Reward:
+- Punishment: Nhận Archetype NPC
 ```
 ======

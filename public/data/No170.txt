@@ -17,10 +17,11 @@ Archetype:
 + Mid 
 ```
 ``` 
-1 Quirk:  
+4 Quirk:
 + Cautious
 + Pure (Nhận Đai Trinh Tiết)
 + Slow Healer (Từ Fingerthing)
++ Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
 Str:5

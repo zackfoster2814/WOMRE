@@ -14,21 +14,21 @@ Sub-race: Regular Troll
 
 ```
 Archetype: 
-+ Cursed of 36k
-+ Trickster
++ Cursed of 36k (đã mất do PvE Punishment)
++ Trickster (đã mất do PvE Punishment)
 ```
 ``` 
 2 Quirk:  
-+ Pure (nhận đai trinh tiết)
-+ Herbalist
++ Pure (nhận đai trinh tiết) (đã mất do PvE Punishment)
++ Herbalist (đã mất do PvE Punishment)
 ```
 ```
-Str: 4 (Cursed of 36k)
-Spd: 4 (Cursed of 36k)
-Dur: 9 (Cursed of 36k)
-IQ: 0 (Cursed of 36k)
-BIQ: 2 (Cursed of 36k)
-MA: 6 (Cursed of 36k)
+Str: 5 
+Spd: 5 
+Dur: 10 
+IQ: 1 
+BIQ: 3 
+MA: 7 
 ```
 
 ```

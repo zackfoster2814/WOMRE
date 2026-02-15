@@ -1,7 +1,7 @@
 No.45
 Name: CúNga (minh1mui)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
