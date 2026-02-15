@@ -2,6 +2,8 @@ import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { CharacterStats } from "../types/character";
 import { playTickSound, playDefaultWinSound } from "../utils/audio";
 import { EffectRegistry } from "../effects/registry";
+import type { EffectSourceBreakdown } from "../effects/resolver";
+import StatModifiersTable from "./StatModifiersTable";
 
 // Types
 interface BossStats {
@@ -100,6 +102,7 @@ interface PlayerData {
   weapons?: string[];
   archetypes?: string[];
   pveOnlyFeatures?: string[];
+  effectBreakdown?: EffectSourceBreakdown[];
 }
 
 interface TeamMemberJson {
@@ -1121,6 +1124,8 @@ const PlayerCard = ({
   isRemoved,
   isHypnotized,
   isIsekai,
+  isSelected,
+  onSelect,
 }: {
   player: PlayerData;
   isDisabled: boolean;
@@ -1129,6 +1134,8 @@ const PlayerCard = ({
   isRemoved: boolean;
   isHypnotized: boolean;
   isIsekai: boolean;
+  isSelected?: boolean;
+  onSelect?: () => void;
 }) => {
   // const [showDetail, setShowDetail] = useState(false);
   const isInactive =
@@ -1174,8 +1181,13 @@ const PlayerCard = ({
 
   return (
     <div
-      className={`bg-gray-800/90 rounded-lg p-2 border-2 transition-all ${
-        isInactive ? "border-gray-600 opacity-50" : "border-teal-500/50"
+      onClick={onSelect}
+      className={`bg-gray-800/90 rounded-lg p-2 border-2 transition-all cursor-pointer ${
+        isSelected
+          ? "border-yellow-400 shadow-lg shadow-yellow-400/20"
+          : isInactive
+            ? "border-gray-600 opacity-50"
+            : "border-teal-500/50 hover:border-teal-400"
       }`}
     >
       <div className="flex justify-between items-start mb-1">
@@ -1261,6 +1273,9 @@ export const BossBattleRoom = ({
   const [isSpinning, setIsSpinning] = useState(false);
   const [wheelRotation, setWheelRotation] = useState(0);
   const [selectedRound, setSelectedRound] = useState<number | null>(null);
+
+  // Selected player for effects breakdown
+  const [selectedPlayerNo, setSelectedPlayerNo] = useState<number | null>(null);
 
   // Manually disabled players
   const [manuallyDisabledPlayers, setManuallyDisabledPlayers] = useState<
@@ -4670,6 +4685,33 @@ export const BossBattleRoom = ({
                 ))}
               </div>
             )}
+
+            {/* Selected Player Effect Breakdown (Left Panel) */}
+            {selectedPlayerNo && (() => {
+              const selectedPlayer = battle.playerData.find(
+                (p) => p.no === selectedPlayerNo,
+              );
+              if (!selectedPlayer?.effectBreakdown || !selectedPlayer?.baseStats) return null;
+              return (
+                <div className="mt-2 bg-gray-800/80 rounded-lg p-3 border border-yellow-500/30 max-h-48 overflow-y-auto">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-yellow-400 text-xs font-bold">
+                      #{selectedPlayer.no} {selectedPlayer.name}
+                    </h4>
+                    <button
+                      onClick={() => setSelectedPlayerNo(null)}
+                      className="text-gray-400 hover:text-white text-sm"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                  <StatModifiersTable
+                    breakdown={selectedPlayer.effectBreakdown}
+                    baseStats={selectedPlayer.baseStats}
+                  />
+                </div>
+              );
+            })()}
           </div>
 
           {/* Right Side */}
@@ -5008,9 +5050,42 @@ export const BossBattleRoom = ({
                     isRemoved={removedPlayers.includes(player.no)}
                     isHypnotized={hypnotizedPlayer?.playerNo === player.no}
                     isIsekai={isekaidPlayers.includes(player.no)}
+                    isSelected={selectedPlayerNo === player.no}
+                    onSelect={() =>
+                      setSelectedPlayerNo(
+                        selectedPlayerNo === player.no ? null : player.no,
+                      )
+                    }
                   />
                 ))}
               </div>
+
+              {/* Selected Player Effect Breakdown */}
+              {selectedPlayerNo && (() => {
+                const selectedPlayer = battle.playerData.find(
+                  (p) => p.no === selectedPlayerNo,
+                );
+                if (!selectedPlayer?.effectBreakdown || !selectedPlayer?.baseStats) return null;
+                return (
+                  <div className="mt-3 bg-gray-800/80 rounded-lg p-3 border border-yellow-500/30 max-h-[300px] overflow-y-auto">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="text-sm font-bold text-yellow-400">
+                        #{selectedPlayer.no} {selectedPlayer.name} - Hiệu ứng
+                      </h4>
+                      <button
+                        onClick={() => setSelectedPlayerNo(null)}
+                        className="text-gray-400 hover:text-white text-lg"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <StatModifiersTable
+                      breakdown={selectedPlayer.effectBreakdown}
+                      baseStats={selectedPlayer.baseStats}
+                    />
+                  </div>
+                );
+              })()}
 
               {/* Team Total Stats */}
               <div className="mt-4 bg-gray-800/50 rounded-lg p-3 border border-green-500/30">

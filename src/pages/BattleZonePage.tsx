@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import { BattleType } from "../types";
 import { CharacterStats } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
-import { EffectResolver } from "../effects/resolver";
+import { EffectResolver, type EffectSourceBreakdown } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { BossBattleRoom } from "../components/BossBattleRoom";
@@ -67,6 +67,7 @@ interface PlayerData {
   powers?: string[];
   weapons?: string[];
   gear?: string[];
+  effectBreakdown?: EffectSourceBreakdown[];
 }
 
 interface TeamMemberJson {
@@ -1646,6 +1647,8 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                         .filter((g) => !g.isLost)
                         .map((g) => g.name),
                     ],
+                    effectBreakdown:
+                      EffectResolver.getCharacterEffectBreakdown(char),
                   });
                 }
               })
