@@ -8,74 +8,72 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Werebeast
-Sub-race: Werebat
+Race: Orc
+Sub-race: 
 ```
 
 ```
 Archetype: 
-+ Edgelord
++ Farmer
+ - Normal
 ```
 ``` 
-3 Quirk:  
-+ Weak-Knee
-+ Patient(Từ House)
-+ Charming (LTL (ltl.jr)) (Từ Baguette)
+1 Quirk:  
++ Lucky (Max: 0)
 ```
 ```
-Str: 9
-Spd: 5
-Dur: 8
-IQ: 7
-BIQ: 4
-MA: 1
+Str:5
+Spd:4
+Dur:1
+IQ:10
+BIQ:8
+MA:10
 ```
 
 ```
 Houses: 
-+ House Stark 
-  -> Ghost
++ Hallownest
 ```
 
 ```
-1 Gear: 
- + 1 Normal gear:
-  - Baguette
+2 Gear: 
+ + 2 Normal gear:
+  - Ớt
+  - Bò Khô
  + 0 Legacy gear:
   - 
 ```
 
 ```
-0 Normal Weapon
-+ 
+1 Normal Weapon
++ Bass (Dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
-Runeword: Không
+2 Rune: 
++ Ith
++ Ort
+Runeword: Pennyworthy
 ```
 
 ```
-2 Power: 
-+ Poison Breath (Từ House)
-+ Luck Manipulation (Từ House)
+2 Power:  
++ 
++ 
 ```
 
 ```
 Char dev: 
-+ Pessimistic (Từ House)
-+ SVKS (Quay lại)
-+ Lost a Leg
++ MrBeast
 ```
 
 ```
-Team: 8
+Team:
 ```
 
 ```
 Lover:
-+ LTL (ltl.jr)
++ 
 ```
 
 ======
@@ -85,9 +83,7 @@ PvE:
 - Đối thủ: Allfather
 - Kết quả: Win
 - Tỉ số: 4-4
-- Reward: 
-  + +4 Str
-  + +4 IQ
+- Reward: Đã Isekaitheo luật boss
 - Punishment: 
 ```
 ======

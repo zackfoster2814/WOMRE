@@ -8,42 +8,37 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Uma
-Sub-race: Symboli Rudolf + Special Week (Hydrate)
+Race: Skeleton (Dwarf)
+Sub-race: 
 ```
 
 ```
 Archetype: 
-+ Him
++ Perfectionist
 ```
 ``` 
-1 Quirk:  
-+ Hydrate (Special Week)
+2 Quirk:  
 + Bloodthirsty
-+ Brainrot
-+ Charming (Kaori (khanhnguyen1703) - tặng Sonic Scream)
 ```
 ```
-Str:4 ban đầu là 7
-Spd:6 ban đầu là 5
-Dur:1 ban đầu là 10
-IQ:6 ban đầu là 5
-BIQ:3 ban đầu là 8
-MA:10 ban đầu là 1
+Str:2
+Spd:2
+Dur:8
+IQ:1 (Cố định)
+BIQ:7
+MA:3
 ```
 
 ```
 Houses: 
-+ Tracen Academy
- -> +1 Str
- -> +3 Spd
- -> +2 Dura
++ Tyrell
 ```
 
 ```
-1 Gear: 
- + 1 Normal gear:
-  - Gold Pine Resin
+2 Gear: 
+ + 2 Normal gear:
+  - Văn Tế
+  - Cuộn khăn giấy
  + 0 Legacy gear:
   - 
 ```
@@ -60,23 +55,23 @@ Runeword:
 ```
 
 ```
-0 Power: 
-+ Hydrate
-+ Sonic Scream (đã mất - tặng cho Kaori (khanhnguyen1703))
+2 Power:  
++ Poison Breath
++ Swinging Maestro
 ```
 
 ```
 Char dev: 
-+ Inversion
++ Depression (Dura)
 ```
 
 ```
-Team: 8
+Team:
 ```
 
 ```
 Lover:
-+ Kaori (khanhnguyen1703)
++ 
 ```
 
 ======
@@ -86,9 +81,7 @@ PvE:
 - Đối thủ: Allfather
 - Kết quả: Win
 - Tỉ số: 4-4
-- Reward: 
-  + +4 Str
-  + +4 IQ
+- Reward: Đã Isekai theo luật boss
 - Punishment: 
 ```
 ======

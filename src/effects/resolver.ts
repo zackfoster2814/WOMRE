@@ -364,11 +364,14 @@ export class EffectResolver {
     }
 
     // Archetype sub-types (from Wibu Wheel, etc.)
+    // Track names added from nestedArchetypes to avoid duplicate effects when powers fallback to archetype_sub
+    const nestedArchetypeSubNames = new Set<string>();
     for (const nested of character.nestedArchetypes || []) {
       // Look up subType (e.g., "Jojo", "JJK", "MHA", "Bleach")
       if (nested.subType) {
         const subEntry = EffectRegistry.get("archetype_sub", nested.subType);
         if (subEntry) {
+          nestedArchetypeSubNames.add(nested.subType);
           sources.push({
             type: "archetype",
             name: nested.subType,
@@ -382,6 +385,7 @@ export class EffectResolver {
       if (nested.subSubType) {
         const subSubEntry = EffectRegistry.get("archetype_sub", nested.subSubType);
         if (subSubEntry) {
+          nestedArchetypeSubNames.add(nested.subSubType);
           sources.push({
             type: "archetype",
             name: nested.subSubType,
@@ -431,7 +435,8 @@ export class EffectResolver {
 
       const entry = EffectRegistry.get("power", power.name)
         // Fallback: some powers come from wheels (MHA, JJK, Jojo, etc.) and are registered as archetype_sub
-        || EffectRegistry.get("archetype_sub", power.name);
+        // But skip if already added from nestedArchetypes to avoid duplicate effects
+        || (!nestedArchetypeSubNames.has(power.name) && EffectRegistry.get("archetype_sub", power.name));
       if (entry) {
         sources.push({
           type: "power",

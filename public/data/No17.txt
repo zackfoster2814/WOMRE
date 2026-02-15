@@ -25,7 +25,7 @@ Str: 3
 Spd: 6
 Dur: 7
 IQ: 5
-BIQ: 0 (ban đầu là 8 do Blessed by Chaos kéo xuống)
+BIQ: 1 (ban đầu là 8 do Blessed by Chaos kéo xuống)
 MA: 7
 ```
 

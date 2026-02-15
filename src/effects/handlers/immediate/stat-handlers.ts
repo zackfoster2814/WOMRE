@@ -175,9 +175,9 @@ registerImmediateHandler(
 
     // Find lover's highest stat
     const statMapping: Record<string, StatName> = {
-      strength: "strength",
-      speed: "speed",
-      durability: "durability",
+      str: "strength",
+      spd: "speed",
+      dur: "durability",
       iq: "iq",
       biq: "biq",
       ma: "ma",
@@ -187,6 +187,8 @@ registerImmediateHandler(
     let highestValue = -1;
     for (const [key, statName] of Object.entries(statMapping)) {
       const val = loverChar.stats[key] ?? 0;
+      console.log(loverChar.stats);
+
       if (val > highestValue) {
         highestValue = val;
         highestStat = statName;
@@ -196,7 +198,7 @@ registerImmediateHandler(
     return {
       statModifiers: [{ stat: highestStat, value: 2 }],
       skipDefault: true,
-      description: `+2 ${highestStat.toUpperCase()} từ In Love (stat cao nhất của lover)`,
+      description: `+2 ${highestStat} từ In Love (stat cao nhất của lover)`,
     };
   },
   "+2 vào stat cao nhất của lover",
@@ -644,7 +646,7 @@ registerImmediateHandler(
         { stat: "ma", value: wrathStacks },
       ],
       skipDefault: true,
-      description: `+${wrathStacks} STR/BIQ/MA từ ${wrathStacks} Wrath stack(s)`,
+      description: `${wrathStacks} Wrath stack(s)`,
     };
   },
   "+1 STR/BIQ/MA per Wrath stack",

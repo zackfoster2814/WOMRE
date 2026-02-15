@@ -31,6 +31,7 @@ import { registerRaceHandlers } from './immediate/race-handlers';
 import { registerWeaponHandlers } from './immediate/weapon-handlers';
 import { registerArchetypeHandlers } from './immediate/archetype-handlers';
 import { registerGearHandlers } from './immediate/gear-handlers';
+import { registerCharDevHandlers } from './immediate/chardev-handlers';
 import { registerCombatHandlers } from './combat/combat-handlers';
 import { registerPowerCombatHandlers } from './combat/power-combat-handlers';
 import { registerRaceCombatHandlers } from './combat/race-combat-handlers';
@@ -55,6 +56,7 @@ export function initializeHandlers(): void {
   registerWeaponHandlers();
   registerArchetypeHandlers();
   registerGearHandlers();
+  registerCharDevHandlers();
 
   // Register all combat handler categories
   registerCombatHandlers();

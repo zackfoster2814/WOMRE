@@ -8,71 +8,65 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Uma
-Sub-race: Tokai Teio + Nice Nature
+Race: Orc
+Sub-race: 
 ```
 
 ```
 Archetype: 
-+ Conquerer
++ Summoner
 ```
 ``` 
-1 Quirk:  
-+ Fast Learner
+2 Quirk:  
++ Progressive
++ Raumanian🍀
 ```
 ```
-Str: 1
-Spd: 6 (Nhận +3 từ Archetype)
-Dur: 7
-IQ: 3
-BIQ: 9
-MA: 1
+(Inversion)
+Str:2 đảo từ 9
+Spd:9 đảo từ 2
+Dur:9 đảo từ 2
+IQ:5 đảo từ 6
+BIQ:3 đảo từ 8
+MA:4 đảo từ 7
 ```
 
 ```
 Houses: 
-+ Tracen Academy
- -> +3 Str
- -> +3 Spd
- -> +1 Dura
++ Kazuya Kinoshita's House
 ```
 
 ```
-3 Gear: 
- + 3 Normal gear:
-  - Đá
-  - Xương sống lưỡi
-  - Bò Khô
+1 Gear: 
+ + 1 Normal gear:
+  - Dark Lanthorn
  + 0 Legacy gear:
   - 
 ```
 
 ```
-1 Normal Weapon
-+ Whip (Dùng được)
+0 Weapon
++ 
 ```
 
 ``` 
-2 Rune: 
-+ Tal
-+ Thul
-Runeword: Không
+0 Rune: 
++ 
+Runeword: 
 ```
 
 ```
-3 Power: 
-+ The Goat
-+ Scrying
-+ Adapt (Từ Char Dev)
+1 Power:  
++ Mewing
 ```
 
 ```
 Char dev: 
-+ Mahogara!
++ Inversion
 ```
 
 ```
-Team: 8
+Team:
 ```
 
 ```
@@ -87,9 +81,7 @@ PvE:
 - Đối thủ: Allfather
 - Kết quả: Win
 - Tỉ số: 4-4
-- Reward: 
-  + +4 Str
-  + +4 IQ
+- Reward: Bị Isekai do luật boss (poor)
 - Punishment: 
 ```
 ======

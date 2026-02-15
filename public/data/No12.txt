@@ -73,6 +73,7 @@ Team: 5
 Lover:
 + Quý Trần Tường (wyug1234)
 + LTL (ltl.jr)
++ Hoàng Tuyền Không Trấn (franx9816)
 ```
 
 ```
