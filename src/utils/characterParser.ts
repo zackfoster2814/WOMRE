@@ -364,9 +364,10 @@ export class CharacterParser {
           // Split multi-line items (joined by "; ")
           const items = field!.split(/;\s*/);
           for (const item of items) {
-            // Format 1: "-X vào stat ... (STAT)", e.g., "-2 vào stat thấp nhất (Str)"
+            // Format 1: "-X vào stat ... (STAT)" or "+X stat cao nhất/thấp nhất (STAT)"
+            // e.g., "-2 vào stat thấp nhất (Str)", "Nhận +1 stat cao nhất (spd)"
             const specificMatch = item.match(
-              /([+-]?\d+)\s+vào\s+stat\s+.+?\((\w+)\)/i,
+              /([+-]?\d+)\s+(?:vào\s+)?stat\s+.+?\((\w+)\)/i,
             );
             if (specificMatch) {
               const value = parseInt(specificMatch[1]);
