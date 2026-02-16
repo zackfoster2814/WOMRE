@@ -65,6 +65,7 @@ function calculateTotalStats(player: PlayerSummary): EffectStats {
     charDevs: player.charDevs || [],
     lover: player.lover,
     pvpRewards: player.pvpRewards,
+    tournament: player.tournament,
   };
   const effects = EffectResolver.calculateCharacterEffects(character);
   return effects.totalStats;
@@ -2066,6 +2067,7 @@ const PlayerDetailModal = ({
         charDevs: p.charDevs || [],
         lover: p.lover,
         pvpRewards: p.pvpRewards,
+        tournament: p.tournament,
       }),
     );
   }, [allPlayers]);

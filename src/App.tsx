@@ -13,6 +13,7 @@ import { BattleZonePage } from "./pages/BattleZonePage";
 import { PvPTournamentPage } from "./pages/PvPTournamentPage";
 import { PublicBracketPage } from "./pages/PublicBracketPage";
 import { WikiPage } from "./pages/WikiPage";
+import { SandboxPage } from "./pages/SandboxPage";
 // import { TeamBattlePage } from "./pages/TeamBattlePage";
 import { isTauri } from "./utils/localStorage";
 
@@ -25,6 +26,7 @@ const navItems = [
   // { path: "/battles", label: "Team Battles", color: "bg-orange-600" },
   { path: "/battle", label: "Battle Zone", color: "bg-red-600" },
   { path: "/pvp-tournament", label: "PvP Tournament", color: "bg-purple-600" },
+  { path: "/sandbox", label: "Sandbox", color: "bg-amber-600" },
   // { path: "/wiki", label: "Wiki", color: "bg-cyan-600" },
 ];
 
@@ -154,6 +156,7 @@ function App() {
             <Route path="/battle" element={<BattleZonePage />} />
             <Route path="/pvp-tournament" element={<PvPTournamentPage />} />
             <Route path="/bracket" element={<PublicBracketPage />} />
+            <Route path="/sandbox" element={<SandboxPage />} />
             <Route path="/wiki" element={<WikiPage />} />
           </>
         )}
