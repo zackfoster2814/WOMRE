@@ -85,8 +85,8 @@ PvE:
 - Tỉ số: 5-1
 - Reward: 
   + Nhận +1 all stats
-  + +1 stat cao nhất (spd)
-  + +1 stat thấp nhất (MA)
+  + Nhận +1 stat cao nhất (spd)
+  + Nhận +1 stat thấp nhất (MA)
 - Punishment: 
 ```
 ======

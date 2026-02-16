@@ -86,8 +86,8 @@ PvE:
 - Tỉ số: 5-1
 - Reward: 
   + Nhận +1 all stats
-  + +1 stat cao nhất (IQ)
-  + +1 stat thấp nhất (str)
+  + Nhận +1 stat cao nhất (IQ)
+  + Nhận +1 stat thấp nhất (str)
 - Punishment: 
 ```
 ======
