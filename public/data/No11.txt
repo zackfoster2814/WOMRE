@@ -21,9 +21,9 @@ Archetype:
 + Artistic
 ```
 ```
-Str: 7
+Str: 4 (ban đầu là 7, do PvE Punishment)
 Spd: 5
-Dur: 2
+Dur: 0 (ban đầu là 2, do PvE Punishment)
 IQ: 6
 BIQ: 5
 MA: 6

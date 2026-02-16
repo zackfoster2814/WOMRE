@@ -23,8 +23,8 @@ Archetype:
 + Generous
 ```
 ```
-Str: 3
-Spd: 9
+Str: 0 (ban đầu là 3, do PvE Punishment)
+Spd: 5 (ban đầu là 9, do PvE Punishment)
 Dur: 5
 IQ: 5
 BIQ: 6

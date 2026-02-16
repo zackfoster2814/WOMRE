@@ -25,8 +25,8 @@ Str: 3
 Spd: 7
 Dur: 6
 IQ: 3
-BIQ: 8
-MA: 1
+BIQ: 4 (ban đầu là 8, do PvE Punishment)
+MA: 0 (ban đầu là 1, do PvE Punishment)
 ```
 
 ```

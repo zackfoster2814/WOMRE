@@ -39,11 +39,12 @@ Houses:
 ```
 5 Gear: 
  + 5 Normal gear:
-  - Cursed Coin (Từ Artisan)
-  - Fingerthing (Từ Artisan)
-  - Holy Symbol
-  - Cursed Charm
-  - Wooden Shield
+  - Cursed Coin (Từ Artisan) (đã mất do PvE Punishment)
+  - Fingerthing (Từ Artisan) (đã mất do PvE Punishment)
+  - Holy Symbol (đã mất do PvE Punishment)
+  - Cursed Charm (đã mất do PvE Punishment)
+  - Wooden Shield (đã mất do PvE Punishment)
+  - Khung hình thờ (từ PvE Punishment)
  + 0 Legacy gear:
   - 
 ```
@@ -86,6 +87,6 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 1-6
 - Reward: 
-- Punishment: 
+- Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
 ```
 ======

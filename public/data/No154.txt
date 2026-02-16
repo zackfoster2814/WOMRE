@@ -32,7 +32,7 @@ MA: 8
 
 ```
 Houses: 
-+ Ban Nhạc Ngọt Đoàn Kết (Đã rời đi)
++ Ban Nhạc Ngọt Đoàn Kết (Đã rời đi) (đã bị đuổi do PvE Punishment)
 ```
 
 ```
@@ -83,6 +83,6 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 1-5
 - Reward: 
-- Punishment: Nhận Archetype "Cinderheart", nếu đã có rồi, nhận +1 All Stats
+- Punishment: bị đuổi khỏi house
 ```
 ======

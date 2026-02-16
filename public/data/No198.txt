@@ -57,8 +57,8 @@ Runeword: Không
 
 ```
 2 Power: 
-+ AIDS (Từ KuSenpai (kusenpai))
-+ Frost Armor
++ AIDS (Từ KuSenpai (kusenpai)) (Đã mất do PvE Punishment)
++ Frost Armor (Đã mất do PvE Punishment)
 + Uno Reverse Card
 ```
 
@@ -84,6 +84,8 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 3-4
 - Reward: 
-- Punishment: Mất Power AID và Frost Armor
+- Punishment: 
+  + Nhận -2 spd
+  + Mất Power AID và Frost Armor
 ```
 ======

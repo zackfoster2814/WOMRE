@@ -15,6 +15,7 @@ Sub-race:
 ```
 Archetype: 
 + Hero of the Emirate🍀
++ Gigachad
 ```
 ``` 
 3 Quirk:  
@@ -87,6 +88,10 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 4-2
 - Reward: 
+  + Nhận +2 Str
+  + Nhận +2 Spd
+  + Nhận +2 Dur
+  + Nhận +2 BIQ
 - Punishment: 
 ```
 ======

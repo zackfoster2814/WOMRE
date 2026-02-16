@@ -42,6 +42,7 @@ Houses:
  + 1 Normal gear:
   - Radio (Từ House)
   - Mì Tôm
+  - Văn Tế (từ PvE)
  + 0 Legacy gear:
   - 
 ```

@@ -59,8 +59,8 @@ Runeword:
 
 ```
 2 Power: 
-+ Invulnerability 
-+ Mewing
++ Invulnerability (Đã mất do PvE Punishment)
++ Mewing (Đã mất do PvE Punishment)
 ```
 
 ```
@@ -85,6 +85,8 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 3-4
 - Reward: 
-- Punishment: Mất hết Power
+- Punishment: 
+  + Nhận -2 spd
+  + Mất hết Power
 ```
 ======

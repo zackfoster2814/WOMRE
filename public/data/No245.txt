@@ -58,6 +58,9 @@ Runeword:
 2 Power:  
 + Bash
 + Lightning Enchant
++ Ice Hammer (từ PvE Reward)
++ Misty Step Ahead (từ PvE Reward)
++ Spear of Fire (từ PvE Reward)
 ```
 
 ```
@@ -81,7 +84,7 @@ PvE:
 - Đối thủ: The Elder Brain
 - Kết quả: Win
 - Tỉ số: 5-1
-- Reward: 
+- Reward: Nhận 3 power Ice Hammer, Misty Step Ahead, Spear of Fire (player được nhận: trantrinhtri)
 - Punishment: 
 ```
 ======

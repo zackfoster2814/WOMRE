@@ -58,11 +58,11 @@ Runeword: Không
 
 ```
 7 Power: 
-+ Water Breathing (Từ Sub-race)
++ Water Breathing (Từ Sub-race) (Đã mất do PvE Punishment)
 + Luck Manipulation
 + The Sand of Time
 + Capybara
-+ Divine Lightning (Demonic Pact)
++ Divine Lightning (Demonic Pact) (Đã mất do PvE Punishment)
 + Detect Thoughts (Demonic Pact)
 + Spell Flux (Demonic Pact)
 ```
@@ -89,6 +89,8 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 3-4
 - Reward: 
-- Punishment: Mất Power Divine Lightning và Water Breathing
+- Punishment: 
+  + Nhận -2 spd
+  + Mất Power Divine Lightning và Water Breathing
 ```
 ======

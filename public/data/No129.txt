@@ -24,11 +24,11 @@ Archetype:
 ```
 ```
 Str: 8 (thành 13 do +5)
-Spd: 5
+Spd: 0 (ban đầu là 5, do PvE Punishment)
 Dur: 7
 IQ: 7 (thành 2 do -5)
 BIQ: 7
-MA: 10
+MA: 5 (ban đầu là 10, do PvE Punishment)
 ```
 
 ```

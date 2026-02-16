@@ -55,7 +55,7 @@ Houses:
 2 Rune: 
 + Sol
 + El
-Runeword: Không
+Runeword: Undying Rage
 ```
 
 ```

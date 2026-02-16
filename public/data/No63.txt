@@ -61,8 +61,8 @@ Runeword: Không
 ```
 4 Power: 
 + Artist (đã mất - cho An Hoàng (leetch1311))
-+ Red Shift/LP
-+ Sybaurafarming
++ Red Shift/LP (Đã mất do PvE Punishment)
++ Sybaurafarming (Đã mất do PvE Punishment)
 + The Coast is Clear!
 ```
 
@@ -88,6 +88,8 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 3-4
 - Reward: 
-- Punishment: Mất Power Sybaurafarming và Red Shift/LP
+- Punishment: 
+  + Nhận -2 spd
+  + Mất Power Sybaurafarming và Red Shift/LP
 ```
 ======

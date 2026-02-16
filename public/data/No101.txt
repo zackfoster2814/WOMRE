@@ -39,9 +39,9 @@ Houses:
 ```
 1 Gear: 
  + 0 Normal gear:
-  - 
+  - Khung hình thờ (từ PvE Punishment)
  + 1 Legacy gear:
-  - Spirit of the Wheel
+  - Spirit of the Wheel (đã mất do PVE Punishment)
 ```
 
 ```
@@ -85,6 +85,6 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 1-6
 - Reward: 
-- Punishment: 
+- Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
 ```
 ======

@@ -40,7 +40,7 @@ Houses:
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Khung hình thờ (từ PvE Punishment)
  + 0 Legacy gear:
   - 
 ```
@@ -83,6 +83,6 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 1-6
 - Reward: 
-- Punishment: 
+- Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
 ```
 ======

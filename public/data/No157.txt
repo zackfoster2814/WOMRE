@@ -56,7 +56,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Tsunami Control
++ Tsunami Control (Đã mất do PvE Punishment)
 ```
 
 ```
@@ -81,6 +81,8 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 3-4
 - Reward: 
-- Punishment: Mất hết Power
+- Punishment: 
+  + Nhận -2 spd
+  + Mất hết Power
 ```
 ======

@@ -57,8 +57,8 @@ Runeword: Không
 ```
 3 Power: 
 + Water Breathing (Từ Sub-race)
-+ Magma Strike(Từ House)
-+ Dominator (Từ House)
++ Magma Strike(Từ House) (Đã mất do PvE Punishment)
++ Dominator (Từ House) (Đã mất do PvE Punishment)
 ```
 
 ```
@@ -83,6 +83,8 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 3-4
 - Reward: 
-- Punishment: Mất Power Magma Strike và Dominator
+- Punishment: 
+  + Nhận -2 spd
+  + Mất Power Magma Strike và Dominator
 ```
 ======

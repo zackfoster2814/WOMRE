@@ -58,7 +58,7 @@ Runeword:
 
 ```
 1 Power:  
-+ Fair Duel
++ Fair Duel (Đã mất do PvE Punishment)
 ```
 
 ```
@@ -83,6 +83,8 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 3-4
 - Reward: 
-- Punishment: Mất hết Power
+- Punishment: 
+  + Nhận -2 spd
+  + Mất hết Power
 ```
 ======

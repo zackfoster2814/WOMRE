@@ -63,6 +63,7 @@ Runeword: Không
 + Analysis Sins
 + Power Negation
 + Quas (Wood Elf)
++ 4 Hit combo (từ PvE Punishment)
 ```
 
 ```
@@ -94,6 +95,8 @@ PvE:
 - Tỉ số: 5-4
 - Reward: 
 - Punishment: 
+  + Nhận +3 BIQ
+  + Nhận Power 4 Hit combo
 - Note: Win BO3 round MA 2-0
 ```
 ======

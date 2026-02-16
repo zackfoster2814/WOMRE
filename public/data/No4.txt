@@ -31,8 +31,8 @@ MA: 6
 
 ```
 Houses: 
-+ Golden Order
- -> Malenia
++ Golden Order (đã bị đuổi do PvE Punishment)
+ -> Malenia (đã bị đuổi do PvE Punishment)
 ```
 
 ```
@@ -85,6 +85,6 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 1-5
 - Reward: 
-- Punishment: Nhận Archetype "Cinderheart", nếu đã có rồi, nhận +1 All Stats
+- Punishment: Bị đuổi khỏi house
 ```
 ======

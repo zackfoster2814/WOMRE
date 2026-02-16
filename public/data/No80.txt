@@ -82,6 +82,6 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 1-5
 - Reward: 
-- Punishment: Nhận Archetype "Cinderheart", nếu đã có rồi, nhận +1 All Stats
+- Punishment: bị đuổi khỏi house
 ```
 ======

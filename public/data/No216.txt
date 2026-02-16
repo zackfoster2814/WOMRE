@@ -41,6 +41,7 @@ Houses:
   - Sổ Tay
   - Swift Boots
   - Knight's Armor
+  - Văn Tế (từ PvE)
  + 0 Legacy gear:
   - 
 ```

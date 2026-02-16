@@ -38,8 +38,9 @@ Houses:
 ```
 2 Gear: 
  + 2 Normal gear:
-  - Sổ Tay (Từ Archetype)
-  - Mì Tôm
+  - Sổ Tay (Từ Archetype) (đã mất do PvE Punishment)
+  - Mì Tôm (đã mất do PvE Punishment)
+  - Khung hình thờ (từ PvE Punishment)
  + 0 Legacy gear:
   - 
 ```
@@ -82,6 +83,6 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 1-6
 - Reward: 
-- Punishment: 
+- Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
 ```
 ======

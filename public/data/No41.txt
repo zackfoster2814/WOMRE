@@ -84,6 +84,10 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 4-2
 - Reward: 
+  + Nhận +2 Spd
+  + Nhận +2 Dur
+  + Nhận +2 BIQ
+  + Nhận +2 MA
 - Punishment: 
 ```
 ======

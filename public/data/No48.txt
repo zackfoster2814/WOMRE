@@ -86,7 +86,8 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 2-8
 - Reward: 
-- Punishment: -2 vào stat thấp nhất
-- Note: Đánh caro 2 lần
+- Punishment: 
+  + Nhận -6 IQ
+- Note: Đánh caro 2 lần (-2 vào stat thấp nhất (x3))
 ```
 ======
