@@ -1,12 +1,13 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { BattleType } from "../types";
-import { CharacterStats } from "../types/character";
+import { Character, CharacterStats } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver, type EffectSourceBreakdown } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { BossBattleRoom } from "../components/BossBattleRoom";
 import { getAssetPath } from "../utils/basePath";
+import { CombatEffectsPanel } from "../components/CombatEffectsPanel";
 
 // Initialize effect data
 let effectsInitialized = false;
@@ -270,6 +271,7 @@ interface PvPPlayerData {
   race: string;
   raceTier: number;
   stats: CharacterStats;
+  character?: Character;
 }
 
 // Combat round result
@@ -348,6 +350,7 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                     race,
                     raceTier: RACE_TIERS[race] || 0,
                     stats: pvpStats,
+                    character: char,
                   });
                 }
               })
@@ -702,6 +705,15 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
           </button>
         </div>
 
+        {/* Pre-combat special rules */}
+        {player1 && player2 && !combatResult && !isAnimating && (
+          <CombatEffectsPanel
+            player1={{ name: player1.name, character: player1.character }}
+            player2={{ name: player2.name, character: player2.character }}
+            preCombatOnly
+          />
+        )}
+
         {/* Battle Button */}
         {player1 && player2 && !combatResult && (
           <div className="text-center mb-8">
@@ -853,6 +865,23 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
           </div>
         )}
 
+        {/* Combat Effects Panel */}
+        {combatResult && player1 && player2 && (
+          <CombatEffectsPanel
+            player1={{ name: player1.name, character: player1.character }}
+            player2={{ name: player2.name, character: player2.character }}
+            combatResult={{
+              winner: combatResult.winner,
+              player1Score: combatResult.player1Score,
+              player2Score: combatResult.player2Score,
+              rounds: combatResult.rounds.map((r) => ({
+                stat: r.stat,
+                winner: r.winner,
+              })),
+            }}
+          />
+        )}
+
         {/* Rules Info */}
         <div className="bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-lg p-4 text-center">
           <p className="text-gray-400 text-sm">
@@ -935,6 +964,7 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                     race,
                     raceTier: RACE_TIERS[race] || 0,
                     stats: pvpStats,
+                    character: char,
                   });
                 }
               })
