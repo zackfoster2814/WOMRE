@@ -20,6 +20,7 @@ interface WheelCanvasProps {
   onCurrentItemChange?: (item: WheelItem | null) => void;
   onSpin?: () => void;
   startAngle?: number;
+  spinButtonClassName?: string;
 }
 
 export const WheelCanvas = ({
@@ -30,6 +31,7 @@ export const WheelCanvas = ({
   onCurrentItemChange,
   onSpin,
   startAngle = 0,
+  spinButtonClassName,
 }: WheelCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
@@ -501,7 +503,7 @@ export const WheelCanvas = ({
         <button
           onClick={onSpin}
           disabled={!canSpin}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold text-2xl shadow-2xl transition-all transform hover:scale-110 disabled:scale-100 disabled:cursor-not-allowed border-4 border-white"
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-500 disabled:to-gray-600 text-white font-bold shadow-2xl transition-all transform hover:scale-110 disabled:scale-100 disabled:cursor-not-allowed border-4 border-white ${spinButtonClassName || "w-32 h-32 text-2xl"}`}
           style={{ zIndex: 10 }}
         >
           {isSpinning ? "..." : "SPIN"}

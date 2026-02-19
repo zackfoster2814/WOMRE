@@ -331,6 +331,206 @@ registerImmediateHandler(
   '+2 BIQ, +1 Strength (Villain)'
 );
 
+// ============================================================================
+// MID ARCHETYPE
+// ============================================================================
+
+/**
+ * Mid - Toàn bộ stats = 5
+ */
+registerImmediateHandler(
+  'mid_stats_five',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    for (const stat of STAT_NAMES) {
+      const diff = 5 - ctx.baseStats[stat];
+      if (diff !== 0) {
+        mods.push({ stat, value: diff, isBase: true });
+      }
+    }
+
+    return {
+      statModifiers: mods,
+      skipDefault: true,
+      description: 'Toàn bộ Base Stats = 5 (Mid)',
+    };
+  },
+  'Set all base stats to 5'
+);
+
+// ============================================================================
+// DUAL WIELDER ARCHETYPE
+// ============================================================================
+
+/**
+ * Dual Wielder - Dùng được 2 vũ khí
+ */
+registerImmediateHandler(
+  'dual_wielder_two_weapons',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Dùng được 2 vũ khí (Dual Wielder)',
+    };
+  },
+  'Can use 2 weapons'
+);
+
+// ============================================================================
+// LOYAL ARCHETYPE
+// ============================================================================
+
+/**
+ * Loyal - Chỉ có 1 Lover duy nhất
+ */
+registerImmediateHandler(
+  'loyal_single_lover',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Chỉ có 1 Lover duy nhất (Loyal)',
+    };
+  },
+  'Only 1 Lover allowed'
+);
+
+// ============================================================================
+// BLACKSMITH ARCHETYPE
+// ============================================================================
+
+/**
+ * Blacksmith - Chắc chắn có vũ khí runeword, dùng được mọi vũ khí
+ */
+registerImmediateHandler(
+  'blacksmith_weapon_setup',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Chắc chắn có vũ khí Runeword, dùng được mọi vũ khí (Blacksmith)',
+    };
+  },
+  'Guaranteed runeword weapon'
+);
+
+// ============================================================================
+// NGƯỜI TRONG BAN NHẠC
+// ============================================================================
+
+/**
+ * Người Trong Ban Nhạc - Setup instrument weapon + house
+ */
+registerImmediateHandler(
+  'nguoi_trong_ban_nhac_setup',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: '36% Instrument Weapon, House "Ban Nhạc Ngọt Đoàn Kết" (Người Trong Ban Nhạc)',
+    };
+  },
+  'Instrument weapon + band house setup'
+);
+
+// ============================================================================
+// MASON ARCHETYPE
+// ============================================================================
+
+/**
+ * Mason - Cường hóa House Feature
+ */
+registerImmediateHandler(
+  'mason_enhanced_house_feature',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Cường hóa House Feature (Mason)',
+    };
+  },
+  'Enhanced House Feature'
+);
+
+// ============================================================================
+// AURA FARMER
+// ============================================================================
+
+/**
+ * Aura Farmer - +2 all stats, chung kết không thua → +1 all, thua → mất
+ */
+registerImmediateHandler(
+  'aura_farmer',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // Check if character lost their Aura Farmer (isLost on the archetype)
+    const nestedArchetypes = ctx.character.nestedArchetypes || [];
+    const auraFarmer = nestedArchetypes.find(
+      (a: any) => a.subType === 'Aura Farmer' || a.subSubType === 'Aura Farmer'
+    );
+
+    if (auraFarmer && (auraFarmer as any).isLost) {
+      return {
+        skipDefault: true,
+        description: 'Aura Farmer đã mất aura',
+      };
+    }
+
+    // Check if in finals bracket for extra bonus
+    const inFinals = ctx.character.tournament?.bracket === 'winner' ||
+      ctx.character.tournament?.round === 'final';
+
+    if (inFinals) {
+      // +2 all (base) + potentially +1 more
+      return {
+        statModifiers: STAT_NAMES.map(stat => ({ stat, value: 3 })),
+        skipDefault: true,
+        description: '+3 All Stats (Aura Farmer - chung kết)',
+      };
+    }
+
+    return {
+      skipDefault: false, // Let default +2 all stats apply
+      description: '+2 All Stats (Aura Farmer)',
+    };
+  },
+  '+2 all stats, extra in finals'
+);
+
+// ============================================================================
+// THE FLASH (SUPERHERO)
+// ============================================================================
+
+/**
+ * The Flash - Base Speed = 10
+ */
+registerImmediateHandler(
+  'the_flash_speed_setup',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const diff = 10 - ctx.baseStats.speed;
+
+    return {
+      statModifiers: diff !== 0 ? [{ stat: 'speed', value: diff, isBase: true }] : [],
+      skipDefault: true,
+      description: `Base Speed = 10 (The Flash${diff !== 0 ? `, ${diff > 0 ? '+' : ''}${diff}` : ''})`,
+    };
+  },
+  'Set Base Speed to 10'
+);
+
+// ============================================================================
+// FAITHKEEPERS (NEW LONDON)
+// ============================================================================
+
+/**
+ * Faithkeepers - Nhận toàn bộ Quirk của 1 người nhà New London khác
+ */
+registerImmediateHandler(
+  'faithkeepers_copy_quirks',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Nhận toàn bộ Quirk của 1 người nhà New London khác (Faithkeepers)',
+    };
+  },
+  'Copy quirks from New London housemate'
+);
+
 export function registerArchetypeHandlers(): void {
   console.log('Archetype handlers registered');
 }

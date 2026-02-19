@@ -35,6 +35,7 @@ import { registerCharDevHandlers } from './immediate/chardev-handlers';
 import { registerCombatHandlers } from './combat/combat-handlers';
 import { registerPowerCombatHandlers } from './combat/power-combat-handlers';
 import { registerRaceCombatHandlers } from './combat/race-combat-handlers';
+import { registerArchetypeCombatHandlers } from './combat/archetype-combat-handlers';
 
 let isInitialized = false;
 
@@ -62,6 +63,7 @@ export function initializeHandlers(): void {
   registerCombatHandlers();
   registerPowerCombatHandlers();
   registerRaceCombatHandlers();
+  registerArchetypeCombatHandlers();
 
   isInitialized = true;
   console.log('Custom handlers initialized');

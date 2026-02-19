@@ -359,6 +359,12 @@ const CreateTab = ({
   const [wheelItems, setWheelItems] = useState<WheelItem[]>([]);
   const [lastDrawnPlayer, setLastDrawnPlayer] =
     useState<TournamentPlayer | null>(null);
+  const [autoDrawing, setAutoDrawing] = useState(false);
+  const autoDrawQueueRef = useRef<number[]>([]);
+  const autoDrawTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pendingSaveRef = useRef<Round256Data | null>(null);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isSavingRef = useRef(false);
 
   // Determine which players are already drawn
   const drawnPlayerIds = useMemo(() => {
@@ -388,9 +394,48 @@ const CreateTab = ({
     setWheelItems(items);
   }, [remainingPlayers]);
 
+  // Debounced save - only saves the latest data, skips intermediate states during auto-draw
+  const debouncedSave = useCallback(
+    (data: Round256Data) => {
+      pendingSaveRef.current = data;
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+      }
+      // During auto-draw: batch saves every 10 seconds; otherwise save after 500ms
+      const delay = autoDrawQueueRef.current.length > 0 ? 10000 : 500;
+      saveTimerRef.current = setTimeout(async () => {
+        const dataToSave = pendingSaveRef.current;
+        if (!dataToSave || isSavingRef.current) return;
+        isSavingRef.current = true;
+        pendingSaveRef.current = null;
+        await saveToDrive(dataToSave);
+        isSavingRef.current = false;
+        // If new data accumulated while saving, save again
+        if (pendingSaveRef.current) {
+          debouncedSave(pendingSaveRef.current);
+        }
+      }, delay);
+    },
+    [saveToDrive],
+  );
+
+  // Flush any pending save immediately (e.g. when auto-draw finishes)
+  const flushSave = useCallback(async () => {
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = null;
+    }
+    const dataToSave = pendingSaveRef.current;
+    if (!dataToSave) return;
+    pendingSaveRef.current = null;
+    isSavingRef.current = true;
+    await saveToDrive(dataToSave);
+    isSavingRef.current = false;
+  }, [saveToDrive]);
+
   // Handle spin completion
   const handleSpinComplete = useCallback(
-    async (item: WheelItem) => {
+    (item: WheelItem) => {
       if (!roundData) return;
 
       const playerId = parseInt(item.id.replace("player-", ""));
@@ -406,7 +451,6 @@ const CreateTab = ({
       const isPlayer1 = (newDrawOrder.length - 1) % 2 === 0;
 
       if (isPlayer1) {
-        // Create new match with player1
         newMatches.push({
           matchNumber: matchIdx + 1,
           player1: {
@@ -421,7 +465,6 @@ const CreateTab = ({
           note: null,
         });
       } else {
-        // Fill player2 in existing match
         if (newMatches[matchIdx]) {
           newMatches[matchIdx] = {
             ...newMatches[matchIdx],
@@ -444,53 +487,50 @@ const CreateTab = ({
       setRoundData(newData);
       setIsSpinning(false);
 
-      // Auto-save to Drive
-      await saveToDrive(newData);
+      // Queue save (debounced - won't block next spin)
+      debouncedSave(newData);
+
+      // If auto-drawing, remove drawn player from queue and trigger next spin
+      if (autoDrawQueueRef.current.length > 0) {
+        autoDrawQueueRef.current = autoDrawQueueRef.current.filter(
+          (id) => id !== playerId,
+        );
+        if (autoDrawQueueRef.current.length > 0) {
+          autoDrawTimerRef.current = setTimeout(() => {
+            if (autoDrawQueueRef.current.length > 0) {
+              setIsSpinning(true);
+            } else {
+              setAutoDrawing(false);
+              flushSave(); // Final save when done
+            }
+          }, 800);
+        } else {
+          setAutoDrawing(false);
+          flushSave(); // Final save when done
+        }
+      }
     },
-    [roundData, players, setRoundData, saveToDrive],
+    [roundData, players, setRoundData, debouncedSave, flushSave],
   );
 
-  // Quick draw all
-  const quickDrawAll = useCallback(async () => {
-    if (!roundData) return;
+  // Auto draw all - spins the wheel sequentially
+  const startAutoDraw = useCallback(() => {
+    if (!roundData || remainingPlayers.length === 0 || isSpinning) return;
+    autoDrawQueueRef.current = remainingPlayers.map((p) => p.id);
+    setAutoDrawing(true);
+    setIsSpinning(true);
+  }, [roundData, remainingPlayers, isSpinning]);
 
-    const shuffled = [...remainingPlayers].sort(() => Math.random() - 0.5);
-    const newDrawOrder = [...roundData.drawOrder];
-    const newMatches = [...roundData.matches];
-
-    for (const p of shuffled) {
-      newDrawOrder.push(p.id);
-      const matchIdx = Math.floor((newDrawOrder.length - 1) / 2);
-      const isPlayer1 = (newDrawOrder.length - 1) % 2 === 0;
-
-      if (isPlayer1) {
-        newMatches.push({
-          matchNumber: matchIdx + 1,
-          player1: { no: p.id, name: p.name, username: p.username },
-          player2: null,
-          winner: null,
-          score: null,
-          specialEvent: null,
-          note: null,
-        });
-      } else if (newMatches[matchIdx]) {
-        newMatches[matchIdx] = {
-          ...newMatches[matchIdx],
-          player2: { no: p.id, name: p.name, username: p.username },
-        };
-      }
+  // Stop auto draw
+  const stopAutoDraw = useCallback(() => {
+    autoDrawQueueRef.current = [];
+    setAutoDrawing(false);
+    if (autoDrawTimerRef.current) {
+      clearTimeout(autoDrawTimerRef.current);
+      autoDrawTimerRef.current = null;
     }
-
-    const newData: Round256Data = {
-      ...roundData,
-      matches: newMatches,
-      drawOrder: newDrawOrder,
-      lastUpdated: new Date().toISOString(),
-    };
-
-    setRoundData(newData);
-    await saveToDrive(newData);
-  }, [roundData, remainingPlayers, setRoundData, saveToDrive]);
+    flushSave(); // Save current progress immediately
+  }, [flushSave]);
 
   // Reset draw
   const resetDraw = useCallback(async () => {
@@ -533,6 +573,7 @@ const CreateTab = ({
                 if (remainingPlayers.length > 0 && !isSpinning)
                   setIsSpinning(true);
               }}
+              spinButtonClassName="w-20 h-20 text-lg"
             />
           </div>
         ) : (
@@ -557,17 +598,27 @@ const CreateTab = ({
 
         {/* Actions */}
         <div className="mt-4 flex justify-center gap-2">
-          {remainingPlayers.length > 0 && (
+          {remainingPlayers.length > 0 && !autoDrawing && (
             <button
-              onClick={quickDrawAll}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm"
+              onClick={startAutoDraw}
+              disabled={isSpinning}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Quick Draw All ({remainingPlayers.length})
+              Auto Draw All ({remainingPlayers.length})
+            </button>
+          )}
+          {autoDrawing && (
+            <button
+              onClick={stopAutoDraw}
+              className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm animate-pulse"
+            >
+              Stop Auto Draw
             </button>
           )}
           <button
             onClick={resetDraw}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm"
+            disabled={isSpinning || autoDrawing}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Reset
           </button>
@@ -575,45 +626,54 @@ const CreateTab = ({
       </div>
 
       {/* Match List (being created) */}
-      <div className="bg-gray-800/50 rounded-lg p-4">
-        <h2 className="text-xl font-bold text-white mb-4">
-          Matches ({roundData?.matches.length || 0})
-        </h2>
-        <div className="max-h-[600px] overflow-y-auto space-y-2">
+      <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700/30">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-white">
+            Matches
+          </h2>
+          <span className="text-sm text-gray-400 bg-gray-700/50 px-2.5 py-1 rounded-full font-mono">
+            {roundData?.matches.length || 0}
+          </span>
+        </div>
+        <div className="max-h-[600px] overflow-y-auto space-y-1.5 pr-1">
           {roundData?.matches
             .slice()
             .reverse()
             .map((match) => (
               <div
                 key={match.matchNumber}
-                className={`p-3 rounded-lg border ${
+                className={`px-3 py-2.5 rounded-lg border transition-colors ${
                   match.player2
-                    ? "bg-gray-700/50 border-gray-600"
-                    : "bg-yellow-900/20 border-yellow-600/50"
+                    ? "bg-gray-700/30 border-gray-600/30"
+                    : "bg-yellow-900/15 border-yellow-600/30 animate-pulse"
                 }`}
               >
-                <div className="text-xs text-gray-400 mb-1">
-                  Match #{match.matchNumber}
-                </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-mono text-gray-500 w-5">
+                    {match.matchNumber}
+                  </span>
                   <div className="flex-1 text-sm">
-                    <span className="text-blue-400">
-                      No.{match.player1?.no} {match.player1?.name || "???"}
+                    <span className="text-blue-300 font-medium">
+                      <span className="text-blue-500/60 text-xs mr-1">{match.player1?.no}.</span>
+                      {match.player1?.name || "???"}
                     </span>
                   </div>
-                  <span className="text-gray-500 text-xs">VS</span>
+                  <span className="text-gray-600 text-[10px] font-bold tracking-wider">VS</span>
                   <div className="flex-1 text-sm text-right">
-                    <span className="text-red-400">
-                      {match.player2
-                        ? `No.${match.player2.no} ${match.player2.name}`
-                        : "Waiting..."}
-                    </span>
+                    {match.player2 ? (
+                      <span className="text-red-300 font-medium">
+                        {match.player2.name}
+                        <span className="text-red-500/60 text-xs ml-1">.{match.player2.no}</span>
+                      </span>
+                    ) : (
+                      <span className="text-yellow-500/60 text-xs italic">Waiting...</span>
+                    )}
                   </div>
                 </div>
               </div>
             ))}
           {(!roundData || roundData.matches.length === 0) && (
-            <p className="text-gray-400 text-center py-4">
+            <p className="text-gray-500 text-center py-8 text-sm">
               Spin the wheel to start drawing players
             </p>
           )}
@@ -697,27 +757,46 @@ const BracketTab = ({
   return (
     <div>
       {/* Stats Bar */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex gap-4 text-sm">
-          <span className="text-gray-400">
-            Total: <span className="text-white font-bold">{stats.total}</span>
-          </span>
-          <span className="text-green-400">
-            Completed: <span className="font-bold">{stats.completed}</span>
-          </span>
-          <span className="text-yellow-400">
-            Pending: <span className="font-bold">{stats.pending}</span>
-          </span>
+      <div className="flex items-center justify-between mb-5 bg-gray-800/60 rounded-xl p-3 border border-gray-700/50">
+        <div className="flex gap-5 text-sm">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-gray-400" />
+            <span className="text-gray-400">Total</span>
+            <span className="text-white font-bold text-base">{stats.total}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-green-400" />
+            <span className="text-green-400/80">Done</span>
+            <span className="text-green-300 font-bold text-base">{stats.completed}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-yellow-400" />
+            <span className="text-yellow-400/80">Pending</span>
+            <span className="text-yellow-300 font-bold text-base">{stats.pending}</span>
+          </div>
+          {stats.total > 0 && (
+            <div className="flex items-center gap-2 ml-2 pl-3 border-l border-gray-600">
+              <div className="w-24 h-2 bg-gray-700 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-green-500 to-emerald-400 rounded-full transition-all"
+                  style={{ width: `${(stats.completed / stats.total) * 100}%` }}
+                />
+              </div>
+              <span className="text-xs text-gray-400">
+                {Math.round((stats.completed / stats.total) * 100)}%
+              </span>
+            </div>
+          )}
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-1 bg-gray-900/50 rounded-lg p-0.5">
           {(["all", "pending", "completed"] as const).map((mode) => (
             <button
               key={mode}
               onClick={() => setFilterMode(mode)}
-              className={`px-3 py-1 text-xs rounded ${
+              className={`px-3 py-1.5 text-xs rounded-md font-medium transition-all ${
                 filterMode === mode
-                  ? "bg-purple-600 text-white"
-                  : "bg-gray-700 text-gray-400 hover:text-white"
+                  ? "bg-purple-600 text-white shadow-md"
+                  : "text-gray-400 hover:text-white hover:bg-gray-700/50"
               }`}
             >
               {mode.charAt(0).toUpperCase() + mode.slice(1)}
@@ -727,75 +806,92 @@ const BracketTab = ({
       </div>
 
       {/* Match Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 max-h-[70vh] overflow-y-auto">
-        {filteredMatches.map((match) => (
-          <button
-            key={match.matchNumber}
-            onClick={() => setSelectedMatch(match)}
-            className={`text-left p-3 rounded-lg border transition-all hover:scale-[1.02] ${
-              match.winner
-                ? "bg-green-900/20 border-green-700/50 hover:border-green-500"
-                : "bg-gray-800 border-gray-700 hover:border-purple-500"
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-gray-400">
-                Match #{match.matchNumber}
-              </span>
-              {match.winner && (
-                <span className="text-xs bg-green-600/30 text-green-400 px-1.5 py-0.5 rounded">
-                  Done
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-h-[70vh] overflow-y-auto pr-1">
+        {filteredMatches.map((match) => {
+          const p1Won = match.winner?.no === match.player1?.no;
+          const p2Won = match.winner?.no === match.player2?.no;
+          return (
+            <button
+              key={match.matchNumber}
+              onClick={() => setSelectedMatch(match)}
+              className={`text-left p-3 rounded-xl border-2 transition-all hover:scale-[1.02] hover:shadow-lg ${
+                match.winner
+                  ? "bg-gradient-to-br from-gray-800/80 to-gray-900/80 border-green-600/40 hover:border-green-400"
+                  : "bg-gradient-to-br from-gray-800 to-gray-850 border-gray-600/50 hover:border-purple-400"
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-mono text-gray-500">
+                  #{match.matchNumber}
                 </span>
-              )}
+                <div className="flex gap-1">
+                  {match.specialEvent && (
+                    <span className="text-[10px] bg-orange-500/20 text-orange-300 px-1.5 py-0.5 rounded-full font-medium">
+                      Special
+                    </span>
+                  )}
+                  {match.winner ? (
+                    <span className="text-[10px] bg-green-500/20 text-green-300 px-1.5 py-0.5 rounded-full font-medium">
+                      {match.score || "Done"}
+                    </span>
+                  ) : (
+                    <span className="text-[10px] bg-yellow-500/20 text-yellow-300 px-1.5 py-0.5 rounded-full font-medium">
+                      Pending
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="space-y-0.5">
+                <div
+                  className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 transition-colors ${
+                    p1Won
+                      ? "bg-green-600/20 ring-1 ring-green-500/60"
+                      : p2Won
+                        ? "bg-gray-700/30 opacity-60"
+                        : "bg-gray-700/40"
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    {p1Won && <span className="text-green-400 text-xs shrink-0">W</span>}
+                    <span className={`text-sm truncate ${p1Won ? "text-green-200 font-semibold" : "text-white"}`}>
+                      {match.player1?.name || "TBD"}
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-gray-500 font-mono shrink-0 ml-1">
+                    {match.player1?.no || "-"}
+                  </span>
+                </div>
+                <div className="text-center text-gray-600 text-[10px] font-bold tracking-wider">
+                  VS
+                </div>
+                <div
+                  className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 transition-colors ${
+                    p2Won
+                      ? "bg-green-600/20 ring-1 ring-green-500/60"
+                      : p1Won
+                        ? "bg-gray-700/30 opacity-60"
+                        : "bg-gray-700/40"
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    {p2Won && <span className="text-green-400 text-xs shrink-0">W</span>}
+                    <span className={`text-sm truncate ${p2Won ? "text-green-200 font-semibold" : "text-white"}`}>
+                      {match.player2?.name || "TBD"}
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-gray-500 font-mono shrink-0 ml-1">
+                    {match.player2?.no || "-"}
+                  </span>
+                </div>
+              </div>
               {match.specialEvent && (
-                <span className="text-xs bg-orange-600/30 text-orange-400 px-1.5 py-0.5 rounded">
-                  Special
-                </span>
+                <div className="mt-1.5 text-center text-[10px] text-orange-300/80 truncate italic">
+                  {match.specialEvent}
+                </div>
               )}
-            </div>
-            <div className="space-y-1">
-              <div
-                className={`flex items-center justify-between rounded px-2 py-1 ${
-                  match.winner?.no === match.player1?.no
-                    ? "bg-green-700/30 ring-1 ring-green-500"
-                    : "bg-gray-700/50"
-                }`}
-              >
-                <span className="text-sm text-white truncate">
-                  {match.player1?.name || "TBD"}
-                </span>
-                <span className="text-xs text-gray-400">
-                  #{match.player1?.no || "-"}
-                </span>
-              </div>
-              <div className="text-center text-gray-500 text-xs">VS</div>
-              <div
-                className={`flex items-center justify-between rounded px-2 py-1 ${
-                  match.winner?.no === match.player2?.no
-                    ? "bg-green-700/30 ring-1 ring-green-500"
-                    : "bg-gray-700/50"
-                }`}
-              >
-                <span className="text-sm text-white truncate">
-                  {match.player2?.name || "TBD"}
-                </span>
-                <span className="text-xs text-gray-400">
-                  #{match.player2?.no || "-"}
-                </span>
-              </div>
-            </div>
-            {match.score && (
-              <div className="mt-1 text-center text-xs text-gray-400">
-                {match.score}
-              </div>
-            )}
-            {match.specialEvent && (
-              <div className="mt-1 text-center text-xs text-orange-400 truncate">
-                {match.specialEvent}
-              </div>
-            )}
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
 
       {/* Battle Modal */}
@@ -922,12 +1018,13 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
     };
   }, [player2]);
 
-  // If match already has a winner, show result directly
+  // If match already has a winner, show result directly (once)
   useEffect(() => {
-    if (match.winner && p1Stats && p2Stats) {
+    if (match.winner && p1Stats && p2Stats && !battleDone) {
       runBattleInstant();
     }
-  }, [match.winner, p1Stats, p2Stats]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [match.winner]);
 
   // Close on escape
   useEffect(() => {
@@ -1093,16 +1190,17 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
         {/* Main Battle Modal */}
         <div
           ref={modalRef}
-          className="bg-gray-900 rounded-2xl border border-gray-700 flex-1 min-w-0 max-w-4xl max-h-[90vh] overflow-y-auto"
+          className="bg-gray-900/95 backdrop-blur-sm rounded-2xl border border-gray-600/50 flex-1 min-w-0 max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-gray-700/50 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-red-900/20">
             <h2 className="text-lg font-bold text-white">
-              Match #{match.matchNumber}
+              <span className="text-gray-400 font-normal text-sm mr-2">Match</span>
+              #{match.matchNumber}
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-white text-2xl"
+              className="text-gray-500 hover:text-white text-xl w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-700/50 transition-colors"
             >
               &times;
             </button>
@@ -1121,25 +1219,37 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
               />
 
               {/* VS / Score */}
-              <div className="flex flex-col items-center justify-center pt-6">
-                <div className="text-2xl font-bold text-white mb-1">
-                  {battleDone ? `${p1Score} - ${p2Score}` : "VS"}
-                </div>
-                {tieBreaker && (
-                  <div className="text-xs text-yellow-400 text-center">
-                    {tieBreaker}
+              <div className="flex flex-col items-center justify-center pt-6 min-w-[100px]">
+                {battleDone ? (
+                  <div className="text-center">
+                    <div className="text-3xl font-black text-white tracking-wider">
+                      <span className="text-blue-400">{p1Score}</span>
+                      <span className="text-gray-600 mx-1">:</span>
+                      <span className="text-red-400">{p2Score}</span>
+                    </div>
+                    {tieBreaker && (
+                      <div className="text-[10px] text-yellow-400/80 mt-1 bg-yellow-500/10 px-2 py-0.5 rounded-full">
+                        {tieBreaker}
+                      </div>
+                    )}
+                    {overallWinner && (
+                      <div
+                        className={`text-sm font-bold mt-2 px-3 py-1 rounded-lg ${
+                          overallWinner === "p1"
+                            ? "text-blue-300 bg-blue-500/15"
+                            : "text-red-300 bg-red-500/15"
+                        }`}
+                      >
+                        {overallWinner === "p1"
+                          ? match.player1?.name
+                          : match.player2?.name}{" "}
+                        WINS
+                      </div>
+                    )}
                   </div>
-                )}
-                {overallWinner && battleDone && (
-                  <div
-                    className={`text-sm font-bold mt-1 ${
-                      overallWinner === "p1" ? "text-blue-400" : "text-red-400"
-                    }`}
-                  >
-                    {overallWinner === "p1"
-                      ? match.player1?.name
-                      : match.player2?.name}{" "}
-                    WINS!
+                ) : (
+                  <div className="text-2xl font-black text-gray-500 tracking-widest">
+                    VS
                   </div>
                 )}
               </div>
@@ -1166,41 +1276,53 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
 
             {/* Rounds */}
             {rounds.length > 0 && (
-              <div className="mt-4 space-y-1">
-                {rounds.map((round, idx) => (
-                  <div
-                    key={round.stat}
-                    className={`grid grid-cols-[1fr_80px_1fr] gap-2 items-center transition-all duration-300 ${
-                      idx <= currentRound ? "opacity-100" : "opacity-20"
-                    }`}
-                  >
+              <div className="mt-4 bg-gray-800/40 rounded-xl p-3 space-y-1">
+                {rounds.map((round, idx) => {
+                  const revealed = idx <= currentRound;
+                  const p1Win = revealed && round.winner === "p1";
+                  const p2Win = revealed && round.winner === "p2";
+                  const tie = revealed && round.winner === "tie";
+                  return (
                     <div
-                      className={`text-right text-sm font-bold px-2 py-1.5 rounded ${
-                        idx <= currentRound && round.winner === "p1"
-                          ? "bg-blue-600/30 text-blue-400"
-                          : idx <= currentRound && round.winner === "tie"
-                            ? "bg-yellow-600/20 text-yellow-400"
-                            : "text-gray-400"
+                      key={round.stat}
+                      className={`grid grid-cols-[1fr_70px_1fr] gap-2 items-center transition-all duration-500 ${
+                        revealed ? "opacity-100 translate-y-0" : "opacity-15 translate-y-1"
                       }`}
                     >
-                      {round.p1Value}
+                      <div
+                        className={`text-right text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${
+                          p1Win
+                            ? "bg-blue-500/25 text-blue-300 ring-1 ring-blue-500/40"
+                            : tie
+                              ? "bg-yellow-500/15 text-yellow-400"
+                              : revealed
+                                ? "text-gray-500"
+                                : "text-gray-600"
+                        }`}
+                      >
+                        {round.p1Value}
+                        {p1Win && <span className="ml-1.5 text-[10px] text-blue-400">W</span>}
+                      </div>
+                      <div className="text-center text-[11px] font-bold text-gray-400 tracking-wider">
+                        {round.label}
+                      </div>
+                      <div
+                        className={`text-left text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${
+                          p2Win
+                            ? "bg-red-500/25 text-red-300 ring-1 ring-red-500/40"
+                            : tie
+                              ? "bg-yellow-500/15 text-yellow-400"
+                              : revealed
+                                ? "text-gray-500"
+                                : "text-gray-600"
+                        }`}
+                      >
+                        {p2Win && <span className="mr-1.5 text-[10px] text-red-400">W</span>}
+                        {round.p2Value}
+                      </div>
                     </div>
-                    <div className="text-center text-xs font-bold text-gray-300">
-                      {round.label}
-                    </div>
-                    <div
-                      className={`text-left text-sm font-bold px-2 py-1.5 rounded ${
-                        idx <= currentRound && round.winner === "p2"
-                          ? "bg-red-600/30 text-red-400"
-                          : idx <= currentRound && round.winner === "tie"
-                            ? "bg-yellow-600/20 text-yellow-400"
-                            : "text-gray-400"
-                      }`}
-                    >
-                      {round.p2Value}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
 
@@ -1231,34 +1353,36 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
             </div>
 
             {/* Actions */}
-            <div className="mt-4 flex justify-center gap-3">
+            <div className="mt-5 flex justify-center gap-3 flex-wrap">
               {!battleDone && (
                 <>
                   <button
                     onClick={runBattle}
                     disabled={isAnimating || !p1Stats || !p2Stats}
-                    className="px-5 py-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all text-sm"
+                    className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all text-sm shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40"
                   >
-                    Battle!
+                    {isAnimating ? "Battling..." : "Battle!"}
                   </button>
-                  <button
-                    onClick={() => setManualWinner("p1")}
-                    className="px-3 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs"
-                  >
-                    {match.player1?.name} Wins (Manual)
-                  </button>
-                  <button
-                    onClick={() => setManualWinner("p2")}
-                    className="px-3 py-2 bg-red-700 hover:bg-red-800 text-white rounded-lg text-xs"
-                  >
-                    {match.player2?.name} Wins (Manual)
-                  </button>
+                  <div className="flex gap-1.5">
+                    <button
+                      onClick={() => setManualWinner("p1")}
+                      className="px-3 py-2 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 rounded-lg text-xs border border-blue-500/30 transition-colors"
+                    >
+                      {match.player1?.name} Win
+                    </button>
+                    <button
+                      onClick={() => setManualWinner("p2")}
+                      className="px-3 py-2 bg-red-600/30 hover:bg-red-600/50 text-red-300 rounded-lg text-xs border border-red-500/30 transition-colors"
+                    >
+                      {match.player2?.name} Win
+                    </button>
+                  </div>
                 </>
               )}
               {battleDone && overallWinner && (
                 <button
                   onClick={handleSave}
-                  className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg text-sm"
+                  className="px-6 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold rounded-xl text-sm shadow-lg shadow-green-500/20 hover:shadow-green-500/40 transition-all"
                 >
                   Save Result
                 </button>
@@ -1274,7 +1398,7 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
                     setP2Score(0);
                     setTieBreaker(null);
                   }}
-                  className="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-xs"
+                  className="px-3 py-2 bg-gray-700/60 hover:bg-gray-600/60 text-gray-300 rounded-lg text-xs border border-gray-600/50 transition-colors"
                 >
                   Re-battle
                 </button>
@@ -1324,49 +1448,67 @@ const PlayerCard = ({
 }: PlayerCardProps) => {
   const race = player?.character.race?.race || "???";
   const subRace = player?.character.race?.subRace || "";
+  const barBg = side === "left" ? "bg-blue-500" : "bg-red-500";
+  const borderGlow = isWinner
+    ? "border-green-400 shadow-lg shadow-green-500/30"
+    : side === "left"
+      ? "border-blue-600/40"
+      : "border-red-600/40";
 
   return (
     <div
-      className={`p-4 rounded-lg border-2 transition-all ${
-        isWinner
-          ? "bg-green-900/20 border-green-500 shadow-lg shadow-green-500/20"
-          : "bg-gray-800/50 border-gray-700"
-      } ${side === "right" ? "text-right" : ""}`}
+      className={`p-4 rounded-xl border-2 transition-all bg-gray-800/70 backdrop-blur ${borderGlow} ${side === "right" ? "text-right" : ""}`}
     >
       <div
-        className={`flex items-center gap-2 mb-2 ${side === "right" ? "flex-row-reverse" : ""}`}
+        className={`flex items-center gap-2 mb-1 ${side === "right" ? "flex-row-reverse" : ""}`}
       >
-        <span className="text-xs text-gray-400">No.{playerRef?.no || "?"}</span>
-        {isWinner && <span className="text-yellow-400 text-sm">WINNER</span>}
+        <span className="text-[11px] font-mono text-gray-500 bg-gray-700/50 px-1.5 py-0.5 rounded">
+          No.{playerRef?.no || "?"}
+        </span>
+        {isWinner && (
+          <span className="text-yellow-400 text-xs font-bold bg-yellow-500/15 px-2 py-0.5 rounded-full">
+            WINNER
+          </span>
+        )}
       </div>
       <h3 className="text-lg font-bold text-white truncate">
         {playerRef?.name || "TBD"}
       </h3>
-      <p className="text-sm text-gray-400">{playerRef?.username || ""}</p>
-      <p className="text-xs text-purple-400 mt-1">
+      <p className="text-xs text-gray-500">{playerRef?.username || ""}</p>
+      <p className={`text-xs mt-1 ${side === "left" ? "text-blue-300/80" : "text-red-300/80"}`}>
         {race}
-        {subRace ? ` (${subRace})` : ""}
+        {subRace ? ` / ${subRace}` : ""}
       </p>
 
       {stats && (
-        <div className="mt-3 space-y-1">
+        <div className="mt-3 space-y-1.5">
           {STAT_ORDER.map(({ key, label }) => (
             <div
               key={key}
               className={`flex items-center gap-2 text-sm ${side === "right" ? "flex-row-reverse" : ""}`}
             >
-              <span className="text-gray-400 w-8">{label}</span>
-              <div className="flex-1 bg-gray-700 rounded-full h-2">
+              <span className="text-gray-500 w-8 text-[11px] font-bold">{label}</span>
+              <div className="flex-1 bg-gray-700/60 rounded-full h-2.5 overflow-hidden">
                 <div
-                  className={`h-2 rounded-full ${side === "left" ? "bg-blue-500" : "bg-red-500"}`}
-                  style={{ width: `${Math.min(stats[key] * 5, 100)}%` }}
+                  className={`h-full rounded-full ${barBg} transition-all duration-500`}
+                  style={{
+                    width: `${Math.min(stats[key] * 5, 100)}%`,
+                    ...(side === "right" ? { marginLeft: "auto" } : {}),
+                  }}
                 />
               </div>
-              <span className="text-white font-mono w-6 text-center">
+              <span className="text-white font-mono w-7 text-center text-sm font-bold">
                 {stats[key]}
               </span>
             </div>
           ))}
+          <div className={`flex items-center gap-2 pt-1 border-t border-gray-700/50 ${side === "right" ? "flex-row-reverse" : ""}`}>
+            <span className="text-gray-500 w-8 text-[10px] font-bold">TTL</span>
+            <div className="flex-1" />
+            <span className={`font-mono w-7 text-center text-sm font-bold ${side === "left" ? "text-blue-300" : "text-red-300"}`}>
+              {STAT_ORDER.reduce((sum, { key }) => sum + (stats[key] || 0), 0)}
+            </span>
+          </div>
         </div>
       )}
     </div>
