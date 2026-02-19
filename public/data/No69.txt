@@ -25,8 +25,8 @@ Archetype:
 ```
 Str: 5
 Spd: 10
-Dur: 4
-IQ: 0 (Ban đầu là 6, về 0 do PvE Punishment)
+Dur: 4 (Ban đầu là 4, về 0 do PvE Punishment)
+IQ: 6 
 BIQ: 6
 MA: 10
 ```

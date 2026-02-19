@@ -22,10 +22,10 @@ Archetype:
 + Open-minded
 ```
 ```
-Str: 1
+Str: 0 (Ban đầu là 1, về 0 do PvE Punishment)
 Spd: 9
 Dur: 1
-IQ: 0 (Ban đầu là 10, về 0 do PvE Punishment)
+IQ: 10 
 BIQ: 10
 MA: 5
 ```

@@ -21,10 +21,10 @@ Archetype:
 + Cluttered Mind
 ```
 ```
-Str: 2
+Str: 0 (Ban đầu là 2, về 0 do PvE Punishment)
 Spd: 8 (+3 từ Herald)
 Dur: 7
-IQ: 0 (Ban đầu là 3, về 0 do PvE Punishment)
+IQ: 3
 BIQ: 3
 MA: 8
 ```
