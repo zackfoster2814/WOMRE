@@ -1934,10 +1934,10 @@ export class EffectResolver {
 
         // Handle custom handlers - execute them and collect their stat modifiers
         // Skip if already executed this handler for this source (e.g., same handler on both immediate and pve_only)
+        // Note: pve_only handlers are NOT executed here because PvE phase is over (PvP context)
         if (
           effect.customHandler &&
           (effect.timing === "immediate" ||
-            effect.timing === "pve_only" ||
             effect.timing === "pvp_only")
         ) {
           if (executedHandlers.has(effect.customHandler)) continue;

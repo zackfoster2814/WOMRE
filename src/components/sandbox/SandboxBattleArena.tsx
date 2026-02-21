@@ -5,6 +5,120 @@
 import { useState, useCallback, useEffect } from "react";
 import type { CharacterStats } from "../../types/character";
 
+// ============================================================================
+// REPORT GENERATION
+// ============================================================================
+
+interface ReportRound {
+  statLabel: string;
+  p1Value: number;
+  p2Value: number;
+  winner: "player1" | "player2" | "tie";
+  /** Wheel of Truth: win probability of player1 (0-100) */
+  p1Chance?: number;
+}
+
+function generateReportText(
+  mode: "Stats Comparison" | "Wheel of Truth",
+  player1: SandboxPlayerData,
+  player2: SandboxPlayerData,
+  rounds: ReportRound[],
+  p1Score: number,
+  p2Score: number,
+  winner: "player1" | "player2",
+  tieBreaker?: "race" | null,
+): string {
+  const now = new Date();
+  const timestamp = now.toLocaleString("vi-VN");
+  const line = "═".repeat(60);
+  const winnerName = winner === "player1" ? player1.name : player2.name;
+  const loserName = winner === "player1" ? player2.name : player1.name;
+  const winScore = Math.max(p1Score, p2Score);
+  const loseScore = Math.min(p1Score, p2Score);
+
+  const STAT_ABBREV: Record<string, string> = {
+    strength: "STR", speed: "SPD", durability: "DUR", iq: "IQ", biq: "BIQ", ma: "MA",
+  };
+
+  const lines: string[] = [];
+
+  lines.push(`Sandbox Battle Report`);
+  lines.push(`Thời gian: ${timestamp}`);
+  lines.push(`Chế độ: ${mode}`);
+  lines.push(line);
+  lines.push(`${player1.name} (${player1.race}) vs ${player2.name} (${player2.race})`);
+  lines.push(line);
+
+  // Stats
+  const statKeys: { key: keyof CharacterStats; label: string }[] = [
+    { key: "str", label: "STR" },
+    { key: "spd", label: "SPD" },
+    { key: "dur", label: "DUR" },
+    { key: "iq", label: "IQ" },
+    { key: "biq", label: "BIQ" },
+    { key: "ma", label: "MA" },
+  ];
+  const p1StatsStr = statKeys.map(({ key, label }) => `${label}:${player1.stats[key]}`).join(" ");
+  const p2StatsStr = statKeys.map(({ key, label }) => `${label}:${player2.stats[key]}`).join(" ");
+
+  lines.push(`\nStats sau immediate effects:`);
+  lines.push(`  ${player1.name}: ${p1StatsStr}`);
+  lines.push(`  ${player2.name}: ${p2StatsStr}`);
+
+  // Immediate effects
+  const allMods = [
+    ...(player1.statModifiers || []).map(m => ({ ...m, player: player1.name })),
+    ...(player2.statModifiers || []).map(m => ({ ...m, player: player2.name })),
+  ];
+  if (allMods.length > 0) {
+    lines.push(`\nImmediate effects đã áp dụng:`);
+    for (const mod of allMods) {
+      const sign = mod.value >= 0 ? "+" : "";
+      const base = mod.isBase ? " Base" : "";
+      const statLabel = STAT_ABBREV[mod.stat?.toLowerCase?.()] ?? mod.stat.toUpperCase();
+      lines.push(`  [${mod.player}] ${mod.source} → ${sign}${mod.value}${base} ${statLabel}`);
+    }
+  }
+
+  // Round results
+  lines.push(`\nKết quả từng round:`);
+  for (const r of rounds) {
+    const w = r.winner === "player1" ? player1.name : r.winner === "player2" ? player2.name : "TIE";
+    const score = r.winner === "tie"
+      ? `TIE (${r.p1Value} vs ${r.p2Value})`
+      : `${w} WIN (${r.winner === "player1" ? r.p1Value : r.p2Value} vs ${r.winner === "player1" ? r.p2Value : r.p1Value})`;
+    const chanceStr = r.p1Chance !== undefined
+      ? ` [${player1.name} ${r.p1Chance.toFixed(1)}% / ${player2.name} ${(100 - r.p1Chance).toFixed(1)}%]`
+      : "";
+    lines.push(`  ${r.statLabel}: ${score}${chanceStr}`);
+  }
+
+  // Final result
+  lines.push(`\nKết quả: ${winnerName} WIN ${winScore}-${loseScore}`);
+  lines.push(`  ${loserName} thua`);
+  if (tieBreaker === "race") {
+    lines.push(`  (Tie-breaker: Race Tier — ${winnerName} có tier cao hơn)`);
+  }
+
+  lines.push(`\n${line}`);
+  lines.push(`Race Tier: ${player1.name} = ${player1.race} (T${player1.raceTier}) | ${player2.name} = ${player2.race} (T${player2.raceTier})`);
+  lines.push(line);
+
+  return lines.join("\n");
+}
+
+function downloadReport(content: string): void {
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "sandbox-result-report.txt";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 // Race tier for tie-breaker (lower tier = stronger race, wins tie)
 const RACE_TIERS: Record<string, number> = {
   God: 1,
@@ -62,6 +176,14 @@ interface WheelRoundResult {
   p1Value: number;
   p2Value: number;
   winner: "player1" | "player2";
+  p1Chance: number;
+}
+
+export interface SandboxStatModifier {
+  source: string;
+  stat: string;
+  value: number;
+  isBase?: boolean;
 }
 
 export interface SandboxPlayerData {
@@ -69,6 +191,7 @@ export interface SandboxPlayerData {
   race: string;
   raceTier: number;
   stats: CharacterStats;
+  statModifiers?: SandboxStatModifier[];
 }
 
 interface SandboxBattleArenaProps {
@@ -366,12 +489,38 @@ const StatsComparisonBattle = ({
                   : player2.name}{" "}
                 WINS! 🏆
               </div>
-              <button
-                onClick={runCombat}
-                className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
-              >
-                Fight Again
-              </button>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={runCombat}
+                  className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
+                >
+                  Fight Again
+                </button>
+                <button
+                  onClick={() => {
+                    const reportRounds: ReportRound[] = combatResult.rounds.map((r) => ({
+                      statLabel: r.statLabel,
+                      p1Value: r.player1Value,
+                      p2Value: r.player2Value,
+                      winner: r.winner,
+                    }));
+                    const text = generateReportText(
+                      "Stats Comparison",
+                      player1,
+                      player2,
+                      reportRounds,
+                      combatResult.player1Score,
+                      combatResult.player2Score,
+                      combatResult.winner,
+                      combatResult.tieBreaker,
+                    );
+                    downloadReport(text);
+                  }}
+                  className="px-6 py-2 bg-green-700 hover:bg-green-600 rounded-lg text-white font-medium transition-all"
+                >
+                  Export Report
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -436,6 +585,8 @@ const WheelOfTruthBattle = ({
     const winner: "player1" | "player2" =
       finalAngle < p1Chance ? "player1" : "player2";
 
+    const p1ChancePct = total > 0 ? (p1Weight / total) * 100 : 50;
+
     setTimeout(() => {
       setRoundResults((prev) => [
         ...prev,
@@ -445,6 +596,7 @@ const WheelOfTruthBattle = ({
           p1Value: p1Val,
           p2Value: p2Val,
           winner,
+          p1Chance: p1ChancePct,
         },
       ]);
 
@@ -698,12 +850,39 @@ const WheelOfTruthBattle = ({
                 {finalWinner === "player1" ? player1.name : player2.name}{" "}
                 WINS! 🏆
               </div>
-              <button
-                onClick={resetBattle}
-                className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
-              >
-                Fight Again
-              </button>
+              <div className="flex justify-center gap-3">
+                <button
+                  onClick={resetBattle}
+                  className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
+                >
+                  Fight Again
+                </button>
+                <button
+                  onClick={() => {
+                    const reportRounds: ReportRound[] = roundResults.map((r) => ({
+                      statLabel: r.statLabel,
+                      p1Value: r.p1Value,
+                      p2Value: r.p2Value,
+                      winner: r.winner,
+                      p1Chance: r.p1Chance,
+                    }));
+                    const text = generateReportText(
+                      "Wheel of Truth",
+                      player1,
+                      player2,
+                      reportRounds,
+                      p1Score,
+                      p2Score,
+                      finalWinner,
+                      tieBreaker,
+                    );
+                    downloadReport(text);
+                  }}
+                  className="px-6 py-2 bg-green-700 hover:bg-green-600 rounded-lg text-white font-medium transition-all"
+                >
+                  Export Report
+                </button>
+              </div>
             </div>
           )}
         </div>

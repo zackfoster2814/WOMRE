@@ -15,6 +15,7 @@ import {
   SandboxBattleArena,
   RACE_TIERS,
   type SandboxPlayerData,
+  type SandboxStatModifier,
 } from "../components/sandbox/SandboxBattleArena";
 
 // Initialize effect data
@@ -131,6 +132,7 @@ export const SandboxPage = () => {
         biq: effects.totalStats.biq,
         ma: effects.totalStats.ma,
       } as CharacterStats,
+      statModifiers: effects.statModifiers as SandboxStatModifier[],
     };
   }, [character1]);
 
@@ -150,8 +152,46 @@ export const SandboxPage = () => {
         biq: effects.totalStats.biq,
         ma: effects.totalStats.ma,
       } as CharacterStats,
+      statModifiers: effects.statModifiers as SandboxStatModifier[],
     };
   }, [character2]);
+
+  // Load random existing player
+  const loadRandomPlayer = useCallback(
+    async (target: 1 | 2) => {
+      await loadPlayerList();
+      // existingPlayers might not be set yet if first call, so use a direct fetch approach
+      const maxNo = 260;
+      const tryLoad = async () => {
+        const no = Math.floor(Math.random() * maxNo) + 1;
+        try {
+          const res = await fetch(getAssetPath(`/data/No${no}.txt`));
+          if (res.ok) {
+            const content = await res.text();
+            const char = CharacterParser.parseCharacterFile(content);
+            if (char.isSymbiosis || char.race?.race === "Symbiosis") {
+              return tryLoad(); // Skip symbiosis, try again
+            }
+            if (target === 1) {
+              setCharacter1(char);
+              setBuilder1Key((k) => k + 1);
+              setBuilder1Initial(characterToBuilderState(char));
+            } else {
+              setCharacter2(char);
+              setBuilder2Key((k) => k + 1);
+              setBuilder2Initial(characterToBuilderState(char));
+            }
+          } else {
+            return tryLoad();
+          }
+        } catch {
+          return tryLoad();
+        }
+      };
+      await tryLoad();
+    },
+    [loadPlayerList],
+  );
 
   // Filter existing players
   const filteredPlayers = useMemo(() => {
@@ -201,6 +241,7 @@ export const SandboxPage = () => {
                 setLoadTarget(1);
                 loadPlayerList();
               }}
+              onLoadRandom={() => loadRandomPlayer(1)}
               initialState={builder1Initial}
             />
             <div className="bg-gray-800/80 backdrop-blur-sm border border-blue-500/30 rounded-xl p-4">
@@ -219,6 +260,7 @@ export const SandboxPage = () => {
                 setLoadTarget(2);
                 loadPlayerList();
               }}
+              onLoadRandom={() => loadRandomPlayer(2)}
               initialState={builder2Initial}
             />
             <div className="bg-gray-800/80 backdrop-blur-sm border border-red-500/30 rounded-xl p-4">
@@ -321,12 +363,14 @@ const CharacterBuilderWithState = ({
   accentColor,
   onCharacterChange,
   onLoadExisting,
+  onLoadRandom,
   initialState,
 }: {
   label: string;
   accentColor: "blue" | "red";
   onCharacterChange: (char: Character) => void;
   onLoadExisting: () => void;
+  onLoadRandom: () => void;
   initialState: CharacterBuilderInitialState | null;
 }) => {
   return (
@@ -335,6 +379,7 @@ const CharacterBuilderWithState = ({
       accentColor={accentColor}
       onCharacterChange={onCharacterChange}
       onLoadExisting={onLoadExisting}
+      onLoadRandom={onLoadRandom}
       initialState={initialState}
     />
   );

@@ -19,6 +19,19 @@ import type {
 } from "../types/character";
 
 /**
+ * Strip source annotation from item name.
+ * Items may include provenance like "(Từ Storage Room Key)" or "(Từ House)" — these
+ * are NOT part of the item name and must be removed before comparisons.
+ * Patterns stripped: (Từ ...), (Nhận từ ...), (từ ...), (nhận từ ...)
+ */
+function stripSourceAnnotation(text: string): string {
+  return text
+    .replace(/\s*\([Tt]ừ [^)]+\)/g, '')
+    .replace(/\s*\([Nn]hận [Tt]ừ [^)]+\)/g, '')
+    .trim();
+}
+
+/**
  * Check if an item text contains "lost" markers
  * Patterns: (Đã mất), (đã mất), (Mất do ...), (đã mất do ...)
  */
@@ -65,7 +78,7 @@ function cleanHouseName(name: string): string {
  */
 function parseLossableItem(text: string): LossableItem {
   return {
-    name: text,
+    name: stripSourceAnnotation(text),
     isLost: isLostItem(text),
   };
 }
@@ -76,7 +89,7 @@ function parseLossableItem(text: string): LossableItem {
 function parseGearItem(text: string): GearItem {
   const usableMatch = text.match(/\((.+?)\)/);
   return {
-    name: text,
+    name: stripSourceAnnotation(text),
     isLost: isLostItem(text),
     usable: usableMatch
       ? !usableMatch[1].toLowerCase().includes("không dùng")
@@ -89,7 +102,7 @@ function parseGearItem(text: string): GearItem {
  */
 function parseRuneItem(text: string): RuneItem {
   return {
-    name: text,
+    name: stripSourceAnnotation(text),
     isLost: isLostItem(text),
   };
 }
@@ -1178,8 +1191,7 @@ export class CharacterParser {
         const weaponText = itemMatch[1].trim();
         if (weaponText) {
           const usableMatch = weaponText.match(/\((.+?)\)/);
-          // Keep full name including notes
-          const name = weaponText;
+          const name = stripSourceAnnotation(weaponText);
           // Check if weapon is lost
           const lost = isLostItem(weaponText);
 

@@ -15,6 +15,36 @@ const STAT_NAMES: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 
 // ============================================================================
 
 /**
+ * Graceful - +1 BIQ với mỗi Lover hiện có
+ */
+registerImmediateHandler(
+  'graceful_biq_per_lover',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const lover = ctx.character.lover;
+    let loverCount = 0;
+
+    if (lover) {
+      if (Array.isArray(lover)) {
+        loverCount = lover.filter((l: any) => !l.isLost).length;
+      } else if (typeof lover === 'object' && !(lover as any).isLost) {
+        loverCount = 1;
+      }
+    }
+
+    if (loverCount === 0) {
+      return { skipDefault: true, description: 'Graceful: chưa có Lover → không nhận bonus BIQ' };
+    }
+
+    return {
+      statModifiers: [{ stat: 'biq', value: loverCount }],
+      skipDefault: true,
+      description: `+${loverCount} BIQ (Graceful - ${loverCount} Lover(s))`,
+    };
+  },
+  '+1 BIQ per Lover (Graceful)'
+);
+
+/**
  * Lucky - 5% max roll
  */
 registerImmediateHandler(
@@ -46,60 +76,10 @@ registerImmediateHandler(
   'Cannot join houses'
 );
 
-/**
- * Blind - Cannot gain points from certain stats
- */
-registerImmediateHandler(
-  'blind_no_point',
-  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    // This is a combat restriction
-    return {
-      skipDefault: true,
-      description: 'Không nhận điểm từ một số rounds',
-    };
-  },
-  'Cannot gain points from certain rounds'
-);
+// blind_no_point is a COMBAT handler → see combat/quirk-combat-handlers.ts
+// cautious_no_str_point is a COMBAT handler → see combat/quirk-combat-handlers.ts
 
-/**
- * Cautious - Cannot gain points from Strength
- */
-registerImmediateHandler(
-  'cautious_no_str_point',
-  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    return {
-      skipDefault: true,
-      description: 'Không nhận điểm từ round Strength',
-    };
-  },
-  'Cannot gain points from Strength round'
-);
-
-/**
- * One Trick Pony - Select one stat to focus
- */
-registerImmediateHandler(
-  'one_trick_pony_stat_selection',
-  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    // Find the highest stat and boost it
-    let highestStat: StatName = 'strength';
-    let highestValue = ctx.currentStats.strength;
-
-    for (const stat of STAT_NAMES) {
-      if (ctx.currentStats[stat] > highestValue) {
-        highestValue = ctx.currentStats[stat];
-        highestStat = stat;
-      }
-    }
-
-    return {
-      statModifiers: [{ stat: highestStat, value: 3 }],
-      skipDefault: true,
-      description: `+3 ${highestStat} (One Trick Pony)`,
-    };
-  },
-  '+3 to highest stat'
-);
+// one_trick_pony_stat_selection is a COMBAT handler → see combat/quirk-combat-handlers.ts
 
 /**
  * Cheater - Nếu có hơn 1 Lover, nhận +1 all stats
@@ -208,24 +188,24 @@ registerImmediateHandler(
 );
 
 /**
- * Let Me Solo Her - Solo bonus
+ * Let Me Solo Her - [PVE Only] x8 tất cả stats để solo Boss
+ * Thắng Boss: nhận Archetype "Gigachad" (handled externally - GM action)
  */
 registerImmediateHandler(
   'let_me_solo_her',
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    // Check if no team members
-    const team = ctx.character.team;
-    if (!team || team === 0) {
-      return {
-        statModifiers: STAT_NAMES.map(stat => ({ stat, value: 2 })),
-        skipDefault: true,
-        description: '+2 All Stats (solo)',
-      };
-    }
-
-    return { skipDefault: true };
+    // x8 tất cả stats: value = stat * 7 (để nhân lên x8 tổng cộng: stat + stat*7 = stat*8)
+    const mods = STAT_NAMES.map(stat => ({
+      stat,
+      value: (ctx.currentStats[stat] ?? 0) * 7,
+    }));
+    return {
+      statModifiers: mods,
+      skipDefault: true,
+      description: '[PVE] x8 tất cả stats để solo Boss (Let Me Solo Her). Thắng → [GM Action] nhận Gigachad',
+    };
   },
-  '+2 All Stats if solo'
+  '[PVE] x8 all stats to solo boss'
 );
 
 /**
@@ -242,59 +222,10 @@ registerImmediateHandler(
   'Can reroll'
 );
 
-/**
- * Artistic - Bonus with instrument
- */
-registerImmediateHandler(
-  'artistic_vs_instrument',
-  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    // Check for instrument weapons
-    const instruments = ['Guitar', 'Violin', 'Piano', 'Drums', 'Flute', 'Bagpipe', 'Harmonica'];
-    const hasInstrument = (ctx.character.weapons || []).some(
-      (w: any) => !w.isLost && instruments.some(i => w.name.includes(i))
-    );
+// artistic_vs_instrument is a COMBAT handler → see combat/quirk-combat-handlers.ts
 
-    if (hasInstrument) {
-      return {
-        statModifiers: [{ stat: 'biq', value: 3 }],
-        skipDefault: true,
-        description: '+3 BIQ (có nhạc cụ)',
-      };
-    }
-
-    return { skipDefault: true };
-  },
-  '+3 BIQ with instrument'
-);
-
-/**
- * Weak Knee - First round penalty
- */
-registerImmediateHandler(
-  'weak_knee_first_round',
-  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    // This is a combat effect
-    return {
-      skipDefault: true,
-      description: 'Penalty ở round đầu',
-    };
-  },
-  'First round penalty'
-);
-
-/**
- * Cruelty - Tie coinflip advantage
- */
-registerImmediateHandler(
-  'cruelty_tie_coinflip',
-  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    return {
-      skipDefault: true,
-      description: 'Ưu thế khi hòa',
-    };
-  },
-  'Advantage on tie coinflip'
-);
+// weak_knee_first_round is a COMBAT handler → see combat/quirk-combat-handlers.ts
+// cruelty_tie_coinflip is a COMBAT handler → see combat/quirk-combat-handlers.ts
 
 /**
  * Fast Learner - Sau combat: 33% học được 1 Power của đối thủ

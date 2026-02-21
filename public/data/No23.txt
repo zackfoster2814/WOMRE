@@ -22,7 +22,6 @@ Archetype:
 + Raumanian🍀
 ```
 ```
-(Inversion)
 Str:2 đảo từ 9
 Spd:9 đảo từ 2
 Dur:9 đảo từ 2

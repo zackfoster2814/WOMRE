@@ -900,6 +900,89 @@ registerCombatHandler(
  * (Already exists in combat-handlers.ts as hero_x_auto_win but overridden here for X sub-type)
  */
 
+// ============================================================================
+// JOJO - STANDS
+// ============================================================================
+
+/**
+ * Golden Experience Requiem - Thua round → đánh lại (mỗi stat 1 lần).
+ * Đối phương Crit thành công → quay lại Crit Wheel (max 2 lần).
+ *
+ * In combat context: Khi thua 1 round, round đó được "reset" - bạn nhận lại điểm.
+ * Cơ chế: mỗi stat chỉ revert 1 lần. Nếu thua nhiều hơn số stat đã dùng, không revert nữa.
+ * Ở đây track qua roundsLost vs số stat available (6 stats max).
+ */
+registerCombatHandler(
+  'golden_experience_requiem',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Revert mechanic: mỗi round thua, có thể "đánh lại" = bù 1 điểm cho mình
+    // Tối đa 6 lần revert (1 per stat)
+    const maxReverts = 6;
+    const roundsLost = ctx.self.roundsLost;
+
+    if (roundsLost > 0 && roundsLost <= maxReverts) {
+      // Each lost round within the revert limit: +1 point to self (negating the loss)
+      return {
+        selfPoints: roundsLost,
+        description: `Golden Experience Requiem: đánh lại ${roundsLost} round thua (+${roundsLost} điểm)`,
+      };
+    }
+
+    // Also handles crit reversal (description-only, external game logic)
+    return {
+      description: 'Golden Experience Requiem: Đối phương Crit → quay lại Crit Wheel (max 2 lần)',
+    };
+  },
+  'Revert lost rounds (1 per stat), revert opponent crits'
+);
+
+// ============================================================================
+// HERO GRAVE KEEPER
+// ============================================================================
+
+/**
+ * Hero Grave Keeper - Sau mỗi vòng tournament: Nhận 1 Gear từ 1 người đã bị loại.
+ * External game logic - gear transfer handled outside combat system.
+ */
+registerCombatHandler(
+  'hero_grave_keeper_loot',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      grantGear: 'random',
+      description: 'Nhận 1 Gear từ người đã bị loại (Hero Grave Keeper)',
+    };
+  },
+  'Loot 1 Gear from eliminated player after each round'
+);
+
+// ============================================================================
+// PROMISED CONSORT / CINDERHEART - During combat: add highest base stat of Lover
+// ============================================================================
+
+registerCombatHandler(
+  'promised_consort_lover_stat',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const lovers: any[] = (ctx.self.character as any)?.lover || [];
+    const activeLovers = lovers.filter((l: any) => !l.isLost);
+    if (activeLovers.length === 0) {
+      return { skipDefault: true, description: 'Promised Consort: Không có Lover → không áp dụng' };
+    }
+    // Prefer Femboy lover if available
+    const femboy = activeLovers.find((l: any) => {
+      const n = typeof l === 'string' ? l : l?.name ?? '';
+      return n.toLowerCase().includes('femboy');
+    });
+    const loverName = typeof (femboy || activeLovers[0]) === 'string'
+      ? (femboy || activeLovers[0])
+      : (femboy || activeLovers[0])?.name ?? 'Lover';
+    return {
+      skipDefault: true,
+      description: `Promised Consort: Thêm stat cao nhất của Lover "${loverName}" vào stat đánh nhau (xử lý ngoài game)`,
+    };
+  },
+  'During combat: add Lover highest base stat to combat stat (prefer Femboy lover)'
+);
+
 export function registerArchetypeCombatHandlers(): void {
   // All handlers are registered via registerCombatHandler calls above
   console.log('Archetype combat handlers registered');

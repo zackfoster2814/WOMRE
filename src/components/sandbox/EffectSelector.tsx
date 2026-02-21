@@ -14,6 +14,7 @@ interface EffectSelectorProps {
   multiple?: boolean;
   placeholder?: string;
   disabled?: boolean;
+  filterNames?: string[];
 }
 
 export const EffectSelector = ({
@@ -24,17 +25,22 @@ export const EffectSelector = ({
   multiple = false,
   placeholder,
   disabled = false,
+  filterNames,
 }: EffectSelectorProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Get all options from registry
+  // Get all options from registry, optionally filtered
   const allOptions = useMemo(() => {
-    return EffectRegistry.getAllByType(sourceType)
-      .map((e) => ({ name: e.name, description: e.description }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [sourceType]);
+    let entries = EffectRegistry.getAllByType(sourceType)
+      .map((e) => ({ name: e.name, description: e.description }));
+    if (filterNames) {
+      const allowed = new Set(filterNames);
+      entries = entries.filter((e) => allowed.has(e.name));
+    }
+    return entries.sort((a, b) => a.name.localeCompare(b.name));
+  }, [sourceType, filterNames]);
 
   // Filter options
   const filteredOptions = useMemo(() => {

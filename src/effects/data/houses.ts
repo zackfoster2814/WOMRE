@@ -232,7 +232,7 @@ export function registerAllHouseEffects() {
   // 14. Coven Council
   defineEffect("house", "Coven Council")
     .description(
-      "Không có Mason Effect. Nhận +4 IQ. Khi Player đến từ Coven Council bị loại, 1 Player random khác cùng house nhận +2 IQ.",
+      "Không có Mason Effect. Nhận +4 IQ. Khi Player Coven Council bị loại, 1 Player random không thuộc Coven được Re-Spin 1 stat.",
     )
     .addStat("iq", 4)
     .effect({
@@ -281,7 +281,7 @@ export function registerAllHouseEffects() {
   // 17. Uchiha
   defineEffect("house", "Uchiha")
     .description(
-      "Không có Mason Effect. Nhận +2 Dura và +2 BIQ. Mỗi khi đánh bại một người trong combat, nhận +1 Stat cao nhất.",
+      "Không có Mason Effect. Nhận +2 Dura và +2 BIQ. Mỗi khi đánh bại một người cùng gia tộc Uchiha, nhận lại +2 Dura và +2 BIQ.",
     )
     .addStat("durability", 2)
     .addStat("biq", 2)
@@ -875,9 +875,9 @@ function registerHouseSubTypes() {
   // MASON ENHANCED HOUSE FEATURES
   // ============================================================================
 
-  // Winterhome Mason - 2 Gear + +1 all stats (thay vì +2 Dura)
+  // Winterhome Mason - 2 Gear + +1 all other stats per 5 Base Dura
   defineEffect("house_sub", "Winterhome Mason")
-    .description("(Mason) Nhận 2 Normal Gear và +1 vào all stats.")
+    .description("(Mason) Nhận 2 Normal Gear và +1 vào all stats khác ngoài Dura với mỗi 5 Base Dura.")
     .effect({
       type: "grant_gear",
       grantType: "gear",
@@ -886,7 +886,12 @@ function registerHouseSubTypes() {
       timing: "immediate",
       target: "self",
     })
-    .addAllStats(1)
+    .effect({
+      type: "custom",
+      timing: "immediate",
+      target: "self",
+      customHandler: "winterhome_mason_dura_bonus",
+    })
     .register();
 
   // Atreides Mason - +2 Base Stat cao nhất + sau combat +1 Base Stat cao nhất

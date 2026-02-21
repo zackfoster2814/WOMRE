@@ -15,27 +15,22 @@ const STAT_NAMES: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 
 // ============================================================================
 
 /**
- * Egoist Win Condition - Auto win if all stats higher
+ * Egoist Win Condition - Nếu không thắng với cách biệt ≥4 điểm → thua combat
+ * after_combat: kiểm tra margin, nếu < 4 thì autoLose
  */
 registerCombatHandler(
   'egoist_win_condition',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (!ctx.opponent) return { skipDefault: true };
-
-    const allHigher = STAT_NAMES.every(
-      stat => ctx.self.stats[stat] > ctx.opponent!.stats[stat]
-    );
-
-    if (allHigher) {
-      return {
-        autoWin: true,
-        description: 'Auto win - tất cả stats cao hơn đối thủ',
-      };
+    const margin = ctx.self.roundsWon - ctx.self.roundsLost;
+    if (margin >= 4) {
+      return { skipDefault: true, description: `Egoist: thắng cách biệt ${margin} điểm, OK` };
     }
-
-    return { skipDefault: true };
+    return {
+      autoLose: true,
+      description: `Egoist: cách biệt chỉ ${margin} điểm (cần ≥4) → thua combat`,
+    };
   },
-  'Auto win if all stats higher than opponent'
+  'Auto lose if did not win by ≥4 margin (Egoist condition)'
 );
 
 /**
@@ -80,7 +75,7 @@ registerCombatHandler(
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     if (!ctx.opponent) return { skipDefault: true };
 
-    const godRaces = ['god', 'titan', 'primordial'];
+    const godRaces = ['god', 'demi-god', 'demi god', 'demigod'];
     if (godRaces.includes(ctx.opponent.race.toLowerCase())) {
       return {
         autoLose: true,
@@ -122,23 +117,21 @@ registerCombatHandler(
 // ============================================================================
 
 /**
- * Conquerer Speed Win - +2 points if speed higher
+ * Conquerer Speed Win - Thắng round Speed: +1 all stats trong phần còn lại của combat
  */
 registerCombatHandler(
   'conquerer_speed_win',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (!ctx.opponent) return { skipDefault: true };
+    // Triggered on_round_win for speed round
+    const speedResult = ctx.roundResults?.speed;
+    if (speedResult !== 'win') return { skipDefault: true };
 
-    if (ctx.self.stats.speed > ctx.opponent.stats.speed) {
-      return {
-        selfPoints: 2,
-        description: '+2 points - speed cao hơn đối thủ',
-      };
-    }
-
-    return { skipDefault: true };
+    return {
+      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+      description: '+1 All Stats (Conquerer - thắng round Speed)',
+    };
   },
-  '+2 points if speed > opponent'
+  'On winning Speed round: +1 all stats for rest of combat'
 );
 
 /**
@@ -240,7 +233,7 @@ registerCombatHandler(
 );
 
 /**
- * Zealot - +1 per round lost
+ * Zealot - Sau combat: mỗi round thua, +1 vào chỉ số thấp nhất
  */
 registerCombatHandler(
   'zealot_per_round_lost',
@@ -248,12 +241,22 @@ registerCombatHandler(
     const bonus = ctx.self.roundsLost;
     if (bonus === 0) return { skipDefault: true };
 
+    // Find the lowest stat
+    let lowestStat: StatName = 'strength';
+    let lowestVal = ctx.self.stats.strength;
+    for (const stat of STAT_NAMES) {
+      if (ctx.self.stats[stat] < lowestVal) {
+        lowestVal = ctx.self.stats[stat];
+        lowestStat = stat;
+      }
+    }
+
     return {
-      selfStatMods: [{ stat: 'ma', value: bonus }],
-      description: `+${bonus} MA từ ${bonus} round(s) thua`,
+      selfStatMods: [{ stat: lowestStat, value: bonus }],
+      description: `+${bonus} ${lowestStat} (chỉ số thấp nhất) từ ${bonus} round(s) thua (Zealot)`,
     };
   },
-  '+1 MA per round lost'
+  'After combat: +1 to lowest stat per round lost'
 );
 
 /**
@@ -429,7 +432,8 @@ registerCombatHandler(
 );
 
 /**
- * Gambler Coin Flip
+ * Gambler Coin Flip - on_round_win
+ * 50% nhận 2 điểm cho round đó (thêm +1 nữa), 50% nhận 0 điểm (cancel điểm vừa thắng)
  */
 registerCombatHandler(
   'gambler_coin_flip',
@@ -438,17 +442,17 @@ registerCombatHandler(
 
     if (isHeads) {
       return {
-        selfPoints: 5,
-        description: '+5 points (Gambler - Win)',
+        selfPoints: 1,
+        description: '+1 điểm thêm → tổng 2 điểm round này (Gambler - May mắn 50%)',
       };
     } else {
       return {
-        selfPoints: -5,
-        description: '-5 points (Gambler - Lose)',
+        selfPoints: -1,
+        description: '-1 điểm → tổng 0 điểm round này (Gambler - Xui 50%)',
       };
     }
   },
-  '50/50 for +5 or -5 points'
+  'on_round_win: 50% +2pts total, 50% 0pts total for that round'
 );
 
 // ============================================================================
@@ -470,26 +474,26 @@ registerCombatHandler(
 );
 
 /**
- * Edgelord Underdog Point
+ * Edgelord Underdog Point - Trước khi kết thúc combat: bên nào ít điểm hơn nhận +1 điểm
  */
 registerCombatHandler(
   'edgelord_underdog_point',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     if (!ctx.opponent) return { skipDefault: true };
 
-    const selfTotal = STAT_NAMES.reduce((sum, s) => sum + ctx.self.stats[s], 0);
-    const oppTotal = STAT_NAMES.reduce((sum, s) => sum + ctx.opponent!.stats[s], 0);
+    const selfScore = ctx.self.roundsWon;
+    const oppScore = ctx.self.roundsLost; // opponent's rounds won
 
-    if (selfTotal < oppTotal) {
+    if (selfScore < oppScore) {
       return {
-        selfPoints: 2,
-        description: '+2 points - underdog bonus',
+        selfPoints: 1,
+        description: '+1 điểm - đang thua điểm (Edgelord underdog)',
       };
     }
 
     return { skipDefault: true };
   },
-  '+2 points if total stats lower than opponent'
+  'Before combat ends: lower-scoring side gets +1 point'
 );
 
 /**

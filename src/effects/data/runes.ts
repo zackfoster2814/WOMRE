@@ -333,7 +333,7 @@ export function registerRunewords() {
 
   // Death's Dance (Tal + Shael)
   defineEffect('runeword', "Death's Dance")
-    .description('3 chỉ số IQ, BIQ và MA của bạn được cố định là 12. 3 chỉ số Strength, Speed, Dura của bạn được cố định là 1.')
+    .description('3 chỉ số IQ, BIQ và MA của bạn được cố định là 12. 3 chỉ số Strength, Speed, Dura của bạn được cố định là 0. Sau mỗi Tiebreak: +3 vào các chỉ số cố định (0→3→6→9→12).')
     .effect({
       type: 'stat_set',
       stat: 'iq',
@@ -358,21 +358,21 @@ export function registerRunewords() {
     .effect({
       type: 'stat_set',
       stat: 'strength',
-      value: 1,
+      value: 0,
       timing: 'immediate',
       target: 'self'
     })
     .effect({
       type: 'stat_set',
       stat: 'speed',
-      value: 1,
+      value: 0,
       timing: 'immediate',
       target: 'self'
     })
     .effect({
       type: 'stat_set',
       stat: 'durability',
-      value: 1,
+      value: 0,
       timing: 'immediate',
       target: 'self'
     })

@@ -328,6 +328,439 @@ registerCombatHandler(
   '-1 all stats to opponent if lost 2+ of first 3'
 );
 
+// ============================================================================
+// HEALING FACTOR - +1 Dura per 2 rounds lost after combat
+// ============================================================================
+
+registerCombatHandler(
+  'healing_factor_per_2_lost',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const bonus = Math.floor(ctx.self.roundsLost / 2);
+    if (bonus > 0) {
+      return {
+        selfStatMods: [{ stat: 'durability', value: bonus }],
+        description: `Healing Factor: ${ctx.self.roundsLost} round thua → +${bonus} Dura`,
+      };
+    }
+    return { skipDefault: true };
+  },
+  '+1 Durability per 2 rounds lost after combat'
+);
+
+// ============================================================================
+// MIND CONTROL - +1 all stats if opponent Base IQ <= 5
+// ============================================================================
+
+registerCombatHandler(
+  'mind_control_iq_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppBaseIQ = ctx.opponent.baseStats.iq;
+    if (oppBaseIQ <= 5) {
+      return {
+        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+        description: `Mind Control: Đối thủ Base IQ ${oppBaseIQ} ≤ 5 → +1 all stats`,
+      };
+    }
+    return { skipDefault: true };
+  },
+  '+1 all stats if opponent Base IQ <= 5'
+);
+
+// ============================================================================
+// BLOODY STRIKE - +1 to each stat that won a round
+// ============================================================================
+
+registerCombatHandler(
+  'bloody_strike_per_round_won',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.roundResults) return { skipDefault: true };
+    const wonStats = STAT_NAMES.filter(stat => ctx.roundResults![stat] === 'win');
+    if (wonStats.length > 0) {
+      return {
+        selfStatMods: wonStats.map(stat => ({ stat, value: 1 })),
+        description: `Bloody Strike: Thắng round ${wonStats.join(', ')} → +1 mỗi stat`,
+      };
+    }
+    return { skipDefault: true };
+  },
+  '+1 to each stat that won a round after combat'
+);
+
+// ============================================================================
+// MEMORY ALTER - Before combat: disable 1 random in-combat power of opponent
+// ============================================================================
+
+registerCombatHandler(
+  'memory_alter_disable_in_combat_power',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppPowers: string[] = ctx.opponent.powers || [];
+    if (oppPowers.length === 0) {
+      return { skipDefault: true, description: 'Memory Alter: Đối thủ không có Power nào' };
+    }
+    const disabled = oppPowers[Math.floor(Math.random() * oppPowers.length)];
+    return {
+      description: `Memory Alter: Vô hiệu Power "${disabled}" của đối thủ trong combat (nếu thắng thì mất vĩnh viễn)`,
+    };
+  },
+  'Disable 1 random in-combat power of opponent before combat (Memory Alter)'
+);
+
+// ============================================================================
+// UNO REVERSE CARD - Opponent stat debuffs apply to themselves instead
+// ============================================================================
+
+registerCombatHandler(
+  'uno_reverse_card_swap_debuffs',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      description: 'Uno Reverse Card: Debuff giảm stat từ đối thủ áp dụng lên chính đối thủ; debuff của bản thân áp dụng lên bản thân (engine effect)',
+    };
+  },
+  'Stat debuffs from opponent redirect to themselves; own debuffs redirect to self (Uno Reverse Card)'
+);
+
+// ============================================================================
+// FROST FINGERS - Opponent -1 highest stat per gear they have (max 5)
+// ============================================================================
+
+registerCombatHandler(
+  'frost_fingers_per_gear',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const gears: string[] = ctx.opponent.gears || [];
+    const penalty = Math.min(gears.length, 5);
+    if (penalty === 0) {
+      return { skipDefault: true, description: 'Frost Fingers: Đối thủ không có Gear' };
+    }
+    // Find opponent's highest stat to apply debuff
+    const oppStats = ctx.opponent.stats;
+    let highestStat: StatName = 'strength';
+    let highestVal = oppStats.strength;
+    for (const s of STAT_NAMES) {
+      if (oppStats[s] > highestVal) { highestVal = oppStats[s]; highestStat = s; }
+    }
+    return {
+      opponentStatMods: [{ stat: highestStat, value: -penalty }],
+      description: `Frost Fingers: Đối thủ có ${gears.length} Gear → -${penalty} ${highestStat} (tối đa 5)`,
+    };
+  },
+  '-1 opponent highest stat per gear they own (max 5) - Frost Fingers'
+);
+
+// ============================================================================
+// STAT ABSORPTION - After win: +1 to stat opponent has highest
+// ============================================================================
+
+registerCombatHandler(
+  'stat_absorption_opponent_highest',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppStats = ctx.opponent.stats;
+    let highestStat: StatName = 'strength';
+    let highestVal = oppStats.strength;
+    for (const s of STAT_NAMES) {
+      if (oppStats[s] > highestVal) { highestVal = oppStats[s]; highestStat = s; }
+    }
+    return {
+      selfStatMods: [{ stat: highestStat, value: 1 }],
+      description: `Stat Absorption: +1 ${highestStat} (stat cao nhất của đối thủ: ${highestVal})`,
+    };
+  },
+  '+1 to stat that opponent has highest after win (Stat Absorption)'
+);
+
+// ============================================================================
+// LUCK MANIPULATION - From round 64: 15% +1 all, 5% +2 all before combat
+// ============================================================================
+
+registerCombatHandler(
+  'luck_manipulation_round_64_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Check if we're from round 64 (pvpWins >= 3 in a 256-bracket = round 32+)
+    const isFrom64 = ctx.self.pvpWins >= 2;
+    if (!isFrom64) {
+      return {
+        skipDefault: true,
+        description: `Luck Manipulation: Chưa đến vòng 64 (pvpWins: ${ctx.self.pvpWins})`,
+      };
+    }
+    // Probability condition (15% / 5%) is applied by resolver before calling handler.
+    // Handler just confirms the bonus applies.
+    return {
+      description: `Luck Manipulation: Từ vòng 64 → bonus stats sẽ áp dụng`,
+    };
+  },
+  'From round 64: 15% +1 all stats, 5% +2 all stats (Luck Manipulation)'
+);
+
+// ============================================================================
+// ZOLTRAAK - BIQ round happens twice (each scored separately)
+// ============================================================================
+
+/**
+ * Zoltraak - during_combat: BIQ round diễn ra 2 lần, cả 2 đều tính điểm.
+ * Handler reports this; actual double-scoring requires engine support.
+ */
+registerCombatHandler(
+  'zoltraak_double_biq_round',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const biqResult = ctx.roundResults?.biq;
+    if (biqResult === 'win') {
+      return {
+        selfPoints: 1,
+        description: 'Zoltraak: BIQ round diễn ra 2 lần → thắng BIQ lần 2, +1 điểm thêm',
+      };
+    }
+    if (biqResult === 'lose') {
+      return {
+        description: 'Zoltraak: BIQ round diễn ra 2 lần → thua BIQ lần 2, đối thủ +1 điểm thêm',
+      };
+    }
+    return {
+      description: 'Zoltraak: BIQ round diễn ra 2 lần → Hòa lần 2, không điểm thêm',
+    };
+  },
+  'BIQ round happens twice, each scored separately (Zoltraak)'
+);
+
+// ============================================================================
+// ENHANCED HEARING - Debuff self if opponent uses instrument or sound power
+// ============================================================================
+
+const INSTRUMENT_NAMES_EH = [
+  'bagpipe', 'drums', 'flute', 'guitar', 'violin', 'trumpet',
+  'piano', 'harp', 'lute', 'saxophone', 'bass', 'cello', 'harmonica',
+  'ukulele', 'nunchuck', 'ruan mei',
+];
+
+const SOUND_POWERS = [
+  'zoltraak', 'rickrolling', 'music', 'sound', 'melody',
+  'siren', 'bard', 'singer', 'singer',
+];
+
+/**
+ * Enhanced Hearing (instrument check) - before_combat:
+ * Nếu đối thủ dùng nhạc cụ → self -1 all stats.
+ */
+registerCombatHandler(
+  'enhanced_hearing_instrument_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const weapons: any[] = ctx.opponent.weapons || [];
+    const hasInstrument = weapons.some((w) => {
+      const wName = (typeof w === 'string' ? w : w?.name ?? '').toLowerCase();
+      return INSTRUMENT_NAMES_EH.some(inst => wName.includes(inst));
+    });
+    if (hasInstrument) {
+      return {
+        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: -1 })),
+        description: 'Enhanced Hearing: Đối thủ dùng nhạc cụ → -1 all stats',
+      };
+    }
+    return { skipDefault: true, description: 'Enhanced Hearing: Đối thủ không dùng nhạc cụ' };
+  },
+  '-1 all stats if opponent uses a musical instrument (Enhanced Hearing)'
+);
+
+/**
+ * Enhanced Hearing (sound power check) - before_combat:
+ * Nếu đối thủ có power liên quan âm thanh → self -2 all stats.
+ */
+registerCombatHandler(
+  'enhanced_hearing_sound_power_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const powers: string[] = (ctx.opponent.powers || []).map((p: any) =>
+      (typeof p === 'string' ? p : p?.name ?? '').toLowerCase()
+    );
+    const hasSoundPower = powers.some(p =>
+      SOUND_POWERS.some(sp => p.includes(sp))
+    );
+    if (hasSoundPower) {
+      return {
+        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: -2 })),
+        description: 'Enhanced Hearing: Đối thủ có power âm thanh → -2 all stats',
+      };
+    }
+    return { skipDefault: true, description: 'Enhanced Hearing: Đối thủ không có power âm thanh' };
+  },
+  '-2 all stats if opponent has a sound-related power (Enhanced Hearing)'
+);
+
+// ============================================================================
+// SPEAR OF FIRE - +1 point if weapon has 2 runes
+// ============================================================================
+
+registerCombatHandler(
+  'spear_of_fire_2_rune_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const rune = (ctx.self.character as any)?.rune;
+    const runes: any[] = rune?.runes || [];
+    const activeRunes = runes.filter((r: any) => !r.isLost);
+    if (activeRunes.length >= 2) {
+      return {
+        selfPoints: 1,
+        description: `Spear of Fire: ${activeRunes.length} Rune → +1 điểm khởi đầu`,
+      };
+    }
+    return {
+      skipDefault: true,
+      description: `Spear of Fire: Chỉ có ${activeRunes.length} Rune (cần 2+)`,
+    };
+  },
+  '+1 starting point if weapon has 2+ runes (Spear of Fire)'
+);
+
+// ============================================================================
+// BUCKING BRONCO - After combat win: +1 MA only if also won MA round
+// ============================================================================
+
+registerCombatHandler(
+  'bucking_bronco_ma_round_win',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.roundResults?.ma === 'win') {
+      return {
+        selfStatMods: [{ stat: 'ma', value: 1 }],
+        description: 'Bucking Bronco: Thắng round MA → +1 MA (stackable)',
+      };
+    }
+    return {
+      skipDefault: true,
+      description: 'Bucking Bronco: Không thắng round MA → không nhận bonus',
+    };
+  },
+  'After combat win: +1 MA (stackable) only if also won MA round (Bucking Bronco)'
+);
+
+// ============================================================================
+// LONE WOLF - After combat: if opponent also has Lone Wolf → lose power
+// ============================================================================
+
+registerCombatHandler(
+  'lone_wolf_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppPowers: any[] = ctx.opponent.powers || [];
+    const oppHasLoneWolf = oppPowers.some((p: any) => {
+      const n = typeof p === 'string' ? p : p?.name ?? '';
+      return n.toLowerCase().includes('lone wolf');
+    });
+    if (oppHasLoneWolf) {
+      return {
+        removePower: 'Lone Wolf',
+        description: 'Lone Wolf: Cả hai đều có power này → mất power Lone Wolf',
+      };
+    }
+    return { skipDefault: true, description: 'Lone Wolf: Đối thủ không có Lone Wolf → +3 Speed vẫn còn' };
+  },
+  'After combat: if opponent also has Lone Wolf, both lose the power (Lone Wolf)'
+);
+
+// ============================================================================
+// ODIN BLESSING - After combat lose: convert +2 STR to +2 highest stat
+// ============================================================================
+
+registerCombatHandler(
+  'odin_blessing_convert_to_highest',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Find self's highest stat (excluding strength since the default gives +2 STR)
+    let highestStat: StatName = 'strength';
+    let highestVal = ctx.self.stats.strength;
+    for (const s of STAT_NAMES) {
+      if (ctx.self.stats[s] > highestVal) {
+        highestVal = ctx.self.stats[s];
+        highestStat = s;
+      }
+    }
+    if (highestStat === 'strength') {
+      return {
+        skipDefault: true,
+        description: 'Odin Blessing: Stat cao nhất là Strength → +2 STR như bình thường',
+      };
+    }
+    return {
+      selfStatMods: [
+        { stat: 'strength', value: -2 }, // Remove the default +2 STR
+        { stat: highestStat, value: 2 }, // Add to highest stat instead
+      ],
+      description: `Odin Blessing: Sau thua → chuyển +2 STR thành +2 ${highestStat} (stat cao nhất)`,
+    };
+  },
+  'After combat loss: convert +2 STR bonus to +2 highest stat (Odin Blessing)'
+);
+
+// ============================================================================
+// FANCY FEET - Before combat: disable opponent's rune/runeword
+// ============================================================================
+
+registerCombatHandler(
+  'fancy_feet_disable_rune',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppRunes = (ctx.opponent.character as any)?.rune?.runes || [];
+    const oppRuneword = (ctx.opponent.character as any)?.rune?.runeword;
+    if (oppRunes.length === 0 && !oppRuneword) {
+      return { skipDefault: true, description: 'Fancy Feet: Đối thủ không có Rune/Runeword' };
+    }
+    const runeDesc = oppRuneword || oppRunes.map((r: any) => r?.name ?? r).join(', ');
+    return {
+      description: `Fancy Feet: Vô hiệu Rune/Runeword của đối thủ (${runeDesc}) trước combat`,
+    };
+  },
+  'Before combat: disable opponent rune/runeword (Fancy Feet)'
+);
+
+// ============================================================================
+// GUIDANCE - Before combat: +1 to 2 random stats if opponent has fewer powers
+// ============================================================================
+
+registerCombatHandler(
+  'guidance_fewer_powers_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const selfPowerCount = ctx.self.powers.length;
+    const oppPowerCount = (ctx.opponent.powers || []).length;
+    if (selfPowerCount <= oppPowerCount) {
+      return {
+        skipDefault: true,
+        description: `Guidance: Đối thủ không ít power hơn (${oppPowerCount} vs ${selfPowerCount}) → không áp dụng`,
+      };
+    }
+    // +1 to 2 random stats
+    const shuffled = [...STAT_NAMES].sort(() => Math.random() - 0.5);
+    const chosen = shuffled.slice(0, 2);
+    return {
+      selfStatMods: chosen.map(stat => ({ stat, value: 1 })),
+      description: `Guidance: Đối thủ ít power hơn (${oppPowerCount} < ${selfPowerCount}) → +1 ${chosen.join(', ')}`,
+    };
+  },
+  '+1 to 2 random stats if opponent has fewer powers (Guidance)'
+);
+
+// ============================================================================
+// HUNTER'S MARK - During combat: random round chosen; win that round = +1 point
+// ============================================================================
+
+registerCombatHandler(
+  'hunters_mark_random_round',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const chosenStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+    if (ctx.roundResults?.[chosenStat] === 'win') {
+      return {
+        selfPoints: 1,
+        description: `Hunter's Mark: Round được chọn = ${chosenStat} → thắng → +1 điểm`,
+      };
+    }
+    return {
+      skipDefault: true,
+      description: `Hunter's Mark: Round được chọn = ${chosenStat} → không thắng → không điểm`,
+    };
+  },
+  'Random round chosen before combat; win that round = +1 point (Hunter\'s Mark)'
+);
+
 export function registerPowerCombatHandlers(): void {
   console.log('Power combat handlers registered');
 }

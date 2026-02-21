@@ -389,6 +389,169 @@ registerCombatHandler(
   'Isekai opponent on winner bracket win'
 );
 
+// ============================================================================
+// DRYAD - On death: all same-race get +2 random stat; last Dryad evolves to Yggdrasil
+// ============================================================================
+
+registerCombatHandler(
+  'dryad_death_buff',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Dryad: Khi chết → tất cả Dryad còn lại +2 stat ngẫu nhiên (xử lý ngoài game)',
+    };
+  },
+  'On Dryad death: all same-race Dryads get +2 random stat'
+);
+
+registerCombatHandler(
+  'dryad_last_standing',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Dryad: Nếu là Dryad cuối cùng khi chết → tiến hóa thành Yggdrasil (xử lý ngoài game)',
+    };
+  },
+  'Last Dryad evolves to Yggdrasil on death'
+);
+
+// ============================================================================
+// WEREBAT SUB-RACE - PvE only: reverse team rewards
+// ============================================================================
+
+registerCombatHandler(
+  'werebat_reverse_reward',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.isPvE) return { skipDefault: true };
+    return {
+      skipDefault: true,
+      description: 'Werebat: [PvE] Đội thua → bạn nhận thưởng; Đội thắng → bạn không nhận thưởng (xử lý ngoài game)',
+    };
+  },
+  'PvE only: team lose = you get reward; team win = you get no reward (Werebat)'
+);
+
+// ============================================================================
+// SPIRIT RACE - On each round lose: +1 Soul stack; at 6/9/13/20 stacks: bonus
+// ============================================================================
+
+registerCombatHandler(
+  'spirit_souls_stack',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const roundsLost = ctx.self.roundsLost;
+    if (roundsLost === 0) {
+      return { skipDefault: true, description: 'Spirit: Chưa thua round nào, 0 Soul stacks' };
+    }
+
+    // Each round lose = +1 Soul stack. Thresholds: 6, 9, 13, 20
+    const souls = roundsLost; // 1 soul per round lost
+    const bonuses: string[] = [];
+
+    if (souls >= 20) {
+      bonuses.push('Gấp đôi stats');
+    } else if (souls >= 13) {
+      bonuses.push('+1 all stats');
+    } else if (souls >= 9) {
+      bonuses.push('+1 Power');
+    } else if (souls >= 6) {
+      bonuses.push('+2 BIQ');
+    }
+
+    if (bonuses.length === 0) {
+      return {
+        skipDefault: true,
+        description: `Spirit Souls: ${souls} stack (cần 6 để kích hoạt)`,
+      };
+    }
+
+    const bonus = bonuses[0];
+    if (souls >= 20) {
+      return {
+        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: ctx.self.stats[stat] })),
+        description: `Spirit Souls: ${souls} stack → ${bonus} (xử lý ngoài game)`,
+      };
+    } else if (souls >= 13) {
+      return {
+        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+        description: `Spirit Souls: ${souls} stack → ${bonus}`,
+      };
+    } else if (souls >= 9) {
+      return {
+        skipDefault: true,
+        description: `Spirit Souls: ${souls} stack → ${bonus} (xử lý ngoài game)`,
+      };
+    } else {
+      // souls >= 6
+      return {
+        selfStatMods: [{ stat: 'biq', value: 2 }],
+        description: `Spirit Souls: ${souls} stack → ${bonus}`,
+      };
+    }
+  },
+  'On round lose: +1 Soul stack; at 6→+2 BIQ, 9→+1 Power, 13→+1 all, 20→double stats (Spirit)'
+);
+
+// ============================================================================
+// WERESEAL - PvE only: team wins if they score 1 point despite -100 all stats
+// ============================================================================
+
+registerCombatHandler(
+  'wereseal_one_point_win',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.isPvE) return { skipDefault: true };
+    return {
+      skipDefault: true,
+      description: 'Wereseal: [PvE] Đội -100 all stats; thắng nếu ghi được 1 điểm (xử lý ngoài game)',
+    };
+  },
+  'PvE only: team wins by scoring 1 point (despite -100 all stats penalty) (Wereseal)'
+);
+
+// ============================================================================
+// WERESHEEP - After combat win (PvE): +3 Dura becomes permanent base stat
+// ============================================================================
+
+registerCombatHandler(
+  'weresheep_permanent_dura',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Weresheep: [PvE] Đội thắng → +3 Dura được cộng vĩnh viễn vào base stat (xử lý ngoài game)',
+    };
+  },
+  'PvE win: +3 Durability becomes permanent base stat (Weresheep)'
+);
+
+// ============================================================================
+// BALDUR SUB-RACE - On death: first God eliminated = +2 all; if you're first God = all Gods get 1 Power
+// ============================================================================
+
+registerCombatHandler(
+  'baldur_first_god_death',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Baldur: Khi chết — Lần đầu God bị loại: +2 all stats. Nếu là God đầu tiên bị loại: tất cả God nhận 1 Power (xử lý ngoài game)',
+    };
+  },
+  'On death: first God eliminated gets +2 all; if first God to die = all Gods get 1 Power (Baldur)'
+);
+
+// ============================================================================
+// EIR SUB-RACE - After each combat: double accumulated Dura bonus (stackable)
+// ============================================================================
+
+registerCombatHandler(
+  'eir_double_dura_stack',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Eir: Sau combat → gấp đôi tổng bonus Dura đã tích lũy (stackable, xử lý ngoài game)',
+    };
+  },
+  'After each combat: double accumulated Durability bonus (stackable) (Eir)'
+);
+
 export function registerRaceCombatHandlers(): void {
   console.log('Race combat handlers registered');
 }

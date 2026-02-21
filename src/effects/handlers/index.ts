@@ -36,6 +36,13 @@ import { registerCombatHandlers } from './combat/combat-handlers';
 import { registerPowerCombatHandlers } from './combat/power-combat-handlers';
 import { registerRaceCombatHandlers } from './combat/race-combat-handlers';
 import { registerArchetypeCombatHandlers } from './combat/archetype-combat-handlers';
+import { registerHouseImmediateHandlers } from './immediate/house-handlers';
+import { registerHouseCombatHandlers } from './combat/house-combat-handlers';
+import { registerGearCombatHandlers } from './combat/gear-combat-handlers';
+import { registerWeaponCombatHandlers } from './combat/weapon-combat-handlers';
+import { registerRuneCombatHandlers } from './combat/rune-combat-handlers';
+import { registerCharDevCombatHandlers } from './combat/chardev-combat-handlers';
+import { registerQuirkCombatHandlers } from './combat/quirk-combat-handlers';
 
 let isInitialized = false;
 
@@ -64,6 +71,25 @@ export function initializeHandlers(): void {
   registerPowerCombatHandlers();
   registerRaceCombatHandlers();
   registerArchetypeCombatHandlers();
+
+  // Register house handler categories
+  registerHouseImmediateHandlers();
+  registerHouseCombatHandlers();
+
+  // Register gear combat handlers
+  registerGearCombatHandlers();
+
+  // Register weapon combat handlers
+  registerWeaponCombatHandlers();
+
+  // Register rune/runeword combat handlers
+  registerRuneCombatHandlers();
+
+  // Register char dev and uma parent combat handlers
+  registerCharDevCombatHandlers();
+
+  // Register quirk combat handlers
+  registerQuirkCombatHandlers();
 
   isInitialized = true;
   console.log('Custom handlers initialized');
