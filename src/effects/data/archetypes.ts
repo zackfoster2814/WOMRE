@@ -534,7 +534,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Trickster Wheel đã quay lúc tạo nhân vật
   defineEffect("archetype", "Trickster")
     .description(
-      'Nhận "Trickster Wheel", kích hoạt trước mỗi combat và hết hiệu lực sau combat. (Đã quay lúc tạo nhân vật)',
+      'Nhận "Trickster Wheel", kích hoạt trước mỗi combat và hết hiệu lực sau combat. ',
     )
     .weight(2.2)
     .effect({

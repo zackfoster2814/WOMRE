@@ -5,6 +5,11 @@
  * - Auto effects: hiển thị ngay + button "Apply"
  * - Probability effects: button "🎡 Spin" mở ProbabilityWheelModal
  * - GM Action effects: hiển thị mô tả để GM xử lý thủ công
+ *
+ * Nhóm 2 features:
+ * - Collapsible sections theo timing (default closed)
+ * - Show activated state cho các effects hiện tại
+ * - Section separation rõ ràng: Trước / Trong / Sau combat
  */
 
 import { useState } from "react";
@@ -41,6 +46,8 @@ export interface CombatPendingEffect {
   /** Kết quả đã xử lý */
   resolved?: boolean;
   resolvedNote?: string;
+  /** Effect này đang được kích hoạt (relevant với combat hiện tại) */
+  isActivated?: boolean;
 }
 
 interface CombatRound {
@@ -298,6 +305,7 @@ const EFFECT_DEFS: EffectDef[] = [
         description: `Zealot: +${n} stat thấp nhất (thua ${n} round).`,
         category: "gm" as EffectCategory,
         gmNote: `[GM Action] Xác định stat thấp nhất hiện tại, cộng +${n}`,
+        isActivated: true,
       };
     },
   },
@@ -316,12 +324,14 @@ const EFFECT_DEFS: EffectDef[] = [
           category: "auto" as EffectCategory,
           resolved: true,
           resolvedNote: `Cách biệt ${ctx.margin} < 4 → bỏ qua`,
+          isActivated: false,
         };
       }
       return {
         description: `Perfectionist: Thắng cách biệt ${ctx.margin} điểm → +4 stat thấp nhất!`,
         category: "gm" as EffectCategory,
         gmNote: `[GM Action] Xác định stat thấp nhất của ${ctx.character.name}, cộng +4`,
+        isActivated: true,
       };
     },
   },
@@ -339,6 +349,7 @@ const EFFECT_DEFS: EffectDef[] = [
         description: `Gambler: Thắng ${wins} round, mỗi round roll 50/50 (+2 điểm / +0 điểm).`,
         category: "gm" as EffectCategory,
         gmNote: `[GM Action] Roll ${wins} lần 50/50. Mỗi lần thành công: +2 điểm vào tổng điểm combat`,
+        isActivated: wins > 0,
       };
     },
   },
@@ -459,6 +470,7 @@ const EFFECT_DEFS: EffectDef[] = [
         description: `Cruelty: Có ${tieRounds} round hòa → cần quay ${tieRounds} lần 50/50.`,
         category: "gm" as EffectCategory,
         gmNote: `[GM Action] Quay coin flip ${tieRounds} lần. Mỗi lần: 50% player này nhận 1 điểm, 50% đối thủ nhận 1 điểm`,
+        isActivated: tieRounds > 0,
       };
     },
   },
@@ -569,6 +581,7 @@ function buildPendingEffects(
         autoChanges: def.autoChanges,
         wheelItems: def.wheelItems,
         gmNote: def.gmNote,
+        isActivated: false,
         ...resolved,
       });
       return;
@@ -592,14 +605,8 @@ function buildPendingEffects(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Effect Row Component
+// Section config
 // ─────────────────────────────────────────────────────────────────────────────
-
-interface EffectRowProps {
-  effect: CombatPendingEffect;
-  onApply: (id: string) => void;
-  onSpinRequest: (effect: CombatPendingEffect) => void;
-}
 
 const TIMING_LABELS: Record<EffectTiming, string> = {
   before_combat: "Trước combat",
@@ -608,6 +615,38 @@ const TIMING_LABELS: Record<EffectTiming, string> = {
   after_win: "Sau thắng",
   after_lose: "Sau thua",
 };
+
+// Group timings into 3 phases for display
+const PHASE_GROUPS: { label: string; icon: string; timings: EffectTiming[]; color: string }[] = [
+  {
+    label: "Trước / Trong Combat",
+    icon: "⚔️",
+    timings: ["before_combat", "during_combat"],
+    color: "border-yellow-500/40 text-yellow-300",
+  },
+  {
+    label: "Sau Combat",
+    icon: "⚡",
+    timings: ["after_combat"],
+    color: "border-gray-500/40 text-gray-300",
+  },
+  {
+    label: "Sau Thắng / Sau Thua",
+    icon: "🏆",
+    timings: ["after_win", "after_lose"],
+    color: "border-green-500/40 text-green-300",
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Effect Row Component
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface EffectRowProps {
+  effect: CombatPendingEffect;
+  onApply: (id: string) => void;
+  onSpinRequest: (effect: CombatPendingEffect) => void;
+}
 
 const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
   const isResolved = effect.resolved;
@@ -626,6 +665,8 @@ const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
       className={`rounded-lg border p-3 transition-all ${
         isResolved
           ? "border-gray-700 bg-gray-800/30 opacity-60"
+          : effect.isActivated
+          ? "border-amber-500/60 bg-amber-900/20"
           : "border-gray-600 bg-gray-800/60"
       }`}
     >
@@ -644,6 +685,11 @@ const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
             <span className="text-xs px-2 py-0.5 rounded-full bg-purple-700/50 text-purple-300 capitalize">
               {effect.sourceName}
             </span>
+            {effect.isActivated && !isResolved && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-amber-600/60 text-amber-200 font-bold animate-pulse">
+                ✦ Kích hoạt
+              </span>
+            )}
           </div>
 
           {/* Description */}
@@ -712,6 +758,85 @@ const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
           <span className="shrink-0 text-green-500 text-lg">✓</span>
         )}
       </div>
+    </div>
+  );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Collapsible Section Component
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface CollapsibleSectionProps {
+  label: string;
+  icon: string;
+  colorClass: string;
+  items: CombatPendingEffect[];
+  defaultOpen?: boolean;
+  onApply: (id: string) => void;
+  onSpinRequest: (effect: CombatPendingEffect) => void;
+}
+
+const CollapsibleSection = ({
+  label,
+  icon,
+  colorClass,
+  items,
+  defaultOpen = false,
+  onApply,
+  onSpinRequest,
+}: CollapsibleSectionProps) => {
+  const [open, setOpen] = useState(defaultOpen);
+
+  const activatedCount = items.filter((e) => e.isActivated && !e.resolved).length;
+  const pendingCount = items.filter((e) => !e.resolved).length;
+  const resolvedCount = items.filter((e) => e.resolved).length;
+
+  return (
+    <div className={`rounded-xl border ${colorClass.split(" ")[0]} overflow-hidden`}>
+      {/* Section header — always visible */}
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center gap-2 px-4 py-2.5 bg-gray-800/70 hover:bg-gray-700/70 transition-colors text-left"
+      >
+        <span className="text-base">{icon}</span>
+        <span className={`font-semibold text-sm flex-1 ${colorClass.split(" ")[1]}`}>{label}</span>
+
+        {/* Badges */}
+        <div className="flex items-center gap-1.5">
+          {activatedCount > 0 && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-amber-600/60 text-amber-200 font-bold">
+              {activatedCount} kích hoạt
+            </span>
+          )}
+          {pendingCount > 0 && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-700 text-gray-300">
+              {pendingCount}
+            </span>
+          )}
+          {resolvedCount > 0 && pendingCount === 0 && (
+            <span className="text-xs px-2 py-0.5 rounded-full bg-green-900/50 text-green-400">
+              ✓ done
+            </span>
+          )}
+          <span className={`text-xs ml-1 ${colorClass.split(" ")[1]}`}>
+            {open ? "▲" : "▼"}
+          </span>
+        </div>
+      </button>
+
+      {/* Collapsible content */}
+      {open && (
+        <div className="px-3 pb-3 pt-2 space-y-2 bg-gray-900/40">
+          {items.map((effect) => (
+            <EffectRow
+              key={effect.id}
+              effect={effect}
+              onApply={onApply}
+              onSpinRequest={onSpinRequest}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -793,67 +918,52 @@ export const CombatEffectsPanel = ({
   };
 
   const pendingCount = effects.filter((e) => !e.resolved).length;
-  const resolvedCount = effects.filter((e) => e.resolved).length;
+  const activatedTotal = effects.filter((e) => e.isActivated && !e.resolved).length;
 
-  // Group by timing
-  const timingOrder: EffectTiming[] = [
-    "before_combat",
-    "during_combat",
-    "after_win",
-    "after_lose",
-    "after_combat",
-  ];
-
-  const grouped = timingOrder
-    .map((timing) => ({
-      timing,
-      items: effects.filter((e) => e.timing === timing),
-    }))
-    .filter((g) => g.items.length > 0);
+  // Group effects by phase
+  const phases = PHASE_GROUPS.map((phase) => ({
+    ...phase,
+    items: effects.filter((e) => phase.timings.includes(e.timing)),
+  })).filter((p) => p.items.length > 0);
 
   return (
     <>
-      <div className="mt-6 bg-gray-900/95 border-2 border-purple-500/40 rounded-xl p-5">
+      <div className="mt-6 bg-gray-900/95 border-2 border-purple-500/40 rounded-xl p-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-purple-300">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-base font-bold text-purple-300">
             {preCombatOnly ? "⚠️ Luật Đặc Biệt Trước Combat" : "⚡ Combat Effects"}
           </h3>
-          <div className="flex items-center gap-3 text-sm">
+          <div className="flex items-center gap-2 text-xs">
+            {activatedTotal > 0 && (
+              <span className="text-amber-300 font-bold animate-pulse">
+                ✦ {activatedTotal} kích hoạt
+              </span>
+            )}
             <span className="text-yellow-400">
               {pendingCount} chưa xử lý
             </span>
-            {resolvedCount > 0 && (
-              <span className="text-green-500">
-                {resolvedCount} đã xong
-              </span>
-            )}
           </div>
         </div>
 
-        {/* Effects grouped by timing */}
-        <div className="space-y-4">
-          {grouped.map(({ timing, items }) => (
-            <div key={timing}>
-              <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                {TIMING_LABELS[timing]}
-              </div>
-              <div className="space-y-2">
-                {items.map((effect) => (
-                  <EffectRow
-                    key={effect.id}
-                    effect={effect}
-                    onApply={handleApply}
-                    onSpinRequest={handleSpinRequest}
-                  />
-                ))}
-              </div>
-            </div>
+        {/* Phases */}
+        <div className="space-y-2">
+          {phases.map((phase) => (
+            <CollapsibleSection
+              key={phase.label}
+              label={phase.label}
+              icon={phase.icon}
+              colorClass={phase.color}
+              items={phase.items}
+              defaultOpen={preCombatOnly || phase.timings.includes("before_combat")}
+              onApply={handleApply}
+              onSpinRequest={handleSpinRequest}
+            />
           ))}
         </div>
 
         {pendingCount === 0 && (
-          <div className="text-center text-green-400 py-4 font-medium">
+          <div className="text-center text-green-400 py-3 font-medium text-sm mt-2">
             ✓ Tất cả effects đã được xử lý!
           </div>
         )}

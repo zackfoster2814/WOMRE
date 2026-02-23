@@ -4,6 +4,29 @@ import {
 } from "../config/googleDrive";
 
 /**
+ * Append plain text to a Drive file (read current → append → overwrite).
+ * Uses Apps Script with action=appendText.
+ */
+export async function appendReportToDrive(fileId: string, content: string): Promise<void> {
+  if (!APPS_SCRIPT_URL) {
+    throw new Error("Apps Script URL not configured.");
+  }
+  const url = `${APPS_SCRIPT_URL}?fileId=${fileId}&action=appendText`;
+  const response = await fetch(url, {
+    method: "POST",
+    body: content,
+    redirect: "follow",
+  });
+  if (!response.ok) {
+    throw new Error(`appendReportToDrive failed: ${response.status} ${response.statusText}`);
+  }
+  const result = await response.json().catch(() => null);
+  if (result && !result.success) {
+    throw new Error(`Apps Script error: ${JSON.stringify(result)}`);
+  }
+}
+
+/**
  * Read a JSON file from Google Drive
  * Uses Apps Script doGet (CORS-safe) as primary method
  */

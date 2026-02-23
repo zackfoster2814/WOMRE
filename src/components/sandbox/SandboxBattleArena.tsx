@@ -58,12 +58,34 @@ function generateReportText(
     { key: "biq", label: "BIQ" },
     { key: "ma", label: "MA" },
   ];
+  const p1BaseStr = player1.baseStats
+    ? statKeys.map(({ key, label }) => `${label}:${player1.baseStats![key]}`).join(" ")
+    : null;
+  const p2BaseStr = player2.baseStats
+    ? statKeys.map(({ key, label }) => `${label}:${player2.baseStats![key]}`).join(" ")
+    : null;
   const p1StatsStr = statKeys.map(({ key, label }) => `${label}:${player1.stats[key]}`).join(" ");
   const p2StatsStr = statKeys.map(({ key, label }) => `${label}:${player2.stats[key]}`).join(" ");
 
-  lines.push(`\nStats sau immediate effects:`);
-  lines.push(`  ${player1.name}: ${p1StatsStr}`);
-  lines.push(`  ${player2.name}: ${p2StatsStr}`);
+  // Player inventory (đưa lên trước stats)
+  const renderInventory = (player: SandboxPlayerData) => {
+    const sources = player.effectSources || [];
+    if (sources.length === 0) return;
+    lines.push(`\nItems & hiệu ứng — ${player.name}:`);
+    for (const src of sources) {
+      const inactive = src.hasCombatEffect ? " (không kích hoạt)" : "";
+      lines.push(`  [${src.sourceType}] ${src.name}${inactive}: ${src.description}`);
+    }
+  };
+  renderInventory(player1);
+  renderInventory(player2);
+
+  // Stats base
+  if (p1BaseStr || p2BaseStr) {
+    lines.push(`\nStats cơ bản (base):`);
+    if (p1BaseStr) lines.push(`  ${player1.name}: ${p1BaseStr}`);
+    if (p2BaseStr) lines.push(`  ${player2.name}: ${p2BaseStr}`);
+  }
 
   // Immediate effects
   const allMods = [
@@ -79,6 +101,11 @@ function generateReportText(
       lines.push(`  [${mod.player}] ${mod.source} → ${sign}${mod.value}${base} ${statLabel}`);
     }
   }
+
+  // Stats sau immediate effects
+  lines.push(`\nStats sau immediate effects:`);
+  lines.push(`  ${player1.name}: ${p1StatsStr}`);
+  lines.push(`  ${player2.name}: ${p2StatsStr}`);
 
   // Round results
   lines.push(`\nKết quả từng round:`);
@@ -117,6 +144,28 @@ function downloadReport(content: string): void {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+async function autoSaveReport(content: string): Promise<void> {
+  const now = new Date().toLocaleString("vi-VN");
+  const separator = `\n${"─".repeat(60)}\nSANDBOX SESSION: ${now}\n${"─".repeat(60)}\n`;
+  const fullContent = separator + content + "\n";
+  try {
+    const { appendReportToDrive } = await import("../../utils/googleDrive");
+    const { REPORT_FILE_ID } = await import("../../config/googleDrive");
+    await appendReportToDrive(REPORT_FILE_ID, fullContent);
+  } catch (driveErr) {
+    // Fallback: dev server local file
+    try {
+      await fetch("/api/append-report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: fullContent }),
+      });
+    } catch {
+      // silently skip if both fail
+    }
+  }
 }
 
 // Race tier for tie-breaker (lower tier = stronger race, wins tie)
@@ -186,12 +235,22 @@ export interface SandboxStatModifier {
   isBase?: boolean;
 }
 
+export interface SandboxEffectSource {
+  name: string;
+  sourceType: string;
+  description: string;
+  /** true nếu effect chỉ có timing combat (không phải immediate) */
+  hasCombatEffect: boolean;
+}
+
 export interface SandboxPlayerData {
   name: string;
   race: string;
   raceTier: number;
   stats: CharacterStats;
+  baseStats?: CharacterStats;
   statModifiers?: SandboxStatModifier[];
+  effectSources?: SandboxEffectSource[];
 }
 
 interface SandboxBattleArenaProps {
@@ -291,6 +350,27 @@ const StatsComparisonBattle = ({
   const [combatResult, setCombatResult] = useState<CombatResult | null>(null);
   const [currentRound, setCurrentRound] = useState(-1);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  // Auto-save report when combat ends
+  useEffect(() => {
+    if (!combatResult) return;
+    const reportRounds: ReportRound[] = combatResult.rounds.map((r) => ({
+      statLabel: r.statLabel,
+      p1Value: r.player1Value,
+      p2Value: r.player2Value,
+      winner: r.winner,
+    }));
+    const text = generateReportText(
+      "Stats Comparison",
+      player1, player2,
+      reportRounds,
+      combatResult.player1Score,
+      combatResult.player2Score,
+      combatResult.winner,
+      combatResult.tieBreaker,
+    );
+    autoSaveReport(text);
+  }, [combatResult]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const runCombat = useCallback(() => {
     setIsAnimating(true);
@@ -611,7 +691,7 @@ const WheelOfTruthBattle = ({
     }, 3000);
   }, [player1, player2, isSpinning, currentRound]);
 
-  // Check for battle end
+  // Check for battle end + auto-save report
   useEffect(() => {
     if (currentRound === 6 && battleState === "fighting") {
       let winner: "player1" | "player2";
@@ -630,8 +710,27 @@ const WheelOfTruthBattle = ({
       setFinalWinner(winner);
       setTieBreaker(usedTieBreaker);
       setBattleState("finished");
+
+      // Auto-save report
+      const reportRounds: ReportRound[] = roundResults.map((r) => ({
+        statLabel: r.statLabel,
+        p1Value: r.p1Value,
+        p2Value: r.p2Value,
+        winner: r.winner,
+        p1Chance: r.p1Chance,
+      }));
+      const text = generateReportText(
+        "Wheel of Truth",
+        player1, player2,
+        reportRounds,
+        p1Score,
+        p2Score,
+        winner,
+        usedTieBreaker,
+      );
+      autoSaveReport(text);
     }
-  }, [currentRound, battleState, p1Score, p2Score, player1, player2]);
+  }, [currentRound, battleState, p1Score, p2Score, player1, player2]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const startBattle = () => {
     setBattleState("fighting");

@@ -6,7 +6,13 @@ import { WheelItem } from "../types";
 import { getAssetPath } from "../utils/basePath";
 import { EffectResolver } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
-import StatModifiersTable from "../components/StatModifiersTable";
+import StatModifiersTable, {
+  sourceTypeColors,
+} from "../components/StatModifiersTable";
+import {
+  ProbabilityWheelModal,
+  type WheelSpinItem,
+} from "../components/ProbabilityWheelModal";
 import {
   readDriveFile,
   writeDriveFile,
@@ -55,7 +61,6 @@ interface TournamentPlayer {
   character: Character;
 }
 
-// Race tiers for tiebreaking (lower = stronger)
 const RACE_TIERS: Record<string, number> = {
   God: 1,
   Dragon: 2,
@@ -100,7 +105,6 @@ export const PvPTournamentPage = () => {
   const [driveStatus, setDriveStatus] = useState<string>("");
   const [saving, setSaving] = useState(false);
 
-  // Load players
   useEffect(() => {
     const loadPlayers = async () => {
       setLoading(true);
@@ -147,14 +151,12 @@ export const PvPTournamentPage = () => {
     loadPlayers();
   }, []);
 
-  // Load round data from Google Drive
   useEffect(() => {
     const loadRoundData = async () => {
       try {
         setDriveStatus("Loading from Google Drive...");
         const raw =
           await readDriveFile<Record<string, unknown>>(ROUND_256_FILE_ID);
-        // Normalize from any format (old or new)
         const data: Round256Data = {
           totalPlayers: (raw.totalPlayers as number) || 256,
           matches: Array.isArray(raw.matches) ? raw.matches : [],
@@ -179,7 +181,6 @@ export const PvPTournamentPage = () => {
     loadRoundData();
   }, []);
 
-  // Save to Google Drive
   const saveToDrive = useCallback(async (data: Round256Data) => {
     const config = isDriveConfigured();
     if (!config.canWrite) {
@@ -204,7 +205,6 @@ export const PvPTournamentPage = () => {
     }
   }, []);
 
-  // Export as local file (fallback)
   const exportLocal = useCallback(() => {
     if (!roundData) return;
     const blob = new Blob([JSON.stringify(roundData, null, 2)], {
@@ -218,7 +218,6 @@ export const PvPTournamentPage = () => {
     URL.revokeObjectURL(url);
   }, [roundData]);
 
-  // Import from local file
   const importLocal = useCallback(() => {
     const input = document.createElement("input");
     input.type = "file";
@@ -256,7 +255,6 @@ export const PvPTournamentPage = () => {
           {players.length} players (excluding Symbiosis)
         </p>
 
-        {/* Drive Status */}
         <div className="flex items-center justify-center gap-4 mb-4 flex-wrap">
           <span
             className={`text-xs px-2 py-1 rounded ${
@@ -289,7 +287,6 @@ export const PvPTournamentPage = () => {
           </button>
         </div>
 
-        {/* Tabs */}
         <div className="flex gap-2 mb-6 justify-center">
           <button
             onClick={() => setActiveTab("create")}
@@ -319,7 +316,6 @@ export const PvPTournamentPage = () => {
           </button>
         </div>
 
-        {/* Tab Content */}
         {activeTab === "create" ? (
           <CreateTab
             players={players}
@@ -366,25 +362,19 @@ const CreateTab = ({
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isSavingRef = useRef(false);
 
-  // Determine which players are already drawn
   const drawnPlayerIds = useMemo(() => {
     if (!roundData) return new Set<number>();
     return new Set(roundData.drawOrder);
   }, [roundData]);
 
-  // Remaining players (not yet drawn)
   const remainingPlayers = useMemo(() => {
     return players.filter((p) => !drawnPlayerIds.has(p.id));
   }, [players, drawnPlayerIds]);
 
-  // Current draw slot
   const currentSlot = roundData?.drawOrder.length ?? 0;
-
-  // Current match being filled
   const currentMatchNumber = Math.floor(currentSlot / 2) + 1;
   const isFillingPlayer2 = currentSlot % 2 === 1;
 
-  // Update wheel items when remaining players change
   useEffect(() => {
     const items: WheelItem[] = remainingPlayers.map((p) => ({
       id: `player-${p.id}`,
@@ -394,14 +384,10 @@ const CreateTab = ({
     setWheelItems(items);
   }, [remainingPlayers]);
 
-  // Debounced save - only saves the latest data, skips intermediate states during auto-draw
   const debouncedSave = useCallback(
     (data: Round256Data) => {
       pendingSaveRef.current = data;
-      if (saveTimerRef.current) {
-        clearTimeout(saveTimerRef.current);
-      }
-      // During auto-draw: batch saves every 10 seconds; otherwise save after 500ms
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
       const delay = autoDrawQueueRef.current.length > 0 ? 10000 : 500;
       saveTimerRef.current = setTimeout(async () => {
         const dataToSave = pendingSaveRef.current;
@@ -410,16 +396,12 @@ const CreateTab = ({
         pendingSaveRef.current = null;
         await saveToDrive(dataToSave);
         isSavingRef.current = false;
-        // If new data accumulated while saving, save again
-        if (pendingSaveRef.current) {
-          debouncedSave(pendingSaveRef.current);
-        }
+        if (pendingSaveRef.current) debouncedSave(pendingSaveRef.current);
       }, delay);
     },
     [saveToDrive],
   );
 
-  // Flush any pending save immediately (e.g. when auto-draw finishes)
   const flushSave = useCallback(async () => {
     if (saveTimerRef.current) {
       clearTimeout(saveTimerRef.current);
@@ -433,20 +415,16 @@ const CreateTab = ({
     isSavingRef.current = false;
   }, [saveToDrive]);
 
-  // Handle spin completion
   const handleSpinComplete = useCallback(
     (item: WheelItem) => {
       if (!roundData) return;
-
       const playerId = parseInt(item.id.replace("player-", ""));
       const drawnPlayer = players.find((p) => p.id === playerId);
       if (!drawnPlayer) return;
 
       setLastDrawnPlayer(drawnPlayer);
-
       const newDrawOrder = [...roundData.drawOrder, playerId];
       const newMatches = [...roundData.matches];
-
       const matchIdx = Math.floor((newDrawOrder.length - 1) / 2);
       const isPlayer1 = (newDrawOrder.length - 1) % 2 === 0;
 
@@ -486,34 +464,29 @@ const CreateTab = ({
 
       setRoundData(newData);
       setIsSpinning(false);
-
-      // Queue save (debounced - won't block next spin)
       debouncedSave(newData);
 
-      // If auto-drawing, remove drawn player from queue and trigger next spin
       if (autoDrawQueueRef.current.length > 0) {
         autoDrawQueueRef.current = autoDrawQueueRef.current.filter(
           (id) => id !== playerId,
         );
         if (autoDrawQueueRef.current.length > 0) {
           autoDrawTimerRef.current = setTimeout(() => {
-            if (autoDrawQueueRef.current.length > 0) {
-              setIsSpinning(true);
-            } else {
+            if (autoDrawQueueRef.current.length > 0) setIsSpinning(true);
+            else {
               setAutoDrawing(false);
-              flushSave(); // Final save when done
+              flushSave();
             }
           }, 800);
         } else {
           setAutoDrawing(false);
-          flushSave(); // Final save when done
+          flushSave();
         }
       }
     },
     [roundData, players, setRoundData, debouncedSave, flushSave],
   );
 
-  // Auto draw all - spins the wheel sequentially
   const startAutoDraw = useCallback(() => {
     if (!roundData || remainingPlayers.length === 0 || isSpinning) return;
     autoDrawQueueRef.current = remainingPlayers.map((p) => p.id);
@@ -521,7 +494,6 @@ const CreateTab = ({
     setIsSpinning(true);
   }, [roundData, remainingPlayers, isSpinning]);
 
-  // Stop auto draw
   const stopAutoDraw = useCallback(() => {
     autoDrawQueueRef.current = [];
     setAutoDrawing(false);
@@ -529,10 +501,9 @@ const CreateTab = ({
       clearTimeout(autoDrawTimerRef.current);
       autoDrawTimerRef.current = null;
     }
-    flushSave(); // Save current progress immediately
+    flushSave();
   }, [flushSave]);
 
-  // Reset draw
   const resetDraw = useCallback(async () => {
     if (!confirm("Reset all draw data? This cannot be undone.")) return;
     const newData: Round256Data = {
@@ -548,7 +519,6 @@ const CreateTab = ({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {/* Wheel Section */}
       <div className="bg-gray-800/50 rounded-lg p-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-white">
@@ -584,7 +554,6 @@ const CreateTab = ({
           </div>
         )}
 
-        {/* Last Drawn */}
         {lastDrawnPlayer && (
           <div className="mt-4 p-3 bg-yellow-600/20 border border-yellow-600 rounded-lg">
             <p className="text-yellow-400 text-center">
@@ -596,7 +565,6 @@ const CreateTab = ({
           </div>
         )}
 
-        {/* Actions */}
         <div className="mt-4 flex justify-center gap-2">
           {remainingPlayers.length > 0 && !autoDrawing && (
             <button
@@ -625,12 +593,9 @@ const CreateTab = ({
         </div>
       </div>
 
-      {/* Match List (being created) */}
       <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700/30">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-white">
-            Matches
-          </h2>
+          <h2 className="text-lg font-bold text-white">Matches</h2>
           <span className="text-sm text-gray-400 bg-gray-700/50 px-2.5 py-1 rounded-full font-mono">
             {roundData?.matches.length || 0}
           </span>
@@ -654,19 +619,27 @@ const CreateTab = ({
                   </span>
                   <div className="flex-1 text-sm">
                     <span className="text-blue-300 font-medium">
-                      <span className="text-blue-500/60 text-xs mr-1">{match.player1?.no}.</span>
+                      <span className="text-blue-500/60 text-xs mr-1">
+                        {match.player1?.no}.
+                      </span>
                       {match.player1?.name || "???"}
                     </span>
                   </div>
-                  <span className="text-gray-600 text-[10px] font-bold tracking-wider">VS</span>
+                  <span className="text-gray-600 text-[10px] font-bold tracking-wider">
+                    VS
+                  </span>
                   <div className="flex-1 text-sm text-right">
                     {match.player2 ? (
                       <span className="text-red-300 font-medium">
                         {match.player2.name}
-                        <span className="text-red-500/60 text-xs ml-1">.{match.player2.no}</span>
+                        <span className="text-red-500/60 text-xs ml-1">
+                          .{match.player2.no}
+                        </span>
                       </span>
                     ) : (
-                      <span className="text-yellow-500/60 text-xs italic">Waiting...</span>
+                      <span className="text-yellow-500/60 text-xs italic">
+                        Waiting...
+                      </span>
                     )}
                   </div>
                 </div>
@@ -756,23 +729,28 @@ const BracketTab = ({
 
   return (
     <div>
-      {/* Stats Bar */}
       <div className="flex items-center justify-between mb-5 bg-gray-800/60 rounded-xl p-3 border border-gray-700/50">
         <div className="flex gap-5 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-gray-400" />
             <span className="text-gray-400">Total</span>
-            <span className="text-white font-bold text-base">{stats.total}</span>
+            <span className="text-white font-bold text-base">
+              {stats.total}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-400" />
             <span className="text-green-400/80">Done</span>
-            <span className="text-green-300 font-bold text-base">{stats.completed}</span>
+            <span className="text-green-300 font-bold text-base">
+              {stats.completed}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-yellow-400" />
             <span className="text-yellow-400/80">Pending</span>
-            <span className="text-yellow-300 font-bold text-base">{stats.pending}</span>
+            <span className="text-yellow-300 font-bold text-base">
+              {stats.pending}
+            </span>
           </div>
           {stats.total > 0 && (
             <div className="flex items-center gap-2 ml-2 pl-3 border-l border-gray-600">
@@ -805,7 +783,6 @@ const BracketTab = ({
         </div>
       </div>
 
-      {/* Match Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-h-[70vh] overflow-y-auto pr-1">
         {filteredMatches.map((match) => {
           const p1Won = match.winner?.no === match.player1?.no;
@@ -852,8 +829,12 @@ const BracketTab = ({
                   }`}
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
-                    {p1Won && <span className="text-green-400 text-xs shrink-0">W</span>}
-                    <span className={`text-sm truncate ${p1Won ? "text-green-200 font-semibold" : "text-white"}`}>
+                    {p1Won && (
+                      <span className="text-green-400 text-xs shrink-0">W</span>
+                    )}
+                    <span
+                      className={`text-sm truncate ${p1Won ? "text-green-200 font-semibold" : "text-white"}`}
+                    >
                       {match.player1?.name || "TBD"}
                     </span>
                   </div>
@@ -874,8 +855,12 @@ const BracketTab = ({
                   }`}
                 >
                   <div className="flex items-center gap-1.5 min-w-0">
-                    {p2Won && <span className="text-green-400 text-xs shrink-0">W</span>}
-                    <span className={`text-sm truncate ${p2Won ? "text-green-200 font-semibold" : "text-white"}`}>
+                    {p2Won && (
+                      <span className="text-green-400 text-xs shrink-0">W</span>
+                    )}
+                    <span
+                      className={`text-sm truncate ${p2Won ? "text-green-200 font-semibold" : "text-white"}`}
+                    >
                       {match.player2?.name || "TBD"}
                     </span>
                   </div>
@@ -894,7 +879,6 @@ const BracketTab = ({
         })}
       </div>
 
-      {/* Battle Modal */}
       {selectedMatch && (
         <BattleModal
           match={selectedMatch}
@@ -902,6 +886,217 @@ const BracketTab = ({
           onClose={() => setSelectedMatch(null)}
           onSave={handleMatchUpdate}
         />
+      )}
+    </div>
+  );
+};
+
+// ===================== Inventory helpers =====================
+
+interface InventoryItem {
+  sourceType: string;
+  name: string;
+}
+
+function buildInventoryList(char: Character): InventoryItem[] {
+  const items: InventoryItem[] = [];
+  const add = (sourceType: string, name: string) => {
+    if (name) items.push({ sourceType, name });
+  };
+
+  if (char.race?.race) add("race", char.race.race);
+  if (char.race?.subRace) add("sub_race", char.race.subRace);
+  for (const a of Array.isArray(char.archetypes) ? char.archetypes : [])
+    add("archetype", a);
+  for (const na of Array.isArray(char.nestedArchetypes)
+    ? char.nestedArchetypes
+    : []) {
+    if (na.subType) add("archetype_sub", na.subType);
+  }
+  for (const q of Array.isArray(char.quirks) ? char.quirks : []) {
+    if (!q.isLost) add("quirk", q.name);
+  }
+  for (const p of Array.isArray(char.powers) ? char.powers : []) {
+    if (!p.isLost) add("power", typeof p === "string" ? p : p.name);
+  }
+  for (const w of Array.isArray(char.weapons) ? char.weapons : []) {
+    const name = typeof w === "string" ? w : w?.name;
+    if (name) add("weapon", name);
+  }
+  for (const g of [
+    ...(char.gear?.normalGear || []),
+    ...(char.gear?.legacyGear || []),
+  ]) {
+    if (!g.isLost) add("gear", g.name);
+  }
+  for (const r of Array.isArray(char.runes?.runes) ? char.runes!.runes : []) {
+    if (!r.isLost) add("rune", r.name);
+  }
+  if (char.runes?.runeword) add("runeword", char.runes.runeword);
+  for (const h of Array.isArray(char.houses) ? char.houses : []) {
+    if (!h.isLost) add("house", h.name);
+  }
+  for (const nh of Array.isArray(char.nestedHouses) ? char.nestedHouses : []) {
+    if (!nh.isLost && nh.subType && !nh.subTypeIsLost)
+      add("house_sub", nh.subType);
+  }
+  for (const cd of Array.isArray(char.charDevs) ? char.charDevs : []) {
+    if (!cd.isLost) add("char_dev", cd.name);
+  }
+  for (const l of Array.isArray(char.lover) ? char.lover : []) {
+    if (!l.isLost) add("lover", l.name);
+  }
+  return items;
+}
+
+function applyDisabledItems(
+  char: Character,
+  playerId: number,
+  disabledItems: Set<string>,
+): Character {
+  if (disabledItems.size === 0) return char;
+
+  const dis = (sourceType: string, name: string) =>
+    disabledItems.has(`${playerId}-${sourceType}-${name}`);
+
+  return {
+    ...char,
+    race:
+      dis("race", char.race?.race || "") ||
+      dis("sub_race", char.race?.subRace || "")
+        ? {
+            ...char.race!,
+            race: dis("race", char.race?.race || "")
+              ? ""
+              : char.race?.race || "",
+            subRace: dis("sub_race", char.race?.subRace || "")
+              ? undefined
+              : char.race?.subRace,
+          }
+        : char.race,
+    archetypes: (char.archetypes || []).filter((a) => !dis("archetype", a)),
+    nestedArchetypes: (char.nestedArchetypes || []).map((na) => ({
+      ...na,
+      subType: dis("archetype_sub", na.subType || "") ? undefined : na.subType,
+    })),
+    quirks: (char.quirks || []).map((q) =>
+      dis("quirk", q.name) ? { ...q, isLost: true } : q,
+    ),
+    powers: (char.powers || []).map((p) => {
+      const name = typeof p === "string" ? p : p.name;
+      return dis("power", name)
+        ? typeof p === "string"
+          ? { name: p, isLost: true }
+          : { ...p, isLost: true }
+        : p;
+    }),
+    weapons: (char.weapons || []).map((w) => {
+      const name = typeof w === "string" ? w : w?.name;
+      return dis("weapon", name || "")
+        ? typeof w === "string"
+          ? ({ name: w, isLost: true } as any)
+          : { ...w, isLost: true }
+        : w;
+    }),
+    gear: char.gear
+      ? {
+          ...char.gear,
+          normalGear: (char.gear.normalGear || []).map((g) =>
+            dis("gear", g.name) ? { ...g, isLost: true } : g,
+          ),
+          legacyGear: (char.gear.legacyGear || []).map((g) =>
+            dis("gear", g.name) ? { ...g, isLost: true } : g,
+          ),
+        }
+      : char.gear,
+    runes: char.runes
+      ? {
+          ...char.runes,
+          runes: (char.runes.runes || []).map((r) =>
+            dis("rune", r.name) ? { ...r, isLost: true } : r,
+          ),
+          runeword: dis("runeword", char.runes.runeword || "")
+            ? undefined
+            : char.runes.runeword,
+        }
+      : char.runes,
+    houses: (char.houses || []).map((h) =>
+      dis("house", h.name) ? { ...h, isLost: true } : h,
+    ),
+    charDevs: (char.charDevs || []).map((cd) =>
+      dis("char_dev", cd.name) ? { ...cd, isLost: true } : cd,
+    ),
+    lover: (char.lover || []).map((l) =>
+      dis("lover", l.name) ? { ...l, isLost: true } : l,
+    ),
+  };
+}
+
+// ===================== Inventory Section =====================
+
+interface InventorySectionProps {
+  player: TournamentPlayer;
+  items: InventoryItem[];
+  disabledItems: Set<string>;
+  onToggleItem: (playerId: number, sourceType: string, name: string) => void;
+  side: "left" | "right";
+}
+
+const InventorySection = ({
+  player,
+  items,
+  disabledItems,
+  onToggleItem,
+  side,
+}: InventorySectionProps) => {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <div className="bg-gray-800/70 rounded-xl border border-gray-700/60 p-3 shadow-inner">
+      <button
+        onClick={() => setOpen(!open)}
+        className={`w-full flex items-center justify-between text-sm font-medium text-gray-300 hover:text-white mb-2 transition-colors ${
+          side === "right" ? "flex-row-reverse" : ""
+        }`}
+      >
+        <span>📋 Inventory ({items.length} items)</span>
+        <span className="text-gray-500">{open ? "▲" : "▼"}</span>
+      </button>
+
+      {open && (
+        <div className="max-h-64 overflow-y-auto space-y-1 pr-1 text-sm">
+          {items.map((item, i) => {
+            const key = `${player.id}-${item.sourceType}-${item.name}`;
+            const isDisabled = disabledItems.has(key);
+            const colorClass =
+              (sourceTypeColors as Record<string, string>)[item.sourceType] ||
+              "text-gray-400";
+
+            return (
+              <button
+                key={i}
+                onClick={() =>
+                  onToggleItem(player.id, item.sourceType, item.name)
+                }
+                className={`w-full text-left px-3 py-1.5 rounded-lg transition-all flex items-center gap-2 text-xs ${
+                  isDisabled
+                    ? "bg-gray-900/50 line-through opacity-60"
+                    : "hover:bg-gray-700/50 bg-gray-800/30"
+                } ${side === "right" ? "flex-row-reverse" : ""}`}
+              >
+                <span className={`font-medium ${colorClass}`}>{item.name}</span>
+                <span className="text-gray-600 opacity-70">
+                  [{item.sourceType}]
+                </span>
+                {isDisabled && (
+                  <span className="ml-auto text-red-400 text-[10px] font-bold">
+                    DISABLED
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       )}
     </div>
   );
@@ -927,7 +1122,7 @@ interface RoundResult {
 const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
   const [rounds, setRounds] = useState<RoundResult[]>([]);
   const [currentRound, setCurrentRound] = useState(-1);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [stepStarted, setStepStarted] = useState(false);
   const [p1Score, setP1Score] = useState(0);
   const [p2Score, setP2Score] = useState(0);
   const [battleDone, setBattleDone] = useState(false);
@@ -935,10 +1130,21 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
   const [tieBreaker, setTieBreaker] = useState<string | null>(null);
   const [specialEvent, setSpecialEvent] = useState(match.specialEvent || "");
   const [note, setNote] = useState(match.note || "");
-  const [showEffects, setShowEffects] = useState(false);
-  const modalRef = useRef<HTMLDivElement>(null);
+  const [showEffects, setShowEffects] = useState(true);
+  const [disabledItems, setDisabledItems] = useState<Set<string>>(new Set());
 
-  // Find full player data
+  const [roundSpinModal, setRoundSpinModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    items: WheelSpinItem[];
+    roundIndex: number;
+    side: "p1" | "p2";
+  }>({ isOpen: false, title: "", items: [], roundIndex: -1, side: "p1" });
+
+  const [roundSpinResults, setRoundSpinResults] = useState<
+    Record<string, { label: string; isSuccess: boolean }>
+  >({});
+
   const player1 = useMemo(
     () => players.find((p) => p.id === match.player1?.no),
     [players, match],
@@ -948,13 +1154,25 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
     [players, match],
   );
 
-  // Calculate stats
+  const itemsP1 = useMemo(
+    () => (player1 ? buildInventoryList(player1.character) : []),
+    [player1],
+  );
+  const itemsP2 = useMemo(
+    () => (player2 ? buildInventoryList(player2.character) : []),
+    [player2],
+  );
+
   const p1Stats = useMemo(() => {
     if (!player1) return null;
-    const effects = EffectResolver.calculateCharacterEffects(
+    const char = applyDisabledItems(
       player1.character,
-      { isPvE: false },
+      player1.id,
+      disabledItems,
     );
+    const effects = EffectResolver.calculateCharacterEffects(char, {
+      isPvE: false,
+    });
     return {
       str: effects.totalStats.strength,
       spd: effects.totalStats.speed,
@@ -963,14 +1181,18 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
       biq: effects.totalStats.biq,
       ma: effects.totalStats.ma,
     } as CharacterStats;
-  }, [player1]);
+  }, [player1, disabledItems]);
 
   const p2Stats = useMemo(() => {
     if (!player2) return null;
-    const effects = EffectResolver.calculateCharacterEffects(
+    const char = applyDisabledItems(
       player2.character,
-      { isPvE: false },
+      player2.id,
+      disabledItems,
     );
+    const effects = EffectResolver.calculateCharacterEffects(char, {
+      isPvE: false,
+    });
     return {
       str: effects.totalStats.strength,
       spd: effects.totalStats.speed,
@@ -979,54 +1201,37 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
       biq: effects.totalStats.biq,
       ma: effects.totalStats.ma,
     } as CharacterStats;
-  }, [player2]);
+  }, [player2, disabledItems]);
 
-  // Effect breakdowns for display
   const p1Breakdown = useMemo(() => {
     if (!player1) return null;
-    return EffectResolver.getCharacterEffectBreakdown(player1.character);
-  }, [player1]);
+    return EffectResolver.getCharacterEffectBreakdown(
+      applyDisabledItems(player1.character, player1.id, disabledItems),
+    );
+  }, [player1, disabledItems]);
 
   const p2Breakdown = useMemo(() => {
     if (!player2) return null;
-    return EffectResolver.getCharacterEffectBreakdown(player2.character);
-  }, [player2]);
+    return EffectResolver.getCharacterEffectBreakdown(
+      applyDisabledItems(player2.character, player2.id, disabledItems),
+    );
+  }, [player2, disabledItems]);
 
-  const p1BaseStats = useMemo(() => {
-    if (!player1) return null;
-    const s = player1.character.stats;
-    return {
-      str: s.str,
-      spd: s.spd,
-      dur: s.dur,
-      iq: s.iq,
-      biq: s.biq,
-      ma: s.ma,
-    };
-  }, [player1]);
+  const p1BaseStats = useMemo(
+    () => player1?.character.stats ?? null,
+    [player1],
+  );
+  const p2BaseStats = useMemo(
+    () => player2?.character.stats ?? null,
+    [player2],
+  );
 
-  const p2BaseStats = useMemo(() => {
-    if (!player2) return null;
-    const s = player2.character.stats;
-    return {
-      str: s.str,
-      spd: s.spd,
-      dur: s.dur,
-      iq: s.iq,
-      biq: s.biq,
-      ma: s.ma,
-    };
-  }, [player2]);
-
-  // If match already has a winner, show result directly (once)
   useEffect(() => {
     if (match.winner && p1Stats && p2Stats && !battleDone) {
       runBattleInstant();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [match.winner]);
+  }, [match.winner, p1Stats, p2Stats, battleDone]);
 
-  // Close on escape
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -1034,6 +1239,178 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [onClose]);
+
+  const toggleItem = (playerId: number, sourceType: string, name: string) => {
+    const key = `${playerId}-${sourceType}-${name}`;
+    setDisabledItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
+  const getPerRoundEffects = (char: Character | undefined) => {
+    if (!char) return { onWin: [] as string[], onLose: [] as string[] };
+    const sources = [
+      ...(char.quirks || [])
+        .filter((q) => !q.isLost)
+        .map((q) => q.name.toLowerCase()),
+      ...(char.archetypes || []).map((a) => a.toLowerCase()),
+      ...(char.powers || [])
+        .filter((p) => (typeof p === "object" ? !p.isLost : true))
+        .map((p) => (typeof p === "string" ? p : p.name).toLowerCase()),
+    ];
+    const onWin: string[] = [];
+    const onLose: string[] = [];
+    if (sources.some((s) => s.includes("critical strike")))
+      onWin.push("Critical Strike");
+    if (sources.some((s) => s.includes("evasion"))) onLose.push("Evasion");
+    if (sources.some((s) => s === "gambler")) onWin.push("Gambler");
+    return { onWin, onLose };
+  };
+
+  const p1Effects = getPerRoundEffects(player1?.character);
+  const p2Effects = getPerRoundEffects(player2?.character);
+  const hasAnySpinEffects =
+    p1Effects.onWin.length > 0 ||
+    p1Effects.onLose.length > 0 ||
+    p2Effects.onWin.length > 0 ||
+    p2Effects.onLose.length > 0;
+
+  const CRIT_ITEMS: WheelSpinItem[] = [
+    {
+      label: "Crit! +1 bonus (20%)",
+      weight: 20,
+      isSuccess: true,
+      color: "#f59e0b",
+    },
+    { label: "Miss (80%)", weight: 80, isSuccess: false, color: "#6b7280" },
+  ];
+  const EVASION_ITEMS: WheelSpinItem[] = [
+    {
+      label: "Evade! +1 điểm (20%)",
+      weight: 20,
+      isSuccess: true,
+      color: "#10b981",
+    },
+    { label: "Không (80%)", weight: 80, isSuccess: false, color: "#6b7280" },
+  ];
+  const GAMBLER_ITEMS: WheelSpinItem[] = [
+    { label: "+2 điểm (50%)", weight: 50, isSuccess: true, color: "#f59e0b" },
+    { label: "+0 điểm (50%)", weight: 50, isSuccess: false, color: "#ef4444" },
+  ];
+
+  const computeRoundPoints = (
+    side: "p1" | "p2",
+    winner: "p1" | "p2" | "tie",
+    roundIdx: number,
+    effects: { onWin: string[]; onLose: string[] },
+  ): { pts: number; pending: boolean } => {
+    const isWinner = winner === side;
+    const isLoser = winner !== side && winner !== "tie";
+    const hasGambler = effects.onWin.includes("Gambler");
+    const hasCrit = effects.onWin.includes("Critical Strike");
+    const hasEvasion = effects.onLose.includes("Evasion");
+    const gamblerSpun = roundSpinResults[`${roundIdx}-Gambler-${side}`];
+    const critSpun = roundSpinResults[`${roundIdx}-Critical Strike-${side}`];
+    const evasionSpun = roundSpinResults[`${roundIdx}-Evasion-${side}`];
+
+    if (isWinner) {
+      if (hasGambler && !gamblerSpun) return { pts: 1, pending: true };
+      let base = hasGambler ? (gamblerSpun?.isSuccess ? 2 : 0) : 1;
+      if (hasCrit && !critSpun) return { pts: base, pending: true };
+      if (hasCrit && critSpun?.isSuccess) base += 1;
+      return { pts: base, pending: false };
+    }
+    if (isLoser && hasEvasion) {
+      if (!evasionSpun) return { pts: 0, pending: true };
+      if (evasionSpun.isSuccess) return { pts: 1, pending: false };
+    }
+    return { pts: isWinner ? 1 : 0, pending: false };
+  };
+
+  const effectiveScores = useMemo(() => {
+    let s1 = 0,
+      s2 = 0;
+    for (let i = 0; i <= currentRound && i < rounds.length; i++) {
+      const r = rounds[i];
+      const p1 = computeRoundPoints("p1", r.winner, i, p1Effects);
+      const p2 = computeRoundPoints("p2", r.winner, i, p2Effects);
+      s1 += p1.pts;
+      s2 += p2.pts;
+    }
+    return { s1, s2 };
+  }, [rounds, currentRound, roundSpinResults, p1Effects, p2Effects]);
+
+  const makeSpinButton = (
+    effectName: string,
+    side: "p1" | "p2",
+    roundIdx: number,
+  ) => {
+    const key = `${roundIdx}-${effectName}-${side}`;
+    const result = roundSpinResults[key];
+    const items =
+      effectName === "Critical Strike"
+        ? CRIT_ITEMS
+        : effectName === "Evasion"
+          ? EVASION_ITEMS
+          : GAMBLER_ITEMS;
+
+    if (result) {
+      return (
+        <button
+          key={effectName}
+          onClick={() =>
+            setRoundSpinModal({
+              isOpen: true,
+              title: effectName,
+              items,
+              roundIndex: roundIdx,
+              side,
+            })
+          }
+          className={`inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded font-bold border transition-colors ${
+            result.isSuccess
+              ? "bg-amber-600/30 text-amber-300 border-amber-500/40 hover:bg-amber-600/50"
+              : "bg-gray-700/60 text-gray-400 border-gray-600/40 hover:bg-gray-700/80"
+          }`}
+          title={`${result.label} — click để quay lại`}
+        >
+          {result.isSuccess ? "✦" : "·"}{" "}
+          {effectName === "Critical Strike"
+            ? "Crit"
+            : effectName === "Evasion"
+              ? "Evade"
+              : "Gambler"}
+        </button>
+      );
+    }
+
+    return (
+      <button
+        key={effectName}
+        onClick={() =>
+          setRoundSpinModal({
+            isOpen: true,
+            title: effectName,
+            items,
+            roundIndex: roundIdx,
+            side,
+          })
+        }
+        className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded font-bold border border-amber-500/50 bg-amber-600/20 text-amber-400 hover:bg-amber-600/40 animate-pulse transition-colors"
+        title={`Quay ${effectName}`}
+      >
+        ◎{" "}
+        {effectName === "Critical Strike"
+          ? "Crit?"
+          : effectName === "Evasion"
+            ? "Evade?"
+            : "Gambler?"}
+      </button>
+    );
+  };
 
   const runBattleInstant = () => {
     if (!p1Stats || !p2Stats) return;
@@ -1066,7 +1443,6 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
     if (s1 > s2) setOverallWinner("p1");
     else if (s2 > s1) setOverallWinner("p2");
     else {
-      // Tiebreaker by race tier
       const r1 = player1?.character.race?.race || "Human";
       const r2 = player2?.character.race?.race || "Human";
       const t1 = RACE_TIERS[r1] || 20;
@@ -1076,67 +1452,52 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
     }
   };
 
-  const runBattle = () => {
-    if (!p1Stats || !p2Stats || isAnimating) return;
-
-    setIsAnimating(true);
+  const startBattle = () => {
+    if (!p1Stats || !p2Stats) return;
     setCurrentRound(-1);
     setBattleDone(false);
     setOverallWinner(null);
     setTieBreaker(null);
+    setP1Score(0);
+    setP2Score(0);
+    setStepStarted(true);
 
     const results: RoundResult[] = [];
-    let s1 = 0,
-      s2 = 0;
-
     for (const { key, label } of STAT_ORDER) {
       const v1 = p1Stats[key];
       const v2 = p2Stats[key];
       let winner: "p1" | "p2" | "tie";
-      if (v1 > v2) {
-        winner = "p1";
-        s1++;
-      } else if (v2 > v1) {
-        winner = "p2";
-        s2++;
-      } else {
-        winner = "tie";
-      }
+      if (v1 > v2) winner = "p1";
+      else if (v2 > v1) winner = "p2";
+      else winner = "tie";
       results.push({ stat: key, label, p1Value: v1, p2Value: v2, winner });
     }
-
     setRounds(results);
+  };
 
-    // Animate
-    let round = 0;
-    let animS1 = 0,
-      animS2 = 0;
-    const animate = () => {
-      if (round < 6) {
-        setCurrentRound(round);
-        const r = results[round];
-        if (r.winner === "p1") animS1++;
-        else if (r.winner === "p2") animS2++;
-        setP1Score(animS1);
-        setP2Score(animS2);
-        round++;
-        setTimeout(animate, 600);
-      } else {
-        setBattleDone(true);
-        setIsAnimating(false);
-        if (s1 > s2) setOverallWinner("p1");
-        else if (s2 > s1) setOverallWinner("p2");
-        else {
-          const r1 = player1?.character.race?.race || "Human";
-          const r2 = player2?.character.race?.race || "Human";
-          const t1 = RACE_TIERS[r1] || 20;
-          const t2 = RACE_TIERS[r2] || 20;
-          setTieBreaker(`Race tier: ${r1}(${t1}) vs ${r2}(${t2})`);
-          setOverallWinner(t1 <= t2 ? "p1" : "p2");
-        }
+  const nextRound = () => {
+    const nextIdx = currentRound + 1;
+    if (nextIdx >= rounds.length) return;
+    setCurrentRound(nextIdx);
+    const r = rounds[nextIdx];
+    const newP1 = p1Score + (r.winner === "p1" ? 1 : 0);
+    const newP2 = p2Score + (r.winner === "p2" ? 1 : 0);
+    setP1Score(newP1);
+    setP2Score(newP2);
+
+    if (nextIdx === rounds.length - 1) {
+      setBattleDone(true);
+      if (newP1 > newP2) setOverallWinner("p1");
+      else if (newP2 > newP1) setOverallWinner("p2");
+      else {
+        const r1 = player1?.character.race?.race || "Human";
+        const r2 = player2?.character.race?.race || "Human";
+        const t1 = RACE_TIERS[r1] || 20;
+        const t2 = RACE_TIERS[r2] || 20;
+        setTieBreaker(`Race tier: ${r1}(${t1}) vs ${r2}(${t2})`);
+        setOverallWinner(t1 <= t2 ? "p1" : "p2");
       }
-    };
-    setTimeout(animate, 300);
+    }
   };
 
   const handleSave = () => {
@@ -1151,7 +1512,6 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
     });
   };
 
-  // Set winner manually (for special events like instant kill)
   const setManualWinner = (who: "p1" | "p2") => {
     setBattleDone(true);
     setOverallWinner(who);
@@ -1165,11 +1525,10 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
       }}
     >
       <div
-        className={`flex gap-3 items-start justify-center max-h-[90vh] transition-all duration-300 ${
+        className={`flex gap-4 items-start justify-center max-h-[90vh] transition-all duration-300 ${
           showEffects ? "w-full max-w-[95vw]" : "w-full max-w-4xl"
         }`}
       >
-        {/* Left Effects Panel */}
         {showEffects && p1Breakdown && p1BaseStats && (
           <div className="w-[420px] shrink-0 bg-gray-900 rounded-2xl border border-blue-500/50 max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-gray-900 p-3 border-b border-blue-500/30 rounded-t-2xl z-10">
@@ -1187,45 +1546,57 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
           </div>
         )}
 
-        {/* Main Battle Modal */}
-        <div
-          ref={modalRef}
-          className="bg-gray-900/95 backdrop-blur-sm rounded-2xl border border-gray-600/50 flex-1 min-w-0 max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl"
-        >
-          {/* Header */}
+        <div className="bg-gray-900/95 backdrop-blur-sm rounded-2xl border border-gray-600/50 flex-1 min-w-0 max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl">
           <div className="flex items-center justify-between px-5 py-3 border-b border-gray-700/50 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-red-900/20">
             <h2 className="text-lg font-bold text-white">
-              <span className="text-gray-400 font-normal text-sm mr-2">Match</span>
+              <span className="text-gray-400 font-normal text-sm mr-2">
+                Match
+              </span>
               #{match.matchNumber}
             </h2>
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-white text-xl w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-700/50 transition-colors"
             >
-              &times;
+              ×
             </button>
           </div>
 
-          {/* Players */}
           <div className="p-4">
-            <div className="grid grid-cols-[1fr_auto_1fr] gap-3 items-start">
-              {/* Player 1 */}
-              <PlayerCard
-                player={player1}
-                playerRef={match.player1}
-                stats={p1Stats}
-                side="left"
-                isWinner={overallWinner === "p1"}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-start">
+              {/* Left column */}
+              <div className="space-y-4">
+                <PlayerCard
+                  player={player1}
+                  playerRef={match.player1}
+                  stats={p1Stats}
+                  side="left"
+                  isWinner={overallWinner === "p1"}
+                />
 
-              {/* VS / Score */}
-              <div className="flex flex-col items-center justify-center pt-6 min-w-[100px]">
+                {player1 && itemsP1.length > 0 && (
+                  <InventorySection
+                    player={player1}
+                    items={itemsP1}
+                    disabledItems={disabledItems}
+                    onToggleItem={toggleItem}
+                    side="left"
+                  />
+                )}
+              </div>
+
+              {/* Center */}
+              <div className="flex flex-col items-center justify-center pt-10 min-w-[100px]">
                 {battleDone ? (
                   <div className="text-center">
                     <div className="text-3xl font-black text-white tracking-wider">
-                      <span className="text-blue-400">{p1Score}</span>
+                      <span className="text-blue-400">
+                        {hasAnySpinEffects ? effectiveScores.s1 : p1Score}
+                      </span>
                       <span className="text-gray-600 mx-1">:</span>
-                      <span className="text-red-400">{p2Score}</span>
+                      <span className="text-red-400">
+                        {hasAnySpinEffects ? effectiveScores.s2 : p2Score}
+                      </span>
                     </div>
                     {tieBreaker && (
                       <div className="text-[10px] text-yellow-400/80 mt-1 bg-yellow-500/10 px-2 py-0.5 rounded-full">
@@ -1254,17 +1625,28 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
                 )}
               </div>
 
-              {/* Player 2 */}
-              <PlayerCard
-                player={player2}
-                playerRef={match.player2}
-                stats={p2Stats}
-                side="right"
-                isWinner={overallWinner === "p2"}
-              />
+              {/* Right column */}
+              <div className="space-y-4">
+                <PlayerCard
+                  player={player2}
+                  playerRef={match.player2}
+                  stats={p2Stats}
+                  side="right"
+                  isWinner={overallWinner === "p2"}
+                />
+
+                {player2 && itemsP2.length > 0 && (
+                  <InventorySection
+                    player={player2}
+                    items={itemsP2}
+                    disabledItems={disabledItems}
+                    onToggleItem={toggleItem}
+                    side="right"
+                  />
+                )}
+              </div>
             </div>
 
-            {/* Effects Breakdown Toggle */}
             <div className="mt-3">
               <button
                 onClick={() => setShowEffects(!showEffects)}
@@ -1274,59 +1656,99 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
               </button>
             </div>
 
-            {/* Rounds */}
             {rounds.length > 0 && (
-              <div className="mt-4 bg-gray-800/40 rounded-xl p-3 space-y-1">
+              <div className="mt-4 bg-gray-800/40 rounded-xl p-3 space-y-1.5">
                 {rounds.map((round, idx) => {
                   const revealed = idx <= currentRound;
                   const p1Win = revealed && round.winner === "p1";
                   const p2Win = revealed && round.winner === "p2";
                   const tie = revealed && round.winner === "tie";
+                  const p1Pts = revealed
+                    ? computeRoundPoints("p1", round.winner, idx, p1Effects)
+                    : null;
+                  const p2Pts = revealed
+                    ? computeRoundPoints("p2", round.winner, idx, p2Effects)
+                    : null;
+
                   return (
                     <div
                       key={round.stat}
-                      className={`grid grid-cols-[1fr_70px_1fr] gap-2 items-center transition-all duration-500 ${
-                        revealed ? "opacity-100 translate-y-0" : "opacity-15 translate-y-1"
-                      }`}
+                      className={`transition-all duration-500 ${revealed ? "opacity-100" : "opacity-15"}`}
                     >
-                      <div
-                        className={`text-right text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${
-                          p1Win
-                            ? "bg-blue-500/25 text-blue-300 ring-1 ring-blue-500/40"
-                            : tie
-                              ? "bg-yellow-500/15 text-yellow-400"
-                              : revealed
-                                ? "text-gray-500"
-                                : "text-gray-600"
-                        }`}
-                      >
-                        {round.p1Value}
-                        {p1Win && <span className="ml-1.5 text-[10px] text-blue-400">W</span>}
+                      <div className="grid grid-cols-[1fr_70px_1fr] gap-2 items-center">
+                        <div
+                          className={`text-right text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${
+                            p1Win
+                              ? "bg-blue-500/25 text-blue-300 ring-1 ring-blue-500/40"
+                              : tie
+                                ? "bg-yellow-500/15 text-yellow-400"
+                                : revealed
+                                  ? "text-gray-500"
+                                  : "text-gray-600"
+                          }`}
+                        >
+                          {round.p1Value}
+                          {p1Win && p1Pts && p1Pts.pts !== 1 && (
+                            <span className="ml-1.5 text-[10px] text-blue-400">
+                              W({p1Pts.pts > 0 ? "+" : ""}
+                              {p1Pts.pts})
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-center text-[11px] font-bold text-gray-400 tracking-wider">
+                          {round.label}
+                        </div>
+                        <div
+                          className={`text-left text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${
+                            p2Win
+                              ? "bg-red-500/25 text-red-300 ring-1 ring-red-500/40"
+                              : tie
+                                ? "bg-yellow-500/15 text-yellow-400"
+                                : revealed
+                                  ? "text-gray-500"
+                                  : "text-gray-600"
+                          }`}
+                        >
+                          {p2Win && p2Pts && p2Pts.pts !== 1 && (
+                            <span className="mr-1.5 text-[10px] text-red-400">
+                              W({p2Pts.pts > 0 ? "+" : ""}
+                              {p2Pts.pts})
+                            </span>
+                          )}
+                          {round.p2Value}
+                        </div>
                       </div>
-                      <div className="text-center text-[11px] font-bold text-gray-400 tracking-wider">
-                        {round.label}
-                      </div>
-                      <div
-                        className={`text-left text-sm font-bold px-3 py-1.5 rounded-lg transition-colors ${
-                          p2Win
-                            ? "bg-red-500/25 text-red-300 ring-1 ring-red-500/40"
-                            : tie
-                              ? "bg-yellow-500/15 text-yellow-400"
-                              : revealed
-                                ? "text-gray-500"
-                                : "text-gray-600"
-                        }`}
-                      >
-                        {p2Win && <span className="mr-1.5 text-[10px] text-red-400">W</span>}
-                        {round.p2Value}
-                      </div>
+
+                      {revealed && (p1Win || p2Win) && (
+                        <div className="flex justify-between mt-0.5 px-1">
+                          <div className="flex gap-1">
+                            {p1Win &&
+                              p1Effects.onWin.map((eff) =>
+                                makeSpinButton(eff, "p1", idx),
+                              )}
+                            {p2Win &&
+                              p1Effects.onLose.map((eff) =>
+                                makeSpinButton(eff, "p1", idx),
+                              )}
+                          </div>
+                          <div className="flex gap-1">
+                            {p2Win &&
+                              p2Effects.onWin.map((eff) =>
+                                makeSpinButton(eff, "p2", idx),
+                              )}
+                            {p1Win &&
+                              p2Effects.onLose.map((eff) =>
+                                makeSpinButton(eff, "p2", idx),
+                              )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
               </div>
             )}
 
-            {/* Special Event & Note */}
             <div className="mt-4 grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-sm text-gray-400 mb-1">
@@ -1352,16 +1774,15 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="mt-5 flex justify-center gap-3 flex-wrap">
-              {!battleDone && (
+              {!stepStarted && !battleDone && (
                 <>
                   <button
-                    onClick={runBattle}
-                    disabled={isAnimating || !p1Stats || !p2Stats}
+                    onClick={startBattle}
+                    disabled={!p1Stats || !p2Stats}
                     className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl disabled:opacity-40 disabled:cursor-not-allowed transition-all text-sm shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40"
                   >
-                    {isAnimating ? "Battling..." : "Battle!"}
+                    ⚔ Bắt đầu
                   </button>
                   <div className="flex gap-1.5">
                     <button
@@ -1379,6 +1800,16 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
                   </div>
                 </>
               )}
+
+              {stepStarted && !battleDone && (
+                <button
+                  onClick={nextRound}
+                  className="px-6 py-2.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-bold rounded-xl text-sm shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 transition-all"
+                >
+                  Round {currentRound + 2}/{rounds.length} ▶ Next
+                </button>
+              )}
+
               {battleDone && overallWinner && (
                 <button
                   onClick={handleSave}
@@ -1387,7 +1818,8 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
                   Save Result
                 </button>
               )}
-              {battleDone && (
+
+              {(battleDone || stepStarted) && (
                 <button
                   onClick={() => {
                     setBattleDone(false);
@@ -1397,17 +1829,40 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
                     setP1Score(0);
                     setP2Score(0);
                     setTieBreaker(null);
+                    setStepStarted(false);
+                    setRoundSpinResults({});
                   }}
                   className="px-3 py-2 bg-gray-700/60 hover:bg-gray-600/60 text-gray-300 rounded-lg text-xs border border-gray-600/50 transition-colors"
                 >
-                  Re-battle
+                  ↺ Re-battle
                 </button>
               )}
             </div>
           </div>
         </div>
 
-        {/* Right Effects Panel */}
+        <ProbabilityWheelModal
+          isOpen={roundSpinModal.isOpen}
+          onClose={() =>
+            setRoundSpinModal((prev) => ({ ...prev, isOpen: false }))
+          }
+          title={roundSpinModal.title}
+          description={`Round ${roundSpinModal.roundIndex + 1} — ${
+            roundSpinModal.side === "p1"
+              ? match.player1?.name
+              : match.player2?.name
+          }`}
+          items={roundSpinModal.items}
+          onResult={(item) => {
+            const key = `${roundSpinModal.roundIndex}-${roundSpinModal.title}-${roundSpinModal.side}`;
+            setRoundSpinResults((prev) => ({
+              ...prev,
+              [key]: { label: item.label, isSuccess: !!item.isSuccess },
+            }));
+            setRoundSpinModal((prev) => ({ ...prev, isOpen: false }));
+          }}
+        />
+
         {showEffects && p2Breakdown && p2BaseStats && (
           <div className="w-[420px] shrink-0 bg-gray-900 rounded-2xl border border-red-500/50 max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-gray-900 p-3 border-b border-red-500/30 rounded-t-2xl z-10">
@@ -1429,7 +1884,7 @@ const BattleModal = ({ match, players, onClose, onSave }: BattleModalProps) => {
   );
 };
 
-// ===================== Player Card =====================
+// ===================== Player Card (đã gỡ inventory) =====================
 
 interface PlayerCardProps {
   player: TournamentPlayer | undefined;
@@ -1457,7 +1912,9 @@ const PlayerCard = ({
 
   return (
     <div
-      className={`p-4 rounded-xl border-2 transition-all bg-gray-800/70 backdrop-blur ${borderGlow} ${side === "right" ? "text-right" : ""}`}
+      className={`p-4 rounded-xl border-2 transition-all bg-gray-800/70 backdrop-blur ${borderGlow} ${
+        side === "right" ? "text-right" : ""
+      }`}
     >
       <div
         className={`flex items-center gap-2 mb-1 ${side === "right" ? "flex-row-reverse" : ""}`}
@@ -1475,7 +1932,9 @@ const PlayerCard = ({
         {playerRef?.name || "TBD"}
       </h3>
       <p className="text-xs text-gray-500">{playerRef?.username || ""}</p>
-      <p className={`text-xs mt-1 ${side === "left" ? "text-blue-300/80" : "text-red-300/80"}`}>
+      <p
+        className={`text-xs mt-1 ${side === "left" ? "text-blue-300/80" : "text-red-300/80"}`}
+      >
         {race}
         {subRace ? ` / ${subRace}` : ""}
       </p>
@@ -1487,7 +1946,9 @@ const PlayerCard = ({
               key={key}
               className={`flex items-center gap-2 text-sm ${side === "right" ? "flex-row-reverse" : ""}`}
             >
-              <span className="text-gray-500 w-8 text-[11px] font-bold">{label}</span>
+              <span className="text-gray-500 w-8 text-[11px] font-bold">
+                {label}
+              </span>
               <div className="flex-1 bg-gray-700/60 rounded-full h-2.5 overflow-hidden">
                 <div
                   className={`h-full rounded-full ${barBg} transition-all duration-500`}
@@ -1502,10 +1963,18 @@ const PlayerCard = ({
               </span>
             </div>
           ))}
-          <div className={`flex items-center gap-2 pt-1 border-t border-gray-700/50 ${side === "right" ? "flex-row-reverse" : ""}`}>
+          <div
+            className={`flex items-center gap-2 pt-1 border-t border-gray-700/50 ${
+              side === "right" ? "flex-row-reverse" : ""
+            }`}
+          >
             <span className="text-gray-500 w-8 text-[10px] font-bold">TTL</span>
             <div className="flex-1" />
-            <span className={`font-mono w-7 text-center text-sm font-bold ${side === "left" ? "text-blue-300" : "text-red-300"}`}>
+            <span
+              className={`font-mono w-7 text-center text-sm font-bold ${
+                side === "left" ? "text-blue-300" : "text-red-300"
+              }`}
+            >
               {STAT_ORDER.reduce((sum, { key }) => sum + (stats[key] || 0), 0)}
             </span>
           </div>

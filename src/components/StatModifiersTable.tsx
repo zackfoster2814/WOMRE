@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { EffectSourceBreakdown } from "../effects/resolver";
 import type { EffectSourceType } from "../effects/types";
 
@@ -75,6 +76,9 @@ const StatModifiersTable = ({
   originalBaseStats,
   tournamentInfo,
 }: StatModifiersTableProps) => {
+  const [allEffectsOpen, setAllEffectsOpen] = useState(false);
+  const [conditionalOpen, setConditionalOpen] = useState(false);
+
   const statKeys: Array<
     "strength" | "speed" | "durability" | "iq" | "biq" | "ma"
   > = ["strength", "speed", "durability", "iq", "biq", "ma"];
@@ -317,65 +321,72 @@ const StatModifiersTable = ({
               .join(", ");
           };
 
+          const totalSources = breakdown.length;
           return (
             <div className="mt-4 pt-3 border-t border-gray-600">
-              <h4 className="text-xs text-gray-300 font-medium mb-2">
-                Tất cả hiệu ứng
-              </h4>
-              <div className="space-y-2">
-                {typeOrder.map((type) => {
-                  const sources = grouped.get(type);
-                  if (!sources || sources.length === 0) return null;
-                  return (
-                    <div key={type}>
-                      <div
-                        className={`text-[10px] font-bold uppercase tracking-wider ${sourceTypeColors[type]} mb-0.5`}
-                      >
-                        {sourceTypeLabels[type]}
-                      </div>
-                      <div className="space-y-0.5">
-                        {sources.map((source, idx) => {
-                          const statSummary = formatStatSummary(source);
-                          return (
-                            <div
-                              key={idx}
-                              className={`flex items-start gap-1.5 text-[11px] px-1.5 py-0.5 rounded ${
-                                source.isDisabled
-                                  ? "bg-gray-800/50 opacity-50 line-through"
-                                  : "bg-gray-700/30"
-                              }`}
-                            >
-                              <span
-                                className={`${sourceTypeColors[source.type]} shrink-0`}
+              <button
+                onClick={() => setAllEffectsOpen((v) => !v)}
+                className="w-full flex items-center justify-between text-xs text-gray-300 font-medium mb-1 hover:text-white transition-colors"
+              >
+                <span>Tất cả hiệu ứng <span className="text-gray-500">({totalSources})</span></span>
+                <span className="text-gray-500 text-[10px]">{allEffectsOpen ? "▲" : "▼"}</span>
+              </button>
+              {allEffectsOpen && (
+                <div className="space-y-2 mt-2">
+                  {typeOrder.map((type) => {
+                    const sources = grouped.get(type);
+                    if (!sources || sources.length === 0) return null;
+                    return (
+                      <div key={type}>
+                        <div
+                          className={`text-[10px] font-bold uppercase tracking-wider ${sourceTypeColors[type]} mb-0.5`}
+                        >
+                          {sourceTypeLabels[type]}
+                        </div>
+                        <div className="space-y-0.5">
+                          {sources.map((source, idx) => {
+                            const statSummary = formatStatSummary(source);
+                            return (
+                              <div
+                                key={idx}
+                                className={`flex items-start gap-1.5 text-[11px] px-1.5 py-0.5 rounded ${
+                                  source.isDisabled
+                                    ? "bg-gray-800/50 opacity-50 line-through"
+                                    : "bg-gray-700/30"
+                                }`}
                               >
-                                {source.name}
-                              </span>
-                              {statSummary && (
-                                <span className="text-gray-400 shrink-0">
-                                  ({statSummary})
-                                </span>
-                              )}
-                              {source.description && !statSummary && (
                                 <span
-                                  className="text-gray-500 truncate"
-                                  title={source.description}
+                                  className={`${sourceTypeColors[source.type]} shrink-0`}
                                 >
-                                  {source.description}
+                                  {source.name}
                                 </span>
-                              )}
-                              {source.isDisabled && (
-                                <span className="text-red-500 text-[9px]">
-                                  [OFF]
-                                </span>
-                              )}
-                            </div>
-                          );
-                        })}
+                                {statSummary && (
+                                  <span className="text-gray-400 shrink-0">
+                                    ({statSummary})
+                                  </span>
+                                )}
+                                {source.description && !statSummary && (
+                                  <span
+                                    className="text-gray-500 truncate"
+                                    title={source.description}
+                                  >
+                                    {source.description}
+                                  </span>
+                                )}
+                                {source.isDisabled && (
+                                  <span className="text-red-500 text-[9px]">
+                                    [OFF]
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })()}
@@ -383,11 +394,17 @@ const StatModifiersTable = ({
       {/* Conditional Effects Section */}
       {sourcesWithConditionalEffects.length > 0 && (
         <div className="mt-4 pt-3 border-t border-gray-600">
-          <h4 className="text-xs text-yellow-400 font-medium mb-2 flex items-center gap-1">
-            <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
-            hiệu ứng điều kiện
-          </h4>
-          <div className="space-y-2">
+          <button
+            onClick={() => setConditionalOpen((v) => !v)}
+            className="w-full flex items-center justify-between mb-1 hover:opacity-80 transition-opacity"
+          >
+            <h4 className="text-xs text-yellow-400 font-medium flex items-center gap-1">
+              <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+              hiệu ứng điều kiện <span className="text-yellow-600">({sourcesWithConditionalEffects.length})</span>
+            </h4>
+            <span className="text-gray-500 text-[10px]">{conditionalOpen ? "▲" : "▼"}</span>
+          </button>
+          {conditionalOpen && <div className="space-y-2 mt-1">
             {sourcesWithConditionalEffects.map((source, idx) => (
               <div
                 key={idx}
@@ -445,7 +462,7 @@ const StatModifiersTable = ({
                 </div>
               </div>
             ))}
-          </div>
+          </div>}
         </div>
       )}
     </div>

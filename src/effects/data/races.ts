@@ -972,8 +972,8 @@ export function registerHumanSubRaces() {
 // ============================================================================
 
 export function registerVampireSubRaces() {
-  defineEffect("sub_race", "Body Count 45689")
-    .description("-1 all stats. (Bạn chắc hẳn rất kén ăn...)")
+  defineEffect("sub_race", "Body Count 1-2")
+    .description("-1 all stats.")
     .weight(2.5)
     .addAllStats(-1)
     .register();
@@ -1035,9 +1035,7 @@ export function registerElementalSubRaces() {
     .register();
 
   defineEffect("sub_race", "Water")
-    .description(
-      'Nhận Power "Water Breathing", +1 BIQ, +1 vào Stat cao nhất.',
-    )
+    .description('Nhận Power "Water Breathing", +1 BIQ, +1 vào Stat cao nhất.')
     .weight(25)
     .grantPower("Water Breathing", 1)
     .addStat("biq", 1)
@@ -1390,7 +1388,11 @@ export function registerDemonSinSubRaces() {
       timing: "before_combat",
       target: "self",
       conditions: [
-        { type: "opponent_has", opponentItemType: "power", opponentItemName: "AIDS" },
+        {
+          type: "opponent_has",
+          opponentItemType: "power",
+          opponentItemName: "AIDS",
+        },
       ],
     })
     .register();
@@ -1518,7 +1520,9 @@ export function registerWerebeastSubRaces() {
     .register();
 
   defineEffect("sub_race", "Wereseal")
-    .description("[PvE Only] Đội -100 all stats. Đội thắng nếu ghi được 1 điểm.")
+    .description(
+      "[PvE Only] Đội -100 all stats. Đội thắng nếu ghi được 1 điểm.",
+    )
     .weight(8)
     .effect({
       type: "stat_modifier",
@@ -1769,7 +1773,11 @@ export function registerGodSubRaces() {
       timing: "before_combat",
       target: "self",
       conditions: [
-        { type: "opponent_has", opponentItemType: "weapon", opponentItemName: "instrument" },
+        {
+          type: "opponent_has",
+          opponentItemType: "weapon",
+          opponentItemName: "instrument",
+        },
       ],
     })
     .effect({
@@ -1780,7 +1788,11 @@ export function registerGodSubRaces() {
       timing: "after_combat_win",
       target: "self",
       conditions: [
-        { type: "opponent_has", opponentItemType: "weapon", opponentItemName: "instrument" },
+        {
+          type: "opponent_has",
+          opponentItemType: "weapon",
+          opponentItemName: "instrument",
+        },
       ],
     })
     .register();

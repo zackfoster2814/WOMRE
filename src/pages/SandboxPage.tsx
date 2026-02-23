@@ -5,6 +5,7 @@
 import { useState, useMemo, useCallback } from "react";
 import type { Character, CharacterStats } from "../types/character";
 import { EffectResolver } from "../effects/resolver";
+import { EffectRegistry } from "../effects/registry";
 import { initializeEffectData } from "../effects/data";
 import { CharacterParser } from "../utils/characterParser";
 import { getAssetPath } from "../utils/basePath";
@@ -16,6 +17,7 @@ import {
   RACE_TIERS,
   type SandboxPlayerData,
   type SandboxStatModifier,
+  type SandboxEffectSource,
 } from "../components/sandbox/SandboxBattleArena";
 
 // Initialize effect data
@@ -115,6 +117,67 @@ export const SandboxPage = () => {
   const [builder1Initial, setBuilder1Initial] = useState<CharacterBuilderInitialState | null>(null);
   const [builder2Initial, setBuilder2Initial] = useState<CharacterBuilderInitialState | null>(null);
 
+  // Build effectSources list for a character (all items + registry description)
+  function buildEffectSources(character: Character, combatEffects: any[]): SandboxEffectSource[] {
+    const sources: SandboxEffectSource[] = [];
+
+    // Set of source names that have a CONDITIONAL combat effect (can fail to trigger).
+    // Effects with customHandler or conditions are conditional.
+    // Effects that are always-on (no customHandler, no conditions) are NOT marked inactive.
+    const combatSourceNames = new Set<string>(
+      combatEffects
+        .filter((ce) =>
+          ce.isActive !== false &&
+          ce.effect?.timing !== "immediate" &&
+          ce.effect?.timing !== "pve_only" &&
+          (ce.effect?.customHandler || (ce.effect?.conditions?.length ?? 0) > 0),
+        )
+        .map((ce) => ce.source?.name as string)
+        .filter(Boolean),
+    );
+
+    const tryAdd = (sourceType: string, name: string) => {
+      if (!name) return;
+      let entry = EffectRegistry.get(sourceType as any, name);
+      if (!entry && sourceType === "power") entry = EffectRegistry.get("archetype_sub" as any, name);
+      const description = entry?.description || "(không có mô tả)";
+      sources.push({
+        name,
+        sourceType,
+        description,
+        hasCombatEffect: combatSourceNames.has(name),
+      });
+    };
+
+    if (character.race?.race) tryAdd("race", character.race.race);
+    if (character.race?.subRace) tryAdd("sub_race", character.race.subRace);
+    for (const arch of Array.isArray(character.archetypes) ? character.archetypes : []) tryAdd("archetype", arch);
+    for (const na of Array.isArray(character.nestedArchetypes) ? character.nestedArchetypes : []) {
+      if (na.subType) tryAdd("archetype_sub", na.subType);
+    }
+    for (const q of Array.isArray((character as any).quirks) ? (character as any).quirks : []) if (!q.isLost) tryAdd("quirk", q.name);
+    for (const p of Array.isArray((character as any).powers) ? (character as any).powers : []) if (!p.isLost) tryAdd("power", p.name);
+    const allGear = [
+      ...(Array.isArray((character as any).gear?.normalGear) ? (character as any).gear.normalGear : []),
+      ...(Array.isArray((character as any).gear?.legacyGear) ? (character as any).gear.legacyGear : []),
+    ];
+    for (const g of allGear) if (!g.isLost) tryAdd("gear", g.name);
+    for (const w of Array.isArray((character as any).weapons) ? (character as any).weapons : []) {
+      const n = typeof w === "string" ? w : w?.name;
+      if (n) tryAdd("weapon", n);
+    }
+    for (const r of Array.isArray((character as any).runes) ? (character as any).runes : []) if (!r.isLost) tryAdd("rune", r.name);
+    if ((character as any).runeword && !(character as any).runeword.isLost)
+      tryAdd("runeword", (character as any).runeword.name);
+    for (const cd of Array.isArray((character as any).charDev) ? (character as any).charDev : []) if (!cd.isLost) tryAdd("char_dev", cd.name);
+    for (const h of Array.isArray((character as any).houses) ? (character as any).houses : []) {
+      if (!h.isLost) tryAdd("house", h.name);
+      if (h.subHouse && !h.subHouse.isLost) tryAdd("house_sub", h.subHouse.name);
+    }
+
+    return sources;
+  }
+
   // Calculate player data for battle
   const player1Data: SandboxPlayerData | null = useMemo(() => {
     if (!character1) return null;
@@ -132,9 +195,18 @@ export const SandboxPage = () => {
         biq: effects.totalStats.biq,
         ma: effects.totalStats.ma,
       } as CharacterStats,
+      baseStats: {
+        str: effects.baseStats.strength,
+        spd: effects.baseStats.speed,
+        dur: effects.baseStats.durability,
+        iq: effects.baseStats.iq,
+        biq: effects.baseStats.biq,
+        ma: effects.baseStats.ma,
+      } as CharacterStats,
       statModifiers: effects.statModifiers as SandboxStatModifier[],
+      effectSources: buildEffectSources(character1, effects.combatEffects),
     };
-  }, [character1]);
+  }, [character1]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const player2Data: SandboxPlayerData | null = useMemo(() => {
     if (!character2) return null;
@@ -152,9 +224,18 @@ export const SandboxPage = () => {
         biq: effects.totalStats.biq,
         ma: effects.totalStats.ma,
       } as CharacterStats,
+      baseStats: {
+        str: effects.baseStats.strength,
+        spd: effects.baseStats.speed,
+        dur: effects.baseStats.durability,
+        iq: effects.baseStats.iq,
+        biq: effects.baseStats.biq,
+        ma: effects.baseStats.ma,
+      } as CharacterStats,
       statModifiers: effects.statModifiers as SandboxStatModifier[],
+      effectSources: buildEffectSources(character2, effects.combatEffects),
     };
-  }, [character2]);
+  }, [character2]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load random existing player
   const loadRandomPlayer = useCallback(

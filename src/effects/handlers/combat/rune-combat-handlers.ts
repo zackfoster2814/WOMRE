@@ -165,17 +165,17 @@ registerCombatHandler(
 registerCombatHandler(
   'undying_rage_boost',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Handled directly in combat loop (computeCombat) — stat boost applied to next round's value
+    // This handler only provides description for the effects panel
     if (ctx.self.roundsLost > 0) {
-      // Boost next round — pick a random stat as proxy
-      const nextStat = STAT_NAMES[ctx.currentRound % STAT_NAMES.length];
       return {
-        selfStatMods: [{ stat: nextStat, value: 3 }],
-        description: `Undying Rage: Thua round → +3 ${nextStat} round kế`,
+        skipDefault: true,
+        description: `Undying Rage: ${ctx.self.roundsLost} round thua → +3 cho mỗi round kế tiếp`,
       };
     }
     return { skipDefault: true };
   },
-  '+3 to next round stat after each round loss'
+  '+3 to next round stat after each round loss (applied in combat loop)'
 );
 
 // ============================================================================

@@ -267,7 +267,7 @@ export function registerAllHouseEffects() {
   // 16. Roundtable Hold
   defineEffect("house", "Roundtable Hold")
     .description(
-      "Không có Mason Effect. Khi bạn thua và đứng trước ngưỡng cửa bị loại, đánh lại 1 round. Kích hoạt 1 lần.",
+      'Không có Mason Effect. (1).Khi bạn thua và đứng trước ngưỡng cửa bị loại, đánh lại combat đó với Sheet của một "Tarnished" khác.\n(2)Bạn là một "Tarnished".\nNếu đối thủ cũng là 1 "Tarnished", không kích hoạt hiệu ứng (1).\nNếu bạn là "Tarnished" cuối cùng, không kích hoạt hiệu ứng (1).\nOutcome của trận đánh vẫn sẽ là của bạn.',
     )
     .effect({
       type: "custom",
@@ -877,7 +877,9 @@ function registerHouseSubTypes() {
 
   // Winterhome Mason - 2 Gear + +1 all other stats per 5 Base Dura
   defineEffect("house_sub", "Winterhome Mason")
-    .description("(Mason) Nhận 2 Normal Gear và +1 vào all stats khác ngoài Dura với mỗi 5 Base Dura.")
+    .description(
+      "(Mason) Nhận 2 Normal Gear và +1 vào all stats khác ngoài Dura với mỗi 5 Base Dura.",
+    )
     .effect({
       type: "grant_gear",
       grantType: "gear",

@@ -48,24 +48,39 @@ registerCombatHandler(
 // ============================================================================
 
 /**
- * Roundtable Hold - Khi thua và sắp bị loại, đánh lại 1 round. Kích hoạt 1 lần.
+ * Roundtable Hold - Khi thua, gọi một Tarnished khác lên đấu trận phụ thay.
+ * - Nếu đối thủ cũng là Tarnished → không kích hoạt
+ * - Nếu là Tarnished cuối cùng → không kích hoạt
+ * - Kết quả trận phụ (Tarnished được chọn vs đối thủ gốc) quyết định số phận người thua
+ * Kích hoạt 1 lần.
  */
 registerCombatHandler(
   'roundtable_hold_retry',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    // Check if player is about to lose (opponent has more rounds won)
-    if (ctx.self.roundsLost > ctx.self.roundsWon) {
+    // Check if player lost
+    if (ctx.self.roundsLost <= ctx.self.roundsWon) {
       return {
-        selfPoints: 1,
-        description: 'Roundtable Hold: Đánh lại 1 round trước khi bị loại (+1 điểm)',
+        description: 'Roundtable Hold: Chưa kích hoạt (chưa thua)',
+      };
+    }
+
+    // Check if opponent is also a Tarnished (has Roundtable Hold house active)
+    const opponentHouses = (ctx.opponent?.character.houses || [])
+      .filter((h: any) => !h.isLost)
+      .map((h: any) => h.name);
+    const opponentIsTarnished = opponentHouses.includes('Roundtable Hold');
+
+    if (opponentIsTarnished) {
+      return {
+        description: 'Roundtable Hold: Không kích hoạt — đối thủ cũng là Tarnished',
       };
     }
 
     return {
-      description: 'Roundtable Hold: Chưa kích hoạt (chưa thua)',
+      description: '[GM Action] Roundtable Hold: Gọi một Tarnished còn sống lên đấu trận phụ. Kết quả trận phụ quyết định số phận của người thua.',
     };
   },
-  'Retry one round before elimination (once)'
+  'On loss: call another Tarnished for a sub-match (once, skips if opponent is also Tarnished)'
 );
 
 // ============================================================================
