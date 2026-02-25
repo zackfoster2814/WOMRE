@@ -238,41 +238,41 @@ registerImmediateHandler(
   "Remove all weapons from character",
 );
 
-/**
- * Blessed by Chaos - Kéo stat cao nhất xuống 1, nhận thêm 2 Char Dev
- */
-registerImmediateHandler(
-  "blessed_by_chaos",
-  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const { baseStats } = ctx;
+// /**
+//  * Blessed by Chaos - Kéo stat cao nhất xuống 1, nhận thêm 2 Char Dev
+//  */
+// registerImmediateHandler(
+//   "blessed_by_chaos",
+//   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+//     const { baseStats } = ctx;
 
-    // Find highest base stat
-    let highestStat: StatName = "strength";
-    let highestVal = baseStats.strength ?? 0;
-    for (const stat of STAT_NAMES) {
-      const val = baseStats[stat] ?? 0;
-      if (val > highestVal) {
-        highestVal = val;
-        highestStat = stat;
-      }
-    }
+//     // Find highest base stat
+//     let highestStat: StatName = "strength";
+//     let highestVal = baseStats.strength ?? 0;
+//     for (const stat of STAT_NAMES) {
+//       const val = baseStats[stat] ?? 0;
+//       if (val > highestVal) {
+//         highestVal = val;
+//         highestStat = stat;
+//       }
+//     }
 
-    const reduceAmount = -(highestVal - 1); // Reduce to 1
-    if (reduceAmount >= 0) {
-      return {
-        skipDefault: true,
-        description: "Blessed by Chaos: stat cao nhất đã là 1, nhận 2 Char Dev",
-      };
-    }
+//     const reduceAmount = -(highestVal - 1); // Reduce to 1
+//     if (reduceAmount >= 0) {
+//       return {
+//         skipDefault: true,
+//         description: "Blessed by Chaos: stat cao nhất đã là 1, nhận 2 Char Dev",
+//       };
+//     }
 
-    return {
-      statModifiers: [{ stat: highestStat, value: reduceAmount, isBase: true }],
-      skipDefault: true,
-      description: `${highestStat} giảm xuống 1, nhận thêm 2 Char Dev (Blessed by Chaos)`,
-    };
-  },
-  "Reduce highest base stat to 1, gain 2 Char Devs",
-);
+//     return {
+//       statModifiers: [{ stat: highestStat, value: reduceAmount, isBase: true }],
+//       skipDefault: true,
+//       description: `${highestStat} giảm xuống 1, nhận thêm 2 Char Dev (Blessed by Chaos)`,
+//     };
+//   },
+//   "Reduce highest base stat to 1, gain 2 Char Devs",
+// );
 
 /**
  * True Heir of the Emirate - +1 All nếu có Archetype🍀, +1 All nếu có Unique Weapon🍀

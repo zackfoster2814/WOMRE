@@ -14,7 +14,7 @@ Sub-race:
 
 ```
 Archetype: 
-+ Elf Slayer
++ Slayer - Elf
 + Gambler (Từ The Dice of the Dead)
 ```
 ``` 

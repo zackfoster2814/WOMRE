@@ -22,6 +22,8 @@ import StatModifiersTable, {
 import { PvPBackground3D } from "../components/three/PvPBackground3D";
 import { PlayerCard3DFrame } from "../components/three/PlayerCard3D";
 import { ScoreDisplay3D } from "../components/three/ScoreDisplay3D";
+import { CombatEffects3D } from "../components/three/CombatEffects3D";
+import { Canvas } from "@react-three/fiber";
 
 // Initialize effect data
 let effectsInitialized = false;
@@ -246,9 +248,30 @@ const PvPBattlePage = ({ onBack }: PvPBattlePageProps) => {
   return <WheelOfTruthMode onBack={() => setSelectedMode(null)} />;
 };
 
+/** When launched from the tournament bracket, pass these to save the result back. */
+export interface TournamentMatchContext {
+  matchNumber: number;
+  player1No: number;
+  player2No: number;
+  existingWinnerNo?: number;
+  existingScore?: string | null;
+  existingSpecialEvent?: string | null;
+  existingNote?: string | null;
+}
+
+export interface TournamentSaveResult {
+  winnerNo: number;
+  score: string | null;
+  specialEvent: string | null;
+  note: string | null;
+}
+
 interface BattleModeProps {
   onBack: () => void;
   isWebView?: boolean;
+  /** If set, StatsComparisonMode operates in tournament mode */
+  tournamentMatch?: TournamentMatchContext;
+  onSaveTournamentResult?: (result: TournamentSaveResult) => void;
 }
 
 // Race tier for tie-breaker (lower tier number = stronger race, wins tie)
@@ -316,6 +339,22 @@ const STAT_ORDER: { key: keyof CharacterStats; label: string }[] = [
   { key: "biq", label: "BIQ" },
   { key: "ma", label: "MA" },
 ];
+
+// Normalize full stat names (from effects/types.ts) to short keys (from types/character.ts)
+const STAT_NAME_MAP: Record<string, keyof CharacterStats> = {
+  strength: "str",
+  speed: "spd",
+  durability: "dur",
+  iq: "iq",
+  biq: "biq",
+  ma: "ma",
+  str: "str",
+  spd: "spd",
+  dur: "dur",
+};
+function normalizeStatKey(stat: string): keyof CharacterStats {
+  return STAT_NAME_MAP[stat.toLowerCase()] ?? (stat as keyof CharacterStats);
+}
 
 // ── Step-by-step combat interfaces ───────────────────────────────────────────
 interface CarryOverEffect {
@@ -424,23 +463,155 @@ function buildInventoryList(char: Character): InventoryItem[] {
   return items;
 }
 
+/** Tính lại stats của character có loại trừ các disabled sources */
+function calcStatsWithDisabled(
+  char: Character,
+  playerNo: number,
+  disabledItems: Set<string>,
+): CharacterStats {
+  const sources = EffectResolver.gatherEffectSources(char);
+  // Mark disabled
+  for (const src of sources) {
+    const key = `${playerNo}-${src.type}-${src.name}`;
+    if (disabledItems.has(key)) {
+      src.isDisabled = true;
+    }
+  }
+  const result = EffectResolver.resolveImmediateEffects(
+    sources,
+    // baseStats in resolver format (strength/speed/...)
+    {
+      strength: char.stats.str,
+      speed: char.stats.spd,
+      durability: char.stats.dur,
+      iq: char.stats.iq,
+      biq: char.stats.biq,
+      ma: char.stats.ma,
+    },
+    { isPvE: false },
+    char,
+  );
+  return {
+    str: result.totalStats.strength,
+    spd: result.totalStats.speed,
+    dur: result.totalStats.durability,
+    iq: result.totalStats.iq,
+    biq: result.totalStats.biq,
+    ma: result.totalStats.ma,
+  };
+}
+
+/**
+ * Calculate combat stats including before_combat modifiers based on opponent race.
+ * These stats are baked into the initial StepCombatState and used for all rounds.
+ */
+function applyBeforeCombatStatMods(
+  base: CharacterStats,
+  char: Character,
+  charNo: number,
+  disabledItems: Set<string>,
+  opponentRace: string,
+  targetFilter: "self" | "opponent",
+): void {
+  const STAT_KEYS: (keyof CharacterStats)[] = ["str", "spd", "dur", "iq", "biq", "ma"];
+  const fx = EffectResolver.calculateCharacterEffects(char, { isPvE: false });
+  for (const ce of fx.combatEffects) {
+    if (ce.isActive === false) continue;
+    if (ce.effect?.timing !== "before_combat") continue;
+    if (ce.effect?.type !== "stat_modifier") continue;
+    if (ce.effect?.value === undefined || !ce.effect?.stat) continue;
+    if ((ce.effect.target || "self") !== targetFilter) continue;
+
+    // Check disabled
+    const srcName = ce.source?.name || "?";
+    const srcType = ce.source?.type || "?";
+    if (disabledItems.has(`${charNo}-${srcType}-${srcName}`)) continue;
+
+    // Check race_match conditions
+    const conditions: any[] = (ce.effect as any).conditions || [];
+    const conditionMet = conditions.every((cond: any) => {
+      if (cond.type === "race_match" && cond.races) {
+        return cond.races.some(
+          (r: string) => r.toLowerCase() === opponentRace.toLowerCase(),
+        );
+      }
+      return true;
+    });
+    if (!conditionMet) continue;
+
+    const val = ce.effect.value;
+    let targets: (keyof CharacterStats)[];
+    if (ce.effect.stat === "all") {
+      targets = STAT_KEYS;
+    } else if (ce.effect.stat === "highest") {
+      const maxVal = Math.max(...STAT_KEYS.map(k => base[k] || 0));
+      targets = [STAT_KEYS.find(k => (base[k] || 0) === maxVal) ?? "str"];
+    } else if (ce.effect.stat === "lowest") {
+      const minVal = Math.min(...STAT_KEYS.map(k => base[k] || 0));
+      targets = [STAT_KEYS.find(k => (base[k] || 0) === minVal) ?? "str"];
+    } else if (ce.effect.stat === "random") {
+      targets = [STAT_KEYS[Math.floor(Math.random() * STAT_KEYS.length)]];
+    } else {
+      targets = [normalizeStatKey(ce.effect.stat)];
+    }
+    for (const k of targets) {
+      base[k] = (base[k] || 0) + val;
+    }
+  }
+}
+
+function calcStatsWithBeforeCombat(
+  char: Character,
+  playerNo: number,
+  disabledItems: Set<string>,
+  opponentRace: string,
+  opponentChar: Character | null,
+  opponentNo: number,
+  opponentDisabledItems: Set<string>,
+  selfRace: string,
+): CharacterStats {
+  const base = calcStatsWithDisabled(char, playerNo, disabledItems);
+
+  // Apply self's own before_combat effects (target: "self")
+  applyBeforeCombatStatMods(base, char, playerNo, disabledItems, opponentRace, "self");
+
+  // Apply opponent's before_combat effects that target "opponent" (i.e., affect us)
+  if (opponentChar) {
+    applyBeforeCombatStatMods(base, opponentChar, opponentNo, opponentDisabledItems, selfRace, "opponent");
+  }
+
+  // Slayer: "Slayer - <Race>" → +2 STR, +3 BIQ, +2 MA if opponent race matches
+  const archetypes: string[] = (char as any).archetypes || [];
+  const slayerEntry = archetypes.find((a: string) => /^slayer\s*-/i.test(a.trim()));
+  if (slayerEntry) {
+    const match = slayerEntry.match(/^slayer\s*-\s*([^\s(]+)/i);
+    const targetRace = match ? match[1].toLowerCase() : "";
+    if (targetRace && opponentRace.toLowerCase() === targetRace) {
+      base.str = (base.str || 0) + 2;
+      base.biq = (base.biq || 0) + 3;
+      base.ma = (base.ma || 0) + 2;
+    }
+  }
+
+  return base;
+}
+
 // ── PlayerCard for StatsComparison (matches tournament style) ─────────────────
 interface SCPlayerCardProps {
   player: PvPPlayerData;
   side: "left" | "right";
   isWinner: boolean;
   showWinner: boolean;
-  disabledItems: Set<string>;
-  onToggleItem: (no: number, sourceType: string, name: string) => void;
+  displayStats?: CharacterStats | null;
 }
 const SCPlayerCard = ({
   player,
   side,
   isWinner,
   showWinner,
-  disabledItems,
-  onToggleItem,
+  displayStats,
 }: SCPlayerCardProps) => {
+  const stats = displayStats ?? player.stats;
   const barBg = side === "left" ? "bg-blue-500" : "bg-red-500";
   const borderGlow =
     showWinner && isWinner
@@ -451,11 +622,9 @@ const SCPlayerCard = ({
   const race = player.character?.race?.race || player.race;
   const subRace = player.character?.race?.subRace || "";
   const total = STAT_ORDER.reduce(
-    (s, { key }) => s + (player.stats[key] || 0),
+    (s, { key }) => s + (stats[key] || 0),
     0,
   );
-  const [invOpen, setInvOpen] = useState(false);
-  const items = player.character ? buildInventoryList(player.character) : [];
 
   return (
     <div
@@ -493,11 +662,11 @@ const SCPlayerCard = ({
             <div className="flex-1 bg-gray-700/60 rounded-full h-2.5 overflow-hidden">
               <div
                 className={`h-full rounded-full ${barBg} transition-all duration-500`}
-                style={{ width: `${Math.min(player.stats[key] * 5, 100)}%` }}
+                style={{ width: `${Math.min(stats[key] * 5, 100)}%` }}
               />
             </div>
             <span className="text-white font-mono w-7 text-center text-sm font-bold">
-              {player.stats[key]}
+              {stats[key]}
             </span>
           </div>
         ))}
@@ -514,62 +683,11 @@ const SCPlayerCard = ({
         </div>
       </div>
 
-      {/* Inventory Panel */}
-      {items.length > 0 && (
-        <div className="mt-3 border-t border-gray-700/50 pt-2">
-          <button
-            onClick={() => setInvOpen((v) => !v)}
-            className={`w-full flex items-center justify-between text-[11px] text-gray-400 hover:text-white transition-colors ${side === "right" ? "flex-row-reverse" : ""}`}
-          >
-            <span>
-              📋 Inventory{" "}
-              <span className="text-gray-600">({items.length})</span>
-            </span>
-            <span className="text-gray-600">{invOpen ? "▲" : "▼"}</span>
-          </button>
-          {invOpen && (
-            <div className="mt-1.5 space-y-0.5 max-h-52 overflow-y-auto pr-0.5">
-              {items.map((item, i) => {
-                const key = `${player.no}-${item.sourceType}-${item.name}`;
-                const disabled = disabledItems.has(key);
-                const colorClass =
-                  (sourceTypeColors as Record<string, string>)[
-                    item.sourceType
-                  ] || "text-gray-400";
-                return (
-                  <button
-                    key={i}
-                    onClick={() =>
-                      onToggleItem(player.no, item.sourceType, item.name)
-                    }
-                    title={item.description || item.name}
-                    className={`w-full text-left text-[11px] px-2 py-1 rounded flex items-center gap-1.5 transition-all ${
-                      disabled
-                        ? "line-through opacity-35 bg-gray-800/20"
-                        : "hover:bg-gray-700/40 bg-gray-800/10"
-                    } ${side === "right" ? "flex-row-reverse" : ""}`}
-                  >
-                    <span className={colorClass}>{item.name}</span>
-                    <span className="text-gray-700 text-[9px]">
-                      [{item.sourceType}]
-                    </span>
-                    {disabled && (
-                      <span className="text-red-500 text-[9px] ml-auto">
-                        OFF
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };
 
-const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
+export const StatsComparisonMode = ({ onBack, tournamentMatch, onSaveTournamentResult }: BattleModeProps) => {
   const [allPlayers, setAllPlayers] = useState<PvPPlayerData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm1, setSearchTerm1] = useState("");
@@ -581,6 +699,8 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
   const [, setCurrentRound] = useState(-1);
   const [focus1, setFocus1] = useState(false);
   const [focus2, setFocus2] = useState(false);
+  const [leftTab, setLeftTab] = useState<"effects" | "inventory">("effects");
+  const [rightTab, setRightTab] = useState<"effects" | "inventory">("effects");
 
   // Roundtable Hold pending state
   const [isPendingRoundtable, setIsPendingRoundtable] = useState(false);
@@ -603,6 +723,33 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
       return next;
     });
   };
+
+  // Stats hiển thị trên card, đã trừ disabled items
+  // Stats hiển thị: khi combat đang diễn ra dùng stepState (đã có during_combat modifiers),
+  // còn lại dùng calcStatsWithDisabled
+  const p1DisplayStats = useMemo(
+    () =>
+      stepState
+        ? stepState.p1Stats
+        : player1?.character
+          ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
+          : player1?.stats ?? null,
+    [player1, disabledItems, stepState],
+  );
+  const p2DisplayStats = useMemo(
+    () =>
+      stepState
+        ? stepState.p2Stats
+        : player2?.character
+          ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
+          : player2?.stats ?? null,
+    [player2, disabledItems, stepState],
+  );
+
+  // Tournament mode state
+  const [tournamentSpecialEvent, setTournamentSpecialEvent] = useState(tournamentMatch?.existingSpecialEvent ?? "");
+  const [tournamentNote, setTournamentNote] = useState(tournamentMatch?.existingNote ?? "");
+  const isTournamentMode = !!tournamentMatch;
 
   // Tarnished selection for Roundtable sub-match
   const [tarnishedList, setTarnishedList] = useState<PvPPlayerData[]>([]);
@@ -646,14 +793,8 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                     biq: effects.totalStats.biq,
                     ma: effects.totalStats.ma,
                   };
-                  const pvpBaseStats: CharacterStats = {
-                    str: effects.baseStats.strength,
-                    spd: effects.baseStats.speed,
-                    dur: effects.baseStats.durability,
-                    iq: effects.baseStats.iq,
-                    biq: effects.baseStats.biq,
-                    ma: effects.baseStats.ma,
-                  };
+                  // Raw spin-wheel stats (before any effect modifiers) for display in breakdown table
+                  const pvpBaseStats: CharacterStats = { ...char.stats };
                   const breakdown =
                     EffectResolver.getCharacterEffectBreakdown(char);
 
@@ -679,6 +820,13 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
         // Sort by player number
         playerList.sort((a, b) => a.no - b.no);
         setAllPlayers(playerList);
+        // Auto-select tournament players
+        if (tournamentMatch) {
+          const p1 = playerList.find((p) => p.no === tournamentMatch.player1No) ?? null;
+          const p2 = playerList.find((p) => p.no === tournamentMatch.player2No) ?? null;
+          setPlayer1(p1);
+          setPlayer2(p2);
+        }
       } catch (error) {
         console.error("Error loading players:", error);
       } finally {
@@ -770,6 +918,67 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
         });
       }
     }
+
+    // Check auto_lose_round effects (e.g. Glass Cannon always loses DUR round)
+    const checkAutoLose = (player: PvPPlayerData, playerSide: "player1" | "player2") => {
+      const fx = EffectResolver.calculateCharacterEffects(player.character!, { isPvE: false });
+      for (const ce of fx.combatEffects) {
+        if (ce.isActive === false) continue;
+        if (ce.effect?.type !== "auto_lose_round") continue;
+        if (ce.effect?.timing !== "during_combat") continue;
+        const autoLoseStat = normalizeStatKey((ce.effect as any).stat || "");
+        if (autoLoseStat !== key) continue;
+        // Check disabled
+        const srcName = ce.source?.name || "?";
+        const srcType = ce.source?.type || "?";
+        if (disabledItems.has(`${player.no}-${srcType}-${srcName}`)) continue;
+        // Force this player to lose the round by setting their value to -999
+        if (playerSide === "player1") p1Val = -999;
+        else p2Val = -999;
+        events.push({
+          player: playerSide,
+          source: srcName,
+          description: `Auto-thua round ${key.toUpperCase()} (${srcName})`,
+          type: "stat_debuff",
+        });
+      }
+    };
+    if (p1.character) checkAutoLose(p1, "player1");
+    if (p2.character) checkAutoLose(p2, "player2");
+
+    // Promised Consort: add highest base stat of a Lover to the current round stat
+    const applyPromisedConsort = (player: PvPPlayerData, playerSide: "player1" | "player2") => {
+      const archetypes: string[] = (player.character as any)?.archetypes || [];
+      if (!archetypes.some(a => a === "Promised Consort")) return;
+      const lovers: any[] = player.character?.lover || [];
+      const activeLovers = lovers.filter((l: any) => !l.isLost);
+      if (activeLovers.length === 0) return;
+      // Prefer Femboy lover
+      const STAT_KEYS_SHORT = ["str", "spd", "dur", "iq", "biq", "ma"] as (keyof CharacterStats)[];
+      const chooseLover = (loverList: any[]) => {
+        const femboy = loverList.find((l: any) => {
+          const n = typeof l === "string" ? l : (l?.name ?? "");
+          return allPlayers.find(p => p.name === n)?.character?.archetypes?.includes("Femboy");
+        });
+        return femboy || loverList[0];
+      };
+      const chosen = chooseLover(activeLovers);
+      const loverName = typeof chosen === "string" ? chosen : (chosen?.name ?? "");
+      const loverPlayer = allPlayers.find(p => p.name === loverName);
+      if (!loverPlayer) return;
+      const loverStats = loverPlayer.baseStats || loverPlayer.stats;
+      const highest = Math.max(...STAT_KEYS_SHORT.map(k => loverStats[k] || 0));
+      if (playerSide === "player1") p1Val += highest;
+      else p2Val += highest;
+      events.push({
+        player: playerSide,
+        source: "Promised Consort",
+        description: `+${highest} từ Base Stat cao nhất của "${loverName}" (Promised Consort)`,
+        type: "stat_boost",
+      });
+    };
+    if (p1.character) applyPromisedConsort(p1, "player1");
+    if (p2.character) applyPromisedConsort(p2, "player2");
 
     // Determine winner
     let winner: "player1" | "player2" | "tie";
@@ -933,17 +1142,82 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
         const timing = ce.effect?.timing;
         const handlerName = ce.effect?.customHandler;
 
-        // Only process round-level timings here
+        // Only process round-level timings here (before_combat is baked into initial stats)
         if (
-          !["on_round_win", "on_round_lose", "during_combat"].includes(
+          !["on_round_win", "on_round_lose", "on_round_tie", "during_combat"].includes(
             timing || "",
           )
         )
           continue;
         if (timing === "on_round_win" && !isWinner) continue;
         if (timing === "on_round_lose" && !isLoser) continue;
+        if (timing === "on_round_tie" && roundWinner !== "tie") continue;
+        // before_combat effects are baked into initial p1Stats/p2Stats at startCombat time
+        if (timing === "before_combat") continue;
 
-        if (!handlerName) continue;
+        // Xử lý during_combat stat_modifier không có customHandler
+        if (!handlerName) {
+          if (
+            timing === "during_combat" &&
+            ce.effect?.type === "stat_modifier" &&
+            ce.effect.value !== undefined &&
+            ce.effect.stat
+          ) {
+            // Check race_match and race_tier_compare conditions
+            const conditions = ce.effect.conditions || [];
+            const selfRaceTier = isSelf ? p1.raceTier : p2.raceTier;
+            const oppRaceTier = isSelf ? p2.raceTier : p1.raceTier;
+            const oppRace = (isSelf ? p2.character?.race?.race : p1.character?.race?.race) || "";
+            const conditionMet = conditions.every((cond: any) => {
+              if (cond.type === "race_match" && cond.races) {
+                return cond.races.some((r: string) => r.toLowerCase() === oppRace.toLowerCase());
+              }
+              if (cond.type === "race_tier_compare" && cond.tierOperator) {
+                // tierOperator: "<" means self tier < opp tier (self is lower rank = facing higher rank)
+                if (cond.tierOperator === "<") return selfRaceTier < oppRaceTier;
+                if (cond.tierOperator === ">") return selfRaceTier > oppRaceTier;
+                if (cond.tierOperator === "=") return selfRaceTier === oppRaceTier;
+              }
+              return true;
+            });
+            if (!conditionMet) continue;
+
+            // Resolve stat targets (including "highest"/"lowest" special values)
+            const ALL_STAT_KEYS = ["str", "spd", "dur", "iq", "biq", "ma"] as (keyof CharacterStats)[];
+            const isOpponentTarget = ce.effect.target === "opponent";
+            const affectedSide = isOpponentTarget
+              ? (playerSide === "player1" ? "player2" : "player1")
+              : playerSide;
+            const currentStats = affectedSide === "player1" ? newP1Stats : newP2Stats;
+            let statTargets: (keyof CharacterStats)[];
+            if (ce.effect.stat === "all") {
+              statTargets = ALL_STAT_KEYS;
+            } else if (ce.effect.stat === "highest") {
+              const maxVal = Math.max(...ALL_STAT_KEYS.map(k => currentStats[k] || 0));
+              statTargets = [ALL_STAT_KEYS.find(k => (currentStats[k] || 0) === maxVal) ?? "str"];
+            } else if (ce.effect.stat === "lowest") {
+              const minVal = Math.min(...ALL_STAT_KEYS.map(k => currentStats[k] || 0));
+              statTargets = [ALL_STAT_KEYS.find(k => (currentStats[k] || 0) === minVal) ?? "str"];
+            } else if (ce.effect.stat === "random") {
+              statTargets = [ALL_STAT_KEYS[Math.floor(Math.random() * ALL_STAT_KEYS.length)]];
+            } else {
+              statTargets = [normalizeStatKey(ce.effect.stat)];
+            }
+            const val = ce.effect.value;
+            for (const csKey of statTargets) {
+              if (affectedSide === "player1")
+                newP1Stats[csKey] = (newP1Stats[csKey] || 0) + val;
+              else newP2Stats[csKey] = (newP2Stats[csKey] || 0) + val;
+            }
+            events.push({
+              player: affectedSide,
+              source: sourceName,
+              description: `${val >= 0 ? "+" : ""}${val} ${ce.effect.stat === "all" ? "All" : statTargets.map(s => s.toUpperCase()).join("/")} (${sourceName}${isOpponentTarget ? " → opponent" : ""})`,
+              type: val >= 0 ? "stat_boost" : "stat_debuff",
+            });
+          }
+          continue;
+        }
         const result = HandlerRegistry.executeCombat(handlerName, ctx);
         if (!result || result.skipDefault) continue;
 
@@ -959,7 +1233,7 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
         // Stat mods
         if (result.selfStatMods) {
           for (const mod of result.selfStatMods) {
-            const csKey = mod.stat as keyof CharacterStats;
+            const csKey = normalizeStatKey(mod.stat);
             // Detect carry-over handlers (Undying Rage, Luminescence — boost the NEXT round)
             const isCarryOver = [
               "undying_rage_boost",
@@ -998,7 +1272,7 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
         // Opponent stat mods
         if (result.opponentStatMods) {
           for (const mod of result.opponentStatMods) {
-            const csKey = mod.stat as keyof CharacterStats;
+            const csKey = normalizeStatKey(mod.stat);
             const oppSide = playerSide === "player1" ? "player2" : "player1";
             const isCarryOver = ["luminescence_debuff"].includes(handlerName);
             if (isCarryOver && roundIndex < 5) {
@@ -1198,11 +1472,73 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
     setSubCombatResult(null);
     _setSubCurrentRound(-1);
     setRoundSpinResults({});
+    setCombatConfirmed(false);
+    const p2Race = player2.character?.race?.race || player2.race || "";
+    const p1Race = player1.character?.race?.race || player1.race || "";
+
+    // Compute starting points from combat_points effects (conditional ones like Freyja, Bragi, Asmodeus, Thor, Belphegor)
+    const calcStartingPoints = (
+      self: PvPPlayerData,
+      opponent: PvPPlayerData,
+    ): number => {
+      if (!self.character) return 0;
+      const selfNo = self.no;
+      const oppChar = opponent.character;
+      const oppRace = oppChar?.race?.race || opponent.race || "";
+      const oppHasLover = !!(oppChar?.lover && (Array.isArray(oppChar.lover) ? oppChar.lover.some(l => !l.isLost) : true));
+      const instruments = ["Guitar", "Violin", "Piano", "Drums", "Flute", "Bagpipe", "Harmonica"];
+      const oppHasInstrument = (oppChar?.weapons || []).some(
+        (w: any) => !w.isLost && instruments.some(i => w.name?.includes(i))
+      );
+      const oppPowers = (oppChar?.powers || []).map((p: any) => typeof p === "string" ? p : p.name);
+
+      const fx = EffectResolver.calculateCharacterEffects(self.character, { isPvE: false });
+      let pts = 0;
+      for (const ce of fx.combatEffects) {
+        if (ce.isActive === false) continue;
+        if (ce.effect?.type !== "combat_points") continue;
+        if (ce.effect?.timing !== "before_combat") continue;
+        // Check disabled
+        const srcName = ce.source?.name || "?";
+        const srcType = ce.source?.type || "?";
+        if (disabledItems.has(`${selfNo}-${srcType}-${srcName}`)) continue;
+        // Check conditions
+        const conditions: any[] = (ce.effect as any).conditions || [];
+        const met = conditions.every((cond: any) => {
+          if (cond.type === "opponent_has") {
+            if (cond.opponentItemType === "lover") return oppHasLover;
+            if (cond.opponentItemType === "weapon" && cond.opponentItemName === "instrument") return oppHasInstrument;
+            if (cond.opponentItemType === "power" && cond.opponentItemName) {
+              return oppPowers.some((p: string) => p.toLowerCase() === cond.opponentItemName.toLowerCase());
+            }
+          }
+          if (cond.type === "race_match" && cond.races) {
+            return cond.races.some((r: string) => r.toLowerCase() === oppRace.toLowerCase());
+          }
+          return true;
+        });
+        if (met) pts += (ce.effect as any).points || 0;
+      }
+      return pts;
+    };
+    const p1StartScore = calcStartingPoints(player1, player2);
+    const p2StartScore = calcStartingPoints(player2, player1);
+
     const init: StepCombatState = {
-      p1Stats: { ...player1.stats },
-      p2Stats: { ...player2.stats },
-      p1Score: 0,
-      p2Score: 0,
+      p1Stats: player1.character
+        ? calcStatsWithBeforeCombat(
+            player1.character, player1.no, disabledItems, p2Race,
+            player2.character ?? null, player2.no, disabledItems, p1Race,
+          )
+        : { ...player1.stats },
+      p2Stats: player2.character
+        ? calcStatsWithBeforeCombat(
+            player2.character, player2.no, disabledItems, p1Race,
+            player1.character ?? null, player1.no, disabledItems, p2Race,
+          )
+        : { ...player2.stats },
+      p1Score: p1StartScore,
+      p2Score: p2StartScore,
       p1CarryOver: [],
       p2CarryOver: [],
       resolvedRounds: [],
@@ -1361,6 +1697,7 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
     setRoundSpinResults({});
     setStepState(null);
     setStepRoundIndex(-1);
+    setCombatConfirmed(false);
   };
 
   // Swap players
@@ -1375,8 +1712,24 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
   };
 
   // Per-round spin effects: detect which effects trigger per round win/lose
-  const getPerRoundEffects = (char: Character | undefined) => {
-    if (!char) return { onWin: [] as string[], onLose: [] as string[] };
+  const getPerRoundEffects = (char: Character | undefined, playerNo?: number) => {
+    if (!char) return { onWin: [] as string[], onLose: [] as string[], onTie: [] as string[] };
+
+    // Helper: check if a named item (of any sourceType) is NOT fully disabled
+    // An item is considered active if at least one inventory entry with that name is not disabled
+    const isEffectActive = (targetName: string) => {
+      if (playerNo === undefined) return true;
+      const items = buildInventoryList(char);
+      const matching = items.filter(
+        (it) => it.name.toLowerCase() === targetName.toLowerCase(),
+      );
+      if (matching.length === 0) return false;
+      // Active if any matching entry is NOT disabled
+      return matching.some(
+        (it) => !disabledItems.has(`${playerNo}-${it.sourceType}-${it.name}`),
+      );
+    };
+
     const sources = [
       ...(char.quirks || [])
         .filter((q) => !q.isLost)
@@ -1388,11 +1741,16 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
     ];
     const onWin: string[] = [];
     const onLose: string[] = [];
-    if (sources.some((s) => s.includes("critical strike")))
+    const onTie: string[] = [];
+    if (sources.some((s) => s.includes("critical strike")) && isEffectActive("Critical Strike"))
       onWin.push("Critical Strike");
-    if (sources.some((s) => s.includes("evasion"))) onLose.push("Evasion");
-    if (sources.some((s) => s === "gambler")) onWin.push("Gambler");
-    return { onWin, onLose };
+    if (sources.some((s) => s.includes("evasion")) && isEffectActive("Evasion"))
+      onLose.push("Evasion");
+    if (sources.some((s) => s === "gambler") && isEffectActive("Gambler"))
+      onWin.push("Gambler");
+    if (sources.some((s) => s === "cruelty") && isEffectActive("Cruelty"))
+      onTie.push("Cruelty");
+    return { onWin, onLose, onTie };
   };
 
   // State for per-round spin modal in round display
@@ -1433,24 +1791,39 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
     { label: "+2 điểm (50%)", weight: 50, isSuccess: true, color: "#f59e0b" },
     { label: "+0 điểm (50%)", weight: 50, isSuccess: false, color: "#ef4444" },
   ];
+  const CRUELTY_ITEMS: WheelSpinItem[] = [
+    // Cruelty on tie: 50% = +1 for this player, 50% = opponent gets +1
+    { label: "+1 điểm cho ta (50%)", weight: 50, isSuccess: true, color: "#e879f9" },
+    { label: "+1 điểm cho đối thủ (50%)", weight: 50, isSuccess: false, color: "#6b7280" },
+  ];
 
   // Compute effective points for a side in a round, factoring in spin results
   const computeRoundPoints = (
     side: "player1" | "player2",
     winner: "player1" | "player2" | "tie",
     roundIdx: number,
-    effects: { onWin: string[]; onLose: string[] },
+    effects: { onWin: string[]; onLose: string[]; onTie: string[] },
   ): { pts: number; pending: boolean; color: string } => {
     const isWinner = winner === side;
     const isLoser = winner !== side && winner !== "tie";
+    const isTie = winner === "tie";
 
     const hasGambler = effects.onWin.includes("Gambler");
     const hasCrit = effects.onWin.includes("Critical Strike");
     const hasEvasion = effects.onLose.includes("Evasion");
+    const hasCruelty = effects.onTie.includes("Cruelty");
 
     const gamblerSpun = roundSpinResults[`${roundIdx}-Gambler-${side}`];
     const critSpun = roundSpinResults[`${roundIdx}-Critical Strike-${side}`];
     const evasionSpun = roundSpinResults[`${roundIdx}-Evasion-${side}`];
+    const crueltySpun = roundSpinResults[`${roundIdx}-Cruelty-${side}`];
+
+    // Cruelty: on tie, spin to decide who gets the point
+    if (isTie && hasCruelty) {
+      if (!crueltySpun) return { pts: 0, pending: true, color: "text-fuchsia-400" };
+      if (crueltySpun.isSuccess) return { pts: 1, pending: false, color: "text-fuchsia-300" };
+      return { pts: 0, pending: false, color: "text-gray-600" };
+    }
 
     if (isWinner) {
       // Gambler replaces base point
@@ -1488,8 +1861,8 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
     p1char?: Character,
     p2char?: Character,
   ) => {
-    const p1Effects = getPerRoundEffects(p1char);
-    const p2Effects = getPerRoundEffects(p2char);
+    const p1Effects = getPerRoundEffects(p1char, player1?.no);
+    const p2Effects = getPerRoundEffects(p2char, player2?.no);
     const showSpins = !!p1char || !!p2char;
 
     const makeSpinButton = (
@@ -1504,7 +1877,9 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
           ? CRIT_ITEMS
           : effectName === "Evasion"
             ? EVASION_ITEMS
-            : GAMBLER_ITEMS;
+            : effectName === "Cruelty"
+              ? CRUELTY_ITEMS
+              : GAMBLER_ITEMS;
 
       if (result) {
         // Show result badge — clickable to re-spin
@@ -1532,7 +1907,9 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
               ? "Crit"
               : effectName === "Evasion"
                 ? "Evade"
-                : "Gambler"}
+                : effectName === "Cruelty"
+                  ? "Cruelty"
+                  : "Gambler"}
           </button>
         );
       }
@@ -1556,7 +1933,9 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
             ? "Crit"
             : effectName === "Evasion"
               ? "Evade"
-              : "Gambler"}
+              : effectName === "Cruelty"
+                ? "Cruelty"
+                : "Gambler"}
         </button>
       );
     };
@@ -1573,14 +1952,18 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
           // Which spin effects are relevant for this round
           const p1SpinEffects = p1Win
             ? p1Effects.onWin
-            : revealed && !tie
-              ? p1Effects.onLose
-              : [];
+            : tie
+              ? p1Effects.onTie
+              : revealed
+                ? p1Effects.onLose
+                : [];
           const p2SpinEffects = p2Win
             ? p2Effects.onWin
-            : revealed && !tie
-              ? p2Effects.onLose
-              : [];
+            : tie
+              ? p2Effects.onTie
+              : revealed
+                ? p2Effects.onLose
+                : [];
 
           // Effective points after spins (only if chars provided)
           const p1Pts =
@@ -1592,15 +1975,15 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
               ? computeRoundPoints("player2", round.winner, index, p2Effects)
               : null;
 
-          // Show point badge: always on winner side; also on loser side if evasion pending/hit
+          // Show point badge: always on winner side; also on loser/tie side if evasion/cruelty pending/hit
           const showP1Pts =
             revealed &&
             round &&
-            (p1Win || (p1Pts && (p1Pts.pts > 0 || p1Pts.pending) && !tie));
+            (p1Win || (p1Pts && (p1Pts.pts > 0 || p1Pts.pending)));
           const showP2Pts =
             revealed &&
             round &&
-            (p2Win || (p2Pts && (p2Pts.pts > 0 || p2Pts.pending) && !tie));
+            (p2Win || (p2Pts && (p2Pts.pts > 0 || p2Pts.pending)));
 
           return (
             <div
@@ -1687,15 +2070,91 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
 
   const battleDone = !!combatResult;
   const stepInProgress = !!stepState && stepRoundIndex < 6;
-  const mainWinner = combatResult
-    ? combatResult.winner === "player1"
-      ? player1
-      : player2
+
+  // Compute effective scores accounting for crit/gambler/evasion spins
+  const effectiveScores = useMemo(() => {
+    if (!combatResult) return { s1: 0, s2: 0 };
+    const rounds = combatResult.rounds;
+    const p1Effects = getPerRoundEffects(player1?.character, player1?.no);
+    const p2Effects = getPerRoundEffects(player2?.character, player2?.no);
+    let s1 = 0, s2 = 0;
+    for (let i = 0; i < rounds.length; i++) {
+      const r = rounds[i];
+      s1 += computeRoundPoints("player1", r.winner, i, p1Effects).pts;
+      s2 += computeRoundPoints("player2", r.winner, i, p2Effects).pts;
+    }
+    return { s1, s2 };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [combatResult, roundSpinResults, player1, player2, disabledItems]);
+
+  // Whether any revealed round still has a pending spin
+  const pendingSpins = useMemo(() => {
+    if (!combatResult) return false;
+    const rounds = combatResult.rounds;
+    const p1Effects = getPerRoundEffects(player1?.character, player1?.no);
+    const p2Effects = getPerRoundEffects(player2?.character, player2?.no);
+    for (let i = 0; i < rounds.length; i++) {
+      const r = rounds[i];
+      if (computeRoundPoints("player1", r.winner, i, p1Effects).pending) return true;
+      if (computeRoundPoints("player2", r.winner, i, p2Effects).pending) return true;
+    }
+    return false;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [combatResult, roundSpinResults, player1, player2, disabledItems]);
+
+  // Effective winner after spins resolved
+  const effectiveWinner = useMemo((): "player1" | "player2" | null => {
+    if (!combatResult || !player1 || !player2) return null;
+    const { s1, s2 } = effectiveScores;
+    if (s1 > s2) return "player1";
+    if (s2 > s1) return "player2";
+    // Tie: use race tier
+    return player1.raceTier <= player2.raceTier ? "player1" : "player2";
+  }, [combatResult, effectiveScores, player1, player2]);
+
+  // User must explicitly confirm result after spins are done
+  const [combatConfirmed, setCombatConfirmed] = useState(false);
+
+  const mainWinner = combatConfirmed && effectiveWinner
+    ? effectiveWinner === "player1" ? player1 : player2
     : null;
   const lastRoundLog =
     stepState && stepState.roundLogs.length > 0
       ? stepState.roundLogs[stepState.roundLogs.length - 1]
       : null;
+
+  // Combat 3D effect triggers — fire briefly after each round resolves
+  const [p1EffectKey, setP1EffectKey] = useState(0);
+  const [p2EffectKey, setP2EffectKey] = useState(0);
+  const [p1Boost, setP1Boost] = useState(false);
+  const [p1Debuff, setP1Debuff] = useState(false);
+  const [p2Boost, setP2Boost] = useState(false);
+  const [p2Debuff, setP2Debuff] = useState(false);
+  const [critActive, setCritActive] = useState(false);
+  useEffect(() => {
+    if (!lastRoundLog) return;
+    const p1Win = lastRoundLog.winner === "player1";
+    const p2Win = lastRoundLog.winner === "player2";
+    // Check if any critical event in log (e.g. critical strike)
+    const hasCrit = lastRoundLog.events.some((e) =>
+      e.description.toLowerCase().includes("critical"),
+    );
+    setP1Boost(p1Win);
+    setP1Debuff(!p1Win && lastRoundLog.winner !== "tie");
+    setP2Boost(p2Win);
+    setP2Debuff(!p2Win && lastRoundLog.winner !== "tie");
+    if (hasCrit) setCritActive(true);
+    setP1EffectKey((k) => k + 1);
+    setP2EffectKey((k) => k + 1);
+    const timer = setTimeout(() => {
+      setP1Boost(false);
+      setP1Debuff(false);
+      setP2Boost(false);
+      setP2Debuff(false);
+      setCritActive(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [lastRoundLog]);
 
   if (loading) {
     return (
@@ -1725,6 +2184,28 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
     >
       {/* 3D animated background layer */}
       <PvPBackground3D />
+
+      {/* Full-screen Canvas overlay for critical hit screen shake */}
+      {critActive && (
+        <div
+          className="fixed inset-0 pointer-events-none"
+          style={{ zIndex: 9999 }}
+        >
+          <Canvas
+            camera={{ position: [0, 0, 5], fov: 75 }}
+            gl={{ alpha: true, antialias: false }}
+            style={{ background: "transparent" }}
+          >
+            <CombatEffects3D
+              boostTrigger={false}
+              debuffTrigger={false}
+              criticalTrigger={critActive}
+              position={[0, 0, 0]}
+            />
+          </Canvas>
+        </div>
+      )}
+
       {/* Content above 3D background */}
       <div className="relative" style={{ zIndex: 1 }}>
         {/* Top bar */}
@@ -1737,92 +2218,105 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
           </button>
           <div className="flex-1 px-5 py-3 rounded-2xl border border-gray-600/50 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-red-900/20">
             <h1 className="text-xl font-bold text-white">
-              PvP Stats Comparison
+              {isTournamentMode ? `Match #${tournamentMatch!.matchNumber}` : "PvP Stats Comparison"}
             </h1>
+            {isTournamentMode && player1 && player2 && (
+              <p className="text-xs text-gray-400 mt-0.5">{player1.name} vs {player2.name}</p>
+            )}
           </div>
         </div>
 
         {/* 3-column layout: left sidebar | center | right sidebar */}
         <div className="max-w-[1400px] mx-auto flex gap-3 px-2 items-start">
-          {/* ── LEFT SIDEBAR: Player 1 effects ── */}
-          <div className="w-[320px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-blue-500/30 max-h-[85vh]">
-            {/* Header: search (always visible, not clipped) */}
-            <div className="p-3 border-b border-blue-500/20 rounded-t-2xl shrink-0">
-              <div className="relative">
-                {player1 ? (
-                  <div className="flex items-center gap-2 px-3 py-2 bg-gray-800 border border-blue-600/40 rounded-lg">
-                    <span className="text-blue-400 text-xs font-mono">
-                      #{player1.no}
-                    </span>
-                    <span className="text-white text-sm font-bold flex-1 truncate">
-                      {player1.name}
-                    </span>
-                    <button
-                      onClick={() => {
-                        setPlayer1(null);
-                        setSearchTerm1("");
-                        resetCombat();
-                      }}
-                      className="text-gray-500 hover:text-white text-xs shrink-0"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <input
-                      type="text"
-                      placeholder="Tìm Player 1..."
-                      value={searchTerm1}
-                      onFocus={() => setFocus1(true)}
-                      onBlur={() => setTimeout(() => setFocus1(false), 150)}
-                      onChange={(e) => setSearchTerm1(e.target.value)}
-                      className="w-full px-3 py-2 bg-gray-800 border border-blue-600/40 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-                    />
-                    {focus1 && filteredPlayers1.length > 0 && (
-                      <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-56 overflow-y-auto">
-                        {filteredPlayers1.map((p) => (
-                          <button
-                            key={p.no}
-                            onMouseDown={() => {
-                              setPlayer1(p);
-                              setSearchTerm1(p.name);
-                              setFocus1(false);
-                              resetCombat();
-                            }}
-                            className="w-full px-3 py-2 text-left hover:bg-gray-700 text-white text-sm flex justify-between items-center gap-2"
-                          >
-                            <span className="flex items-center gap-1.5 min-w-0">
-                              <span className="text-blue-400 font-mono text-xs shrink-0">
-                                #{p.no}
-                              </span>
-                              <span className="truncate">{p.name}</span>
-                            </span>
-                            <span className="text-xs text-gray-400 shrink-0">
-                              {p.race}
-                            </span>
-                          </button>
-                        ))}
+          {/* ── LEFT SIDEBAR: Player 1 ── */}
+          {(() => {
+            const p1Items = player1?.character ? buildInventoryList(player1.character) : [];
+            return (
+              <div className="w-[320px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-blue-500/30 max-h-[85vh]">
+                {/* Header: search + tab switcher */}
+                <div className="p-3 border-b border-blue-500/20 rounded-t-2xl shrink-0 space-y-2">
+                  <div className="relative">
+                    {player1 ? (
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gray-800 border border-blue-600/40 rounded-lg">
+                        <span className="text-blue-400 text-xs font-mono">#{player1.no}</span>
+                        <span className="text-white text-sm font-bold flex-1 truncate">{player1.name}</span>
+                        {!isTournamentMode && (
+                          <button onClick={() => { setPlayer1(null); setSearchTerm1(""); resetCombat(); }} className="text-gray-500 hover:text-white text-xs shrink-0">✕</button>
+                        )}
                       </div>
+                    ) : (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="Tìm Player 1..."
+                          value={searchTerm1}
+                          onFocus={() => setFocus1(true)}
+                          onBlur={() => setTimeout(() => setFocus1(false), 150)}
+                          onChange={(e) => setSearchTerm1(e.target.value)}
+                          className="w-full px-3 py-2 bg-gray-800 border border-blue-600/40 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        />
+                        {focus1 && filteredPlayers1.length > 0 && (
+                          <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-56 overflow-y-auto">
+                            {filteredPlayers1.map((p) => (
+                              <button key={p.no} onMouseDown={() => { setPlayer1(p); setSearchTerm1(p.name); setFocus1(false); setLeftTab("effects"); resetCombat(); }}
+                                className="w-full px-3 py-2 text-left hover:bg-gray-700 text-white text-sm flex justify-between items-center gap-2">
+                                <span className="flex items-center gap-1.5 min-w-0">
+                                  <span className="text-blue-400 font-mono text-xs shrink-0">#{p.no}</span>
+                                  <span className="truncate">{p.name}</span>
+                                </span>
+                                <span className="text-xs text-gray-400 shrink-0">{p.race}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </>
                     )}
-                  </>
-                )}
-              </div>
-            </div>
-            {/* Scrollable content */}
-            <div className="overflow-y-auto flex-1 p-3">
-              {player1 ? (
-                <StatModifiersTable
-                  breakdown={player1.breakdown}
-                  baseStats={player1.baseStats}
-                />
-              ) : (
-                <div className="text-gray-600 text-xs text-center py-8">
-                  Chọn Player 1 để xem hiệu ứng
+                  </div>
+                  {player1 && (
+                    <div className="flex bg-gray-800/60 rounded-lg p-0.5 gap-0.5">
+                      <button onClick={() => setLeftTab("effects")}
+                        className={`flex-1 text-xs py-1 rounded-md font-medium transition-all ${leftTab === "effects" ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"}`}>
+                        Hiệu ứng
+                      </button>
+                      <button onClick={() => setLeftTab("inventory")}
+                        className={`flex-1 text-xs py-1 rounded-md font-medium transition-all ${leftTab === "inventory" ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"}`}>
+                        Inventory {p1Items.length > 0 && <span className="opacity-60">({p1Items.length})</span>}
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+                {/* Scrollable content */}
+                <div className="overflow-y-auto flex-1 p-3">
+                  {player1 ? (
+                    leftTab === "effects" ? (
+                      <StatModifiersTable breakdown={player1.breakdown} baseStats={player1.baseStats} />
+                    ) : (
+                      <div className="space-y-0.5">
+                        {p1Items.length === 0 ? (
+                          <div className="text-gray-600 text-xs text-center py-8">Không có item</div>
+                        ) : p1Items.map((item, i) => {
+                          const k = `${player1.no}-${item.sourceType}-${item.name}`;
+                          const disabled = disabledItems.has(k);
+                          const colorClass = (sourceTypeColors as Record<string, string>)[item.sourceType] || "text-gray-400";
+                          return (
+                            <button key={i} onClick={() => toggleItem(player1.no, item.sourceType, item.name)}
+                              title={item.description || item.name}
+                              className={`w-full text-left text-[11px] px-2 py-1.5 rounded flex items-center gap-1.5 transition-all ${disabled ? "line-through opacity-35 bg-gray-800/20" : "hover:bg-gray-700/40 bg-gray-800/10"}`}>
+                              <span className={colorClass}>{item.name}</span>
+                              <span className="text-gray-700 text-[9px]">[{item.sourceType}]</span>
+                              {disabled && <span className="text-red-500 text-[9px] ml-auto">OFF</span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )
+                  ) : (
+                    <div className="text-gray-600 text-xs text-center py-8">Chọn Player 1 để xem</div>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
 
           {/* ── CENTER: Battle area ── */}
           <div className="flex-1 min-w-0">
@@ -1834,22 +2328,24 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                   <PlayerCard3DFrame
                     side="left"
                     isWinner={
-                      battleDone &&
+                      combatConfirmed &&
                       !isPendingRoundtable &&
-                      combatResult?.winner === "player1"
+                      effectiveWinner === "player1"
                     }
+                    boostTrigger={p1Boost}
+                    debuffTrigger={p1Debuff}
+                    key={`p1-frame-${p1EffectKey}`}
                   >
                     <SCPlayerCard
                       player={player1}
                       side="left"
+                      displayStats={p1DisplayStats}
                       isWinner={
-                        battleDone &&
+                        combatConfirmed &&
                         !isPendingRoundtable &&
-                        combatResult?.winner === "player1"
+                        effectiveWinner === "player1"
                       }
-                      showWinner={battleDone && !isPendingRoundtable}
-                      disabledItems={disabledItems}
-                      onToggleItem={toggleItem}
+                      showWinner={combatConfirmed && !isPendingRoundtable}
                     />
                   </PlayerCard3DFrame>
                 ) : (
@@ -1861,12 +2357,12 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                 {/* VS / Score with 3D backdrop */}
                 <ScoreDisplay3D
                   winner={
-                    battleDone && !isPendingRoundtable
-                      ? (combatResult?.winner ?? null)
+                    combatConfirmed && !isPendingRoundtable
+                      ? effectiveWinner
                       : null
                   }
-                  p1Score={combatResult?.player1Score ?? 0}
-                  p2Score={combatResult?.player2Score ?? 0}
+                  p1Score={effectiveScores.s1}
+                  p2Score={effectiveScores.s2}
                 >
                   {/* HTML children giữ nguyên 100% */}
                   <div className="flex flex-col items-center justify-center pt-4 min-w-[80px]">
@@ -1874,14 +2370,19 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                       <div className="text-center">
                         <div className="text-3xl font-black text-white tracking-wider">
                           <span className="text-blue-400">
-                            {combatResult!.player1Score}
+                            {effectiveScores.s1}
                           </span>
                           <span className="text-gray-600 mx-1">:</span>
                           <span className="text-red-400">
-                            {combatResult!.player2Score}
+                            {effectiveScores.s2}
                           </span>
                         </div>
-                        {combatResult!.tieBreaker && (
+                        {pendingSpins && (
+                          <div className="text-[10px] text-amber-400/80 mt-1 bg-amber-500/10 px-2 py-0.5 rounded-full animate-pulse">
+                            Còn hiệu ứng chờ quay
+                          </div>
+                        )}
+                        {!pendingSpins && combatResult!.tieBreaker && effectiveScores.s1 === effectiveScores.s2 && (
                           <div className="text-[10px] text-yellow-400/80 mt-1 bg-yellow-500/10 px-2 py-0.5 rounded-full">
                             Race Tier
                           </div>
@@ -1889,7 +2390,7 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                         {!isPendingRoundtable && mainWinner && (
                           <div
                             className={`text-xs font-bold mt-2 px-3 py-1 rounded-lg ${
-                              combatResult!.winner === "player1"
+                              effectiveWinner === "player1"
                                 ? "text-blue-300 bg-blue-500/15"
                                 : "text-red-300 bg-red-500/15"
                             }`}
@@ -1916,22 +2417,24 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                   <PlayerCard3DFrame
                     side="right"
                     isWinner={
-                      battleDone &&
+                      combatConfirmed &&
                       !isPendingRoundtable &&
-                      combatResult?.winner === "player2"
+                      effectiveWinner === "player2"
                     }
+                    boostTrigger={p2Boost}
+                    debuffTrigger={p2Debuff}
+                    key={`p2-frame-${p2EffectKey}`}
                   >
                     <SCPlayerCard
                       player={player2}
                       side="right"
+                      displayStats={p2DisplayStats}
                       isWinner={
-                        battleDone &&
+                        combatConfirmed &&
                         !isPendingRoundtable &&
-                        combatResult?.winner === "player2"
+                        effectiveWinner === "player2"
                       }
-                      showWinner={battleDone && !isPendingRoundtable}
-                      disabledItems={disabledItems}
-                      onToggleItem={toggleItem}
+                      showWinner={combatConfirmed && !isPendingRoundtable}
                     />
                   </PlayerCard3DFrame>
                 ) : (
@@ -1942,7 +2445,7 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
               </div>
 
               {/* Swap button */}
-              {player1 && player2 && (
+              {player1 && player2 && !isTournamentMode && (
                 <div className="mt-3 flex justify-center">
                   <button
                     onClick={swapPlayers}
@@ -1962,11 +2465,11 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                   player1={{ name: player1.name, character: player1.character }}
                   player2={{ name: player2.name, character: player2.character }}
                   combatResult={
-                    battleDone
+                    battleDone && combatConfirmed && effectiveWinner
                       ? {
-                          winner: combatResult!.winner,
-                          player1Score: combatResult!.player1Score,
-                          player2Score: combatResult!.player2Score,
+                          winner: effectiveWinner,
+                          player1Score: effectiveScores.s1,
+                          player2Score: effectiveScores.s2,
                           rounds: combatResult!.rounds.map((r) => ({
                             stat: r.stat,
                             winner: r.winner,
@@ -2277,6 +2780,29 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                   ⚔ Bắt đầu
                 </button>
               )}
+              {/* Tournament: manual winner override (before battle) */}
+              {isTournamentMode && !stepState && !combatResult && player1 && player2 && (
+                <div className="flex gap-1.5">
+                  <button
+                    onClick={() => {
+                      const winnerNo = player1.no;
+                      onSaveTournamentResult?.({ winnerNo, score: null, specialEvent: tournamentSpecialEvent || null, note: tournamentNote || null });
+                    }}
+                    className="px-3 py-2 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 rounded-lg text-xs border border-blue-500/30 transition-colors"
+                  >
+                    {player1.name} Win
+                  </button>
+                  <button
+                    onClick={() => {
+                      const winnerNo = player2.no;
+                      onSaveTournamentResult?.({ winnerNo, score: null, specialEvent: tournamentSpecialEvent || null, note: tournamentNote || null });
+                    }}
+                    className="px-3 py-2 bg-red-600/30 hover:bg-red-600/50 text-red-300 rounded-lg text-xs border border-red-500/30 transition-colors"
+                  >
+                    {player2.name} Win
+                  </button>
+                </div>
+              )}
               {/* Step through rounds */}
               {stepInProgress && (
                 <button
@@ -2286,8 +2812,23 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                   Round {stepRoundIndex + 1}/6 ▶ Next
                 </button>
               )}
-              {/* Done */}
-              {battleDone && (
+              {/* All rounds done — confirm result (after optional spins) */}
+              {battleDone && !combatConfirmed && (
+                <button
+                  onClick={() => setCombatConfirmed(true)}
+                  disabled={pendingSpins}
+                  className={`px-6 py-2.5 font-bold rounded-xl text-sm transition-all shadow-lg ${
+                    pendingSpins
+                      ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
+                      : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-green-500/20 hover:shadow-green-500/40"
+                  }`}
+                  title={pendingSpins ? "Quay hết các hiệu ứng trước" : "Xác nhận kết quả"}
+                >
+                  {pendingSpins ? "⏳ Còn hiệu ứng chờ quay..." : "✓ Kết thúc"}
+                </button>
+              )}
+              {/* Re-battle (only after confirmed) */}
+              {combatConfirmed && (
                 <button
                   onClick={resetCombat}
                   className="px-4 py-2 bg-gray-700/60 hover:bg-gray-600/60 text-gray-300 rounded-lg text-xs border border-gray-600/50 transition-colors"
@@ -2296,6 +2837,46 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
                 </button>
               )}
             </div>
+
+            {/* Tournament: Special Event / Note / Save */}
+            {isTournamentMode && (
+              <div className="mt-3 bg-gray-800/60 rounded-xl border border-yellow-600/30 p-3 space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Special Event</label>
+                    <input
+                      type="text"
+                      value={tournamentSpecialEvent}
+                      onChange={(e) => setTournamentSpecialEvent(e.target.value)}
+                      placeholder="e.g. Instant Kill..."
+                      className="w-full bg-gray-800 text-white border border-gray-600 rounded px-2 py-1.5 text-xs focus:border-yellow-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] text-gray-400 mb-1">Note</label>
+                    <input
+                      type="text"
+                      value={tournamentNote}
+                      onChange={(e) => setTournamentNote(e.target.value)}
+                      placeholder="Additional notes..."
+                      className="w-full bg-gray-800 text-white border border-gray-600 rounded px-2 py-1.5 text-xs focus:border-yellow-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+                {combatConfirmed && effectiveWinner && player1 && player2 && (
+                  <button
+                    onClick={() => {
+                      const winner = effectiveWinner === "player1" ? player1 : player2;
+                      const score = tournamentSpecialEvent ? null : `${effectiveScores.s1}-${effectiveScores.s2}`;
+                      onSaveTournamentResult?.({ winnerNo: winner.no, score, specialEvent: tournamentSpecialEvent || null, note: tournamentNote || null });
+                    }}
+                    className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold rounded-lg text-sm transition-all"
+                  >
+                    💾 Lưu kết quả Match #{tournamentMatch!.matchNumber}
+                  </button>
+                )}
+              </div>
+            )}
 
             {/* Rules Info */}
             <div className="mt-4 bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-lg p-3 text-center">
@@ -2326,84 +2907,93 @@ const StatsComparisonMode = ({ onBack }: BattleModeProps) => {
             }}
           />
 
-          {/* ── RIGHT SIDEBAR: Player 2 effects ── */}
-          <div className="w-[320px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-red-500/30 max-h-[85vh]">
-            <div className="p-3 border-b border-red-500/20 rounded-t-2xl shrink-0">
-              {/* Player 2 search */}
-              <div className="relative">
-                {player2 ? (
-                  <div className="flex items-center gap-2 px-3 py-2 bg-gray-800 border border-red-600/40 rounded-lg">
-                    <span className="text-red-400 text-xs font-mono">
-                      #{player2.no}
-                    </span>
-                    <span className="text-white text-sm font-bold flex-1 truncate">
-                      {player2.name}
-                    </span>
-                    <button
-                      onClick={() => {
-                        setPlayer2(null);
-                        setSearchTerm2("");
-                        resetCombat();
-                      }}
-                      className="text-gray-500 hover:text-white text-xs shrink-0"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <input
-                      type="text"
-                      placeholder="Tìm Player 2..."
-                      value={searchTerm2}
-                      onFocus={() => setFocus2(true)}
-                      onBlur={() => setTimeout(() => setFocus2(false), 150)}
-                      onChange={(e) => {
-                        setSearchTerm2(e.target.value);
-                      }}
-                      className="w-full px-3 py-2 bg-gray-800 border border-red-600/40 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
-                    />
-                    {focus2 && filteredPlayers2.length > 0 && (
-                      <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-56 overflow-y-auto">
-                        {filteredPlayers2.map((p) => (
-                          <button
-                            key={p.no}
-                            onMouseDown={() => {
-                              setPlayer2(p);
-                              setSearchTerm2(p.name);
-                              setFocus2(false);
-                              resetCombat();
-                            }}
-                            className="w-full px-3 py-2 text-left hover:bg-gray-700 text-white text-sm flex justify-between items-center"
-                          >
-                            <span>
-                              <span className="text-red-400">#{p.no}</span>{" "}
-                              {p.name}
-                            </span>
-                            <span className="text-xs text-gray-400">
-                              {p.race}
-                            </span>
-                          </button>
-                        ))}
+          {/* ── RIGHT SIDEBAR: Player 2 ── */}
+          {(() => {
+            const p2Items = player2?.character ? buildInventoryList(player2.character) : [];
+            return (
+              <div className="w-[320px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-red-500/30 max-h-[85vh]">
+                <div className="p-3 border-b border-red-500/20 rounded-t-2xl shrink-0 space-y-2">
+                  <div className="relative">
+                    {player2 ? (
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gray-800 border border-red-600/40 rounded-lg">
+                        <span className="text-red-400 text-xs font-mono">#{player2.no}</span>
+                        <span className="text-white text-sm font-bold flex-1 truncate">{player2.name}</span>
+                        {!isTournamentMode && (
+                          <button onClick={() => { setPlayer2(null); setSearchTerm2(""); resetCombat(); }} className="text-gray-500 hover:text-white text-xs shrink-0">✕</button>
+                        )}
                       </div>
+                    ) : (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="Tìm Player 2..."
+                          value={searchTerm2}
+                          onFocus={() => setFocus2(true)}
+                          onBlur={() => setTimeout(() => setFocus2(false), 150)}
+                          onChange={(e) => setSearchTerm2(e.target.value)}
+                          className="w-full px-3 py-2 bg-gray-800 border border-red-600/40 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-red-500"
+                        />
+                        {focus2 && filteredPlayers2.length > 0 && (
+                          <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-56 overflow-y-auto">
+                            {filteredPlayers2.map((p) => (
+                              <button key={p.no} onMouseDown={() => { setPlayer2(p); setSearchTerm2(p.name); setFocus2(false); setRightTab("effects"); resetCombat(); }}
+                                className="w-full px-3 py-2 text-left hover:bg-gray-700 text-white text-sm flex justify-between items-center gap-2">
+                                <span className="flex items-center gap-1.5 min-w-0">
+                                  <span className="text-red-400 font-mono text-xs shrink-0">#{p.no}</span>
+                                  <span className="truncate">{p.name}</span>
+                                </span>
+                                <span className="text-xs text-gray-400 shrink-0">{p.race}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </>
                     )}
-                  </>
-                )}
-              </div>
-            </div>
-            <div className="overflow-y-auto flex-1 p-3">
-              {player2 ? (
-                <StatModifiersTable
-                  breakdown={player2.breakdown}
-                  baseStats={player2.baseStats}
-                />
-              ) : (
-                <div className="text-gray-600 text-xs text-center py-8">
-                  Chọn Player 2 để xem hiệu ứng
+                  </div>
+                  {player2 && (
+                    <div className="flex bg-gray-800/60 rounded-lg p-0.5 gap-0.5">
+                      <button onClick={() => setRightTab("effects")}
+                        className={`flex-1 text-xs py-1 rounded-md font-medium transition-all ${rightTab === "effects" ? "bg-red-600 text-white" : "text-gray-400 hover:text-white"}`}>
+                        Hiệu ứng
+                      </button>
+                      <button onClick={() => setRightTab("inventory")}
+                        className={`flex-1 text-xs py-1 rounded-md font-medium transition-all ${rightTab === "inventory" ? "bg-red-600 text-white" : "text-gray-400 hover:text-white"}`}>
+                        Inventory {p2Items.length > 0 && <span className="opacity-60">({p2Items.length})</span>}
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+                <div className="overflow-y-auto flex-1 p-3">
+                  {player2 ? (
+                    rightTab === "effects" ? (
+                      <StatModifiersTable breakdown={player2.breakdown} baseStats={player2.baseStats} />
+                    ) : (
+                      <div className="space-y-0.5">
+                        {p2Items.length === 0 ? (
+                          <div className="text-gray-600 text-xs text-center py-8">Không có item</div>
+                        ) : p2Items.map((item, i) => {
+                          const k = `${player2.no}-${item.sourceType}-${item.name}`;
+                          const disabled = disabledItems.has(k);
+                          const colorClass = (sourceTypeColors as Record<string, string>)[item.sourceType] || "text-gray-400";
+                          return (
+                            <button key={i} onClick={() => toggleItem(player2.no, item.sourceType, item.name)}
+                              title={item.description || item.name}
+                              className={`w-full text-left text-[11px] px-2 py-1.5 rounded flex items-center gap-1.5 transition-all ${disabled ? "line-through opacity-35 bg-gray-800/20" : "hover:bg-gray-700/40 bg-gray-800/10"}`}>
+                              <span className={colorClass}>{item.name}</span>
+                              <span className="text-gray-700 text-[9px]">[{item.sourceType}]</span>
+                              {disabled && <span className="text-red-500 text-[9px] ml-auto">OFF</span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )
+                  ) : (
+                    <div className="text-gray-600 text-xs text-center py-8">Chọn Player 2 để xem</div>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </div>
       {/* end relative content wrapper */}
@@ -2471,14 +3061,8 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                     biq: effects.totalStats.biq,
                     ma: effects.totalStats.ma,
                   };
-                  const pvpBaseStats: CharacterStats = {
-                    str: effects.baseStats.strength,
-                    spd: effects.baseStats.speed,
-                    dur: effects.baseStats.durability,
-                    iq: effects.baseStats.iq,
-                    biq: effects.baseStats.biq,
-                    ma: effects.baseStats.ma,
-                  };
+                  // Raw spin-wheel stats (before any effect modifiers) for display in breakdown table
+                  const pvpBaseStats: CharacterStats = { ...char.stats };
                   const race = char.race?.race || "Human";
                   playerList.push({
                     no: char.no || i,

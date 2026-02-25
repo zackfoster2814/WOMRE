@@ -14,7 +14,7 @@ Sub-race:
 
 ```
 Archetype: 
-+ Slayer (Dwarf Slayer)
++ Slayer - Dwarf 
 ```
 ``` 
 2 Quirk:  

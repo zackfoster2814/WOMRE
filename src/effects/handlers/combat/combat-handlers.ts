@@ -313,30 +313,37 @@ registerCombatHandler(
 // ============================================================================
 
 /**
- * Slayer Race Check - Bonus vs specific races
+ * Slayer Race Check - Bonus vs the chosen slayer target race
+ * The character's archetype name format: "Slayer - <Race>" or "Slayer - <Race> (Từ ...)"
+ * e.g. "Slayer - Giant", "Slayer - Dwarf", "Slayer - Uma (Từ Become King Slayer)"
  */
 registerCombatHandler(
   'slayer_race_check',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (!ctx.opponent) return { skipDefault: true };
+    if (!ctx.opponent || !ctx.self.character) return { skipDefault: true };
 
-    // Check for target races (Demon Slayer, Dragon Slayer, etc.)
-    const demonRaces = ['demon', 'devil', 'fiend'];
-    const dragonRaces = ['dragon', 'dragonkin', 'wyvern'];
+    // Find archetype entry starting with "Slayer"
+    const archetypes: string[] = (ctx.self.character as any).archetypes || [];
+    const slayerEntry = archetypes.find((a: string) => /^slayer\s*-/i.test(a.trim()));
+    if (!slayerEntry) return { skipDefault: true };
+
+    // Extract race: "Slayer - Giant" → "Giant", "Slayer - Uma (Từ ...)" → "Uma"
+    const match = slayerEntry.match(/^slayer\s*-\s*([^\s(]+)/i);
+    const targetRace = match ? match[1].toLowerCase() : '';
 
     const oppRace = ctx.opponent.race.toLowerCase();
+    if (!targetRace || oppRace !== targetRace) return { skipDefault: true };
 
-    if (demonRaces.includes(oppRace) || dragonRaces.includes(oppRace)) {
-      return {
-        selfStatMods: [{ stat: 'strength', value: 3 }],
-        selfPoints: 2,
-        description: `+3 Strength, +2 points vs ${ctx.opponent.race}`,
-      };
-    }
-
-    return { skipDefault: true };
+    return {
+      selfStatMods: [
+        { stat: 'strength', value: 2 },
+        { stat: 'biq', value: 3 },
+        { stat: 'ma', value: 2 },
+      ],
+      description: `Slayer: +2 STR, +3 BIQ, +2 MA vs ${ctx.opponent.race}`,
+    };
   },
-  'Bonus vs demon/dragon races'
+  'Bonus +2 STR +3 BIQ +2 MA vs chosen slayer target race'
 );
 
 /**

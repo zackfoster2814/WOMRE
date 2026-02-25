@@ -99,25 +99,18 @@ registerCombatHandler(
 // ============================================================================
 
 /**
- * Cruelty - during_combat / on_tie: 50% self nhận 1 điểm, 50% opponent nhận 1 điểm.
- * (Thay vì không ai nhận gì khi hòa)
+ * Cruelty - on_round_tie: hiển thị thông báo để người dùng quay vòng spin UI.
+ * Điểm được tính bởi spin wheel UI (roundSpinResults), không tự cộng ở đây.
  */
 registerCombatHandler(
   'cruelty_tie_coinflip',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    const selfWins = Math.random() >= 0.5;
-    if (selfWins) {
-      return {
-        selfPoints: 1,
-        description: 'Cruelty: hòa → vòng 50/50 → Bạn nhận 1 điểm',
-      };
-    }
     return {
-      opponentPoints: 1,
-      description: 'Cruelty: hòa → vòng 50/50 → Đối thủ nhận 1 điểm',
+      skipDefault: true,
+      description: 'Cruelty: hòa → quay 50/50 để quyết định điểm',
     };
   },
-  'On tie: 50/50 gives 1 point to either player (Cruelty)'
+  'On tie: spin wheel decides who gets the point (Cruelty)'
 );
 
 // ============================================================================

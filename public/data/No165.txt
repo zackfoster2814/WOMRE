@@ -14,7 +14,7 @@ Sub-race: Đen
 
 ```
 Archetype:
-+ Skeleton Slayer
++ Slayer - Skeleton
 + NPC
 ```
 ``` 

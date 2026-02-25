@@ -277,9 +277,15 @@ export class EffectResolver {
     }
 
     // Extract base name (before any parentheses or arrows)
-    const baseNameMatch = fullName.match(/^([^(->]+)/);
-    if (baseNameMatch) {
-      baseName = baseNameMatch[1].trim();
+    // Special case: "Become a Power Ranger (Color)" — keep the full name including color
+    if (/^Become a Power Ranger\s*\(/i.test(fullName)) {
+      const colorMatch = fullName.match(/^(Become a Power Ranger\s*\([^)]+\))/i);
+      baseName = colorMatch ? colorMatch[1].trim() : 'Become a Power Ranger';
+    } else {
+      const baseNameMatch = fullName.match(/^([^(->]+)/);
+      if (baseNameMatch) {
+        baseName = baseNameMatch[1].trim();
+      }
     }
 
     return { baseName, denyAids, statBonus };

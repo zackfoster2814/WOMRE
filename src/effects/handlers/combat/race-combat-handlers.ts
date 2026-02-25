@@ -438,57 +438,51 @@ registerCombatHandler(
 registerCombatHandler(
   'spirit_souls_stack',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    const roundsLost = ctx.self.roundsLost;
-    if (roundsLost === 0) {
-      return { skipDefault: true, description: 'Spirit: Chưa thua round nào, 0 Soul stacks' };
+    const charData = ctx.self.character as any;
+    // Souls đã tích lũy từ trước (từ file) + số round thua trận này
+    const prevSouls: number = charData?.spiritSouls ?? 0;
+    const soulsThisMatch = ctx.self.roundsLost; // round thua trong trận hiện tại
+    const souls = prevSouls + soulsThisMatch;
+
+    if (souls === 0) {
+      return { skipDefault: true, description: 'Spirit: 0 Soul stacks (cần 6 để kích hoạt)' };
     }
 
-    // Each round lose = +1 Soul stack. Thresholds: 6, 9, 13, 20
-    const souls = roundsLost; // 1 soul per round lost
-    const bonuses: string[] = [];
+    // Tích lũy tất cả mốc đạt được (bao gồm cả các mốc trước đó)
+    const mods: Array<{ stat: StatName; value: number }> = [];
+    const bonusLabels: string[] = [];
 
+    if (souls >= 6) {
+      mods.push({ stat: 'biq', value: 2 });
+      bonusLabels.push('+2 BIQ');
+    }
+    if (souls >= 13) {
+      STAT_NAMES.forEach(stat => mods.push({ stat, value: 1 }));
+      bonusLabels.push('+1 all stats');
+    }
+    if (souls >= 9 && souls < 13) {
+      // +1 Power — không thể auto-apply, ghi chú
+      bonusLabels.push('+1 Power (xử lý ngoài game)');
+    }
     if (souls >= 20) {
-      bonuses.push('Gấp đôi stats');
-    } else if (souls >= 13) {
-      bonuses.push('+1 all stats');
-    } else if (souls >= 9) {
-      bonuses.push('+1 Power');
-    } else if (souls >= 6) {
-      bonuses.push('+2 BIQ');
+      // Gấp đôi tất cả hiệu ứng trước → double stats hiện tại (xử lý ngoài game)
+      bonusLabels.push('Gấp đôi stats (xử lý ngoài game)');
     }
 
-    if (bonuses.length === 0) {
+    if (mods.length === 0 && souls < 6) {
       return {
         skipDefault: true,
         description: `Spirit Souls: ${souls} stack (cần 6 để kích hoạt)`,
       };
     }
 
-    const bonus = bonuses[0];
-    if (souls >= 20) {
-      return {
-        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: ctx.self.stats[stat] })),
-        description: `Spirit Souls: ${souls} stack → ${bonus} (xử lý ngoài game)`,
-      };
-    } else if (souls >= 13) {
-      return {
-        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
-        description: `Spirit Souls: ${souls} stack → ${bonus}`,
-      };
-    } else if (souls >= 9) {
-      return {
-        skipDefault: true,
-        description: `Spirit Souls: ${souls} stack → ${bonus} (xử lý ngoài game)`,
-      };
-    } else {
-      // souls >= 6
-      return {
-        selfStatMods: [{ stat: 'biq', value: 2 }],
-        description: `Spirit Souls: ${souls} stack → ${bonus}`,
-      };
-    }
+    return {
+      selfStatMods: mods.length > 0 ? mods : undefined,
+      skipDefault: mods.length === 0,
+      description: `Spirit Souls: ${souls} stack (${prevSouls} cũ + ${soulsThisMatch} trận này) → ${bonusLabels.join(', ')}`,
+    };
   },
-  'On round lose: +1 Soul stack; at 6→+2 BIQ, 9→+1 Power, 13→+1 all, 20→double stats (Spirit)'
+  'On round lose: dùng spiritSouls tích lũy; at 6→+2 BIQ, 9→+1 Power, 13→+1 all, 20→double stats (Spirit)'
 );
 
 // ============================================================================

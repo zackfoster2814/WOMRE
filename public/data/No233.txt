@@ -14,7 +14,7 @@ Sub-race: 100
 
 ```
 Archetype: 
-+ Angel Slayer
++ Slayer - Angel
 ```
 ``` 
 1 Quirk:  

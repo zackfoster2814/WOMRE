@@ -16,6 +16,7 @@
 import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import { CombatEffects3D } from "./CombatEffects3D";
 
 // ── Neon border ring ──────────────────────────────────────────────────────────
 function NeonBorderRing({
@@ -321,6 +322,8 @@ interface PlayerCard3DFrameProps {
   side: "left" | "right";
   isWinner: boolean;
   stats?: Record<string, number>; // optional, để render stat particles
+  boostTrigger?: boolean;
+  debuffTrigger?: boolean;
   children: React.ReactNode;
 }
 
@@ -328,6 +331,8 @@ export function PlayerCard3DFrame({
   side,
   isWinner,
   stats = { str: 10, spd: 10, dur: 10, iq: 10, biq: 10, ma: 10 }, // default
+  boostTrigger = false,
+  debuffTrigger = false,
   children,
 }: PlayerCard3DFrameProps) {
   const color = side === "left" ? "#3b82f6" : "#ef4444";
@@ -361,6 +366,12 @@ export function PlayerCard3DFrame({
               {isWinner && <WinnerParticles color={winColor} />}
               <StatParticles stats={stats} isWinner={isWinner} />
               {damageTrigger && <DamageFlash trigger={damageTrigger} />}
+              <CombatEffects3D
+                boostTrigger={boostTrigger}
+                debuffTrigger={debuffTrigger}
+                criticalTrigger={false}
+                position={[0, 0, 0]}
+              />
             </CardBreathe>
           </HoverTilt>
         </Canvas>

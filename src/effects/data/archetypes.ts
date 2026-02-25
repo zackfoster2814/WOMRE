@@ -59,34 +59,10 @@ export function registerAllArchetypeEffects() {
     })
     .register();
 
-  // Slayer
+  // Slayer — handled directly in calcStatsWithBeforeCombat (baked into initial stats)
   defineEffect("archetype", "Slayer")
     .description("Chọn 1 tộc để Slay. Vs tộc đó: +2 Str, +3 BIQ, +2 MA.")
     .weight(2)
-    .effect({
-      type: "stat_modifier",
-      stat: "strength",
-      value: 2,
-      timing: "during_combat",
-      target: "self",
-      customHandler: "slayer_race_check",
-    })
-    .effect({
-      type: "stat_modifier",
-      stat: "biq",
-      value: 3,
-      timing: "during_combat",
-      target: "self",
-      customHandler: "slayer_race_check",
-    })
-    .effect({
-      type: "stat_modifier",
-      stat: "ma",
-      value: 2,
-      timing: "during_combat",
-      target: "self",
-      customHandler: "slayer_race_check",
-    })
     .register();
 
   // Masochist
@@ -421,17 +397,20 @@ export function registerAllArchetypeEffects() {
     })
     .register();
 
-  // Cinderheart (same as Promised Consort)
+  // Cinderheart
   defineEffect("archetype", "Cinderheart")
     .description(
-      'Trong Combat: Thêm Base Stat cao nhất của Lover vào stat đánh nhau. Ưu tiên Lover có Archetype "Femboy".',
+      '+1 All Stats. Sau Combat: Đối thủ nhận Power "Cinder Flickering".',
     )
     .weight(0.5)
+    .addAllStats(1)
     .effect({
-      type: "custom",
-      timing: "during_combat",
-      target: "self",
-      customHandler: "promised_consort_lover_stat",
+      type: "grant_power",
+      grantType: "power",
+      grantName: "Cinder Flickering",
+      grantCount: 1,
+      timing: "after_combat",
+      target: "opponent",
     })
     .register();
 
@@ -761,6 +740,7 @@ export function registerAllArchetypeEffects() {
   registerPowerRangerSubTypes();
   registerSuperheroSubTypes();
   registerHeroXSubTypes();
+  registerThaoDuocSubTypes();
 }
 
 /**
@@ -1015,7 +995,7 @@ function registerWibuSubTypes() {
       type: "stat_modifier",
       stat: "all",
       value: -1,
-      timing: "during_combat",
+      timing: "before_combat",
       target: "opponent",
     })
     .register();
@@ -1056,7 +1036,7 @@ function registerWibuSubTypes() {
       type: "stat_modifier",
       stat: "durability",
       value: -4,
-      timing: "during_combat",
+      timing: "before_combat",
       target: "opponent",
     })
     .register();
@@ -1550,7 +1530,7 @@ function registerNewLondonArchetypes() {
       type: "stat_modifier",
       stat: "all",
       value: -1,
-      timing: "during_combat",
+      timing: "before_combat",
       target: "opponent",
     })
     .effect({
@@ -2003,6 +1983,132 @@ function registerHeroXSubTypes() {
       timing: "during_combat",
       target: "self",
       customHandler: "hero_x_auto_win",
+    })
+    .register();
+}
+
+/**
+ * Thảo dược Wheel Sub-Types (from Herbalist quirk)
+ * Effects split by win/lose outcome after combat.
+ */
+function registerThaoDuocSubTypes() {
+  // Mirage Flower: Thắng +1 PvP reward, Thua +1 Char Dev ngẫu nhiên
+  defineEffect("archetype_sub", "Mirage Flower")
+    .description("Thảo dược. Thắng: +1 PvP Reward. Thua: +1 Char Dev ngẫu nhiên.")
+    .weight(16.67)
+    .effect({
+      type: "custom",
+      timing: "after_combat_win",
+      target: "self",
+      customHandler: "mirage_flower_win",
+    })
+    .effect({
+      type: "grant_char_dev",
+      grantType: "char_dev",
+      grantName: "random",
+      grantCount: 1,
+      timing: "after_combat_lose",
+      target: "self",
+    })
+    .register();
+
+  // Sunberry: Thắng +2 stat cao nhất, Thua +6 stat thấp nhất
+  defineEffect("archetype_sub", "Sunberry")
+    .description("Thảo dược. Thắng: +2 stat cao nhất. Thua: +6 stat thấp nhất.")
+    .weight(16.67)
+    .effect({
+      type: "stat_modifier",
+      stat: "highest",
+      value: 2,
+      timing: "after_combat_win",
+      target: "self",
+    })
+    .effect({
+      type: "stat_modifier",
+      stat: "lowest",
+      value: 6,
+      timing: "after_combat_lose",
+      target: "self",
+    })
+    .register();
+
+  // Dragon's Weed: Thắng +1 Power, Thua mất hết Power rồi +4 Power
+  defineEffect("archetype_sub", "Dragon's Weed")
+    .description("Thảo dược. Thắng: +1 Power. Thua: mất hết Power, nhận 4 Power.")
+    .weight(16.67)
+    .effect({
+      type: "grant_power",
+      grantType: "power",
+      grantName: "random",
+      grantCount: 1,
+      timing: "after_combat_win",
+      target: "self",
+    })
+    .effect({
+      type: "custom",
+      timing: "after_combat_lose",
+      target: "self",
+      customHandler: "dragons_weed_lose",
+    })
+    .register();
+
+  // Moonroot: Thắng +1 điểm khởi đầu combat kế, Thua +3 điểm khởi đầu combat kế
+  defineEffect("archetype_sub", "Moonroot")
+    .description("Thảo dược. Thắng: +1 điểm KĐ combat kế. Thua: +3 điểm KĐ combat kế.")
+    .weight(16.67)
+    .effect({
+      type: "custom",
+      timing: "after_combat_win",
+      target: "self",
+      customHandler: "moonroot_win",
+    })
+    .effect({
+      type: "custom",
+      timing: "after_combat_lose",
+      target: "self",
+      customHandler: "moonroot_lose",
+    })
+    .register();
+
+  // Mistpetal: Thắng +1 Quirk, Thua +6 Quirk
+  defineEffect("archetype_sub", "Mistpetal")
+    .description("Thảo dược. Thắng: +1 Quirk. Thua: +6 Quirk.")
+    .weight(16.67)
+    .effect({
+      type: "grant_quirk",
+      grantType: "quirk",
+      grantName: "random",
+      grantCount: 1,
+      timing: "after_combat_win",
+      target: "self",
+    })
+    .effect({
+      type: "grant_quirk",
+      grantType: "quirk",
+      grantName: "random",
+      grantCount: 6,
+      timing: "after_combat_lose",
+      target: "self",
+    })
+    .register();
+
+  // Eldritch Mushroom: Thắng -1 all stats, Thua +1 all stats
+  defineEffect("archetype_sub", "Eldritch Mushroom")
+    .description("Thảo dược. Thắng: -1 all stats. Thua: +1 all stats.")
+    .weight(16.67)
+    .effect({
+      type: "stat_modifier",
+      stat: "all",
+      value: -1,
+      timing: "after_combat_win",
+      target: "self",
+    })
+    .effect({
+      type: "stat_modifier",
+      stat: "all",
+      value: 1,
+      timing: "after_combat_lose",
+      target: "self",
     })
     .register();
 }

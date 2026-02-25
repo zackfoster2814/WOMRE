@@ -548,9 +548,7 @@ function buildPendingEffects(
 
   EFFECT_DEFS.forEach((def) => {
     // Check if character has this source
-    const hasSource = sources.some(
-      (s) => s === def.source || s.startsWith(def.source),
-    );
+    const hasSource = sources.some((s) => s === def.source);
     if (!hasSource) return;
 
     // In pre-combat mode: only show before_combat effects

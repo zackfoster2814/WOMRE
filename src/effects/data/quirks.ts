@@ -656,7 +656,7 @@ export function registerAllQuirkEffects() {
     .weight(2.38)
     .effect({
       type: "custom",
-      timing: "during_combat",
+      timing: "on_round_tie",
       target: "self",
       customHandler: "cruelty_tie_coinflip",
     })

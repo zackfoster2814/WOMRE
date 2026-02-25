@@ -7,7 +7,7 @@
  */
 
 import { useRef, useEffect, useMemo } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, RootState } from "@react-three/fiber";
 import * as THREE from "three";
 
 // ── Stat Boost Particles (green upward) ───────────────────────────────────────
@@ -152,7 +152,7 @@ function CriticalHitEffect({ trigger }: { trigger: boolean }) {
     if (trigger) startTime.current = Date.now();
   }, [trigger]);
 
-  useFrame(({ camera }) => {
+  useFrame(({ camera }: RootState) => {
     const elapsed = (Date.now() - startTime.current) / 1000;
     if (elapsed > 0 && elapsed < 0.5) {
       camera.position.x = Math.random() * 0.1 - 0.05;

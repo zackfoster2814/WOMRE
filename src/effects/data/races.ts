@@ -392,7 +392,7 @@ export function registerRaces() {
       type: "stat_modifier",
       stat: "all",
       value: 1,
-      timing: "during_combat",
+      timing: "before_combat",
       target: "self",
       conditions: [{ type: "race_match", races: ["Human"] }],
     })
@@ -400,7 +400,7 @@ export function registerRaces() {
       type: "stat_modifier",
       stat: "all",
       value: -1,
-      timing: "during_combat",
+      timing: "before_combat",
       target: "self",
       conditions: [{ type: "race_match", races: ["God"] }],
     })

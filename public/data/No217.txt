@@ -15,7 +15,7 @@ Sub-race:
 ```
 Archetype: 
 + Sentinel of Purity
-+ Goblin Slayer (Từ Become King Slayer)
++ Slayer - Goblin (Từ Become King Slayer)
 ```
 ``` 
 2 Quirk:  

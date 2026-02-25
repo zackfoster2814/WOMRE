@@ -47,6 +47,7 @@ export type EffectTiming =
   | 'before_combat_end'   // Trước khi kết thúc combat
   | 'on_round_win'        // Khi thắng 1 round
   | 'on_round_lose'       // Khi thua 1 round
+  | 'on_round_tie'        // Khi hòa 1 round
   | 'on_loser_bracket'    // Khi ở nhánh thua
   | 'on_winner_bracket'   // Khi ở nhánh thắng
   | 'on_finals'           // Khi ở chung kết

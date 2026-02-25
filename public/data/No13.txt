@@ -81,6 +81,11 @@ Lover:
 + 
 ```
 
+```
+Add info:
+Spirit souls: 0
+```
+
 ======
 Battle Log:
 ```

@@ -146,6 +146,9 @@ export interface Character {
   // Used to show the roll values for transparency
   originalBaseStats?: CharacterStats;
 
+  // Spirit race: số Soul stacks tích lũy vĩnh viễn (từ "Add info: Spirit souls: X")
+  spiritSouls?: number;
+
   // Faction - can have multiple houses, some may be lost (kicked out)
   houses: LossableItem[];
   nestedHouses?: NestedHouse[]; // Detailed house info with sub-types (e.g., New London -> Thinkers)

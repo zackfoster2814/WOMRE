@@ -350,6 +350,9 @@ export class CharacterParser {
     // Parse Tournament Status
     character.tournament = this.parseTournamentInfo(lines);
 
+    // Parse Spirit souls từ "Add info" block
+    character.spiritSouls = this.parseSpiritSouls(lines);
+
     // Parse Battle Log
     character.battleLog = this.parseBattleLog(lines);
 
@@ -421,6 +424,22 @@ export class CharacterParser {
 
   private static findSectionIndex(lines: string[], keyword: string): number {
     return lines.findIndex((line) => line.includes(keyword));
+  }
+
+  /**
+   * Parse Spirit souls from "Add info" block
+   * Format: "Spirit souls: X"
+   */
+  private static parseSpiritSouls(lines: string[]): number | undefined {
+    const addInfoIdx = lines.findIndex((l) => l.includes("Add info:"));
+    if (addInfoIdx < 0) return undefined;
+    for (let i = addInfoIdx + 1; i < Math.min(addInfoIdx + 20, lines.length); i++) {
+      const match = lines[i].match(/Spirit\s+souls?\s*:\s*(\d+)/i);
+      if (match) return parseInt(match[1]);
+      // Stop at next section delimiter
+      if (lines[i].startsWith("======")) break;
+    }
+    return undefined;
   }
 
   /**
