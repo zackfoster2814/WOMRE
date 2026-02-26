@@ -1988,10 +1988,11 @@ export class EffectResolver {
         }
 
         // Collect immediate stat modifiers (or bracket-based if in matching bracket)
+        // pvp_only is treated like immediate in PvP breakdown (this page is PvP-only)
         // Skip effects that target others (lover, opponent, etc.) - only show self effects
         if (
           effect.type === "stat_modifier" &&
-          (effect.timing === "immediate" || isInMatchingBracket) &&
+          (effect.timing === "immediate" || effect.timing === "pvp_only" || isInMatchingBracket) &&
           effect.value !== undefined &&
           (!effect.target || effect.target === "self")
         ) {

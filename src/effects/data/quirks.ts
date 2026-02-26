@@ -37,9 +37,8 @@ export function registerAllQuirkEffects() {
       type: "stat_modifier",
       stat: "all",
       value: 1,
-      timing: "immediate",
+      timing: "on_loser_bracket",
       target: "self",
-      conditions: [{ type: "bracket", bracket: "loser" }],
     })
     .register();
 
@@ -122,15 +121,13 @@ export function registerAllQuirkEffects() {
 
   // Night Owl
   defineEffect("quirk", "Night Owl")
-    .description("Sau Combat: 10% -1 all stats.")
+    .description("Sau Combat: Quay vòng 10/90 — 10% nhận -1 all stats.")
     .weight(2.38)
     .effect({
-      type: "stat_modifier",
-      stat: "all",
-      value: -1,
+      type: "custom",
       timing: "after_combat",
       target: "self",
-      conditions: [{ type: "probability", chance: 10 }],
+      customHandler: "night_owl_wheel",
     })
     .register();
 
@@ -149,9 +146,8 @@ export function registerAllQuirkEffects() {
       type: "stat_modifier",
       stat: "all",
       value: -1,
-      timing: "immediate",
+      timing: "on_loser_bracket",
       target: "self",
-      conditions: [{ type: "bracket", bracket: "loser" }],
     })
     .register();
 
@@ -239,7 +235,7 @@ export function registerAllQuirkEffects() {
 
   // Independent
   defineEffect("quirk", "Independent")
-    .description("Không thuộc House nào. Sau combat: +2 random stat.")
+    .description("Không thuộc House nào. Sau combat: Quay vòng 6 chỉ số, nhận +2 vào chỉ số được chọn.")
     .weight(2.38)
     .effect({
       type: "custom",
@@ -248,23 +244,22 @@ export function registerAllQuirkEffects() {
       customHandler: "independent_no_house",
     })
     .effect({
-      type: "stat_modifier",
-      stat: "random",
-      value: 2,
+      type: "custom",
       timing: "after_combat",
       target: "self",
+      customHandler: "independent_random_stat_wheel",
     })
     .register();
 
   // Open-minded
   defineEffect("quirk", "Open-minded")
-    .description("Sau Combat: 33% biến đối thủ thành Lover.")
+    .description("Sau Combat: Quay vòng 33/67 — 33% biến đối thủ thành Lover.")
     .weight(2.38)
     .effect({
-      type: "make_love",
+      type: "custom",
       timing: "after_combat",
-      target: "opponent",
-      conditions: [{ type: "probability", chance: 33 }],
+      target: "self",
+      customHandler: "open_minded_wheel",
     })
     .register();
 
@@ -409,55 +404,50 @@ export function registerAllQuirkEffects() {
 
   // Blind
   defineEffect("quirk", "Blind")
-    .description("+3 BIQ. 15% không nhận điểm khi thắng round.")
+    .description("+3 BIQ. Mỗi khi thắng 1 round, quay vòng 15/85 — 15% không nhận điểm round đó.")
     .weight(2.38)
     .addStat("biq", 3)
     .effect({
       type: "custom",
       timing: "on_round_win",
       target: "self",
-      conditions: [{ type: "probability", chance: 15 }],
       customHandler: "blind_no_point",
     })
     .register();
 
   // Mute
   defineEffect("quirk", "Mute")
-    .description("+3 MA. 10% bị -1 stat khi thua round.")
+    .description("+3 MA. Mỗi khi thua 1 round, quay vòng 10/90 — 10% bị -1 vào chỉ số của round đó.")
     .weight(2.38)
     .addStat("ma", 3)
     .effect({
-      type: "stat_modifier",
-      stat: "random", // The stat of the lost round
-      value: -1,
+      type: "custom",
       timing: "on_round_lose",
       target: "self",
-      conditions: [{ type: "probability", chance: 10 }],
+      customHandler: "mute_stat_loss",
     })
     .register();
 
   // Raumanian / Raumanian🍀 (same quirk, different display names)
   defineEffect("quirk", "Raumanian")
-    .description("36% nhận 1 điểm khởi đầu.")
+    .description("Trước combat: Quay vòng 36/64 — 36% nhận 1 điểm khởi đầu. Phát nhạc Khúc ca tình Thanh Hóa.")
     .weight(2.38)
     .effect({
-      type: "combat_points",
-      points: 1,
+      type: "custom",
       timing: "before_combat",
       target: "self",
-      conditions: [{ type: "probability", chance: 36 }],
+      customHandler: "raumanian_wheel",
     })
     .register();
 
   defineEffect("quirk", "Raumanian🍀")
-    .description("36% nhận 1 điểm khởi đầu. 🍀")
+    .description("Trước combat: Quay vòng 36/64 — 36% nhận 1 điểm khởi đầu. 🍀 Phát nhạc Khúc ca tình Thanh Hóa.")
     .weight(2.38)
     .effect({
-      type: "combat_points",
-      points: 1,
+      type: "custom",
       timing: "before_combat",
       target: "self",
-      conditions: [{ type: "probability", chance: 36 }],
+      customHandler: "raumanian_wheel",
     })
     .register();
 
@@ -625,7 +615,7 @@ export function registerAllQuirkEffects() {
   // One Trick Pony
   defineEffect("quirk", "One Trick Pony")
     .description(
-      "Trong combat: Chọn ngẫu nhiên 1 stat, thắng stat đó được 3 điểm. Các stat còn lại thắng được 0 điểm.",
+      "Trong combat: Quay vòng 6 chỉ số để chọn. Thắng chỉ số đó = 3 điểm; thắng các chỉ số còn lại = 0 điểm.",
     )
     .weight(2.38)
     .effect({

@@ -68,6 +68,11 @@ interface CombatEffectsPanelProps {
   combatResult?: CombatResultInfo;
   /** Nếu true: chỉ hiển thị before_combat effects (pre-combat warning mode) */
   preCombatOnly?: boolean;
+  /**
+   * Callback generic khi bất kỳ wheel effect nào được resolve.
+   * BattleZonePage tự xử lý logic dựa vào sourceName.
+   */
+  onWheelResolved?: (playerLabel: "player1" | "player2", sourceName: string, item: WheelSpinItem) => void;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -419,6 +424,24 @@ const EFFECT_DEFS: EffectDef[] = [
     gmNote: "Nếu thành công: cộng 1 điểm vào điểm khởi đầu",
   },
 
+  // ─── HOUSE EFFECTS ────────────────────────────────────────────────────────
+
+  // Dothraki: quay wheel trước combat để xác định luật đặc biệt
+  {
+    source: "dothraki",
+    timing: "before_combat",
+    category: "wheel",
+    description: "Dothraki: Quay wheel xác định luật chiến đấu đặc biệt cho trận này.",
+    wheelItems: [
+      { label: "Luật 1: Đảo chỉ số của đối thủ (STR↔MA, Speed↔BIQ, Dura↔IQ)", weight: 1, color: "#ef4444", meta: { ruleIndex: 1 } },
+      { label: "Luật 2: Đảo Strength↔Battle IQ của bạn", weight: 1, color: "#f59e0b", meta: { ruleIndex: 2 } },
+      { label: "Luật 3: Đảo Speed↔IQ của bạn", weight: 1, color: "#22c55e", meta: { ruleIndex: 3 } },
+      { label: "Luật 4: Đảo Dura↔MA của bạn", weight: 1, color: "#3b82f6", meta: { ruleIndex: 4 } },
+      { label: "Luật 5: Bạn +4 All Stats, đối thủ nhận +3 điểm khởi đầu", weight: 1, color: "#a855f7", meta: { ruleIndex: 5 } },
+      { label: "Luật 6: Đối thủ +5 All Stats, bạn +1 All Stats mỗi điểm ghi được sau trận [GM]", weight: 1, color: "#ec4899", meta: { ruleIndex: 6 } },
+    ],
+  },
+
   // ─── DURING-COMBAT QUIRKS (hiển thị trước combat để GM biết luật đặc biệt) ──
 
   // Bloodthirsty: thắng round +1 điểm, thua round mất hết điểm
@@ -439,13 +462,20 @@ const EFFECT_DEFS: EffectDef[] = [
     gmNote: "[GM Action] Khi so sánh STR, nếu đối thủ thắng → họ KHÔNG được +1 điểm",
   },
 
-  // One Trick Pony: chọn ngẫu nhiên 1 stat → thắng stat đó 3 điểm, các stat khác 0
+  // One Trick Pony: quay wheel chọn 1 stat → thắng stat đó +3 điểm, thắng stat khác +0 điểm
   {
     source: "one trick pony",
-    timing: "before_combat",
-    category: "gm",
-    description: "One Trick Pony: 1 stat được chọn ngẫu nhiên → thắng stat đó +3 điểm, thắng các stat khác +0 điểm.",
-    gmNote: "[GM Action] Trước combat: quay wheel để chọn 1 stat (STR/SPD/DUR/IQ/BIQ/MA). Stat đó nếu thắng = +3 điểm. Các stat khác nếu thắng = +0 điểm.",
+    timing: "during_combat",
+    category: "wheel",
+    description: "One Trick Pony: Quay wheel chọn 1 stat. Thắng stat đó = +3 điểm; thắng các stat khác = +0 điểm.",
+    wheelItems: [
+      { label: "Strength", weight: 1, isSuccess: true, color: "#ef4444" },
+      { label: "Speed", weight: 1, isSuccess: true, color: "#f59e0b" },
+      { label: "Durability", weight: 1, isSuccess: true, color: "#22c55e" },
+      { label: "IQ", weight: 1, isSuccess: true, color: "#3b82f6" },
+      { label: "BIQ", weight: 1, isSuccess: true, color: "#a855f7" },
+      { label: "MA", weight: 1, isSuccess: true, color: "#ec4899" },
+    ],
   },
 
   // Weak-Knee: round đầu tiên thắng không nhận điểm
@@ -492,6 +522,17 @@ const EFFECT_DEFS: EffectDef[] = [
     description: "Mute: Mỗi round thua có 10% -1 stat ngẫu nhiên.",
     gmNote: "[GM Action] Mỗi round player này thua: roll 10% → nếu trúng, -1 vào stat của round đó",
   },
+
+  // ─── HOUSE MASON EFFECTS ─────────────────────────────────────────────────
+
+  // Tracen Academy Mason: sau combat +1 stat bất kì
+  {
+    source: "tracen academy mason",
+    timing: "after_combat",
+    category: "gm",
+    description: "Tracen Academy Mason: Sau combat nhận +1 vào 1 Stat bất kì.",
+    gmNote: "[GM Action] Cho player chọn hoặc quay ngẫu nhiên 1 stat → +1 vào stat đó",
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -536,12 +577,20 @@ function buildPendingEffects(
     margin,
   };
 
-  // Collect source names (quirks + archetypes) lowercase
+  // Collect source names (quirks + archetypes + house names + house sub-types) lowercase
   const sources: string[] = [
     ...(character.quirks || [])
       .filter((q) => !q.isLost)
       .map((q) => q.name.toLowerCase()),
     ...(character.archetypes || []).map((a) => a.toLowerCase()),
+    // Active house names (e.g. "dothraki", "roundtable hold")
+    ...((character as any).houses || [])
+      .filter((h: any) => !h.isLost && h.name)
+      .map((h: any) => (h.name as string).toLowerCase()),
+    // House sub-types (Mason effects etc.) — sourced from houses[].subType
+    ...((character as any).houses || [])
+      .filter((h: any) => !h.isLost && !h.subTypeIsLost && h.subType)
+      .map((h: any) => (h.subType as string).toLowerCase()),
   ];
 
   const effects: CombatPendingEffect[] = [];
@@ -848,6 +897,7 @@ export const CombatEffectsPanel = ({
   player2,
   combatResult,
   preCombatOnly = false,
+  onWheelResolved,
 }: CombatEffectsPanelProps) => {
   const [effects, setEffects] = useState<CombatPendingEffect[]>(() => {
     const list: CombatPendingEffect[] = [];
@@ -904,9 +954,17 @@ export const CombatEffectsPanel = ({
   const handleSpinResult = (item: WheelSpinItem) => {
     if (!spinModal.effect) return;
     const id = spinModal.effect.id;
-    const note = item.isSuccess
-      ? `Thành công: ${item.label}`
-      : `Thất bại: ${item.label}`;
+    const effect = spinModal.effect;
+    const isOTP = effect.sourceName === "one trick pony";
+    const isDothraki = effect.sourceName === "dothraki";
+    const note = isOTP
+      ? `Stat được chọn: ${item.label} → thắng = +3 điểm, các stat khác thắng = +0 điểm`
+      : isDothraki
+        ? `Kết quả: ${item.label}`
+        : item.isSuccess
+          ? `Thành công: ${item.label}`
+          : `Thất bại: ${item.label}`;
+    onWheelResolved?.(effect.playerLabel, effect.sourceName, item);
     setEffects((prev) =>
       prev.map((e) =>
         e.id === id ? { ...e, resolved: true, resolvedNote: note } : e,

@@ -653,48 +653,48 @@ registerImmediateHandler(
 /**
  * Fate's Trick - 50% nhân đôi Base Stat thấp nhất, 50% chia đôi stat cao nhất.
  */
-registerImmediateHandler(
-  "fates_trick_50_50",
-  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const roll = Math.random();
+// registerImmediateHandler(
+//   "fates_trick_50_50",
+//   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+//     const roll = Math.random();
 
-    if (roll < 0.5) {
-      // 50%: double lowest base stat
-      let lowestStat: StatName = "strength";
-      let lowestVal = ctx.baseStats.strength ?? 0;
-      for (const stat of STAT_NAMES) {
-        if ((ctx.baseStats[stat] ?? 0) < lowestVal) {
-          lowestVal = ctx.baseStats[stat] ?? 0;
-          lowestStat = stat;
-        }
-      }
-      return {
-        statModifiers: [{ stat: lowestStat, value: lowestVal, isBase: true }],
-        skipDefault: true,
-        description: `Fate's Trick: Nhân đôi ${lowestStat} (${lowestVal} → ${lowestVal * 2})`,
-      };
-    } else {
-      // 50%: halve highest stat
-      let highestStat: StatName = "strength";
-      let highestVal = ctx.baseStats.strength ?? 0;
-      for (const stat of STAT_NAMES) {
-        if ((ctx.baseStats[stat] ?? 0) > highestVal) {
-          highestVal = ctx.baseStats[stat] ?? 0;
-          highestStat = stat;
-        }
-      }
-      const halved = Math.ceil(highestVal / 2);
-      return {
-        statModifiers: [
-          { stat: highestStat, value: -(highestVal - halved), isBase: true },
-        ],
-        skipDefault: true,
-        description: `Fate's Trick: Chia đôi ${highestStat} (${highestVal} → ${halved})`,
-      };
-    }
-  },
-  "50% double lowest base stat, 50% halve highest stat",
-);
+//     if (roll < 0.5) {
+//       // 50%: double lowest base stat
+//       let lowestStat: StatName = "strength";
+//       let lowestVal = ctx.baseStats.strength ?? 0;
+//       for (const stat of STAT_NAMES) {
+//         if ((ctx.baseStats[stat] ?? 0) < lowestVal) {
+//           lowestVal = ctx.baseStats[stat] ?? 0;
+//           lowestStat = stat;
+//         }
+//       }
+//       return {
+//         statModifiers: [{ stat: lowestStat, value: lowestVal, isBase: true }],
+//         skipDefault: true,
+//         description: `Fate's Trick: Nhân đôi ${lowestStat} (${lowestVal} → ${lowestVal * 2})`,
+//       };
+//     } else {
+//       // 50%: halve highest stat
+//       let highestStat: StatName = "strength";
+//       let highestVal = ctx.baseStats.strength ?? 0;
+//       for (const stat of STAT_NAMES) {
+//         if ((ctx.baseStats[stat] ?? 0) > highestVal) {
+//           highestVal = ctx.baseStats[stat] ?? 0;
+//           highestStat = stat;
+//         }
+//       }
+//       const halved = Math.ceil(highestVal / 2);
+//       return {
+//         statModifiers: [
+//           { stat: highestStat, value: -(highestVal - halved), isBase: true },
+//         ],
+//         skipDefault: true,
+//         description: `Fate's Trick: Chia đôi ${highestStat} (${highestVal} → ${halved})`,
+//       };
+//     }
+//   },
+//   "50% double lowest base stat, 50% halve highest stat",
+// );
 
 /**
  * Overcome the Habits - +1 stat thấp nhất per Quirk (based on Base Stats).

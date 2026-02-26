@@ -332,7 +332,7 @@ export function registerAllHouseEffects() {
   // 20. Tracen Academy (Uma default house)
   defineEffect("house", "Tracen Academy")
     .description(
-      "Học Viện chỉ nhận Uma. Nhận ngẫu nhiên từ 1-3 Strength, 1-3 Speed và 1-3 Durability.",
+      "Học Viện chỉ nhận Uma. Nhận ngẫu nhiên từ 1-3 Strength, 1-3 Speed và 1-3 Durability. Archetype Mason: Sau Combat: Nhận +1 vào 1 Stat bất kì.",
     )
     .effect({
       type: "custom",
@@ -1075,6 +1075,18 @@ function registerHouseSubTypes() {
       type: "grant_wheel",
       wheelName: "Ban Nhạc Ngọt Gear Wheel",
       timing: "immediate",
+      target: "self",
+    })
+    .register();
+
+  // Tracen Academy Mason - sau combat +1 stat bất kì (GM action)
+  defineEffect("house_sub", "Tracen Academy Mason")
+    .description("(Mason) Sau Combat: Nhận +1 vào 1 Stat bất kì [GM Action].")
+    .effect({
+      type: "stat_modifier",
+      stat: "random",
+      value: 1,
+      timing: "after_combat",
       target: "self",
     })
     .register();
