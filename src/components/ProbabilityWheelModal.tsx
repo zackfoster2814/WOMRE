@@ -14,6 +14,8 @@ export interface WheelSpinItem {
   weight: number; // Tương ứng với xác suất (weight / totalWeight)
   color?: string;
   isSuccess?: boolean; // Đánh dấu outcome "thành công"
+  /** Arbitrary metadata for custom effects (e.g. Dothraki ruleIndex) */
+  meta?: Record<string, unknown>;
 }
 
 interface ProbabilityWheelModalProps {
@@ -92,7 +94,7 @@ export const ProbabilityWheelModal = ({
         )}
 
         {/* Probability display */}
-        <div className="flex flex-wrap gap-2 mb-4 justify-center">
+        {/* <div className="flex flex-wrap gap-2 mb-4 justify-center">
           {items.map((item, idx) => {
             const totalWeight = items.reduce((s, i) => s + i.weight, 0);
             const pct = Math.round((item.weight / totalWeight) * 100);
@@ -109,7 +111,7 @@ export const ProbabilityWheelModal = ({
               </span>
             );
           })}
-        </div>
+        </div> */}
 
         {/* Wheel */}
         <div className="flex justify-center mb-4">
@@ -133,13 +135,11 @@ export const ProbabilityWheelModal = ({
             }`}
           >
             <div className="text-lg font-bold text-white">{result.label}</div>
-            {result.isSuccess ? (
-              <div className="text-green-400 text-sm">
-                ✓ Hiệu ứng kích hoạt!
-              </div>
+            {/* {result.isSuccess ? (
+              <div className="text-green-400 text-sm">✓ Hiệu ứng kích hoạt!</div>
             ) : (
               <div className="text-red-400 text-sm">✗ Không có gì xảy ra</div>
-            )}
+            )} */}
           </div>
         )}
 
