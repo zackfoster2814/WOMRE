@@ -834,6 +834,201 @@ registerCombatHandler(
   'Auto-win vs Demon; +3 all stats when no Demons remain'
 );
 
+// ============================================================================
+// DIVINE RAPIER - Remove weapon on combat loss
+// ============================================================================
+
+/**
+ * Divine Rapier - Sau Combat thua: Mất vũ khí này.
+ */
+registerCombatHandler(
+  'divine_rapier_lose_on_loss',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      removeWeapon: 'Divine Rapier',
+      description: 'Divine Rapier: Thua combat → Mất vũ khí',
+    };
+  },
+  'Remove Divine Rapier on combat loss'
+);
+
+// ============================================================================
+// BLOODTHRIST DAGGER - +16% crit bonus for Critical Strike
+// ============================================================================
+
+/**
+ * Bloodthrist Dagger - Trong Combat: +16% tỉ lệ crit của Critical Strike.
+ */
+registerCombatHandler(
+  'bloodthrist_crit_bonus',
+  (ctx: CombatHandlerContext): CombatHandlerResult | null => {
+    const hasCritStrike = ctx.self.powers?.includes('Critical Strike');
+    if (!hasCritStrike) return { skipDefault: true };
+    return {
+      updateCharacterField: { critBonusPercent: 16 },
+      description: 'Bloodthrist Dagger: +16% crit cho Critical Strike',
+    };
+  },
+  '+16% Critical Strike crit rate during combat'
+);
+
+// ============================================================================
+// RUYI JINGU BANG - Grant random power after win (handled via condition probability)
+// ============================================================================
+
+/**
+ * Ruyi Jingu Bang - Sau Combat thắng: 72% nhận 1 Power ngẫu nhiên.
+ * (Probability condition is handled by effect definition; handler executes grant)
+ */
+registerCombatHandler(
+  'ruyi_jingu_power_chance',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      grantPower: 'random',
+      description: 'Ruyi Jingu Bang: Nhận 1 Power ngẫu nhiên',
+    };
+  },
+  'Grant random power after combat win (72% chance via condition)'
+);
+
+// ============================================================================
+// MJOLNIR - Return to wheel on combat loss
+// ============================================================================
+
+/**
+ * Mjolnir - Sau combat thua: Mất vũ khí và trả lại về vòng quay.
+ */
+registerCombatHandler(
+  'mjolnir_return_on_lose',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      removeWeapon: 'Mjolnir',
+      description: 'Mjolnir: Thua combat → Mất Mjolnir, trả về vòng quay',
+    };
+  },
+  'Remove Mjolnir and return to wheel on combat loss'
+);
+
+// ============================================================================
+// RHITTA - 33% chance to double weapon stat bonuses during combat
+// ============================================================================
+
+/**
+ * Rhitta - Trong Combat: 33% gấp đôi +STR và +Dura từ vũ khí.
+ * Rhitta grants +3 STR and +2 Dura; doubled = +3 STR and +2 Dura extra.
+ */
+registerCombatHandler(
+  'rhitta_double_bonus',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    const roll = Math.random() * 100;
+    if (roll >= 33) return { skipDefault: true };
+    return {
+      selfStatMods: [
+        { stat: 'strength', value: 3 },
+        { stat: 'durability', value: 2 },
+      ],
+      description: 'Rhitta: 33% kích hoạt → Gấp đôi +STR +Dura',
+    };
+  },
+  '33% chance to double Rhitta stat bonuses (+3 STR +2 Dura) during combat'
+);
+
+// ============================================================================
+// ANDÚRIL - +1 starting point per 3 Summons vs evil races
+// ============================================================================
+
+const ANDURIL_EVIL_RACES = ['demon', 'vampire', 'spirit', 'orc', 'skeleton', 'goblin'];
+
+/**
+ * Andúril - Trước Combat: vs Demon/Vampire/Spirit/Orc/Skeleton/Goblin,
+ * +1 điểm khởi đầu với mỗi 3 Summon đang có.
+ */
+registerCombatHandler(
+  'anduril_evil_race_bonus',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppRace = (ctx.opponent.race || '').toLowerCase();
+    const isEvilRace = ANDURIL_EVIL_RACES.includes(oppRace);
+    if (!isEvilRace) return { skipDefault: true };
+
+    const powers: any[] = ctx.self.powers || [];
+    const summonCount = powers.filter((p: any) => {
+      const name = typeof p === 'string' ? p : (p?.name || '');
+      return name.toLowerCase().startsWith('summon:');
+    }).length;
+    const bonusPoints = Math.floor(summonCount / 3);
+    if (bonusPoints <= 0) return { skipDefault: true };
+
+    return {
+      selfPoints: bonusPoints,
+      description: `Andúril: vs ${ctx.opponent.race}, ${summonCount} Summons → +${bonusPoints} điểm`,
+    };
+  },
+  '+1 starting point per 3 Summons when vs evil races (Demon/Vampire/Spirit/Orc/Skeleton/Goblin)'
+);
+
+// ============================================================================
+// GALEFORCE - After combat: if opponent total points ≤0, +3 random stat
+// ============================================================================
+
+/**
+ * Galeforce - Sau Combat: Nếu tổng điểm đối thủ ≤0, nhận +3 vào 1 stat ngẫu nhiên.
+ */
+registerCombatHandler(
+  'galeforce_zero_points_bonus',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const oppPoints = (ctx as any).opponentTotalPoints ?? (ctx.opponent ? (ctx as any).opponentPoints : null);
+    // Check via opponentPoints field or fallback: only grant if opponent ended ≤0 points
+    if (oppPoints === null || oppPoints === undefined || oppPoints > 0) return { skipDefault: true };
+    const stat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+    return {
+      selfStatMods: [{ stat, value: 3 }],
+      description: `Galeforce: Đối thủ ≤0 điểm → +3 ${stat}`,
+    };
+  },
+  '+3 random stat after combat if opponent total points ≤0'
+);
+
+// ============================================================================
+// BATTLEFURY - After combat: if opponent total points ≤0, +3 random stat
+// ============================================================================
+
+/**
+ * Battlefury - Sau Combat: Nếu tổng điểm đối thủ ≤0, nhận +3 vào 1 stat ngẫu nhiên.
+ */
+registerCombatHandler(
+  'battlefury_zero_points_bonus',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const oppPoints = (ctx as any).opponentTotalPoints ?? (ctx.opponent ? (ctx as any).opponentPoints : null);
+    if (oppPoints === null || oppPoints === undefined || oppPoints > 0) return { skipDefault: true };
+    const stat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+    return {
+      selfStatMods: [{ stat, value: 3 }],
+      description: `Battlefury: Đối thủ ≤0 điểm → +3 ${stat}`,
+    };
+  },
+  '+3 random stat after combat if opponent total points ≤0'
+);
+
+// ============================================================================
+// INFINITY GAUNTLET - Assign stones to 6 random players, collect on their death
+// ============================================================================
+
+/**
+ * Infinity Gauntlet - Immediate: Quay 6 người chơi nhận đá vô cực.
+ * Khi họ bị loại, người sở hữu gauntlet nhận đá của họ (Power).
+ * This is a complex meta-game effect; immediate handler marks 6 players.
+ */
+registerCombatHandler(
+  'infinity_gauntlet_stones',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    // This is handled by the engine at tournament level (spin 6 players for stones).
+    // Combat handler is a no-op; actual stone collection happens on_death events.
+    return { skipDefault: true };
+  },
+  'Meta-game: assign stones to 6 players, collect on their death (engine-level)'
+);
+
 export function registerWeaponCombatHandlers() {
   // All handlers are registered at module level via registerCombatHandler calls above.
 }

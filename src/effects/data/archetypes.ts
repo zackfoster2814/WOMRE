@@ -10,7 +10,7 @@ export function registerAllArchetypeEffects() {
   // Egoist
   defineEffect("archetype", "Egoist")
     .description(
-      "Nhận +2 all stats. Nếu không thắng với cách biệt 4 điểm trở lên, bạn sẽ thua.",
+      "Nhận +2 all stats. Nếu bạn không thắng với cách biệt 4 điểm hoặc hơn trong 1 combat, bạn sẽ thua combat đó.",
     )
     .weight(1.6)
     .addAllStats(2)
@@ -24,7 +24,7 @@ export function registerAllArchetypeEffects() {
 
   // NPC
   defineEffect("archetype", "NPC")
-    .description("-1 all stats và không thể có Character Development.")
+    .description("Nhận -1 all stats và không thể có \"Character Development\". Bất kể những vòng quay sau có Char Dev cũng không được nhận.")
     .weight(3)
     .addAllStats(-1)
     .effect({
@@ -38,7 +38,7 @@ export function registerAllArchetypeEffects() {
   // Gigachad
   defineEffect("archetype", "Gigachad")
     .description(
-      "+1 all stats vs tộc thứ hạng cao hơn, -1 all stats vs tộc thứ hạng thấp hơn.",
+      "Nhận +1 all stats khi đối đầu với tộc có thứ hạng cao hơn và -1 all stats khi đối đầu với tộc có thứ hạng thấp hơn trong vòng quay Race.",
     )
     .weight(2.4)
     .effect({
@@ -61,7 +61,7 @@ export function registerAllArchetypeEffects() {
 
   // Slayer — handled directly in calcStatsWithBeforeCombat (baked into initial stats)
   defineEffect("archetype", "Slayer")
-    .description("Chọn 1 tộc để Slay. Vs tộc đó: +2 Str, +3 BIQ, +2 MA.")
+    .description("Chọn 1 tộc để Slay. Khi đối đầu với tộc đó, nhận +2 Strength, +3 BIQ và +2 Martial Arts.")
     .weight(2)
     .register();
 
@@ -89,7 +89,7 @@ export function registerAllArchetypeEffects() {
   // Femboy
   defineEffect("archetype", "Femboy")
     .description(
-      'Mặc định có Power "AIDS". +1 all stats với mỗi Lover có AIDS.',
+      "Bạn mặc định có Power \"AIDS\". Với mỗi Lover có \"AIDS\", bạn nhận +1 all stats. (Tính cả các Lover đã chết)",
     )
     .weight(1.2)
     .effect({
@@ -112,7 +112,7 @@ export function registerAllArchetypeEffects() {
 
   // Pacifist
   defineEffect("archetype", "Pacifist")
-    .description("+2 IQ và -4 MA.")
+    .description("Nhận +2 IQ và -4 Martial Arts.")
     .weight(1.1)
     .addStat("iq", 2)
     .addStat("ma", -4)
@@ -120,7 +120,7 @@ export function registerAllArchetypeEffects() {
 
   // Anti-Social
   defineEffect("archetype", "Anti-Social")
-    .description("[PvE] -5 all stats. [PvP] +1 all stats.")
+    .description("[PvE Only] Nhận -5 all stats khi raid boss PvE. Nhận +1 all stats khi đấu PvP.")
     .weight(1.6)
     .effect({
       type: "stat_modifier",
@@ -140,7 +140,7 @@ export function registerAllArchetypeEffects() {
 
   // Bookworm
   defineEffect("archetype", "Bookworm")
-    .description('+2 IQ và 1 Gear "Sổ tay".')
+    .description("Nhận +2 IQ và 1 Gear \"Sổ tay\"")
     .weight(2.5)
     .addStat("iq", 2)
     .effect({
@@ -155,7 +155,7 @@ export function registerAllArchetypeEffects() {
 
   // Glass Cannon
   defineEffect("archetype", "Glass Cannon")
-    .description("Mặc định thua round Durability, +1 all stats.")
+    .description("Bạn mặc định thua round \"Durability\", nhận +1 all stats.")
     .weight(1.5)
     .addAllStats(1)
     .effect({
@@ -168,7 +168,7 @@ export function registerAllArchetypeEffects() {
 
   // Mid
   defineEffect("archetype", "Mid")
-    .description("Toàn bộ vòng quay stats có giá trị là 5.")
+    .description("Kết quả của toàn bộ vòng quay stats của bạn có giá trị là 5.")
     .weight(2.3)
     .effect({
       type: "custom",
@@ -180,7 +180,7 @@ export function registerAllArchetypeEffects() {
 
   // Hand Fighter
   defineEffect("archetype", "Hand Fighter")
-    .description("Không thể nhận vũ khí. +3 Str, +2 Dur, +2 MA.")
+    .description("Không thể nhận vũ khí. (Bypass toàn bộ hiệu ứng khác) Nhận +3 Strength, +2 Durability và +2 MA.")
     .weight(2.4)
     .effect({
       type: "immunity",
@@ -195,7 +195,7 @@ export function registerAllArchetypeEffects() {
 
   // Conquerer
   defineEffect("archetype", "Conquerer")
-    .description("+3 Base Speed. Thắng round Speed: +1 all stats trong combat.")
+    .description("Nhận +3 Base Speed. Trong Combat: Khi bạn thắng round Speed, nhận +1 all stats trong phần còn lại của combat.")
     .weight(2.2)
     .addStat("speed", 3, true)
     .effect({
@@ -211,7 +211,7 @@ export function registerAllArchetypeEffects() {
 
   // Paladin
   defineEffect("archetype", "Paladin")
-    .description('Nhận Power "Divine Smite", +2 Base MA.')
+    .description("Nhận Power \"Divine Smite\", Nhận +2 Base MA")
     .weight(2.2)
     .effect({
       type: "grant_power",
@@ -226,7 +226,7 @@ export function registerAllArchetypeEffects() {
 
   // Him
   defineEffect("archetype", "Him")
-    .description("+10 all stats, đối thủ nhận 5 điểm ở cuối combat.")
+    .description("Nhận +10 all stats, đối thủ nhận 5 điểm ở cuối combat.")
     .weight(1.3)
     .addAllStats(10)
     .effect({
@@ -239,7 +239,7 @@ export function registerAllArchetypeEffects() {
 
   // Perfectionist
   defineEffect("archetype", "Perfectionist")
-    .description("+4 stat thấp nhất nếu thắng với cách biệt ≥4 điểm.")
+    .description("Nhận +4 vào stat thấp nhất nếu bạn giành chiến thắng với cách biệt 4 điểm trở lên.")
     .weight(2.4)
     .effect({
       type: "stat_modifier",
@@ -253,7 +253,7 @@ export function registerAllArchetypeEffects() {
 
   // Chokevy
   defineEffect("archetype", "Chokevy")
-    .description("+3 all stats. Sau Combat: -1 all stats.")
+    .description("Nhận +3 all stats. Sau Combat: nhận -1 all stats.")
     .weight(2)
     .addAllStats(3)
     .effect({
@@ -267,7 +267,7 @@ export function registerAllArchetypeEffects() {
 
   // Dual Wielder
   defineEffect("archetype", "Dual Wielder")
-    .description("-3 Strength. Dùng được 2 vũ khí.")
+    .description("Nhận -3 Strength. Dùng được 2 vũ khí và chắc chắn nhận 2 vũ khí, tối đa 1 Unique Weapon. (Chỉ có 1 vũ khí có thể có Runeword)")
     .weight(1.7)
     .addStat("strength", -3)
     .effect({
@@ -280,7 +280,7 @@ export function registerAllArchetypeEffects() {
 
   // Zealot
   defineEffect("archetype", "Zealot")
-    .description("Sau Combat: Mỗi round thua, +1 stat thấp nhất.")
+    .description("Sau Combat: Mỗi round combat thua, nhận +1 vào chỉ số thấp nhất")
     .weight(1.1)
     .effect({
       type: "stat_modifier",
@@ -294,7 +294,7 @@ export function registerAllArchetypeEffects() {
 
   // Atheist
   defineEffect("archetype", "Atheist")
-    .description("Trước combat: +1 điểm vs God và Demi-God.")
+    .description("Trước combat: Nhận 1 điểm combat khi đối đầu với God và Demi-God.")
     .weight(2)
     .effect({
       type: "combat_points",
@@ -308,7 +308,7 @@ export function registerAllArchetypeEffects() {
   // Devotee
   defineEffect("archetype", "Devotee")
     .description(
-      "+1 điểm khởi đầu vs Demon/Vampire/Spirit/Orc/Skeleton/Goblin. Thua ngay vs God/Demi-God.",
+      "Trong combat: Nhận 1 điểm khởi đầu khi combat với Demon, Vampire, Spirit, Orc, Skeleton và Goblin. Nhưng sẽ ngay lập tức thua khi đối đầu với God và Demi-God. (Hiệu ứng thua này mạnh hơn các hiệu ứng liên quan đến kết quả trận đấu khác).",
     )
     .weight(2)
     .effect({
@@ -334,7 +334,7 @@ export function registerAllArchetypeEffects() {
   // Follower of the Two Fingers
   defineEffect("archetype", "Follower of the Two Fingers")
     .description(
-      "Sau combat: -1 IQ, -1 BIQ, cướp 1 Power từ player ngẫu nhiên.",
+      "Sau combat: Nhận -1 IQ và -1 BIQ, cướp 1 Power từ 1 người chơi còn sống ngẫu nhiên.",
     )
     .weight(1.8)
     .effect({
@@ -386,7 +386,7 @@ export function registerAllArchetypeEffects() {
   // Promised Consort
   defineEffect("archetype", "Promised Consort")
     .description(
-      'Trong Combat: Thêm Base Stat cao nhất của Lover vào stat đánh nhau. Ưu tiên Lover có Archetype "Femboy".',
+      "Trong Combat: Thêm Base Stat cao nhất của 1 \"Lover\" của bạn vào Stat đánh nhau của bạn. Nếu như có \"Lover\" nào có Archetype \"Femboy\", chọn \"Lover\" đó, nếu có nhiều, quay Wheel (Lmao).",
     )
     .weight(0.5)
     .effect({
@@ -400,7 +400,7 @@ export function registerAllArchetypeEffects() {
   // Cinderheart
   defineEffect("archetype", "Cinderheart")
     .description(
-      '+1 All Stats. Sau Combat: Đối thủ nhận Power "Cinder Flickering".',
+      "Trong Combat: Thêm Base Stat cao nhất của 1 \"Lover\" của bạn vào Stat đánh nhau của bạn. Nếu như có \"Lover\" nào có Archetype \"Femboy\", chọn \"Lover\" đó, nếu có nhiều, quay Wheel (Lmao).",
     )
     .weight(0.5)
     .addAllStats(1)
@@ -418,7 +418,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Power "Spell Flux" và 1 Power "Trong Combat" đã nhận lúc tạo nhân vật
   defineEffect("archetype", "Stargazer")
     .description(
-      'Nhận Power "Spell Flux" và 1 Power có kích hoạt "Trong Combat" ngẫu nhiên. (Đã nhận lúc tạo nhân vật)',
+      "Nhận Power \"Spell Flux\" và 1 Power có kích hoạt \"Trong Combat\" ngẫu nhiên.",
     )
     .weight(0.5)
     .register();
@@ -427,7 +427,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: "Siêu Anh Hùng Wheel" đã quay lúc tạo nhân vật
   defineEffect("archetype", "Superhero")
     .description(
-      'Bạn là một siêu anh hùng! Nhận "Siêu Anh Hùng Wheel". (Đã quay lúc tạo nhân vật)',
+      "Bạn là một siêu anh hùng! Nhận \"Siêu Anh Hùng Wheel\".",
     )
     .weight(1.6)
     .effect({
@@ -442,7 +442,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Instrument Weapon và House đã nhận lúc tạo nhân vật
   defineEffect("archetype", "Người Trong Ban Nhạc")
     .description(
-      '36% nhận "Instrument Weapon Wheel". Skip vũ khí thường. Mặc định House "Ban Nhạc Ngọt Đoàn Kết". (Đã xử lý lúc tạo nhân vật)',
+      "Có 36% nhận được vòng quay \"Instrument Weapon\". Chắc chắn luôn sử dụng được tất cả vũ khí nhạc cụ. Skip vòng quay vũ khí thông thường. Bạn mặc định thuộc về House \"Ban Nhạc Ngọt Đoàn Kết\"",
     )
     .weight(3)
     .effect({
@@ -455,7 +455,7 @@ export function registerAllArchetypeEffects() {
 
   // Hero Grave Keeper
   defineEffect("archetype", "Hero Grave Keeper")
-    .description("Sau mỗi vòng: Nhận 1 Gear từ 1 người đã bị loại.")
+    .description("Sau mỗi vòng, Nhận 1 Gear từ 1 người đã bị loại.")
     .weight(3)
     .effect({
       type: "custom",
@@ -468,7 +468,7 @@ export function registerAllArchetypeEffects() {
   // Gambler
   defineEffect("archetype", "Gambler")
     .description(
-      "Trong combat: Mỗi round thắng có 50% nhận 2 điểm và 50% nhận 0 điểm.",
+      "Mỗi round thắng trong combat, có 50% khả năng nhận nhận 2 điểm và 50% khả năng nhận 0 điểm.",
     )
     .weight(2.2)
     .effect({
@@ -483,7 +483,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Hiệu ứng spin lại stat đã xử lý lúc tạo nhân vật
   defineEffect("archetype", "Time Traveller")
     .description(
-      "Khi spin Base Stats, stat ≤3 sẽ spin lại 1 lần. (Đã xử lý lúc tạo nhân vật)",
+      "Khi spin Base Stats, với mỗi chỉ số có điểm dưới hoặc bằng 3 sẽ spin lại 1 lần.",
     )
     .weight(1.8)
     .register();
@@ -492,7 +492,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Lover đã nhận lúc tạo nhân vật
   defineEffect("archetype", "Loyal")
     .description(
-      "Nhận 1 Lover và chỉ có 1 Lover duy nhất. Khi Lover bị loại: +1 Char Dev. (Lover đã nhận lúc tạo nhân vật)",
+      "Nhận 1 Lover và sẽ chỉ có 1 Lover duy nhất. (Nếu đang có sẵn nhiều hơn 1 Lover, quay 1 Archetype khác). Khi Lover bị loại, nhận 1 Char Dev.",
     )
     .weight(2.2)
     .effect({
@@ -513,7 +513,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Trickster Wheel đã quay lúc tạo nhân vật
   defineEffect("archetype", "Trickster")
     .description(
-      'Nhận "Trickster Wheel", kích hoạt trước mỗi combat và hết hiệu lực sau combat. ',
+      "Nhận \"Trickster\" wheel, kích hoạt trước mỗi combat và hết hiệu lực sau mỗi combat",
     )
     .weight(2.2)
     .effect({
@@ -526,7 +526,7 @@ export function registerAllArchetypeEffects() {
 
   // Summoner
   defineEffect("archetype", "Summoner")
-    .description("Sau combat thắng: Nhận 1 lần vòng quay Summon (không trùng).")
+    .description("Sau combat thắng: Nhận 1 lần vòng quay Summon, không thể ra trùng Summon đã sở hữu. Sẽ không quay thêm nếu đã sở hữu tất cả các Summon.")
     .weight(2.3)
     .effect({
       type: "grant_wheel",
@@ -540,7 +540,7 @@ export function registerAllArchetypeEffects() {
   // Edgelord
   defineEffect("archetype", "Edgelord")
     .description(
-      "Trước khi kết thúc combat: Bên thấp điểm hơn nhận thêm 1 điểm.",
+      "Trước khi kết thúc combat: So sánh điểm của hai bên, bên nào thấp điểm hơn sẽ nhận thêm 1 điểm.",
     )
     .weight(2.8)
     .effect({
@@ -555,7 +555,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Quirk🍀 và Power🍀 đã nhận lúc tạo nhân vật
   defineEffect("archetype", "Hero of the Emirate🍀")
     .description(
-      "Nhận thêm Quirk 🍀 và Power 🍀 ngay lập tức. (Đã nhận lúc tạo nhân vật)",
+      "Nhận thêm Quirk 🍀, Power 🍀 ngay lập tức",
     )
     .weight(3.6)
     .register();
@@ -564,7 +564,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Gear "Fishing Rod" đã nhận lúc tạo nhân vật
   defineEffect("archetype", "Fisher")
     .description(
-      'Nhận Gear "Fishing Rod". Đến vòng 16: +1 PvP Rewards. (Gear đã nhận lúc tạo nhân vật)',
+      "Nhận Gear \"Fishing Rod\". Đến vòng 16, nhận thêm 1 PvP Rewards.",
     )
     .weight(2.2)
     .effect({
@@ -579,7 +579,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Vũ khí và runeword đã xử lý lúc tạo nhân vật
   defineEffect("archetype", "Blacksmith")
     .description(
-      "Chắc chắn có vũ khí. Vũ khí chắc chắn là runeword. Dùng được mọi vũ khí. (Đã xử lý lúc tạo nhân vật)",
+      "(1) Bạn chắc chắn có vũ khí. (2) Vũ khí của bạn chắc chắn là 1 runeword. (3) Bạn chắc chắn sử dụng được mọi vũ khí.",
     )
     .weight(2.2)
     .effect({
@@ -592,7 +592,7 @@ export function registerAllArchetypeEffects() {
 
   // Sentinel of Purity
   defineEffect("archetype", "Sentinel of Purity")
-    .description('Lần đầu tiên bị dính power "AIDS": Nhận Char dev "Isekai".')
+    .description("Lần đầu tiên bạn bị dính power \"AIDS\", bạn sẽ nhận Char dev \"Isekai\".")
     .weight(2)
     .effect({
       type: "custom",
@@ -618,7 +618,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Hiệu ứng 50% không quay được đã xử lý lúc tạo nhân vật
   defineEffect("archetype", "Gambler Bloodline")
     .description(
-      "50% không được quay vòng quay đó, stat mặc định = 1. Nếu không quay được stat nào -> all stats = 10. Nếu không quay được gì -> vô địch! (Đã xử lý lúc tạo nhân vật)",
+      "Ở những vòng quay còn lại của quá trình tạo nhân vật, Có 50% không được quay vòng quay đó, Nếu là không nhận được vòng quay Stat, Stat đó mặc định là 1. Áp dụng lên cả những vòng quay phụ sinh ra từ Vòng quay chính. Nếu bạn không được quay bất kì chỉ số nào, toàn bộ stats của bạn sẽ được đặt base = 10. Nếu bạn không được quay bất cứ cái gì, mùa giải kết thúc và bạn là nhà vô địch ăn trọn 100% giải thưởng.",
     )
     .weight(1.9)
     .register();
@@ -627,7 +627,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Power Ranger Wheel đã quay lúc tạo nhân vật
   defineEffect("archetype", "Power Ranger")
     .description(
-      'Bạn trở thành 1 trong các siêu nhân Gao! Nhận "Power Ranger Wheel". (Đã quay lúc tạo nhân vật)',
+      "Bạn trở thành 1 trong các siêu nhân Gao! Nhận \"Power Ranger Wheel\".",
     )
     .weight(1.5)
     .effect({
@@ -640,14 +640,14 @@ export function registerAllArchetypeEffects() {
 
   // Philosopher
   defineEffect("archetype", "Philosopher")
-    .description("Base IQ +3.")
+    .description("Base IQ +3")
     .weight(3)
     .addStat("iq", 3, true)
     .register();
 
   // Herald
   defineEffect("archetype", "Herald")
-    .description("Base Speed +3.")
+    .description("Base Speed +3")
     .weight(3)
     .addStat("speed", 3, true)
     .register();
@@ -656,7 +656,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: 3 Power Quas/Wex/Exort đã nhận lúc tạo nhân vật
   defineEffect("archetype", "Invoker")
     .description(
-      'Nhận 3 Power "Quas", "Wex", "Exort". Trước Combat: Quay 1 Power chưa sở hữu và nhận hiệu ứng trong combat đó. (Power đã nhận lúc tạo nhân vật)',
+      "(1). Nhận 3 Power \"Quas\", \"Wex\" và \"Exort\". (2).Trước Combat: Quay ngẫu nhiêu 1 Power chưa sở hữu và nhận hiệu ứng của nó trong combat đó. Power này chỉ dùng được trong Combat đó.",
     )
     .weight(1)
     .effect({
@@ -671,7 +671,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Không có vòng quay Power đã xử lý lúc tạo nhân vật
   defineEffect("archetype", "Bravest of the Brave")
     .description(
-      "Không được vòng quay Power. Thắng combat PvP: Nhận 2 PvP Rewards thay vì 1. (Đã xử lý lúc tạo nhân vật)",
+      "Bạn không được nhận vòng quay Power, nhưng khi thắng combat PvP bạn sẽ nhận 2 vòng quay PvP Rewards thay vì 1.",
     )
     .weight(1)
     .effect({
@@ -685,7 +685,7 @@ export function registerAllArchetypeEffects() {
   // Mason
   defineEffect("archetype", "Mason")
     .description(
-      "Cường hóa House Feature khi nhận Houses. (Không nhận House Feature thông thường)",
+      "Cường Hóa House Feature khi nhận Houses. (Không nhận House Feature thông thường)",
     )
     .weight(3)
     .effect({
@@ -699,7 +699,7 @@ export function registerAllArchetypeEffects() {
   // Cursed of 36k
   defineEffect("archetype", "Cursed of 36k")
     .description(
-      "Giảm toàn bộ Base Stat quay ra đi 1. (Cái tội sống vội + ham hố)",
+      "Cái tội sống vội + ham hố, chưa mở chính thức mà đóng tiền, ngoài ra giảm toàn bộ Base Stat quay ra đi 1.",
     )
     .weight(0)
     //.addAllStats(-1, true)
@@ -709,7 +709,7 @@ export function registerAllArchetypeEffects() {
   // NOTE: Hero X Wheel đã quay lúc tạo nhân vật
   defineEffect("archetype", "X")
     .description(
-      'Unique - chỉ 1 người có. Thua -> chuyển cho người thắng. Nhận "Hero X Wheel". Mất archetype -> -1 all stats. (Đã quay lúc tạo nhân vật)',
+      "Chỉ có duy nhất 1 người có thể làm X trong toàn bộ giải, khi lần đầu tiên có người quay ra \"X\", loại bỏ nó khỏi vòng quay Archetype. Khi người có archetype này nhận thất bại, sẽ loại bỏ archetype này từ người đó và chuyển nó sang cho người thắng. Khi bất kì ai nhận archetype \"X\", họ sẽ nhận vòng quay \"Hero X\", khi archetype này rời khỏi bất kì ai, người đó sẽ nhận -1 all stats.",
     )
     .weight(0)
     .effect({
@@ -1373,7 +1373,7 @@ function registerNewLondonArchetypes() {
   // Merchants
   defineEffect("archetype", "Merchants")
     .description(
-      'Nhận 1 "Đồng Tiền Vàng". Sau Combat: Bán 1 Gear lấy 1 "Đồng Tiền Vàng".',
+      "Nhận 1 Gear \"Đồng Tiền Vàng\". Sau Combat: Bán 1 Gear lấy 1 \"Đồng Tiền Vàng\" (Gear bị bán ko thể là đồng tiền vàng)",
     )
     .weight(0)
     .effect({
@@ -1419,7 +1419,7 @@ function registerNewLondonArchetypes() {
   // Evolvers
   defineEffect("archetype", "Evolvers")
     .description(
-      "Chuyển tất cả Debuff của đối thủ dành cho mình thành Buff tặng cho mình.",
+      "\"Adapt and embrace the frost. Natural selection rewards Merit. Design works only through reason.\" Chuyển tất cả Debuff của đối thủ dành cho mình thành Buff tặng cho mình.",
     )
     .weight(0)
     .effect({
@@ -1432,7 +1432,7 @@ function registerNewLondonArchetypes() {
 
   // Faithkeepers
   defineEffect("archetype", "Faithkeepers")
-    .description('Nhận toàn bộ Quirk của 1 người nhà "New London" khác.')
+    .description("\"Progress the advance humanity. Equal as one flock. Tradition is our bedrock.\" Nhận Toàn bộ Quirk của 1 người nhà \"New London\" khác.")
     .weight(0)
     .effect({
       type: "custom",
@@ -1445,7 +1445,7 @@ function registerNewLondonArchetypes() {
   // Pilgrims
   defineEffect("archetype", "Pilgrims")
     .description(
-      "Biến đổi Debuff của bản thân thành Buff tăng chỉ số cho mình.",
+      "\"Adapt; the frost humbles all. All are equal in the frostland. Tradition will ground and guide us.\" Biến đổi Debuff của bản thân thành \"Thay vì giảm chỉ số đối thủ, Buff tăng chỉ số cho mình.\"",
     )
     .weight(0)
     .effect({
@@ -1458,7 +1458,7 @@ function registerNewLondonArchetypes() {
 
   // Stalwarts
   defineEffect("archetype", "Stalwarts")
-    .description("+2 Strength, +2 IQ, +2 BIQ.")
+    .description("\"Progress for the glory of New London. Merit forges the strongest. Reason for order, order for control.\" Nhận +2 Strength, +2 IQ và +2 BIQ")
     .weight(0)
     .addStat("strength", 2)
     .addStat("iq", 2)
@@ -1468,7 +1468,7 @@ function registerNewLondonArchetypes() {
   // Bohemians
   defineEffect("archetype", "Bohemians")
     .description(
-      "Trong Combat: Tất cả vòng quay 40/40/20 (20% hòa). All Stats = 99.",
+      "\"Adaptation is the art of survival. Equality frees us. Tradition isn't afraid to destroy an old canvas.\" Trong Combat: Tất cả vòng quay Stat/trọng số đều là 40/40/20 (20% hòa). All Stats của bạn cố định là 99.",
     )
     .weight(0)
     .effect({
@@ -1482,7 +1482,7 @@ function registerNewLondonArchetypes() {
   // Icebloods
   defineEffect("archetype", "Icebloods")
     .description(
-      "Trong Combat: +1 điểm nếu thắng round, -1 điểm nếu thua round.",
+      "\"Embrace Adaptation, reward Merit, honour Tradition.\" Trong Combat: Nhận thêm 1 điểm nếu thắng round, trừ đi 1 điểm nếu thua round.",
     )
     .weight(0)
     .effect({
@@ -1495,7 +1495,7 @@ function registerNewLondonArchetypes() {
 
   // Legionnaires
   defineEffect("archetype", "Legionnaires")
-    .description("Sau Combat: Nếu thắng, khởi đầu trận tiếp theo với 1 điểm.")
+    .description("\"Progress marches ever forward. Equality in the ranks. Tradition ensures order.\" Sau Combat: Nếu thắng trận, khởi đầu trận tiếp theo với 1 điểm.")
     .weight(0)
     .effect({
       type: "combat_points",
@@ -1509,7 +1509,7 @@ function registerNewLondonArchetypes() {
   // Menders
   defineEffect("archetype", "Menders")
     .description(
-      "Sau Combat: Stat thấp nhất đối thủ +2 cho mình, Stat cao nhất +1 cho mình.",
+      "\"Adaptation staves off hubris. Equality before the frost. Traditions guide us.\" Sau Combat: Stat thấp nhất của đối thủ sẽ +2 vào Stat đó của mình, Stat cao nhất của đối thủ sẽ +1 vào stat đó của mình",
     )
     .weight(0)
     .effect({
@@ -1523,7 +1523,7 @@ function registerNewLondonArchetypes() {
   // Overseers
   defineEffect("archetype", "Overseers")
     .description(
-      'Trong Combat: Cả hai chỉ chọn 1 Power "Trong Combat". Đối thủ -1 all stats.',
+      "\"Progress guided by the worthy. Merit culls the excess. Tradition ensures hierarchy.\" Trong Combat: Cả hai chỉ được chọn 1 Power có chữ \"Trong Combat\" để kích hoạt. Debuff: -1 All Stat của đối thủ.",
     )
     .weight(0)
     .effect({
@@ -1543,7 +1543,7 @@ function registerNewLondonArchetypes() {
 
   // Proteans
   defineEffect("archetype", "Proteans")
-    .description('BIQ +5. Nhận Power "Darwin Evolution Theory".')
+    .description("\"Adaptation through evolution. Merit so the best survives. Reason for every blueprint.\" BIQ +5. Nhận Power \"Darwin Evolution Theory\"")
     .weight(0)
     .addStat("biq", 5)
     .effect({
@@ -1558,7 +1558,7 @@ function registerNewLondonArchetypes() {
 
   // Technocrats
   defineEffect("archetype", "Technocrats")
-    .description('IQ +5. Nhận Power "Algorithms Are Clear".')
+    .description("\"Technology will ensure prosperity. Equality for all citizens. Reason guarantees social harmony.\" IQ +5. Nhận Power \"Algorithms Are Clear\"")
     .weight(0)
     .addStat("iq", 5)
     .effect({
@@ -1573,7 +1573,7 @@ function registerNewLondonArchetypes() {
 
   // Venturers
   defineEffect("archetype", "Venturers")
-    .description("Trong Combat: Trọng số bạn cao hơn -> +4, thấp hơn -> +8.")
+    .description("\"Progress, for those who can keep pace. Merit fuels the industrious. Reason to optomize investment.\" Trong Combat: Sau khi xác định được Trọng Số của hai bên, nhận +4 vào Trọng số của bạn nếu bạn cao hơn, +8 vào Trọng số của bạn nếu thấp hơn.")
     .weight(0)
     .effect({
       type: "custom",

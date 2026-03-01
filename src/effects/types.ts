@@ -145,7 +145,8 @@ export type ConditionType =
   | 'pvp_win_count'           // Số trận PvP thắng
   | 'round_result'            // Kết quả round
   | 'opponent_has'            // Opponent có gì
-  | 'probability';            // Xác suất %
+  | 'probability'             // Xác suất %
+  | 'metadata_match';         // Gear metadata match (e.g., stellaronMember)
 
 export interface Condition {
   type: ConditionType;
@@ -185,6 +186,10 @@ export interface Condition {
 
   // For has_char_dev
   charDev?: string;
+
+  // For metadata_match
+  key?: string;
+  value?: string | number | boolean;
 
   // Negate condition
   negate?: boolean;

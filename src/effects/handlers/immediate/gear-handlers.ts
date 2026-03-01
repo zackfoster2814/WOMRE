@@ -348,16 +348,34 @@ registerImmediateHandler(
 
 /**
  * Stellaron Hunter's Member Card - Kí bởi 1 trong 5 thành viên Stellaron Hunters.
+ * Blade signature: nhận stat ngay khi immediate (Blade: -1 Dura, +2 Str, +1 BIQ, +1 MA)
  */
 registerImmediateHandler(
   "stellaron_hunter_card",
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const members = ['Kafka', 'Silver Wolf', 'Blade', 'Firefly', 'Elio'];
+    const members = ['Kafka', 'Silver Wolf', 'Blade', 'Firefly', 'Elio'] as const;
     const member = members[Math.floor(Math.random() * members.length)];
 
+    // Blade: immediate stat changes
+    if (member === 'Blade') {
+      return {
+        statModifiers: [
+          { stat: 'durability', value: -1 },
+          { stat: 'strength', value: 2 },
+          { stat: 'biq', value: 1 },
+          { stat: 'ma', value: 1 },
+        ],
+        skipDefault: true,
+        description: `Stellaron Hunter's Card: Signed by Blade → -1 Dura, +2 Str, +1 BIQ, +1 MA`,
+        metadata: { stellaronMember: member as string },
+      };
+    }
+
+    // Store member on the gear for combat handlers to use
     return {
       skipDefault: true,
       description: `Stellaron Hunter's Card: Signed by ${member}`,
+      metadata: { stellaronMember: member as string },
     };
   },
   "Random Stellaron Hunter member signature",
@@ -471,6 +489,24 @@ registerImmediateHandler(
     };
   },
   "Bounty on random player - 36k reward on death",
+);
+
+// ============================================================================
+// KHUNG HÌNH THỜ - Transfer to winner on death
+// ============================================================================
+
+/**
+ * Khung hình thờ - Khi bị loại, chuyển gear này cho người thắng.
+ */
+registerImmediateHandler(
+  "khung_hinh_tho_transfer",
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: "Khung hình thờ: Chuyển gear cho người thắng khi bị loại",
+    };
+  },
+  "Transfer Khung hình thờ to winner on death",
 );
 
 // so_tay_iq_bonus is a COMBAT handler → see combat/gear-combat-handlers.ts

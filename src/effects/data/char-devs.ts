@@ -170,7 +170,7 @@ export function registerCharDevEffects() {
 
   // 13. Fate's Trick
   defineEffect('char_dev', "Fate's Trick")
-    .description('Có 50% khả năng nhân đôi Base stat thấp nhất và 50% khả năng chia đôi stat cao nhất.')
+    .description('Có 50% khả năng nhân đôi Base stat thấp nhất và 50% khả năng chia đôi stat cao nhất. (làm tròn lên)')
     .weight(2)
     .effect({
       type: 'custom',
@@ -194,7 +194,7 @@ export function registerCharDevEffects() {
 
   // 15. Creator's Favor
   defineEffect('char_dev', "Creator's Favor")
-    .description('"Đấng Sáng Tạo" tùy ý buff cho nhân vật. (Không thay đổi quá 2 chỉ số)')
+    .description('"Đấng Sáng Tạo" tùy ý buff cho nhân vật. (Không thay đổi quá 2 chỉ số). (Sẽ có danh sách các hành động có thể thực hiện)')
     .weight(1.2)
     .effect({
       type: 'custom',
@@ -227,7 +227,7 @@ export function registerCharDevEffects() {
 
   // 18. Mentor
   defineEffect('char_dev', 'Mentor')
-    .description('Nhận thêm 1 Power từ 1 Player ngẫu nhiên. (Mục tiêu sẽ mất power đó)')
+    .description('Nhận thêm 1 Power từ 1 Player ngẫu nhiên. (Mục tiêu được chọn phải còn sống và mục tiêu đó sẽ mất power được chọn)')
     .weight(1.8)
     .effect({
       type: 'steal_power',
@@ -252,7 +252,7 @@ export function registerCharDevEffects() {
 
   // 20. Make love
   defineEffect('char_dev', 'Make love')
-    .description('Quay 1 wheel bao gồm toàn bộ player hiện tại để chọn ra người tình. Nếu một trong hai có AIDS, truyền nó.')
+    .description('Quay 1 wheel bao gồm toàn bộ player hiện tại để chọn ra người tình. Có khả năng tạo ra Race mới ở mùa sau. Nếu một trong hai có Power "Aids", truyền nó cho người còn lại.')
     .weight(1.5)
     .effect({
       type: 'make_love',
@@ -296,7 +296,7 @@ export function registerCharDevEffects() {
 
   // 24. Furry
   defineEffect('char_dev', 'Furry')
-    .description('Trong Combat: +1 all stats vs Werebeast. Thua: -1 all. Thắng: +1 all vĩnh viễn.')
+    .description('(1).Trong Combat: Nhận +1 all stats khi đấu với Werebeast. (2).Nếu thua Werebeast, nhận -1 All Stats. (3).Nếu thắng Werebeast, nhận +1 all stats vĩnh viễn.')
     .weight(1.2)
     .effect({
       type: 'stat_modifier',
@@ -355,7 +355,7 @@ export function registerCharDevEffects() {
 
   // 28. Creator's Limitation
   defineEffect('char_dev', "Creator's Limitation")
-    .description('"Đấng Sáng Tạo" tùy ý nerf cho nhân vật. (Không thay đổi quá 2 chỉ số)')
+    .description('"Đấng Sáng Tạo" tùy ý nerf cho nhân vật. (Không thay đổi quá 2 chỉ số). (Sẽ có danh sách các hành động có thể thực hiện)')
     .weight(1.2)
     .effect({
       type: 'custom',
@@ -416,7 +416,7 @@ export function registerCharDevEffects() {
 
   // 34. Become King Slayer
   defineEffect('char_dev', 'Become King Slayer')
-    .description("Nhận Archetype \"Slayer\". Trong Combat: vs \"King's Landing\", +1 All Stats.")
+    .description("(1).Nhận Archetype \"Slayer\". Nếu bạn đang là một \"Slayer\", chọn thêm 1 tộc nữa. (2).Trong Combat: Nếu đối thủ có Char Dev \"King's Landing\", nhận +1 All Stats.")
     .weight(2)
     .effect({
       type: 'grant_archetype',
@@ -438,7 +438,7 @@ export function registerCharDevEffects() {
 
   // 35. King's Landing
   defineEffect('char_dev', "King's Landing")
-    .description('Khi bị loại, gia tộc nhận 1 Power. Trong Combat: -2 điểm và -10 IQ nếu không có Devotee/God/Demi God.')
+    .description('(1).Khi bạn bị loại, tất cả mọi người còn sống trong "Gia tộc" của bạn sẽ được nhận 1 Power. (2).Trong Combat: Nếu bạn không có Archetype "Devotee", Không thuộc race "God" hoặc "Demi God", nhận -2 điểm khởi đầu và -10 IQ.')
     .weight(2)
     .effect({
       type: 'custom',
@@ -465,7 +465,7 @@ export function registerCharDevEffects() {
 
   // 36. True Heir of the Emirate🍀
   defineEffect('char_dev', 'True Heir of the Emirate🍀')
-    .description('Nếu có Archetype🍀, +1 All Stats 🍀. Nếu có Unique Weapon 🍀, +1 All Stats 🍀')
+    .description('Nếu bạn có Archetype🍀, nhận +1 All Stats 🍀. Nếu bạn có Unique Weapon 🍀, nhận +1 All Stats 🍀.')
     .weight(2)
     .effect({
       type: 'custom',
@@ -477,7 +477,7 @@ export function registerCharDevEffects() {
 
   // 37. Become Hand of The King
   defineEffect('char_dev', 'Become Hand of The King')
-    .description('Nhận +3 IQ. Trong Combat: vs "Become King Slayer", +1 All Stats.')
+    .description('(1).Nhận +3 IQ. (2). Trong Combat: Nếu đối thủ có Char Dev "Become King Slayer", nhận +1 All Stats.')
     .weight(2)
     .addStat('iq', 3)
     .effect({
@@ -556,7 +556,7 @@ export function registerCharDevEffects() {
 
   // 43. Overcome the Habits
   defineEffect('char_dev', 'Overcome the Habits')
-    .description('Với mỗi Quirk bạn có, +1 vào stat thấp nhất. (Dựa theo Base Stats gốc)')
+    .description('Với mỗi Quirk bạn có trên người, +1 vào stat thấp nhất. (Tính theo chỉ số từ vòng quay stats gốc và chỉ có 1 chỉ số duy nhất được chọn)')
     .weight(2)
     .effect({
       type: 'custom',
@@ -592,7 +592,7 @@ export function registerCharDevEffects() {
 
   // 46. Become a Power Ranger (generic — player gets Power Ranger Wheel)
   defineEffect('char_dev', 'Become a Power Ranger')
-    .description('Nhận "Power Ranger Wheel". Không nhận PvP Rewards, không có vòng PvE. Sau combat thắng, all Rangers +1 random stat.')
+    .description('Nhận "Power Ranger Wheel" và hiệu ứng tương ứng. Tối đa chỉ có thể có 1 Ranger mỗi màu. Power Rangers không nhận PvP Rewards và không có vòng PvE. Sau mỗi combat chiến thắng, tất cả Rangers nhận +1 vào 1 chỉ số ngẫu nhiên (tất cả được cộng giống nhau).')
     .weight(1.4)
     .effect({
       type: 'grant_wheel',
@@ -748,7 +748,7 @@ export function registerCharDevEffects() {
 
   // 54. SVKS
   defineEffect('char_dev', 'SVKS')
-    .description('Chọn 1 người còn sống ngẫu nhiên. Cướp lấy tất cả hiệu ứng từ PvP Rewards của họ.')
+    .description('Chọn 1 người chơi còn sống ngẫu nhiên. Bạn sẽ cướp lấy tất cả hiệu ứng mà người chơi đó nhận được từ vòng quay PvP Rewards. (Tính từ thời điểm Char Dev này được quay ra, nếu họ không có PvP Reward, nhận 1 char dev mới)')
     .weight(1.6)
     .effect({
       type: 'custom',
@@ -760,7 +760,7 @@ export function registerCharDevEffects() {
 
   // 55. Mang Bàn Chân Này Đi Dạo Phố
   defineEffect('char_dev', 'Mang Bàn Chân Này Đi Dạo Phố')
-    .description('Toàn bộ Stats cố định là 1. Sau Combat: +1 điểm per Ngọt Reference. Cover bài Thắng Ngọt = 1 Slot mùa sau.')
+    .description('(1).Toàn bộ Stats của bạn cố định là 1. (2).Sau Combat: Với mỗi Ngọt Reference bạn có trong người, nhận thêm 1 điểm trước lúc tổng kết trận đấu. (3).Trong Combat: Nếu bạn Cover được full hoàn chỉnh 1 Bài của Thắng Ngọt và gửi vào kênh chat chung của Vòng quay trước khi trận đấu kết thúc thì bạn sẽ nhận 1 Slot mùa sau (Áp dụng 1 lần) (Không được duyệt nếu cố tình bôi nhọ hay chế lời hoặc cười cợt chơi đùa về bất cứ thứ gì, bạn phải hát nghiêm túc, chỉ hát cover 1 bài của Thắng Ngọt, có beat đệm không hát chay pls, tổ duyệt sẽ là Kwan và Vilhelm).')
     .weight(0.1)
     .effect({
       type: 'custom',
@@ -772,7 +772,7 @@ export function registerCharDevEffects() {
 
   // 56. MrBeast
   defineEffect('char_dev', 'MrBeast')
-    .description('Sau Combat thắng: Quay 5 người và tặng 1 Gear bạn có. Không có Gear thì -5 stat để +1 cho 5 người.')
+    .description('Sau Combat thắng: Quay 5 người chơi còn sống ngẫu nhiên và tặng cho họ 1 Gear ngẫu nhiên mà bạn có. (5 người cùng nhận Gear đó). Nếu bạn không có Gear nào, -5 1 stats ngẫu nhiên để tăng +1 cho 5 người đó. Nếu một MrBeast tặng cho một MrBeast, nhận +2 all stats. (cho người được tặng)')
     .weight(1.2)
     .effect({
       type: 'custom',
@@ -784,7 +784,7 @@ export function registerCharDevEffects() {
 
   // 57. "Chuyện Bộ Tộc"
   defineEffect('char_dev', '"Chuyện Bộ Tộc"')
-    .description('Bạn và những người cùng gia tộc nhận +1 All Base Stats. (Kích hoạt 1 lần mỗi gia tộc mỗi mùa)')
+    .description('(1).Ngay lập tức khi quay xong toàn bộ player, bạn và những người cùng gia tộc nhận +1 All Base Stats. (2).Bạn và những người trong gia tộc có thể nhắn tin Discord cho Vilhelm0802(Vilhelm#0802) để xin tăng lượng chỉ số này lên thành +2 All Base Stats nhưng bù lại những người còn lại trong gia tộc không thể nhận hiệu ứng (1). (3).Nếu có 2 hoặc nhiều hơn 2 người trong gia tộc nhắn tin cho Vilhelm, cả gia tộc sẽ nhận -1 All Base Stats cho đến khi tất cả những người nhắn tin bị loại trong giải, khi đấy +1 All Base Stats lại cho những người còn sống (Về cơ bản là khôi phục lại như cũ nếu Sú chết hết). (4). Mỗi Gia Tộc kích hoạt "Chuyện Bộ Tộc" một lần duy nhất trong cả mùa giải.')
     .weight(2)
     .effect({
       type: 'custom',
@@ -818,7 +818,7 @@ export function registerCharDevEffects() {
 
   // 60. Don't say it
   defineEffect('char_dev', "Don't say it")
-    .description('Nhận -2 all stats. Sau combat thắng: Xóa bỏ giảm stats, +2 all stats và nhận Power "Encroaching Shadow".')
+    .description('Nhận -2 all stats. Sau combat thắng: Xóa bỏ hiệu ứng giảm stats, đồng thời nhận +2 all stats và nhận Power "Encroaching Shadow". (Hiệu ứng này chỉ kích hoạt 1 lần)')
     .weight(1.8)
     .addAllStats(-2)
     .effect({
@@ -862,7 +862,7 @@ export function registerCharDevEffects() {
 
   // 62. Cơ cấu
   defineEffect('char_dev', 'Cơ cấu')
-    .description('Bạn sẽ gia nhập vào tổ đội Raid Boss có nhiều người nhất mà chưa đầy.')
+    .description('Bạn sẽ gia nhập vào tổ đội Raid Boss có nhiều người nhất mà chưa đầy (Nếu có nhiều tổ đội bằng người sẽ quay random).')
     .weight(1.6)
     .effect({
       type: 'custom',
@@ -891,7 +891,7 @@ export function registerCharDevEffects() {
 
   // Lord of Cinder
   defineEffect('char_dev', 'Lord of Cinder')
-    .description('Nếu thua ở vòng có đọ trọng số (Vòng trong), đánh lại combat đấy thêm 1 lần nữa. (1 lần mỗi vòng)')
+    .description('Nếu thua ở vòng có đọ trọng số (Vòng trong), đánh lại combat đấy thêm 1 lần nữa. (1 lần mỗi vòng đấu)')
     .effect({
       type: 'custom',
       timing: 'after_combat_lose',

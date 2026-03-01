@@ -56,19 +56,27 @@ registerCombatHandler(
 );
 
 /**
- * King's Landing Penalty - -2 điểm và -10 IQ nếu không có Devotee/God/Demi God
+ * King's Landing Penalty - -2 điểm và -10 IQ nếu không có Archetype "Devotee",
+ * không thuộc race "God" hoặc "Demi God"
  */
 registerCombatHandler(
   'kings_landing_penalty_check',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     const selfRace = ctx.self.race?.toLowerCase() ?? '';
-    const exemptRaces = ['devotee', 'god', 'demi god', 'demi-god', 'demigod'];
+    const exemptRaces = ['god', 'demi god', 'demi-god', 'demigod'];
 
-    const isExempt = exemptRaces.some((r) => selfRace.includes(r));
-    if (isExempt) {
+    const isExemptByRace = exemptRaces.some((r) => selfRace.includes(r));
+
+    // Check Archetype "Devotee"
+    const archetypes: string[] = (ctx.self as any).archetypes?.map((a: any) =>
+      typeof a === 'string' ? a : (a?.name ?? '')
+    ) || [];
+    const isDevotee = archetypes.some((a) => a.toLowerCase().includes('devotee'));
+
+    if (isExemptByRace || isDevotee) {
       return {
         skipDefault: true,
-        description: "King's Landing: exempt (Devotee/God/Demi God race)",
+        description: "King's Landing: exempt (Archetype Devotee hoặc race God/Demi God)",
       };
     }
 
@@ -79,7 +87,7 @@ registerCombatHandler(
       description: "King's Landing: -2 điểm và -10 IQ (không có Devotee/God/Demi God)",
     };
   },
-  "King's Landing: -2 points and -10 IQ unless Devotee/God/Demi God",
+  "King's Landing: -2 points and -10 IQ unless Archetype Devotee or race God/Demi God",
 );
 
 /**

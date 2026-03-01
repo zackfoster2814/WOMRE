@@ -58,15 +58,18 @@ registerCombatHandler(
 
 /**
  * Invoker - Quay 1 Power ngẫu nhiên trước combat
+ * NOTE: Đây là GM Action - CombatEffectsPanel hiển thị note hướng dẫn GM.
+ * GM cần quay vòng quay Power (loại bỏ các power đã có), apply hiệu ứng tạm thời.
  */
 registerCombatHandler(
   'invoker_random_power',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
     return {
-      description: 'Quay 1 Power chưa sở hữu cho combat này (Invoker)',
+      skipDefault: true, // GM xử lý thủ công qua CombatEffectsPanel
+      description: '[GM] Invoker: Đã quay 1 Power ngẫu nhiên chưa sở hữu trước combat',
     };
   },
-  'Random power before combat'
+  'Random power before combat (GM manual action)'
 );
 
 /**

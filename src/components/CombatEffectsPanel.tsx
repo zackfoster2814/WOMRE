@@ -13,7 +13,10 @@
  */
 
 import { useState } from "react";
-import { ProbabilityWheelModal, type WheelSpinItem } from "./ProbabilityWheelModal";
+import {
+  ProbabilityWheelModal,
+  type WheelSpinItem,
+} from "./ProbabilityWheelModal";
 import type { Character } from "../types/character";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -21,7 +24,12 @@ import type { Character } from "../types/character";
 // ─────────────────────────────────────────────────────────────────────────────
 
 type EffectCategory = "auto" | "wheel" | "gm";
-type EffectTiming = "before_combat" | "during_combat" | "after_combat" | "after_win" | "after_lose";
+type EffectTiming =
+  | "before_combat"
+  | "during_combat"
+  | "after_combat"
+  | "after_win"
+  | "after_lose";
 
 interface StatChange {
   stat: string;
@@ -68,18 +76,18 @@ interface CombatEffectsPanelProps {
   combatResult?: CombatResultInfo;
   /** Nếu true: chỉ hiển thị before_combat effects (pre-combat warning mode) */
   preCombatOnly?: boolean;
-  /**
-   * Callback generic khi bất kỳ wheel effect nào được resolve.
-   * BattleZonePage tự xử lý logic dựa vào sourceName.
-   */
-  onWheelResolved?: (playerLabel: "player1" | "player2", sourceName: string, item: WheelSpinItem) => void;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Effect Definitions (Quirks + Archetypes với combat timing)
 // ─────────────────────────────────────────────────────────────────────────────
 
-type EffectTrigger = "after_combat" | "after_win" | "after_lose" | "during_combat" | "before_combat";
+type EffectTrigger =
+  | "after_combat"
+  | "after_win"
+  | "after_lose"
+  | "during_combat"
+  | "before_combat";
 
 interface EffectDef {
   source: string; // Quirk / Archetype name (lowercase để match)
@@ -105,13 +113,21 @@ interface ResolverCtx {
 }
 
 const STAT_LABELS: Record<string, string> = {
-  strength: "STR", speed: "SPD", durability: "DUR",
-  iq: "IQ", biq: "BIQ", ma: "MA",
+  strength: "STR",
+  speed: "SPD",
+  durability: "DUR",
+  iq: "IQ",
+  biq: "BIQ",
+  ma: "MA",
 };
 
-const ALL_STATS: StatChange[] = Object.entries(STAT_LABELS).map(([stat, label]) => ({
-  stat, label, value: 0,
-}));
+const ALL_STATS: StatChange[] = Object.entries(STAT_LABELS).map(
+  ([stat, label]) => ({
+    stat,
+    label,
+    value: 0,
+  }),
+);
 
 function allStatChange(value: number): StatChange[] {
   return ALL_STATS.map((s) => ({ ...s, value }));
@@ -171,8 +187,18 @@ const EFFECT_DEFS: EffectDef[] = [
     category: "wheel",
     description: "Fast Learner: 33% học được 1 Power của đối thủ.",
     wheelItems: [
-      { label: "Học Power (33%)", weight: 33, isSuccess: true, color: "#10b981" },
-      { label: "Thất bại (67%)", weight: 67, isSuccess: false, color: "#6b7280" },
+      {
+        label: "Học Power (33%)",
+        weight: 33,
+        isSuccess: true,
+        color: "#10b981",
+      },
+      {
+        label: "Thất bại (67%)",
+        weight: 67,
+        isSuccess: false,
+        color: "#6b7280",
+      },
     ],
     gmNote: "Nếu thành công: GM trao 1 Power ngẫu nhiên từ đối thủ",
   },
@@ -185,9 +211,15 @@ const EFFECT_DEFS: EffectDef[] = [
     description: "Resilient: 36% nhận +1 vào chỉ số thua round.",
     wheelItems: [
       { label: "+1 Stat (36%)", weight: 36, isSuccess: true, color: "#10b981" },
-      { label: "Bình thường (64%)", weight: 64, isSuccess: false, color: "#6b7280" },
+      {
+        label: "Bình thường (64%)",
+        weight: 64,
+        isSuccess: false,
+        color: "#6b7280",
+      },
     ],
-    gmNote: "Nếu thành công: +1 vào stat của round đã thua (GM xác định round cụ thể)",
+    gmNote:
+      "Nếu thành công: +1 vào stat của round đã thua (GM xác định round cụ thể)",
   },
 
   // Herbalist: nhận 1 thảo dược sau combat
@@ -205,7 +237,8 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "after_win",
     category: "gm",
     description: "Under the Weather → Shining Brightly sau khi thắng.",
-    gmNote: "[GM Action] Đổi quirk 'Under the Weather' → 'Shining Brightly' trong data",
+    gmNote:
+      "[GM Action] Đổi quirk 'Under the Weather' → 'Shining Brightly' trong data",
   },
 
   // Shining Brightly → Under the Weather (sau thua)
@@ -214,7 +247,8 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "after_lose",
     category: "gm",
     description: "Shining Brightly → Under the Weather sau khi thua.",
-    gmNote: "[GM Action] Đổi quirk 'Shining Brightly' → 'Under the Weather' trong data",
+    gmNote:
+      "[GM Action] Đổi quirk 'Shining Brightly' → 'Under the Weather' trong data",
   },
 
   // Compassionate: +1 IQ sau thắng + tặng Gear cho đối thủ
@@ -234,8 +268,18 @@ const EFFECT_DEFS: EffectDef[] = [
     category: "wheel",
     description: "Open-minded: 33% biến đối thủ thành Lover.",
     wheelItems: [
-      { label: "Lover mới! (33%)", weight: 33, isSuccess: true, color: "#ec4899" },
-      { label: "Bình thường (67%)", weight: 67, isSuccess: false, color: "#6b7280" },
+      {
+        label: "Lover mới! (33%)",
+        weight: 33,
+        isSuccess: true,
+        color: "#ec4899",
+      },
+      {
+        label: "Bình thường (67%)",
+        weight: 67,
+        isSuccess: false,
+        color: "#6b7280",
+      },
     ],
     gmNote: "Nếu thành công: GM thêm đối thủ vào danh sách Lover",
   },
@@ -245,8 +289,10 @@ const EFFECT_DEFS: EffectDef[] = [
     source: "progressive",
     timing: "after_lose",
     category: "gm",
-    description: "Progressive: quay lại stats sau thua. Nếu total mới > cũ: +1 all stats.",
-    gmNote: "[GM Action] Cho player quay lại toàn bộ stats. So sánh total. Nếu mới > cũ: +1 All Stats",
+    description:
+      "Progressive: quay lại stats sau thua. Nếu total mới > cũ: +1 all stats.",
+    gmNote:
+      "[GM Action] Cho player quay lại toàn bộ stats. So sánh total. Nếu mới > cũ: +1 All Stats",
   },
 
   // Generous: tặng PvP Reward sau thắng
@@ -255,7 +301,8 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "after_win",
     category: "gm",
     description: "Generous: tặng PvP Reward cho đối thủ sau thắng.",
-    gmNote: "[GM Action] Trao PvP Reward cho đối thủ và tăng counter generousRewardsGiven lên 1",
+    gmNote:
+      "[GM Action] Trao PvP Reward cho đối thủ và tăng counter generousRewardsGiven lên 1",
   },
 
   // Cheater death buff
@@ -264,7 +311,8 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "after_lose",
     category: "gm",
     description: "Cheater: khi bị loại, Lovers nhận +1 All Stats.",
-    gmNote: "[GM Action] Nếu bị loại hoàn toàn khỏi giải: buff +1 All Stats cho tất cả Lovers",
+    gmNote:
+      "[GM Action] Nếu bị loại hoàn toàn khỏi giải: buff +1 All Stats cho tất cả Lovers",
   },
 
   // Patient: max power wheel sau thắng
@@ -273,7 +321,8 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "after_win",
     category: "gm",
     description: "Patient: nhận vòng quay Power với kết quả tối đa sau thắng.",
-    gmNote: "[GM Action] Quay vòng quay Power cho player, kết quả luôn là giá trị cao nhất",
+    gmNote:
+      "[GM Action] Quay vòng quay Power cho player, kết quả luôn là giá trị cao nhất",
   },
 
   // ─── ARCHETYPES ──────────────────────────────────────────────────────────
@@ -395,7 +444,8 @@ const EFFECT_DEFS: EffectDef[] = [
     source: "bravest of the brave",
     timing: "after_win",
     category: "gm",
-    description: "Bravest of the Brave: nhận 2 PvP Rewards thay vì 1 sau thắng.",
+    description:
+      "Bravest of the Brave: nhận 2 PvP Rewards thay vì 1 sau thắng.",
     gmNote: "[GM Action] Trao 2 PvP Rewards cho player",
   },
 
@@ -407,7 +457,12 @@ const EFFECT_DEFS: EffectDef[] = [
     description: "Raumanian: 36% nhận +1 điểm khởi đầu.",
     wheelItems: [
       { label: "+1 điểm (36%)", weight: 36, isSuccess: true, color: "#10b981" },
-      { label: "Bình thường (64%)", weight: 64, isSuccess: false, color: "#6b7280" },
+      {
+        label: "Bình thường (64%)",
+        weight: 64,
+        isSuccess: false,
+        color: "#6b7280",
+      },
     ],
     gmNote: "Nếu thành công: cộng 1 điểm vào điểm khởi đầu",
   },
@@ -419,27 +474,14 @@ const EFFECT_DEFS: EffectDef[] = [
     description: "Raumanian🍀: 36% nhận +1 điểm khởi đầu.",
     wheelItems: [
       { label: "+1 điểm (36%)", weight: 36, isSuccess: true, color: "#10b981" },
-      { label: "Bình thường (64%)", weight: 64, isSuccess: false, color: "#6b7280" },
+      {
+        label: "Bình thường (64%)",
+        weight: 64,
+        isSuccess: false,
+        color: "#6b7280",
+      },
     ],
     gmNote: "Nếu thành công: cộng 1 điểm vào điểm khởi đầu",
-  },
-
-  // ─── HOUSE EFFECTS ────────────────────────────────────────────────────────
-
-  // Dothraki: quay wheel trước combat để xác định luật đặc biệt
-  {
-    source: "dothraki",
-    timing: "before_combat",
-    category: "wheel",
-    description: "Dothraki: Quay wheel xác định luật chiến đấu đặc biệt cho trận này.",
-    wheelItems: [
-      { label: "Luật 1: Đảo chỉ số của đối thủ (STR↔MA, Speed↔BIQ, Dura↔IQ)", weight: 1, color: "#ef4444", meta: { ruleIndex: 1 } },
-      { label: "Luật 2: Đảo Strength↔Battle IQ của bạn", weight: 1, color: "#f59e0b", meta: { ruleIndex: 2 } },
-      { label: "Luật 3: Đảo Speed↔IQ của bạn", weight: 1, color: "#22c55e", meta: { ruleIndex: 3 } },
-      { label: "Luật 4: Đảo Dura↔MA của bạn", weight: 1, color: "#3b82f6", meta: { ruleIndex: 4 } },
-      { label: "Luật 5: Bạn +4 All Stats, đối thủ nhận +3 điểm khởi đầu", weight: 1, color: "#a855f7", meta: { ruleIndex: 5 } },
-      { label: "Luật 6: Đối thủ +5 All Stats, bạn +1 All Stats mỗi điểm ghi được sau trận [GM]", weight: 1, color: "#ec4899", meta: { ruleIndex: 6 } },
-    ],
   },
 
   // ─── DURING-COMBAT QUIRKS (hiển thị trước combat để GM biết luật đặc biệt) ──
@@ -449,8 +491,10 @@ const EFFECT_DEFS: EffectDef[] = [
     source: "bloodthirsty",
     timing: "before_combat",
     category: "gm",
-    description: "Bloodthirsty: Mỗi round thắng +1 điểm BONUS, mỗi round thua mất TOÀN BỘ điểm tích lũy.",
-    gmNote: "[GM Action] Theo dõi điểm riêng cho player này theo rule Bloodthirsty: round win = +1 bonus, round lose = reset về 0",
+    description:
+      "Bloodthirsty: Mỗi round thắng +1 điểm BONUS, mỗi round thua mất TOÀN BỘ điểm tích lũy.",
+    gmNote:
+      "[GM Action] Theo dõi điểm riêng cho player này theo rule Bloodthirsty: round win = +1 bonus, round lose = reset về 0",
   },
 
   // Cautious: đối thủ không nhận điểm khi thắng round Strength
@@ -459,23 +503,19 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "before_combat",
     category: "gm",
     description: "Cautious: Đối thủ không nhận điểm khi thắng round Strength.",
-    gmNote: "[GM Action] Khi so sánh STR, nếu đối thủ thắng → họ KHÔNG được +1 điểm",
+    gmNote:
+      "[GM Action] Khi so sánh STR, nếu đối thủ thắng → họ KHÔNG được +1 điểm",
   },
 
-  // One Trick Pony: quay wheel chọn 1 stat → thắng stat đó +3 điểm, thắng stat khác +0 điểm
+  // One Trick Pony: chọn ngẫu nhiên 1 stat → thắng stat đó 3 điểm, các stat khác 0
   {
     source: "one trick pony",
-    timing: "during_combat",
-    category: "wheel",
-    description: "One Trick Pony: Quay wheel chọn 1 stat. Thắng stat đó = +3 điểm; thắng các stat khác = +0 điểm.",
-    wheelItems: [
-      { label: "Strength", weight: 1, isSuccess: true, color: "#ef4444" },
-      { label: "Speed", weight: 1, isSuccess: true, color: "#f59e0b" },
-      { label: "Durability", weight: 1, isSuccess: true, color: "#22c55e" },
-      { label: "IQ", weight: 1, isSuccess: true, color: "#3b82f6" },
-      { label: "BIQ", weight: 1, isSuccess: true, color: "#a855f7" },
-      { label: "MA", weight: 1, isSuccess: true, color: "#ec4899" },
-    ],
+    timing: "before_combat",
+    category: "gm",
+    description:
+      "One Trick Pony: 1 stat được chọn ngẫu nhiên → thắng stat đó +3 điểm, thắng các stat khác +0 điểm.",
+    gmNote:
+      "[GM Action] Trước combat: quay wheel để chọn 1 stat (STR/SPD/DUR/IQ/BIQ/MA). Stat đó nếu thắng = +3 điểm. Các stat khác nếu thắng = +0 điểm.",
   },
 
   // Weak-Knee: round đầu tiên thắng không nhận điểm
@@ -484,7 +524,8 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "before_combat",
     category: "gm",
     description: "Weak-Knee: Round đầu tiên chiến thắng không nhận điểm.",
-    gmNote: "[GM Action] Round đầu tiên player này thắng (dù là round nào) → không tính điểm",
+    gmNote:
+      "[GM Action] Round đầu tiên player này thắng (dù là round nào) → không tính điểm",
   },
 
   // Cruelty: round hòa → coinflip 50/50 ai nhận 1 điểm
@@ -492,9 +533,12 @@ const EFFECT_DEFS: EffectDef[] = [
     source: "cruelty",
     timing: "before_combat",
     category: "wheel",
-    description: "Cruelty: Khi round hòa, quay 50/50 để quyết định ai nhận 1 điểm.",
+    description:
+      "Cruelty: Khi round hòa, quay 50/50 để quyết định ai nhận 1 điểm.",
     resolver: (ctx) => {
-      const tieRounds = ctx.combatResult.rounds.filter((r) => r.winner === "tie").length;
+      const tieRounds = ctx.combatResult.rounds.filter(
+        (r) => r.winner === "tie",
+      ).length;
       if (tieRounds === 0) return null;
       return {
         description: `Cruelty: Có ${tieRounds} round hòa → cần quay ${tieRounds} lần 50/50.`,
@@ -511,7 +555,8 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "before_combat",
     category: "gm",
     description: "Blind: Mỗi round thắng có 15% không nhận điểm.",
-    gmNote: "[GM Action] Mỗi round player này thắng: roll 15% (xác suất) → nếu trúng, round đó không tính điểm",
+    gmNote:
+      "[GM Action] Mỗi round player này thắng: roll 15% (xác suất) → nếu trúng, round đó không tính điểm",
   },
 
   // Mute: 10% -1 stat ngẫu nhiên khi thua round
@@ -520,18 +565,8 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "before_combat",
     category: "gm",
     description: "Mute: Mỗi round thua có 10% -1 stat ngẫu nhiên.",
-    gmNote: "[GM Action] Mỗi round player này thua: roll 10% → nếu trúng, -1 vào stat của round đó",
-  },
-
-  // ─── HOUSE MASON EFFECTS ─────────────────────────────────────────────────
-
-  // Tracen Academy Mason: sau combat +1 stat bất kì
-  {
-    source: "tracen academy mason",
-    timing: "after_combat",
-    category: "gm",
-    description: "Tracen Academy Mason: Sau combat nhận +1 vào 1 Stat bất kì.",
-    gmNote: "[GM Action] Cho player chọn hoặc quay ngẫu nhiên 1 stat → +1 vào stat đó",
+    gmNote:
+      "[GM Action] Mỗi round player này thua: roll 10% → nếu trúng, -1 vào stat của round đó",
   },
 ];
 
@@ -577,20 +612,12 @@ function buildPendingEffects(
     margin,
   };
 
-  // Collect source names (quirks + archetypes + house names + house sub-types) lowercase
+  // Collect source names (quirks + archetypes) lowercase
   const sources: string[] = [
     ...(character.quirks || [])
       .filter((q) => !q.isLost)
       .map((q) => q.name.toLowerCase()),
     ...(character.archetypes || []).map((a) => a.toLowerCase()),
-    // Active house names (e.g. "dothraki", "roundtable hold")
-    ...((character as any).houses || [])
-      .filter((h: any) => !h.isLost && h.name)
-      .map((h: any) => (h.name as string).toLowerCase()),
-    // House sub-types (Mason effects etc.) — sourced from houses[].subType
-    ...((character as any).houses || [])
-      .filter((h: any) => !h.isLost && !h.subTypeIsLost && h.subType)
-      .map((h: any) => (h.subType as string).toLowerCase()),
   ];
 
   const effects: CombatPendingEffect[] = [];
@@ -608,8 +635,8 @@ function buildPendingEffects(
       def.timing === "after_combat" ||
       (def.timing === "after_win" && isWinner) ||
       (def.timing === "after_lose" && isLoser) ||
-      (def.timing === "before_combat") ||
-      (def.timing === "during_combat");
+      def.timing === "before_combat" ||
+      def.timing === "during_combat";
 
     if (!timingOk) return;
 
@@ -664,7 +691,12 @@ const TIMING_LABELS: Record<EffectTiming, string> = {
 };
 
 // Group timings into 3 phases for display
-const PHASE_GROUPS: { label: string; icon: string; timings: EffectTiming[]; color: string }[] = [
+const PHASE_GROUPS: {
+  label: string;
+  icon: string;
+  timings: EffectTiming[];
+  color: string;
+}[] = [
   {
     label: "Trước / Trong Combat",
     icon: "⚔️",
@@ -713,8 +745,8 @@ const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
         isResolved
           ? "border-gray-700 bg-gray-800/30 opacity-60"
           : effect.isActivated
-          ? "border-amber-500/60 bg-amber-900/20"
-          : "border-gray-600 bg-gray-800/60"
+            ? "border-amber-500/60 bg-amber-900/20"
+            : "border-gray-600 bg-gray-800/60"
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -770,7 +802,9 @@ const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
 
           {/* Resolved note */}
           {isResolved && effect.resolvedNote && (
-            <p className="text-gray-500 text-xs mt-1">✓ {effect.resolvedNote}</p>
+            <p className="text-gray-500 text-xs mt-1">
+              ✓ {effect.resolvedNote}
+            </p>
           )}
         </div>
 
@@ -834,19 +868,27 @@ const CollapsibleSection = ({
 }: CollapsibleSectionProps) => {
   const [open, setOpen] = useState(defaultOpen);
 
-  const activatedCount = items.filter((e) => e.isActivated && !e.resolved).length;
+  const activatedCount = items.filter(
+    (e) => e.isActivated && !e.resolved,
+  ).length;
   const pendingCount = items.filter((e) => !e.resolved).length;
   const resolvedCount = items.filter((e) => e.resolved).length;
 
   return (
-    <div className={`rounded-xl border ${colorClass.split(" ")[0]} overflow-hidden`}>
+    <div
+      className={`rounded-xl border ${colorClass.split(" ")[0]} overflow-hidden`}
+    >
       {/* Section header — always visible */}
       <button
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center gap-2 px-4 py-2.5 bg-gray-800/70 hover:bg-gray-700/70 transition-colors text-left"
       >
         <span className="text-base">{icon}</span>
-        <span className={`font-semibold text-sm flex-1 ${colorClass.split(" ")[1]}`}>{label}</span>
+        <span
+          className={`font-semibold text-sm flex-1 ${colorClass.split(" ")[1]}`}
+        >
+          {label}
+        </span>
 
         {/* Badges */}
         <div className="flex items-center gap-1.5">
@@ -897,7 +939,6 @@ export const CombatEffectsPanel = ({
   player2,
   combatResult,
   preCombatOnly = false,
-  onWheelResolved,
 }: CombatEffectsPanelProps) => {
   const [effects, setEffects] = useState<CombatPendingEffect[]>(() => {
     const list: CombatPendingEffect[] = [];
@@ -940,9 +981,7 @@ export const CombatEffectsPanel = ({
   const handleApply = (id: string) => {
     setEffects((prev) =>
       prev.map((e) =>
-        e.id === id
-          ? { ...e, resolved: true, resolvedNote: "Đã apply" }
-          : e,
+        e.id === id ? { ...e, resolved: true, resolvedNote: "Đã apply" } : e,
       ),
     );
   };
@@ -954,17 +993,9 @@ export const CombatEffectsPanel = ({
   const handleSpinResult = (item: WheelSpinItem) => {
     if (!spinModal.effect) return;
     const id = spinModal.effect.id;
-    const effect = spinModal.effect;
-    const isOTP = effect.sourceName === "one trick pony";
-    const isDothraki = effect.sourceName === "dothraki";
-    const note = isOTP
-      ? `Stat được chọn: ${item.label} → thắng = +3 điểm, các stat khác thắng = +0 điểm`
-      : isDothraki
-        ? `Kết quả: ${item.label}`
-        : item.isSuccess
-          ? `Thành công: ${item.label}`
-          : `Thất bại: ${item.label}`;
-    onWheelResolved?.(effect.playerLabel, effect.sourceName, item);
+    const note = item.isSuccess
+      ? `Thành công: ${item.label}`
+      : `Thất bại: ${item.label}`;
     setEffects((prev) =>
       prev.map((e) =>
         e.id === id ? { ...e, resolved: true, resolvedNote: note } : e,
@@ -974,7 +1005,9 @@ export const CombatEffectsPanel = ({
   };
 
   const pendingCount = effects.filter((e) => !e.resolved).length;
-  const activatedTotal = effects.filter((e) => e.isActivated && !e.resolved).length;
+  const activatedTotal = effects.filter(
+    (e) => e.isActivated && !e.resolved,
+  ).length;
 
   // Group effects by phase
   const phases = PHASE_GROUPS.map((phase) => ({
@@ -988,7 +1021,9 @@ export const CombatEffectsPanel = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-base font-bold text-purple-300">
-            {preCombatOnly ? "⚠️ Luật Đặc Biệt Trước Combat" : "⚡ Combat Effects"}
+            {preCombatOnly
+              ? "⚠️ Luật Đặc Biệt Trước Combat"
+              : "⚡ Combat Effects"}
           </h3>
           <div className="flex items-center gap-2 text-xs">
             {activatedTotal > 0 && (
@@ -996,9 +1031,7 @@ export const CombatEffectsPanel = ({
                 ✦ {activatedTotal} kích hoạt
               </span>
             )}
-            <span className="text-yellow-400">
-              {pendingCount} chưa xử lý
-            </span>
+            <span className="text-yellow-400">{pendingCount} chưa xử lý</span>
           </div>
         </div>
 
@@ -1011,7 +1044,9 @@ export const CombatEffectsPanel = ({
               icon={phase.icon}
               colorClass={phase.color}
               items={phase.items}
-              defaultOpen={preCombatOnly || phase.timings.includes("before_combat")}
+              defaultOpen={
+                preCombatOnly || phase.timings.includes("before_combat")
+              }
               onApply={handleApply}
               onSpinRequest={handleSpinRequest}
             />

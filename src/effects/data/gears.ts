@@ -256,7 +256,7 @@ export function registerAllGearEffects() {
 
   // 22. Soap
   defineEffect('gear', 'Soap')
-    .description('Thơm. Bạn sẽ không cần phải quay lại khả năng sử dụng của "Ancient Protector".')
+    .description('Thơm.')
     .weight(2174)
     .effect({
       type: 'custom',
@@ -394,7 +394,7 @@ export function registerAllGearEffects() {
 
   // 33. Giấy Nợ Gia Truyền
   defineEffect('gear', 'Giấy Nợ Gia Truyền')
-    .description('Sau Combat: (1).Nếu bạn không kiếm đủ 4 điểm, Toàn bộ Gear và Weapon của bạn sẽ biến mất và chuyển cho đối thủ.')
+    .description('Sau Combat: (1).Nếu bạn không kiếm đủ 4 điểm. Toàn bộ Gear và Weapon của bạn sẽ biến mất và chuyển Gear này sang 1 người ngẫu nhiên trong House. (2).Nếu bạn kiếm đủ 4 điểm trở lên, nhận 2 "Golden Coin"')
     .weight(2174)
     .effect({
       type: 'custom',
@@ -430,7 +430,7 @@ export function registerAllGearEffects() {
 
   // 37. Golden Coin
   defineEffect('gear', 'Golden Coin')
-    .description('Trong Combat: Với mỗi đồng tiền Vàng trong người, có 10% mua được 1 điểm khởi đầu. Nếu có hơn 100%, quay lại từ 10%.')
+    .description('Trong Combat: Với mỗi đồng tiền Vàng trong người, có 10% mua được 1 điểm khởi đầu. Nếu có hơn 100%, mua thêm 1 điểm nữa với lượng % dư ra.')
     .weight(2174)
     .effect({
       type: 'custom',
@@ -549,7 +549,7 @@ export function registerAllGearEffects() {
 
   // 44. Beer
   defineEffect('gear', 'Beer')
-    .description('(1).Bạn Cần "Empty Stein" để uống được Beer và mở khóa hiệu ứng (2). (2).Trong Combat: Cộng Tổng Debuff của đối thủ vào điểm khởi đầu.')
+    .description('(1).Bạn Cần "Empty Stein" để uống được Beer và mở khóa hiệu ứng (2). (2).Trong Combat: Cộng Tổng Debuff của đối thủ lại và áp dụng vào 1 Stat ngẫu nhiên của mình.')
     .weight(2174)
     .effect({
       type: 'custom',
@@ -561,7 +561,7 @@ export function registerAllGearEffects() {
 
   // 45. Wine
   defineEffect('gear', 'Wine')
-    .description('(1).Bạn Cần "Shot Glass" để uống được Wine và mở khóa hiệu ứng (2). (2).Trong Combat: Cộng Tổng Debuff của bản thân vào điểm khởi đầu.')
+    .description('(1).Bạn Cần "Shot Glass" để uống được Wine và mở khóa hiệu ứng (2). (2).Trong Combat: Cộng Tổng Debuff của mình lại và áp dụng vào 1 Stat ngẫu nhiên của đối thủ.')
     .weight(2174)
     .effect({
       type: 'custom',
@@ -577,7 +577,7 @@ export function registerAllGearEffects() {
 
   // 46. Kryptonite
   defineEffect('gear', 'Kryptonite')
-    .description('Là một thứ dùng phục vụ cho Combat với Superman. Đối đầu Superman bị 2 điểm khởi đầu.')
+    .description('Là một thứ dùng phục vụ cho Combat với Superman.')
     .effect({
       type: 'custom',
       timing: 'before_combat',
@@ -625,23 +625,80 @@ export function registerAllGearEffects() {
 
   // 50. Darkin Blade
   defineEffect('gear', 'Darkin Blade')
-    .description('Trong Combat: Ở 3 Round cuối, hút 1 điểm của đối thủ nếu thắng, kích hoạt 1 lần. (Nhận tổng 2 điểm)')
+    .description('Trong Combat: Ở 3 Round cuối, hút 1 điểm của đối thủ nếu thắng, kích hoạt 1 lần. (Nhận tổng 2 điểm: 1 điểm từ thắng 1 điểm từ hút, đối thủ bị trừ 1 điểm vì bị hút.)')
     .effect({
       type: 'custom',
       timing: 'during_combat',
       target: 'self',
-      customHandler: 'darkin_blade_point_steal'
+      customHandler: 'darkin_blade_point_steal',
+      triggerOnce: true
     })
     .register();
 
   // 51. Stellaron Hunter's Member Card
   defineEffect('gear', "Stellaron Hunter's Member Card")
-    .description('Mỗi tấm thẻ thành viên Stellaron sẽ được kí bởi 1 trong 5 thành viên chủ chốt của Stellaron Hunters.')
+    .description('Mỗi tấm thẻ thành viên Stellaron sẽ được kí bởi 1 trong 5 thành viên chủ chốt của Stellaron Hunters. Người sở hữu tấm thẻ này sẽ nhận hiệu ứng tương ứng với chữ kí nhận được. (1) Kafka: Sau Combat Thắng: Nhận thêm 1 Power với mỗi 3 điểm ghi được. (Tối đa 3 Power) (2) Blade: Sau Combat: Nhận -1 Dura. Nhận +2 Strength, +1 BIQ và +1 MA. (3) Silver Wolf: Sau combat: Cướp ngẫu nhiên 1 Gear từ một người chơi còn sống và nhận +1 IQ. (4) Firefly: Trong combat: Khi chiến thắng 2 round liên tiếp. Đối thủ sẽ bị nhận Debuff: -6 vào stat ở round tiếp theo. (Kích hoạt 1 lần mỗi combat). (5) Elio: Sau mỗi 2 combat: Nhận 1 "Creator\'s Favor".')
     .effect({
       type: 'custom',
       timing: 'immediate',
       target: 'self',
       customHandler: 'stellaron_hunter_card'
+    })
+    // Kafka: after_combat_win — power per 3 points
+    .effect({
+      type: 'custom',
+      timing: 'after_combat_win',
+      target: 'self',
+      customHandler: 'stellaron_kafka_power',
+      conditions: [{ type: 'metadata_match', key: 'stellaronMember', value: 'Kafka' }]
+    })
+    // Silver Wolf: after_combat — steal gear + +1 IQ
+    .effect({
+      type: 'custom',
+      timing: 'after_combat',
+      target: 'self',
+      customHandler: 'stellaron_silver_wolf_steal',
+      conditions: [{ type: 'metadata_match', key: 'stellaronMember', value: 'Silver Wolf' }]
+    })
+    // Firefly: during_combat — -6 stat on 2 consecutive round wins
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'stellaron_firefly_streak',
+      conditions: [{ type: 'metadata_match', key: 'stellaronMember', value: 'Firefly' }]
+    })
+    // Elio: after_combat — Creator's Favor every 2 combats
+    .effect({
+      type: 'custom',
+      timing: 'after_combat',
+      target: 'self',
+      customHandler: 'stellaron_elio_favor',
+      conditions: [{ type: 'metadata_match', key: 'stellaronMember', value: 'Elio' }]
+    })
+    .register();
+
+  // 52. Khung hình thờ
+  defineEffect('gear', 'Khung hình thờ')
+    .description('Nhận -4 vào Stats cao nhất. Khi bị loại, chuyển gear này cho người thắng. Khi hai người có Khung Hình Thờ combat, loại bỏ hiệu ứng của cả hai và loại bỏ gear sau trận đấu.')
+    .effect({
+      type: 'stat_modifier',
+      stat: 'highest',
+      value: -4,
+      timing: 'immediate',
+      target: 'self'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'on_death',
+      target: 'self',
+      customHandler: 'khung_hinh_tho_transfer'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'khung_hinh_tho_mirror'
     })
     .register();
 
@@ -750,7 +807,7 @@ export function registerAllGearEffects() {
 
   // 6. God of War's Entry Ticket
   defineEffect('gear', "God of War's Entry Ticket")
-    .description('Biến Base Strength thành 10. "Make love" với 1 tộc. Nhận +2 stat thấp nhất khi đối đầu với tộc đó.')
+    .description('Biến Base Strength thành 10. "Make love" với 1 tộc. Nhận +2 stat thấp nhất khi đối đầu với Demi God/God.')
     .weight(9.09)
     .tier(1)
     .effect({
@@ -766,6 +823,12 @@ export function registerAllGearEffects() {
       timing: 'immediate',
       target: 'self',
       customHandler: 'god_of_war_make_love_race'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'god_of_war_demi_god_bonus'
     })
     .register();
 
@@ -813,7 +876,7 @@ export function registerAllGearEffects() {
 
   // 9. Creator's Cat Ring
   defineEffect('gear', "Creator's Cat Ring")
-    .description("Nhận Creator's Favor 1-3 lần. Mỗi lần +1 All Stats.")
+    .description("Nhận Creator's Favor 1-3 lần.")
     .weight(9.09)
     .tier(1)
     .effect({
@@ -832,7 +895,7 @@ export function registerAllGearEffects() {
 
   // 10. The Dice of the Dead
   defineEffect('gear', 'The Dice of the Dead')
-    .description('Nhận Archetype "Gambler". Mặc định thắng tất cả các trận đấu khi đối đầu với những người đã chết.')
+    .description('Nhận Archetype "Gambler". Mặc định thắng tất cả các trận đấu khi đối đầu với những người chơi có Archetype này. (Hiệu ứng này yếu hơn tất cả các hiệu ứng tự động thắng khác). Sau combat thắng: Tăng khả năng chiến thắng gamble thêm 4% (Stack)')
     .weight(9.09)
     .tier(1)
     .effect({
@@ -848,6 +911,12 @@ export function registerAllGearEffects() {
       timing: 'before_combat',
       target: 'self',
       customHandler: 'dice_of_dead_auto_win'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'after_combat_win',
+      target: 'self',
+      customHandler: 'dice_of_dead_gamble_stack'
     })
     .register();
 
@@ -936,7 +1005,7 @@ export function registerAllGearEffects() {
 
   // Ragnarok's Cobra
   defineEffect('gear', "Ragnarok's Cobra")
-    .description('Người sở hữu con rắn này giết 1 vị thần ngẫu nhiên sau khi quay đủ player và tính stat.')
+    .description('Người sở hữu con rắn này giết 1 vị thần ngẫu nhiên sau khi quay đủ player và tính đó là 1 trận thắng, sau đó tự động thua ở vòng 64 (1 lần).')
     .tier(1)
     .effect({
       type: 'custom',
@@ -944,11 +1013,18 @@ export function registerAllGearEffects() {
       target: 'self',
       customHandler: 'ragnarok_cobra_kill_god'
     })
+    .effect({
+      type: 'custom',
+      timing: 'before_combat',
+      target: 'self',
+      customHandler: 'ragnarok_cobra_auto_lose_r64',
+      triggerOnce: true
+    })
     .register();
 
   // Yamakunson's Wanted Poster
   defineEffect('gear', "Yamakunson's Wanted Poster")
-    .description('Quay ngẫu nhiên 1 người chơi còn sống, khi người chơi đó chết bạn nhận 36k tiền thưởng.')
+    .description('Quay ngẫu nhiên 1 người chơi còn sống, khi người chơi đó chết bạn nhận 36k tiền thưởng cuối mùa và quay thêm 1 người chơi mới cho hiệu ứng này. (Hiệu ứng quay thêm người chơi mới sẽ áp dụng tối đa 1 lần mỗi vòng đấu)')
     .tier(1)
     .effect({
       type: 'custom',
@@ -996,7 +1072,7 @@ export function registerAllGearEffects() {
 
   // Spirit of the Wheel
   defineEffect('gear', 'Spirit of the Wheel')
-    .description('Trận đầu tiên của bạn khi biết kết quả sẽ khiến 3 người ngẫu nhiên "Isekai".')
+    .description('Trận đầu tiên của bạn khi biết kết quả sẽ khiến 3 người ngẫu nhiên "Isekai", trận tiếp theo của bạn sẽ thua. "Người ta đã đồn, Linh hồn của Vòng Quay không bao giờ hứng thú với chiến thắng, nó muốn tìm ra người nắm lấy Vinh Kwan"')
     .tier(1)
     .effect({
       type: 'custom',

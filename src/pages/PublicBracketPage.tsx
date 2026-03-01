@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { readDriveFile } from "../utils/googleDrive";
 import { ROUND_256_FILE_ID } from "../config/googleDrive";
+import { BracketTreeView } from "../components/bracket/BracketTreeView";
 
 // ===================== Types =====================
 
@@ -170,79 +171,99 @@ export const PublicBracketPage = () => {
           </div>
         </div>
 
-        {/* Match Grid */}
-        {filteredMatches.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-400 text-xl">
-              {roundData && roundData.matches.length > 0
-                ? "No matches found for this filter."
-                : "No matches yet. Tournament draw has not started."}
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
-            {filteredMatches.map((match) => (
-              <button
-                key={match.matchNumber}
-                onClick={() => setSelectedMatch(match)}
-                className={`text-left p-3 rounded-lg border transition-all hover:scale-[1.02] ${
-                  match.winner
-                    ? "bg-green-900/20 border-green-700/50 hover:border-green-500"
-                    : "bg-gray-800 border-gray-700 hover:border-purple-500"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-gray-400">Match #{match.matchNumber}</span>
-                  {match.winner && (
-                    <span className="text-xs bg-green-600/30 text-green-400 px-1.5 py-0.5 rounded">
-                      Done
-                    </span>
+        {/* Mobile: grid card layout (hidden trên desktop) */}
+        <div className="lg:hidden">
+          {filteredMatches.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-400 text-xl">
+                {roundData && roundData.matches.length > 0
+                  ? "No matches found for this filter."
+                  : "No matches yet. Tournament draw has not started."}
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {filteredMatches.map((match) => (
+                <button
+                  key={match.matchNumber}
+                  onClick={() => setSelectedMatch(match)}
+                  className={`text-left p-3 rounded-lg border transition-all hover:scale-[1.02] ${
+                    match.winner
+                      ? "bg-green-900/20 border-green-700/50 hover:border-green-500"
+                      : "bg-gray-800 border-gray-700 hover:border-purple-500"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-gray-400">Match #{match.matchNumber}</span>
+                    {match.winner && (
+                      <span className="text-xs bg-green-600/30 text-green-400 px-1.5 py-0.5 rounded">
+                        Done
+                      </span>
+                    )}
+                    {match.specialEvent && (
+                      <span className="text-xs bg-orange-600/30 text-orange-400 px-1.5 py-0.5 rounded">
+                        Special
+                      </span>
+                    )}
+                  </div>
+                  <div className="space-y-1">
+                    <div
+                      className={`flex items-center justify-between rounded px-2 py-1 ${
+                        match.winner?.no === match.player1?.no
+                          ? "bg-green-700/30 ring-1 ring-green-500"
+                          : "bg-gray-700/50"
+                      }`}
+                    >
+                      <span className="text-sm text-white truncate">
+                        {match.player1?.name || "TBD"}
+                      </span>
+                      <span className="text-xs text-gray-400">#{match.player1?.no || "-"}</span>
+                    </div>
+                    <div className="text-center text-gray-500 text-xs">VS</div>
+                    <div
+                      className={`flex items-center justify-between rounded px-2 py-1 ${
+                        match.winner?.no === match.player2?.no
+                          ? "bg-green-700/30 ring-1 ring-green-500"
+                          : "bg-gray-700/50"
+                      }`}
+                    >
+                      <span className="text-sm text-white truncate">
+                        {match.player2?.name || "TBD"}
+                      </span>
+                      <span className="text-xs text-gray-400">#{match.player2?.no || "-"}</span>
+                    </div>
+                  </div>
+                  {match.score && (
+                    <div className="mt-1 text-center text-xs text-gray-400">{match.score}</div>
                   )}
                   {match.specialEvent && (
-                    <span className="text-xs bg-orange-600/30 text-orange-400 px-1.5 py-0.5 rounded">
-                      Special
-                    </span>
+                    <div className="mt-1 text-center text-xs text-orange-400 truncate">
+                      {match.specialEvent}
+                    </div>
                   )}
-                </div>
-                <div className="space-y-1">
-                  <div
-                    className={`flex items-center justify-between rounded px-2 py-1 ${
-                      match.winner?.no === match.player1?.no
-                        ? "bg-green-700/30 ring-1 ring-green-500"
-                        : "bg-gray-700/50"
-                    }`}
-                  >
-                    <span className="text-sm text-white truncate">
-                      {match.player1?.name || "TBD"}
-                    </span>
-                    <span className="text-xs text-gray-400">#{match.player1?.no || "-"}</span>
-                  </div>
-                  <div className="text-center text-gray-500 text-xs">VS</div>
-                  <div
-                    className={`flex items-center justify-between rounded px-2 py-1 ${
-                      match.winner?.no === match.player2?.no
-                        ? "bg-green-700/30 ring-1 ring-green-500"
-                        : "bg-gray-700/50"
-                    }`}
-                  >
-                    <span className="text-sm text-white truncate">
-                      {match.player2?.name || "TBD"}
-                    </span>
-                    <span className="text-xs text-gray-400">#{match.player2?.no || "-"}</span>
-                  </div>
-                </div>
-                {match.score && (
-                  <div className="mt-1 text-center text-xs text-gray-400">{match.score}</div>
-                )}
-                {match.specialEvent && (
-                  <div className="mt-1 text-center text-xs text-orange-400 truncate">
-                    {match.specialEvent}
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-        )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Desktop: bracket tree view (hidden trên mobile) */}
+        <div className="hidden lg:block">
+          {roundData && roundData.matches.length > 0 ? (
+            <BracketTreeView
+              matches={roundData.matches}
+              filterMode={filterMode}
+              onSelectMatch={setSelectedMatch}
+              readOnly={true}
+            />
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-400 text-xl">
+                No matches yet. Tournament draw has not started.
+              </p>
+            </div>
+          )}
+        </div>
 
         {/* Refresh button */}
         <div className="text-center mt-6">

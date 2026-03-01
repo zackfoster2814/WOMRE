@@ -60,6 +60,10 @@ export interface CombatHandlerContext {
     gears: string[];
     roundsWon: number;
     roundsLost: number;
+    totalDebuff?: number;           // Tổng điểm debuff trên nhân vật này
+    totalCombats?: number;          // Số combat đã tham gia
+    consecutiveRoundWins?: number;  // Số round thắng liên tiếp hiện tại
+    gambleWinBonus?: number;        // % bonus thắng gamble (Dice of the Dead)
     duringCombatActivations?: number;
   };
   opponent?: {
@@ -74,11 +78,15 @@ export interface CombatHandlerContext {
     quirks: string[];
     weapons: any[];
     gears: string[];
+    totalDebuff?: number;           // Tổng điểm debuff của đối thủ
   };
   isFinals: boolean;
   isPvE: boolean;
+  isLoserBracket?: boolean;         // Đang ở nhánh thua
   currentRound: number;
   totalRounds: number;
+  currentRoundResult?: 'win' | 'lose' | 'tie'; // Kết quả của round hiện tại
+  matchNumber?: number;             // Match number trong tournament
   bracket?: string;
   roundResults?: RoundResults;
 }
@@ -103,6 +111,9 @@ export interface ImmediateHandlerResult {
 
   // Additional info for display
   description?: string;
+
+  // Metadata lưu trên gear (dùng cho conditional combat handlers)
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -125,20 +136,35 @@ export interface CombatHandlerResult {
 
   // Special effects
   autoWin?: boolean;
+  autoWinPriority?: 'weakest' | 'normal' | 'strongest'; // Priority khi nhiều autoWin cùng lúc
   autoLose?: boolean;
+  triggerOnce?: boolean;          // Handler chỉ kích hoạt 1 lần (engine tự track)
   skipRound?: boolean;
   opponentWeaponDisabled?: boolean;
   opponentIsekai?: boolean;
 
   // Grant items after combat
   grantPower?: string;
-  grantGear?: string;
+  grantPowers?: string[];          // Nhiều powers cùng lúc
+  grantGear?: string | string[];   // 1 hoặc nhiều gear
   grantQuirk?: string;
+  grantCreatorFavor?: number;      // Nhận Creator's Favor
 
-  // Remove items
+  // Remove/steal items
   removePower?: string;
   removeGear?: string;
   removeWeapon?: string;
+  removeOpponentGear?: string;     // Xóa gear của đối thủ
+  removeAllGearAndWeapon?: boolean; // Xóa toàn bộ gear và weapon của self
+  stealGearFromRandomLivingPlayer?: boolean; // Cướp gear từ người ngẫu nhiên còn sống
+  transferGearToRandomHouseMember?: boolean; // Chuyển gear sang người ngẫu nhiên trong House
+
+  // Cancel effect
+  cancelGearEffect?: string;       // Huỷ hiệu ứng của gear (cả 2 bên)
+  cancelOpponentGearEffect?: string;
+
+  // Update arbitrary character fields (tracked by engine)
+  updateCharacterField?: Record<string, unknown>;
 
   // Skip default effect processing
   skipDefault?: boolean;

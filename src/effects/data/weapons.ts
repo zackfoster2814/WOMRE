@@ -13,7 +13,7 @@ export function registerAllWeaponEffects() {
 
   // 1. Banana Peel
   defineEffect('weapon', 'Banana Peel')
-    .description('Trước Combat: -1 all stats nếu Base IQ thấp hơn đối phương, +1 all stats nếu cao hơn.')
+    .description('Trước Combat: Nhận -1 all stats nếu có Base IQ thấp hơn đối phương. Nhận +1 all stats nếu có Base IQ cao hơn đối phương.')
     .weight(2.86)
     .effect({
       type: 'custom',
@@ -86,7 +86,7 @@ export function registerAllWeaponEffects() {
 
   // 8. Glass Bottle
   defineEffect('weapon', 'Glass Bottle')
-    .description('+2 all stats. Sau Combat: Loại bỏ vũ khí này. Không thể khảm Rune.')
+    .description('(1).Nhận +2 all stats. (2).Sau Combat: Loại bỏ vũ khí này. (3) Vũ khí này không thể khảm Rune.')
     .weight(2.86)
     .addAllStats(2)
     .effect({
@@ -141,7 +141,7 @@ export function registerAllWeaponEffects() {
 
   // 14. Hidden Blade
   defineEffect('weapon', 'Hidden Blade')
-    .description('Nhận +1 Speed và Power Critical Strike. Assassins chắc chắn dùng được.')
+    .description('Nhận +1 Speed và Power "Critical Strike". Nếu có Archetype "Assassins", chắc chắn sử dụng được vũ khí này.')
     .weight(2.86)
     .addStat('speed', 1)
     .effect({
@@ -188,7 +188,7 @@ export function registerAllWeaponEffects() {
 
   // 19. Halberd
   defineEffect('weapon', 'Halberd')
-    .description('Nếu có >7 STR, +35% tỉ lệ dùng được. Sau Combat: Khi thắng round STR, +1 BIQ, +1 MA.')
+    .description('(1).Nếu có trên 7 Strength, tăng tỉ lệ dùng được vũ khí này lên thêm 35% (2).Sau Combat: Khi thắng round Str, nhận +1 BIQ, +1MA')
     .weight(2.86)
     .effect({
       type: 'custom',
@@ -360,6 +360,26 @@ export function registerAllWeaponEffects() {
     .addStat('biq', 1)
     .register();
 
+  // 36. Desolator (Normal - Trước Combat debuff)
+  defineEffect('weapon', 'Desolator (Normal)')
+    .description('(1).Trước Combat: Nhận +3 Strength (2).Debuff: Đối thủ -3 Durability.')
+    .weight(2.86)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'strength',
+      value: 3,
+      timing: 'before_combat',
+      target: 'self'
+    })
+    .effect({
+      type: 'debuff',
+      timing: 'before_combat',
+      target: 'opponent',
+      stat: 'durability',
+      value: -3
+    })
+    .register();
+
   // ============================================================================
   // UNIQUE WEAPONS (Vũ khí Unique)
   // ============================================================================
@@ -497,7 +517,7 @@ export function registerAllWeaponEffects() {
 
   // 11. Divine Rapier
   defineEffect('weapon', 'Divine Rapier')
-    .description('+2 all stats. Debuff: Đối thủ -1 all stats. Mất khi thua.')
+    .description('(1).Nhận +2 all stats. (2).Debuff: Đối thủ nhận -1 all stats. (3).Khi thua trận người sở hữu sẽ mất vũ khí này.')
     .weight(2.94)
     .addAllStats(2)
     .effect({
@@ -507,11 +527,17 @@ export function registerAllWeaponEffects() {
       stat: 'all',
       value: -1
     })
+    .effect({
+      type: 'custom',
+      timing: 'after_combat_lose',
+      target: 'self',
+      customHandler: 'divine_rapier_lose_on_loss'
+    })
     .register();
 
   // 12. Bloodthrist Dagger
   defineEffect('weapon', 'Bloodthrist Dagger')
-    .description('Nhận Power Critical Strike. Trong Combat: +16% crit.')
+    .description('(1).Nhận Power "Critical Strike" (2).Trong Combat: Tăng thêm 16% tỉ lệ crit của "Critical Strike".')
     .weight(2.94)
     .effect({
       type: 'grant_power',
@@ -519,17 +545,30 @@ export function registerAllWeaponEffects() {
       target: 'self',
       grantName: 'Critical Strike'
     })
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'bloodthrist_crit_bonus'
+    })
     .register();
 
   // 13. Ruyi Jingu Bang
   defineEffect('weapon', 'Ruyi Jingu Bang')
-    .description('Trước Combat: +1 all stats với mỗi 3 power. Sau Combat thắng: 72% nhận 1 Power.')
+    .description('(1).Trước Combat: Nhận +1 all stats với mỗi 3 power sở hữu. Hiệu ứng này chỉ có hiệu lực trong combat đó. (2).Sau Combat thắng: Có 72% nhận 1 Power ngẫu nhiên.')
     .weight(2.94)
     .effect({
       type: 'custom',
       timing: 'before_combat',
       target: 'self',
       customHandler: 'ruyi_jingu_power_scaling'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'after_combat_win',
+      target: 'self',
+      conditions: [{ type: 'probability', chance: 72 }],
+      customHandler: 'ruyi_jingu_power_chance'
     })
     .register();
 
@@ -567,11 +606,24 @@ export function registerAllWeaponEffects() {
 
   // 17. Mjolnir
   defineEffect('weapon', 'Mjolnir')
-    .description('+5 STR, +3 SPD, +1 Dura. Sau combat thắng: +2 random. Thua: Mất vũ khí.')
+    .description('Nhận +5 Strength, +3 Speed và +1 Dura. Sau combat thắng: Nhận +2 vào 1 chỉ số ngẫu nhiên. Sau combat thua: Mất đi vũ khí này và trả lại nó về vòng quay.')
     .weight(2.94)
     .addStat('strength', 5)
     .addStat('speed', 3)
     .addStat('durability', 1)
+    .effect({
+      type: 'stat_modifier',
+      stat: 'random',
+      value: 2,
+      timing: 'after_combat_win',
+      target: 'self'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'after_combat_lose',
+      target: 'self',
+      customHandler: 'mjolnir_return_on_lose'
+    })
     .register();
 
   // 18. Shadow Killer
@@ -684,14 +736,14 @@ export function registerAllWeaponEffects() {
     })
     .register();
 
-  // 26. Desolator (Owned)
+  // 26. Desolator (Unique - Trong combat debuff)
   defineEffect('weapon', 'Desolator')
-    .description('+3 STR. Debuff: Đối thủ -3 Durability.')
+    .description('Nhận +3 Strength. Trong combat: Đối thủ nhận -3 Dura.')
     .weight(2.94)
     .addStat('strength', 3)
     .effect({
       type: 'debuff',
-      timing: 'before_combat',
+      timing: 'during_combat',
       target: 'opponent',
       stat: 'durability',
       value: -3
@@ -708,12 +760,12 @@ export function registerAllWeaponEffects() {
 
   // 28. Saitama's Gloves
   defineEffect('weapon', "Saitama's Gloves")
-    .description('+3 STR. Quay 1 stat ngẫu nhiên. Thắng stat đó +1 điểm. Nếu STR, thắng luôn.')
+    .description('Nhận +3 Strength. Bắt đầu trận đấu, quay 1 chỉ số ngẫu nhiên. Khi chiến thắng chỉ số đó, nhận +1 điểm. Nếu đó là Strength, thắng luôn Combat.')
     .weight(2.94)
     .addStat('strength', 3)
     .effect({
       type: 'custom',
-      timing: 'during_combat',
+      timing: 'before_combat',
       target: 'self',
       customHandler: 'saitama_random_stat'
     })
@@ -721,7 +773,7 @@ export function registerAllWeaponEffects() {
 
   // 29. Galeforce
   defineEffect('weapon', 'Galeforce')
-    .description('Round thua đầu: đối thủ không nhận điểm. Nếu điểm đối thủ <=0: +3 random stat.')
+    .description('Round đầu tiên thua trong combat đối phương sẽ không nhận điểm và không thể kích hoạt các hiệu ứng (ví dụ: Crit) Sau Combat: Nếu tổng điểm đối thủ =0 hoặc âm, nhận +3 vào 1 chỉ số ngẫu nhiên.')
     .weight(2.94)
     .effect({
       type: 'custom',
@@ -730,11 +782,17 @@ export function registerAllWeaponEffects() {
       triggerOnce: true,
       customHandler: 'galeforce_first_lose'
     })
+    .effect({
+      type: 'custom',
+      timing: 'after_combat',
+      target: 'self',
+      customHandler: 'galeforce_zero_points_bonus'
+    })
     .register();
 
   // 30. Battlefury (Owned)
   defineEffect('weapon', 'Battlefury')
-    .description('Round thua đầu: đối thủ không nhận điểm. Nếu điểm đối thủ <=0: +3 random stat.')
+    .description('(1).Trong Combat: Round thua đầu tiên sẽ khiến đối thủ sẽ không nhận được điểm và không thể kích hoạt các Feature. (2).Sau Combat: Nếu tổng điểm đối thủ bằng 0 hoặc âm, nhận +3 vào 1 chỉ số ngẫu nhiên.')
     .weight(2.94)
     .effect({
       type: 'custom',
@@ -742,6 +800,12 @@ export function registerAllWeaponEffects() {
       target: 'opponent',
       triggerOnce: true,
       customHandler: 'battlefury_first_lose'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'after_combat',
+      target: 'self',
+      customHandler: 'battlefury_zero_points_bonus'
     })
     .register();
 
@@ -784,13 +848,19 @@ export function registerAllWeaponEffects() {
 
   // 34. Andúril (Owned)
   defineEffect('weapon', 'Andúril')
-    .description('Sau Combat: Nhận Summon Wheel. Trước Combat vs evil races: +1 điểm/3 Summon.')
+    .description('(1).Sau Combat: Nhận Summon Wheel. (2).Trước Combat: Khi Combat với Demon, Vampire, Spirit, Orc, Skeleton và Goblin, +1 điểm khởi đầu với mỗi 3 Summon hiện có.')
     .weight(2.94)
     .effect({
       type: 'wheel_grant',
       timing: 'after_combat',
       target: 'self',
       wheelType: 'summon'
+    })
+    .effect({
+      type: 'custom',
+      timing: 'before_combat',
+      target: 'self',
+      customHandler: 'anduril_evil_race_bonus'
     })
     .register();
 
@@ -845,10 +915,16 @@ export function registerAllWeaponEffects() {
 
   // 39. Rhitta (Owned)
   defineEffect('weapon', 'Rhitta')
-    .description('+3 STR, +2 Dura. Trong combat: 33% gấp đôi bonus stat.')
+    .description('Nhận +3 Strength và +2 Dura. Trong combat: Có 33% gấp đôi hiệu ứng cộng chỉ số từ vũ khí này.')
     .weight(2.94)
     .addStat('strength', 3)
     .addStat('durability', 2)
+    .effect({
+      type: 'custom',
+      timing: 'during_combat',
+      target: 'self',
+      customHandler: 'rhitta_double_bonus'
+    })
     .register();
 
   // 40. Hou Yi's Divine Bow

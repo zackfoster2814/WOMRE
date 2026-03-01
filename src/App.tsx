@@ -26,7 +26,7 @@ const navItems = [
   // { path: "/battles", label: "Team Battles", color: "bg-orange-600" },
   { path: "/battle", label: "Battle Zone", color: "bg-red-600" },
   { path: "/pvp-tournament", label: "PvP Tournament", color: "bg-purple-600" },
-  { path: "/sandbox", label: "Sandbox", color: "bg-amber-600" },
+  // { path: "/sandbox", label: "Sandbox", color: "bg-amber-600" },
   // { path: "/wiki", label: "Wiki", color: "bg-cyan-600" },
 ];
 

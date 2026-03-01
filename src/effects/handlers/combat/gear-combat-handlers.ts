@@ -71,10 +71,14 @@ registerCombatHandler(
 
 /**
  * Ba hoa trắng - Sau khi thắng ở nhánh thua, +1 all stats và loại bỏ gear.
+ * Chỉ kích hoạt khi đang ở nhánh thua (isLoserBracket).
  */
 registerCombatHandler(
   'ba_hoa_trang_loser_win',
-  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.isLoserBracket) {
+      return { skipDefault: true };
+    }
     return {
       selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
       removeGear: 'Ba hoa trắng',
@@ -85,25 +89,30 @@ registerCombatHandler(
 );
 
 // ============================================================================
-// GIẤY NỢ GIA TRUYỀN - Debt penalty
+// GIẤY NỢ GIA TRUYỀN - Debt penalty or Golden Coin reward
 // ============================================================================
 
 /**
- * Giấy Nợ Gia Truyền - Nếu không kiếm đủ 4 điểm, mất toàn bộ Gear/Weapon.
+ * Giấy Nợ Gia Truyền:
+ * - Không đủ 4 điểm → mất toàn bộ Gear/Weapon, chuyển gear sang 1 người ngẫu nhiên trong House.
+ * - Đủ 4 điểm → nhận 2 Golden Coin.
  */
 registerCombatHandler(
   'giay_no_gia_truyen_debt',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     if (ctx.self.roundsWon < 4) {
       return {
-        description: 'Giấy Nợ Gia Truyền: Không đủ 4 điểm → mất toàn bộ Gear và Weapon cho đối thủ',
+        removeAllGearAndWeapon: true,
+        transferGearToRandomHouseMember: true,
+        description: 'Giấy Nợ Gia Truyền: Không đủ 4 điểm → mất toàn bộ Gear và Weapon, chuyển Giấy Nợ cho người ngẫu nhiên trong House',
       };
     }
     return {
-      description: 'Giấy Nợ Gia Truyền: Đủ 4 điểm, an toàn',
+      grantGear: ['Golden Coin', 'Golden Coin'],
+      description: 'Giấy Nợ Gia Truyền: Đủ 4 điểm → nhận 2 Golden Coin',
     };
   },
-  'Lose all Gear/Weapon if < 4 points'
+  'Lose all Gear/Weapon if < 4 points; gain 2 Golden Coins if >= 4 points'
 );
 
 // ============================================================================
@@ -134,16 +143,15 @@ registerCombatHandler(
 );
 
 // ============================================================================
-// BEER - Opponent debuff count to starting points
+// BEER - Opponent total debuff applied to random self stat
 // ============================================================================
 
 /**
- * Beer - Cần Empty Stein. Cộng tổng debuff của đối thủ vào điểm khởi đầu.
+ * Beer - Cần Empty Stein. Cộng tổng debuff của đối thủ và áp dụng vào 1 stat ngẫu nhiên của mình.
  */
 registerCombatHandler(
   'beer_debuff_to_points',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    // Check if character has Empty Stein
     const hasStein = ctx.self.gears.some(g => g === 'Empty Stein' || (g as any).name === 'Empty Stein');
     if (!hasStein) {
       return {
@@ -151,21 +159,29 @@ registerCombatHandler(
       };
     }
 
-    // Count opponent debuffs (negative stat effects)
-    // Simplified: count as description since debuff tracking is external
+    if (!ctx.opponent) return { skipDefault: true };
+
+    // Sum all negative debuffs on opponent (sum of negative bonuses)
+    const totalDebuff = ctx.opponent.totalDebuff ?? 0;
+    if (totalDebuff <= 0) {
+      return { description: 'Beer: Đối thủ không có debuff' };
+    }
+
+    const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
     return {
-      description: 'Beer: Cộng tổng debuff của đối thủ vào điểm khởi đầu',
+      selfStatMods: [{ stat: randomStat, value: totalDebuff }],
+      description: `Beer: Cộng ${totalDebuff} debuff của đối thủ vào ${randomStat} của mình`,
     };
   },
-  'Convert opponent debuffs to starting points'
+  'Sum opponent debuffs → apply to random self stat'
 );
 
 // ============================================================================
-// WINE - Self debuff count to starting points
+// WINE - Self total debuff applied to random opponent stat
 // ============================================================================
 
 /**
- * Wine - Cần Shot Glass. Cộng tổng debuff của bản thân vào điểm khởi đầu.
+ * Wine - Cần Shot Glass. Cộng tổng debuff của mình và áp dụng vào 1 stat ngẫu nhiên của đối thủ.
  */
 registerCombatHandler(
   'wine_self_debuff_to_points',
@@ -177,11 +193,20 @@ registerCombatHandler(
       };
     }
 
+    if (!ctx.opponent) return { skipDefault: true };
+
+    const totalDebuff = ctx.self.totalDebuff ?? 0;
+    if (totalDebuff <= 0) {
+      return { description: 'Wine: Bản thân không có debuff' };
+    }
+
+    const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
     return {
-      description: 'Wine: Cộng tổng debuff của bản thân vào điểm khởi đầu',
+      opponentStatMods: [{ stat: randomStat, value: totalDebuff }],
+      description: `Wine: Cộng ${totalDebuff} debuff của mình vào ${randomStat} của đối thủ`,
     };
   },
-  'Convert self debuffs to starting points'
+  'Sum self debuffs → apply to random opponent stat'
 );
 
 // ============================================================================
@@ -294,26 +319,31 @@ registerCombatHandler(
 );
 
 // ============================================================================
-// DARKIN BLADE - Point steal in last 3 rounds
+// DARKIN BLADE - Point steal in last 3 rounds, trigger once
 // ============================================================================
 
 /**
- * Darkin Blade - Ở 3 Round cuối, hút 1 điểm của đối thủ nếu thắng (1 lần).
+ * Darkin Blade - Ở 3 Round cuối, nếu thắng round đó, hút 1 điểm của đối thủ. Kích hoạt 1 lần duy nhất.
+ * (Nhận tổng 2 điểm: 1 từ thắng + 1 từ hút. Đối thủ mất 1 điểm.)
  */
 registerCombatHandler(
   'darkin_blade_point_steal',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    // Check if in last 3 rounds (rounds 4, 5, 6 of 6 total)
-    if (ctx.currentRound >= ctx.totalRounds - 2) {
-      return {
-        selfPoints: 1,
-        opponentPoints: -1,
-        description: 'Darkin Blade: Hút 1 điểm từ đối thủ (round cuối)',
-      };
+    // Only trigger in last 3 rounds (rounds totalRounds-2, totalRounds-1, totalRounds)
+    if (ctx.currentRound < ctx.totalRounds - 2) {
+      return { skipDefault: true };
     }
-    return { skipDefault: true };
+    // Won this round
+    if (ctx.currentRoundResult !== 'win') {
+      return { skipDefault: true };
+    }
+    return {
+      selfPoints: 1,
+      opponentPoints: -1,
+      description: 'Darkin Blade: Hút 1 điểm từ đối thủ (kích hoạt 1 lần ở 3 round cuối)',
+    };
   },
-  'Steal 1 point in last 3 rounds'
+  'Steal 1 point once in last 3 rounds when winning that round'
 );
 
 // ============================================================================
@@ -351,19 +381,18 @@ registerCombatHandler(
 );
 
 // ============================================================================
-// DICE OF THE DEAD - Auto win vs eliminated players
+// DICE OF THE DEAD - Auto win vs Gambler archetype (weakest auto-win)
 // ============================================================================
 
 /**
  * The Dice of the Dead - Auto win khi đối đầu người có Archetype "Gambler".
- * Sau mỗi combat thắng: tỉ lệ thắng cờ bạc tăng +4% (tracked externally).
+ * Hiệu ứng này yếu hơn tất cả các hiệu ứng tự động thắng khác.
  */
 registerCombatHandler(
   'dice_of_dead_auto_win',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     if (!ctx.opponent) return { skipDefault: true };
 
-    // Check if opponent has Gambler archetype
     const oppArchetypes: any[] = (ctx.opponent.character as any).archetypes || [];
     const isGambler = oppArchetypes.some((a: any) => {
       const name = typeof a === 'string' ? a : a?.name ?? '';
@@ -373,13 +402,29 @@ registerCombatHandler(
     if (isGambler) {
       return {
         autoWin: true,
-        description: 'The Dice of the Dead: Auto win vs Gambler',
+        autoWinPriority: 'weakest',
+        description: 'The Dice of the Dead: Auto win vs Gambler (yếu nhất)',
       };
     }
 
     return { skipDefault: true };
   },
-  'Auto win against Gambler archetype opponents'
+  'Auto win (weakest) against Gambler archetype opponents'
+);
+
+/**
+ * The Dice of the Dead - Sau combat thắng: +4% gamble win chance (stack).
+ */
+registerCombatHandler(
+  'dice_of_dead_gamble_stack',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const current = (ctx.self as any).gambleWinBonus ?? 0;
+    return {
+      updateCharacterField: { gambleWinBonus: current + 4 },
+      description: `The Dice of the Dead: Gamble win chance +4% (tổng ${current + 4}%)`,
+    };
+  },
+  '+4% gamble win chance stack after combat win'
 );
 
 // ============================================================================
@@ -524,6 +569,170 @@ registerCombatHandler(
     };
   },
   "PvE: receive Creator's Favor 1-3 times (+1 all stats each) (Creator's Cat Ring)"
+);
+
+// ============================================================================
+// STELLARON HUNTER'S MEMBER CARD - Per-member combat effects
+// ============================================================================
+
+/**
+ * Kafka - Sau Combat Thắng: Nhận thêm 1 Power với mỗi 3 điểm ghi được. (Tối đa 3 Power)
+ */
+registerCombatHandler(
+  'stellaron_kafka_power',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const points = ctx.self.roundsWon;
+    const powerCount = Math.min(3, Math.floor(points / 3));
+    if (powerCount <= 0) return { skipDefault: true };
+    return {
+      grantPowers: Array(powerCount).fill('random'),
+      description: `Stellaron Kafka: ${points} điểm → nhận ${powerCount} Power`,
+    };
+  },
+  'Kafka: +1 Power per 3 points (max 3) after combat win'
+);
+
+/**
+ * Silver Wolf - Sau combat: Cướp ngẫu nhiên 1 Gear từ người chơi còn sống và nhận +1 IQ.
+ */
+registerCombatHandler(
+  'stellaron_silver_wolf_steal',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      stealGearFromRandomLivingPlayer: true,
+      selfStatMods: [{ stat: 'iq', value: 1 }],
+      description: 'Stellaron Silver Wolf: Cướp 1 Gear ngẫu nhiên từ người chơi còn sống + nhận +1 IQ',
+    };
+  },
+  'Silver Wolf: steal 1 random gear from living player + +1 IQ'
+);
+
+/**
+ * Firefly - Trong combat: Khi thắng 2 round liên tiếp, đối thủ bị -6 stat ở round tiếp theo. (1 lần/combat)
+ */
+registerCombatHandler(
+  'stellaron_firefly_streak',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const streak = (ctx.self as any).consecutiveRoundWins ?? 0;
+    if (streak >= 2) {
+      const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+      return {
+        opponentStatMods: [{ stat: randomStat, value: -6 }],
+        description: `Stellaron Firefly: Thắng 2 round liên tiếp → đối thủ -6 ${randomStat} round tiếp theo`,
+      };
+    }
+    return { skipDefault: true };
+  },
+  'Firefly: -6 random stat to opponent after 2 consecutive round wins (once per combat)'
+);
+
+/**
+ * Elio - Sau mỗi 2 combat: Nhận 1 Creator's Favor.
+ */
+registerCombatHandler(
+  'stellaron_elio_favor',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const combatCount = ((ctx.self as any).totalCombats ?? 0) + 1;
+    if (combatCount % 2 === 0) {
+      return {
+        grantCreatorFavor: 1,
+        description: `Stellaron Elio: Combat thứ ${combatCount} → nhận 1 Creator's Favor`,
+      };
+    }
+    return { skipDefault: true };
+  },
+  "Elio: +1 Creator's Favor every 2 combats"
+);
+
+// ============================================================================
+// KHUNG HÌNH THỜ - Mirror cancel when both players have it
+// ============================================================================
+
+/**
+ * Khung hình thờ - Khi hai người đều có Khung Hình Thờ: loại bỏ hiệu ứng cả hai, xóa gear sau trận.
+ */
+registerCombatHandler(
+  'khung_hinh_tho_mirror',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+
+    const oppGears: any[] = (ctx.opponent.character as any).gear?.normalGear ?? [];
+    const oppHasKhung = oppGears.some((g: any) => {
+      const name = typeof g === 'string' ? g : g?.name ?? '';
+      return name.startsWith('Khung hình thờ');
+    });
+
+    if (oppHasKhung) {
+      return {
+        cancelGearEffect: 'Khung hình thờ',
+        cancelOpponentGearEffect: 'Khung hình thờ',
+        removeGear: 'Khung hình thờ',
+        removeOpponentGear: 'Khung hình thờ',
+        description: 'Khung hình thờ: Cả hai đều có → huỷ hiệu ứng và loại bỏ gear của cả hai',
+      };
+    }
+
+    return { skipDefault: true };
+  },
+  'Cancel both Khung hình thờ effects when both players have it'
+);
+
+// ============================================================================
+// GOD OF WAR'S ENTRY TICKET - +2 lowest stat vs Demi God/God
+// ============================================================================
+
+/**
+ * God of War's Entry Ticket - Nhận +2 stat thấp nhất khi đối đầu với Demi God/God.
+ */
+registerCombatHandler(
+  'god_of_war_demi_god_bonus',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+
+    const oppRace: string = (ctx.opponent.character as any).race?.race ?? '';
+    const isDemiGodOrGod = oppRace === 'Demi God' || oppRace === 'God';
+
+    if (!isDemiGodOrGod) return { skipDefault: true };
+
+    let lowestStat: StatName = 'strength';
+    let lowestVal = ctx.self.stats.strength;
+    for (const stat of STAT_NAMES) {
+      if (ctx.self.stats[stat] < lowestVal) {
+        lowestVal = ctx.self.stats[stat];
+        lowestStat = stat;
+      }
+    }
+
+    return {
+      selfStatMods: [{ stat: lowestStat, value: 2 }],
+      description: `God of War: Đối đầu ${oppRace} → +2 ${lowestStat}`,
+    };
+  },
+  '+2 lowest stat when facing Demi God or God race'
+);
+
+// ============================================================================
+// RAGNAROK'S COBRA - Auto-lose at round 64 (once)
+// ============================================================================
+
+/**
+ * Ragnarok's Cobra - Tự động thua ở vòng 64 (1 lần).
+ * Việc "giết thần" và tính là trận thắng được xử lý ở immediate handler.
+ */
+registerCombatHandler(
+  'ragnarok_cobra_auto_lose_r64',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // round 64 = WB-R64 hoặc LB tương đương (matchNumber 193-224)
+    const matchNumber = ctx.matchNumber ?? 0;
+    const isRound64 = matchNumber >= 193 && matchNumber <= 224;
+    if (!isRound64) return { skipDefault: true };
+    return {
+      autoLose: true,
+      triggerOnce: true,
+      description: "Ragnarok's Cobra: Tự động thua ở vòng 64 (1 lần)",
+    };
+  },
+  "Ragnarok's Cobra: auto-lose at WB-R64 (once)"
 );
 
 export function registerGearCombatHandlers() {

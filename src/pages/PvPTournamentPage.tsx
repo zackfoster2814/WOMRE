@@ -10,6 +10,7 @@ import {
   type TournamentMatchContext,
   type TournamentSaveResult,
 } from "./BattleZonePage";
+import { BracketTreeView } from "../components/bracket/BracketTreeView";
 import {
   readDriveFile,
   writeDriveFile,
@@ -767,110 +768,123 @@ const BracketTab = ({ roundData, onOpenMatch }: BracketTabProps) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 max-h-[70vh] overflow-y-auto pr-1">
-        {filteredMatches.map((match) => {
-          const p1Won = match.winner?.no === match.player1?.no;
-          const p2Won = match.winner?.no === match.player2?.no;
-          return (
-            <button
-              key={match.matchNumber}
-              onClick={() =>
-                onOpenMatch({
-                  matchNumber: match.matchNumber,
-                  player1No: match.player1?.no ?? 0,
-                  player2No: match.player2?.no ?? 0,
-                  existingWinnerNo: match.winner?.no,
-                  existingScore: match.score,
-                  existingSpecialEvent: match.specialEvent,
-                  existingNote: match.note,
-                })
-              }
-              className={`text-left p-3 rounded-xl border-2 transition-all hover:scale-[1.02] hover:shadow-lg ${
-                match.winner
-                  ? "bg-gradient-to-br from-gray-800/80 to-gray-900/80 border-green-600/40 hover:border-green-400"
-                  : "bg-gradient-to-br from-gray-800 to-gray-850 border-gray-600/50 hover:border-purple-400"
-              }`}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-mono text-gray-500">
-                  #{match.matchNumber}
-                </span>
-                <div className="flex gap-1">
-                  {match.specialEvent && (
-                    <span className="text-[10px] bg-orange-500/20 text-orange-300 px-1.5 py-0.5 rounded-full font-medium">
-                      Special
-                    </span>
-                  )}
-                  {match.winner ? (
-                    <span className="text-[10px] bg-green-500/20 text-green-300 px-1.5 py-0.5 rounded-full font-medium">
-                      {match.score || "Done"}
-                    </span>
-                  ) : (
-                    <span className="text-[10px] bg-yellow-500/20 text-yellow-300 px-1.5 py-0.5 rounded-full font-medium">
-                      Pending
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="space-y-0.5">
-                <div
-                  className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 transition-colors ${
-                    p1Won
-                      ? "bg-green-600/20 ring-1 ring-green-500/60"
-                      : p2Won
-                        ? "bg-gray-700/30 opacity-60"
-                        : "bg-gray-700/40"
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    {p1Won && (
-                      <span className="text-green-400 text-xs shrink-0">W</span>
+      {/* Mobile: grid card layout (hidden trên desktop) */}
+      <div className="lg:hidden">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[70vh] overflow-y-auto pr-1">
+          {filteredMatches.map((match) => {
+            const p1Won = match.winner?.no === match.player1?.no;
+            const p2Won = match.winner?.no === match.player2?.no;
+            return (
+              <button
+                key={match.matchNumber}
+                onClick={() =>
+                  onOpenMatch({
+                    matchNumber: match.matchNumber,
+                    player1No: match.player1?.no ?? 0,
+                    player2No: match.player2?.no ?? 0,
+                    existingWinnerNo: match.winner?.no,
+                    existingScore: match.score,
+                    existingSpecialEvent: match.specialEvent,
+                    existingNote: match.note,
+                  })
+                }
+                className={`text-left p-3 rounded-xl border-2 transition-all hover:scale-[1.02] hover:shadow-lg ${
+                  match.winner
+                    ? "bg-gradient-to-br from-gray-800/80 to-gray-900/80 border-green-600/40 hover:border-green-400"
+                    : "bg-gradient-to-br from-gray-800 to-gray-850 border-gray-600/50 hover:border-purple-400"
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[11px] font-mono text-gray-500">
+                    #{match.matchNumber}
+                  </span>
+                  <div className="flex gap-1">
+                    {match.specialEvent && (
+                      <span className="text-[10px] bg-orange-500/20 text-orange-300 px-1.5 py-0.5 rounded-full font-medium">
+                        Special
+                      </span>
                     )}
-                    <span
-                      className={`text-sm truncate ${p1Won ? "text-green-200 font-semibold" : "text-white"}`}
-                    >
-                      {match.player1?.name || "TBD"}
+                    {match.winner ? (
+                      <span className="text-[10px] bg-green-500/20 text-green-300 px-1.5 py-0.5 rounded-full font-medium">
+                        {match.score || "Done"}
+                      </span>
+                    ) : (
+                      <span className="text-[10px] bg-yellow-500/20 text-yellow-300 px-1.5 py-0.5 rounded-full font-medium">
+                        Pending
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="space-y-0.5">
+                  <div
+                    className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 transition-colors ${
+                      p1Won
+                        ? "bg-green-600/20 ring-1 ring-green-500/60"
+                        : p2Won
+                          ? "bg-gray-700/30 opacity-60"
+                          : "bg-gray-700/40"
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      {p1Won && (
+                        <span className="text-green-400 text-xs shrink-0">W</span>
+                      )}
+                      <span
+                        className={`text-sm truncate ${p1Won ? "text-green-200 font-semibold" : "text-white"}`}
+                      >
+                        {match.player1?.name || "TBD"}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-gray-500 font-mono shrink-0 ml-1">
+                      {match.player1?.no || "-"}
                     </span>
                   </div>
-                  <span className="text-[10px] text-gray-500 font-mono shrink-0 ml-1">
-                    {match.player1?.no || "-"}
-                  </span>
-                </div>
-                <div className="text-center text-gray-600 text-[10px] font-bold tracking-wider">
-                  VS
-                </div>
-                <div
-                  className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 transition-colors ${
-                    p2Won
-                      ? "bg-green-600/20 ring-1 ring-green-500/60"
-                      : p1Won
-                        ? "bg-gray-700/30 opacity-60"
-                        : "bg-gray-700/40"
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5 min-w-0">
-                    {p2Won && (
-                      <span className="text-green-400 text-xs shrink-0">W</span>
-                    )}
-                    <span
-                      className={`text-sm truncate ${p2Won ? "text-green-200 font-semibold" : "text-white"}`}
-                    >
-                      {match.player2?.name || "TBD"}
+                  <div className="text-center text-gray-600 text-[10px] font-bold tracking-wider">
+                    VS
+                  </div>
+                  <div
+                    className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 transition-colors ${
+                      p2Won
+                        ? "bg-green-600/20 ring-1 ring-green-500/60"
+                        : p1Won
+                          ? "bg-gray-700/30 opacity-60"
+                          : "bg-gray-700/40"
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      {p2Won && (
+                        <span className="text-green-400 text-xs shrink-0">W</span>
+                      )}
+                      <span
+                        className={`text-sm truncate ${p2Won ? "text-green-200 font-semibold" : "text-white"}`}
+                      >
+                        {match.player2?.name || "TBD"}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-gray-500 font-mono shrink-0 ml-1">
+                      {match.player2?.no || "-"}
                     </span>
                   </div>
-                  <span className="text-[10px] text-gray-500 font-mono shrink-0 ml-1">
-                    {match.player2?.no || "-"}
-                  </span>
                 </div>
-              </div>
-              {match.specialEvent && (
-                <div className="mt-1.5 text-center text-[10px] text-orange-300/80 truncate italic">
-                  {match.specialEvent}
-                </div>
-              )}
-            </button>
-          );
-        })}
+                {match.specialEvent && (
+                  <div className="mt-1.5 text-center text-[10px] text-orange-300/80 truncate italic">
+                    {match.specialEvent}
+                  </div>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Desktop: bracket tree view (hidden trên mobile) */}
+      <div className="hidden lg:block">
+        <BracketTreeView
+          matches={roundData.matches}
+          filterMode={filterMode}
+          onOpenMatch={onOpenMatch}
+          readOnly={false}
+        />
       </div>
 
     </div>

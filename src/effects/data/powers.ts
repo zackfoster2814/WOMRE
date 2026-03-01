@@ -9,7 +9,7 @@ import { defineEffect } from "../registry";
 export function registerAllPowerEffects() {
   // U=ma2 (từ Agnes Tachyon)
   defineEffect("power", "U=ma2")
-    .description("Thua round Str: +3 Speed. Thua round Speed: +4 Dura.")
+    .description("Trong combat: Thua round Str: +3 Speed. Thua round Speed: +4 Dura.")
     .weight(0.78)
     .effect({
       type: "stat_modifier",
@@ -60,7 +60,7 @@ export function registerAllPowerEffects() {
 
   // Baldening
   defineEffect("power", "Baldening")
-    .description("Bạn đang hói 💀")
+    .description("Debuff: Khiến đối thủ bị rụng hết tóc.")
     .weight(0.78)
     .register();
 
@@ -522,7 +522,7 @@ export function registerAllPowerEffects() {
   defineEffect("power", "Exort")
     .description("Buff: +1 IQ. Có Quas+Wex+Exort: nhận Archetype Invoker.")
     .weight(0.78)
-    .addStat("durability", 1)
+    .addStat("iq", 1)
     .effect({
       type: "grant_archetype",
       grantName: "Invoker",
@@ -1807,6 +1807,219 @@ export function registerAllPowerEffects() {
       value: -3,
       timing: "during_combat",
       target: "opponent",
+    })
+    .register();
+
+  // Spell Flux (#128)
+  defineEffect("power", "Spell Flux")
+    .description(
+      '1 Power kích hoạt "Trong Combat" của bạn kích hoạt lần đầu sẽ được kích hoạt 2 lần.',
+    )
+    .weight(0.78)
+    .effect({
+      type: "custom",
+      timing: "during_combat",
+      target: "self",
+      customHandler: "spell_flux_double_first_in_combat",
+    })
+    .register();
+
+  // ============================================================================
+  // SPECIAL POWERS (không có số thứ tự - từ sự kiện/combo đặc biệt)
+  // ============================================================================
+
+  // Cinder Flickering
+  defineEffect("power", "Cinder Flickering")
+    .description(
+      'Sau Combat: Khi 2 người có Cinder Flickering trong cùng 1 Combat, người thắng nhận Char Dev "Lord of Cinder".',
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "after_combat",
+      target: "self",
+      customHandler: "cinder_flickering_check",
+    })
+    .register();
+
+  // Darwin Evolution Theory
+  defineEffect("power", "Darwin Evolution Theory")
+    .description(
+      "Sau Combat: Thăng hạng chủng tộc của mình lên 1 bậc. (Cả tộc của bạn được nâng bậc)",
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "after_combat",
+      target: "self",
+      customHandler: "darwin_evolution_race_up",
+    })
+    .register();
+
+  // Algorithms Are Clear
+  defineEffect("power", "Algorithms Are Clear")
+    .description(
+      "Sau Combat: Cộng tổng Base Stat đối thủ chia 6, thay thế Base Stat thấp nhất của bạn thành con số đó.",
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "after_combat",
+      target: "self",
+      customHandler: "algorithms_are_clear_replace_lowest",
+    })
+    .register();
+
+  // Eternal Mangekyou Sharingan
+  defineEffect("power", "Eternal Mangekyou Sharingan")
+    .description(
+      "Trước Combat: Kích hoạt ngẫu nhiên 1 trong 3 hiệu ứng - Amaterasu: đối thủ -6 Dura; Tsukuyomi: đối thủ -6 IQ; Susanoo: đối thủ -6 Strength.",
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "before_combat",
+      target: "opponent",
+      customHandler: "eternal_mangekyou_random_effect",
+    })
+    .register();
+
+  // Adapt
+  defineEffect("power", "Adapt")
+    .description(
+      "Ghi nhớ mọi Power gặp. Trước combat: Vô hiệu hóa toàn bộ Power của đối thủ mà bản thân đã ghi nhớ.",
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "before_combat",
+      target: "opponent",
+      customHandler: "adapt_disable_known_powers",
+    })
+    .register();
+
+  // Hey Ya!
+  defineEffect("power", "Hey Ya!")
+    .description("Bạn được cổ vũ tinh thần.")
+    .weight(0)
+    .register();
+
+  // Jogan
+  defineEffect("power", "Jogan")
+    .description("Mắt sáng, không bị cận.")
+    .weight(0)
+    .register();
+
+  // Super Lucky
+  defineEffect("power", "Super Lucky")
+    .description(
+      "Khi thua trận, 15% lật kèo thắng. Nếu không, thêm 1 cơ hội 10% lật kèo.",
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "after_combat_lose",
+      target: "self",
+      customHandler: "super_lucky_comeback_check",
+    })
+    .register();
+
+  // Valkyrie's Blessing
+  defineEffect("power", "Valkyrie's Blessing")
+    .description(
+      "Miễn nhiễm AIDS. Miễn nhiễm Debuff. Tie-break 66% nghiêng về bạn. Power này không thể bị tác động/vô hiệu/xóa bỏ.",
+    )
+    .weight(0)
+    .effect({
+      type: "immunity",
+      immuneTo: ["aids", "debuff"],
+      timing: "immediate",
+      target: "self",
+    })
+    .effect({
+      type: "immunity",
+      immuneTo: ["remove_valkyrie_blessing"],
+      timing: "immediate",
+      target: "self",
+    })
+    .register();
+
+  // 4 Hit Combo
+  defineEffect("power", "4 Hit Combo")
+    .description(
+      "Trong Combat: Round BIQ thắng sẽ nhận điểm để bằng với đối thủ. Không có tác dụng nếu đang hơn điểm.",
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "during_combat",
+      target: "self",
+      customHandler: "four_hit_combo_biq_equalize",
+    })
+    .register();
+
+  // Sovngarde's Blessing
+  defineEffect("power", "Sovngarde's Blessing")
+    .description(
+      "Trong combat: Khởi đầu trận đấu với +1 điểm và Buff: +1 All Stats.",
+    )
+    .weight(0)
+    .effect({
+      type: "combat_points",
+      points: 1,
+      timing: "before_combat",
+      target: "self",
+    })
+    .effect({
+      type: "stat_modifier",
+      stat: "all",
+      value: 1,
+      timing: "before_combat",
+      target: "self",
+      duration: "combat",
+    })
+    .register();
+
+  // Glory glory Man United
+  defineEffect("power", "Glory glory Man United")
+    .description(
+      "Trong combat: Với mỗi bàn thua EPL gần nhất của MU, -1 all stats. MU thắng ≥3-0: +7 all stats.",
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "during_combat",
+      target: "self",
+      customHandler: "glory_man_united_epl_check",
+    })
+    .register();
+
+  // Cold Mirage
+  defineEffect("power", "Cold Mirage")
+    .description(
+      "Trong combat: Sau mỗi round thắng, quay 1 chỉ số từ các round chưa thi đấu. Đối thủ không nhận điểm khi thắng những round bị quay ra.",
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "on_round_win",
+      target: "self",
+      customHandler: "cold_mirage_spin_unused_round",
+    })
+    .register();
+
+  // Golden Parry
+  defineEffect("power", "Golden Parry")
+    .description(
+      "Trong combat: Sau mỗi round thua, đối thủ có 35% không nhận được điểm.",
+    )
+    .weight(0)
+    .effect({
+      type: "custom",
+      timing: "on_round_lose",
+      target: "self",
+      conditions: [{ type: "probability", chance: 35 }],
+      customHandler: "golden_parry_deny_opponent_point",
     })
     .register();
 

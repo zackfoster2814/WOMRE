@@ -127,7 +127,7 @@ export function registerRunewords() {
 
   // Pennyworthy (Ith + Ort)
   defineEffect('runeword', 'Pennyworthy')
-    .description('Mất tất cả Power. Không thể nhận Power. 36% +1 điểm khi thắng round, 36% +2 stat khi thua round.')
+    .description('Người sở hữu runeword này mất tất cả Power và không thể nhận bất kì Power nào. Trong Combat: Với mỗi round thắng, có 36% nhận được thêm 1 điểm. Sau combat: Với mỗi round thua, có 36% nhận +2 vào chỉ số thua.')
     .effect({
       type: 'remove_power',
       grantCount: -1, // All powers
@@ -148,32 +148,27 @@ export function registerRunewords() {
       conditions: [{ type: 'probability', chance: 36 }]
     })
     .effect({
-      type: 'stat_modifier',
-      stat: 'lowest', // Stat của round thua
-      value: 2,
-      timing: 'on_round_lose',
+      type: 'custom',
+      timing: 'after_combat',
       target: 'self',
-      conditions: [{ type: 'probability', chance: 36 }]
+      customHandler: 'pennyworthy_lose_round_bonus'
     })
     .register();
 
   // Double Claws (El + Amn)
   defineEffect('runeword', 'Double Claws')
-    .description('Trước combat: Có 18% khả năng cướp vĩnh viễn 1 Power ngẫu nhiên của kẻ địch.')
+    .description('Trước combat: Có 18% khả năng cướp vĩnh viễn 1 Power ngẫu nhiên của kẻ địch. Nếu cướp thành công, tiếp tục cướp (stack vô hạn lần cho đến khi fail hoặc đối thủ hết power).')
     .effect({
-      type: 'steal_power',
-      grantCount: 1,
+      type: 'custom',
       timing: 'before_combat',
       target: 'opponent',
-      conditions: [{ type: 'probability', chance: 18 }],
-      stackable: true, // Stack vô hạn lần
       customHandler: 'double_claws_steal'
     })
     .register();
 
   // Extraordinary (Tal + Ral)
   defineEffect('runeword', 'Extraordinary')
-    .description('Stats có Base < Base IQ sẽ được quay lại 1 lần.')
+    .description('Khi nhận Runeword này, tất cả các Stats có Base nhỏ hơn Base IQ của chủ sở hữu sẽ ngay lập tức được quay lại 1 lần.')
     .effect({
       type: 'stat_respin',
       timing: 'immediate',
@@ -203,7 +198,7 @@ export function registerRunewords() {
 
   // Blackjack (Sol + Thul)
   defineEffect('runeword', 'Blackjack')
-    .description('Trong combat: Gọi ngẫu nhiên 1 Summon từ vòng quay Summon Wheel. Có 97% sẽ bỏ Summon đó, nếu không bỏ thì giữ lại.')
+    .description('Trong combat: Gọi ngẫu nhiên 1 Summon từ vòng quay Summon Wheel. Sau Combat: Có 97% sẽ bỏ Summon đó, nếu không bỏ, giữ summon đó vĩnh viễn.')
     .effect({
       type: 'custom',
       timing: 'during_combat',
@@ -214,37 +209,35 @@ export function registerRunewords() {
 
   // Dead Touch (Ort + Thul)
   defineEffect('runeword', 'Dead Touch')
-    .description('Sau combat: Đối thủ nhận 1 Power vô dụng. Sau đó, cướp ngẫu nhiên 2 Power của đối thủ.')
+    .description('Sau combat: Đối thủ nhận 1 Power vô dụng. Sau đó, cướp ngẫu nhiên 2 Power của đối thủ, nếu đó là Power vô dụng, giữ lại, nếu nó là Power khác, trả lại. Với mỗi Power vô dụng, nhận +1 IQ và +1 BIQ.')
     .effect({
-      type: 'grant_power',
-      grantType: 'power',
-      grantName: 'Useless Power',
-      grantCount: 1,
+      type: 'custom',
       timing: 'after_combat',
-      target: 'opponent'
-    })
-    .effect({
-      type: 'steal_power',
-      grantCount: 2,
-      timing: 'after_combat',
-      target: 'self'
+      target: 'self',
+      customHandler: 'dead_touch_useless_power'
     })
     .register();
 
   // Affection (Ort + Sol)
   defineEffect('runeword', 'Affection')
-    .description('Khi bắt đầu combat, người sở hữu runeword này và đối thủ sẽ bị đảo (inversion) 1 chỉ số ngẫu nhiên.')
+    .description('Khi bắt đầu combat, người sở hữu runeword này và đối thủ sẽ bị đảo (inversion) 1 chỉ số ngẫu nhiên, kết quả này được giữ vĩnh viễn. Sau combat: Cả hai có 69% make love.')
     .effect({
       type: 'stat_inversion',
       stat: 'random',
       timing: 'before_combat',
       target: 'both'
     })
+    .effect({
+      type: 'make_love',
+      timing: 'after_combat',
+      target: 'both',
+      conditions: [{ type: 'probability', chance: 69 }]
+    })
     .register();
 
   // Highroller (El + Shael)
   defineEffect('runeword', 'Highroller')
-    .description('Trong combat: Chỉ số Base 1 của cả hai bên được tính là Base 10 và Base 10 sẽ là 1.')
+    .description('Trong combat: Chỉ số Base 1 của cả hai bên được tính là Base 10 và Base 10 sẽ là 1. (Không áp dụng được lên IQ Skeleton).')
     .effect({
       type: 'custom',
       timing: 'during_combat',
@@ -255,7 +248,7 @@ export function registerRunewords() {
 
   // The Twin (Any Pair)
   defineEffect('runeword', 'The Twin')
-    .description('+2 Speed, +2 IQ. Sau 2 PvP thắng: +2 Str, +2 Dura. Sau 4 PvP thắng: +2 BIQ, +2 MA.')
+    .description('Nhận +2 Speed, +2 IQ. Sau 2 combat PvP chiến thắng (kích hoạt 1 lần): Nhận +2 Strength, +2 Dura. Sau 4 combat PvP chiến thắng (kích hoạt 1 lần): Nhận +2 BIQ, +2 MA.')
     .addStat('speed', 2)
     .addStat('iq', 2)
     .effect({
@@ -318,7 +311,7 @@ export function registerRunewords() {
 
   // Flawless (Amn + Shael)
   defineEffect('runeword', 'Flawless')
-    .description('+1 Speed, +1 IQ. Sau combat: Nếu đối phương không ghi điểm, +1 all stats.')
+    .description('Nhận +1 Speed và +1 IQ. Sau combat: Nếu đối phương không ghi được điểm nào, nhận +1 all stats.')
     .addStat('speed', 1)
     .addStat('iq', 1)
     .effect({
@@ -333,7 +326,7 @@ export function registerRunewords() {
 
   // Death's Dance (Tal + Shael)
   defineEffect('runeword', "Death's Dance")
-    .description('3 chỉ số IQ, BIQ và MA của bạn được cố định là 12. 3 chỉ số Strength, Speed, Dura của bạn được cố định là 0. Sau mỗi Tiebreak: +3 vào các chỉ số cố định (0→3→6→9→12).')
+    .description('3 chỉ số IQ, BIQ và MA của bạn được cố định là 12. 3 chỉ số Strength, Speed, Dura của bạn được cố định là 0. Sau mỗi combat phải quyết định bằng tie-break: Nhận +3 vào chỉ số cố định của Strength, Speed và Dura. (0->3->6->9->12)')
     .effect({
       type: 'stat_set',
       stat: 'iq',
@@ -376,6 +369,12 @@ export function registerRunewords() {
       timing: 'immediate',
       target: 'self'
     })
+    .effect({
+      type: 'custom',
+      timing: 'after_combat',
+      target: 'self',
+      customHandler: 'deaths_dance_tiebreak_bonus'
+    })
     .register();
 
   // Undying Rage (El + Sol)
@@ -394,17 +393,9 @@ export function registerRunewords() {
 
   // Cure (Thul + Zod)
   defineEffect('runeword', 'Cure')
-    .description('Trong combat: Vô hiệu hóa Debuff đối phương. +1 stat thấp nhất với mỗi Debuff.')
+    .description('Trong combat: Toàn bộ "Debuff" của đối phương bị vô hiệu hóa. Với mỗi "Debuff" bị vô hiệu hóa, nhận +1 vào chỉ số thấp nhất.')
     .effect({
-      type: 'immunity',
-      immuneTo: ['opponent_debuff'],
-      timing: 'during_combat',
-      target: 'self'
-    })
-    .effect({
-      type: 'stat_modifier',
-      stat: 'lowest',
-      value: 1,
+      type: 'custom',
       timing: 'during_combat',
       target: 'self',
       customHandler: 'cure_counter_debuff'
@@ -413,16 +404,15 @@ export function registerRunewords() {
 
   // Adventurous (Ral + Amn)
   defineEffect('runeword', 'Adventurous')
-    .description('[PVE Only] +1 điểm khởi đầu. Khi Raid Boss thành công, nhận thêm 1 phần thưởng PvP.')
+    .description('[PVE Only] Trong combat: Nhận +1 điểm khởi đầu. Khi Raid Boss thành công, nhận thêm 1 phần thưởng PvP Rewards.')
     .effect({
       type: 'combat_points',
       points: 1,
-      timing: 'before_combat',
-      target: 'self',
-      conditions: [{ type: 'always' }] // PvE check in resolver
+      timing: 'pve_only',
+      target: 'self'
     })
     .effect({
-      type: 'double_reward',
+      type: 'custom',
       timing: 'after_combat_win',
       target: 'self',
       customHandler: 'adventurous_raid_reward'
@@ -431,7 +421,7 @@ export function registerRunewords() {
 
   // Resonance (Ith + Ral)
   defineEffect('runeword', 'Resonance')
-    .description('+1 stat thấp nhất với mỗi Buff có trên bản thân (chỉ 1 lần).')
+    .description('Với mỗi hiệu ứng "Buff" có trên bản thân, nhận +1 vào chỉ số thấp nhất, chỉ tác dụng 1 lần lúc nhận Runeword này.')
     .effect({
       type: 'stat_modifier',
       stat: 'lowest',

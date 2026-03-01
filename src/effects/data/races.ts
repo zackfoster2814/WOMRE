@@ -15,7 +15,7 @@ export function registerRaces() {
   // Symbiosis
   defineEffect("race", "Symbiosis")
     .description(
-      "Quay 1 loại ký sinh.\nKí sinh lên 1 người chơi. Tiền thưởng chia đều. Khi host chết, bạn cũng bị loại.",
+      "Nhận 1 vòng quay hoàn toàn khác biệt, kí sinh lên 1 người chơi hiện tại trong mùa, tiền thưởng của một trong hai giành được sẽ được chia đều cho cả hai. Khi người chơi bị kí sinh chết đi, bạn cũng sẽ bị loại. Một người chơi không thể cùng lúc được 2 symbios kí sinh. Mỗi khi roll ra tộc này, mùa +1 Player.",
     )
     .weight(1.5)
     .tier(1)
@@ -60,7 +60,7 @@ export function registerRaces() {
   // Chỉ khi tiến hóa thành Lich thì IQ mới thay đổi (thành 8)
   defineEffect("race", "Skeleton")
     .description(
-      "Quay Bone Lineage.\nIQ luôn = 1 (không thể thay đổi).\nSau 2 PvP thắng: tiến hóa Lich (IQ=8). Sau 4 PvP thắng: Lich King (+1 all). Miễn nhiễm AIDS.",
+      "Sau 2 trận PvP thắng, tiến hóa thành Lich, IQ được cố định thành 8. Sau 4 trận thắng PvP, tiến hóa thành Lich King, nhận +1 all stats. Bạn không thể bị AIDS.",
     )
     .weight(5.25)
     .tier(8)
@@ -109,14 +109,14 @@ export function registerRaces() {
 
   // Troll - No trait
   defineEffect("race", "Troll")
-    .description("Quay Troll's Type.\nKhông có trait đặc biệt.")
+    .description("Không có 💀")
     .weight(5.25)
     .tier(8)
     .register();
 
   // Orc
   defineEffect("race", "Orc")
-    .description("+2 stat thấp nhất khi thắng, -3 stat cao nhất khi thua.")
+    .description("Nhận +2 vào chỉ số thấp nhất khi thắng và -3 vào chỉ số cao nhất khi thua.")
     .weight(5.25)
     .tier(8)
     .effect({
@@ -137,7 +137,7 @@ export function registerRaces() {
 
   // Merfolk
   defineEffect("race", "Merfolk")
-    .description('Thuộc House "Naga", không có vòng quay House.')
+    .description('Người chơi thuộc về House "Naga" và không có vòng quay House.')
     .weight(5.25)
     .tier(8)
     .effect({
@@ -151,7 +151,7 @@ export function registerRaces() {
   // Dryad
   defineEffect("race", "Dryad")
     .description(
-      "Khi Dryad khác chết: +2 random stat. Dryad cuối cùng: tiến hóa Yggdrasil +9 random stat.",
+      "Khi mỗi Dryad chết đi, một Dryad ngẫu nhiên còn sống sẽ nhận +2 vào 1 chỉ số ngẫu nhiên. Khi chỉ còn duy nhất 1 Dryad, người đó tiến hóa thành Yggdrasil và +9 Base vào 1 chỉ số ngẫu nhiên.",
     )
     .weight(4.5)
     .tier(7)
@@ -174,7 +174,7 @@ export function registerRaces() {
 
   // Elf - No trait
   defineEffect("race", "Elf")
-    .description("Quay Elf's Type.\nKhông có trait đặc biệt.")
+    .description("Không có 💀")
     .weight(4.5)
     .tier(7)
     .register();
@@ -182,7 +182,7 @@ export function registerRaces() {
   // Spirit
   defineEffect("race", "Spirit")
     .description(
-      "Mỗi round thua: +1 stack Souls. 6 stack: +2 BIQ. 9 stack: +1 Power. 13 stack: +1 all. 20 stack: gấp đôi. Miễn nhiễm AIDS.",
+      'Mỗi khi thua 1 round đấu, nhận 1 stack "Souls" (stack vĩnh viễn). Nhận hiệu ứng tương đương với số stack ở dưới (bao gồm cả các mốc trước đó): 6 Stack: Nhận +2 BIQ. 9 Stack: Nhận 1 Power ngẫu nhiên. 13 Stack: Nhận +1 all stats. 20 Stack: Gấp đôi tất cả các hiệu ứng trước đó. Bạn không thể bị AIDS.',
     )
     .weight(4.5)
     .tier(7)
@@ -199,7 +199,7 @@ export function registerRaces() {
   // Uma
   defineEffect("race", "Uma")
     .description(
-      'Quay Uma Parents.\nThuộc House "Tracen Academy", không có vòng quay House.',
+      'Người chơi thuộc về House "Tracen Academy" và không có vòng quay House.',
     )
     .weight(4.5)
     .tier(7)
@@ -220,7 +220,7 @@ export function registerRaces() {
 
   // Vampire
   defineEffect("race", "Vampire")
-    .description('Quay Body Count.\nNhận vòng quay "Khẩu vị độc đáo".')
+    .description('Nhận vòng quay "Khẩu vị độc đáo".')
     .weight(4)
     .tier(6)
     .effect({
@@ -234,7 +234,7 @@ export function registerRaces() {
   // Giant - So sánh dựa trên BASE stats (stats từ vòng quay ban đầu)
   defineEffect("race", "Giant")
     .description(
-      "+5 IQ nếu Base IQ > Base Str (-5 Str). +5 Str nếu Base Str > Base IQ (-5 IQ). Bằng nhau: +3 cả hai.",
+      "Nhận +5 IQ nếu sau vòng quay base stats IQ > Strength. (Và -5 Strength). Nhận +5 Strength nếu sau vòng quay base stats Strength > IQ. (Và -5 IQ). Nếu cả hai bằng nhau sau vòng quay base stats, nhận +3 Strength và IQ.",
     )
     .weight(4)
     .tier(6)
@@ -344,7 +344,7 @@ export function registerRaces() {
 
   // Dragon - No trait
   defineEffect("race", "Dragon")
-    .description("Quay Dragon's Type.\nKhông có trait đặc biệt.")
+    .description("Không có 💀")
     .weight(4)
     .tier(6)
     .register();
@@ -352,7 +352,7 @@ export function registerRaces() {
   // Reincarnator
   defineEffect("race", "Reincarnator")
     .description(
-      "Chuyển sinh thành player mùa 2.5, nhận Base Stats và tộc của người đó.",
+      "Chuyển sinh thành 1 người chơi của mùa 2.5, nhận Base Stats và tộc của người đó. Các vòng quay còn lại quay như bình thường.",
     )
     .weight(2)
     .tier(3)
@@ -368,7 +368,7 @@ export function registerRaces() {
   // Angel
   defineEffect("race", "Angel")
     .description(
-      'Quay Angel Rank.\nNhận Archetype "Pacifist" từ đầu (sẽ nhận thêm một Archetype nữa).',
+      'Nhận Archetype "Pacifist" từ đầu (sẽ nhận thêm một Archetype nữa).',
     )
     .weight(3.5)
     .tier(5)
@@ -384,7 +384,7 @@ export function registerRaces() {
   // Demi-God
   defineEffect("race", "Demi-God")
     .description(
-      "Quay God's Gifts.\n+1 all stats vs Human, -1 all stats vs God.",
+      "Nhận +1 all stats khi đối đầu với Human và -1 all stats khi đối đầu với God.",
     )
     .weight(3.5)
     .tier(5)
@@ -409,7 +409,7 @@ export function registerRaces() {
   // Primordial Being
   defineEffect("race", "Primordial Being")
     .description(
-      "Quay Elemental Wheel.\nMỗi khi thắng Combat, nhận lại Elemental Wheel một lần nữa.",
+      "Cứ mỗi khi thắng Combat, nhận lại Elemental Wheel một lần nữa.",
     )
     .weight(3.5)
     .tier(5)
