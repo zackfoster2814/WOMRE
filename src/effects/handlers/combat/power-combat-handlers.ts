@@ -761,6 +761,149 @@ registerCombatHandler(
   'Random round chosen before combat; win that round = +1 point (Hunter\'s Mark)'
 );
 
+// ============================================================================
+// GARLIC BREATH - +1 all stats vs Vampire OR with 3+ Breath powers
+// ============================================================================
+
+registerCombatHandler(
+  'garlic_breath_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppIsVampire = ctx.opponent.race.toLowerCase() === 'vampire';
+    const breathPowers = ctx.self.powers.filter(p =>
+      p.toLowerCase().includes('breath')
+    ).length;
+    if (!oppIsVampire && breathPowers < 3) {
+      return {
+        skipDefault: true,
+        description: `Garlic Breath: đối thủ không phải Vampire (${ctx.opponent.race}), chỉ có ${breathPowers} Breath power`,
+      };
+    }
+    const reason = oppIsVampire ? 'đối thủ là Vampire' : `có ${breathPowers} Breath power`;
+    return {
+      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+      description: `+1 All Stats (Garlic Breath – ${reason})`,
+    };
+  },
+  '+1 all stats vs Vampire or with 3+ Breath powers (Garlic Breath)'
+);
+
+// ============================================================================
+// SUPER LUCKY - Khi thua: 15% lật kèo, nếu thất bại → 10% lật kèo lần 2
+// ============================================================================
+
+registerCombatHandler(
+  'super_lucky_comeback_check',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (Math.random() < 0.15) {
+      return {
+        autoWin: true,
+        description: 'LẬT KÈO! (Super Lucky – 15%)',
+      };
+    }
+    if (Math.random() < 0.10) {
+      return {
+        autoWin: true,
+        description: 'LẬT KÈO! (Super Lucky – 10% lần 2)',
+      };
+    }
+    return {
+      skipDefault: true,
+      description: 'Super Lucky: không lật kèo được (cả 15% lẫn 10% đều trượt)',
+    };
+  },
+  '15% then 10% auto-win comeback when losing (Super Lucky)'
+);
+
+// ============================================================================
+// 4 HIT COMBO - Thắng round BIQ → kéo điểm bằng đối thủ (nếu đang thua)
+// Engine cần đọc flag này và equalize score.
+// ============================================================================
+
+registerCombatHandler(
+  'four_hit_combo_biq_equalize',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.roundResults?.biq !== 'win') return { skipDefault: true };
+    return {
+      description: '[4 Hit Combo] Thắng round BIQ → điểm bằng đối thủ nếu đang thua (GM/engine xử lý equalize)',
+      skipDefault: false,
+    };
+  },
+  'BIQ win: equalize own score to opponent score if behind (4 Hit Combo)'
+);
+
+// ============================================================================
+// GOLDEN PARRY - Sau mỗi round thua: 35% đối thủ không nhận điểm
+// ============================================================================
+
+registerCombatHandler(
+  'golden_parry_deny_opponent_point',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.currentRoundResult !== 'lose') return { skipDefault: true };
+    if (Math.random() > 0.35) {
+      return { skipDefault: true, description: 'Golden Parry: không kích hoạt (65%)' };
+    }
+    return {
+      opponentPoints: -1,
+      description: 'Đối thủ không nhận điểm (Golden Parry – 35% khi thua round)',
+    };
+  },
+  '35% opponent does not score when you lose a round (Golden Parry)'
+);
+
+// ============================================================================
+// ETERNAL MANGEKYOU SHARINGAN - Trước combat: random 1 trong 3 debuff đối thủ
+// ============================================================================
+
+registerCombatHandler(
+  'eternal_mangekyou_random_effect',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const options: Array<{ stat: StatName; name: string }> = [
+      { stat: 'durability', name: 'Amaterasu (-6 Dura)' },
+      { stat: 'iq',         name: 'Tsukuyomi (-6 IQ)' },
+      { stat: 'strength',   name: 'Susanoo (-6 Strength)' },
+    ];
+    const chosen = options[Math.floor(Math.random() * 3)];
+    return {
+      opponentStatMods: [{ stat: chosen.stat, value: -6 }],
+      description: `Eternal Mangekyou Sharingan: ${chosen.name} đối thủ`,
+    };
+  },
+  'Random -6 to opponent: Amaterasu(Dura) / Tsukuyomi(IQ) / Susanoo(Str)'
+);
+
+// ============================================================================
+// SPELL FLUX - Power "Trong combat" đầu tiên kích hoạt 2 lần
+// GM xử lý: tìm power đầu tiên có timing during_combat và apply 2 lần.
+// ============================================================================
+
+registerCombatHandler(
+  'spell_flux_double_first_in_combat',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      description: '[Spell Flux] Power "Trong combat" đầu tiên kích hoạt 2 lần – GM kiểm tra danh sách power',
+      skipDefault: false,
+    };
+  },
+  'First during-combat power activates twice (Spell Flux)'
+);
+
+// ============================================================================
+// GLORY GLORY MAN UNITED - GM nhập tỉ số MU để tính buff/debuff
+// ============================================================================
+
+registerCombatHandler(
+  'glory_man_united_epl_check',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      description: '[GM Action] Glory glory Man United: Nhập tỉ số MU - Đối thủ. Bàn thua = -1 all stats/bàn; MU thắng ≥3-0 = +7 all stats',
+      skipDefault: false,
+    };
+  },
+  'GM enters MU EPL score to calculate stat buff/debuff (Glory glory Man United)'
+);
+
 export function registerPowerCombatHandlers(): void {
   console.log('Power combat handlers registered');
 }

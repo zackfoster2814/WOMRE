@@ -10,7 +10,7 @@ import { initializeEffectData } from "../effects/data";
 import { HandlerRegistry } from "../effects/handlers";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { BossBattleRoom } from "../components/BossBattleRoom";
-import { getAssetPath } from "../utils/basePath";
+import { getAssetPath, getAvatarUrl, AVATAR_EXTENSIONS } from "../utils/basePath";
 import { CombatEffectsPanel } from "../components/CombatEffectsPanel";
 import {
   ProbabilityWheelModal,
@@ -763,7 +763,7 @@ function applyBeforeCombatStatMods(
   for (const ce of fx.combatEffects) {
     if (ce.isActive === false) continue;
     if (ce.effect?.timing !== "before_combat") continue;
-    if (ce.effect?.type !== "stat_modifier") continue;
+    if (ce.effect?.type !== "stat_modifier" && ce.effect?.type !== "debuff") continue;
     if (ce.effect?.value === undefined || !ce.effect?.stat) continue;
     if ((ce.effect.target || "self") !== targetFilter) continue;
 
@@ -843,18 +843,20 @@ function calcStatsWithBeforeCombat(
 
 // ── Sidebar Avatar Banner ──────────────────────────────────────────────────────
 const SidebarAvatarBanner = ({ player, accent }: { player: PvPPlayerData; accent: "blue" | "red" }) => {
-  const [err, setErr] = React.useState(false);
+  const [extIndex, setExtIndex] = React.useState(0);
   const nameColor = accent === "blue" ? "text-blue-300/80" : "text-red-300/80";
   const race = player.character?.race?.race || player.race || "";
   const subRace = player.character?.race?.subRace || "";
+  const allFailed = extIndex >= AVATAR_EXTENSIONS.length;
   return (
     <div className="relative rounded-t-2xl overflow-hidden h-48 bg-gray-800 shrink-0">
-      {!err ? (
+      {!allFailed ? (
         <img
-          src={getAssetPath(`/data/avatars/no${player.no}.png`)}
+          key={extIndex}
+          src={getAvatarUrl(player.no, extIndex)}
           alt={player.name}
           className="w-full h-full object-cover object-top"
-          onError={() => setErr(true)}
+          onError={() => setExtIndex((i) => i + 1)}
         />
       ) : (
         <div className="w-full h-full flex items-center justify-center text-gray-600 text-6xl font-black select-none">
@@ -1513,7 +1515,7 @@ export const StatsComparisonMode = ({ onBack, tournamentMatch, onSaveTournamentR
         if (!handlerName) {
           if (
             timing === "during_combat" &&
-            ce.effect?.type === "stat_modifier" &&
+            (ce.effect?.type === "stat_modifier" || ce.effect?.type === "debuff") &&
             ce.effect.value !== undefined &&
             ce.effect.stat
           ) {

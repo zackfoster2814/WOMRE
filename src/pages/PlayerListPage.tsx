@@ -24,6 +24,8 @@ import {
   getAssetPath,
   getPlayerNumbers,
   clearPlayerNumbersCache,
+  getAvatarUrl,
+  AVATAR_EXTENSIONS,
 } from "../utils/basePath";
 import { isTauri } from "../utils/localStorage";
 import { PvEBattlePage } from "./BattleZonePage";
@@ -2023,20 +2025,17 @@ const PlayerDetailModal = ({
     string | null
   >(null);
   const [openHouseTooltip, setOpenHouseTooltip] = useState<string | null>(null);
-  const [avatarError, setAvatarError] = useState(false);
+  const [avatarExtIndex, setAvatarExtIndex] = useState(0);
   const [avatarLoaded, setAvatarLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState<"info" | "battlelog">("info");
 
   // Reset avatar state when character changes
   useEffect(() => {
-    setAvatarError(false);
+    setAvatarExtIndex(0);
     setAvatarLoaded(false);
   }, [character.no]);
 
-  // Try multiple image extensions
-  const getAvatarUrl = () => {
-    return getAssetPath(`/data/avatars/no${character.no}.png`);
-  };
+  const avatarAllFailed = avatarExtIndex >= AVATAR_EXTENSIONS.length;
 
   // Helper functions
   const hasArchetypeSubTypes = (arch: NestedArchetype) =>
@@ -2267,7 +2266,7 @@ const PlayerDetailModal = ({
             <div className="bg-gray-700/50 rounded-lg p-4">
               <div className="flex justify-center">
                 <div className="w-[250px] h-[250px] lg:w-[300px] lg:h-[300px] rounded-lg overflow-hidden border-2 border-gray-600 bg-gray-800">
-                  {!avatarError ? (
+                  {!avatarAllFailed ? (
                     <>
                       {!avatarLoaded && (
                         <div className="w-full h-full flex items-center justify-center">
@@ -2275,11 +2274,12 @@ const PlayerDetailModal = ({
                         </div>
                       )}
                       <img
-                        src={getAvatarUrl()}
+                        key={avatarExtIndex}
+                        src={getAvatarUrl(character.no, avatarExtIndex)}
                         alt={`Avatar of ${character.name}`}
                         className={`w-full h-full object-cover ${avatarLoaded ? "block" : "hidden"}`}
                         onLoad={() => setAvatarLoaded(true)}
-                        onError={() => setAvatarError(true)}
+                        onError={() => { setAvatarExtIndex((i) => i + 1); setAvatarLoaded(false); }}
                       />
                     </>
                   ) : (
@@ -2287,7 +2287,7 @@ const PlayerDetailModal = ({
                       <span className="text-6xl mb-3">👤</span>
                       <p className="text-sm text-center px-4">Chưa có avatar</p>
                       <p className="text-xs text-gray-600 mt-1">
-                        no{character.no}.png
+                        no{character.no}.[png/jpg/gif/webp]
                       </p>
                     </div>
                   )}

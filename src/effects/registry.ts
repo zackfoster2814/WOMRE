@@ -452,7 +452,7 @@ export class EffectEntryBuilder {
    * Quick helper: debuff opponent
    */
   debuffOpponent(stat: DynamicStatTarget, value: number): this {
-    return this.effect(debuff(stat, value));
+    return this.effect(debuff(stat, value, 'before_combat'));
   }
 
   /**

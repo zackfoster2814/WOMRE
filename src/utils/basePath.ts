@@ -10,6 +10,15 @@ export function getAssetPath(path: string): string {
   return `${BASE_PATH}${cleanPath}`;
 }
 
+// Avatar: thử lần lượt các extension cho đến khi tìm được ảnh hợp lệ
+// Hỗ trợ: png, jpg, jpeg, gif, webp (bao gồm ảnh động)
+export const AVATAR_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'webp'] as const;
+
+export function getAvatarUrl(no: number, extIndex = 0): string {
+  const ext = AVATAR_EXTENSIONS[extIndex] ?? AVATAR_EXTENSIONS[0];
+  return getAssetPath(`/data/avatars/no${no}.${ext}`);
+}
+
 // Default fallback player range if player-index.json fails to load
 const DEFAULT_PLAYER_RANGE = { start: 1, end: 259 };
 

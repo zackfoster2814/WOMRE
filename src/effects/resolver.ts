@@ -1766,12 +1766,19 @@ export class EffectResolver {
     }
 
     // Special case: Slow Metabolism - Speed cannot increase, only decrease
+    // So sánh totalStats.speed với base speed gốc (character.stats.spd)
+    // Loại bỏ cả base tăng (isBase) lẫn bonus tăng để đảm bảo speed không vượt gốc
     if (result.immunities.includes("speed_increase")) {
+      const originalSpeed = baseStats.speed; // speed gốc từ character.stats
+      if (result.totalStats.speed > originalSpeed) {
+        result.totalStats.speed = originalSpeed;
+      }
+      // Xóa bonusStats.speed nếu dương
       if (result.bonusStats.speed > 0) {
-        // Remove positive speed bonus
-        result.totalStats.speed -= result.bonusStats.speed;
         result.bonusStats.speed = 0;
       }
+      // Đưa baseStats.speed về đúng với totalStats sau khi cap
+      result.baseStats.speed = result.totalStats.speed;
     }
 
     return result;
