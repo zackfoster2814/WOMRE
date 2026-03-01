@@ -122,8 +122,9 @@ registerCombatHandler(
 registerCombatHandler(
   'conquerer_speed_win',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    // Triggered on_round_win for speed round
-    const speedResult = ctx.roundResults?.speed;
+    // Triggered during_combat: active only after winning the Speed (spd) round
+    // roundResults keys are short stat keys: "spd" not "speed"
+    const speedResult = ctx.roundResults?.['spd'] ?? ctx.roundResults?.speed;
     if (speedResult !== 'win') return { skipDefault: true };
 
     return {

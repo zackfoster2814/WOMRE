@@ -525,6 +525,19 @@ const EFFECT_DEFS: EffectDef[] = [
     gmNote: "[GM Action] Khi so sánh STR, nếu đối thủ thắng → họ KHÔNG được +1 điểm",
   },
 
+  // Encroaching Shadow: trước combat quay 75/25 → +7 Speed suốt trận
+  {
+    source: "encroaching shadow",
+    timing: "before_combat",
+    category: "wheel",
+    description: "Encroaching Shadow: 75% nhận +7 Speed suốt trận.",
+    wheelItems: [
+      { label: "+7 Speed (75%)", weight: 75, isSuccess: true, color: "#a855f7" },
+      { label: "Không có (25%)", weight: 25, isSuccess: false, color: "#6b7280" },
+    ],
+    gmNote: "Nếu thành công: +7 Speed được cộng vào stats trước combat",
+  },
+
   // One Trick Pony: quay wheel chọn 1 stat → thắng stat đó +3 điểm, thắng stat khác +0 điểm
   {
     source: "one trick pony",
@@ -701,7 +714,7 @@ function buildPendingEffects(
     margin,
   };
 
-  // Collect source names (quirks + archetypes + house names + house sub-types + sub-race) lowercase
+  // Collect source names (quirks + archetypes + house names + house sub-types + sub-race + powers) lowercase
   const sources: string[] = [
     ...(character.quirks || [])
       .filter((q) => !q.isLost)
@@ -717,6 +730,10 @@ function buildPendingEffects(
       .map((h: any) => (h.subType as string).toLowerCase()),
     // Sub-race (UMA, Demon Sin, God, etc.)
     ...(character.race?.subRace ? [character.race.subRace.toLowerCase()] : []),
+    // Powers (e.g. "Encroaching Shadow")
+    ...(character.powers || [])
+      .filter((p: any) => !p.isLost)
+      .map((p: any) => (typeof p === "string" ? p : p.name).toLowerCase()),
   ];
 
   const effects: CombatPendingEffect[] = [];

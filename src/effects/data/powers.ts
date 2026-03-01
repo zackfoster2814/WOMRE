@@ -9,7 +9,9 @@ import { defineEffect } from "../registry";
 export function registerAllPowerEffects() {
   // U=ma2 (từ Agnes Tachyon)
   defineEffect("power", "U=ma2")
-    .description("Trong combat: Thua round Str: +3 Speed. Thua round Speed: +4 Dura.")
+    .description(
+      "Trong combat: Thua round Str: +3 Speed. Thua round Speed: +4 Dura.",
+    )
     .weight(0.78)
     .effect({
       type: "stat_modifier",
@@ -1755,10 +1757,10 @@ export function registerAllPowerEffects() {
       type: "stat_modifier",
       stat: "speed",
       value: 7,
-      timing: "during_combat",
+      timing: "before_combat",
       target: "self",
       duration: "combat",
-      conditions: [{ type: "probability", chance: 75 }],
+      customHandler: "encroaching_shadow_wheel",
     })
     .register();
 

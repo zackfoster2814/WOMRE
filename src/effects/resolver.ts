@@ -1132,6 +1132,11 @@ export class EffectResolver {
       case "bracket":
         if (condition.bracket === "finals") {
           result = context.isFinals;
+        } else if (condition.bracket === "winner") {
+          // Active unless explicitly in loser bracket
+          result = (context.self.bracket || "winner") !== "loser";
+        } else if (condition.bracket === "loser") {
+          result = (context.self.bracket || "winner") === "loser";
         } else if (condition.bracket) {
           result = context.self.bracket === condition.bracket;
         }
@@ -1303,16 +1308,22 @@ export class EffectResolver {
 
         case "bracket":
           // Check bracket condition using character's tournament info
-          if (character?.tournament?.bracket && condition.bracket) {
+          // Logic: condition.bracket = "winner" → active unless player is in loser bracket
+          //        condition.bracket = "loser"  → active only if player is in loser bracket
+          //        condition.bracket = "finals" → active only if it's a finals round
+          // No tournament info = treat as winner bracket (default)
+          {
+            const playerBracket = character?.tournament?.bracket || "winner";
             if (condition.bracket === "finals") {
-              // Check if in finals
-              result = character.tournament.round === "final";
+              result = character?.tournament?.round === "final";
+            } else if (condition.bracket === "winner") {
+              // Active unless player is explicitly in loser bracket
+              result = playerBracket !== "loser";
+            } else if (condition.bracket === "loser") {
+              result = playerBracket === "loser";
             } else {
-              result = character.tournament.bracket === condition.bracket;
+              result = playerBracket === condition.bracket;
             }
-          } else {
-            // No tournament info, condition not met
-            result = false;
           }
           break;
 

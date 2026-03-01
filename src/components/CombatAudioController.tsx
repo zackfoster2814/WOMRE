@@ -169,9 +169,10 @@ interface LocalTrackCardProps {
   pan: number;
   accent: "blue" | "red";
   visible: boolean;
+  stopped?: boolean;
 }
 
-const LocalTrackCard = ({ track, pan, accent, visible }: LocalTrackCardProps) => {
+const LocalTrackCard = ({ track, pan, accent, visible, stopped }: LocalTrackCardProps) => {
   const [state, setState] = useState<TrackState>(mkDefault(false));
   const audioRef  = useRef<HTMLAudioElement | null>(null);
   const gainRef   = useRef<GainNode | null>(null);
@@ -210,6 +211,7 @@ const LocalTrackCard = ({ track, pan, accent, visible }: LocalTrackCardProps) =>
   }, [track.src]);
 
   useEffect(() => { if (pannerRef.current) pannerRef.current.pan.value = pan; }, [pan]);
+  useEffect(() => { if (stopped) audioRef.current?.pause(); }, [stopped]);
 
   const togglePlay = useCallback(() => {
     const a = audioRef.current; if (!a) return;
@@ -242,9 +244,10 @@ interface YouTubeTrackCardProps {
   track: CombatAudioTrack;
   accent: "blue" | "red";
   visible: boolean;
+  stopped?: boolean;
 }
 
-const YouTubeTrackCard = ({ track, accent, visible }: YouTubeTrackCardProps) => {
+const YouTubeTrackCard = ({ track, accent, visible, stopped }: YouTubeTrackCardProps) => {
   const [state, setState] = useState<TrackState>(mkDefault(true));
   const playerRef  = useRef<any>(null);
   const pollRef    = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -333,6 +336,8 @@ const YouTubeTrackCard = ({ track, accent, visible }: YouTubeTrackCardProps) => 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => { if (stopped) playerRef.current?.pauseVideo?.(); }, [stopped]);
+
   const togglePlay = useCallback(() => {
     const p = playerRef.current; if (!p) return;
     if (state.isPlaying) p.pauseVideo?.(); else p.playVideo?.();
@@ -365,6 +370,7 @@ export interface CombatAudioControllerProps {
   otherSideHasAudio: boolean;
   side: "left" | "right";
   accent: "blue" | "red";
+  stopped?: boolean;
 }
 
 export const CombatAudioController = ({
@@ -372,6 +378,7 @@ export const CombatAudioController = ({
   otherSideHasAudio,
   side,
   accent,
+  stopped,
 }: CombatAudioControllerProps) => {
   const [open, setOpen] = useState(false);
 
@@ -408,8 +415,8 @@ export const CombatAudioController = ({
 
         {stableTracks.map(track =>
           track.type === "local"
-            ? <LocalTrackCard key={track.id} track={track} pan={pan} accent={accent} visible />
-            : <YouTubeTrackCard key={track.id} track={track} accent={accent} visible />
+            ? <LocalTrackCard key={track.id} track={track} pan={pan} accent={accent} visible stopped={stopped} />
+            : <YouTubeTrackCard key={track.id} track={track} accent={accent} visible stopped={stopped} />
         )}
       </div>
 

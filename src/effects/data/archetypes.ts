@@ -45,17 +45,19 @@ export function registerAllArchetypeEffects() {
       type: "stat_modifier",
       stat: "all",
       value: 1,
-      timing: "during_combat",
+      timing: "before_combat",
       target: "self",
-      conditions: [{ type: "race_tier_compare", tierOperator: "<" }], // Self tier < opponent tier
+      // tier số LỚN HƠN = rank thấp hơn; self tier# > opp tier# = self đang đối đầu tộc rank cao hơn → +1
+      conditions: [{ type: "race_tier_compare", tierOperator: ">" }],
     })
     .effect({
       type: "stat_modifier",
       stat: "all",
       value: -1,
-      timing: "during_combat",
+      timing: "before_combat",
       target: "self",
-      conditions: [{ type: "race_tier_compare", tierOperator: ">" }], // Self tier > opponent tier
+      // self tier# < opp tier# = self đang đối đầu tộc rank thấp hơn → -1
+      conditions: [{ type: "race_tier_compare", tierOperator: "<" }],
     })
     .register();
 
