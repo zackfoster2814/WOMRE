@@ -16,6 +16,7 @@ Sub-race: Lùn Xám
 Archetype: 
 + Farmer
  -> Aura Farmer
++ Gigachad
 ```
 ``` 
 2 Quirk:  

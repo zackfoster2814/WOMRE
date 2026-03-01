@@ -15,12 +15,12 @@ Sub-race:
 ```
 Archetype: 
 + Slayer - Dwarf 
++ Gigachad
 ```
 ``` 
 2 Quirk:  
 + Let me solo her
 + Artisan
-+ Gigachad
 ```
 ```
 Str: 7 (-5)

@@ -16,6 +16,7 @@ Sub-race:
 Archetype: 
 + Cursed of 36k
 + Anti-Social
++ Gigachad
 ```
 ``` 
 2 Quirk:  
