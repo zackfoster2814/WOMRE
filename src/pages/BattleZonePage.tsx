@@ -12,6 +12,7 @@ import wheelBgImage from "../assets/img/wheel-bg.png";
 import { BossBattleRoom } from "../components/BossBattleRoom";
 import { getAssetPath, getAvatarUrl, AVATAR_EXTENSIONS } from "../utils/basePath";
 import { CombatEffectsPanel } from "../components/CombatEffectsPanel";
+import { CombatAudioController, detectCombatAudioTracks, type CombatAudioTrack } from "../components/CombatAudioController";
 import {
   ProbabilityWheelModal,
   type WheelSpinItem,
@@ -842,34 +843,61 @@ function calcStatsWithBeforeCombat(
 }
 
 // ── Sidebar Avatar Banner ──────────────────────────────────────────────────────
-const SidebarAvatarBanner = ({ player, accent }: { player: PvPPlayerData; accent: "blue" | "red" }) => {
+const SidebarAvatarBanner = ({
+  player,
+  accent,
+  audioTracks,
+  otherSideHasAudio,
+}: {
+  player: PvPPlayerData;
+  accent: "blue" | "red";
+  audioTracks?: CombatAudioTrack[];
+  otherSideHasAudio?: boolean;
+}) => {
   const [extIndex, setExtIndex] = React.useState(0);
   const nameColor = accent === "blue" ? "text-blue-300/80" : "text-red-300/80";
   const race = player.character?.race?.race || player.race || "";
   const subRace = player.character?.race?.subRace || "";
   const allFailed = extIndex >= AVATAR_EXTENSIONS.length;
+  const side = accent === "blue" ? "left" : "right";
+  const tracks = audioTracks ?? [];
   return (
-    <div className="relative rounded-t-2xl overflow-hidden h-48 bg-gray-800 shrink-0">
-      {!allFailed ? (
-        <img
-          key={extIndex}
-          src={getAvatarUrl(player.no, extIndex)}
-          alt={player.name}
-          className="w-full h-full object-cover object-top"
-          onError={() => setExtIndex((i) => i + 1)}
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center text-gray-600 text-6xl font-black select-none">
-          {player.name.charAt(0).toUpperCase()}
+    // Outer wrapper — không overflow-hidden để panel popup không bị clip
+    <div className="relative shrink-0">
+      {/* Avatar area — overflow-hidden chỉ áp dụng ở đây */}
+      <div className="relative rounded-t-2xl overflow-hidden h-48 bg-gray-800">
+        {!allFailed ? (
+          <img
+            key={extIndex}
+            src={getAvatarUrl(player.no, extIndex)}
+            alt={player.name}
+            className="w-full h-full object-cover object-top"
+            onError={() => setExtIndex((i) => i + 1)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-600 text-6xl font-black select-none">
+            {player.name.charAt(0).toUpperCase()}
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/95 via-gray-900/20 to-transparent" />
+        <div className="absolute bottom-2 left-3 right-3">
+          <p className="text-white font-bold text-sm truncate leading-tight">{player.name}</p>
+          <p className={`text-xs truncate ${nameColor}`}>
+            {race}{subRace ? ` / ${subRace}` : ""}
+          </p>
+        </div>
+      </div>
+      {/* Audio button — nằm ngoài overflow-hidden, absolute so với outer wrapper */}
+      {tracks.length > 0 && (
+        <div className="absolute bottom-2 right-2 z-20">
+          <CombatAudioController
+            tracks={tracks}
+            otherSideHasAudio={otherSideHasAudio ?? false}
+            side={side}
+            accent={accent}
+          />
         </div>
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/95 via-gray-900/20 to-transparent" />
-      <div className="absolute bottom-2 left-3 right-3">
-        <p className="text-white font-bold text-sm truncate leading-tight">{player.name}</p>
-        <p className={`text-xs truncate ${nameColor}`}>
-          {race}{subRace ? ` / ${subRace}` : ""}
-        </p>
-      </div>
     </div>
   );
 };
@@ -3001,10 +3029,12 @@ export const StatsComparisonMode = ({ onBack, tournamentMatch, onSaveTournamentR
           {/* ── LEFT SIDEBAR: Player 1 ── */}
           {(() => {
             const p1Items = player1?.character ? buildInventoryList(player1.character) : [];
+            const p1AudioTracks = detectCombatAudioTracks(player1?.character);
+            const p2AudioTracks = detectCombatAudioTracks(player2?.character);
             return (
               <div className="w-[320px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-blue-500/30 max-h-[85vh]">
                 {/* Avatar lớn P1 */}
-                {player1 && <SidebarAvatarBanner key={player1.no} player={player1} accent="blue" />}
+                {player1 && <SidebarAvatarBanner key={player1.no} player={player1} accent="blue" audioTracks={p1AudioTracks} otherSideHasAudio={p2AudioTracks.length > 0} />}
                 {/* Header: search + tab switcher */}
                 <div className="p-3 border-b border-blue-500/20 shrink-0 space-y-2">
                   <div className="relative">
@@ -3777,10 +3807,12 @@ export const StatsComparisonMode = ({ onBack, tournamentMatch, onSaveTournamentR
           {/* ── RIGHT SIDEBAR: Player 2 ── */}
           {(() => {
             const p2Items = player2?.character ? buildInventoryList(player2.character) : [];
+            const _p1AudioTracks = detectCombatAudioTracks(player1?.character);
+            const _p2AudioTracks = detectCombatAudioTracks(player2?.character);
             return (
               <div className="w-[320px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-red-500/30 max-h-[85vh]">
                 {/* Avatar lớn P2 */}
-                {player2 && <SidebarAvatarBanner key={player2.no} player={player2} accent="red" />}
+                {player2 && <SidebarAvatarBanner key={player2.no} player={player2} accent="red" audioTracks={_p2AudioTracks} otherSideHasAudio={_p1AudioTracks.length > 0} />}
                 <div className="p-3 border-b border-red-500/20 shrink-0 space-y-2">
                   <div className="relative">
                     {player2 ? (

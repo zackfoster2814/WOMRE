@@ -904,6 +904,127 @@ registerCombatHandler(
   'GM enters MU EPL score to calculate stat buff/debuff (Glory glory Man United)'
 );
 
+// ============================================================================
+// CINDER FLICKERING - Khi cả 2 có power này, người thắng nhận Char Dev "Lord of Cinder"
+// ============================================================================
+
+registerCombatHandler(
+  'cinder_flickering_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppPowers: any[] = ctx.opponent.powers || [];
+    const oppHasCinder = oppPowers.some((p: any) => {
+      const n = typeof p === 'string' ? p : p?.name ?? '';
+      return n.toLowerCase().includes('cinder flickering');
+    });
+    if (oppHasCinder) {
+      return {
+        grantCreatorFavor: 0, // placeholder — GM grants "Lord of Cinder" char dev manually
+        description: '[Cinder Flickering] Cả 2 đều có power → Người thắng nhận Char Dev "Lord of Cinder" (GM xử lý)',
+      };
+    }
+    return { skipDefault: true, description: 'Cinder Flickering: Đối thủ không có power này' };
+  },
+  'After combat: winner gets "Lord of Cinder" char dev if both have Cinder Flickering'
+);
+
+// ============================================================================
+// DARWIN EVOLUTION THEORY - Sau combat: thăng hạng chủng tộc +1 bậc
+// GM cần xử lý vì không thể tự động đổi race tier trong engine
+// ============================================================================
+
+registerCombatHandler(
+  'darwin_evolution_race_up',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      description: '[Darwin Evolution Theory] Sau combat: Thăng hạng chủng tộc +1 bậc (GM xử lý nâng race tier)',
+      skipDefault: false,
+    };
+  },
+  'After combat: race tier upgrades by 1 (Darwin Evolution Theory)'
+);
+
+// ============================================================================
+// ALGORITHMS ARE CLEAR - Sau combat: Tổng base stat đối thủ / 6, thay stat thấp nhất của bản thân
+// ============================================================================
+
+registerCombatHandler(
+  'algorithms_are_clear_replace_lowest',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppBase = ctx.opponent.baseStats;
+    const STAT_KEYS: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
+    const totalOppBase = STAT_KEYS.reduce((sum, s) => sum + (oppBase[s] || 0), 0);
+    const avgOppBase = Math.round(totalOppBase / 6);
+
+    // Find self's lowest stat
+    const selfStats = ctx.self.stats;
+    let lowestStat: StatName = 'strength';
+    let lowestVal = selfStats.strength;
+    for (const s of STAT_KEYS) {
+      if (selfStats[s] < lowestVal) { lowestVal = selfStats[s]; lowestStat = s; }
+    }
+
+    const diff = avgOppBase - lowestVal;
+    if (diff === 0) {
+      return { skipDefault: true, description: `Algorithms Are Clear: ${lowestStat} đã bằng avg đối thủ (${avgOppBase})` };
+    }
+    return {
+      selfStatMods: [{ stat: lowestStat, value: diff }],
+      description: `Algorithms Are Clear: Tổng base đối thủ ${totalOppBase}/6 = ${avgOppBase} → thay ${lowestStat} (${lowestVal} → ${avgOppBase})`,
+    };
+  },
+  'After combat: replace own lowest base stat with avg of opponent base stats (Algorithms Are Clear)'
+);
+
+// ============================================================================
+// ADAPT - Trước combat: vô hiệu các power của đối thủ đã gặp trước đó
+// Engine/GM track danh sách power đã gặp
+// ============================================================================
+
+registerCombatHandler(
+  'adapt_disable_known_powers',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppPowers: any[] = ctx.opponent.powers || [];
+    if (oppPowers.length === 0) {
+      return { skipDefault: true, description: 'Adapt: Đối thủ không có Power' };
+    }
+    const oppPowerNames = oppPowers
+      .map((p: any) => typeof p === 'string' ? p : p?.name ?? '')
+      .filter(Boolean);
+    return {
+      description: `[Adapt] Vô hiệu hóa các power đối thủ đã gặp trong quá khứ: ${oppPowerNames.join(', ')} (GM track danh sách powers đã gặp)`,
+      skipDefault: false,
+    };
+  },
+  'Before combat: disable opponent powers that were previously encountered (Adapt)'
+);
+
+// ============================================================================
+// COLD MIRAGE - Sau mỗi round thắng: quay 1 chỉ số từ các round chưa thi đấu
+// Đối thủ không nhận điểm khi thắng những round bị quay ra
+// ============================================================================
+
+registerCombatHandler(
+  'cold_mirage_spin_unused_round',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const STAT_KEYS: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
+    // Find rounds not yet played (no result in roundResults)
+    const playedRounds = Object.keys(ctx.roundResults || {});
+    const unusedRounds = STAT_KEYS.filter(s => !playedRounds.includes(s));
+    if (unusedRounds.length === 0) {
+      return { skipDefault: true, description: 'Cold Mirage: Không còn round chưa thi đấu' };
+    }
+    const picked = unusedRounds[Math.floor(Math.random() * unusedRounds.length)];
+    return {
+      description: `[Cold Mirage] Round ${picked} bị quay → Đối thủ không nhận điểm nếu thắng round ${picked} (GM xử lý cancel điểm)`,
+      skipDefault: false,
+    };
+  },
+  'After round win: spin unused round — opponent scores no point if winning that round (Cold Mirage)'
+);
+
 export function registerPowerCombatHandlers(): void {
   console.log('Power combat handlers registered');
 }
