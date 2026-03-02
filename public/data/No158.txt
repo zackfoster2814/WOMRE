@@ -77,6 +77,12 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 Str
+```
+
+
 ======
 Battle Log:
 ```

@@ -41,7 +41,7 @@ Houses:
 ```
 3 Gear:
  + 3 Normal gear:
-  - Fishing's Rod
+  - Fishing Rod
   - Empty Stein
   - Wine
  + 0 Legacy gear:
@@ -77,6 +77,11 @@ Team: 16
 ```
 Lover:
 + 
+```
+
+```
+PvP Reward:
+- +1 all stats
 ```
 
 ======

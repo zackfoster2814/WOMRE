@@ -39,6 +39,7 @@ Houses:
 1 Gear: 
  + 1 Normal gear:
   - Fishing Rod
+  - Knight's Armor
  + 0 Legacy gear:
   - 
 ```
@@ -72,6 +73,12 @@ Team: 28
 Lover:
 + 
 ```
+
+```
+PvP Reward:
+- Nhận 1 gear
+```
+
 
 ======
 Battle Log:

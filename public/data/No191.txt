@@ -79,3 +79,8 @@ Team:
 Lover:
 + 
 ```
+
+```
+PvP Reward:
+- +1 Spd
+```

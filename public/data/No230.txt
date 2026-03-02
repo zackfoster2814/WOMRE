@@ -79,6 +79,11 @@ Lover:
 + Dương Quá Quá (duongquaqua)
 ```
 
+```
+PvP Reward:
+- +1 MA
+```
+
 ======
 Battle Log:
 ```

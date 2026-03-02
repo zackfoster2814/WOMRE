@@ -45,6 +45,7 @@ Houses:
   - Golden Coin (Từ House)
   - Đá
   - Healing Flasks
+  - Radio (từ PvP Reward)
  + 0 Legacy gear:
   - 
 ```
@@ -80,6 +81,12 @@ Team: 19
 Lover:
 + 
 ```
+
+```
+PvP Reward:
+- +1 Gear
+```
+
 
 ======
 Battle Log:

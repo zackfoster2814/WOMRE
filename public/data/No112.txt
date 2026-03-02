@@ -87,6 +87,12 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 IQ
+```
+
+
 ======
 Battle Log: 
 ```

@@ -59,17 +59,18 @@ Runeword: Không
 
 ```
 4 Power: 
-+ Frost Fingers
-+ AIDS
-+ Gaze of the Abyss
-+ EscAPADe
-+ Critical Strike (từ Loki)
-+ Evasion (từ Loki)
++ Frost Fingers (đã mất)
++ AIDS (đã mất)
++ Gaze of the Abyss (đã mất)
++ EscAPADe (đã mất)
++ Critical Strike (từ Loki) (đã mất)
++ Evasion (từ Loki) (đã mất)
 ```
 
 ```
 Char dev: 
 + True Heir of the Emirate🍀
++ Back to basics
 ```
 
 ```
@@ -80,6 +81,18 @@ Team: 24
 Lover:
 + 
 ```
+
+```
+PvP Reward:
+- Nhận 1 chardev
+```
+
+
+```
+Nguồn khác:
+- 
+- 
+````
 
 ======
 Battle Log:
