@@ -29,8 +29,14 @@ export default {
           "0%, 100%": { boxShadow: "0 0 6px 2px rgba(139, 92, 246, 0.2)" },
           "50%": { boxShadow: "0 0 12px 4px rgba(139, 92, 246, 0.5)" },
         },
+        "float-up-fade": {
+          "0%":   { opacity: "1",   transform: "translateX(-50%) translateY(0) scale(1)" },
+          "60%":  { opacity: "0.9", transform: "translateX(-50%) translateY(-40px) scale(1.05)" },
+          "100%": { opacity: "0",   transform: "translateX(-50%) translateY(-70px) scale(0.9)" },
+        },
       },
       animation: {
+        "float-up-fade": "float-up-fade 3s ease-out forwards",
         "slide-in": "slide-in 0.3s ease-out",
         "fade-in": "fade-in forwards",
         "draw-circle": "draw-circle forwards",
