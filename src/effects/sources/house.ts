@@ -1,10 +1,21 @@
 /**
- * House Effects Data
+ * House Effects — definitions + handlers (immediate + combat) in one place.
  *
  * Nguồn: wheelofmultiverse-ss3.xlsx - Sheet "Houses" và "Houses Feature"
  */
 
 import { defineEffect } from "../registry";
+import { registerImmediateHandler } from "../handlers/registry";
+import { registerCombatHandler } from "../handlers/registry";
+import type { ImmediateHandlerContext, ImmediateHandlerResult } from "../handlers/types";
+import type { CombatHandlerContext, CombatHandlerResult } from "../handlers/types";
+import type { StatName, CharacterStats } from "../types";
+
+const STAT_NAMES: StatName[] = ["strength", "speed", "durability", "iq", "biq", "ma"];
+
+// ============================================================================
+// HOUSE EFFECT DEFINITIONS
+// ============================================================================
 
 export function registerAllHouseEffects() {
   // ============================================================================
@@ -1090,4 +1101,229 @@ function registerHouseSubTypes() {
       target: "self",
     })
     .register();
+}
+
+// ============================================================================
+// IMMEDIATE HANDLERS
+// ============================================================================
+
+registerImmediateHandler(
+  "hallownest_guaranteed_weapon_runes",
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: "Chắc chắn nhận 1 Weapon và 2 Rune lên Weapon đó (Hallownest)",
+    };
+  },
+  "Guaranteed weapon + 2 runes",
+);
+
+registerImmediateHandler(
+  "hallownest_mason_guaranteed_weapon_3_runes",
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: "Chắc chắn nhận 1 Weapon và 3 Rune lên Weapon đó (Hallownest Mason)",
+    };
+  },
+  "Guaranteed weapon + 3 runes (Mason)",
+);
+
+registerImmediateHandler(
+  "tracen_academy_random_stats",
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const strBonus = Math.floor(Math.random() * 3) + 1;
+    const spdBonus = Math.floor(Math.random() * 3) + 1;
+    const durBonus = Math.floor(Math.random() * 3) + 1;
+    return {
+      statModifiers: [
+        { stat: "strength", value: strBonus },
+        { stat: "speed", value: spdBonus },
+        { stat: "durability", value: durBonus },
+      ],
+      skipDefault: true,
+      description: `Tracen Academy: +${strBonus} Str, +${spdBonus} Spd, +${durBonus} Dur`,
+    };
+  },
+  "Random 1-3 for Str/Spd/Dur",
+);
+
+registerImmediateHandler(
+  "blessing_might_convert_stat",
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    let highestStat: StatName = "strength";
+    let highestVal = ctx.baseStats.strength;
+    for (const stat of STAT_NAMES) {
+      const val = ctx.baseStats[stat as keyof CharacterStats] as number;
+      if (val > highestVal) {
+        highestVal = val;
+        highestStat = stat;
+      }
+    }
+    const bonus = Math.floor(highestVal / 3);
+    const mods: Array<{ stat: StatName; value: number; isBase?: boolean }> = [];
+    mods.push({ stat: highestStat, value: -highestVal, isBase: true });
+    for (const stat of STAT_NAMES) {
+      if (stat !== highestStat) {
+        mods.push({ stat, value: bonus });
+      }
+    }
+    return {
+      statModifiers: mods,
+      skipDefault: true,
+      description: `Blessing of Might: ${highestStat} (${highestVal}) → 0, +${bonus} all other stats`,
+    };
+  },
+  "Convert highest base stat to +1 all others per 3 points",
+);
+
+registerImmediateHandler(
+  "blessing_reforge_rune",
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const weapons = ctx.character.weapons || [];
+    const hasWeapon = weapons.length > 0;
+    if (hasWeapon) {
+      return {
+        skipDefault: true,
+        description: "Blessing of Reforge: Nhận 1 Rune lên Weapon",
+      };
+    }
+    return {
+      statModifiers: STAT_NAMES.map((stat) => ({ stat, value: 1 })),
+      skipDefault: true,
+      description: "Blessing of Reforge: Không có Weapon → +1 all stats",
+    };
+  },
+  "Grant 1 Rune or +1 all stats if no weapon",
+);
+
+registerImmediateHandler(
+  "winterhome_mason_dura_bonus",
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const baseDura = ctx.baseStats.durability ?? 0;
+    const bonus = Math.floor(baseDura / 5);
+    if (bonus === 0) {
+      return {
+        skipDefault: true,
+        description: `Winterhome Mason: Base Dura ${baseDura} < 5, không nhận bonus`,
+      };
+    }
+    const mods = STAT_NAMES.filter((s) => s !== "durability").map((stat) => ({
+      stat,
+      value: bonus,
+    }));
+    return {
+      statModifiers: mods,
+      skipDefault: true,
+      description: `Winterhome Mason: +${bonus} vào all stats trừ Dura (${baseDura} Base Dura / 5)`,
+    };
+  },
+  "+1 all other stats per 5 Base Dura (Winterhome Mason)",
+);
+
+export function registerHouseImmediateHandlers() {
+  // All handlers registered at module level above.
+}
+
+// ============================================================================
+// COMBAT HANDLERS
+// ============================================================================
+
+registerCombatHandler(
+  "dothraki_random_stat_compare",
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      description:
+        "Dothraki: Stat được đọ trong trận sẽ tuân theo luật ngẫu nhiên được quay ra",
+    };
+  },
+  "Randomize stat comparison order in combat",
+);
+
+registerCombatHandler(
+  "coven_council_death_bonus",
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      description:
+        "[GM Action] Coven Council bị loại: 1 Player ngẫu nhiên KHÔNG thuộc Coven được Re-Spin 1 stat bất kì",
+    };
+  },
+  "On death: random non-Coven player re-spins 1 stat (GM action required)",
+);
+
+registerCombatHandler(
+  "roundtable_hold_retry",
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.self.roundsLost <= ctx.self.roundsWon) {
+      return { description: "Roundtable Hold: Chưa kích hoạt (chưa thua)" };
+    }
+    const opponentHouses = (ctx.opponent?.character.houses || [])
+      .filter((h: any) => !h.isLost)
+      .map((h: any) => h.name);
+    const opponentIsTarnished = opponentHouses.includes("Roundtable Hold");
+    if (opponentIsTarnished) {
+      return {
+        description:
+          "Roundtable Hold: Không kích hoạt — đối thủ cũng là Tarnished",
+      };
+    }
+    return {
+      description:
+        "[GM Action] Roundtable Hold: Gọi một Tarnished còn sống lên đấu trận phụ. Kết quả trận phụ quyết định số phận của người thua.",
+    };
+  },
+  "On loss: call another Tarnished for a sub-match (once, skips if opponent is also Tarnished)",
+);
+
+registerCombatHandler(
+  "check_enemy_is_same_house",
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const opponentHouses = (ctx.opponent.character.houses || [])
+      .filter((h: any) => !h.isLost)
+      .map((h: any) => h.name);
+    const opponentInUchiha = opponentHouses.some((name: string) =>
+      name.toLowerCase().includes("uchiha"),
+    );
+    if (!opponentInUchiha) {
+      return {
+        skipDefault: true,
+        description: "Uchiha: đối thủ không cùng Uchiha, không nhận bonus thêm",
+      };
+    }
+    return {
+      selfStatMods: [
+        { stat: "durability", value: 2 },
+        { stat: "biq", value: 2 },
+      ],
+      description: "Uchiha vs Uchiha: nhận thêm +2 Dura và +2 BIQ",
+    };
+  },
+  "After win vs same Uchiha house member: grant +2 Dura and +2 BIQ again",
+);
+
+registerCombatHandler(
+  "grey_wind_death_bonus",
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      description:
+        "Grey Wind: Khi bị loại, tất cả người nhà Stark nhận +1 all stats",
+    };
+  },
+  "+1 all stats to all Stark players on death",
+);
+
+registerCombatHandler(
+  "shaggydog_house_bonus",
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      description:
+        "Shaggydog: Sau combat, tất cả người nhà Stark nhận +1 Stat thấp nhất",
+    };
+  },
+  "+1 lowest stat to all Stark players after combat",
+);
+
+export function registerHouseCombatHandlers() {
+  // All handlers registered at module level above.
 }

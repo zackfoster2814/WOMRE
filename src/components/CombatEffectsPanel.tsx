@@ -728,8 +728,10 @@ function buildPendingEffects(
     ...((character as any).houses || [])
       .filter((h: any) => !h.isLost && !h.subTypeIsLost && h.subType)
       .map((h: any) => (h.subType as string).toLowerCase()),
-    // Sub-race (UMA, Demon Sin, God, etc.)
-    ...(character.race?.subRace ? [character.race.subRace.toLowerCase()] : []),
+    // Sub-race (UMA, Demon Sin, God, etc.) — split compound strings like "Tokai Teio + Gold Ship"
+    ...(character.race?.subRace
+      ? character.race.subRace.split("+").map((s) => s.trim().toLowerCase())
+      : []),
     // Powers (e.g. "Encroaching Shadow")
     ...(character.powers || [])
       .filter((p: any) => !p.isLost)

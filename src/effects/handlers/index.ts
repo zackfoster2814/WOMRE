@@ -25,24 +25,23 @@ export {
 
 // Import handler modules to register them
 import { registerStatHandlers } from './immediate/stat-handlers';
-import { registerQuirkHandlers } from './immediate/quirk-handlers';
-import { registerPowerHandlers } from './immediate/power-handlers';
-import { registerRaceHandlers } from './immediate/race-handlers';
-import { registerWeaponHandlers } from './immediate/weapon-handlers';
-import { registerArchetypeHandlers } from './immediate/archetype-handlers';
-import { registerGearHandlers } from './immediate/gear-handlers';
-import { registerCharDevHandlers } from './immediate/chardev-handlers';
+import { registerQuirkHandlers } from '../sources/quirk';
+import { registerPowerHandlers } from '../sources/power';
+import { registerRaceHandlers } from '../sources/race';
+import { registerWeaponHandlers } from '../sources/weapon';
+import { registerArchetypeHandlers } from '../sources/archetype';
+import { registerGearHandlers } from '../sources/gear';
+import { registerCharDevHandlers } from '../sources/char-dev';
 import { registerCombatHandlers } from './combat/combat-handlers';
-import { registerPowerCombatHandlers } from './combat/power-combat-handlers';
-import { registerRaceCombatHandlers } from './combat/race-combat-handlers';
-import { registerArchetypeCombatHandlers } from './combat/archetype-combat-handlers';
-import { registerHouseImmediateHandlers } from './immediate/house-handlers';
-import { registerHouseCombatHandlers } from './combat/house-combat-handlers';
-import { registerGearCombatHandlers } from './combat/gear-combat-handlers';
-import { registerWeaponCombatHandlers } from './combat/weapon-combat-handlers';
-import { registerRuneCombatHandlers } from './combat/rune-combat-handlers';
-import { registerCharDevCombatHandlers } from './combat/chardev-combat-handlers';
-import { registerQuirkCombatHandlers } from './combat/quirk-combat-handlers';
+import { registerPowerCombatHandlers } from '../sources/power';
+import { registerRaceCombatHandlers } from '../sources/race';
+import { registerArchetypeCombatHandlers } from '../sources/archetype';
+import { registerHouseImmediateHandlers, registerHouseCombatHandlers } from '../sources/house';
+import { registerGearCombatHandlers } from '../sources/gear';
+import { registerWeaponCombatHandlers } from '../sources/weapon';
+import { registerRuneCombatHandlers } from '../sources/rune';
+import { registerCharDevCombatHandlers } from '../sources/char-dev';
+import { registerQuirkCombatHandlers } from '../sources/quirk';
 
 let isInitialized = false;
 

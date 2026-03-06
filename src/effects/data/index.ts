@@ -4,18 +4,17 @@
  * Tập trung đăng ký tất cả effect data vào registry
  */
 
-import { registerAllRuneEffects } from './runes';
-import { registerAllRaceEffects } from './races';
-import { registerAllArchetypeEffects } from './archetypes';
-import { registerAllQuirkEffects } from './quirks';
-import { registerAllPowerEffects } from './powers';
-import { registerAllWeaponEffects } from './weapons';
-import { registerAllHouseEffects } from './houses';
-import { registerAllGearEffects } from './gears';
-import { registerUmaParentEffects } from './uma-parents';
-import { registerCharDevEffects } from './char-devs';
-import { registerSymbiosisEffects } from './symbiosis';
-import { registerPvPRewardEffects } from './pvp-rewards';
+import { registerAllRuneEffects } from '../sources/rune';
+import { registerAllRaceEffects, registerUmaParentEffects } from '../sources/race';
+import { registerAllArchetypeEffects } from '../sources/archetype';
+import { registerAllQuirkEffects } from '../sources/quirk';
+import { registerAllPowerEffects } from '../sources/power';
+import { registerAllWeaponEffects } from '../sources/weapon';
+import { registerAllHouseEffects } from '../sources/house';
+import { registerAllGearEffects } from '../sources/gear';
+import { registerCharDevEffects } from '../sources/char-dev';
+import { registerSymbiosisEffects } from '../sources/symbiosis';
+import { registerPvPRewardEffects } from '../sources/pvp-reward';
 import { initializeHandlers } from '../handlers';
 
 // Flags to prevent double registration
@@ -70,15 +69,14 @@ export function isEffectDataInitialized(): boolean {
 }
 
 // Re-export individual registration functions for selective loading
-export { registerAllRuneEffects } from './runes';
-export { registerAllRaceEffects } from './races';
-export { registerAllArchetypeEffects } from './archetypes';
-export { registerAllQuirkEffects } from './quirks';
-export { registerAllPowerEffects } from './powers';
-export { registerAllWeaponEffects } from './weapons';
-export { registerAllHouseEffects } from './houses';
-export { registerAllGearEffects } from './gears';
-export { registerUmaParentEffects } from './uma-parents';
-export { registerCharDevEffects } from './char-devs';
-export { registerSymbiosisEffects } from './symbiosis';
-export { registerPvPRewardEffects } from './pvp-rewards';
+export { registerAllRuneEffects } from '../sources/rune';
+export { registerAllRaceEffects, registerUmaParentEffects } from '../sources/race';
+export { registerAllArchetypeEffects } from '../sources/archetype';
+export { registerAllQuirkEffects } from '../sources/quirk';
+export { registerAllPowerEffects } from '../sources/power';
+export { registerAllWeaponEffects } from '../sources/weapon';
+export { registerAllHouseEffects } from '../sources/house';
+export { registerAllGearEffects } from '../sources/gear';
+export { registerCharDevEffects } from '../sources/char-dev';
+export { registerSymbiosisEffects } from '../sources/symbiosis';
+export { registerPvPRewardEffects } from '../sources/pvp-reward';

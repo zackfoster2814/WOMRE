@@ -1,13 +1,18 @@
 /**
- * Symbiosis Effects
+ * Symbiosis — Effect Definitions
  *
+ * Gộp từ: src/effects/data/symbiosis.ts
  * Stats và hiệu ứng của các Symbiosis khi ký sinh vào vật chủ
  */
 
 import { defineEffect } from '../registry';
 
+// ============================================================================
+// SYMBIOSIS EFFECT DEFINITIONS
+// ============================================================================
+
 export function registerSymbiosisEffects() {
-  // 1. Mephisto - +2 STR, +2 SPD, +2 DUR, +0 IQ, +0 BIQ, +2 MA
+  // 1. Mephisto - +2 STR, +2 SPD, +2 DUR, +2 MA
   defineEffect('symbiosis', 'Mephisto')
     .description('Sau combat: Vật chủ -1 IQ và -1 BIQ. Nhận thêm 1 Char Dev, 1 Archetype và 1 Quirk.')
     .addStat('strength', 2)
@@ -16,8 +21,7 @@ export function registerSymbiosisEffects() {
     .addStat('ma', 2)
     .register();
 
-  // 2. Diablo - +0 base tất cả, nhưng có stack Wrath system
-  // Vật chủ nhận +1 Strength, +1 BIQ và +1 MA với mỗi Stack "Wrath" tồn tại trong người
+  // 2. Diablo - Wrath stack system
   defineEffect('symbiosis', 'Diablo')
     .description('Vật chủ khởi đầu với 2 stack "Wrath". +1 STR/BIQ/MA mỗi stack.')
     .effect({
@@ -28,7 +32,7 @@ export function registerSymbiosisEffects() {
     })
     .register();
 
-  // 3. Korrupt - +1 STR, +3 SPD, +0 DUR, +0 IQ, +1 BIQ, +3 MA
+  // 3. Korrupt - +1 STR, +3 SPD, +1 BIQ, +3 MA
   defineEffect('symbiosis', 'Korrupt')
     .description('Sau combat thắng: 6.7% vật chủ mất kiểm soát.')
     .addStat('strength', 1)
@@ -43,7 +47,7 @@ export function registerSymbiosisEffects() {
     .addAllStats(-2)
     .register();
 
-  // 5. Angelica - +0 tất cả ngoại trừ +2 IQ
+  // 5. Angelica - +2 IQ
   defineEffect('symbiosis', 'Angelica')
     .description('Sau combat: +2 IQ. Khi IQ đạt 20, +1 all stats.')
     .addStat('iq', 2)
@@ -60,8 +64,8 @@ export function registerSymbiosisEffects() {
     .addStat('ma', -7)
     .register();
 
-  // New season symbiosis types (from right side of Excel)
-  // 1. Voidling - +2 STR, +2 SPD, +2 DUR, +0 IQ, +0 BIQ, +2 MA (same as Mephisto)
+  // New season symbiosis
+  // 1. Voidling - +2 STR, +2 SPD, +2 DUR, +2 MA
   defineEffect('symbiosis', 'Voidling')
     .description('Vật chủ -1 IQ và -1 BIQ sau mỗi combat PvP. Nhận 1 Char Dev, 1 Archetype và 1 Quirk.')
     .addStat('strength', 2)
@@ -70,7 +74,7 @@ export function registerSymbiosisEffects() {
     .addStat('ma', 2)
     .register();
 
-  // 2. Fury - +2 STR, +0 SPD, +0 DUR, +0 IQ, +2 BIQ, +2 MA
+  // 2. Fury - +2 STR, +2 BIQ, +2 MA
   defineEffect('symbiosis', 'Fury')
     .description('Sau Combat thắng: +1 STR/BIQ/MA. Thua: -1 STR/BIQ/MA.')
     .addStat('strength', 2)

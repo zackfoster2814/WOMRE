@@ -67,6 +67,13 @@ export function detectCombatAudioTracks(character: any): CombatAudioTrack[] {
   if (!character) return [];
   const tracks: CombatAudioTrack[] = [];
 
+  const quirks: string[] = (character.quirks || [])
+    .filter((q: any) => !q.isLost)
+    .map((q: any) => (typeof q === "string" ? q : q?.name ?? "").toLowerCase());
+
+  if (quirks.some(q => q === "raumanian" || q === "raumanian🍀"))
+    tracks.push({ id: "quirk-raumanian", itemName: "Raumanian🍀", type: "youtube", videoId: "UVFHuVneiPM", label: "Raumanian🍀" });
+
   const powers: string[] = (character.powers || [])
     .filter((p: any) => !p.isLost)
     .map((p: any) => (typeof p === "string" ? p : p?.name ?? ""));

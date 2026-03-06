@@ -1,55 +1,53 @@
 /**
- * PvP Rewards Effects
+ * PvP Reward — Effect Definitions
  *
+ * Gộp từ: src/effects/data/pvp-rewards.ts
  * Phần thưởng sau mỗi trận PvP chiến thắng
  */
 
 import { defineEffect } from '../registry';
 
+// ============================================================================
+// PVP REWARD EFFECT DEFINITIONS
+// ============================================================================
+
 export function registerPvPRewardEffects() {
-  // +1 Strength
   defineEffect('pvp_reward', '+1 Strength')
     .description('Nhận +1 Strength')
     .weight(10)
     .addStat('strength', 1)
     .register();
 
-  // +1 Speed
   defineEffect('pvp_reward', '+1 Speed')
     .description('Nhận +1 Speed')
     .weight(10)
     .addStat('speed', 1)
     .register();
 
-  // +1 Durability
   defineEffect('pvp_reward', '+1 Durability')
     .description('Nhận +1 Dura')
     .weight(10)
     .addStat('durability', 1)
     .register();
 
-  // +1 IQ
   defineEffect('pvp_reward', '+1 IQ')
     .description('Nhận +1 IQ')
     .weight(10)
     .addStat('iq', 1)
     .register();
 
-  // +1 BIQ
   defineEffect('pvp_reward', '+1 BIQ')
     .description('Nhận +1 BIQ')
     .weight(10)
     .addStat('biq', 1)
     .register();
 
-  // +1 Martial Arts
   defineEffect('pvp_reward', '+1 Martial Arts')
     .description('Nhận +1 Martial Arts')
     .weight(10)
     .addStat('ma', 1)
     .register();
 
-  // 1 Gear
   defineEffect('pvp_reward', '1 Gear')
     .description('Nhận 1 Gear.')
     .weight(10)
@@ -63,7 +61,6 @@ export function registerPvPRewardEffects() {
     })
     .register();
 
-  // +2 Stat Thấp Nhất
   defineEffect('pvp_reward', '+2 Stat Thấp Nhất')
     .description('Nhận +2 Stat Thấp Nhất')
     .weight(6)
@@ -76,7 +73,6 @@ export function registerPvPRewardEffects() {
     })
     .register();
 
-  // +2 Stat Cao Nhất
   defineEffect('pvp_reward', '+2 Stat Cao Nhất')
     .description('Nhận +2 Stat Cao Nhất')
     .weight(6)
@@ -89,7 +85,6 @@ export function registerPvPRewardEffects() {
     })
     .register();
 
-  // 1 Power
   defineEffect('pvp_reward', '1 Power')
     .description('Nhận 1 Power')
     .weight(6)
@@ -103,7 +98,6 @@ export function registerPvPRewardEffects() {
     })
     .register();
 
-  // 2 Power
   defineEffect('pvp_reward', '2 Power')
     .description('Nhận 2 Power')
     .weight(2)
@@ -117,7 +111,6 @@ export function registerPvPRewardEffects() {
     })
     .register();
 
-  // 1 Char Dev
   defineEffect('pvp_reward', '1 Char Dev')
     .description('Nhận 1 Char Dev')
     .weight(4)
@@ -131,7 +124,6 @@ export function registerPvPRewardEffects() {
     })
     .register();
 
-  // 2 Char Dev
   defineEffect('pvp_reward', '2 Char Dev')
     .description('Nhận 2 Char Dev')
     .weight(1)
@@ -149,99 +141,34 @@ export function registerPvPRewardEffects() {
   defineEffect('pvp_reward', '+2 Random x3')
     .description('Nhận +2 vào Stat ngẫu nhiên 3 lần')
     .weight(0.64)
-    .effect({
-      type: 'stat_modifier',
-      stat: 'random',
-      value: 2,
-      timing: 'immediate',
-      target: 'self'
-    })
-    .effect({
-      type: 'stat_modifier',
-      stat: 'random',
-      value: 2,
-      timing: 'immediate',
-      target: 'self'
-    })
-    .effect({
-      type: 'stat_modifier',
-      stat: 'random',
-      value: 2,
-      timing: 'immediate',
-      target: 'self'
-    })
+    .effect({ type: 'stat_modifier', stat: 'random', value: 2, timing: 'immediate', target: 'self' })
+    .effect({ type: 'stat_modifier', stat: 'random', value: 2, timing: 'immediate', target: 'self' })
+    .effect({ type: 'stat_modifier', stat: 'random', value: 2, timing: 'immediate', target: 'self' })
     .register();
 
   // +2 Random Stat x6
   defineEffect('pvp_reward', '+2 Random x6')
     .description('Nhận +2 vào Stat ngẫu nhiên 6 lần')
     .weight(0.36)
-    .effect({
-      type: 'stat_modifier',
-      stat: 'random',
-      value: 2,
-      timing: 'immediate',
-      target: 'self'
-    })
-    .effect({
-      type: 'stat_modifier',
-      stat: 'random',
-      value: 2,
-      timing: 'immediate',
-      target: 'self'
-    })
-    .effect({
-      type: 'stat_modifier',
-      stat: 'random',
-      value: 2,
-      timing: 'immediate',
-      target: 'self'
-    })
-    .effect({
-      type: 'stat_modifier',
-      stat: 'random',
-      value: 2,
-      timing: 'immediate',
-      target: 'self'
-    })
-    .effect({
-      type: 'stat_modifier',
-      stat: 'random',
-      value: 2,
-      timing: 'immediate',
-      target: 'self'
-    })
-    .effect({
-      type: 'stat_modifier',
-      stat: 'random',
-      value: 2,
-      timing: 'immediate',
-      target: 'self'
-    })
+    .effect({ type: 'stat_modifier', stat: 'random', value: 2, timing: 'immediate', target: 'self' })
+    .effect({ type: 'stat_modifier', stat: 'random', value: 2, timing: 'immediate', target: 'self' })
+    .effect({ type: 'stat_modifier', stat: 'random', value: 2, timing: 'immediate', target: 'self' })
+    .effect({ type: 'stat_modifier', stat: 'random', value: 2, timing: 'immediate', target: 'self' })
+    .effect({ type: 'stat_modifier', stat: 'random', value: 2, timing: 'immediate', target: 'self' })
+    .effect({ type: 'stat_modifier', stat: 'random', value: 2, timing: 'immediate', target: 'self' })
     .register();
 
-  // +1 All Stats
   defineEffect('pvp_reward', '+1 All Stats')
     .description('Nhận +1 all stats')
     .weight(4)
     .addAllStats(1)
     .register();
 
-  // Lời Nguyền Địa Ngục (weight 0 - special/curse)
+  // Special/curse — weight 0
   defineEffect('pvp_reward', 'Lời Nguyền Địa Ngục')
     .description('Re-spin lại stat cao nhất của bạn và một người còn sống ngẫu nhiên.')
     .weight(0)
-    .effect({
-      type: 'stat_respin',
-      stat: 'highest',
-      timing: 'immediate',
-      target: 'self'
-    })
-    .effect({
-      type: 'stat_respin',
-      stat: 'highest',
-      timing: 'immediate',
-      target: 'random_player'
-    })
+    .effect({ type: 'stat_respin', stat: 'highest', timing: 'immediate', target: 'self' })
+    .effect({ type: 'stat_respin', stat: 'highest', timing: 'immediate', target: 'random_player' })
     .register();
 }

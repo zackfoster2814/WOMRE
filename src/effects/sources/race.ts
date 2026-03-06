@@ -1,17 +1,48 @@
 /**
- * Race Effects Data
- *
- * Dữ liệu effects cho các Race và Sub-race
- * Nguồn: wheelofmultiverse-ss3.xlsx - Sheet "Race" và "Sub-race wheel"
+ * Race Effects — Source
+ * Gộp từ: data/races.ts, data/uma-parents.ts, handlers/immediate/race-handlers.ts, handlers/combat/race-combat-handlers.ts
  */
 
-import { defineEffect } from "../registry";
+import { defineEffect } from '../registry';
+import { EffectEntryBuilder } from '../registry';
+import { registerImmediateHandler } from '../handlers/registry';
+import { registerCombatHandler } from '../handlers/registry';
+import type { ImmediateHandlerContext, ImmediateHandlerResult } from '../handlers/types';
+import type { CombatHandlerContext, CombatHandlerResult } from '../handlers/types';
+import type { StatName } from '../types';
+
+const STAT_NAMES: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
+
+// Helper for grantGear (from races.ts)
+declare module '../registry' {
+  interface EffectEntryBuilder {
+    grantGear(name: string, count: number): EffectEntryBuilder;
+  }
+}
+
+EffectEntryBuilder.prototype.grantGear = function (
+  name: string = 'random',
+  count: number = 1,
+) {
+  return this.effect({
+    type: 'grant_gear',
+    grantType: 'gear',
+    grantName: name,
+    grantCount: count,
+    timing: 'immediate',
+    target: 'self',
+  });
+};
 
 // ============================================================================
-// MAIN RACES
+// RACE EFFECT DEFINITIONS
 // ============================================================================
 
-export function registerRaces() {
+export function registerAllRaceEffects() {
+  // ============================================================================
+  // MAIN RACES
+  // ============================================================================
+
   // Symbiosis
   defineEffect("race", "Symbiosis")
     .description(
@@ -448,13 +479,11 @@ export function registerRaces() {
       target: "self",
     })
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: GOBLIN HORDE
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: GOBLIN HORDE
+  // ============================================================================
 
-export function registerGoblinSubRaces() {
   // Sub-race là số lượng goblin trong đàn
   // Cả tên "1" và "Goblin Horde 1" đều được register để support cả 2 format
 
@@ -578,35 +607,11 @@ export function registerGoblinSubRaces() {
       customHandler: "goblin_100k_unique_weapon",
     })
     .register();
-}
 
-// Helper for grantGear
-declare module "../registry" {
-  interface EffectEntryBuilder {
-    grantGear(name: string, count: number): EffectEntryBuilder;
-  }
-}
+  // ============================================================================
+  // SUB-RACES: ELF TYPES
+  // ============================================================================
 
-import { EffectEntryBuilder } from "../registry";
-EffectEntryBuilder.prototype.grantGear = function (
-  name: string = "random",
-  count: number = 1,
-) {
-  return this.effect({
-    type: "grant_gear",
-    grantType: "gear",
-    grantName: name,
-    grantCount: count,
-    timing: "immediate",
-    target: "self",
-  });
-};
-
-// ============================================================================
-// SUB-RACES: ELF TYPES
-// ============================================================================
-
-export function registerElfSubRaces() {
   defineEffect("sub_race", "High Elf")
     .description("+2 Base IQ.")
     .weight(9)
@@ -666,13 +671,11 @@ export function registerElfSubRaces() {
     .weight(7)
     .addStat("speed", 3, true)
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: DWARF TYPES
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: DWARF TYPES
+  // ============================================================================
 
-export function registerDwarfSubRaces() {
   defineEffect("sub_race", "Lùn núi")
     .description("+3 Strength.")
     .weight(25)
@@ -717,13 +720,11 @@ export function registerDwarfSubRaces() {
     .description("Bạn là 1 người lùn...")
     .weight(40)
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: TROLL TYPES
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: TROLL TYPES
+  // ============================================================================
 
-export function registerTrollSubRaces() {
   defineEffect("sub_race", "Regular Troll")
     .description("Một con Troll thường.")
     .weight(42)
@@ -752,13 +753,11 @@ export function registerTrollSubRaces() {
       customHandler: "lich_troll_steal_dead",
     })
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: DRAGON TYPES
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: DRAGON TYPES
+  // ============================================================================
 
-export function registerDragonSubRaces() {
   defineEffect("sub_race", "Crimson Dragon")
     .description("+2 Base IQ và +1 Base Dura.")
     .weight(9)
@@ -859,13 +858,11 @@ export function registerDragonSubRaces() {
     .weight(5)
     .grantQuirk("random", 3)
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: ANGEL RANKS
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: ANGEL RANKS
+  // ============================================================================
 
-export function registerAngelSubRaces() {
   defineEffect("sub_race", "Angels")
     .description("Không có gì đặc biệt.")
     .weight(40)
@@ -926,13 +923,11 @@ export function registerAngelSubRaces() {
     .weight(4)
     .addAllStats(2)
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: HUMAN SKIN COLORS
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: HUMAN SKIN COLORS
+  // ============================================================================
 
-export function registerHumanSubRaces() {
   defineEffect("sub_race", "Trắng")
     .description("Chắc chắn dùng được tất cả vũ khí và chắc chắn có vũ khí.")
     .weight(30)
@@ -965,13 +960,11 @@ export function registerHumanSubRaces() {
       customHandler: "human_black_min_dura",
     })
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: VAMPIRE BODY COUNT
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: VAMPIRE BODY COUNT
+  // ============================================================================
 
-export function registerVampireSubRaces() {
   defineEffect("sub_race", "Body Count 1-2")
     .description("-1 all stats.")
     .weight(2.5)
@@ -1017,13 +1010,11 @@ export function registerVampireSubRaces() {
     .weight(2.5)
     .addAllStats(1)
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: PRIMORDIAL BEING ELEMENTAL
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: PRIMORDIAL BEING ELEMENTAL
+  // ============================================================================
 
-export function registerElementalSubRaces() {
   defineEffect("sub_race", "Air")
     .description(
       'Nhận Power "Blowing Leaves", +1 Speed, +1 vào Stat thấp nhất.',
@@ -1057,13 +1048,11 @@ export function registerElementalSubRaces() {
     .addStat("strength", 1)
     .grantQuirk("random", 1)
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: UMA PARENTS
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: UMA PARENTS (from races.ts registerUmaParentSubRaces)
+  // ============================================================================
 
-export function registerUmaParentSubRaces() {
   defineEffect("sub_race", "Maruzensky")
     .description('Nhận Power "Red Shift/LP1211-M".')
     .weight(4.8)
@@ -1273,13 +1262,11 @@ export function registerUmaParentSubRaces() {
     .weight(4.8)
     .grantPower("Angling and Scheming", 1)
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: DEMON SINS
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: DEMON SINS
+  // ============================================================================
 
-export function registerDemonSinSubRaces() {
   defineEffect("sub_race", "Lucifer")
     .description(
       'Nhận Archetype "Egoist". Vòng quay Power đạt kết quả tối đa (4).',
@@ -1396,13 +1383,11 @@ export function registerDemonSinSubRaces() {
       ],
     })
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: WEREBEAST TYPES
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: WEREBEAST TYPES
+  // ============================================================================
 
-export function registerWerebeastSubRaces() {
   defineEffect("sub_race", "Wereraven")
     .description("[PvE Only] +2 all stats.")
     .weight(12)
@@ -1538,13 +1523,11 @@ export function registerWerebeastSubRaces() {
       customHandler: "wereseal_one_point_win",
     })
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: GOD'S GIFTS (Demi-God)
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: GOD'S GIFTS (Demi-God)
+  // ============================================================================
 
-export function registerGodsGiftSubRaces() {
   defineEffect("sub_race", "Cursed Sword")
     .description("-1 all stats.")
     .weight(30)
@@ -1664,13 +1647,11 @@ export function registerGodsGiftSubRaces() {
       target: "self",
     })
     .register();
-}
 
-// ============================================================================
-// SUB-RACES: GODS
-// ============================================================================
+  // ============================================================================
+  // SUB-RACES: GODS
+  // ============================================================================
 
-export function registerGodSubRaces() {
   defineEffect("sub_race", "Odin")
     .description(
       "+1 all stats. Sau combat thắng: Đối phương bị Isekai. (Chỉ ở nhánh thắng)",
@@ -1816,26 +1797,1082 @@ export function registerGodSubRaces() {
       conditions: [{ type: "race_match", races: ["Human"] }],
     })
     .register();
+
+}
+
+export function registerUmaParentEffects(): void {
+  // Uma parent effects are registered as part of registerAllRaceEffects
 }
 
 // ============================================================================
-// REGISTER ALL
+// IMMEDIATE HANDLERS
 // ============================================================================
 
-export function registerAllRaceEffects() {
-  registerRaces();
-  registerGoblinSubRaces();
-  registerElfSubRaces();
-  registerDwarfSubRaces();
-  registerTrollSubRaces();
-  registerDragonSubRaces();
-  registerAngelSubRaces();
-  registerHumanSubRaces();
-  registerVampireSubRaces();
-  registerElementalSubRaces();
-  registerUmaParentSubRaces();
-  registerDemonSinSubRaces();
-  registerWerebeastSubRaces();
-  registerGodsGiftSubRaces();
-  registerGodSubRaces();
+// ============================================================================
+// SYMBIOSIS
+// ============================================================================
+
+registerImmediateHandler(
+  'symbiosis_link',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // Link to a random player
+    return {
+      skipDefault: true,
+      description: 'Linked to a host player (symbiosis)',
+    };
+  },
+  'Link to a host player'
+);
+
+// ============================================================================
+// DRYAD
+// ============================================================================
+
+registerImmediateHandler(
+  'dryad_death_buff',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This triggers when another Dryad dies
+    return {
+      skipDefault: true,
+      description: '+2 random stat when another Dryad dies',
+    };
+  },
+  '+2 random stat on Dryad death'
+);
+
+registerImmediateHandler(
+  'dryad_last_standing',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This triggers when last Dryad standing
+    return {
+      skipDefault: true,
+      description: 'Evolve to Yggdrasil (+9 random stat)',
+    };
+  },
+  'Evolve to Yggdrasil'
+);
+
+// ============================================================================
+// SPIRIT - SOULS STACK
+// ============================================================================
+
+registerImmediateHandler(
+  'spirit_souls_stack',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // Get current soul count from character (stored in custom data)
+    const charData = ctx.character as any;
+    const soulCount = charData.soulStacks || 0;
+    const newCount = soulCount + 1;
+
+    const modifiers: Array<{ stat: StatName; value: number }> = [];
+    let description = `Soul stack: ${newCount}`;
+
+    // Check thresholds
+    if (newCount === 6) {
+      modifiers.push({ stat: 'biq', value: 2 });
+      description += ', +2 BIQ unlocked';
+    } else if (newCount === 13) {
+      modifiers.push(...STAT_NAMES.map(stat => ({ stat, value: 1 })));
+      description += ', +1 all stats unlocked';
+    }
+
+    return {
+      statModifiers: modifiers.length > 0 ? modifiers : undefined,
+      skipDefault: true,
+      description,
+    };
+  },
+  '+1 soul stack per round lost'
+);
+
+// ============================================================================
+// SKELETON/LICH EVOLUTION
+// ============================================================================
+
+registerImmediateHandler(
+  'skeleton_iq_lock',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      statModifiers: [{ stat: 'iq', value: 0, isBase: true }], // IQ is always 1
+      skipDefault: true,
+      description: 'IQ locked at 1 (Skeleton)',
+    };
+  },
+  'Lock IQ at 1'
+);
+
+// ============================================================================
+// TROLL - LICH TROLL
+// ============================================================================
+
+registerImmediateHandler(
+  'lich_troll_steal_dead',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This triggers after combat to steal from dead players
+    return {
+      skipDefault: true,
+      description: 'Steal 1 Power from a dead player',
+    };
+  },
+  'Steal Power from dead player'
+);
+
+// ============================================================================
+// GOBLIN HORDE 100000
+// ============================================================================
+
+registerImmediateHandler(
+  'goblin_100k_unique_weapon',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // Guarantee unique weapon
+    return {
+      skipDefault: true,
+      description: 'Guaranteed Unique Weapon',
+    };
+  },
+  'Grant Unique Weapon'
+);
+
+// ============================================================================
+// HUMAN SUB-RACES
+// ============================================================================
+
+registerImmediateHandler(
+  'human_white_weapon_usable',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // All weapons usable and guaranteed weapon
+    return {
+      skipDefault: true,
+      description: 'All weapons usable, guaranteed weapon',
+    };
+  },
+  'All weapons usable'
+);
+
+registerImmediateHandler(
+  'human_yellow_min_iq',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    if ((ctx.baseStats as Record<StatName, number>)['iq'] < 5) {
+      const diff = 5 - (ctx.baseStats as Record<StatName, number>)['iq'];
+      return {
+        statModifiers: [{ stat: 'iq', value: diff, isBase: true }],
+        skipDefault: true,
+        description: `IQ raised to 5 (+${diff})`,
+      };
+    }
+    return { skipDefault: true };
+  },
+  'Minimum IQ 5'
+);
+
+registerImmediateHandler(
+  'human_black_min_dura',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    if ((ctx.baseStats as Record<StatName, number>)['durability'] < 5) {
+      const diff = 5 - (ctx.baseStats as Record<StatName, number>)['durability'];
+      return {
+        statModifiers: [{ stat: 'durability', value: diff, isBase: true }],
+        skipDefault: true,
+        description: `Durability raised to 5 (+${diff})`,
+      };
+    }
+    return { skipDefault: true };
+  },
+  'Minimum Durability 5'
+);
+
+// ============================================================================
+// UMA PARENT HANDLERS
+// ============================================================================
+
+registerImmediateHandler(
+  'haru_urara_late_game_buff',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This activates at round 32
+    return {
+      skipDefault: true,
+      description: '-1 all stats becomes +2 all stats at Round 32',
+    };
+  },
+  'Late game stat buff'
+);
+
+registerImmediateHandler(
+  'gold_ship_coin_flip',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // 50/50 during combat
+    const isLucky = Math.random() > 0.5;
+    if (isLucky) {
+      return {
+        statModifiers: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+        skipDefault: true,
+        description: '+1 all stats (Gold Ship lucky)',
+      };
+    } else {
+      return {
+        statModifiers: STAT_NAMES.map(stat => ({ stat, value: -1 })),
+        skipDefault: true,
+        description: '-1 all stats (Gold Ship unlucky)',
+      };
+    }
+  },
+  '50/50 for +1 or -1 all stats'
+);
+
+registerImmediateHandler(
+  'symboli_rudolf_winner_bracket_final',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This triggers on winner bracket final win
+    return {
+      skipDefault: true,
+      description: '+1 all stats on winner bracket final win',
+    };
+  },
+  '+1 all stats on winner bracket final'
+);
+
+registerImmediateHandler(
+  'tokai_teio_instrument_speed',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // Check for instrument weapon
+    const instruments = ['Guitar', 'Violin', 'Piano', 'Drums', 'Flute', 'Bagpipe', 'Harmonica'];
+    const weapons = ctx.character.weapons || [];
+    const hasInstrument = weapons.some(
+      (w: any) => !w.isLost && instruments.some(i => w.name?.includes(i))
+    );
+
+    if (hasInstrument) {
+      const baseSpeed = (ctx.baseStats as Record<StatName, number>)['speed'];
+      return {
+        statModifiers: [{ stat: 'speed', value: baseSpeed }], // Double base speed
+        skipDefault: true,
+        description: `Speed doubled to ${baseSpeed * 2} (instrument)`,
+      };
+    }
+
+    return { skipDefault: true };
+  },
+  'Double Speed with instrument'
+);
+
+registerImmediateHandler(
+  'nice_nature_tie_win',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This is a combat tie-breaker
+    return {
+      skipDefault: true,
+      description: 'Win on 3-3 tie (Nice Nature)',
+    };
+  },
+  'Win on 3-3 tie'
+);
+
+registerImmediateHandler(
+  'special_week_random_power',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const isGourmand = Math.random() > 0.5;
+    return {
+      skipDefault: true,
+      description: `Receive ${isGourmand ? 'Gourmand' : 'Hydrate'} Power`,
+    };
+  },
+  '50/50 Gourmand or Hydrate'
+);
+
+registerImmediateHandler(
+  'el_condor_pasa_dura_win_buff',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This triggers after winning Dura round
+    return {
+      skipDefault: true,
+      description: '+3 Speed, +3 Strength next combat if won Dura round',
+    };
+  },
+  '+3 Speed/Strength after Dura round win'
+);
+
+registerImmediateHandler(
+  'mork_high_risk_points',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This is a combat point mechanic
+    return {
+      skipDefault: true,
+      description: 'Win round: +1 point. Lose round: lose all points.',
+    };
+  },
+  'High risk point mechanic'
+);
+
+// ============================================================================
+// DEMON SIN HANDLERS
+// ============================================================================
+
+registerImmediateHandler(
+  'lucifer_max_power_wheel',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Power wheel maxed to 4',
+    };
+  },
+  'Max Power wheel'
+);
+
+registerImmediateHandler(
+  'beelzebub_max_random_stat',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+    return {
+      statModifiers: [{ stat: randomStat, value: 10, isBase: true }],
+      skipDefault: true,
+      description: `${randomStat} set to 10`,
+    };
+  },
+  'Set random stat to 10'
+);
+
+registerImmediateHandler(
+  'leviathan_mark_distribution',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Marked 6 random players with Leviathan Mark',
+    };
+  },
+  'Distribute Leviathan Marks'
+);
+
+registerImmediateHandler(
+  'behemoth_lose_penalty',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+    return {
+      statModifiers: [{ stat: randomStat, value: -10, isBase: true }], // Set to 0
+      skipDefault: true,
+      description: `Base ${randomStat} set to 0`,
+    };
+  },
+  'Set random base stat to 0'
+);
+
+registerImmediateHandler(
+  'behemoth_win_bonus',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+    return {
+      statModifiers: [{ stat: randomStat, value: 2, isBase: true }],
+      skipDefault: true,
+      description: `Base ${randomStat} +2`,
+    };
+  },
+  '+2 base random stat'
+);
+
+registerImmediateHandler(
+  'belphegor_lazy_rounds',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This is a combat mechanic
+    return {
+      skipDefault: true,
+      description: '66% no point on first 2 round wins',
+    };
+  },
+  'Lazy rounds mechanic'
+);
+
+// ============================================================================
+// GOD HANDLERS
+// ============================================================================
+
+registerImmediateHandler(
+  'baldur_first_god_death',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: '+2 all stats on first God death / Grant Powers if first',
+    };
+  },
+  'First God death effects'
+);
+
+registerImmediateHandler(
+  'eir_double_dura_stack',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // Get current stack count from character (stored in custom data)
+    const charData = ctx.character as any;
+    const currentStack = charData.eirStack || 1;
+    const newStack = currentStack * 2;
+
+    return {
+      statModifiers: [{ stat: 'durability', value: currentStack }], // Add the difference
+      skipDefault: true,
+      description: `Durability bonus doubled to ${newStack}`,
+    };
+  },
+  'Double Durability stack'
+);
+
+registerImmediateHandler(
+  'thor_mjolnir_grant',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Granted Mjolnir (usable)',
+    };
+  },
+  'Grant Mjolnir'
+);
+
+// ============================================================================
+// WEREBEAST HANDLERS
+// ============================================================================
+
+registerImmediateHandler(
+  'werewolf_team_strength',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    // This is a PvE team buff
+    return {
+      skipDefault: true,
+      description: '+2 Strength per team member (PvE)',
+    };
+  },
+  '+2 Strength per team member'
+);
+
+registerImmediateHandler(
+  'wereboar_chance_point_on_lose',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: '20% to gain point on round loss (PvE)',
+    };
+  },
+  '20% point on round loss'
+);
+
+registerImmediateHandler(
+  'werebat_reverse_reward',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Reversed reward/penalty (PvE)',
+    };
+  },
+  'Reverse reward/penalty'
+);
+
+registerImmediateHandler(
+  'werecapybara_double_biq_round',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'BIQ round plays twice (PvE)',
+    };
+  },
+  'Double BIQ round'
+);
+
+registerImmediateHandler(
+  'weresheep_permanent_dura',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      statModifiers: [{ stat: 'durability', value: 3, isBase: true }],
+      skipDefault: true,
+      description: '+3 Durability permanent on team win',
+    };
+  },
+  '+3 permanent Durability'
+);
+
+registerImmediateHandler(
+  'wereseal_one_point_win',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Team wins with 1 point scored',
+    };
+  },
+  'Win with 1 point'
+);
+
+// ============================================================================
+// REINCARNATOR
+// ============================================================================
+
+registerImmediateHandler(
+  'reincarnator_transform',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Transform into a Season 2.5 player',
+    };
+  },
+  'Transform into past player'
+);
+
+// ============================================================================
+// GOD'S GIFTS (Demi-God)
+// ============================================================================
+
+registerImmediateHandler(
+  'creation_creators_favor',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      skipDefault: true,
+      description: "Granted Creator's Favor",
+    };
+  },
+  "Grant Creator's Favor"
+);
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+export function registerRaceHandlers(): void {
+  console.log('Race handlers registered');
+}
+
+// ============================================================================
+// COMBAT HANDLERS
+// ============================================================================
+
+// ============================================================================
+// ORC HANDLERS
+// ============================================================================
+
+/**
+ * Orc - +2 lowest stat on win, -3 highest stat on lose
+ */
+registerCombatHandler(
+  'orc_win_lowest_bonus',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Find lowest stat
+    let lowestStat: StatName = 'strength';
+    let lowestValue = ctx.self.stats.strength;
+
+    for (const stat of STAT_NAMES) {
+      if ((ctx.self.stats as Record<StatName, number>)[stat] < lowestValue) {
+        lowestValue = (ctx.self.stats as Record<StatName, number>)[stat];
+        lowestStat = stat;
+      }
+    }
+
+    return {
+      selfStatMods: [{ stat: lowestStat, value: 2 }],
+      description: `+2 ${lowestStat} (Orc win bonus)`,
+    };
+  },
+  '+2 lowest stat on win'
+);
+
+registerCombatHandler(
+  'orc_lose_highest_penalty',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Find highest stat
+    let highestStat: StatName = 'strength';
+    let highestValue = ctx.self.stats.strength;
+
+    for (const stat of STAT_NAMES) {
+      if ((ctx.self.stats as Record<StatName, number>)[stat] > highestValue) {
+        highestValue = (ctx.self.stats as Record<StatName, number>)[stat];
+        highestStat = stat;
+      }
+    }
+
+    return {
+      selfStatMods: [{ stat: highestStat, value: -3 }],
+      description: `-3 ${highestStat} (Orc lose penalty)`,
+    };
+  },
+  '-3 highest stat on lose'
+);
+
+// ============================================================================
+// GIANT HANDLERS
+// ============================================================================
+
+/**
+ * Giant - Compare IQ vs Strength to determine bonuses
+ */
+registerCombatHandler(
+  'giant_iq_vs_str_compare',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const baseIQ = ctx.self.baseStats?.iq || ctx.self.stats.iq;
+    const baseStr = ctx.self.baseStats?.strength || ctx.self.stats.strength;
+
+    if (baseIQ > baseStr) {
+      return {
+        selfStatMods: [
+          { stat: 'iq', value: 5 },
+          { stat: 'strength', value: -5 },
+        ],
+        description: '+5 IQ, -5 Strength (IQ > Str)',
+      };
+    } else if (baseStr > baseIQ) {
+      return {
+        selfStatMods: [
+          { stat: 'strength', value: 5 },
+          { stat: 'iq', value: -5 },
+        ],
+        description: '+5 Strength, -5 IQ (Str > IQ)',
+      };
+    } else {
+      return {
+        selfStatMods: [
+          { stat: 'strength', value: 3 },
+          { stat: 'iq', value: 3 },
+        ],
+        description: '+3 Strength, +3 IQ (equal)',
+      };
+    }
+  },
+  'Giant IQ vs Strength comparison'
+);
+
+// ============================================================================
+// DEMI-GOD HANDLERS
+// ============================================================================
+
+/**
+ * Demi-God - +1 all vs Human, -1 all vs God
+ */
+registerCombatHandler(
+  'demigod_vs_human',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+
+    if (ctx.opponent.race.toLowerCase() === 'human') {
+      return {
+        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+        description: '+1 all stats vs Human',
+      };
+    }
+    return { skipDefault: true };
+  },
+  '+1 all stats vs Human'
+);
+
+registerCombatHandler(
+  'demigod_vs_god',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+
+    if (ctx.opponent.race.toLowerCase() === 'god') {
+      return {
+        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: -1 })),
+        description: '-1 all stats vs God',
+      };
+    }
+    return { skipDefault: true };
+  },
+  '-1 all stats vs God'
+);
+
+// ============================================================================
+// DRAGON SUB-RACE HANDLERS
+// ============================================================================
+
+/**
+ * Ancient Dragon - Disable opponent weapon
+ */
+registerCombatHandler(
+  'ancient_dragon_weapon_disable',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      opponentWeaponDisabled: true,
+      description: 'Opponent weapon disabled (Ancient Dragon)',
+    };
+  },
+  'Disable opponent weapon'
+);
+
+/**
+ * Thunder Dragon - +1 starting point (PvE)
+ */
+registerCombatHandler(
+  'thunder_dragon_pve_point',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.isPvE) {
+      return {
+        selfPoints: 1,
+        description: '+1 starting point (Thunder Dragon PvE)',
+      };
+    }
+    return { skipDefault: true };
+  },
+  '+1 starting point in PvE'
+);
+
+// ============================================================================
+// ANGEL RANK HANDLERS
+// ============================================================================
+
+/**
+ * Principalities - +2 lowest stat after combat
+ */
+registerCombatHandler(
+  'principalities_lowest_stat',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Find lowest stat
+    let lowestStat: StatName = 'strength';
+    let lowestValue = ctx.self.stats.strength;
+
+    for (const stat of STAT_NAMES) {
+      if ((ctx.self.stats as Record<StatName, number>)[stat] < lowestValue) {
+        lowestValue = (ctx.self.stats as Record<StatName, number>)[stat];
+        lowestStat = stat;
+      }
+    }
+
+    return {
+      selfStatMods: [{ stat: lowestStat, value: 2 }],
+      description: `+2 ${lowestStat} (Principalities after combat)`,
+    };
+  },
+  '+2 lowest stat after combat'
+);
+
+// ============================================================================
+// DEMON SIN HANDLERS
+// ============================================================================
+
+/**
+ * Asmodeus - +1 starting point if opponent has AIDS
+ */
+registerCombatHandler(
+  'asmodeus_vs_aids',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+
+    const opponentPowers = ctx.opponent.powers || [];
+    const hasAids = opponentPowers.some((p: any) => p.name === 'AIDS');
+
+    if (hasAids) {
+      return {
+        selfPoints: 1,
+        description: '+1 starting point (opponent has AIDS)',
+      };
+    }
+    return { skipDefault: true };
+  },
+  '+1 point if opponent has AIDS'
+);
+
+// ============================================================================
+// GOD HANDLERS
+// ============================================================================
+
+/**
+ * Freyja - +1 point if opponent has Lover
+ */
+registerCombatHandler(
+  'freyja_vs_lover',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+
+    const lover = ctx.opponent.lover;
+    const hasLover = lover && (Array.isArray(lover) ? lover.length > 0 : true);
+
+    if (hasLover) {
+      return {
+        selfPoints: 1,
+        description: '+1 starting point (opponent has Lover)',
+      };
+    }
+    return { skipDefault: true };
+  },
+  '+1 point if opponent has Lover'
+);
+
+/**
+ * Bragi - +1 point vs instrument user
+ */
+registerCombatHandler(
+  'bragi_vs_instrument',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+
+    const instruments = ['Guitar', 'Violin', 'Piano', 'Drums', 'Flute', 'Bagpipe', 'Harmonica'];
+    const opponentWeapons = ctx.opponent.weapons || [];
+    const hasInstrument = opponentWeapons.some(
+      (w: any) => !w.isLost && instruments.some(i => w.name?.includes(i))
+    );
+
+    if (hasInstrument) {
+      return {
+        selfPoints: 1,
+        description: '+1 starting point (opponent uses instrument)',
+      };
+    }
+    return { skipDefault: true };
+  },
+  '+1 point vs instrument user'
+);
+
+/**
+ * Thor - +1 point vs Human
+ */
+registerCombatHandler(
+  'thor_vs_human',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+
+    if (ctx.opponent.race.toLowerCase() === 'human') {
+      return {
+        selfPoints: 1,
+        description: '+1 point vs Human (Thor)',
+      };
+    }
+    return { skipDefault: true };
+  },
+  '+1 point vs Human'
+);
+
+/**
+ * Týr - Grant Quirk on Strength round win
+ */
+registerCombatHandler(
+  'tyr_str_win_quirk',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.roundResults?.strength === 'win') {
+      return {
+        skipDefault: false, // Allow quirk grant
+        description: 'Grant Quirk (won Strength round)',
+      };
+    }
+    return { skipDefault: true };
+  },
+  'Grant Quirk on Strength win'
+);
+
+/**
+ * Frigg - Grant Power on IQ round win
+ */
+registerCombatHandler(
+  'frigg_iq_win_power',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.roundResults?.iq === 'win') {
+      return {
+        skipDefault: false, // Allow power grant
+        description: 'Grant Power (won IQ round)',
+      };
+    }
+    return { skipDefault: true };
+  },
+  'Grant Power on IQ win'
+);
+
+// ============================================================================
+// SECRET EVIL (Demi-God God's Gift)
+// ============================================================================
+
+registerCombatHandler(
+  'secret_evil_highest_lowest',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Find highest and lowest stats
+    let highestStat: StatName = 'strength';
+    let lowestStat: StatName = 'strength';
+    let highestValue = ctx.self.stats.strength;
+    let lowestValue = ctx.self.stats.strength;
+
+    for (const stat of STAT_NAMES) {
+      if ((ctx.self.stats as Record<StatName, number>)[stat] > highestValue) {
+        highestValue = (ctx.self.stats as Record<StatName, number>)[stat];
+        highestStat = stat;
+      }
+      if ((ctx.self.stats as Record<StatName, number>)[stat] < lowestValue) {
+        lowestValue = (ctx.self.stats as Record<StatName, number>)[stat];
+        lowestStat = stat;
+      }
+    }
+
+    return {
+      selfStatMods: [
+        { stat: highestStat, value: 2 },
+        { stat: lowestStat, value: 2 },
+      ],
+      description: `+2 ${highestStat}, +2 ${lowestStat} (Secret Evil)`,
+    };
+  },
+  '+2 to highest and lowest stats'
+);
+
+// ============================================================================
+// ODIN - Isekai on winner bracket win
+// ============================================================================
+
+registerCombatHandler(
+  'odin_isekai_winner_bracket',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.bracket === 'winner') {
+      return {
+        opponentIsekai: true,
+        description: 'Opponent is Isekai-ed (Odin)',
+      };
+    }
+    return { skipDefault: true };
+  },
+  'Isekai opponent on winner bracket win'
+);
+
+// ============================================================================
+// DRYAD - On death: all same-race get +2 random stat; last Dryad evolves to Yggdrasil
+// ============================================================================
+
+registerCombatHandler(
+  'dryad_death_buff',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Dryad: Khi chết → tất cả Dryad còn lại +2 stat ngẫu nhiên (xử lý ngoài game)',
+    };
+  },
+  'On Dryad death: all same-race Dryads get +2 random stat'
+);
+
+registerCombatHandler(
+  'dryad_last_standing',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Dryad: Nếu là Dryad cuối cùng khi chết → tiến hóa thành Yggdrasil (xử lý ngoài game)',
+    };
+  },
+  'Last Dryad evolves to Yggdrasil on death'
+);
+
+// ============================================================================
+// WEREBAT SUB-RACE - PvE only: reverse team rewards
+// ============================================================================
+
+registerCombatHandler(
+  'werebat_reverse_reward',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.isPvE) return { skipDefault: true };
+    return {
+      skipDefault: true,
+      description: 'Werebat: [PvE] Đội thua → bạn nhận thưởng; Đội thắng → bạn không nhận thưởng (xử lý ngoài game)',
+    };
+  },
+  'PvE only: team lose = you get reward; team win = you get no reward (Werebat)'
+);
+
+// ============================================================================
+// SPIRIT RACE - On each round lose: +1 Soul stack; at 6/9/13/20 stacks: bonus
+// ============================================================================
+
+registerCombatHandler(
+  'spirit_souls_stack',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const charData = ctx.self.character as any;
+    // Souls đã tích lũy từ trước (từ file) + số round thua trận này
+    const prevSouls: number = charData?.spiritSouls ?? 0;
+    const soulsThisMatch = ctx.self.roundsLost; // round thua trong trận hiện tại
+    const souls = prevSouls + soulsThisMatch;
+
+    if (souls === 0) {
+      return { skipDefault: true, description: 'Spirit: 0 Soul stacks (cần 6 để kích hoạt)' };
+    }
+
+    // Tích lũy tất cả mốc đạt được (bao gồm cả các mốc trước đó)
+    const mods: Array<{ stat: StatName; value: number }> = [];
+    const bonusLabels: string[] = [];
+
+    if (souls >= 6) {
+      mods.push({ stat: 'biq', value: 2 });
+      bonusLabels.push('+2 BIQ');
+    }
+    if (souls >= 13) {
+      STAT_NAMES.forEach(stat => mods.push({ stat, value: 1 }));
+      bonusLabels.push('+1 all stats');
+    }
+    if (souls >= 9 && souls < 13) {
+      // +1 Power — không thể auto-apply, ghi chú
+      bonusLabels.push('+1 Power (xử lý ngoài game)');
+    }
+    if (souls >= 20) {
+      // Gấp đôi tất cả hiệu ứng trước → double stats hiện tại (xử lý ngoài game)
+      bonusLabels.push('Gấp đôi stats (xử lý ngoài game)');
+    }
+
+    if (mods.length === 0 && souls < 6) {
+      return {
+        skipDefault: true,
+        description: `Spirit Souls: ${souls} stack (cần 6 để kích hoạt)`,
+      };
+    }
+
+    return {
+      selfStatMods: mods.length > 0 ? mods : undefined,
+      skipDefault: mods.length === 0,
+      description: `Spirit Souls: ${souls} stack (${prevSouls} cũ + ${soulsThisMatch} trận này) → ${bonusLabels.join(', ')}`,
+    };
+  },
+  'On round lose: dùng spiritSouls tích lũy; at 6→+2 BIQ, 9→+1 Power, 13→+1 all, 20→double stats (Spirit)'
+);
+
+// ============================================================================
+// WERESEAL - PvE only: team wins if they score 1 point despite -100 all stats
+// ============================================================================
+
+registerCombatHandler(
+  'wereseal_one_point_win',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.isPvE) return { skipDefault: true };
+    return {
+      skipDefault: true,
+      description: 'Wereseal: [PvE] Đội -100 all stats; thắng nếu ghi được 1 điểm (xử lý ngoài game)',
+    };
+  },
+  'PvE only: team wins by scoring 1 point (despite -100 all stats penalty) (Wereseal)'
+);
+
+// ============================================================================
+// WERESHEEP - After combat win (PvE): +3 Dura becomes permanent base stat
+// ============================================================================
+
+registerCombatHandler(
+  'weresheep_permanent_dura',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Weresheep: [PvE] Đội thắng → +3 Dura được cộng vĩnh viễn vào base stat (xử lý ngoài game)',
+    };
+  },
+  'PvE win: +3 Durability becomes permanent base stat (Weresheep)'
+);
+
+// ============================================================================
+// BALDUR SUB-RACE - On death: first God eliminated = +2 all; if you're first God = all Gods get 1 Power
+// ============================================================================
+
+registerCombatHandler(
+  'baldur_first_god_death',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Baldur: Khi chết — Lần đầu God bị loại: +2 all stats. Nếu là God đầu tiên bị loại: tất cả God nhận 1 Power (xử lý ngoài game)',
+    };
+  },
+  'On death: first God eliminated gets +2 all; if first God to die = all Gods get 1 Power (Baldur)'
+);
+
+// ============================================================================
+// EIR SUB-RACE - After each combat: double accumulated Dura bonus (stackable)
+// ============================================================================
+
+registerCombatHandler(
+  'eir_double_dura_stack',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      skipDefault: true,
+      description: 'Eir: Sau combat → gấp đôi tổng bonus Dura đã tích lũy (stackable, xử lý ngoài game)',
+    };
+  },
+  'After each combat: double accumulated Durability bonus (stackable) (Eir)'
+);
+
+export function registerRaceCombatHandlers(): void {
+  console.log('Race combat handlers registered');
 }

@@ -1,10 +1,24 @@
 /**
- * Character Development Effects
+ * Character Development Effects — Source
  *
- * Char Dev: Plot của nhân vật
+ * Gộp từ:
+ *   data/char-devs.ts
+ *   handlers/immediate/chardev-handlers.ts
+ *   handlers/combat/chardev-combat-handlers.ts
  */
 
 import { defineEffect } from '../registry';
+import { registerImmediateHandler } from '../handlers/registry';
+import { registerCombatHandler } from '../handlers/registry';
+import type { ImmediateHandlerContext, ImmediateHandlerResult } from '../handlers/types';
+import type { CombatHandlerContext, CombatHandlerResult } from '../handlers/types';
+import type { StatName } from '../types';
+
+const STAT_NAMES: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
+
+// ============================================================================
+// CHAR DEV EFFECT DEFINITIONS
+// ============================================================================
 
 export function registerCharDevEffects() {
   // 1. Armed to the Teeth
@@ -590,7 +604,7 @@ export function registerCharDevEffects() {
     })
     .register();
 
-  // 46. Become a Power Ranger (generic — player gets Power Ranger Wheel)
+  // 46. Become a Power Ranger (generic)
   defineEffect('char_dev', 'Become a Power Ranger')
     .description('Nhận "Power Ranger Wheel" và hiệu ứng tương ứng. Tối đa chỉ có thể có 1 Ranger mỗi màu. Power Rangers không nhận PvP Rewards và không có vòng PvE. Sau mỗi combat chiến thắng, tất cả Rangers nhận +1 vào 1 chỉ số ngẫu nhiên (tất cả được cộng giống nhau).')
     .weight(1.4)
@@ -608,7 +622,7 @@ export function registerCharDevEffects() {
     })
     .register();
 
-  // 46b. Become a Power Ranger — specific colors (color pre-determined, same handler as archetype_sub)
+  // 46b. Power Ranger colors
   defineEffect('char_dev', 'Become a Power Ranger (Red)')
     .description('Power Ranger - Red. Trong combat: Thắng round Strength có 20% nhận thêm 2 điểm.')
     .weight(0)
@@ -876,7 +890,6 @@ export function registerCharDevEffects() {
   // SPECIAL CHAR DEVS (No weight - granted by other effects)
   // ============================================================================
 
-  // Lord of the Seven Kingdoms
   defineEffect('char_dev', 'Lord of the Seven Kingdoms')
     .description('Nhận +1 bảy lần vào Base Stat thấp nhất.')
     .effect({
@@ -889,7 +902,6 @@ export function registerCharDevEffects() {
     })
     .register();
 
-  // Lord of Cinder
   defineEffect('char_dev', 'Lord of Cinder')
     .description('Nếu thua ở vòng có đọ trọng số (Vòng trong), đánh lại combat đấy thêm 1 lần nữa. (1 lần mỗi vòng đấu)')
     .effect({
@@ -900,7 +912,6 @@ export function registerCharDevEffects() {
     })
     .register();
 
-  // Shardbearer
   defineEffect('char_dev', 'Shardbearer')
     .description('Sau Combat: Nhận thêm 1 mảnh Great Rune chưa có.')
     .effect({
@@ -911,7 +922,6 @@ export function registerCharDevEffects() {
     })
     .register();
 
-  // Ascended
   defineEffect('char_dev', 'Ascended')
     .description('Ngay lập tức khi nhận Char Dev này, 2 Stats cao nhất của bạn được +4.')
     .effect({
@@ -921,4 +931,657 @@ export function registerCharDevEffects() {
       customHandler: 'ascended_top_2_stats'
     })
     .register();
+}
+
+// ============================================================================
+// IMMEDIATE HANDLERS
+// ============================================================================
+
+registerImmediateHandler(
+  'last_standing_check',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const { character, allCharacters } = ctx;
+
+    if (!allCharacters || allCharacters.length === 0) {
+      return { skipDefault: true, description: 'Last Standing (không có dữ liệu players)' };
+    }
+
+    const myHouses: string[] = [];
+    for (const h of character.nestedHouses || []) {
+      if (!h.isLost || h.lostType === 'kinda_homeless') myHouses.push(h.name);
+    }
+    for (const h of character.houses || []) {
+      if (!h.isLost && !myHouses.includes(h.name)) myHouses.push(h.name);
+    }
+
+    if (myHouses.length === 0) {
+      return { skipDefault: true, description: 'Last Standing (không có House)' };
+    }
+
+    let isLastStanding = false;
+    for (const houseName of myHouses) {
+      const otherAliveMembers = allCharacters.filter((other) => {
+        if (other.no === character.no) return false;
+        if (other.tournament?.status !== 'alive') return false;
+        const otherHouses: string[] = [];
+        for (const h of other.nestedHouses || []) {
+          if (!h.isLost || h.lostType === 'kinda_homeless') otherHouses.push(h.name);
+        }
+        for (const h of other.houses || []) {
+          if (!h.isLost && !otherHouses.includes(h.name)) otherHouses.push(h.name);
+        }
+        return otherHouses.includes(houseName);
+      });
+      if (otherAliveMembers.length === 0) { isLastStanding = true; break; }
+    }
+
+    if (!isLastStanding) {
+      return { skipDefault: true, description: 'Last Standing (chưa kích hoạt - còn đồng đội trong House)' };
+    }
+
+    return {
+      statModifiers: STAT_NAMES.map(stat => ({ stat, value: 2 })),
+      skipDefault: true,
+      description: '+2 All Stats (Last Standing)',
+    };
+  },
+  '+2 all stats when last alive member of House'
+);
+
+registerImmediateHandler(
+  'no_more_home_remove_house',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Bị loại khỏi House và mất tất cả bonus từ đó (No more Home)' };
+  },
+  'Remove character from their House and lose all House bonuses'
+);
+
+registerImmediateHandler(
+  'lose_control_remove_all_powers',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Mất tất cả Power (Lose Control)' };
+  },
+  'Remove all Powers from character'
+);
+
+registerImmediateHandler(
+  'creators_favor',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Creator buff nhân vật (tối đa 2 chỉ số)' };
+  },
+  'Creator manually buffs character (up to 2 stats)'
+);
+
+registerImmediateHandler(
+  'creators_limitation',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Creator nerf nhân vật (tối đa 2 chỉ số)' };
+  },
+  'Creator manually nerfs character (up to 2 stats)'
+);
+
+registerImmediateHandler(
+  'creators_reforge',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Loại bỏ vũ khí hiện tại và nhận vũ khí Normal + Rune do Creator chọn' };
+  },
+  'Creator removes current weapon and grants a Normal weapon with a Rune'
+);
+
+registerImmediateHandler(
+  'demonic_pact_sacrifice',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+    const currentVal = ctx.baseStats[randomStat] ?? 0;
+    return {
+      statModifiers: [{ stat: randomStat, value: -currentVal, isBase: true }],
+      skipDefault: true,
+      description: `Hiến tế ${randomStat} xuống 0 và nhận 3 Power (Demonic Pact)`,
+    };
+  },
+  'Sacrifice a random base stat to 0, gain 3 Powers'
+);
+
+registerImmediateHandler(
+  'mentor_steal_power',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Nhận 1 Power từ 1 player ngẫu nhiên (Mentor - mục tiêu mất power đó)' };
+  },
+  'Steal 1 Power from a random player'
+);
+
+registerImmediateHandler(
+  'it_is_what_it_is_remove_weapons',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Mất hết toàn bộ vũ khí (It is what it is)' };
+  },
+  'Remove all weapons from character'
+);
+
+registerImmediateHandler(
+  'true_heir_emirate_check',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const { character } = ctx;
+    const mods: ImmediateHandlerResult['statModifiers'] = [];
+    let desc = 'True Heir of the Emirate:';
+
+    const archetypes: string[] = (character as any).archetypes?.map((a: any) =>
+      typeof a === 'string' ? a : a.name
+    ) || [];
+    if (archetypes.some((a) => a.includes('🍀'))) {
+      for (const stat of STAT_NAMES) mods.push({ stat, value: 1 });
+      desc += ' +1 All (Archetype🍀)';
+    }
+
+    const weapons: any[] = character.weapons || [];
+    if (weapons.some((w) => { const wName = typeof w === 'string' ? w : w.name; return wName && wName.includes('🍀'); })) {
+      for (const stat of STAT_NAMES) mods.push({ stat, value: 1 });
+      desc += ' +1 All (Unique Weapon🍀)';
+    }
+
+    if (mods.length === 0) {
+      return { skipDefault: true, description: 'True Heir of the Emirate: không có Archetype🍀 hay Unique Weapon🍀' };
+    }
+    return { statModifiers: mods, skipDefault: true, description: desc };
+  },
+  '+1 all stats if has 🍀 Archetype, +1 all if has 🍀 Unique Weapon'
+);
+
+registerImmediateHandler(
+  'nghe_bai_thu_toi_50_50',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: '50% nhận Char Dev "Braindead", 50% nhận Char Dev "Seeking Wisdom" (Nghe Bài thú tội)' };
+  },
+  '50% chance Braindead, 50% Seeking Wisdom Char Dev'
+);
+
+registerImmediateHandler(
+  'kinda_homeless_leave_house',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Rời khỏi House nhưng vẫn giữ lại tất cả những gì đã nhận (Kinda Homeless)' };
+  },
+  'Leave House but keep all items received from it'
+);
+
+registerImmediateHandler(
+  'become_power_ranger_setup',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Gia nhập Power Ranger Wheel. Không nhận PvP Rewards, không có vòng PvE. Sau combat thắng, all Rangers +1 random stat.' };
+  },
+  'Join the Power Ranger Wheel with special rules'
+);
+
+registerImmediateHandler(
+  'back_to_basics_remove_powers',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Mất tất cả Power và không thể nhận Power mới (Back to Basics)' };
+  },
+  'Remove all Powers, cannot gain new Powers'
+);
+
+registerImmediateHandler(
+  'svks_steal_pvp_rewards',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Cướp tất cả hiệu ứng PvP Rewards từ 1 người còn sống ngẫu nhiên (SVKS)' };
+  },
+  'Steal all PvP Reward effects from a random alive player'
+);
+
+registerImmediateHandler(
+  'mrbeast_gift_gear',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Sau combat thắng: Quay 5 người và tặng 1 Gear. Nếu không có Gear: -5 stats để +1 cho 5 người (MrBeast)' };
+  },
+  'After win: gift gear to 5 random players or -5 stats to give +1 to 5 players'
+);
+
+registerImmediateHandler(
+  'co_cau_join_raid_boss',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Gia nhập tổ đội Raid Boss có nhiều người nhất mà chưa đầy (Cơ cấu)' };
+  },
+  'Join the largest non-full Raid Boss team'
+);
+
+registerImmediateHandler(
+  'haru_urara_round_32_check',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const pvpWins = (ctx.character as any).pvpWins ?? (ctx.character as any).tournament?.pvpWins ?? 0;
+    if (pvpWins < 3) {
+      return { skipDefault: true, description: 'Haru Urara: chưa tới vòng 32 (chưa kích hoạt)' };
+    }
+    return {
+      statModifiers: STAT_NAMES.map(stat => ({ stat, value: 3 })),
+      skipDefault: true,
+      description: '+3 All Stats (Haru Urara - đã đến vòng 32, net +2)',
+    };
+  },
+  '+3 all stats if survived to round 32 (net +2 after initial -1)'
+);
+
+registerImmediateHandler(
+  'nagi_extra_char_dev',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Nhận thêm 2 Char Dev ngẫu nhiên khi quay Char Dev wheel (Nagi)' };
+  },
+  'Gain 2 extra random Char Devs when spinning Char Dev wheel'
+);
+
+registerImmediateHandler(
+  'tokai_teio_instrument_check',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const INSTRUMENT_WEAPONS = ['Bagpipe', 'Drums', 'Flute', 'Guitar', 'Violin', 'Trumpet', 'Piano', 'Harp', 'Lute', 'Saxophone', 'Bass', 'Cello'];
+    const weapons: any[] = ctx.character.weapons || [];
+    const hasInstrument = weapons.some((w) => {
+      const wName = typeof w === 'string' ? w : w.name;
+      return wName && INSTRUMENT_WEAPONS.some((inst) => wName.toLowerCase().includes(inst.toLowerCase()));
+    });
+    if (!hasInstrument) {
+      return { skipDefault: true, description: 'Tokai Teio: không có nhạc cụ, không kích hoạt' };
+    }
+    const currentSpeed = ctx.baseStats.speed ?? 0;
+    return {
+      statModifiers: [{ stat: 'speed', value: currentSpeed, isBase: true }],
+      skipDefault: true,
+      description: `Gấp đôi Base Speed (${currentSpeed} → ${currentSpeed * 2}) khi dùng nhạc cụ (Tokai Teio)`,
+    };
+  },
+  'Double Base Speed when using a musical instrument as weapon'
+);
+
+registerImmediateHandler(
+  'rice_shower_not_finals',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const bracket = (ctx.character as any).tournament?.bracket ?? '';
+    const isFinals = (ctx.character as any).tournament?.isFinals ?? false;
+    const isLoserBracket = bracket === 'loser' || bracket === 'losers';
+    if (!isLoserBracket || isFinals) {
+      return { skipDefault: true, description: 'Rice Shower: không ở nhánh thua hoặc đã tới chung kết' };
+    }
+    return {
+      statModifiers: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+      skipDefault: true,
+      description: '+1 All Stats (Rice Shower - nhánh thua)',
+    };
+  },
+  '+1 all stats in loser bracket, disabled in finals'
+);
+
+registerImmediateHandler(
+  'final_reserves_round_16',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return { skipDefault: true, description: 'Final Reserves: Vòng 16 nhánh thua → loại bỏ hiệu ứng, nhận 2 Power ngẫu nhiên' };
+  },
+  'At loser round 16: remove effect and gain 2 random Powers'
+);
+
+registerImmediateHandler(
+  'overcome_habits_per_quirk',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const quirkCount = ((ctx.character as any).quirks || []).filter((q: any) => !q.isLost).length;
+    if (quirkCount === 0) {
+      return { skipDefault: true, description: 'Overcome the Habits: Không có Quirk' };
+    }
+    let lowestStat: StatName = 'strength';
+    let lowestVal = ctx.baseStats.strength ?? 0;
+    for (const stat of STAT_NAMES) {
+      if ((ctx.baseStats[stat] ?? 0) < lowestVal) { lowestVal = ctx.baseStats[stat] ?? 0; lowestStat = stat; }
+    }
+    return {
+      statModifiers: [{ stat: lowestStat, value: quirkCount }],
+      skipDefault: true,
+      description: `Overcome the Habits: ${quirkCount} Quirk → +${quirkCount} ${lowestStat} (stat thấp nhất)`,
+    };
+  },
+  '+1 lowest stat per Quirk (Overcome the Habits)'
+);
+
+registerImmediateHandler(
+  'w_speed_per_5_base',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const baseSpeed = ctx.baseStats.speed ?? 0;
+    const bonus = Math.floor(baseSpeed / 5);
+    if (bonus === 0) {
+      return { skipDefault: true, description: `W Speed: Base Speed ${baseSpeed} < 5, không nhận bonus` };
+    }
+    return {
+      statModifiers: STAT_NAMES.filter(s => s !== 'speed').map(stat => ({ stat, value: bonus })),
+      skipDefault: true,
+      description: `W Speed: +${bonus} vào tất cả chỉ số còn lại (${baseSpeed} Base Speed / 5)`,
+    };
+  },
+  '+1 all other stats per 5 Base Speed (W Speed)'
+);
+
+registerImmediateHandler(
+  'mad_scientist_random_size',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const isEnlarging = Math.random() < 0.5;
+    return { skipDefault: true, description: `Mad Scientist: Trước combat nhận hiệu ứng "${isEnlarging ? 'Enlarging' : 'Shrinking'}" (chỉ trong combat đó)` };
+  },
+  'Before combat: randomly apply Shrinking or Enlarging effect'
+);
+
+registerImmediateHandler(
+  'metamorphosis_random_stat',
+  (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const options: Array<{ stat: StatName; value: number }> = [
+      { stat: 'strength', value: 1 },
+      { stat: 'speed', value: 7 },
+      { stat: 'durability', value: 7 },
+      { stat: 'iq', value: 0 },
+      { stat: 'biq', value: 1 },
+      { stat: 'ma', value: 3 },
+    ];
+    const chosen = options[Math.floor(Math.random() * options.length)];
+    if (chosen.value === 0) {
+      return { skipDefault: true, description: 'Metamorphosis: Quay ra +0 IQ (không có thay đổi)' };
+    }
+    return {
+      statModifiers: [chosen],
+      skipDefault: true,
+      description: `Metamorphosis: +${chosen.value} ${chosen.stat}`,
+    };
+  },
+  'Randomly gain one of: +1 Str, +7 Spd, +7 Dura, +0 IQ, +1 BIQ, +3 MA'
+);
+
+registerImmediateHandler(
+  '100_girlfriends_stat_bonus',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const lover = ctx.character.lover as any;
+    let loverCount = 0;
+    if (lover) {
+      if (Array.isArray(lover)) loverCount = lover.filter((l: any) => !l.isLost).length;
+      else if (typeof lover === 'object' && !lover.isLost) loverCount = 1;
+      else if (typeof lover === 'string') loverCount = 1;
+    }
+    if (loverCount === 0) {
+      return { skipDefault: true, description: '100 Girlfriends: Chưa có Lover' };
+    }
+    let lowestStat: StatName = 'strength';
+    let lowestVal = ctx.currentStats.strength;
+    for (const stat of STAT_NAMES) {
+      if ((ctx.currentStats as Record<StatName, number>)[stat] < lowestVal) {
+        lowestVal = (ctx.currentStats as Record<StatName, number>)[stat];
+        lowestStat = stat;
+      }
+    }
+    return {
+      statModifiers: [{ stat: lowestStat, value: loverCount }],
+      skipDefault: true,
+      description: `100 Girlfriends: ${loverCount} Lover → +${loverCount} ${lowestStat}`,
+    };
+  },
+  '+1 lowest stat per Lover (100 Girlfriends)'
+);
+
+registerImmediateHandler(
+  'mang_ban_chan_stats_1',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    return {
+      statModifiers: STAT_NAMES.map(stat => ({ stat, value: 1 - ((ctx.baseStats as Record<StatName, number>)[stat] ?? 0), isBase: true as const })),
+      skipDefault: true,
+      description: 'Mang Bàn Chân Này Đi Dạo Phố: Tất cả Base Stats = 1',
+    };
+  },
+  'Set all base stats to 1 (Mang Bàn Chân Này Đi Dạo Phố)'
+);
+
+registerImmediateHandler(
+  'ascended_top_2_stats',
+  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
+    const sorted = [...STAT_NAMES].sort((a, b) =>
+      ((ctx.currentStats as Record<StatName, number>)[b] ?? 0) - ((ctx.currentStats as Record<StatName, number>)[a] ?? 0)
+    );
+    const [top1, top2] = sorted;
+    return {
+      statModifiers: [{ stat: top1, value: 4 }, { stat: top2, value: 4 }],
+      skipDefault: true,
+      description: `Ascended: +4 ${top1}, +4 ${top2} (2 stats cao nhất)`,
+    };
+  },
+  '+4 to the 2 highest stats (Ascended)'
+);
+
+// ============================================================================
+// COMBAT HANDLERS
+// ============================================================================
+
+registerCombatHandler(
+  'king_slayer_vs_kings_landing',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppCharDevs: string[] = (ctx.opponent.character as any).charDevs?.map((c: any) =>
+      typeof c === 'string' ? c : c.name
+    ) || [];
+    if (!oppCharDevs.some((cd) => cd.toLowerCase().includes("king's landing"))) {
+      return { skipDefault: true, description: 'King Slayer: đối thủ không có "King\'s Landing"' };
+    }
+    return {
+      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+      description: "+1 All Stats (King Slayer vs King's Landing)",
+    };
+  },
+  "+1 all stats when fighting opponent with King's Landing char dev"
+);
+
+registerCombatHandler(
+  'kings_landing_death_gift',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return { description: "King's Landing: khi bị loại, gia tộc nhận 1 Power (handled externally)" };
+  },
+  'On death: housemates gain 1 Power'
+);
+
+registerCombatHandler(
+  'kings_landing_penalty_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const selfRace = ctx.self.race?.toLowerCase() ?? '';
+    const exemptRaces = ['god', 'demi god', 'demi-god', 'demigod'];
+    const isExemptByRace = exemptRaces.some((r) => selfRace.includes(r));
+    const archetypes: string[] = (ctx.self as any).archetypes?.map((a: any) =>
+      typeof a === 'string' ? a : (a?.name ?? '')
+    ) || [];
+    const isDevotee = archetypes.some((a) => a.toLowerCase().includes('devotee'));
+    if (isExemptByRace || isDevotee) {
+      return { skipDefault: true, description: "King's Landing: exempt (Archetype Devotee hoặc race God/Demi God)" };
+    }
+    return {
+      selfStatMods: [{ stat: 'iq', value: -10 }],
+      selfPoints: -2,
+      description: "King's Landing: -2 điểm và -10 IQ (không có Devotee/God/Demi God)",
+    };
+  },
+  "King's Landing: -2 points and -10 IQ unless Archetype Devotee or race God/Demi God"
+);
+
+registerCombatHandler(
+  'hand_of_king_vs_slayer',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    const oppCharDevs: string[] = (ctx.opponent.character as any).charDevs?.map((c: any) =>
+      typeof c === 'string' ? c : c.name
+    ) || [];
+    if (!oppCharDevs.some((cd) => cd.toLowerCase().includes('king slayer') || cd.toLowerCase().includes('slayer'))) {
+      return { skipDefault: true, description: 'Hand of King: đối thủ không có "King Slayer"' };
+    }
+    return {
+      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+      description: '+1 All Stats (Hand of King vs King Slayer)',
+    };
+  },
+  '+1 all stats when fighting opponent with Become King Slayer char dev'
+);
+
+registerCombatHandler(
+  'lord_of_cinder_rematch',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return { description: 'Lord of Cinder: đánh lại combat này thêm 1 lần (handled externally)' };
+  },
+  'Rematch once per round if lost in a weighted round'
+);
+
+registerCombatHandler(
+  'shardbearer_great_rune',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return { description: 'Shardbearer: nhận 1 mảnh Great Rune chưa có (handled externally)' };
+  },
+  'After combat: gain 1 Great Rune shard not yet owned'
+);
+
+registerCombatHandler(
+  'dont_say_it_win_bonus',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return {
+      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 2 })),
+      grantPower: 'Encroaching Shadow',
+      description: 'Don\'t say it: xóa giảm stats, +2 All Stats, nhận "Encroaching Shadow"',
+    };
+  },
+  'After first win: remove stat penalty, +2 all stats, grant Encroaching Shadow power'
+);
+
+registerCombatHandler(
+  'mrbeast_gift_gear',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return { description: 'MrBeast: Quay 5 người và tặng 1 Gear. Nếu không có Gear: -5 stats để +1 cho 5 người (handled externally)' };
+  },
+  'After win: gift gear to 5 random players, or -5 stats to give +1 to 5 players'
+);
+
+registerCombatHandler(
+  'svks_steal_pvp_rewards',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return { description: 'SVKS: Cướp tất cả hiệu ứng PvP Rewards từ 1 người ngẫu nhiên (handled externally)' };
+  },
+  'Steal all PvP Reward effects from a random alive player'
+);
+
+registerCombatHandler(
+  'el_condor_pasa_dura_win',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    if (ctx.roundResults?.durability !== 'win') {
+      return { skipDefault: true, description: 'El Condor Pasa: chưa thắng Round Dura' };
+    }
+    return {
+      selfStatMods: [{ stat: 'speed', value: 3 }, { stat: 'strength', value: 3 }],
+      description: '+3 Speed, +3 Strength (El Condor Pasa - thắng Round Dura)',
+    };
+  },
+  'After winning Dura round: +3 Speed and +3 Strength in next combat'
+);
+
+registerCombatHandler(
+  'symboli_rudolf_finals_winner',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.isFinals || ctx.self.bracket === 'loser') {
+      return { skipDefault: true, description: 'Symboli Rudolf: không phải chung kết nhánh thắng' };
+    }
+    return {
+      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+      description: '+1 All Stats (Symboli Rudolf - thắng chung kết nhánh thắng)',
+    };
+  },
+  '+1 all stats on winning winner bracket finals'
+);
+
+registerCombatHandler(
+  'nice_nature_auto_win_tie',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (!ctx.opponent) return { skipDefault: true };
+    if (ctx.self.roundsWon === 3 && ctx.self.roundsLost === 3) {
+      return { autoWin: true, description: 'Nice Nature: Tie-Break 3-3 → Auto Win' };
+    }
+    return { skipDefault: true, description: 'Nice Nature: chưa đến Tie-Break 3-3' };
+  },
+  'If tied 3-3 in combat, skip Tie-Break and auto-win'
+);
+
+registerCombatHandler(
+  'rice_shower_not_finals',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const isLoserBracket = ctx.self.bracket === 'loser' || ctx.self.bracket === 'losers';
+    if (!isLoserBracket || ctx.isFinals) {
+      return { skipDefault: true, description: 'Rice Shower: không ở nhánh thua hoặc đã tới chung kết' };
+    }
+    return {
+      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
+      description: '+1 All Stats trong combat (Rice Shower - nhánh thua)',
+    };
+  },
+  '+1 all stats in loser bracket combats, disabled in finals'
+);
+
+registerCombatHandler(
+  'haru_urara_round_32_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.self.pvpWins < 3) {
+      return { skipDefault: true, description: 'Haru Urara: chưa tới vòng 32' };
+    }
+    return {
+      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 3 })),
+      description: '+3 All Stats (Haru Urara - đã đến vòng 32)',
+    };
+  },
+  '+3 all stats during combat if reached round 32'
+);
+
+registerCombatHandler(
+  'nagi_extra_char_dev',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    return { description: 'Nagi: +2 Char Dev khi quay vòng Char Dev (handled externally)' };
+  },
+  'Gain 2 extra Char Devs when spinning Char Dev wheel'
+);
+
+registerCombatHandler(
+  'tokai_teio_instrument_check',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const INSTRUMENT_WEAPONS = ['Bagpipe', 'Drums', 'Flute', 'Guitar', 'Violin', 'Trumpet', 'Piano', 'Harp', 'Lute', 'Saxophone', 'Bass', 'Cello'];
+    const weapons: any[] = ctx.self.weapons || [];
+    const hasInstrument = weapons.some((w) => {
+      const wName = typeof w === 'string' ? w : w?.name;
+      return wName && INSTRUMENT_WEAPONS.some((inst) => wName.toLowerCase().includes(inst.toLowerCase()));
+    });
+    if (!hasInstrument) {
+      return { skipDefault: true, description: 'Tokai Teio: không có nhạc cụ' };
+    }
+    const baseSpeed = ctx.self.baseStats.speed ?? 0;
+    return {
+      selfStatMods: [{ stat: 'speed', value: baseSpeed }],
+      description: `Gấp đôi Base Speed (+${baseSpeed}) khi dùng nhạc cụ (Tokai Teio)`,
+    };
+  },
+  'Double Base Speed during combat when using a musical instrument'
+);
+
+registerCombatHandler(
+  'mad_scientist_random_size',
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (Math.random() < 0.5) {
+      return {
+        opponentStatMods: STAT_NAMES.map(stat => ({ stat, value: -2 })),
+        description: 'Mad Scientist: Shrinking → Đối thủ -2 all stats (combat only)',
+      };
+    }
+    return {
+      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 2 })),
+      description: 'Mad Scientist: Enlarging → Bản thân +2 all stats (combat only)',
+    };
+  },
+  '50% Shrinking (opponent -2 all) or 50% Enlarging (self +2 all) before combat'
+);
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+export function registerCharDevHandlers(): void {
+  console.log('CharDev handlers registered');
+}
+
+export function registerCharDevCombatHandlers(): void {
+  console.log('CharDev combat handlers registered');
 }
