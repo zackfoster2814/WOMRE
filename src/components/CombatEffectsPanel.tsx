@@ -201,27 +201,33 @@ const EFFECT_DEFS: EffectDef[] = [
     gmNote: "Quay wheel random stat → +2 vào stat đó",
   },
 
-  // Fast Learner: 33% học Power của đối thủ
+  // Fast Learner: 33% học Power của đối thủ → nếu thành công mở wheel chọn power
   {
     source: "fast learner",
     timing: "after_combat",
     category: "wheel",
     description: "Fast Learner: 33% học được 1 Power của đối thủ.",
-    wheelItems: [
-      {
-        label: "Học Power (33%)",
-        weight: 33,
-        isSuccess: true,
-        color: "#10b981",
-      },
-      {
-        label: "Thất bại (67%)",
-        weight: 67,
-        isSuccess: false,
-        color: "#6b7280",
-      },
-    ],
-    gmNote: "Nếu thành công: GM trao 1 Power ngẫu nhiên từ đối thủ",
+    resolver: (ctx) => {
+      const oppPowers = (ctx.opponentCharacter?.powers || [])
+        .filter((p: any) => !p?.isLost)
+        .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
+        .filter(Boolean);
+      const hasPowers = oppPowers.length > 0;
+      return {
+        category: "wheel" as EffectCategory,
+        description: hasPowers
+          ? `Fast Learner: 33% học được 1 trong ${oppPowers.length} Power của đối thủ.`
+          : "Fast Learner: Đối thủ không có Power → không kích hoạt.",
+        wheelItems: hasPowers
+          ? [
+              { label: "Học được Power (33%)", weight: 33, isSuccess: true, color: "#10b981", meta: { oppPowers } },
+              { label: "Thất bại (67%)", weight: 67, isSuccess: false, color: "#6b7280" },
+            ]
+          : [{ label: "Đối thủ không có Power", weight: 1, isSuccess: false, color: "#6b7280" }],
+        resolved: !hasPowers,
+        isActivated: hasPowers,
+      };
+    },
   },
 
   // Resilient: 36% +1 vào stat đã thua
@@ -686,14 +692,66 @@ const EFFECT_DEFS: EffectDef[] = [
       "[GM Action] Mỗi round player này thắng: roll 15% (xác suất) → nếu trúng, round đó không tính điểm",
   },
 
-  // Mute: 10% -1 stat ngẫu nhiên khi thua round
+  // Mute: 10% -1 stat của round đó khi thua round
   {
     source: "mute",
     timing: "before_combat",
     category: "gm",
-    description: "Mute: Mỗi round thua có 10% -1 stat ngẫu nhiên.",
+    description: "Mute: Mỗi round thua có 10% bị -1 vào chỉ số của round đó.",
     gmNote:
-      "[GM Action] Mỗi round player này thua: roll 10% → nếu trúng, -1 vào stat của round đó",
+      "[GM Action] Mỗi round player này thua: roll 10% → nếu trúng, -1 vào chỉ số của round vừa thua (STR/SPD/DUR/IQ/BIQ/MA)",
+  },
+
+  // Generous: nhận bonus sau thua (nếu đã tặng reward)
+  {
+    source: "generous",
+    timing: "after_lose",
+    category: "gm",
+    description:
+      "Generous: Sau thua — nhận +N lowest stat + N Power wheel (N = số reward đã tặng).",
+    gmNote:
+      "[GM Action] Kiểm tra generousRewardsGiven. Nếu >0: +N vào stat thấp nhất và quay N Power wheel cho player",
+  },
+
+  // Sổ tay: +1 IQ nếu thua round IQ
+  {
+    source: "sổ tay",
+    timing: "after_combat",
+    category: "gm",
+    description: "Sổ tay: Nếu thua round IQ → +1 IQ.",
+    gmNote: "[GM Action] Kiểm tra kết quả round IQ: nếu player thua → +1 IQ",
+  },
+
+  // House Tyrell: +2 Base Stat thấp nhất sau combat
+  {
+    source: "house tyrell",
+    timing: "after_combat",
+    category: "gm",
+    description: "House Tyrell: Sau combat nhận +2 vào Base Stat thấp nhất.",
+    gmNote:
+      "[GM Action] Xác định Base Stat thấp nhất hiện tại → +2 vào stat đó",
+  },
+
+  // MrBeast: sau thắng quay 5 người và tặng 1 Gear
+  {
+    source: "mrbeast",
+    timing: "after_win",
+    category: "gm",
+    description:
+      "MrBeast: Sau thắng — quay 5 player ngẫu nhiên còn sống và tặng họ 1 Gear ngẫu nhiên của bạn.",
+    gmNote:
+      "[GM Action] Quay 5 player còn sống ngẫu nhiên. Nếu có Gear: chọn 1 Gear ngẫu nhiên → 5 người nhận Gear đó. Nếu không có Gear: -5 vào 1 stat ngẫu nhiên → 5 người nhận +1 stat đó. Nếu người nhận cũng là MrBeast: +2 All Stats cho họ",
+  },
+
+  // Coven Council: khi bị loại, 1 player ngẫu nhiên ngoài Coven được Re-Spin 1 stat
+  {
+    source: "coven council",
+    timing: "after_lose",
+    category: "gm",
+    description:
+      "Coven Council: Khi bị loại — 1 player ngẫu nhiên không thuộc Coven được Re-Spin 1 stat.",
+    gmNote:
+      "[GM Action] Chỉ kích hoạt khi player bị loại khỏi giải. Quay random 1 player không thuộc Coven Council → Re-Spin 1 stat bất kì của họ",
   },
 
   // ─── HOUSE MASON EFFECTS ─────────────────────────────────────────────────
@@ -1015,13 +1073,13 @@ const EFFECT_DEFS: EffectDef[] = [
       'Mad Scientist: Trước combat: Nhận ngẫu nhiên hiệu ứng của 1 trong 2 Power "Shrinking" và "Enlarging". (Chỉ có hiệu lực trong combat đó)',
     wheelItems: [
       {
-        label: "Shrinking: Đối thủ -2 All Stats",
+        label: "Shrinking: +6 SPD, -3 STR, -3 DUR",
         weight: 1,
         isSuccess: true,
         color: "#ef4444",
       },
       {
-        label: "Enlarging: Bản thân +2 All Stats",
+        label: "Enlarging: +3 STR, +3 DUR, -6 SPD",
         weight: 1,
         isSuccess: true,
         color: "#22c55e",
@@ -1410,6 +1468,90 @@ const EFFECT_DEFS: EffectDef[] = [
         wheelItems,
       };
     },
+  },
+
+  // Trickster: quay subtype trước mỗi combat
+  {
+    source: "trickster",
+    timing: "before_combat",
+    category: "wheel",
+    description:
+      "Trickster: Quay Trickster Wheel để xác định subtype cho combat này.",
+    resolver: (_ctx) => {
+      const tricksterSubs = EffectRegistry.getAllByType("archetype_sub").filter(
+        (e) =>
+          [
+            "ace of spades",
+            "king of diamonds",
+            "queen of clubs",
+            "jack of 97",
+            "ten of hearts",
+          ].includes(e.name.toLowerCase()),
+      );
+      const colors = ["#ef4444", "#f59e0b", "#22c55e", "#a855f7", "#6b7280"];
+      const subtypeNames = [
+        "Ace of Spades",
+        "King of Diamonds",
+        "Queen of Clubs",
+        "Jack of 97",
+        "Ten of Hearts",
+      ];
+      const weights: Record<string, number> = {
+        "ace of spades": 10,
+        "king of diamonds": 30,
+        "queen of clubs": 35,
+        "jack of 97": 0.97,
+        "ten of hearts": 24.03,
+      };
+      const wheelItems: WheelSpinItem[] = subtypeNames.map((name, i) => {
+        const sub = tricksterSubs.find(
+          (e) => e.name.toLowerCase() === name.toLowerCase(),
+        );
+        return {
+          label: name,
+          weight: weights[name.toLowerCase()] ?? 1,
+          isSuccess: name.toLowerCase() !== "ten of hearts",
+          color: colors[i % colors.length],
+          description: sub?.description,
+        };
+      });
+      return {
+        category: "wheel" as EffectCategory,
+        description: `Trickster: Quay wheel để chọn subtype — Ace of Spades (10%), King of Diamonds (30%), Queen of Clubs (35%), Jack of 97 (0.97%), Ten of Hearts (24%).`,
+        wheelItems,
+      };
+    },
+  },
+
+  // Detect Thoughts: +2 BIQ nếu Base IQ > đối thủ (engine tự apply, hiển thị trạng thái)
+  {
+    source: "detect thoughts",
+    timing: "before_combat",
+    category: "auto",
+    description: "Detect Thoughts: +2 BIQ nếu Base IQ cao hơn đối thủ.",
+    resolver: (ctx) => {
+      const selfIQ = (ctx.character.stats as any)?.iq ?? 0;
+      const oppIQ = (ctx.opponentCharacter?.stats as any)?.iq ?? 0;
+      const activated = selfIQ > oppIQ;
+      return {
+        description: activated
+          ? `Detect Thoughts: Base IQ ${selfIQ} > đối thủ ${oppIQ} → +2 BIQ (engine tự apply).`
+          : `Detect Thoughts: Base IQ ${selfIQ} ≤ đối thủ ${oppIQ} → không kích hoạt.`,
+        category: "auto" as EffectCategory,
+        resolved: true,
+        isActivated: activated,
+      };
+    },
+  },
+
+  // Golden Vow: +1 điểm khởi đầu (auto, engine xử lý)
+  {
+    source: "golden vow",
+    timing: "before_combat",
+    category: "auto",
+    description: "Golden Vow: Khởi đầu với +1 điểm (engine tự apply).",
+    resolved: true,
+    resolvedNote: "Engine tự apply +1 điểm khởi đầu",
   },
 
   // ─── POWER EFFECTS (before_combat wheel) ─────────────────────────────────
