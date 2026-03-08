@@ -14,6 +14,7 @@ export interface WheelSpinItem {
   weight: number; // Tương ứng với xác suất (weight / totalWeight)
   color?: string;
   isSuccess?: boolean; // Đánh dấu outcome "thành công"
+  description?: string; // Mô tả của item (hiển thị sau khi quay ra)
   /** Arbitrary metadata for custom effects (e.g. Dothraki ruleIndex) */
   meta?: Record<string, unknown>;
 }
@@ -76,7 +77,7 @@ export const ProbabilityWheelModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="bg-gray-900 border-2 border-purple-500/50 rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl">
+      <div className="bg-gray-900 border-2 border-purple-500/50 rounded-2xl p-6 w-full max-w-2xl mx-4 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-purple-300">{title}</h2>
@@ -89,59 +90,42 @@ export const ProbabilityWheelModal = ({
           </button>
         </div>
 
-        {description && (
-          <p className="text-gray-400 text-sm mb-4">{description}</p>
-        )}
-
-        {/* Probability display */}
-        {/* <div className="flex flex-wrap gap-2 mb-4 justify-center">
-          {items.map((item, idx) => {
-            const totalWeight = items.reduce((s, i) => s + i.weight, 0);
-            const pct = Math.round((item.weight / totalWeight) * 100);
-            return (
-              <span
-                key={idx}
-                className={`px-2 py-1 rounded text-xs font-medium ${
-                  item.isSuccess
-                    ? "bg-green-700/60 text-green-300"
-                    : "bg-gray-700/60 text-gray-300"
+        {/* Body: description bên trái, wheel bên phải */}
+        <div className="flex gap-6 items-start mb-4">
+          {/* Left: description + item list + result */}
+          <div className="flex-1 min-w-0 flex flex-col gap-3">
+            {description && (
+              <p className="text-gray-300 text-sm leading-relaxed">{description}</p>
+            )}
+            {result && (
+              <div
+                className={`p-3 rounded-lg ${
+                  result.isSuccess
+                    ? "bg-green-700/20 border border-green-500/60"
+                    : "bg-red-700/20 border border-red-500/60"
                 }`}
               >
-                {item.label}: {pct}%
-              </span>
-            );
-          })}
-        </div> */}
+                <div className="text-xs text-gray-400 mb-1 uppercase tracking-wide">Kết quả</div>
+                <div className="text-base font-bold text-white">{result.label}</div>
+                {result.description && (
+                  <div className="text-xs text-gray-300 mt-1 leading-relaxed">{result.description}</div>
+                )}
+              </div>
+            )}
+          </div>
 
-        {/* Wheel */}
-        <div className="flex justify-center mb-4">
-          <div className="w-64 h-64">
-            <WheelCanvas
-              items={wheelItems}
-              isSpinning={isSpinning}
-              onSpinComplete={handleSpinComplete}
-              spinButtonClassName="hidden"
-            />
+          {/* Right: wheel */}
+          <div className="shrink-0">
+            <div className="w-64 h-64">
+              <WheelCanvas
+                items={wheelItems}
+                isSpinning={isSpinning}
+                onSpinComplete={handleSpinComplete}
+                spinButtonClassName="hidden"
+              />
+            </div>
           </div>
         </div>
-
-        {/* Result */}
-        {result && (
-          <div
-            className={`text-center mb-4 p-3 rounded-lg ${
-              result.isSuccess
-                ? "bg-green-700/30 border border-green-500"
-                : "bg-red-700/30 border border-red-500"
-            }`}
-          >
-            <div className="text-lg font-bold text-white">{result.label}</div>
-            {/* {result.isSuccess ? (
-              <div className="text-green-400 text-sm">✓ Hiệu ứng kích hoạt!</div>
-            ) : (
-              <div className="text-red-400 text-sm">✗ Không có gì xảy ra</div>
-            )} */}
-          </div>
-        )}
 
         {/* Buttons */}
         <div className="flex gap-3 justify-center">

@@ -104,7 +104,7 @@ export function registerAllGearEffects() {
       type: 'stat_modifier',
       stat: 'all',
       value: -2,
-      timing: 'during_combat',
+      timing: 'before_combat',
       target: 'opponent',
       conditions: [{ type: 'race_match', races: ['Demon', 'Vampire', 'Spirit', 'Orc', 'Skeleton', 'Goblin'] }]
     })
@@ -1166,6 +1166,17 @@ export function registerAllGearEffects() {
     .description('+3 MA. Khi bị loại, đá trở về Infinity Gauntlet.')
     .addStat('ma', 3)
     .register();
+
+  // Shaggydog
+  defineEffect('gear', 'Shaggydog')
+    .description('Khi nhận Sói: Nhận +1 Stat thấp nhất. Sau mỗi Combat: Người nhà Stark nhận +1 Stat thấp nhất.')
+    .effect({
+      type: 'custom',
+      timing: 'after_combat',
+      target: 'self',
+      customHandler: 'shaggydog_stark_bonus'
+    })
+    .register();
 }
 
 // ============================================================================
@@ -1760,19 +1771,22 @@ registerCombatHandler(
 registerCombatHandler(
   'giay_no_gia_truyen_debt',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (ctx.self.roundsWon < 4) {
+    // Spec: "không kiếm đủ 4 điểm" = score < 4 (not rounds won)
+    // currentScore is injected by applyBeforeCombatEnd if timing is before_combat_end
+    const score = (ctx.self as any).currentScore ?? ctx.self.roundsWon;
+    if (score < 4) {
       return {
         removeAllGearAndWeapon: true,
         transferGearToRandomHouseMember: true,
-        description: 'Giấy Nợ Gia Truyền: Không đủ 4 điểm → mất toàn bộ Gear và Weapon, chuyển Giấy Nợ cho người ngẫu nhiên trong House',
+        description: `Giấy Nợ Gia Truyền: Không đủ 4 điểm (${score} điểm) → mất toàn bộ Gear và Weapon, chuyển Giấy Nợ cho người ngẫu nhiên trong House`,
       };
     }
     return {
       grantGear: ['Golden Coin', 'Golden Coin'],
-      description: 'Giấy Nợ Gia Truyền: Đủ 4 điểm → nhận 2 Golden Coin',
+      description: `Giấy Nợ Gia Truyền: Đủ ${score} điểm (≥4) → nhận 2 Golden Coin`,
     };
   },
-  'Lose all Gear/Weapon if < 4 points; gain 2 Golden Coins if >= 4 points'
+  'Lose all Gear/Weapon if score < 4; gain 2 Golden Coins if score >= 4'
 );
 
 // ============================================================================
@@ -1785,21 +1799,14 @@ registerCombatHandler(
 registerCombatHandler(
   'cursed_coin_50_50',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    const selfDebuffed = Math.random() < 0.5;
-
-    if (selfDebuffed) {
-      return {
-        selfStatMods: STAT_NAMES.map(stat => ({ stat, value: -1 })),
-        description: 'Cursed Coin: Bạn bị -1 all stats',
-      };
-    } else {
-      return {
-        opponentStatMods: STAT_NAMES.map(stat => ({ stat, value: -1 })),
-        description: 'Cursed Coin: Đối thủ bị -1 all stats',
-      };
-    }
+    // 50/50 probability decided by wheel UI in CombatEffectsPanel, not Math.random()
+    // This handler is a GM reference — actual execution is manual via wheel spin
+    return {
+      skipDefault: true,
+      description: 'Cursed Coin: 50/50 xem ai bị -1 All Stats (xác suất quyết định bởi wheel UI)',
+    };
   },
-  '50/50 -1 all stats to self or opponent'
+  '50/50 -1 all stats to self or opponent (wheel decides who)'
 );
 
 // ============================================================================
@@ -2138,20 +2145,14 @@ registerCombatHandler(
 registerCombatHandler(
   'staff_fallen_one_swap',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    const quirkToPower = Math.random() < 0.5;
-    if (quirkToPower) {
-      return {
-        grantPower: 'random',
-        description: 'Staff of the Fallen One: Mất 1 Quirk → nhận 1 Power',
-      };
-    } else {
-      return {
-        grantQuirk: 'random',
-        description: 'Staff of the Fallen One: Mất 1 Power → nhận 1 Quirk',
-      };
-    }
+    // 50/50 probability decided by wheel UI in CombatEffectsPanel, not Math.random()
+    // This handler is a GM reference — actual execution is manual via wheel spin
+    return {
+      skipDefault: true,
+      description: 'Staff of the Fallen One: 50/50 swap Quirk↔Power (xác suất quyết định bởi wheel UI)',
+    };
   },
-  '50/50 swap Quirk↔Power after combat'
+  '50/50 swap Quirk↔Power after combat (wheel decides probability)'
 );
 
 // ============================================================================
@@ -2393,6 +2394,29 @@ registerCombatHandler(
     };
   },
   "Ragnarok's Cobra: auto-lose at WB-R64 (once)"
+);
+
+// ============================================================================
+// SHAGGYDOG - +1 lowest stat after combat for Stark house members
+// ============================================================================
+
+/**
+ * Shaggydog - Sau mỗi Combat: Người nhà Stark nhận +1 Stat thấp nhất.
+ */
+registerCombatHandler(
+  'shaggydog_stark_bonus',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const house = ((ctx.self as any).character?.house || (ctx.self as any).house || '').toLowerCase();
+    if (!house.includes('stark')) return { skipDefault: true };
+    const stats = ctx.self.stats;
+    const STAT_KEYS: StatName[] = ['strength', 'speed', 'durability', 'iq', 'biq', 'ma'];
+    const lowestStat = STAT_KEYS.reduce((a, b) => (stats[a] ?? 0) <= (stats[b] ?? 0) ? a : b);
+    return {
+      selfStatMods: [{ stat: lowestStat, value: 1 }],
+      description: `Shaggydog: Người nhà Stark → +1 ${lowestStat.toUpperCase()} (stat thấp nhất)`,
+    };
+  },
+  '+1 lowest stat after combat for Stark house members (Shaggydog)'
 );
 
 export function registerGearCombatHandlers() {

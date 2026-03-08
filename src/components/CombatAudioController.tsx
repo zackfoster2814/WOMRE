@@ -9,6 +9,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { getAssetPath } from "../utils/basePath";
 
 // ============================================================
 // TYPES
@@ -19,9 +20,16 @@ export interface CombatAudioTrack {
   itemName: string;
   type: "local" | "youtube";
   src?: string;
+  /** Local file path — nếu có, ưu tiên dùng thay vì YouTube */
+  localSrc?: string;
+  /** Danh sách local files để random khi bài kết thúc */
+  localPlaylist?: string[];
+  /** Folder prefix cho localPlaylist */
+  localPlaylistFolder?: string;
   playlistId?: string;
   videoId?: string;
   label: string;
+  loop?: boolean;
 }
 
 interface TrackState {
@@ -42,10 +50,77 @@ const mkDefault = (ytVol = false): TrackState => ({
 // DETECT TRACKS FROM CHARACTER
 // ============================================================
 
+// Local file lists — fallback to YouTube nếu folder trống
+const KEO_LOCAL_FILES = [
+  "01 - Ngọt - Thấy Chưa (Official Music Video).mp3",
+  "02 - Ngọt - Thấy Chưa.mp3",
+  "03 - Ngọt - Mấy Khi (Official Music Video).mp3",
+  "04 - Ngọt - LẦN CUỐI (đi bên em xót xa người ơi).mp3",
+  "05 - Ngọt - Em dạo này (Official Music Video).mp3",
+  "06 - Ngọt - CHUYỂN KÊNH (sản phẩm này không phải là thuốc).mp3",
+  "07 - Ngọt vc. Đen - Cho Tôi Lang Thang.mp3",
+  "08 - Ngọt - Em Trang Trí.mp3",
+  "09 - Ngọt - Đốt.mp3",
+  "10 - Ngọt - Cho.mp3",
+  "11 - Ngọt - để quên.mp3",
+  "12 - Ngọt - HẾT THỜI.mp3",
+  "13 - Ngọt - NỨT (đôi chân đôi tay đôi mắt trái tim).mp3",
+  "14 - Ngọt - (bé).mp3",
+  "15 - Ngọt -  (sau đây là) DỰ BÁO THỜI TIẾT (cho các vùng vào ngày mai).mp3",
+  "16 - Ngọt - Mấy Khi ｜ Director's Cut.mp3",
+  "17 - Ngọt - CHUÔNG BÁO THỨC (sáng rồi).mp3",
+  "18 - Ngọt - Tìm Người Nhà.mp3",
+  "19 - Ngọt - VÉ ĐI THIÊN ĐƯỜNG (một chiều).mp3",
+  "20 - Ngọt - GIẢ VỜ.mp3",
+  "21 - Ngọt - EM CÓ CHẮC KHÔNG (？) (bài ca rebound).mp3",
+  "22 - Ngọt - MÀU (đen trắng).mp3",
+  "23 - Ngọt -  (tôi) ĐI TRÚ ĐÔNG (Official Music Video).mp3",
+  "24 - Ngọt - MẾU MÁO (T.T).mp3",
+  "25 - Ngọt - Một ngày không mưa.mp3",
+  "26 - Ngọt - Mèo hoang.mp3",
+  "27 - Ngọt - Kẻ thù.mp3",
+  "28 - Ngọt - Kho báu.mp3",
+  "29 - Ngọt - Xin cho tôi.mp3",
+  "30 - Ngọt - Em Dạo Này (bản CNGDC).mp3",
+  "31 - Ngọt - Kẻ Thù (bản CNGDC).mp3",
+  "32 - Ngọt - Bartender (Official Music Video).mp3",
+  "33 - Ngọt - Bartender (bản CNGDC).mp3",
+  "34 - Ngọt - Mèo Hoang (bản CNGDC).mp3",
+  "35 - Ngọt - Ng`bthg Hà Nội 23⧸9⧸2017.mp3",
+  "36 - Ngọt - Drama Queen.mp3",
+  "37 - Ngọt - Khắp Xung Quanh.mp3",
+  "38 - Ngọt - Những Chuyến Phiêu Lưu.mp3",
+  "39 - Ngọt - À Ơi.mp3",
+  "40 - Ngọt - Xanh.mp3",
+  "41 - Ngọt - Be Cool.mp3",
+  "42 - Ngọt - Vì Ai.mp3",
+  "43 - Ngọt - Xanh (fingerstyle).mp3",
+  "44 - Ngọt - Không Làm Gì (Official Music Video).mp3",
+  "45 - Ngọt - Cho Tôi Đi Theo (trực tiếp tại Bữa Trưa Vui Vẻ VTV6).mp3",
+  "47 - Ngọt - Cá hồi.mp3",
+  "48 - Ngọt - Cho Tôi Đi Theo.mp3",
+  "49 - Ngọt - Khắp Xung Quanh.mp3",
+  "50 - Ngọt - Cá Hồi.mp3",
+];
+
+const OT_LOCAL_FILES = [
+  "01 - Lần Cuối - Bocchi (AI cover).mp3",
+  "02 - Trước Khi Em Tồn Tại (Peter Griffin Cover).mp3",
+  "03 - CHẾT TRUYỀN THÔNG - VŨ ĐINH TRỌNG THẮNG ( Arisu AI Cover ).mp3",
+  "04 - Trước Khi Em Tồn Tại - Tokai Teio (AI cover).mp3",
+  "05 - Em dạo này (Ngọt) - Mejiro McQueen (AI Cover).mp3",
+  "06 - LẦN CUỐI - Tokai Teio (AI Cover).mp3",
+  "07 - Kẻ Thù - Ngọt (Sorasaki Hina AI Cover).mp3",
+  "08 - Mèo Hoang - Ngọt (Takanashi Hoshino AI Cover).mp3",
+  "09 - Lần Cuối - Drake x Ngọt (AI Cover).mp3",
+  "10 - Peter Griffin Hát Chuyển Kênh.mp3",
+  "11 - Ngọt - Hết Thời (Tokai Teio Cover).mp3",
+];
+
+// YouTube fallback seeds
 const KEO_PLAYLIST_ID = "PLnUioGkqqn5XwWaMlwhftWusPPK_KHz3T";
 const OT_PLAYLIST_ID  = "PLI8ooDRiresrLRA0no6IA7KFZl0dvVp6E";
-// Kẹo: 49 video IDs từ playlist PLnUioGkqqn5XwWaMlwhftWusPPK_KHz3T
-const KEO_SEED = [
+const KEO_YT_SEED = [
   "-6s_eRHYqVM", "-b4qvyf_vNU", "0VJZOF_SJKs", "0YdgmKjUG-o", "1u0ygl9vJHI",
   "4VKoHGN9FzU", "9ZKA9xaMLac", "9mA7h1jfxc8", "BNKr6ONy4_Q", "BwuLJf9gHSo",
   "DlZ0vjfmzV0", "ECZVU4x6Xq0", "GqIaese5_Ac", "HD52peTkszQ", "ISK0p7-CUw0",
@@ -57,11 +132,12 @@ const KEO_SEED = [
   "lFQLRusYtQA", "mjpUWO5MuPg", "njv-aZKJnn8", "p8VDTNYyKbo", "vsRS7oGqPTg",
   "xG94wlZai1I", "xvpverLphlo", "yJbGCwT7Kms", "zVB61Ta9TMs",
 ];
-// Ớt: 11 video IDs từ playlist PLI8ooDRiresrLRA0no6IA7KFZl0dvVp6E
-const OT_SEED  = [
+const OT_YT_SEED = [
   "iZzVHk2m0mI", "EMG5tRgyrR8", "QcTWqGk2kP4", "aqXvFPKCFzs", "VPzWsWhk1zA",
   "BrPhEJh9xj4", "OnxEaDIsgWY", "RvLzVhjOj90", "gQg6P4UtDrM", "mr9jN6lHuP8", "xhhW9ncf4WE",
 ];
+
+function randomFrom<T>(arr: T[]): T { return arr[Math.floor(Math.random() * arr.length)]; }
 
 export function detectCombatAudioTracks(character: any): CombatAudioTrack[] {
   if (!character) return [];
@@ -72,37 +148,81 @@ export function detectCombatAudioTracks(character: any): CombatAudioTrack[] {
     .map((q: any) => (typeof q === "string" ? q : q?.name ?? "").toLowerCase());
 
   if (quirks.some(q => q === "raumanian" || q === "raumanian🍀"))
-    tracks.push({ id: "quirk-raumanian", itemName: "Raumanian🍀", type: "youtube", videoId: "UVFHuVneiPM", label: "Raumanian🍀" });
+    tracks.push({
+      id: "quirk-raumanian", itemName: "Raumanian🍀", type: "local",
+      src: "/assets/combatSFX/Raumanian.mp3",
+      label: "Raumanian🍀 – Khúc Tình Ca Thanh Hoá", loop: true,
+    });
 
   const powers: string[] = (character.powers || [])
     .filter((p: any) => !p.isLost)
     .map((p: any) => (typeof p === "string" ? p : p?.name ?? ""));
 
   if (powers.includes("67"))
-    tracks.push({ id: "power-67", itemName: "67", type: "youtube", videoId: "ei7NmqtqgOs", label: "67" });
+    tracks.push({
+      id: "power-67", itemName: "67", type: "local",
+      src: "/assets/combatSFX/67_sfx.mp3",
+      label: "67", loop: true,
+    });
+
   if (powers.some(p => p.toLowerCase().includes("railroad realm")))
-    tracks.push({ id: "power-railroad", itemName: "Railroad Realm 🍀", type: "youtube", videoId: "S49CN57Y58o", label: "Railroad Realm 🍀" });
+    tracks.push({
+      id: "power-railroad", itemName: "Railroad Realm 🍀", type: "local",
+      src: "/assets/combatSFX/railroad.mp3",
+      label: "Railroad Realm 🍀", loop: true,
+    });
+
   if (powers.some(p => p.toLowerCase().includes("tick-tock") || p.toLowerCase() === "tick tock"))
-    tracks.push({ id: "power-ticktock", itemName: "Tick-tock", type: "youtube", videoId: "xyCQFLOSWGc", label: "Tick-tock" });
+    tracks.push({
+      id: "power-ticktock", itemName: "Tick-tock", type: "local",
+      src: "/assets/combatSFX/ticktock.mp3",
+      label: "Tick-tock", loop: true,
+    });
 
   const allGear = [
     ...(Array.isArray(character.gear?.normalGear) ? character.gear.normalGear : []),
     ...(Array.isArray(character.gear?.legacyGear) ? character.gear.legacyGear : []),
   ].filter((g: any) => !g.isLost);
 
-  allGear.filter((g: any) => g.name === "Kẹo").forEach((_, i) => tracks.push({
-    id: `gear-keo-${i}`, itemName: "Kẹo", type: "youtube",
-    playlistId: KEO_PLAYLIST_ID,
-    videoId: KEO_SEED[Math.floor(Math.random() * KEO_SEED.length)],
-    label: `Kẹo #${i + 1} – Thắng Ngọt`,
-  }));
+  allGear.filter((g: any) => g.name === "Kẹo").forEach((_, i) => {
+    if (KEO_LOCAL_FILES.length > 0) {
+      const file = randomFrom(KEO_LOCAL_FILES);
+      tracks.push({
+        id: `gear-keo-${i}`, itemName: "Kẹo", type: "local",
+        src: `/assets/combatSFX/NhacNgot/${file}`,
+        label: `Kẹo #${i + 1} – ${file.replace(/^\d+ - /, "").replace(".mp3", "")}`,
+        localPlaylist: KEO_LOCAL_FILES,
+        localPlaylistFolder: "/assets/combatSFX/NhacNgot/",
+      });
+    } else {
+      tracks.push({
+        id: `gear-keo-${i}`, itemName: "Kẹo", type: "youtube",
+        playlistId: KEO_PLAYLIST_ID,
+        videoId: randomFrom(KEO_YT_SEED),
+        label: `Kẹo #${i + 1} – Thắng Ngọt`,
+      });
+    }
+  });
 
-  allGear.filter((g: any) => g.name === "Ớt").forEach((_, i) => tracks.push({
-    id: `gear-ot-${i}`, itemName: "Ớt", type: "youtube",
-    playlistId: OT_PLAYLIST_ID,
-    videoId: OT_SEED[Math.floor(Math.random() * OT_SEED.length)],
-    label: `Ớt #${i + 1} – Thắng Ngọt AI Cover`,
-  }));
+  allGear.filter((g: any) => g.name === "Ớt").forEach((_, i) => {
+    if (OT_LOCAL_FILES.length > 0) {
+      const file = randomFrom(OT_LOCAL_FILES);
+      tracks.push({
+        id: `gear-ot-${i}`, itemName: "Ớt", type: "local",
+        src: `/assets/combatSFX/NhacNgotAI/${file}`,
+        label: `Ớt #${i + 1} – ${file.replace(/^\d+ - /, "").replace(".mp3", "")}`,
+        localPlaylist: OT_LOCAL_FILES,
+        localPlaylistFolder: "/assets/combatSFX/NhacNgotAI/",
+      });
+    } else {
+      tracks.push({
+        id: `gear-ot-${i}`, itemName: "Ớt", type: "youtube",
+        playlistId: OT_PLAYLIST_ID,
+        videoId: randomFrom(OT_YT_SEED),
+        label: `Ớt #${i + 1} – Thắng Ngọt AI Cover`,
+      });
+    }
+  });
 
   return tracks;
 }
@@ -177,17 +297,21 @@ interface LocalTrackCardProps {
   accent: "blue" | "red";
   visible: boolean;
   stopped?: boolean;
+  silenced?: boolean;
 }
 
-const LocalTrackCard = ({ track, pan, accent, visible, stopped }: LocalTrackCardProps) => {
+const LocalTrackCard = ({ track, pan, accent, visible, stopped, silenced }: LocalTrackCardProps) => {
   const [state, setState] = useState<TrackState>(mkDefault(false));
   const audioRef  = useRef<HTMLAudioElement | null>(null);
   const gainRef   = useRef<GainNode | null>(null);
   const pannerRef = useRef<StereoPannerNode | null>(null);
   const ctxRef    = useRef<AudioContext | null>(null);
+  const trackRef  = useRef(track);
+  trackRef.current = track;
 
   useEffect(() => {
-    const audio = new Audio(track.src!);
+    const audio = new Audio(getAssetPath(track.src!));
+    if (track.loop) audio.loop = true;
     audioRef.current = audio;
 
     try {
@@ -203,22 +327,46 @@ const LocalTrackCard = ({ track, pan, accent, visible, stopped }: LocalTrackCard
       srcNode.connect(panner).connect(gain).connect(ctx.destination);
     } catch { /* no panning fallback */ }
 
+    const onEnded = () => {
+      const t = trackRef.current;
+      if (t.localPlaylist && t.localPlaylist.length > 0 && t.localPlaylistFolder) {
+        // Random bài tiếp theo (tránh trùng bài hiện tại nếu có thể)
+        const currentFile = t.src?.split("/").pop() ?? "";
+        const others = t.localPlaylist.filter(f => f !== currentFile);
+        const nextFile = randomFrom(others.length > 0 ? others : t.localPlaylist);
+        const nextSrc = getAssetPath(`${t.localPlaylistFolder}${nextFile}`);
+        const a = audioRef.current;
+        if (a) {
+          a.src = nextSrc;
+          a.load();
+          a.play().catch(() => {});
+          setState(s => ({ ...s, currentTime: 0, duration: 0, title: nextFile.replace(/^\d+ - /, "").replace(".mp3", "") }));
+        }
+      } else {
+        setState(s => ({ ...s, isPlaying: !t.loop }));
+      }
+    };
+
     audio.addEventListener("timeupdate",    () => setState(s => ({ ...s, currentTime: audio.currentTime })));
     audio.addEventListener("durationchange",() => setState(s => ({ ...s, duration: audio.duration })));
     audio.addEventListener("loadeddata",    () => setState(s => ({ ...s, isReady: true })));
-    audio.addEventListener("ended",  () => setState(s => ({ ...s, isPlaying: false })));
+    audio.addEventListener("ended",  onEnded);
     audio.addEventListener("play",   () => setState(s => ({ ...s, isPlaying: true })));
     audio.addEventListener("pause",  () => setState(s => ({ ...s, isPlaying: false })));
 
     if (ctxRef.current?.state === "suspended") ctxRef.current.resume();
     audio.play().catch(() => {});
 
-    return () => { audio.pause(); audio.src = ""; ctxRef.current?.close(); };
+    return () => { audio.pause(); audio.src = ""; try { ctxRef.current?.close(); } catch { /* ignore */ } };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [track.src]);
 
   useEffect(() => { if (pannerRef.current) pannerRef.current.pan.value = pan; }, [pan]);
   useEffect(() => { if (stopped) audioRef.current?.pause(); }, [stopped]);
+  useEffect(() => {
+    if (gainRef.current) gainRef.current.gain.value = silenced ? 0 : state.volume;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [silenced]);
 
   const togglePlay = useCallback(() => {
     const a = audioRef.current; if (!a) return;
@@ -252,14 +400,27 @@ interface YouTubeTrackCardProps {
   accent: "blue" | "red";
   visible: boolean;
   stopped?: boolean;
+  silenced?: boolean;
 }
 
-const YouTubeTrackCard = ({ track, accent, visible, stopped }: YouTubeTrackCardProps) => {
+const YouTubeTrackCard = ({ track, accent, visible, stopped, silenced }: YouTubeTrackCardProps) => {
   const [state, setState] = useState<TrackState>(mkDefault(true));
   const playerRef  = useRef<any>(null);
   const pollRef    = useRef<ReturnType<typeof setInterval> | null>(null);
   const mountedRef = useRef(true);
   const containerId = useRef(`yt-${track.id}-${Math.random().toString(36).slice(2, 7)}`).current;
+
+  // Stop nhạc khi user rời trang (tab ẩn / navigate ra ngoài)
+  useEffect(() => {
+    const stopAudio = () => playerRef.current?.pauseVideo?.();
+    window.addEventListener("beforeunload", stopAudio);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopAudio();
+    });
+    return () => {
+      window.removeEventListener("beforeunload", stopAudio);
+    };
+  }, []);
 
   const startPolling = useCallback(() => {
     if (pollRef.current) return;
@@ -298,6 +459,7 @@ const YouTubeTrackCard = ({ track, accent, visible, stopped }: YouTubeTrackCardP
         videoId: track.videoId,
         playerVars: {
           autoplay: 1, controls: 0, disablekb: 1, fs: 0, rel: 0,
+          ...(track.loop ? { loop: 1, playlist: track.videoId } : {}),
           ...(track.playlistId ? { list: track.playlistId, listType: "playlist" } : {}),
         },
         events: {
@@ -311,6 +473,11 @@ const YouTubeTrackCard = ({ track, accent, visible, stopped }: YouTubeTrackCardP
           onStateChange: (e: any) => {
             if (!mountedRef.current) return;
             setState(s => ({ ...s, isPlaying: e.data === 1 }));
+            // Nếu video kết thúc (state=0) và track có loop → play lại
+            if (e.data === 0 && track.loop) {
+              e.target.seekTo(0);
+              e.target.playVideo();
+            }
           },
         },
       });
@@ -336,6 +503,7 @@ const YouTubeTrackCard = ({ track, accent, visible, stopped }: YouTubeTrackCardP
     return () => {
       mountedRef.current = false;
       if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; }
+      try { playerRef.current?.stopVideo?.(); } catch { /* ignore */ }
       playerRef.current?.destroy?.();
       playerRef.current = null;
       document.getElementById(containerId)?.remove();
@@ -344,6 +512,11 @@ const YouTubeTrackCard = ({ track, accent, visible, stopped }: YouTubeTrackCardP
   }, []);
 
   useEffect(() => { if (stopped) playerRef.current?.pauseVideo?.(); }, [stopped]);
+  useEffect(() => {
+    if (silenced) playerRef.current?.setVolume?.(0);
+    else playerRef.current?.setVolume?.(state.volume);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [silenced]);
 
   const togglePlay = useCallback(() => {
     const p = playerRef.current; if (!p) return;
@@ -378,6 +551,7 @@ export interface CombatAudioControllerProps {
   side: "left" | "right";
   accent: "blue" | "red";
   stopped?: boolean;
+  silenced?: boolean;
 }
 
 export const CombatAudioController = ({
@@ -386,6 +560,7 @@ export const CombatAudioController = ({
   side,
   accent,
   stopped,
+  silenced,
 }: CombatAudioControllerProps) => {
   const [open, setOpen] = useState(false);
 
@@ -422,8 +597,8 @@ export const CombatAudioController = ({
 
         {stableTracks.map(track =>
           track.type === "local"
-            ? <LocalTrackCard key={track.id} track={track} pan={pan} accent={accent} visible stopped={stopped} />
-            : <YouTubeTrackCard key={track.id} track={track} accent={accent} visible stopped={stopped} />
+            ? <LocalTrackCard key={track.id} track={track} pan={pan} accent={accent} visible stopped={stopped} silenced={silenced} />
+            : <YouTubeTrackCard key={track.id} track={track} accent={accent} visible stopped={stopped} silenced={silenced} />
         )}
       </div>
 

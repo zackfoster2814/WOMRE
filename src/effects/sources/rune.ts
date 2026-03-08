@@ -710,34 +710,15 @@ registerCombatHandler(
 // Double Claws (El + Amn) - 18% cướp 1 Power. Nếu thành công, tiếp tục cướp.
 registerCombatHandler(
   'double_claws_steal',
-  (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (!ctx.opponent) return { skipDefault: true };
-    const opponentPowers = ctx.opponent.powers || [];
-    if (opponentPowers.length === 0) return { skipDefault: true };
-
-    let stolen = 0;
-    let remaining = opponentPowers.length;
-    while (remaining > 0 && Math.random() < 0.18) {
-      stolen++;
-      remaining--;
-    }
-
-    if (stolen === 0) {
-      return {
-        skipDefault: true,
-        description: 'Double Claws: Thất bại (18%) → Không cướp được Power nào',
-      };
-    }
-
-    const grantPowers: string[] = [];
-    for (let i = 0; i < stolen; i++) grantPowers.push('random');
-
+  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+    // 18% chain steal decided by wheel UI in CombatEffectsPanel, not Math.random()
+    // GM spins wheel repeatedly (18% success each time) until fail or opponent has no powers
     return {
-      grantPowers,
-      description: `Double Claws: Cướp thành công ${stolen} Power (chain 18%)`,
+      skipDefault: true,
+      description: 'Double Claws: 18% cướp Power chain (xác suất quyết định bởi wheel UI)',
     };
   },
-  '18% steal power chain: keep stealing until fail or opponent runs out'
+  '18% steal power chain (wheel decides probability)'
 );
 
 // Extraordinary (Tal + Ral) - Stats có Base < Base IQ được quay lại 1 lần.
@@ -765,17 +746,13 @@ registerCombatHandler(
 registerCombatHandler(
   'blackjack_summon_gamble',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    const keep = Math.random() < 0.03;
-    if (keep) {
-      return {
-        description: 'Blackjack: May mắn! Giữ lại Summon (3%)',
-      };
-    }
+    // 97%/3% probability decided by wheel UI in CombatEffectsPanel, not Math.random()
     return {
-      description: 'Blackjack: Triệu hồi rồi bỏ Summon (97%)',
+      skipDefault: true,
+      description: 'Blackjack: Triệu hồi 1 Summon → quay 97%/3% xem có giữ không (wheel UI)',
     };
   },
-  'Summon from wheel: 97% discard, 3% keep'
+  'Summon from wheel: 97% discard, 3% keep (wheel decides)'
 );
 
 // Highroller (El + Shael) - Base 1 tính là 10, Base 10 tính là 1 trong combat.
@@ -803,19 +780,23 @@ registerCombatHandler(
   'Swap Base 1 and Base 10 for both sides in combat'
 );
 
-// Flawless (Amn + Shael) - Nếu đối phương không ghi điểm, +1 all stats.
+// Flawless (Amn + Shael) - Nếu đối phương không ghi điểm nào, +1 all stats.
 registerCombatHandler(
   'flawless_perfect_win',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (ctx.self.roundsWon === ctx.totalRounds) {
+    // Spec: "đối phương không ghi được điểm nào" = opponent score = 0
+    // currentScore is injected by engine (opponent's total combat score)
+    const oppScore = (ctx.opponent as any)?.currentScore;
+    const conditionMet = oppScore !== undefined ? oppScore === 0 : ctx.self.roundsWon === ctx.totalRounds;
+    if (conditionMet) {
       return {
         selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 1 })),
-        description: 'Flawless: Đối phương không ghi điểm → +1 all stats',
+        description: 'Flawless: Đối phương không ghi điểm nào → +1 all stats',
       };
     }
     return { skipDefault: true };
   },
-  '+1 all stats if opponent scored 0 points'
+  '+1 all stats if opponent scored 0 points total'
 );
 
 // Undying Rage (El + Sol) - Mỗi round thua, stat của round kế tiếp +3.
@@ -1060,28 +1041,18 @@ registerCombatHandler(
 registerCombatHandler(
   'pennyworthy_lose_round_bonus',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // 36% per round thua decided by wheel UI in CombatEffectsPanel, not Math.random()
+    // GM spins wheel once per lost round; handler is reference only
     const roundResults = ctx.roundResults;
     if (!roundResults) return { skipDefault: true };
-
-    const mods: Array<{ stat: StatName; value: number }> = [];
-    for (const stat of STAT_NAMES) {
-      if (roundResults[stat] === 'lose' && Math.random() < 0.36) {
-        mods.push({ stat, value: 2 });
-      }
-    }
-
-    if (mods.length > 0) {
-      return {
-        selfStatMods: mods,
-        description: `Pennyworthy: Kích hoạt ${mods.length} lần → ${mods.map(m => `+2 ${m.stat}`).join(', ')}`,
-      };
-    }
+    const lostStats = STAT_NAMES.filter(s => roundResults[s] === 'lose');
+    if (lostStats.length === 0) return { skipDefault: true };
     return {
       skipDefault: true,
-      description: 'Pennyworthy: Không kích hoạt được lần nào (36%)',
+      description: `Pennyworthy: Thua ${lostStats.length} round (${lostStats.join(', ')}) → GM quay wheel 36% cho từng round`,
     };
   },
-  'After combat: 36% per round lost to gain +2 in that stat'
+  'After combat: 36% per round lost to gain +2 in that stat (wheel decides)'
 );
 
 // Dead Touch (Ort + Thul) - Cho đối thủ 1 Power vô dụng, cướp 2, giữ vô dụng.

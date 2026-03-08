@@ -471,7 +471,7 @@ export function registerCharDevEffects() {
       type: 'stat_modifier',
       stat: 'iq',
       value: -10,
-      timing: 'during_combat',
+      timing: 'before_combat',
       target: 'self',
       customHandler: 'kings_landing_penalty_check'
     })
@@ -1560,18 +1560,11 @@ registerCombatHandler(
 registerCombatHandler(
   'mad_scientist_random_size',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (Math.random() < 0.5) {
-      return {
-        opponentStatMods: STAT_NAMES.map(stat => ({ stat, value: -2 })),
-        description: 'Mad Scientist: Shrinking → Đối thủ -2 all stats (combat only)',
-      };
-    }
-    return {
-      selfStatMods: STAT_NAMES.map(stat => ({ stat, value: 2 })),
-      description: 'Mad Scientist: Enlarging → Bản thân +2 all stats (combat only)',
-    };
+    // Effect đã được apply qua wheel spin trong BattleZonePage (madScientistResult state)
+    // Không apply ngẫu nhiên nữa — skip để tránh double apply
+    return { skipDefault: true };
   },
-  '50% Shrinking (opponent -2 all) or 50% Enlarging (self +2 all) before combat'
+  'Mad Scientist effect applied via wheel spin in BattleZonePage (no random fallback)'
 );
 
 // ============================================================================

@@ -948,6 +948,7 @@ registerCombatHandler(
     const INSTRUMENT_NAMES = [
       'bagpipe', 'drums', 'flute', 'guitar', 'violin', 'trumpet',
       'piano', 'harp', 'lute', 'saxophone', 'bass', 'cello', 'harmonica',
+      'ukulele', 'nunchuck', 'ruan mei',
     ];
     const weapons: any[] = ctx.opponent.weapons || [];
     const hasInstrument = weapons.some((w) => {
@@ -1013,7 +1014,7 @@ registerCombatHandler(
   'After combat loss: Shining Brightly transforms to Under the Weather quirk'
 );
 
-// Cheater - On death: lovers get +2 highest stat
+// Cheater - On death: lovers remove stat penalties and receive +1 all stats
 registerCombatHandler(
   'cheater_death_buff_lovers',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
@@ -1024,10 +1025,10 @@ registerCombatHandler(
     }
     return {
       skipDefault: true,
-      description: `Cheater: Khi chết → ${activeLoverCount} Lover nhận +2 stat cao nhất (xử lý ngoài game)`,
+      description: `Cheater: Khi chết → ${activeLoverCount} Lover loại bỏ hiệu ứng trừ chỉ số và nhận +1 all stats (xử lý ngoài game)`,
     };
   },
-  'On death: all lovers receive +2 to their highest stat (Cheater)'
+  'On death: all lovers remove stat penalties and receive +1 all stats (Cheater)'
 );
 
 // Patient - After win: max power wheel
@@ -1042,22 +1043,22 @@ registerCombatHandler(
   'After combat win: receive power wheel with maximum result (Patient)'
 );
 
-// Fast Learner - 33% copy 1 random power from opponent
+// Fast Learner - 33% copy 1 random power from opponent (xác suất do wheel UI quyết định)
 registerCombatHandler(
   'fast_learner_copy_power',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     if (!ctx.opponent) return { skipDefault: true };
-    const oppPowers: string[] = ctx.opponent.powers || [];
+    const oppPowers: string[] = (ctx.opponent.powers || []).map((p: any) => typeof p === 'string' ? p : p?.name).filter(Boolean);
     if (oppPowers.length === 0) {
       return { skipDefault: true, description: 'Fast Learner: Đối thủ không có Power' };
     }
     const copiedPower = oppPowers[Math.floor(Math.random() * oppPowers.length)];
     return {
       grantPower: copiedPower,
-      description: `Fast Learner: Học được Power "${copiedPower}" từ đối thủ`,
+      description: `Fast Learner: Học được Power "${copiedPower}" từ đối thủ (đối thủ không mất Power)`,
     };
   },
-  '33% chance to copy 1 random power from opponent after combat (Fast Learner)'
+  '33% chance to copy 1 random power from opponent after combat (Fast Learner) — probability decided by wheel UI'
 );
 
 // Progressive - After loss: reroll stats

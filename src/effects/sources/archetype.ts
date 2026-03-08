@@ -412,7 +412,7 @@ export function registerAllArchetypeEffects() {
   // Cinderheart
   defineEffect("archetype", "Cinderheart")
     .description(
-      "Trong Combat: Thêm Base Stat cao nhất của 1 \"Lover\" của bạn vào Stat đánh nhau của bạn. Nếu như có \"Lover\" nào có Archetype \"Femboy\", chọn \"Lover\" đó, nếu có nhiều, quay Wheel (Lmao).",
+      "(1).Nhận +1 All Stats (2).Sau Combat: Đối thủ nhận Power \"Cinder Flickering\".",
     )
     .weight(0.5)
     .addAllStats(1)
@@ -1907,6 +1907,38 @@ registerCombatHandler(
 );
 
 registerCombatHandler(
+  'egoist_win_condition',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const selfScore: number = (ctx.self as any).currentScore ?? 0;
+    const oppScore: number = (ctx.opponent as any)?.currentScore ?? 0;
+    const margin = selfScore - oppScore;
+    if (margin >= 4) {
+      return { skipDefault: true, description: `Egoist: thắng cách biệt ${margin} điểm ≥ 4 ✓` };
+    }
+    // Không thắng cách biệt ≥4 → tự thua: cộng điểm cho đối thủ để đảo kết quả
+    const needed = 4 - margin;
+    return { opponentPoints: needed, description: `Egoist: không thắng cách biệt ≥4 điểm → bị thua (đối thủ +${needed} điểm)` };
+  },
+  'Egoist: lose if win margin < 4'
+);
+
+registerCombatHandler(
+  'edgelord_underdog_point',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const selfScore: number = (ctx.self as any).currentScore ?? 0;
+    const oppScore: number = (ctx.opponent as any)?.currentScore ?? 0;
+    if (selfScore < oppScore) {
+      return { selfPoints: 1, description: `Edgelord: mình thấp hơn (${selfScore} vs ${oppScore}) → mình +1 điểm` };
+    }
+    if (oppScore < selfScore) {
+      return { opponentPoints: 1, description: `Edgelord: đối thủ thấp hơn (${oppScore} vs ${selfScore}) → đối thủ +1 điểm` };
+    }
+    return { skipDefault: true, description: `Edgelord: bằng nhau (${selfScore} vs ${oppScore}), không kích hoạt` };
+  },
+  'Edgelord: +1 point if losing on score before end'
+);
+
+registerCombatHandler(
   'x_transfer_to_winner',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
     return { description: 'Archetype X chuyển cho người thắng (X)' };
@@ -2148,68 +2180,64 @@ registerCombatHandler(
 registerCombatHandler(
   'power_ranger_red_str_bonus',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Chỉ kích hoạt khi thắng round Strength — xác suất 20% do wheel UI quyết định
     if (ctx.roundResults?.strength !== 'win') return { skipDefault: true };
-    if (Math.random() < 0.20) return { selfPoints: 2, description: '+2 điểm thêm (Red Ranger - 20% khi thắng Str)' };
-    return { skipDefault: true, description: 'Red Ranger: 20% không kích hoạt' };
+    return { selfPoints: 2, description: '+2 điểm thêm (Red Ranger - thắng Str)' };
   },
-  '20% +2 points on Str round win'
+  '20% +2 points on Str round win (wheel decides probability)'
 );
 
 registerCombatHandler(
   'power_ranger_blue_spd_bonus',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Chỉ kích hoạt khi thắng round Speed — xác suất 33% do wheel UI quyết định
     if (ctx.roundResults?.speed !== 'win') return { skipDefault: true };
-    if (Math.random() < 0.33) return { selfStatMods: [{ stat: 'speed', value: 3 }], description: '+3 Base Speed (Blue Ranger - 33% khi thắng Speed)' };
-    return { skipDefault: true, description: 'Blue Ranger: 33% không kích hoạt' };
+    return { selfStatMods: [{ stat: 'speed', value: 3 }], description: '+3 Base Speed (Blue Ranger - thắng Speed)' };
   },
-  '33% +3 Base Speed on Speed round win'
+  '33% +3 Base Speed on Speed round win (wheel decides probability)'
 );
 
 registerCombatHandler(
   'power_ranger_black_power',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Chỉ kích hoạt khi thắng round Durability — xác suất 20% do wheel UI quyết định
     if (ctx.roundResults?.durability !== 'win') return { skipDefault: true };
-    if (Math.random() < 0.20) return { grantPower: 'random', description: 'Nhận 1 Power ngẫu nhiên (Black Ranger - 20% khi thắng Dur)' };
-    return { skipDefault: true, description: 'Black Ranger: 20% không kích hoạt' };
+    return { grantPower: 'random', description: 'Nhận 1 Power ngẫu nhiên (Black Ranger - thắng Dur)' };
   },
-  '20% grant Power on Dur round win'
+  '20% grant Power on Dur round win (wheel decides probability)'
 );
 
 registerCombatHandler(
   'power_ranger_yellow_gear',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Chỉ kích hoạt khi thắng round IQ — xác suất 25% do wheel UI quyết định
     if (ctx.roundResults?.iq !== 'win') return { skipDefault: true };
-    if (Math.random() < 0.25) return { grantGear: 'random', description: 'Nhận 1 Gear (Yellow Ranger - 25% khi thắng IQ)' };
-    return { skipDefault: true, description: 'Yellow Ranger: 25% không kích hoạt' };
+    return { grantGear: 'random', description: 'Nhận 1 Gear (Yellow Ranger - thắng IQ)' };
   },
-  '25% grant Gear on IQ round win'
+  '25% grant Gear on IQ round win (wheel decides probability)'
 );
 
 registerCombatHandler(
   'power_ranger_pink_base_stat',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Chỉ kích hoạt khi thắng round BIQ hoặc MA — xác suất 25% do wheel UI quyết định
     const wonBIQ = ctx.roundResults?.biq === 'win';
     const wonMA = ctx.roundResults?.ma === 'win';
     if (!wonBIQ && !wonMA) return { skipDefault: true };
-    if (Math.random() < 0.25) {
-      const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
-      return { selfStatMods: [{ stat: randomStat, value: 1 }], description: `+1 Base ${randomStat} (Pink Ranger - 25% khi thắng BIQ/MA)` };
-    }
-    return { skipDefault: true, description: 'Pink Ranger: 25% không kích hoạt' };
+    const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
+    return { selfStatMods: [{ stat: randomStat, value: 1 }], description: `+1 Base ${randomStat} (Pink Ranger - thắng BIQ/MA)` };
   },
-  '25% +1 Base random stat on BIQ/MA round win'
+  '25% +1 Base random stat on BIQ/MA round win (wheel decides probability)'
 );
 
 registerCombatHandler(
   'power_ranger_silver_double',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (Math.random() < 0.15) {
-      const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
-      return { selfStatMods: [{ stat: randomStat, value: 5 }], description: `+5 ${randomStat} (Silver Ranger - 15% gấp đôi stat)` };
-    }
-    return { skipDefault: true, description: 'Silver Ranger: 15% không kích hoạt' };
+    // Thắng bất kỳ round — xác suất 15% do wheel UI quyết định
+    // Engine sẽ xử lý carry-over double stat sang round kế trong BattleZonePage
+    return { description: 'Silver Ranger: gấp đôi chỉ số round tiếp theo (15%)' };
   },
-  '15% double stat next round on round win'
+  '15% double stat next round on any round win (wheel decides probability, carry-over handled in UI)'
 );
 
 registerCombatHandler(

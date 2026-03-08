@@ -345,6 +345,8 @@ registerImmediateHandler(
 registerCombatHandler(
   'uma2_str_lose',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Chỉ trigger đúng round STR (currentRoundStat === 'str')
+    if ((ctx as any).currentRoundStat !== 'str') return { skipDefault: true };
     if (ctx.roundResults?.strength === 'lose') {
       return { selfStatMods: [{ stat: 'speed', value: 3 }], description: '+3 Speed (lost Strength round)' };
     }
@@ -356,6 +358,8 @@ registerCombatHandler(
 registerCombatHandler(
   'uma2_spd_lose',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Chỉ trigger đúng round SPD (currentRoundStat === 'spd')
+    if ((ctx as any).currentRoundStat !== 'spd') return { skipDefault: true };
     if (ctx.roundResults?.speed === 'lose') {
       return { selfStatMods: [{ stat: 'durability', value: 4 }], description: '+4 Durability (lost Speed round)' };
     }
@@ -367,6 +371,7 @@ registerCombatHandler(
 registerCombatHandler(
   'metamagic_biq_round',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if ((ctx as any).currentRoundStat !== 'biq') return { skipDefault: true };
     if (ctx.roundResults?.biq === 'win') {
       return { selfPoints: 1, description: '+1 point (BIQ round win)' };
     }
@@ -378,6 +383,7 @@ registerCombatHandler(
 registerCombatHandler(
   'armor_piercing_dura_round',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if ((ctx as any).currentRoundStat !== 'dur') return { skipDefault: true };
     if (ctx.roundResults?.durability === 'win') {
       return { selfPoints: 1, description: '+1 point (Durability round win)' };
     }
@@ -389,6 +395,7 @@ registerCombatHandler(
 registerCombatHandler(
   'divine_smite_ma_round',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if ((ctx as any).currentRoundStat !== 'ma') return { skipDefault: true };
     if (ctx.roundResults?.ma === 'win') {
       return { selfPoints: 1, description: '+1 point (MA round win)' };
     }
@@ -412,6 +419,8 @@ registerCombatHandler(
 registerCombatHandler(
   'homeguard_no_str_lose',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Trigger sau round STR — nếu không thua STR thì +3 Speed
+    if ((ctx as any).currentRoundStat !== 'str') return { skipDefault: true };
     if (ctx.roundResults?.strength !== 'lose') {
       return { selfStatMods: [{ stat: 'speed', value: 3 }], description: '+3 Speed (no Strength loss)' };
     }
@@ -423,6 +432,8 @@ registerCombatHandler(
 registerCombatHandler(
   'red_shift_check',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Trigger sau round DUR (round thứ 3) — khi đã có đủ kết quả 3 round đầu
+    if ((ctx as any).currentRoundStat !== 'dur') return { skipDefault: true };
     const first3 = ['strength', 'speed', 'durability'];
     const winsInFirst3 = first3.filter(r => ctx.roundResults?.[r as StatName] === 'win').length;
     if (winsInFirst3 >= 1) {
@@ -443,6 +454,7 @@ registerCombatHandler(
 registerCombatHandler(
   'shooting_for_victory_check',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if ((ctx as any).currentRoundStat !== 'dur') return { skipDefault: true };
     const first3 = ['strength', 'speed', 'durability'];
     const winsInFirst3 = first3.filter(r => ctx.roundResults?.[r as StatName] === 'win').length;
     const lossesInFirst3 = first3.filter(r => ctx.roundResults?.[r as StatName] === 'lose').length;
@@ -464,6 +476,7 @@ registerCombatHandler(
 registerCombatHandler(
   'pump_iron_check',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if ((ctx as any).currentRoundStat !== 'dur') return { skipDefault: true };
     const first3 = ['strength', 'speed', 'durability'];
     const winsInFirst3 = first3.filter(r => ctx.roundResults?.[r as StatName] === 'win').length;
     if (winsInFirst3 === 1) {
@@ -484,6 +497,7 @@ registerCombatHandler(
 registerCombatHandler(
   'angling_scheming_str_win',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if ((ctx as any).currentRoundStat !== 'str') return { skipDefault: true };
     if (ctx.roundResults?.strength === 'win') {
       return {
         selfStatMods: [
@@ -525,12 +539,18 @@ registerCombatHandler(
 registerCombatHandler(
   'gaze_of_abyss_5_loses',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (ctx.self.roundsLost >= 5) {
-      return { selfPoints: 5, description: '+5 points (lost 5 rounds)' };
+    // Evaluate tại round MA (round cuối). Thua đúng 5 round trước + thắng MA → +5 điểm
+    if ((ctx as any).currentRoundStat !== 'ma') return { skipDefault: true };
+    // Round MA phải là win (không phải tie)
+    if (ctx.roundResults?.['ma'] !== 'win') return { skipDefault: true };
+    const first5 = ['strength', 'speed', 'durability', 'iq', 'biq'];
+    const totalLost = first5.filter(s => ctx.roundResults?.[s] === 'lose').length;
+    if (totalLost === 5) {
+      return { selfPoints: 5, description: 'Gaze of the Abyss: Thua 5 round đầu + thắng MA → +5 điểm' };
     }
     return { skipDefault: true };
   },
-  '+5 points after 5 round losses',
+  '+5 points if lost first 5 rounds and won MA round',
 );
 
 registerCombatHandler(
@@ -547,6 +567,8 @@ registerCombatHandler(
 registerCombatHandler(
   'dominator_2_of_3_loses',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Trigger sau round DUR (round thứ 3) — khi đã có đủ kết quả 3 round đầu
+    if ((ctx as any).currentRoundStat !== 'dur') return { skipDefault: true };
     const first3 = ['strength', 'speed', 'durability'];
     const lossesInFirst3 = first3.filter(r => ctx.roundResults?.[r as StatName] === 'lose').length;
     if (lossesInFirst3 >= 2) {
@@ -692,6 +714,8 @@ registerCombatHandler(
 registerCombatHandler(
   'zoltraak_double_biq_round',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Chỉ trigger đúng round BIQ
+    if ((ctx as any).currentRoundStat !== 'biq') return { skipDefault: true };
     const biqResult = ctx.roundResults?.biq;
     if (biqResult === 'win') {
       return { selfPoints: 1, description: 'Zoltraak: BIQ round diễn ra 2 lần → thắng BIQ lần 2, +1 điểm thêm' };
@@ -873,6 +897,8 @@ registerCombatHandler(
 registerCombatHandler(
   'hunters_mark_random_round',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Trigger sau round MA (cuối cùng) — khi đã có đủ tất cả kết quả
+    if ((ctx as any).currentRoundStat !== 'ma') return { skipDefault: true };
     const chosenStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
     if (ctx.roundResults?.[chosenStat] === 'win') {
       return { selfPoints: 1, description: `Hunter's Mark: Round được chọn = ${chosenStat} → thắng → +1 điểm` };
@@ -1571,12 +1597,12 @@ export function registerAllPowerEffects() {
   defineEffect('power', 'Age Manipulation')
     .description('Debuff: Đối thủ +1 IQ, -1 mọi stat còn lại.')
     .weight(0.78)
-    .effect({ type: 'debuff', stat: 'iq', value: 1, timing: 'during_combat', target: 'opponent' })
-    .effect({ type: 'debuff', stat: 'strength', value: -1, timing: 'during_combat', target: 'opponent' })
-    .effect({ type: 'debuff', stat: 'speed', value: -1, timing: 'during_combat', target: 'opponent' })
-    .effect({ type: 'debuff', stat: 'durability', value: -1, timing: 'during_combat', target: 'opponent' })
-    .effect({ type: 'debuff', stat: 'biq', value: -1, timing: 'during_combat', target: 'opponent' })
-    .effect({ type: 'debuff', stat: 'ma', value: -1, timing: 'during_combat', target: 'opponent' })
+    .effect({ type: 'debuff', stat: 'iq', value: 1, timing: 'before_combat', target: 'opponent' })
+    .effect({ type: 'debuff', stat: 'strength', value: -1, timing: 'before_combat', target: 'opponent' })
+    .effect({ type: 'debuff', stat: 'speed', value: -1, timing: 'before_combat', target: 'opponent' })
+    .effect({ type: 'debuff', stat: 'durability', value: -1, timing: 'before_combat', target: 'opponent' })
+    .effect({ type: 'debuff', stat: 'biq', value: -1, timing: 'before_combat', target: 'opponent' })
+    .effect({ type: 'debuff', stat: 'ma', value: -1, timing: 'before_combat', target: 'opponent' })
     .register();
 
   defineEffect('power', 'Garlic Breath')
@@ -1621,7 +1647,7 @@ export function registerAllPowerEffects() {
   defineEffect('power', 'Black Magic')
     .description('Debuff: Đối thủ -2 vào một stat ngẫu nhiên.')
     .weight(0.78)
-    .effect({ type: 'debuff', stat: 'random', value: -2, timing: 'during_combat', target: 'opponent' })
+    .effect({ type: 'debuff', stat: 'random', value: -2, timing: 'before_combat', target: 'opponent' })
     .register();
 
   defineEffect('power', 'The Great Storm')

@@ -2768,7 +2768,8 @@ registerCombatHandler(
     const charData = ctx.self.character as any;
     // Souls đã tích lũy từ trước (từ file) + số round thua trận này
     const prevSouls: number = charData?.spiritSouls ?? 0;
-    const soulsThisMatch = ctx.self.roundsLost; // round thua trong trận hiện tại
+    // roundsLost = số round đã thua TRƯỚC round này → +1 để tính round thua hiện tại
+    const soulsThisMatch = ctx.self.roundsLost + 1;
     const souls = prevSouls + soulsThisMatch;
 
     if (souls === 0) {

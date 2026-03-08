@@ -791,7 +791,7 @@ export function registerAllWeaponEffects() {
     .weight(2.94)
     .effect({
       type: 'custom',
-      timing: 'during_combat',
+      timing: 'on_round_lose',
       target: 'opponent',
       triggerOnce: true,
       customHandler: 'galeforce_first_lose'
@@ -810,7 +810,7 @@ export function registerAllWeaponEffects() {
     .weight(2.94)
     .effect({
       type: 'custom',
-      timing: 'during_combat',
+      timing: 'on_round_lose',
       target: 'opponent',
       triggerOnce: true,
       customHandler: 'battlefury_first_lose'
@@ -1097,6 +1097,32 @@ export function registerAllWeaponEffects() {
       timing: 'during_combat',
       target: 'self',
       customHandler: 'bolt_gransax_speed_bonus'
+    })
+    .register();
+
+  // 52. Thunder Orb
+  defineEffect('weapon', 'Thunder Orb')
+    .description('Debuff: Đối thủ nhận -2 Durability.')
+    .weight(2.86)
+    .effect({
+      type: 'debuff',
+      timing: 'before_combat',
+      target: 'opponent',
+      stat: 'durability',
+      value: -2
+    })
+    .register();
+
+  // 53. Ice Spike
+  defineEffect('weapon', 'Ice Spike')
+    .description('Debuff: Đối thủ nhận -2 Durability.')
+    .weight(2.86)
+    .effect({
+      type: 'debuff',
+      timing: 'before_combat',
+      target: 'opponent',
+      stat: 'durability',
+      value: -2
     })
     .register();
 }
@@ -1525,19 +1551,14 @@ registerCombatHandler(
 registerCombatHandler(
   'saitama_random_stat',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    const randomStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
-    if (randomStat === 'strength') {
-      return {
-        autoWin: true,
-        description: "Saitama's Gloves: Quay ra STR → Thắng luôn round STR!",
-      };
-    }
+    // Stat selection is decided by wheel UI in CombatEffectsPanel (before_combat)
+    // This handler is a reference — actual execution depends on wheel result tracked externally
     return {
-      selfPoints: 1,
-      description: `Saitama's Gloves: Quay ra ${randomStat} → Thắng +1 điểm nếu thắng round đó`,
+      skipDefault: true,
+      description: "Saitama's Gloves: Xác định stat bởi wheel trước combat (xem CombatEffectsPanel)",
     };
   },
-  'Random stat: auto-win if STR, else +1 point'
+  'Random stat wheel: auto-win if STR, else +1 point on winning that stat'
 );
 
 // ============================================================================
@@ -1550,10 +1571,13 @@ registerCombatHandler(
 registerCombatHandler(
   'galeforce_first_lose',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (ctx.currentRound === 1 && ctx.self.roundsLost === 1) {
+    // roundsLost = số round đã thua TRƯỚC round này (chưa gồm round hiện tại)
+    // "round thua đầu tiên" = khi roundsLost === 0 và round này là thua
+    // timing on_round_lose đảm bảo chỉ gọi khi thua; triggerOnce chưa được engine track
+    if (ctx.self.roundsLost === 0) {
       return {
         opponentPoints: -1,
-        description: 'Galeforce: Round thua đầu → đối thủ không nhận điểm',
+        description: 'Galeforce: Round thua đầu tiên → đối thủ không nhận điểm round này',
       };
     }
     return { skipDefault: true };
@@ -1571,10 +1595,13 @@ registerCombatHandler(
 registerCombatHandler(
   'battlefury_first_lose',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (ctx.currentRound === 1 && ctx.self.roundsLost === 1) {
+    // roundsLost = số round đã thua TRƯỚC round này (chưa gồm round hiện tại)
+    // "round thua đầu tiên" = khi roundsLost === 0 và round này là thua
+    // timing on_round_lose đảm bảo chỉ gọi khi thua; triggerOnce chưa được engine track
+    if (ctx.self.roundsLost === 0) {
       return {
         opponentPoints: -1,
-        description: 'Battlefury: Round thua đầu → đối thủ không nhận điểm',
+        description: 'Battlefury: Round thua đầu tiên → đối thủ không nhận điểm round này',
       };
     }
     return { skipDefault: true };
@@ -1669,8 +1696,8 @@ registerCombatHandler(
     }
     // Lost: grant 2 powers
     return {
-      grantPower: 'random',
-      description: 'Flower of Fire: Thua → nhận 2 Power',
+      grantPowers: ['random', 'random'],
+      description: 'Flower of Fire: Thua → nhận 2 Power ngẫu nhiên',
     };
   },
   '+1 random stat per 2 powers on win; 2 powers on lose'
@@ -2037,17 +2064,13 @@ registerCombatHandler(
 registerCombatHandler(
   'rhitta_double_bonus',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    const roll = Math.random() * 100;
-    if (roll >= 33) return { skipDefault: true };
+    // 33% probability decided by wheel UI in CombatEffectsPanel, not Math.random()
     return {
-      selfStatMods: [
-        { stat: 'strength', value: 3 },
-        { stat: 'durability', value: 2 },
-      ],
-      description: 'Rhitta: 33% kích hoạt → Gấp đôi +STR +Dura',
+      skipDefault: true,
+      description: 'Rhitta: 33% gấp đôi stat bonus (xác suất quyết định bởi wheel UI)',
     };
   },
-  '33% chance to double Rhitta stat bonuses (+3 STR +2 Dura) during combat'
+  '33% chance to double Rhitta stat bonuses (+3 STR +2 Dura) (wheel decides probability)'
 );
 
 // ============================================================================
