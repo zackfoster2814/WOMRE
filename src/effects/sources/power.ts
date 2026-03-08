@@ -36,9 +36,12 @@ registerImmediateHandler(
 registerImmediateHandler(
   'escapade_convert_iq_to_str',
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const baseIQ = ctx.baseStats.iq;
+    // Use raw character IQ (from the txt file) as the baseline, not baseStats.iq which may
+    // already include isBase bonuses (e.g. sub-race High Elf +2 IQ). EscAPADe converts ALL
+    // IQ added on top of the character's own base stat, including sub-race/pve-reward bonuses.
+    const rawIQ = ctx.character.stats?.iq ?? ctx.baseStats.iq;
     const currentIQ = ctx.currentStats.iq;
-    const iqBonus = currentIQ - baseIQ;
+    const iqBonus = currentIQ - rawIQ;
     if (iqBonus > 0) {
       return {
         statModifiers: [

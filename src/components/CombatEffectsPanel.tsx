@@ -1160,7 +1160,7 @@ const EFFECT_DEFS: EffectDef[] = [
       },
     ],
     gmNote:
-      "[GM Action] Nếu thành công: vô hiệu hóa 3 Power ngẫu nhiên của đối thủ trong combat này",
+      "Nếu thành công: mở vòng quay để chọn 3 Power của đối thủ bị vô hiệu (hoặc tự động disable tất cả nếu đối thủ có ≤3 Power).",
   },
 
   // Rhitta: 33% gấp đôi hiệu ứng cộng stat từ vũ khí trong combat
@@ -1554,6 +1554,22 @@ const EFFECT_DEFS: EffectDef[] = [
     resolvedNote: "Engine tự apply +1 điểm khởi đầu",
   },
 
+  // Black Magic: -2 vào 1 stat ngẫu nhiên của đối thủ (wheel chọn stat)
+  {
+    source: "black magic",
+    timing: "before_combat",
+    category: "wheel",
+    description: "Black Magic: Quay chọn 1 stat ngẫu nhiên của đối thủ để trừ -2.",
+    wheelItems: [
+      { label: "STR", weight: 1, isSuccess: true, color: "#ef4444" },
+      { label: "SPD", weight: 1, isSuccess: true, color: "#3b82f6" },
+      { label: "DUR", weight: 1, isSuccess: true, color: "#84cc16" },
+      { label: "IQ",  weight: 1, isSuccess: true, color: "#06b6d4" },
+      { label: "BIQ", weight: 1, isSuccess: true, color: "#a855f7" },
+      { label: "MA",  weight: 1, isSuccess: true, color: "#f97316" },
+    ],
+  },
+
   // ─── POWER EFFECTS (before_combat wheel) ─────────────────────────────────
 
   // Power Negation: vô hiệu 1 power ngẫu nhiên của đối thủ (wheel chọn)
@@ -1714,6 +1730,36 @@ const EFFECT_DEFS: EffectDef[] = [
     description: "Tracen Academy Mason: Sau combat nhận +1 vào 1 Stat bất kì.",
     gmNote:
       "[GM Action] Cho player chọn hoặc quay ngẫu nhiên 1 stat → +1 vào stat đó",
+  },
+
+  // ─── POWER EFFECTS ───────────────────────────────────────────────────────
+
+  // Hunter's Mark: trước combat quay chọn 1 stat → thắng stat đó +2 điểm thay vì +1
+  {
+    source: "hunter's mark",
+    timing: "before_combat",
+    category: "wheel",
+    description:
+      "Hunter's Mark: Quay wheel chọn 1 stat. Khi thắng round stat đó → nhận +2 điểm thay vì +1.",
+    wheelItems: [
+      { label: "Strength",   weight: 1, isSuccess: true, color: "#ef4444" },
+      { label: "Speed",      weight: 1, isSuccess: true, color: "#3b82f6" },
+      { label: "Durability", weight: 1, isSuccess: true, color: "#10b981" },
+      { label: "IQ",         weight: 1, isSuccess: true, color: "#a855f7" },
+      { label: "BIQ",        weight: 1, isSuccess: true, color: "#ec4899" },
+      { label: "MA",         weight: 1, isSuccess: true, color: "#f59e0b" },
+    ],
+  },
+
+  // Golden Parry: khi thua round → 35% chặn đối thủ không nhận điểm round đó
+  {
+    source: "golden parry",
+    timing: "during_combat",
+    category: "gm",
+    description:
+      "Golden Parry: Khi thua round: 35% chặn đối thủ không nhận điểm (quay per-round trong bảng round).",
+    gmNote:
+      "[Per-round] Khi thua round: quay spin button 'Parry' trong bảng round. 35% Parry → đối thủ không nhận điểm.",
   },
 ];
 

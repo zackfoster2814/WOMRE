@@ -1398,10 +1398,16 @@ export const StatsComparisonMode = ({
   const [subCombatResult, setSubCombatResult] = useState<CombatResult | null>(
     null,
   );
-  const [subIsAnimating, setSubIsAnimating] = useState(false);
+  const [subIsAnimating] = useState(false);
   // Sub-combat round animation is not shown gradually; no-op setter used
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _setSubCurrentRound = (_: number) => {};
+
+  // Roundtable Hold full sub-combat mode
+  const [roundtableSubMode, setRoundtableSubMode] = useState(false);
+  // Snapshot of main combat state before sub-combat
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [roundtableSnapshot, setRoundtableSnapshot] = useState<Record<string, any> | null>(null);
 
   // Load all players
   useEffect(() => {
@@ -2623,9 +2629,12 @@ export const StatsComparisonMode = ({
     setSubCombatResult(null);
     _setSubCurrentRound(-1);
     setRoundSpinResults({});
-    // NOTE: oneTrickPonyStat is intentionally NOT reset here — OTP wheel is spun before combat starts
-    // and must persist into the step rounds. Reset happens in resetCombat (player change).
-    // NOTE: tricksterResult is also NOT reset here — Trickster wheel is spun before combat starts.
+    // Reset all pre-combat wheel results — trận mới cần quay lại từ đầu
+    setOneTrickPonyStat({});
+    setHuntersMarkStat({});
+    setTricksterResult({});
+    setDothrakiSpinResult({});
+    setBlackMagicStat({});
     setRaumanianSuccess({});
     setGoldenCoinPoints({});
     setEncroachingShadowSuccess({});
@@ -2770,6 +2779,10 @@ export const StatsComparisonMode = ({
     // Encroaching Shadow: +7 Speed nếu wheel thành công
     if (encroachingShadowSuccess["player1"]) applyStatDelta(p1BaseStats, "spd", 7);
     if (encroachingShadowSuccess["player2"]) applyStatDelta(p2BaseStats, "spd", 7);
+
+    // Black Magic: -2 vào stat được chọn của đối thủ
+    if (blackMagicStat["player1"]) applyStatDelta(p2BaseStats, blackMagicStat["player1"]!, -2);
+    if (blackMagicStat["player2"]) applyStatDelta(p1BaseStats, blackMagicStat["player2"]!, -2);
 
     // Gold Ship: +1 hoặc -1 all stats tùy kết quả wheel
     if (goldShipResult["player1"] != null) {
@@ -4332,79 +4345,117 @@ export const StatsComparisonMode = ({
     }
   };
 
-  // Sub-combat (Roundtable Hold) — keep simple auto-compute
-  const computeCombat = (
-    p1: PvPPlayerData,
-    p2: PvPPlayerData,
-  ): CombatResult => {
-    const rounds: RoundResult[] = [];
-    let p1Score = 0,
-      p2Score = 0;
-    let p1NextBoost = 0,
-      p2NextBoost = 0;
-    const p1HasUndyingRage = p1.character?.runes?.runeword === "Undying Rage";
-    const p2HasUndyingRage = p2.character?.runes?.runeword === "Undying Rage";
-    for (let i = 0; i < STAT_ORDER.length; i++) {
-      const { key, label } = STAT_ORDER[i];
-      const p1Value = (p1.stats[key] || 0) + p1NextBoost;
-      const p2Value = (p2.stats[key] || 0) + p2NextBoost;
-      p1NextBoost = 0;
-      p2NextBoost = 0;
-      let winner: "player1" | "player2" | "tie";
-      if (p1Value > p2Value) {
-        winner = "player1";
-        p1Score++;
-      } else if (p2Value > p1Value) {
-        winner = "player2";
-        p2Score++;
-      } else {
-        winner = "tie";
-      }
-      if (winner === "player2" && p1HasUndyingRage) p1NextBoost = 3;
-      if (winner === "player1" && p2HasUndyingRage) p2NextBoost = 3;
-      rounds.push({
-        stat: key,
-        statLabel: label,
-        player1Value: p1Value,
-        player2Value: p2Value,
-        winner,
-      });
-    }
-    let overallWinner: "player1" | "player2";
-    let tieBreaker: "race" | null = null;
-    if (p1Score > p2Score) overallWinner = "player1";
-    else if (p2Score > p1Score) overallWinner = "player2";
-    else {
-      tieBreaker = "race";
-      overallWinner = p1.raceTier < p2.raceTier ? "player1" : "player2";
-    }
-    return {
-      rounds,
-      player1Score: p1Score,
-      player2Score: p2Score,
-      startPlayer1Score: 0,
-      startPlayer2Score: 0,
-      winner: overallWinner,
-      tieBreaker,
+  // Run sub-combat (Tarnished vs main winner) — full PvP mode with snapshot/restore
+  const startRoundtableSubCombat = (
+    tarnished: PvPPlayerData,
+    mainWinnerPlayer: PvPPlayerData,
+    mainCombatResult: CombatResult,
+    pendingLoserSide: "player1" | "player2",
+    savedTarnishedList: PvPPlayerData[],
+  ) => {
+    // Save snapshot of current main combat state
+    const snapshot = {
+      player1, player2, searchTerm1, searchTerm2,
+      combatResult: mainCombatResult,
+      stepState, stepRoundIndex, combatConfirmed,
+      roundSpinResults, oneTrickPonyStat, huntersMarkStat,
+      raumanianSuccess, goldenCoinPoints, encroachingShadowSuccess,
+      goldShipResult, madScientistResult, summoningScrollResult,
+      tricksterResult, blackMagicStat, dothrakiSpinResult,
+      afterCombatEntries, afterCombatSpinResults,
+      isPendingRoundtable: true, pendingLoser: pendingLoserSide,
+      tarnishedList: savedTarnishedList, selectedTarnished: tarnished,
+      disabledItems,
     };
+    setRoundtableSnapshot(snapshot);
+    setRoundtableSubMode(true);
+
+    // Set players for sub-combat: Tarnished (p1) vs main winner (p2)
+    setPlayer1(tarnished);
+    setPlayer2(mainWinnerPlayer);
+    setSearchTerm1(tarnished.name);
+    setSearchTerm2(mainWinnerPlayer.name);
+
+    // Reset all combat states for fresh sub-combat
+    setCombatResult(null);
+    setStepState(null);
+    setStepRoundIndex(-1);
+    setCombatConfirmed(false);
+    setRoundSpinResults({});
+    setOneTrickPonyStat({});
+    setHuntersMarkStat({});
+    setRaumanianSuccess({});
+    setGoldenCoinPoints({});
+    setEncroachingShadowSuccess({});
+    setGoldShipResult({});
+    setMadScientistResult({});
+    setSummoningScrollResult({});
+    setTricksterResult({});
+    setBlackMagicStat({});
+    setDothrakiSpinResult({});
+    setAfterCombatEntries([]);
+    setAfterCombatSpinResults({});
+    setIsPendingRoundtable(false);
+    setPendingLoser(null);
+    setTarnishedList([]);
+    setSelectedTarnished(null);
+    setSubCombatResult(null);
+    setDisabledItems(new Set());
+    setAudioResetKey((k) => k + 1);
   };
 
-  // Run sub-combat (Tarnished vs original opponent)
-  const runSubCombat = () => {
-    if (!selectedTarnished || !combatResult) return;
+  // Confirm sub-combat result and restore main combat snapshot
+  const confirmRoundtableSubCombat = (subResult: CombatResult) => {
+    if (!roundtableSnapshot) return;
+    const snap = roundtableSnapshot;
+    const tarnishedWon = subResult.winner === "player1"; // Tarnished is always player1 in sub
 
-    // Tarnished (as player1 slot) vs the winner of the main match
-    const mainWinner = combatResult.winner === "player1" ? player1! : player2!;
+    // Restore main combat state
+    setPlayer1(snap.player1);
+    setPlayer2(snap.player2);
+    setSearchTerm1(snap.searchTerm1);
+    setSearchTerm2(snap.searchTerm2);
+    setStepState(snap.stepState);
+    setStepRoundIndex(snap.stepRoundIndex);
+    setCombatConfirmed(snap.combatConfirmed);
+    setRoundSpinResults(snap.roundSpinResults);
+    setOneTrickPonyStat(snap.oneTrickPonyStat);
+    setHuntersMarkStat(snap.huntersMarkStat);
+    setRaumanianSuccess(snap.raumanianSuccess);
+    setGoldenCoinPoints(snap.goldenCoinPoints);
+    setEncroachingShadowSuccess(snap.encroachingShadowSuccess);
+    setGoldShipResult(snap.goldShipResult);
+    setMadScientistResult(snap.madScientistResult);
+    setSummoningScrollResult(snap.summoningScrollResult);
+    setTricksterResult(snap.tricksterResult);
+    setBlackMagicStat(snap.blackMagicStat);
+    setDothrakiSpinResult(snap.dothrakiSpinResult);
+    setAfterCombatEntries(snap.afterCombatEntries);
+    setAfterCombatSpinResults(snap.afterCombatSpinResults);
+    setTarnishedList(snap.tarnishedList);
+    setSelectedTarnished(snap.selectedTarnished);
+    setSubCombatResult(subResult);
+    setDisabledItems(snap.disabledItems);
 
-    setSubIsAnimating(true);
-    _setSubCurrentRound(-1);
-    setSubCombatResult(null);
+    // If Tarnished won → loser is saved (override winner of main combat)
+    // Result is encoded in subCombatResult and displayed in the roundtable panel
+    if (tarnishedWon) {
+      // Tarnished saves the loser → override combatResult winner to be the loser's side
+      const savedResult: CombatResult = {
+        ...snap.combatResult,
+        winner: snap.pendingLoser, // loser is now winner thanks to Tarnished
+      };
+      setCombatResult(savedResult);
+    } else {
+      // Tarnished lost → original result stands
+      setCombatResult(snap.combatResult);
+    }
 
-    const result = computeCombat(selectedTarnished, mainWinner);
-    // Reveal all rounds immediately
-    result.rounds.forEach((_, i) => _setSubCurrentRound(i));
-    setSubCombatResult(result);
-    setSubIsAnimating(false);
+    setIsPendingRoundtable(false);
+    setPendingLoser(snap.pendingLoser);
+    setRoundtableSubMode(false);
+    setRoundtableSnapshot(null);
+    setAudioResetKey((k) => k + 1);
   };
 
   // Reset all combat state
@@ -4421,6 +4472,7 @@ export const StatsComparisonMode = ({
     setTarnishedSearchTerm("");
     setRoundSpinResults({});
     setOneTrickPonyStat({});
+    setHuntersMarkStat({});
     setRaumanianSuccess({});
     setGoldenCoinPoints({});
     setEncroachingShadowSuccess({});
@@ -4428,6 +4480,7 @@ export const StatsComparisonMode = ({
     setMadScientistResult({});
     setSummoningScrollResult({});
     setTricksterResult({});
+    setBlackMagicStat({});
     setDothrakiSpinResult({});
     setAfterCombatEntries([]);
     setAfterCombatSpinResults({});
@@ -4436,6 +4489,8 @@ export const StatsComparisonMode = ({
     setCombatConfirmed(false);
     setAudioResetKey(k => k + 1);
     setViewLogIndex(null);
+    setRoundtableSubMode(false);
+    setRoundtableSnapshot(null);
   };
 
   // Swap players
@@ -4537,6 +4592,12 @@ export const StatsComparisonMode = ({
     if (sources.some((s) => s === "cautious") && isEffectActive("Cautious")) {
       onWin.push("Cautious-Self"); // marker: this player has Cautious (opponent's STR win = 0)
     }
+    // Hunter's Mark: +1 bonus khi thắng round stat đã chọn trước combat
+    if (sources.some((s) => s === "hunter's mark") && isEffectActive("Hunter's Mark"))
+      onWin.push("Hunter's Mark");
+    // Golden Parry: 35% chặn đối thủ không nhận điểm khi thua round
+    if (sources.some((s) => s === "golden parry") && isEffectActive("Golden Parry"))
+      onLose.push("Golden Parry");
     return { onWin, onLose, onTie };
   };
 
@@ -4577,6 +4638,9 @@ export const StatsComparisonMode = ({
     Record<string, string>
   >({});
 
+  // Hunter's Mark: stat được chọn trước combat (key = "player1" | "player2")
+  const [huntersMarkStat, setHuntersMarkStat] = useState<Record<string, string>>({});
+
   // Raumanian: +1 điểm khởi đầu nếu thành công (key = "player1" | "player2")
   const [raumanianSuccess, setRaumanianSuccess] = useState<
     Record<string, boolean>
@@ -4604,6 +4668,9 @@ export const StatsComparisonMode = ({
   // Trickster: subtype được chọn từ wheel trước combat (key = "player1" | "player2")
   // "ace of spades" | "king of diamonds" | "queen of clubs" | "jack of 97" | "ten of hearts" | null
   const [tricksterResult, setTricksterResult] = useState<Record<string, string | null>>({});
+
+  // Black Magic: stat bị -2 của đối thủ (key = playerLabel của người dùng Black Magic, value = stat key)
+  const [blackMagicStat, setBlackMagicStat] = useState<Record<string, keyof CharacterStats | null>>({});
 
   // Creator's Cat modal: chọn hiệu ứng Creator's Favor
   const [creatorsCatModal, setCreatorsCatModal] = useState<{
@@ -4850,8 +4917,15 @@ export const StatsComparisonMode = ({
       for (const k of _ALL_STAT_KEYS) s[k] = Math.max(0, (s[k] ?? 0) + delta);
       return s;
     }
+    // Black Magic của player2 debuff player1
+    const bmStatOnP1 = blackMagicStat["player2"];
+    if (base && bmStatOnP1) {
+      const s = { ...base };
+      s[bmStatOnP1] = Math.max(0, (s[bmStatOnP1] ?? 0) - 2);
+      return s;
+    }
     return base;
-  }, [player1, disabledItems, stepState, dothrakiPreviewStats, tricksterResult]);
+  }, [player1, disabledItems, stepState, dothrakiPreviewStats, tricksterResult, blackMagicStat]);
 
   const p2DisplayStats = useMemo(() => {
     if (stepState) return stepState.p2Stats;
@@ -4865,8 +4939,15 @@ export const StatsComparisonMode = ({
       for (const k of _ALL_STAT_KEYS) s[k] = Math.max(0, (s[k] ?? 0) + delta);
       return s;
     }
+    // Black Magic của player1 debuff player2
+    const bmStatOnP2 = blackMagicStat["player1"];
+    if (base && bmStatOnP2) {
+      const s = { ...base };
+      s[bmStatOnP2] = Math.max(0, (s[bmStatOnP2] ?? 0) - 2);
+      return s;
+    }
     return base;
-  }, [player2, disabledItems, stepState, dothrakiPreviewStats, tricksterResult]);
+  }, [player2, disabledItems, stepState, dothrakiPreviewStats, tricksterResult, blackMagicStat]);
 
   // Dev Mode: wheel weight overrides (effectName -> itemIndex -> weight)
   const [devMode, setDevMode] = useState(false);
@@ -4908,6 +4989,8 @@ export const StatsComparisonMode = ({
   ) => {
     if (sourceName === "one trick pony") {
       setOneTrickPonyStat((prev) => ({ ...prev, [playerLabel]: item.label }));
+    } else if (sourceName === "hunter's mark") {
+      setHuntersMarkStat((prev) => ({ ...prev, [playerLabel]: item.label }));
     } else if (sourceName === "golden coin") {
       // label là "+X điểm khởi đầu (Y%)" — parse số điểm từ label
       const match = item.label.match(/\+(\d+)\s*điểm/);
@@ -4947,6 +5030,62 @@ export const StatsComparisonMode = ({
       if (rule !== null) {
         setDothrakiSpinResult((prev) => ({ ...prev, [playerLabel]: rule }));
       }
+    } else if (sourceName === "cursed pennywort") {
+      if (!item.isSuccess) return; // 64% không kích hoạt
+      // Kích hoạt: vô hiệu 3 power của đối thủ (hoặc tất cả nếu ≤3)
+      const disableTarget: "player1" | "player2" = playerLabel === "player1" ? "player2" : "player1";
+      const oppPlayer = disableTarget === "player1" ? player1 : player2;
+      if (!oppPlayer) return;
+      const oppPowers = (oppPlayer.character?.powers || [])
+        .filter((p: any) => !p?.isLost)
+        .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
+        .filter(Boolean);
+      if (oppPowers.length === 0) return;
+      const POWER_COLORS = ["#ef4444","#f59e0b","#22c55e","#3b82f6","#a855f7","#ec4899","#06b6d4","#84cc16"];
+      const maxDisable = 3;
+      if (oppPowers.length <= maxDisable) {
+        // Auto-disable tất cả
+        setDisabledItems((prev) => {
+          const next = new Set(prev);
+          for (const pn of oppPowers) next.add(`${oppPlayer.no}-power-${pn}`);
+          return next;
+        });
+        return;
+      }
+      // Mở wheel chọn power — chain 3 lần, track những power đã chọn để loại khỏi lần sau
+      const alreadyChosen: string[] = [];
+      const openPennyWheelSpin = (spinIdx: number, remaining: string[]) => {
+        setPreCombatModal({
+          isOpen: true,
+          title: `Cursed Pennywort — Chọn Power vô hiệu (${spinIdx}/${maxDisable})`,
+          description: `${oppPlayer.name}: Quay để chọn power bị vô hiệu (lần ${spinIdx}/${maxDisable})`,
+          items: remaining.map((name, i) => ({
+            label: name,
+            weight: 1,
+            isSuccess: true,
+            color: POWER_COLORS[i % POWER_COLORS.length],
+            meta: { powerName: name, disableTarget },
+          })),
+          side: playerLabel,
+          effectKey: `cursed-pennywort-${playerLabel}-spin${spinIdx}`,
+          onResult: (result) => {
+            const chosen = result.label;
+            alreadyChosen.push(chosen);
+            setDisabledItems((prev) => {
+              const next = new Set(prev);
+              next.add(`${oppPlayer.no}-power-${chosen}`);
+              return next;
+            });
+            if (spinIdx < maxDisable) {
+              const nextRemaining = remaining.filter((p) => p !== chosen);
+              if (nextRemaining.length > 0) {
+                openPennyWheelSpin(spinIdx + 1, nextRemaining);
+              }
+            }
+          },
+        });
+      };
+      openPennyWheelSpin(1, oppPowers);
     } else if ((sourceName === "power negation" || sourceName === "anti-magic barrier" || sourceName === "memory alter") && item.meta?.powerName) {
       // Power Negation / Anti-Magic Barrier: disable power được chọn của đối thủ
       const powerName = item.meta.powerName as string;
@@ -4959,6 +5098,21 @@ export const StatsComparisonMode = ({
           next.add(disableKey);
           return next;
         });
+      }
+    } else if (sourceName === "black magic") {
+      const statMap: Record<string, keyof CharacterStats> = { STR: "str", SPD: "spd", DUR: "dur", IQ: "iq", BIQ: "biq", MA: "ma" };
+      const stat = statMap[item.label];
+      if (stat) {
+        setBlackMagicStat((prev) => ({ ...prev, [playerLabel]: stat }));
+        const oppLabel = playerLabel === "player1" ? "player2" : "player1";
+        const setOpp = oppLabel === "player1" ? setPlayer1 : setPlayer2;
+        setOpp((prev) => {
+          if (!prev) return prev;
+          const newStats = { ...prev.stats };
+          newStats[stat] = Math.max(0, (newStats[stat] ?? 0) - 2);
+          return { ...prev, stats: newStats };
+        });
+        spawnStatBubbles([{ player: oppLabel, text: `-2 ${item.label} (Black Magic)`, isPositive: false }]);
       }
     } else if (sourceName === "summoning scroll") {
       const label = item.label;
@@ -5107,6 +5261,10 @@ export const StatsComparisonMode = ({
   };
 
   // Wheel items for each effect
+  const GOLDEN_PARRY_ITEMS: WheelSpinItem[] = [
+    { label: "Parry!",  weight: 35, isSuccess: true,  color: "#f59e0b" },
+    { label: "Không",   weight: 65, isSuccess: false, color: "#6b7280" },
+  ];
   const BASH_ITEMS: WheelSpinItem[] = [
     { label: "-3 stat đối thủ round kế (35%)", weight: 35, isSuccess: true, color: "#a855f7" },
     { label: "Không có (65%)", weight: 65, isSuccess: false, color: "#6b7280" },
@@ -5341,6 +5499,17 @@ export const StatsComparisonMode = ({
     }
 
     if (isWinner) {
+      // Golden Parry (from opponent): nếu đối thủ thua và parry thành công → ta không nhận điểm
+      const oppSideForParry = side === "player1" ? "player2" : "player1";
+      const oppEffsForParry = getPerRoundEffects(
+        oppSideForParry === "player1" ? player1?.character : player2?.character,
+        oppSideForParry === "player1" ? player1?.no : player2?.no,
+      );
+      const goldenParrySpun = roundSpinResults[`${roundIdx}-Golden Parry-${oppSideForParry}`];
+      if (oppEffsForParry.onLose.includes("Golden Parry")) {
+        if (!goldenParrySpun) return { pts: 1, pending: true, color: "text-amber-400" };
+        if (goldenParrySpun.isSuccess) return { pts: 0, pending: false, color: "text-amber-300" };
+      }
       // Cautious (on opponent): đối thủ có Cautious → ta không nhận điểm round STR
       if (statKey === "str") {
         const oppSideForCautious = side === "player1" ? "player2" : "player1";
@@ -5374,6 +5543,19 @@ export const StatsComparisonMode = ({
           return { pts: base, pending: true, color: "text-red-400" };
         if (rangerRedSpun.isSuccess) base += 2;
       }
+      // Hunter's Mark: +1 bonus khi thắng đúng round stat đã chọn trước combat
+      if (effects.onWin.includes("Hunter's Mark")) {
+        const hmsChosen = huntersMarkStat[side];
+        const STAT_KEY_TO_LABEL_HM: Record<string, string> = {
+          str: "Strength", spd: "Speed", dur: "Durability", iq: "IQ", biq: "BIQ", ma: "MA",
+        };
+        const roundStatLabelHM = STAT_KEY_TO_LABEL_HM[statKey ?? ""] ?? "";
+        if (hmsChosen === roundStatLabelHM) {
+          // Thắng đúng stat → +1 bonus
+          base += 1;
+        }
+        // Chưa chọn stat hoặc sai stat → bình thường (tiếp tục)
+      }
       const color =
         base === 0
           ? "text-gray-500"
@@ -5393,6 +5575,13 @@ export const StatsComparisonMode = ({
         if (evasionSpun.isSuccess)
           return { pts: 1, pending: false, color: "text-emerald-300" };
       }
+      // Golden Parry: 35% chặn đối thủ không nhận điểm khi thua round
+      // Nếu có Golden Parry, cần quay để xác định — kết quả ảnh hưởng lên điểm của đối thủ
+      const hasGoldenParry = effects.onLose.includes("Golden Parry");
+      const goldenParryLoserSpun = roundSpinResults[`${roundIdx}-Golden Parry-${side}`];
+      if (hasGoldenParry && !goldenParryLoserSpun)
+        return { pts: 0, pending: true, color: "text-amber-400" };
+      // Golden Parry không ảnh hưởng điểm của người thua (luôn 0)
       return { pts: 0, pending: false, color: "text-gray-600" };
     }
 
@@ -5444,7 +5633,9 @@ export const StatsComparisonMode = ({
                                 ? RANGER_PINK_ITEMS
                                 : effectName === "Ranger-Silver"
                                   ? RANGER_SILVER_ITEMS
-                                  : GAMBLER_ITEMS;
+                                  : effectName === "Golden Parry"
+                                    ? GOLDEN_PARRY_ITEMS
+                                    : GAMBLER_ITEMS;
       const items = applyDevWeights(effectName, baseItems);
 
       if (result) {
@@ -5483,9 +5674,11 @@ export const StatsComparisonMode = ({
                         ? effectName
                         : effectName === "Scrying"
                           ? "Scrying"
-                          : effectName.startsWith("Ranger-")
-                            ? effectName.replace("Ranger-", "") + "🦸"
-                            : "Gambler"}
+                          : effectName === "Golden Parry"
+                            ? "Parry"
+                            : effectName.startsWith("Ranger-")
+                              ? effectName.replace("Ranger-", "") + "🦸"
+                              : "Gambler"}
           </button>
         );
       }
@@ -5519,9 +5712,11 @@ export const StatsComparisonMode = ({
                       ? effectName
                       : effectName === "Scrying"
                         ? "Scrying"
-                        : effectName.startsWith("Ranger-")
-                          ? effectName.replace("Ranger-", "") + "🦸"
-                          : "Gambler"}
+                        : effectName === "Golden Parry"
+                          ? "Parry"
+                          : effectName.startsWith("Ranger-")
+                            ? effectName.replace("Ranger-", "") + "🦸"
+                            : "Gambler"}
         </button>
       );
     };
@@ -5539,7 +5734,7 @@ export const StatsComparisonMode = ({
           // Bash/Luminescence không trigger ở round cuối (index 5 = MA) vì không có round kế
           // Bloodthirsty is auto-applied (no spin needed), always filter it out from spin buttons
           const filterLastRound = (effs: string[]) =>
-            effs.filter((e) => e !== "Bloodthirsty" && e !== "Divine Smite" && e !== "Cautious-Self" && (index !== 5 || (e !== "Bash" && e !== "Luminescence")));
+            effs.filter((e) => e !== "Bloodthirsty" && e !== "Divine Smite" && e !== "Cautious-Self" && e !== "Hunter's Mark" && (index !== 5 || (e !== "Bash" && e !== "Luminescence")));
           const p1SpinEffects = filterLastRound(p1Win
             ? p1Effects.onWin
             : tie
@@ -5771,6 +5966,7 @@ export const StatsComparisonMode = ({
     player2,
     disabledItems,
     oneTrickPonyStat,
+    huntersMarkStat,
     tricksterResult,
   ]);
 
@@ -5916,6 +6112,7 @@ export const StatsComparisonMode = ({
     player2,
     disabledItems,
     oneTrickPonyStat,
+    huntersMarkStat,
     afterCombatEntries,
     afterCombatSpinResults,
   ]);
@@ -6461,7 +6658,7 @@ export const StatsComparisonMode = ({
                 </div>
 
                 {/* Swap button */}
-                {player1 && player2 && !isTournamentMode && (
+                {player1 && player2 && !isTournamentMode && !roundtableSubMode && (
                   <div className="mt-2 flex justify-center">
                     <button
                       onClick={swapPlayers}
@@ -6666,8 +6863,51 @@ export const StatsComparisonMode = ({
               </div>
             )}
 
+            {/* Roundtable Hold Sub-Combat Mode Banner */}
+            {roundtableSubMode && roundtableSnapshot && (
+              <div className="bg-orange-900/40 border border-orange-500/60 rounded-xl p-3 mb-3">
+                <div className="text-orange-300 font-bold text-sm mb-1 flex items-center gap-2">
+                  <span>⚔️</span> TRẬN PHỤ — Roundtable Hold
+                </div>
+                <div className="text-orange-200/80 text-xs mb-2">
+                  <strong>{roundtableSnapshot.selectedTarnished?.name}</strong> thách đấu{" "}
+                  <strong>
+                    {roundtableSnapshot.pendingLoser === "player1"
+                      ? roundtableSnapshot.player1?.name
+                      : roundtableSnapshot.player2?.name}
+                  </strong>{" "}
+                  (người vừa thắng trận chính). Kết quả trận này sẽ quyết định ai tiến vào vòng tiếp theo.
+                </div>
+                {combatResult && combatConfirmed && effectiveWinner && (
+                  <div className="mt-2 space-y-1">
+                    <div className="text-xs text-orange-300/70 font-semibold">Kết quả trận phụ:</div>
+                    <div className={`text-sm font-bold px-3 py-2 rounded-lg border ${
+                      effectiveWinner === "player1"
+                        ? "text-green-300 bg-green-900/30 border-green-500/40"
+                        : "text-red-300 bg-red-900/30 border-red-500/40"
+                    }`}>
+                      {effectiveWinner === "player1"
+                        ? `Tarnished (${player1?.name}) THẮNG → ${roundtableSnapshot.pendingLoser === "player1" ? roundtableSnapshot.player1?.name : roundtableSnapshot.player2?.name} được cứu!`
+                        : `Tarnished (${player1?.name}) THUA → ${roundtableSnapshot.pendingLoser === "player1" ? roundtableSnapshot.player1?.name : roundtableSnapshot.player2?.name} vẫn bị loại.`}
+                    </div>
+                    <button
+                      onClick={() => confirmRoundtableSubCombat({ ...combatResult, winner: effectiveWinner })}
+                      className="w-full mt-2 px-4 py-2 bg-gradient-to-r from-green-700 to-emerald-700 hover:from-green-600 hover:to-emerald-600 text-white font-bold text-sm rounded-xl border border-green-500/50 transition-all"
+                    >
+                      Xác nhận & Quay về trận chính
+                    </button>
+                  </div>
+                )}
+                {!combatConfirmed && (
+                  <div className="text-xs text-orange-300/60 italic">
+                    Chạy combat bình thường và xác nhận kết quả bên trên để quay về trận chính.
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Roundtable Hold Pending Banner */}
-            {battleDone && isPendingRoundtable && pendingLoser && (
+            {!roundtableSubMode && battleDone && isPendingRoundtable && pendingLoser && (
               <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-xl p-4 mb-3">
                 <div className="text-yellow-400 font-bold text-base mb-1 flex items-center gap-2">
                   <span>⏳</span> KẾT QUẢ TẠM HOÃN — Roundtable Hold kích hoạt
@@ -6682,8 +6922,37 @@ export const StatsComparisonMode = ({
 
                 {!selectedTarnished ? (
                   <div>
-                    <div className="text-xs text-gray-400 mb-2">
-                      {tarnishedList.length} Tarnished còn hoạt động:
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-xs text-gray-400">
+                        {tarnishedList.length} Tarnished còn hoạt động:
+                      </div>
+                      <button
+                        onClick={() => {
+                          const colors = ["#f59e0b","#10b981","#3b82f6","#a855f7","#ef4444","#06b6d4","#84cc16","#ec4899"];
+                          setPreCombatModal({
+                            isOpen: true,
+                            title: "Roundtable Hold — Quay chọn Tarnished",
+                            description: "Quay ngẫu nhiên để chọn Tarnished tham chiến trận phụ",
+                            items: tarnishedList.map((p, i) => ({
+                              label: `${p.name} (#${p.no})`,
+                              weight: 1,
+                              isSuccess: true,
+                              color: colors[i % colors.length],
+                              meta: { playerNo: p.no },
+                            })),
+                            side: (pendingLoser ?? "player1") as "player1" | "player2",
+                            effectKey: "roundtable-tarnished-spin",
+                            onResult: (result) => {
+                              const no = result.meta?.playerNo as number;
+                              const chosen = tarnishedList.find((p) => p.no === no);
+                              if (chosen) setSelectedTarnished(chosen);
+                            },
+                          });
+                        }}
+                        className="px-3 py-1 bg-yellow-700/50 hover:bg-yellow-600/60 border border-yellow-500/50 rounded-lg text-yellow-200 text-xs font-bold transition-colors"
+                      >
+                        🎡 Quay ngẫu nhiên
+                      </button>
                     </div>
                     <input
                       type="text"
@@ -6791,7 +7060,7 @@ export const StatsComparisonMode = ({
                               )}
                               <button
                                 onClick={() => setIsPendingRoundtable(false)}
-                                className="mt-3 px-4 py-1.5 bg-gray-700 hover:bg-gray-600 text-white text-xs rounded-lg border border-gray-600 transition-colors"
+                                className="mt-3 px-4 py-1.5 bg-green-700 hover:bg-green-600 text-white text-xs rounded-lg border border-green-500 font-bold transition-colors"
                               >
                                 Xác nhận kết quả cuối
                               </button>
@@ -6805,15 +7074,48 @@ export const StatsComparisonMode = ({
                       </div>
                     ) : (
                       <button
-                        onClick={runSubCombat}
-                        disabled={subIsAnimating}
-                        className="w-full px-4 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 disabled:opacity-50 text-white font-bold text-sm rounded-xl transition-all"
+                        onClick={() => {
+                          if (!combatResult) return;
+                          const mainWinnerP = combatResult.winner === "player1" ? player1! : player2!;
+                          startRoundtableSubCombat(
+                            selectedTarnished,
+                            mainWinnerP,
+                            combatResult,
+                            pendingLoser!,
+                            tarnishedList,
+                          );
+                        }}
+                        className="w-full px-4 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-sm rounded-xl transition-all"
                       >
-                        ⚔️ Chạy Trận Phụ
+                        ⚔️ Chạy Trận Phụ (Full PvP)
                       </button>
                     )}
                   </div>
                 )}
+              </div>
+            )}
+
+            {/* Roundtable Hold sub-combat result (after snapshot restored) */}
+            {!roundtableSubMode && subCombatResult && selectedTarnished && !isPendingRoundtable && (
+              <div className="bg-gray-900/60 border border-orange-600/40 rounded-xl p-3 mb-3">
+                <div className="text-orange-300 font-bold text-xs mb-2">
+                  Kết quả trận phụ Roundtable Hold: <span className="text-yellow-300">{selectedTarnished.name}</span>
+                </div>
+                {renderRounds(subCombatResult.rounds, null, selectedTarnished.character, undefined)}
+                <div className="mt-2 text-center text-sm font-bold">
+                  <span className="text-blue-400">{subCombatResult.player1Score}</span>
+                  <span className="text-gray-500 mx-2">:</span>
+                  <span className="text-red-400">{subCombatResult.player2Score}</span>
+                </div>
+                <div className={`mt-2 text-xs font-bold text-center px-3 py-1.5 rounded-lg border ${
+                  subCombatResult.winner === "player1"
+                    ? "text-green-300 bg-green-900/30 border-green-500/40"
+                    : "text-red-300 bg-red-900/30 border-red-500/40"
+                }`}>
+                  {subCombatResult.winner === "player1"
+                    ? `Tarnished (${selectedTarnished.name}) thắng → Người thua được cứu`
+                    : `Tarnished (${selectedTarnished.name}) thua → Kết quả trận chính giữ nguyên`}
+                </div>
               </div>
             )}
 
@@ -7092,8 +7394,8 @@ export const StatsComparisonMode = ({
                   {pendingSpins ? "⏳ Còn hiệu ứng chờ quay..." : "✓ Kết thúc"}
                 </button>
               )}
-              {/* Re-battle (only after confirmed) */}
-              {combatConfirmed && (
+              {/* Re-battle (only after confirmed, not in roundtable sub-mode) */}
+              {combatConfirmed && !roundtableSubMode && (
                 <button
                   onClick={resetCombat}
                   className="px-4 py-2 bg-gray-700/60 hover:bg-gray-600/60 text-gray-300 rounded-lg text-xs border border-gray-600/50 transition-colors"
@@ -7134,7 +7436,7 @@ export const StatsComparisonMode = ({
                     />
                   </div>
                 </div>
-                {combatConfirmed && effectiveWinner && player1 && player2 && (
+                {combatConfirmed && effectiveWinner && player1 && player2 && !roundtableSubMode && (
                   <button
                     onClick={() => {
                       const winner =

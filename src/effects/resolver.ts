@@ -437,6 +437,24 @@ export class EffectResolver {
       }
     }
 
+    // PvP Rewards (skip lost rewards)
+    for (const pvpReward of character.pvpRewards || []) {
+      if (pvpReward.isLost) continue; // Skip lost rewards
+      // Normalize PvP reward name to match registry
+      // Data file may have abbreviated names like "+1 Spd" but registry has "+1 Speed"
+      const normalizedName = this.normalizePvPRewardName(pvpReward.description);
+      const entry = EffectRegistry.get("pvp_reward", normalizedName);
+      if (entry) {
+        sources.push({
+          type: "pvp_reward",
+          name: pvpReward.description,
+          effects: entry.effects,
+          rawDescription: entry.description,
+          isActive: true,
+        });
+      }
+    }
+
     // Powers (skip lost items)
     for (const power of character.powers || []) {
       if (power.isLost) continue; // Skip lost items
@@ -884,24 +902,6 @@ export class EffectResolver {
             isActive: true,
           });
         }
-      }
-    }
-
-    // PvP Rewards (skip lost rewards)
-    for (const pvpReward of character.pvpRewards || []) {
-      if (pvpReward.isLost) continue; // Skip lost rewards
-      // Normalize PvP reward name to match registry
-      // Data file may have abbreviated names like "+1 Spd" but registry has "+1 Speed"
-      const normalizedName = this.normalizePvPRewardName(pvpReward.description);
-      const entry = EffectRegistry.get("pvp_reward", normalizedName);
-      if (entry) {
-        sources.push({
-          type: "pvp_reward",
-          name: pvpReward.description,
-          effects: entry.effects,
-          rawDescription: entry.description,
-          isActive: true,
-        });
       }
     }
 
@@ -1408,6 +1408,11 @@ export class EffectResolver {
       bonusStats: emptyStats(),
     };
 
+    // Handlers that must run AFTER all other immediate effects have been applied,
+    // so they can see the fully-accumulated stats (e.g. EscAPADe converts total IQ bonus).
+    const DEFERRED_HANDLERS = new Set(["escapade_convert_iq_to_str"]);
+    const deferredItems: { source: EffectSource; effect: Effect }[] = [];
+
     for (const source of sources) {
       if (!source.isActive || source.isDisabled) continue;
 
@@ -1506,6 +1511,12 @@ export class EffectResolver {
           )
         ) {
           continue; // Skip this effect if conditions not met
+        }
+
+        // Defer handlers that need fully-accumulated stats (e.g. EscAPADe)
+        if (effect.customHandler && DEFERRED_HANDLERS.has(effect.customHandler)) {
+          deferredItems.push({ source, effect });
+          continue;
         }
 
         // Process custom handler if present
@@ -1611,6 +1622,38 @@ export class EffectResolver {
             effect,
             isActive: true,
           });
+        }
+      }
+    }
+
+    // Pass 2: run deferred handlers (e.g. EscAPADe) now that all stat bonuses are accumulated
+    for (const { source, effect } of deferredItems) {
+      if (!effect.customHandler || !character) continue;
+      const handlerResult = HandlerRegistry.executeImmediate(
+        effect.customHandler,
+        {
+          character,
+          baseStats,
+          currentStats: result.totalStats,
+          source,
+          effect,
+          allCharacters,
+        } as ImmediateHandlerContext,
+      );
+      if (handlerResult?.statModifiers) {
+        for (const mod of handlerResult.statModifiers) {
+          result.statModifiers.push({
+            stat: mod.stat,
+            value: mod.value,
+            isBase: mod.isBase || false,
+            source: source.name,
+          });
+          if (mod.isBase) {
+            result.baseStats[mod.stat] += mod.value;
+          } else {
+            result.bonusStats[mod.stat] += mod.value;
+          }
+          result.totalStats[mod.stat] += mod.value;
         }
       }
     }
@@ -1914,6 +1957,22 @@ export class EffectResolver {
       ),
     );
 
+    // Pre-compute total stats for deferred handlers (e.g. EscAPADe needs to see all IQ bonuses)
+    // by doing a quick pass over all non-deferred immediate stat modifiers.
+    const DEFERRED_HANDLERS_BD = new Set(["escapade_convert_iq_to_str"]);
+    const precomputedStats: Record<StatName, number> = { ...baseStats };
+    for (const src of sources) {
+      if (!src.isActive || src.isDisabled) continue;
+      for (const eff of src.effects) {
+        if (eff.customHandler && DEFERRED_HANDLERS_BD.has(eff.customHandler)) continue;
+        if (eff.timing !== "immediate" && eff.timing !== "pvp_only") continue;
+        if (eff.type !== "stat_modifier" || eff.value === undefined) continue;
+        if (eff.target && eff.target !== "self") continue;
+        const stats = resolveStatTarget(eff.stat as DynamicStatTarget, baseStats);
+        for (const s of stats) precomputedStats[s] += eff.value;
+      }
+    }
+
     // Map timing to Vietnamese display text
     const timingLabels: Record<string, string> = {
       after_combat: "Sau combat",
@@ -1966,12 +2025,16 @@ export class EffectResolver {
         ) {
           if (executedHandlers.has(effect.customHandler)) continue;
           executedHandlers.add(effect.customHandler);
+          // Deferred handlers use precomputedStats so they see all bonuses already accumulated
+          const ctxStats = DEFERRED_HANDLERS_BD.has(effect.customHandler)
+            ? { ...precomputedStats }
+            : { ...runningStats };
           const handlerResult = HandlerRegistry.executeImmediate(
             effect.customHandler,
             {
               character,
               baseStats,
-              currentStats: { ...runningStats },
+              currentStats: ctxStats,
               source,
               effect,
               allCharacters,
