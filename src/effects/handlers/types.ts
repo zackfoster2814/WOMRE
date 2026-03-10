@@ -84,6 +84,7 @@ export interface CombatHandlerContext {
   isPvE: boolean;
   isLoserBracket?: boolean;         // Đang ở nhánh thua
   currentRound: number;
+  currentRoundStat?: string;        // Short key của round hiện tại: str/spd/dur/iq/biq/ma
   totalRounds: number;
   currentRoundResult?: 'win' | 'lose' | 'tie'; // Kết quả của round hiện tại
   matchNumber?: number;             // Match number trong tournament

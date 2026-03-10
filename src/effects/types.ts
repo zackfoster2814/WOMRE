@@ -308,6 +308,7 @@ export interface EffectRegistryEntry {
   weight?: number;                // Trọng số trong wheel
   isUnique?: boolean;             // Unique (chỉ 1 người có)
   tier?: number;                  // Tier/rank
+  tags?: string[];                // Tags: 'physical', 'magic', 'music', etc.
 
   // Requirements
   requirements?: {

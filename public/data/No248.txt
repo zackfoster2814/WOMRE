@@ -44,7 +44,9 @@ Houses:
  + 1 Normal gear:
   - Academie Ring (Từ House)
   - Xương Sống Lưỡi (Từ House)
-  - Golden Coinx3 (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
+  - Golden Coin (Từ House)
   - Fingerthing
  + 0 Legacy gear:
   - 

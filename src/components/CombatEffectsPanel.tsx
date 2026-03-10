@@ -79,6 +79,9 @@ interface CombatResultInfo {
 interface CombatEffectsPanelProps {
   player1: { name: string; character?: Character };
   player2: { name: string; character?: Character };
+  /** Stats cuối cùng (sau tất cả bonuses) để resolver tính đúng */
+  player1ComputedStats?: Character["stats"];
+  player2ComputedStats?: Character["stats"];
   combatResult?: CombatResultInfo;
   /** Nếu true: chỉ hiển thị before_combat effects (pre-combat warning mode) */
   preCombatOnly?: boolean;
@@ -125,6 +128,7 @@ interface EffectDef {
 interface ResolverCtx {
   character: Character;
   opponentCharacter?: Character;
+  opponentComputedStats?: Character["stats"];
   combatResult: CombatResultInfo;
   playerLabel: "player1" | "player2";
   isWinner: boolean;
@@ -230,23 +234,36 @@ const EFFECT_DEFS: EffectDef[] = [
     },
   },
 
-  // Resilient: 36% +1 vào stat đã thua
+  // Resilient: 36% +1 vào stat đã thua — quay số lần = số round thua
   {
     source: "resilient",
     timing: "after_combat",
     category: "wheel",
     description: "Resilient: 36% nhận +1 vào chỉ số thua round.",
-    wheelItems: [
-      { label: "+1 Stat (36%)", weight: 36, isSuccess: true, color: "#10b981" },
-      {
-        label: "Bình thường (64%)",
-        weight: 64,
-        isSuccess: false,
-        color: "#6b7280",
-      },
-    ],
-    gmNote:
-      "Nếu thành công: +1 vào stat của round đã thua (GM xác định round cụ thể)",
+    resolver: (ctx) => {
+      const lostRounds = ctx.combatResult.rounds.filter(
+        (r) => r.winner !== ctx.playerLabel && r.winner !== "tie",
+      );
+      const n = lostRounds.length;
+      if (n === 0) {
+        return {
+          category: "auto" as EffectCategory,
+          description: "Resilient: Không thua round nào → không quay.",
+          resolved: true,
+          resolvedNote: "Không thua round nào",
+        };
+      }
+      const statLabels = lostRounds.map((r) => STAT_LABELS[r.stat] ?? r.stat.toUpperCase()).join(", ");
+      return {
+        category: "wheel" as EffectCategory,
+        description: `Resilient: Thua ${n} round (${statLabels}) → Quay ${n} lần, mỗi lần 36% nhận +1 vào stat đó.`,
+        wheelItems: [
+          { label: "+1 Stat (36%)", weight: 36, isSuccess: true, color: "#10b981", meta: { spinCount: n } },
+          { label: "Bình thường (64%)", weight: 64, isSuccess: false, color: "#6b7280", meta: { spinCount: n } },
+        ],
+        gmNote: `Nếu thành công mỗi lần: +1 vào stat của round thua tương ứng (${statLabels})`,
+      };
+    },
   },
 
   // Herbalist: nhận 1 thảo dược sau combat
@@ -476,6 +493,19 @@ const EFFECT_DEFS: EffectDef[] = [
     gmNote: "[GM Action] Trao 2 PvP Rewards cho player",
   },
 
+  // Scrying: 40% -4 stat cao nhất của đối thủ trước combat
+  {
+    source: "scrying",
+    timing: "before_combat",
+    category: "wheel",
+    description: "Scrying: 40% Debuff đối thủ -4 Stat cao nhất.",
+    wheelItems: [
+      { label: "Scrying! -4 Stat cao nhất đối thủ (40%)", weight: 40, isSuccess: true, color: "#7c3aed" },
+      { label: "Không có (60%)", weight: 60, isSuccess: false, color: "#6b7280" },
+    ],
+    gmNote: "Nếu thành công: đối thủ bị -4 vào stat cao nhất trước combat",
+  },
+
   // Raumanian: 36% nhận 1 điểm trước combat
   {
     source: "raumanian",
@@ -634,20 +664,20 @@ const EFFECT_DEFS: EffectDef[] = [
     gmNote: "Nếu thành công: +7 Speed được cộng vào stats trước combat",
   },
 
-  // One Trick Pony: quay wheel chọn 1 stat → thắng stat đó +3 điểm, thắng stat khác +0 điểm
+  // One Trick Pony: quay wheel chọn 1 stat trước combat → thắng stat đó +3 điểm, thắng stat khác +0 điểm
   {
     source: "one trick pony",
-    timing: "during_combat",
+    timing: "before_combat",
     category: "wheel",
     description:
       "One Trick Pony: Quay wheel chọn 1 stat. Thắng stat đó = +3 điểm; thắng các stat khác = +0 điểm.",
     wheelItems: [
-      { label: "Strength", weight: 1, isSuccess: true, color: "#ef4444" },
-      { label: "Speed", weight: 1, isSuccess: true, color: "#f59e0b" },
-      { label: "Durability", weight: 1, isSuccess: true, color: "#22c55e" },
-      { label: "IQ", weight: 1, isSuccess: true, color: "#3b82f6" },
-      { label: "BIQ", weight: 1, isSuccess: true, color: "#a855f7" },
-      { label: "MA", weight: 1, isSuccess: true, color: "#ec4899" },
+      { label: "str", weight: 1, isSuccess: true, color: "#ef4444" },
+      { label: "spd", weight: 1, isSuccess: true, color: "#f59e0b" },
+      { label: "dur", weight: 1, isSuccess: true, color: "#22c55e" },
+      { label: "iq", weight: 1, isSuccess: true, color: "#3b82f6" },
+      { label: "biq", weight: 1, isSuccess: true, color: "#a855f7" },
+      { label: "ma", weight: 1, isSuccess: true, color: "#ec4899" },
     ],
   },
 
@@ -790,6 +820,154 @@ const EFFECT_DEFS: EffectDef[] = [
     ],
     gmNote:
       "[GM Action] Nếu thành công: quay stat ngẫu nhiên → đối thủ -3 stat đó ở round kế",
+  },
+
+  // Power Ranger - Red: thắng round STR có 20% nhận +2 điểm
+  {
+    source: "red",
+    timing: "on_round_win",
+    category: "wheel",
+    description: "Power Ranger Red: Thắng round STR có 20% nhận thêm +2 điểm.",
+    resolver: (ctx) => {
+      const wonStr = ctx.combatResult.rounds.some(
+        (r) => r.stat === "str" && r.winner === ctx.playerLabel,
+      );
+      if (!wonStr) return null;
+      return {
+        description: "Power Ranger Red: Thắng round STR → quay 20% nhận +2 điểm.",
+        category: "wheel" as EffectCategory,
+        wheelItems: [
+          { label: "+2 điểm bonus (20%)", weight: 20, isSuccess: true, color: "#ef4444" },
+          { label: "Không kích hoạt (80%)", weight: 80, isSuccess: false, color: "#6b7280" },
+        ],
+        gmNote: "[GM Action] Nếu thành công: +2 điểm vào tổng điểm combat",
+        isActivated: true,
+      };
+    },
+  },
+
+  // Power Ranger - Blue: thắng round SPD có 33% nhận +3 Base Speed
+  {
+    source: "blue",
+    timing: "on_round_win",
+    category: "wheel",
+    description: "Power Ranger Blue: Thắng round SPD có 33% nhận +3 Base Speed.",
+    resolver: (ctx) => {
+      const wonSpd = ctx.combatResult.rounds.some(
+        (r) => r.stat === "spd" && r.winner === ctx.playerLabel,
+      );
+      if (!wonSpd) return null;
+      return {
+        description: "Power Ranger Blue: Thắng round SPD → quay 33% nhận +3 Base Speed.",
+        category: "wheel" as EffectCategory,
+        wheelItems: [
+          { label: "+3 Base Speed (33%)", weight: 33, isSuccess: true, color: "#3b82f6" },
+          { label: "Không kích hoạt (67%)", weight: 67, isSuccess: false, color: "#6b7280" },
+        ],
+        gmNote: "[GM Action] Nếu thành công: +3 Base Speed (permanent trong combat)",
+        isActivated: true,
+      };
+    },
+  },
+
+  // Power Ranger - Black: thắng round DUR có 20% nhận 1 Power ngẫu nhiên
+  {
+    source: "black",
+    timing: "on_round_win",
+    category: "wheel",
+    description: "Power Ranger Black: Thắng round DUR có 20% nhận 1 Power ngẫu nhiên.",
+    resolver: (ctx) => {
+      const wonDur = ctx.combatResult.rounds.some(
+        (r) => r.stat === "dur" && r.winner === ctx.playerLabel,
+      );
+      if (!wonDur) return null;
+      return {
+        description: "Power Ranger Black: Thắng round DUR → quay 20% nhận 1 Power ngẫu nhiên.",
+        category: "wheel" as EffectCategory,
+        wheelItems: [
+          { label: "Nhận 1 Power ngẫu nhiên (20%)", weight: 20, isSuccess: true, color: "#1f2937" },
+          { label: "Không kích hoạt (80%)", weight: 80, isSuccess: false, color: "#6b7280" },
+        ],
+        gmNote: "[GM Action] Nếu thành công: quay Power Wheel và trao 1 Power ngẫu nhiên cho player",
+        isActivated: true,
+      };
+    },
+  },
+
+  // Power Ranger - Yellow: thắng round IQ có 25% nhận 1 Gear
+  {
+    source: "yellow",
+    timing: "on_round_win",
+    category: "wheel",
+    description: "Power Ranger Yellow: Thắng round IQ có 25% nhận 1 Gear.",
+    resolver: (ctx) => {
+      const wonIQ = ctx.combatResult.rounds.some(
+        (r) => r.stat === "iq" && r.winner === ctx.playerLabel,
+      );
+      if (!wonIQ) return null;
+      return {
+        description: "Power Ranger Yellow: Thắng round IQ → quay 25% nhận 1 Gear.",
+        category: "wheel" as EffectCategory,
+        wheelItems: [
+          { label: "Nhận 1 Gear (25%)", weight: 25, isSuccess: true, color: "#f59e0b" },
+          { label: "Không kích hoạt (75%)", weight: 75, isSuccess: false, color: "#6b7280" },
+        ],
+        gmNote: "[GM Action] Nếu thành công: quay Gear Wheel và trao 1 Gear ngẫu nhiên cho player",
+        isActivated: true,
+      };
+    },
+  },
+
+  // Power Ranger - Pink: thắng round BIQ hoặc MA có 25% nhận +1 Base vào stat ngẫu nhiên
+  {
+    source: "pink",
+    timing: "on_round_win",
+    category: "wheel",
+    description: "Power Ranger Pink: Thắng round BIQ/MA có 25% nhận +1 Base vào 1 stat ngẫu nhiên.",
+    resolver: (ctx) => {
+      const wonBIQorMA = ctx.combatResult.rounds.some(
+        (r) => (r.stat === "biq" || r.stat === "ma") && r.winner === ctx.playerLabel,
+      );
+      if (!wonBIQorMA) return null;
+      return {
+        description: "Power Ranger Pink: Thắng round BIQ/MA → quay 25% nhận +1 Base stat ngẫu nhiên.",
+        category: "wheel" as EffectCategory,
+        wheelItems: [
+          { label: "+1 Base stat ngẫu nhiên (25%)", weight: 25, isSuccess: true, color: "#ec4899" },
+          { label: "Không kích hoạt (75%)", weight: 75, isSuccess: false, color: "#6b7280" },
+        ],
+        gmNote: "[GM Action] Nếu thành công: quay wheel xác định stat → +1 Base vào stat đó",
+        isActivated: true,
+      };
+    },
+  },
+
+  // Power Ranger - Silver: thắng bất kỳ round (trừ round cuối) có 15% gấp đôi stat round kế
+  {
+    source: "silver",
+    timing: "on_round_win",
+    category: "wheel",
+    description: "Power Ranger Silver: Thắng bất kỳ round (trừ round cuối) có 15% gấp đôi stat ở round tiếp theo.",
+    resolver: (ctx) => {
+      // Chỉ hiện nếu player thắng ít nhất 1 round không phải round cuối (MA = round 6)
+      const totalRounds = ctx.combatResult.rounds.length; // usually 6
+      // Tìm round thắng mà không phải round cuối cùng
+      const wonNonLastRound = ctx.combatResult.rounds.some((r, idx) => {
+        const isLastRound = idx === totalRounds - 1;
+        return !isLastRound && r.winner === ctx.playerLabel;
+      });
+      if (!wonNonLastRound) return null;
+      return {
+        description: "Power Ranger Silver: Thắng round (trừ round cuối) → quay 15% gấp đôi stat round kế.",
+        category: "wheel" as EffectCategory,
+        wheelItems: [
+          { label: "Gấp đôi stat round kế (15%)", weight: 15, isSuccess: true, color: "#9ca3af" },
+          { label: "Không kích hoạt (85%)", weight: 85, isSuccess: false, color: "#6b7280" },
+        ],
+        gmNote: "[GM Action] Nếu thành công: stat của round tiếp theo được nhân đôi (áp dụng cho từng round thắng không phải cuối)",
+        isActivated: true,
+      };
+    },
   },
 
   // ─── GEAR EFFECTS (wheel probability) ────────────────────────────────────
@@ -1003,23 +1181,19 @@ const EFFECT_DEFS: EffectDef[] = [
       "Chastiefol: Nhận +3 vào 2 Stat thấp nhất của đối thủ cho bản thân.",
     resolver: (ctx) => {
       if (!ctx.opponentCharacter) return null;
-      const oppStats =
-        (ctx.opponentCharacter as any).stats ??
-        (ctx.opponentCharacter as any).baseStats ??
-        {};
-      const statKeys = ["strength", "speed", "durability", "iq", "biq", "ma"];
+      const oppStats = ctx.opponentComputedStats ?? (ctx.opponentCharacter as any).stats ?? {};
+      const statKeys = ["str", "spd", "dur", "iq", "biq", "ma"];
+      const LABELS: Record<string, string> = { str: "STR", spd: "SPD", dur: "DUR", iq: "IQ", biq: "BIQ", ma: "MA" };
       const sorted = statKeys
-        .map((k) => ({ k, v: oppStats[k] ?? 0 }))
+        .map((k) => ({ k, v: Number(oppStats[k]) ?? 0 }))
         .sort((a, b) => a.v - b.v);
       const two = sorted.slice(0, 2);
       const changes = two.map(({ k }) => ({
         stat: k,
-        label: STAT_LABELS[k] ?? k.toUpperCase(),
+        label: LABELS[k],
         value: 3,
       }));
-      const desc = two
-        .map(({ k, v }) => `+3 ${STAT_LABELS[k]}(opp=${v})`)
-        .join(", ");
+      const desc = two.map(({ k, v }) => `+3 ${LABELS[k]} (đối thủ ${LABELS[k]}=${v})`).join(", ");
       return {
         description: `Chastiefol: 2 stat thấp nhất của đối thủ → ${desc}`,
         category: "auto" as EffectCategory,
@@ -1734,6 +1908,23 @@ const EFFECT_DEFS: EffectDef[] = [
 
   // ─── POWER EFFECTS ───────────────────────────────────────────────────────
 
+  // Guidance: trước combat quay 2 stat → +1 mỗi stat (chỉ khi đối thủ ít power hơn)
+  {
+    source: "guidance",
+    timing: "before_combat",
+    category: "wheel",
+    description: "Guidance: Nếu đối thủ ít Power hơn → quay 2 lần chọn stat, mỗi stat nhận +1.",
+    wheelItems: [
+      { label: "str", weight: 1, isSuccess: true, color: "#ef4444" },
+      { label: "spd", weight: 1, isSuccess: true, color: "#3b82f6" },
+      { label: "dur", weight: 1, isSuccess: true, color: "#10b981" },
+      { label: "iq",  weight: 1, isSuccess: true, color: "#a855f7" },
+      { label: "biq", weight: 1, isSuccess: true, color: "#ec4899" },
+      { label: "ma",  weight: 1, isSuccess: true, color: "#f59e0b" },
+    ],
+    gmNote: "Chỉ kích hoạt nếu đối thủ có ít Power hơn. Quay 2 lần (stat 2 loại stat 1 đã chọn). Source name = 'guidance-stat1'.",
+  },
+
   // Hunter's Mark: trước combat quay chọn 1 stat → thắng stat đó +2 điểm thay vì +1
   {
     source: "hunter's mark",
@@ -1761,6 +1952,84 @@ const EFFECT_DEFS: EffectDef[] = [
     gmNote:
       "[Per-round] Khi thua round: quay spin button 'Parry' trong bảng round. 35% Parry → đối thủ không nhận điểm.",
   },
+
+  // The World: thắng round SPD → +4 BIQ, +3 MA (engine tự xử lý)
+  {
+    source: "the world",
+    timing: "during_combat",
+    category: "auto",
+    description:
+      "The World: Thắng round Speed → +4 BIQ, +3 MA (engine tự xử lý).",
+    resolved: true,
+    resolvedNote: "Engine tự apply +4 BIQ, +3 MA khi thắng round SPD",
+  },
+
+  // The Tamer Straight Sword: sau combat thắng → vòng quay steal 1 power của đối thủ
+  {
+    source: "the tamer straight sword",
+    timing: "after_win",
+    category: "gm",
+    description: "The Tamer Straight Sword: Đánh cắp 1 Power của đối thủ sau khi thắng.",
+    resolver: (ctx) => {
+      if (!ctx.isWinner) return null;
+      const oppPowers = (ctx.opponentCharacter?.powers || [])
+        .filter((p: any) => !p?.isLost)
+        .map((p: any) => typeof p === "string" ? p : p?.name ?? "")
+        .filter((n: string) => n.length > 0);
+      if (oppPowers.length === 0) {
+        return {
+          description: "The Tamer Straight Sword: Đối thủ không còn Power nào để đánh cắp",
+          category: "gm" as EffectCategory,
+          gmNote: "[GM Action] Đối thủ không có Power",
+          isActivated: true,
+        };
+      }
+      const wheelItems = oppPowers.map((n: string) => ({
+        label: n,
+        weight: 1,
+        isSuccess: true,
+        color: "#a855f7",
+      }));
+      return {
+        description: "The Tamer Straight Sword: Chọn 1 Power của đối thủ để đánh cắp",
+        category: "wheel" as EffectCategory,
+        wheelItems,
+        gmNote: "[GM Action] Quay để chọn Power đánh cắp từ đối thủ",
+        isActivated: true,
+      };
+    },
+  },
+
+  // Accelerating Sorcery: +1 IQ mỗi khi power during_combat kích hoạt (engine tự xử lý)
+  {
+    source: "accelerating sorcery",
+    timing: "during_combat",
+    category: "auto",
+    description: "Accelerating Sorcery: +1 IQ mỗi khi Power 'Trong combat' kích hoạt trong round đó (engine tự xử lý).",
+    resolved: true,
+    resolvedNote: "Engine đếm số power during_combat đã fire, apply +N IQ cuối vòng lặp",
+  },
+
+  // Zoltraak: round BIQ diễn ra 2 lần (engine tự xử lý)
+  {
+    source: "zoltraak",
+    timing: "during_combat",
+    category: "auto",
+    description: "Zoltraak: Round BIQ diễn ra 2 lần — thắng: +1 điểm thêm; thua: đối thủ +1 điểm thêm (engine tự xử lý).",
+    resolved: true,
+    resolvedNote: "Engine tự apply điểm lần 2 khi round BIQ",
+  },
+
+  // Angling and Scheming: thắng round STR → +1 IQ, +1 BIQ, +2 MA (engine tự xử lý)
+  {
+    source: "angling and scheming",
+    timing: "during_combat",
+    category: "auto",
+    description:
+      "Angling and Scheming: Thắng round STR → +1 IQ, +1 BIQ, +2 MA (engine tự xử lý).",
+    resolved: true,
+    resolvedNote: "Engine tự apply +1 IQ, +1 BIQ, +2 MA khi thắng round STR",
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1781,6 +2050,7 @@ function buildPendingEffects(
   playerName: string,
   combatResult: CombatResultInfo | undefined,
   preCombatOnly: boolean,
+  opponentComputedStats?: Character["stats"],
 ): CombatPendingEffect[] {
   const result = combatResult ?? EMPTY_COMBAT_RESULT;
   const isWinner = result.winner === playerLabel;
@@ -1797,6 +2067,7 @@ function buildPendingEffects(
   const ctx: ResolverCtx = {
     character,
     opponentCharacter,
+    opponentComputedStats,
     combatResult: result,
     playerLabel,
     isWinner,
@@ -1811,6 +2082,13 @@ function buildPendingEffects(
       .filter((q) => !q.isLost)
       .map((q) => q.name.toLowerCase()),
     ...(character.archetypes || []).map((a) => a.toLowerCase()),
+    // Archetype sub-types (e.g., Power Ranger → "Blue", "Red"; Trickster → "Ace of Spades")
+    ...((character as any).nestedArchetypes || [])
+      .filter((na: any) => na.subType)
+      .map((na: any) => (na.subType as string).toLowerCase()),
+    ...((character as any).nestedArchetypes || [])
+      .filter((na: any) => na.subSubType)
+      .map((na: any) => (na.subSubType as string).toLowerCase()),
     // Active house names (e.g. "dothraki", "roundtable hold")
     ...((character as any).houses || [])
       .filter((h: any) => !h.isLost && h.name)
@@ -1828,7 +2106,10 @@ function buildPendingEffects(
       .filter((p: any) => !p.isLost)
       .map((p: any) => (typeof p === "string" ? p : p.name).toLowerCase()),
     // Gears (for gear effects with wheel probability, e.g. Cursed Coin, Staff of the Fallen One)
-    ...((character as any).gear?.normalGear || [])
+    ...[
+      ...((character as any).gear?.normalGear || []),
+      ...((character as any).gear?.legacyGear || []),
+    ]
       .filter((g: any) => !g.isLost)
       .map((g: any) =>
         (typeof g === "string" ? g : (g?.name ?? "")).toLowerCase(),
@@ -2178,6 +2459,8 @@ const CollapsibleSection = ({
 export const CombatEffectsPanel = ({
   player1,
   player2,
+  player1ComputedStats,
+  player2ComputedStats,
   combatResult,
   preCombatOnly = false,
   onWheelResolved,
@@ -2194,6 +2477,7 @@ export const CombatEffectsPanel = ({
           player1.name,
           combatResult,
           preCombatOnly,
+          player2ComputedStats,
         ),
       );
     }
@@ -2206,6 +2490,7 @@ export const CombatEffectsPanel = ({
           player2.name,
           combatResult,
           preCombatOnly,
+          player1ComputedStats,
         ),
       );
     }
@@ -2294,20 +2579,25 @@ export const CombatEffectsPanel = ({
           : `Thất bại: ${item.label}`;
     onWheelResolved?.(effect.playerLabel, effect.sourceName, item);
 
+    const totalSpins = (effect.wheelItems?.[0]?.meta?.spinCount as number) ?? 1;
+    const currentSpin = totalSpins - spinModal.spinsLeft + 1;
     const spinsLeft = spinModal.spinsLeft - 1;
     if (spinsLeft > 0) {
-      // Còn lần quay nữa — cập nhật note tạm thời nhưng không resolve, mở lại modal
+      // Còn lần quay nữa — close modal trước để trigger re-open
       setEffects((prev) =>
         prev.map((e) =>
           e.id === id
             ? {
                 ...e,
-                resolvedNote: `Lần 1: ${item.label} (còn ${spinsLeft} lần quay)`,
+                resolvedNote: `Lần ${currentSpin}/${totalSpins}: ${item.label} (còn ${spinsLeft} lần)`,
               }
             : e,
         ),
       );
-      setSpinModal({ isOpen: true, effect, spinsLeft });
+      setSpinModal({ isOpen: false, effect, spinsLeft });
+      setTimeout(() => {
+        setSpinModal({ isOpen: true, effect, spinsLeft });
+      }, 150);
     } else {
       setEffects((prev) =>
         prev.map((e) =>

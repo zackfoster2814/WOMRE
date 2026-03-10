@@ -137,23 +137,60 @@ registerCombatHandler(
 );
 
 /**
- * The World - Speed comparison win
+ * Angling and Scheming - Thắng round STR → +1 IQ, +1 BIQ, +2 MA
+ */
+registerCombatHandler(
+  'angling_scheming_str_win',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    if (ctx.currentRoundStat !== 'str') return { skipDefault: true };
+    if (ctx.currentRoundResult !== 'win') return { skipDefault: true };
+
+    return {
+      selfStatMods: [
+        { stat: 'iq', value: 1 },
+        { stat: 'biq', value: 1 },
+        { stat: 'ma', value: 2 },
+      ],
+      description: 'Angling and Scheming: Thắng round STR → +1 IQ, +1 BIQ, +2 MA',
+    };
+  },
+  'Thắng round STR: +1 IQ, +1 BIQ, +2 MA'
+);
+
+/**
+ * Accelerating Sorcery - +1 IQ mỗi khi power during_combat khác kích hoạt
+ */
+registerCombatHandler(
+  'accelerating_sorcery_count',
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const count = ctx.self.duringCombatActivations ?? 0;
+    if (count === 0) return { skipDefault: true };
+    return {
+      selfStatMods: [{ stat: 'iq', value: count }],
+      description: `Accelerating Sorcery: ${count} Power "Trong combat" đã kích hoạt → +${count} IQ`,
+    };
+  },
+  '+1 IQ per power during_combat activated this round (Accelerating Sorcery)'
+);
+
+/**
+ * The World - Thắng round Speed → +4 BIQ, +3 MA
  */
 registerCombatHandler(
   'the_world_speed_win',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (!ctx.opponent) return { skipDefault: true };
+    if (ctx.currentRoundStat !== 'spd') return { skipDefault: true };
+    if (ctx.currentRoundResult !== 'win') return { skipDefault: true };
 
-    if (ctx.self.stats.speed >= ctx.opponent.stats.speed * 2) {
-      return {
-        selfPoints: 3,
-        description: '+3 points - speed >= 2x đối thủ (Za Warudo!)',
-      };
-    }
-
-    return { skipDefault: true };
+    return {
+      selfStatMods: [
+        { stat: 'biq', value: 4 },
+        { stat: 'ma', value: 3 },
+      ],
+      description: 'The World: Thắng round SPD → +4 BIQ, +3 MA',
+    };
   },
-  '+3 points if speed >= 2x opponent'
+  'Thắng round SPD: +4 BIQ, +3 MA'
 );
 
 /**

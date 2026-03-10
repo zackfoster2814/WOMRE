@@ -626,37 +626,37 @@ export function registerCharDevEffects() {
   defineEffect('char_dev', 'Become a Power Ranger (Red)')
     .description('Power Ranger - Red. Trong combat: Thắng round Strength có 20% nhận thêm 2 điểm.')
     .weight(0)
-    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_red_str_bonus' })
+    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_red_str_bonus', conditions: [{ type: 'probability', chance: 20 }] })
     .register();
 
   defineEffect('char_dev', 'Become a Power Ranger (Blue)')
     .description('Power Ranger - Blue. Trong combat: Thắng round Speed có 33% nhận +3 Base Speed.')
     .weight(0)
-    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_blue_spd_bonus' })
+    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_blue_spd_bonus', conditions: [{ type: 'probability', chance: 33 }] })
     .register();
 
   defineEffect('char_dev', 'Become a Power Ranger (Black)')
     .description('Power Ranger - Black. Trong combat: Thắng round Dura có 20% nhận 1 Power ngẫu nhiên.')
     .weight(0)
-    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_black_power' })
+    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_black_power', conditions: [{ type: 'probability', chance: 20 }] })
     .register();
 
   defineEffect('char_dev', 'Become a Power Ranger (Yellow)')
     .description('Power Ranger - Yellow. Trong combat: Thắng round IQ có 25% nhận 1 Gear.')
     .weight(0)
-    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_yellow_gear' })
+    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_yellow_gear', conditions: [{ type: 'probability', chance: 25 }] })
     .register();
 
   defineEffect('char_dev', 'Become a Power Ranger (Pink)')
     .description('Power Ranger - Pink. Trong combat: Thắng round BIQ/MA có 25% nhận +1 Base vào stat ngẫu nhiên.')
     .weight(0)
-    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_pink_base_stat' })
+    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_pink_base_stat', conditions: [{ type: 'probability', chance: 25 }] })
     .register();
 
   defineEffect('char_dev', 'Become a Power Ranger (Silver)')
     .description('Power Ranger - Silver. Trong combat: Thắng round có 15% gấp đôi stat ở round tiếp theo.')
     .weight(0)
-    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_silver_double' })
+    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'power_ranger_silver_double', conditions: [{ type: 'probability', chance: 15 }] })
     .register();
 
   // 47. W Speed

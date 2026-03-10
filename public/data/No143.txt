@@ -19,9 +19,9 @@ Archetype:
 ``` 
 4 Quirk:  
 + Slow Metabolism
-+ Under the Weather (Sybauaurafarming)
-+ Raumanian (Sybauaurafarming)
-+ Herbalist (Sybauaurafarming)
++ Under the Weather (từ Sybauaurafarming)
++ Raumanian (từ Sybauaurafarming)
++ Herbalist (từ Sybauaurafarming)
 ```
 ```
 Str: 5 (ban đầu là 10, Sybauaurafarming)

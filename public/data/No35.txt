@@ -41,7 +41,9 @@ Houses:
  + 4 Normal gear:
   - Mì Tôm (Từ House)
   - Beer (Từ House)
-  - Golden Coinx3
+  - Golden Coin
+  - Golden Coin
+  - Golden Coin
   - Love Letter
  + 0 Legacy gear:
   - Space stone

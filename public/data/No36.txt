@@ -40,7 +40,7 @@ Houses:
  + 1 Normal gear:
   - Văn tế
  + 1 Legacy gear:
-  - The Tamer Straight Sword (Summon: Imp)
+  - The Tamer Straight Sword
 ```
 
 ```

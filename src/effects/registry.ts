@@ -410,6 +410,11 @@ export class EffectEntryBuilder {
     return this;
   }
 
+  tags(...t: string[]): this {
+    this.entry.tags = t;
+    return this;
+  }
+
   effect(e: Effect): this {
     this.entry.effects!.push(e);
     return this;

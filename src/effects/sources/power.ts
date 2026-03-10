@@ -718,13 +718,12 @@ registerCombatHandler(
   'zoltraak_double_biq_round',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     // Chỉ trigger đúng round BIQ
-    if ((ctx as any).currentRoundStat !== 'biq') return { skipDefault: true };
-    const biqResult = ctx.roundResults?.biq;
-    if (biqResult === 'win') {
+    if (ctx.currentRoundStat !== 'biq') return { skipDefault: true };
+    if (ctx.currentRoundResult === 'win') {
       return { selfPoints: 1, description: 'Zoltraak: BIQ round diễn ra 2 lần → thắng BIQ lần 2, +1 điểm thêm' };
     }
-    if (biqResult === 'lose') {
-      return { description: 'Zoltraak: BIQ round diễn ra 2 lần → thua BIQ lần 2, đối thủ +1 điểm thêm' };
+    if (ctx.currentRoundResult === 'lose') {
+      return { opponentPoints: 1, description: 'Zoltraak: BIQ round diễn ra 2 lần → thua BIQ lần 2, đối thủ +1 điểm thêm' };
     }
     return { description: 'Zoltraak: BIQ round diễn ra 2 lần → Hòa lần 2, không điểm thêm' };
   },
@@ -1477,9 +1476,7 @@ export function registerAllPowerEffects() {
   defineEffect('power', 'Angling and Scheming')
     .description('Trong Combat: Nếu thắng Round Strength, Buff: +1 IQ, +1 BIQ, +2 MA.')
     .weight(0.78)
-    .effect({ type: 'stat_modifier', stat: 'iq', value: 1, timing: 'during_combat', target: 'self', duration: 'combat', customHandler: 'angling_scheming_str_win' })
-    .effect({ type: 'stat_modifier', stat: 'biq', value: 1, timing: 'during_combat', target: 'self', duration: 'combat', customHandler: 'angling_scheming_str_win' })
-    .effect({ type: 'stat_modifier', stat: 'ma', value: 2, timing: 'during_combat', target: 'self', duration: 'combat', customHandler: 'angling_scheming_str_win' })
+    .effect({ type: 'custom', timing: 'during_combat', target: 'self', customHandler: 'angling_scheming_str_win' })
     .register();
 
   defineEffect('power', 'EscAPADe')
@@ -1798,7 +1795,7 @@ export function registerAllPowerEffects() {
   defineEffect('power', 'Scrying')
     .description('Debuff: Đối thủ 40% -4 Stat mạnh nhất.')
     .weight(0.78)
-    .effect({ type: 'debuff', stat: 'highest', value: -4, timing: 'during_combat', target: 'opponent', conditions: [{ type: 'probability', chance: 40 }] })
+    .effect({ type: 'debuff', stat: 'highest', value: -4, timing: 'before_combat', target: 'opponent', conditions: [{ type: 'probability', chance: 40 }] })
     .register();
 
   defineEffect('power', 'Cold Breeze')

@@ -35,6 +35,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'banana_peel_iq_compare'
     })
+    .tags('physical')
     .register();
 
   // 2. Broken Straight Sword
@@ -42,6 +43,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận -1 all stats.')
     .weight(2.86)
     .addAllStats(-1)
+    .tags('physical')
     .register();
 
   // 3. Ukulele
@@ -62,6 +64,7 @@ export function registerAllWeaponEffects() {
       stat: 'biq',
       value: -1
     })
+    .tags('music')
     .register();
 
   // 4. Uchigatana
@@ -70,6 +73,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('biq', 2)
     .addStat('ma', 1)
+    .tags('physical')
     .register();
 
   // 5. Kunai
@@ -77,6 +81,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +2 Speed.')
     .weight(2.86)
     .addStat('speed', 2)
+    .tags('physical')
     .register();
 
   // 6. Drums
@@ -89,6 +94,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'drums_extra_pvp_reward'
     })
+    .tags('music')
     .register();
 
   // 7. Magical Staff
@@ -96,6 +102,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +3 IQ.')
     .weight(2.86)
     .addStat('iq', 3)
+    .tags('magic')
     .register();
 
   // 8. Glass Bottle
@@ -109,6 +116,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'glass_bottle_break'
     })
+    .tags('physical')
     .register();
 
   // 9. Wooden Sword
@@ -116,6 +124,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +1 Strength.')
     .weight(2.86)
     .addStat('strength', 1)
+    .tags('physical')
     .register();
 
   // 10. Cursed Pennywort
@@ -129,6 +138,7 @@ export function registerAllWeaponEffects() {
       conditions: [{ type: 'probability', chance: 36 }],
       customHandler: 'cursed_pennywort_disable'
     })
+    .tags('physical', 'magic')
     .register();
 
   // 11. Slingshot
@@ -137,6 +147,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('strength', 1)
     .addStat('biq', 1)
+    .tags('physical')
     .register();
 
   // 12. B.F Sword
@@ -144,6 +155,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +3 Strength.')
     .weight(2.86)
     .addStat('strength', 3)
+    .tags('physical')
     .register();
 
   // 13. Long Bow
@@ -151,6 +163,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +2 BIQ.')
     .weight(2.86)
     .addStat('biq', 2)
+    .tags('physical')
     .register();
 
   // 14. Hidden Blade
@@ -164,6 +177,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       grantName: 'Critical Strike'
     })
+    .tags('physical')
     .register();
 
   // 15. Summoning Scroll
@@ -176,6 +190,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'summoning_scroll_summon'
     })
+    .tags('magic')
     .register();
 
   // 16. Nunchuck
@@ -183,6 +198,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +3 Martial Arts.')
     .weight(2.86)
     .addStat('ma', 3)
+    .tags('physical')
     .register();
 
   // 17. Grimoire
@@ -190,6 +206,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +1 IQ.')
     .weight(2.86)
     .addStat('iq', 1)
+    .tags('magic')
     .register();
 
   // 18. Whip
@@ -198,6 +215,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('speed', 1)
     .addStat('ma', 1)
+    .tags('physical')
     .register();
 
   // 19. Halberd
@@ -210,6 +228,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'halberd_str_win_bonus'
     })
+    .tags('physical')
     .register();
 
   // 20. Saxophone
@@ -218,6 +237,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('iq', 1)
     .addStat('biq', 1)
+    .tags('music')
     .register();
 
   // 21. Guitar
@@ -226,6 +246,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('speed', 1)
     .addStat('strength', 1)
+    .tags('music')
     .register();
 
   // 22. Flute
@@ -233,6 +254,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +2 BIQ.')
     .weight(2.86)
     .addStat('biq', 2)
+    .tags('music')
     .register();
 
   // 23. Bass
@@ -240,6 +262,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +2 MA.')
     .weight(2.86)
     .addStat('ma', 2)
+    .tags('music')
     .register();
 
   // 24. Long Sword
@@ -247,6 +270,7 @@ export function registerAllWeaponEffects() {
     .description('Nhận +2 Strength.')
     .weight(2.86)
     .addStat('strength', 2)
+    .tags('physical')
     .register();
 
   // 25. Caestus
@@ -260,6 +284,7 @@ export function registerAllWeaponEffects() {
       timing: 'after_combat',
       target: 'self'
     })
+    .tags('physical')
     .register();
 
   // 26. War Axe
@@ -274,6 +299,7 @@ export function registerAllWeaponEffects() {
       timing: 'after_combat',
       target: 'self'
     })
+    .tags('physical')
     .register();
 
   // 27. Wand
@@ -293,6 +319,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       grantName: 'random'
     })
+    .tags('magic')
     .register();
 
   // 28. Morningstar
@@ -306,6 +333,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'morningstar_physical_bonus'
     })
+    .tags('physical')
     .register();
 
   // 29. Blood Sword
@@ -320,6 +348,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'blood_sword_sacrifice'
     })
+    .tags('physical')
     .register();
 
   // 30. Rapier
@@ -328,6 +357,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('biq', 1)
     .addStat('ma', 1)
+    .tags('physical')
     .register();
 
   // 31. Claymore
@@ -336,6 +366,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('strength', 2)
     .addStat('speed', 1)
+    .tags('physical')
     .register();
 
   // 32. Zweihänd'r
@@ -344,6 +375,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('strength', 4)
     .addStat('speed', -2)
+    .tags('physical')
     .register();
 
   // 33. Astrologer's Staff
@@ -356,6 +388,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'astrologer_staff_power_trigger'
     })
+    .tags('magic')
     .register();
 
   // 34. Backhand Blade
@@ -364,6 +397,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('speed', 2)
     .addStat('ma', 1)
+    .tags('physical')
     .register();
 
   // 35. Clawmark Seal
@@ -372,6 +406,7 @@ export function registerAllWeaponEffects() {
     .weight(2.86)
     .addStat('durability', 2)
     .addStat('biq', 1)
+    .tags('magic')
     .register();
 
   // 36. Desolator (Normal - Trước Combat debuff)
@@ -392,6 +427,7 @@ export function registerAllWeaponEffects() {
       stat: 'durability',
       value: -3
     })
+    .tags('physical')
     .register();
 
   // ============================================================================
@@ -409,6 +445,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       grantName: 'Critical Strike'
     })
+    .tags('physical')
     .register();
 
   // 2. Blade of Chaos
@@ -423,6 +460,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'blade_of_chaos_god_bonus'
     })
+    .tags('physical')
     .register();
 
   // 3. River of Blood (Owned)
@@ -432,6 +470,7 @@ export function registerAllWeaponEffects() {
     .addStat('speed', 3)
     .addStat('biq', 2)
     .addStat('ma', 2)
+    .tags('physical')
     .register();
 
   // 4. Staff of Moses
@@ -444,6 +483,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       grantName: 'random'
     })
+    .tags('magic')
     .register();
 
   // 5. Staff of Homa
@@ -457,6 +497,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       grantName: 'random'
     })
+    .tags('physical')
     .register();
 
   // 6. Frostmourne (Owned)
@@ -475,6 +516,7 @@ export function registerAllWeaponEffects() {
       timing: 'after_combat',
       target: 'opponent'
     })
+    .tags('physical', 'magic')
     .register();
 
   // 7. Death's Scythe (Owned)
@@ -487,6 +529,7 @@ export function registerAllWeaponEffects() {
       target: 'opponent',
       customHandler: 'deaths_scythe_scaling_debuff'
     })
+    .tags('magic')
     .register();
 
   // 8. Excalibur
@@ -499,6 +542,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       stat: 'strength'
     })
+    .tags('physical')
     .register();
 
   // 9. Yamato Blade (Owned)
@@ -519,6 +563,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       stat: 'ma'
     })
+    .tags('physical')
     .register();
 
   // 10. Moonlight Greatsword
@@ -527,6 +572,7 @@ export function registerAllWeaponEffects() {
     .weight(2.94)
     .addStat('durability', 3)
     .addStat('ma', 2)
+    .tags('physical', 'magic')
     .register();
 
   // 11. Divine Rapier
@@ -547,6 +593,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'divine_rapier_lose_on_loss'
     })
+    .tags('physical')
     .register();
 
   // 12. Bloodthrist Dagger
@@ -565,6 +612,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'bloodthrist_crit_bonus'
     })
+    .tags('physical')
     .register();
 
   // 13. Ruyi Jingu Bang
@@ -584,6 +632,7 @@ export function registerAllWeaponEffects() {
       conditions: [{ type: 'probability', chance: 72 }],
       customHandler: 'ruyi_jingu_power_chance'
     })
+    .tags('physical', 'magic')
     .register();
 
   // 14. Playful Cloud
@@ -596,6 +645,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       stat: 'ma'
     })
+    .tags('physical')
     .register();
 
   // 15. Necronomicon
@@ -604,6 +654,7 @@ export function registerAllWeaponEffects() {
     .weight(2.94)
     .addStat('iq', 4)
     .addStat('biq', 4)
+    .tags('magic')
     .register();
 
   // 16. Death's Web Wand
@@ -616,6 +667,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'deaths_web_sacrifice'
     })
+    .tags('magic')
     .register();
 
   // 17. Mjolnir
@@ -638,6 +690,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'mjolnir_return_on_lose'
     })
+    .tags('magic')
     .register();
 
   // 18. Shadow Killer
@@ -651,6 +704,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       grantName: 'Evasion'
     })
+    .tags('physical')
     .register();
 
   // 19. Great Highland Bagpipe
@@ -664,6 +718,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'bagpipe_power_bonus'
     })
+    .tags('music')
     .register();
 
   // 20. Yoriichi's Black Nichirin (Owned)
@@ -676,6 +731,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'nichirin_demon_slayer'
     })
+    .tags('physical')
     .register();
 
   // 21. Sarastro's Flute (Owned)
@@ -688,6 +744,7 @@ export function registerAllWeaponEffects() {
       target: 'opponent',
       customHandler: 'sarastro_flute_debuff'
     })
+    .tags('music')
     .register();
 
   // 22. Two Dragons Sword (Owned)
@@ -703,6 +760,7 @@ export function registerAllWeaponEffects() {
       grantName: 'random',
       grantCount: 2
     })
+    .tags('physical')
     .register();
 
   // 23. Lusat's Glintstone Staff (Owned)
@@ -716,6 +774,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'lusat_iq_win_power'
     })
+    .tags('physical')
     .register();
 
   // 24. Instruments of the Sirens (Owned)
@@ -736,11 +795,12 @@ export function registerAllWeaponEffects() {
       timing: 'after_combat',
       target: 'self'
     })
+    .tags('music')
     .register();
 
   // 25. Chastiefol
   defineEffect('weapon', 'Chastiefol')
-    .description('Trước Combat: +3 vào 2 Stat thấp nhất của đối phương.')
+    .description('Trước Combat: Nhận +3 cho bản thân vào 2 Stat thấp nhất của đối phương.')
     .weight(2.94)
     .effect({
       type: 'custom',
@@ -748,6 +808,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'chastiefol_lowest_stats'
     })
+    .tags('physical')
     .register();
 
   // 26. Desolator (Unique - Trong combat debuff)
@@ -762,6 +823,7 @@ export function registerAllWeaponEffects() {
       stat: 'durability',
       value: -3
     })
+    .tags('physical')
     .register();
 
   // 27. Diamond Sword (Owned)
@@ -770,6 +832,7 @@ export function registerAllWeaponEffects() {
     .weight(2.94)
     .addStat('strength', 4)
     .addStat('speed', 2)
+    .tags('physical')
     .register();
 
   // 28. Saitama's Gloves
@@ -783,6 +846,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'saitama_random_stat'
     })
+    .tags('magic')
     .register();
 
   // 29. Galeforce
@@ -802,6 +866,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'galeforce_zero_points_bonus'
     })
+    .tags('physical')
     .register();
 
   // 30. Battlefury (Owned)
@@ -821,6 +886,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'battlefury_zero_points_bonus'
     })
+    .tags('physical')
     .register();
 
   // 31. Dawnbreaker
@@ -833,6 +899,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'dawnbreaker_round_wins'
     })
+    .tags('physical')
     .register();
 
   // 32. Moonveil
@@ -845,6 +912,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'moonveil_bonuses'
     })
+    .tags('physical', 'magic')
     .register();
 
   // 33. Misericorde
@@ -858,6 +926,7 @@ export function registerAllWeaponEffects() {
       conditions: [{ type: 'probability', chance: 10 }],
       customHandler: 'misericorde_steal_point'
     })
+    .tags('physical')
     .register();
 
   // 34. Andúril (Owned)
@@ -876,6 +945,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'anduril_evil_race_bonus'
     })
+    .tags('physical')
     .register();
 
   // 35. Needle
@@ -888,6 +958,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'needle_lowest_stat_bonus'
     })
+    .tags('physical')
     .register();
 
   // 36. 12 đôi dép
@@ -900,6 +971,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'twelve_sandals_bonus'
     })
+    .tags('physical')
     .register();
 
   // 37. Ruan Mei's Lute
@@ -912,6 +984,7 @@ export function registerAllWeaponEffects() {
       target: 'opponent',
       customHandler: 'ruan_mei_shared_quirks'
     })
+    .tags('music')
     .register();
 
   // 38. Green Dragon Crescent Blade
@@ -925,6 +998,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'green_dragon_biq_str'
     })
+    .tags('physical')
     .register();
 
   // 39. Rhitta (Owned)
@@ -939,6 +1013,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'rhitta_double_bonus'
     })
+    .tags('physical')
     .register();
 
   // 40. Hou Yi's Divine Bow
@@ -951,6 +1026,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       wheelType: 'hou_yi'
     })
+    .tags('physical', 'magic')
     .register();
 
   // 41. Honjo Masamune
@@ -965,6 +1041,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'honjo_spd_biq_bonus'
     })
+    .tags('physical')
     .register();
 
   // 42. Medusa's Head (Owned)
@@ -978,6 +1055,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'medusa_steal_effect_points'
     })
+    .tags('magic')
     .register();
 
   // 43. Giant Slayer (Owned)
@@ -990,6 +1068,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'giant_slayer_dura_bonus'
     })
+    .tags('physical')
     .register();
 
   // 44. Guinsoo's Rageblade
@@ -1004,6 +1083,7 @@ export function registerAllWeaponEffects() {
       timing: 'after_combat',
       target: 'self'
     })
+    .tags('physical')
     .register();
 
   // 45. Labrys Axe
@@ -1017,6 +1097,7 @@ export function registerAllWeaponEffects() {
       timing: 'after_combat_win',
       target: 'self'
     })
+    .tags('physical')
     .register();
 
   // 46. Flower of Fire
@@ -1029,6 +1110,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'flower_of_fire_scaling'
     })
+    .tags('magic')
     .register();
 
   // 47. The Hex Core
@@ -1050,6 +1132,7 @@ export function registerAllWeaponEffects() {
       grantName: 'random',
       grantCount: 8
     })
+    .tags('magic')
     .register();
 
   // 48. Infinity Gauntlet
@@ -1062,6 +1145,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'infinity_gauntlet_stones'
     })
+    .tags('magic')
     .register();
 
   // 49. Diffusal Blade
@@ -1074,6 +1158,7 @@ export function registerAllWeaponEffects() {
       target: 'opponent',
       customHandler: 'diffusal_disable_magic'
     })
+    .tags('magic')
     .register();
 
   // 50. Eclipse Shotel (Owned)
@@ -1086,6 +1171,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'eclipse_shotel_effects'
     })
+    .tags('physical', 'magic')
     .register();
 
   // 51. Bolt of Gransax
@@ -1098,6 +1184,7 @@ export function registerAllWeaponEffects() {
       target: 'self',
       customHandler: 'bolt_gransax_speed_bonus'
     })
+    .tags('physical', 'magic')
     .register();
 
   // 52. Thunder Orb
@@ -1111,6 +1198,7 @@ export function registerAllWeaponEffects() {
       stat: 'durability',
       value: -2
     })
+    .tags('magic')
     .register();
 
   // 53. Ice Spike
@@ -1124,6 +1212,7 @@ export function registerAllWeaponEffects() {
       stat: 'durability',
       value: -2
     })
+    .tags('magic')
     .register();
 }
 
@@ -1431,8 +1520,7 @@ registerCombatHandler(
 // ============================================================================
 
 /**
- * Chastiefol - Trước Combat: +3 vào 2 Stat thấp nhất của đối phương.
- * (Buff đối thủ - nhưng đây là từ góc nhìn Chastiefol chủ nhân)
+ * Chastiefol - Trước Combat: Nhận +3 cho bản thân vào 2 Stat thấp nhất của đối phương.
  */
 registerCombatHandler(
   'chastiefol_lowest_stats',
@@ -1441,11 +1529,11 @@ registerCombatHandler(
     const sorted = [...STAT_NAMES].sort((a, b) => (ctx.opponent!.stats as Record<StatName, number>)[a] - (ctx.opponent!.stats as Record<StatName, number>)[b]);
     const [lowest1, lowest2] = sorted;
     return {
-      opponentStatMods: [
+      selfStatMods: [
         { stat: lowest1, value: 3 },
         { stat: lowest2, value: 3 },
       ],
-      description: `Chastiefol: +3 ${lowest1}, +3 ${lowest2} cho đối phương`,
+      description: `Chastiefol: +3 ${lowest1.toUpperCase()}, +3 ${lowest2.toUpperCase()} (2 Stat thấp nhất của đối phương)`,
     };
   },
   "+3 to opponent's 2 lowest stats"

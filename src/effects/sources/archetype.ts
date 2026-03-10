@@ -1581,6 +1581,7 @@ function registerPowerRangerSubTypes() {
       timing: "on_round_win",
       target: "self",
       customHandler: "power_ranger_red_str_bonus",
+      conditions: [{ type: "probability", chance: 20 }],
     })
     .register();
 
@@ -1594,6 +1595,7 @@ function registerPowerRangerSubTypes() {
       timing: "on_round_win",
       target: "self",
       customHandler: "power_ranger_blue_spd_bonus",
+      conditions: [{ type: "probability", chance: 33 }],
     })
     .register();
 
@@ -1607,6 +1609,7 @@ function registerPowerRangerSubTypes() {
       timing: "on_round_win",
       target: "self",
       customHandler: "power_ranger_black_power",
+      conditions: [{ type: "probability", chance: 20 }],
     })
     .register();
 
@@ -1620,6 +1623,7 @@ function registerPowerRangerSubTypes() {
       timing: "on_round_win",
       target: "self",
       customHandler: "power_ranger_yellow_gear",
+      conditions: [{ type: "probability", chance: 25 }],
     })
     .register();
 
@@ -1633,6 +1637,7 @@ function registerPowerRangerSubTypes() {
       timing: "on_round_win",
       target: "self",
       customHandler: "power_ranger_pink_base_stat",
+      conditions: [{ type: "probability", chance: 25 }],
     })
     .register();
 
@@ -1646,6 +1651,7 @@ function registerPowerRangerSubTypes() {
       timing: "on_round_win",
       target: "self",
       customHandler: "power_ranger_silver_double",
+      conditions: [{ type: "probability", chance: 15 }],
     })
     .register();
 }
@@ -2850,7 +2856,7 @@ registerCombatHandler(
   "power_ranger_red_str_bonus",
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     // Chỉ kích hoạt khi thắng round Strength — xác suất 20% do wheel UI quyết định
-    if (ctx.roundResults?.strength !== "win") return { skipDefault: true };
+    if (ctx.currentRoundStat !== "str") return { skipDefault: true };
     return {
       selfPoints: 2,
       description: "+2 điểm thêm (Red Ranger - thắng Str)",
@@ -2863,7 +2869,7 @@ registerCombatHandler(
   "power_ranger_blue_spd_bonus",
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     // Chỉ kích hoạt khi thắng round Speed — xác suất 33% do wheel UI quyết định
-    if (ctx.roundResults?.speed !== "win") return { skipDefault: true };
+    if (ctx.currentRoundStat !== "spd") return { skipDefault: true };
     return {
       selfStatMods: [{ stat: "speed", value: 3 }],
       description: "+3 Base Speed (Blue Ranger - thắng Speed)",
@@ -2876,7 +2882,7 @@ registerCombatHandler(
   "power_ranger_black_power",
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     // Chỉ kích hoạt khi thắng round Durability — xác suất 20% do wheel UI quyết định
-    if (ctx.roundResults?.durability !== "win") return { skipDefault: true };
+    if (ctx.currentRoundStat !== "dur") return { skipDefault: true };
     return {
       grantPower: "random",
       description: "Nhận 1 Power ngẫu nhiên (Black Ranger - thắng Dur)",
@@ -2889,7 +2895,7 @@ registerCombatHandler(
   "power_ranger_yellow_gear",
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     // Chỉ kích hoạt khi thắng round IQ — xác suất 25% do wheel UI quyết định
-    if (ctx.roundResults?.iq !== "win") return { skipDefault: true };
+    if (ctx.currentRoundStat !== "iq") return { skipDefault: true };
     return {
       grantGear: "random",
       description: "Nhận 1 Gear (Yellow Ranger - thắng IQ)",
@@ -2902,9 +2908,9 @@ registerCombatHandler(
   "power_ranger_pink_base_stat",
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     // Chỉ kích hoạt khi thắng round BIQ hoặc MA — xác suất 25% do wheel UI quyết định
-    const wonBIQ = ctx.roundResults?.biq === "win";
-    const wonMA = ctx.roundResults?.ma === "win";
-    if (!wonBIQ && !wonMA) return { skipDefault: true };
+    const isBIQRound = ctx.currentRoundStat === "biq";
+    const isMAround = ctx.currentRoundStat === "ma";
+    if (!isBIQRound && !isMAround) return { skipDefault: true };
     const randomStat =
       STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
     return {

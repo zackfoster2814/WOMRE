@@ -536,7 +536,7 @@ export function registerAllQuirkEffects() {
   defineEffect('quirk', 'Weak-Knee')
     .description('Trong combat: Round đầu tiên chiến thắng không nhận điểm.')
     .weight(2.38)
-    .effect({ type: 'custom', timing: 'during_combat', target: 'self', customHandler: 'weak_knee_first_round' })
+    .effect({ type: 'custom', timing: 'on_round_win', target: 'self', customHandler: 'weak_knee_first_round' })
     .register();
 
   // Cruelty
