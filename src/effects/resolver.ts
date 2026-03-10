@@ -22,6 +22,8 @@ import type { Character } from "../types/character";
 import { HandlerRegistry } from "./handlers/registry";
 import type { ImmediateHandlerContext } from "./handlers/types";
 
+export type { Condition, CharacterEffects } from "./types";
+
 // ============================================================================
 // STAT UTILITIES
 // ============================================================================
@@ -631,8 +633,8 @@ export class EffectResolver {
         // For houseBonusApplied: skip stat_modifier effects (already pre-applied, e.g. before Fate's Trick)
         let effectsToApply = isKindaHomeless
           ? entry.effects.filter(
-              (e) => e.type === "stat_modifier" && e.timing === "immediate",
-            )
+            (e) => e.type === "stat_modifier" && e.timing === "immediate",
+          )
           : entry.effects;
         if (character.houseBonusApplied) {
           effectsToApply = effectsToApply.filter(
@@ -788,7 +790,7 @@ export class EffectResolver {
                 !(
                   e.type === "grant_power" &&
                   (e as { grantName?: string }).grantName?.toLowerCase() ===
-                    "aids"
+                  "aids"
                 ),
             );
           }
@@ -800,7 +802,7 @@ export class EffectResolver {
                 !(
                   e.type === "custom" &&
                   (e as { customHandler?: string }).customHandler ===
-                    "metamorphosis_random_stat"
+                  "metamorphosis_random_stat"
                 ),
             );
             // Add specific stat modifier
@@ -823,7 +825,7 @@ export class EffectResolver {
                 !(
                   e.type === "custom" &&
                   (e as { customHandler?: string }).customHandler ===
-                    "in_love_stat_bonus"
+                  "in_love_stat_bonus"
                 ),
             );
             // Add specific stat modifier from data (e.g., "-> +2 IQ")
@@ -845,7 +847,7 @@ export class EffectResolver {
                 !(
                   e.type === "custom" &&
                   (e as { customHandler?: string }).customHandler ===
-                    "creators_limitation"
+                  "creators_limitation"
                 ),
             );
             effects.push({
@@ -1065,7 +1067,9 @@ export class EffectResolver {
         break;
 
       case "probability":
-        result = Math.random() * 100 < (condition.chance || 0);
+        // Probability is handled by the UI wheels (onWin/onLose/onTie/preCombat etc.)
+        // We return true here so the effect is passed to the engine and the UI can show the wheel.
+        result = true;
         break;
 
       case "stat_compare":
@@ -1236,7 +1240,9 @@ export class EffectResolver {
           break;
 
         case "probability":
-          result = Math.random() * 100 < (condition.chance || 0);
+          // Probability is handled by the UI wheels (onWin/onLose/onTie/preCombat etc.)
+          // We return true here so the effect is passed to the engine and the UI can show the wheel.
+          result = true;
           break;
 
         case "stat_compare":
@@ -1578,7 +1584,7 @@ export class EffectResolver {
           // This ensures "Base Stat thấp nhất" looks at original base stats, not modified stats
           const statsForResolution =
             effect.isBase &&
-            (effect.stat === "lowest" || effect.stat === "highest")
+              (effect.stat === "lowest" || effect.stat === "highest")
               ? baseStats // Use original base stats passed to this function
               : result.totalStats;
           const targetStats = resolveStatTarget(

@@ -502,12 +502,6 @@ export function registerAllArchetypeEffects() {
       "Mỗi round thắng trong combat, có 50% khả năng nhận nhận 2 điểm và 50% khả năng nhận 0 điểm.",
     )
     .weight(2.2)
-    .effect({
-      type: "custom",
-      timing: "on_round_win",
-      target: "self",
-      customHandler: "gambler_coin_flip",
-    })
     .register();
 
   // Time Traveller

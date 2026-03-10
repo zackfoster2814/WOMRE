@@ -7,7 +7,7 @@
  *   handlers/combat/weapon-combat-handlers.ts
  */
 
-import { defineEffect } from '../registry';
+import { defineEffect, EffectRegistry } from '../registry';
 import { registerImmediateHandler } from '../handlers/registry';
 import { registerCombatHandler } from '../handlers/registry';
 import type { ImmediateHandlerContext, ImmediateHandlerResult } from '../handlers/types';
@@ -1378,11 +1378,15 @@ registerCombatHandler(
   'morningstar_physical_bonus',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     if (!ctx.opponent) return { skipDefault: true };
-    const physicalWeapons = ['Sword', 'Axe', 'Hammer', 'Spear', 'Blade', 'Club', 'Dagger', 'Mace'];
-    const opponentWeapons = ctx.opponent.weapons || [];
-    const hasPhysical = opponentWeapons.some((w: any) =>
-      physicalWeapons.some(p => (w.name || w)?.includes(p))
-    );
+    const opponentWeapons: any[] = ctx.opponent.weapons || [];
+    const weaponEntries = EffectRegistry.getAllByType('weapon');
+    const hasPhysical = opponentWeapons.some((w: any) => {
+      if (w?.isLost) return false;
+      const name: string = (typeof w === 'string' ? w : w?.name ?? '').replace(/\s*\(.*?\)/g, '').trim();
+      if (!name) return false;
+      const entry = weaponEntries.find(e => e.name.toLowerCase() === name.toLowerCase());
+      return entry?.tags?.includes('physical') ?? false;
+    });
     if (hasPhysical) {
       return {
         selfStatMods: [{ stat: 'strength', value: 2 }],

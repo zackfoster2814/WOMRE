@@ -477,30 +477,6 @@ registerCombatHandler(
   '50/50 for +2 or -2 All Stats'
 );
 
-/**
- * Gambler Coin Flip - on_round_win
- * 50% nhận 2 điểm cho round đó (thêm +1 nữa), 50% nhận 0 điểm (cancel điểm vừa thắng)
- */
-registerCombatHandler(
-  'gambler_coin_flip',
-  (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    const isHeads = Math.random() > 0.5;
-
-    if (isHeads) {
-      return {
-        selfPoints: 1,
-        description: '+1 điểm thêm → tổng 2 điểm round này (Gambler - May mắn 50%)',
-      };
-    } else {
-      return {
-        selfPoints: -1,
-        description: '-1 điểm → tổng 0 điểm round này (Gambler - Xui 50%)',
-      };
-    }
-  },
-  'on_round_win: 50% +2pts total, 50% 0pts total for that round'
-);
-
 // ============================================================================
 // POINT MANIPULATION HANDLERS
 // ============================================================================
