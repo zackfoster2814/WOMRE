@@ -905,8 +905,9 @@ registerCombatHandler(
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     const oppWonStr = ctx.roundResults?.strength === 'lose';
     if (!oppWonStr) return { skipDefault: true };
+    // Dùng blockOpponentPoint thay vì -1 để tránh trừ điểm khi đối thủ đang 0 điểm
     return {
-      opponentPoints: -1,
+      blockOpponentPoint: true,
       description: 'Cautious: đối thủ không nhận điểm round Strength',
     };
   },

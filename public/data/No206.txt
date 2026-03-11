@@ -15,7 +15,7 @@ Sub-race: Ice Troll
 ```
 Archetype: 
 + Conquerer
-+ Edgelord(Từ Spatula)
++ Edgelord (Từ Spatula)
 ```
 ``` 
 2 Quirk:  

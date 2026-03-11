@@ -79,6 +79,8 @@ interface CombatResultInfo {
 interface CombatEffectsPanelProps {
   player1: { name: string; character?: Character };
   player2: { name: string; character?: Character };
+  /** Key thay đổi khi combat mới bắt đầu (e.g. sub-combat) → reset toàn bộ resolved state */
+  resetKey?: string | number;
   /** Stats cuối cùng (sau tất cả bonuses) để resolver tính đúng */
   player1ComputedStats?: Character["stats"];
   player2ComputedStats?: Character["stats"];
@@ -1923,6 +1925,13 @@ const EFFECT_DEFS: EffectDef[] = [
       { label: "ma",  weight: 1, isSuccess: true, color: "#f59e0b" },
     ],
     gmNote: "Chỉ kích hoạt nếu đối thủ có ít Power hơn. Quay 2 lần (stat 2 loại stat 1 đã chọn). Source name = 'guidance-stat1'.",
+    resolver: (ctx) => {
+      const selfPowerCount = (ctx.character.powers || []).filter((p: any) => !p.isLost).length;
+      const oppPowerCount = (ctx.opponentCharacter?.powers || []).filter((p: any) => !p.isLost).length;
+      // Chỉ hiện khi đối thủ có ít power hơn (không bằng, không nhiều hơn)
+      if (oppPowerCount >= selfPowerCount) return null;
+      return {};
+    },
   },
 
   // Hunter's Mark: trước combat quay chọn 1 stat → thắng stat đó +2 điểm thay vì +1
@@ -2465,6 +2474,7 @@ export const CombatEffectsPanel = ({
   preCombatOnly = false,
   onWheelResolved,
   onPendingPreCombatChange,
+  resetKey,
 }: CombatEffectsPanelProps) => {
   const buildEffects = () => {
     const list: CombatPendingEffect[] = [];
@@ -2498,6 +2508,12 @@ export const CombatEffectsPanel = ({
   };
 
   const [effects, setEffects] = useState<CombatPendingEffect[]>(buildEffects);
+
+  // Reset toàn bộ khi resetKey thay đổi (e.g. sub-combat mới bắt đầu)
+  useEffect(() => {
+    setEffects(buildEffects());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resetKey]);
 
   // Rebuild effects khi player thay đổi (e.g. dev mode load matchup)
   // Giữ lại resolved state của effects cũ (id-based) để không reset sau khi invoker add power

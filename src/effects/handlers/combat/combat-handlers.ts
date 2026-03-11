@@ -495,28 +495,7 @@ registerCombatHandler(
   '+1 starting point'
 );
 
-/**
- * Edgelord Underdog Point - Trước khi kết thúc combat: bên nào ít điểm hơn nhận +1 điểm
- */
-registerCombatHandler(
-  'edgelord_underdog_point',
-  (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (!ctx.opponent) return { skipDefault: true };
-
-    const selfScore = ctx.self.roundsWon;
-    const oppScore = ctx.self.roundsLost; // opponent's rounds won
-
-    if (selfScore < oppScore) {
-      return {
-        selfPoints: 1,
-        description: '+1 điểm - đang thua điểm (Edgelord underdog)',
-      };
-    }
-
-    return { skipDefault: true };
-  },
-  'Before combat ends: lower-scoring side gets +1 point'
-);
+// edgelord_underdog_point is registered in archetype.ts with correct currentScore logic
 
 /**
  * Ace of Spades - Swap points

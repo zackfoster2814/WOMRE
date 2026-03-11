@@ -173,7 +173,7 @@ const DevWheelPanel = ({
     fetch(getAssetPath("/data/Round256.json"))
       .then((r) => r.json())
       .then((d) => setMpMatches(d.matches || []))
-      .catch(() => { });
+      .catch(() => {});
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -301,12 +301,13 @@ const DevWheelPanel = ({
                     onClick={() => {
                       if (p1Data && p2Data) onLoadMatchup(p1Data, p2Data);
                     }}
-                    className={`w-full text-left px-2 py-1.5 rounded-lg border transition-all ${isDone
-                      ? "border-gray-700/50 bg-gray-900/30 opacity-60"
-                      : hasBoth
-                        ? "border-yellow-600/30 bg-gray-900/60 hover:bg-yellow-900/20 hover:border-yellow-500/60"
-                        : "border-gray-800 bg-gray-900/20 opacity-40 cursor-not-allowed"
-                      }`}
+                    className={`w-full text-left px-2 py-1.5 rounded-lg border transition-all ${
+                      isDone
+                        ? "border-gray-700/50 bg-gray-900/30 opacity-60"
+                        : hasBoth
+                          ? "border-yellow-600/30 bg-gray-900/60 hover:bg-yellow-900/20 hover:border-yellow-500/60"
+                          : "border-gray-800 bg-gray-900/20 opacity-40 cursor-not-allowed"
+                    }`}
                   >
                     <div className="flex items-center gap-1.5">
                       <span className="text-gray-600 text-[10px] shrink-0 w-5 text-right">
@@ -377,10 +378,11 @@ const DevWheelPanel = ({
                           );
                           onOverrideChange(effectName, i, v);
                         }}
-                        className={`w-14 text-center text-xs rounded px-1 py-0.5 border ${isOverridden
-                          ? "bg-yellow-900/40 border-yellow-500/60 text-yellow-200"
-                          : "bg-gray-800 border-gray-600 text-gray-300"
-                          } focus:outline-none focus:border-yellow-400`}
+                        className={`w-14 text-center text-xs rounded px-1 py-0.5 border ${
+                          isOverridden
+                            ? "bg-yellow-900/40 border-yellow-500/60 text-yellow-200"
+                            : "bg-gray-800 border-gray-600 text-gray-300"
+                        } focus:outline-none focus:border-yellow-400`}
                       />
                       <span className="text-gray-500 text-[10px]">%</span>
                     </div>
@@ -651,48 +653,222 @@ function normalizeStatKey(stat: string): keyof CharacterStats {
 }
 
 /** All short stat keys — single source of truth. */
-const _ALL_STAT_KEYS: (keyof CharacterStats)[] = ["str", "spd", "dur", "iq", "biq", "ma"];
+const _ALL_STAT_KEYS: (keyof CharacterStats)[] = [
+  "str",
+  "spd",
+  "dur",
+  "iq",
+  "biq",
+  "ma",
+];
 
 // Race stat roll weights (values 1-10, index 0 = value 1)
 // Source: public/document/race-weight-stats.txt
 // Skeleton: dùng sub-race để xác định race, IQ cố định 1
-const RACE_STAT_WEIGHTS: Record<string, Record<keyof CharacterStats, number[]>> = {
-  goblin: { str: [10, 10, 15, 18, 25, 10, 5, 3, 2, 2], spd: [10, 15, 15, 15, 15, 15, 5, 5, 3, 2], dur: [10, 10, 15, 20, 15, 15, 10, 2, 2, 1], iq: [15, 15, 10, 10, 20, 15, 5, 5, 3, 2], biq: [5, 10, 10, 15, 23, 15, 10, 5, 5, 2], ma: [15, 15, 15, 10, 10, 10, 10, 5, 5, 5] },
-  gnome: { str: [15, 10, 10, 13, 22, 15, 5, 5, 3, 2], spd: [10, 15, 15, 15, 15, 15, 5, 5, 3, 2], dur: [15, 10, 10, 10, 30, 10, 7, 3, 3, 2], iq: [10, 10, 5, 5, 15, 25, 15, 5, 5, 5], biq: [15, 15, 15, 15, 10, 10, 10, 5, 3, 2], ma: [20, 20, 15, 15, 10, 5, 5, 5, 3, 2] },
-  human: { str: [15, 15, 10, 10, 20, 10, 5, 5, 5, 5], spd: [15, 10, 10, 10, 20, 15, 10, 5, 3, 2], dur: [15, 7, 8, 9, 20, 16, 14, 6, 3, 2], iq: [15, 5, 5, 5, 15, 15, 15, 12, 8, 5], biq: [10, 5, 5, 5, 15, 15, 20, 10, 10, 5], ma: [15, 5, 5, 5, 20, 10, 15, 5, 5, 15] },
-  dwarf: { str: [5, 7, 8, 7, 13, 20, 15, 10, 9, 6], spd: [20, 15, 15, 15, 15, 5, 5, 5, 3, 2], dur: [5, 5, 5, 5, 15, 20, 20, 10, 8, 7], iq: [15, 10, 10, 5, 20, 12, 12, 8, 5, 3], biq: [5, 5, 5, 10, 15, 20, 20, 10, 5, 5], ma: [12, 12, 12, 4, 4, 12, 24, 10, 5, 5] },
-  troll: { str: [10, 5, 10, 5, 20, 20, 15, 5, 5, 5], spd: [15, 10, 10, 10, 20, 15, 5, 5, 5, 5], dur: [6, 7, 8, 9, 10, 35, 10, 5, 5, 5], iq: [15, 15, 15, 5, 25, 10, 5, 5, 3, 2], biq: [5, 5, 5, 10, 15, 20, 20, 10, 5, 5], ma: [12, 12, 12, 4, 4, 12, 24, 10, 5, 5] },
-  orc: { str: [2, 3, 4, 5, 6, 35, 20, 10, 8, 7], spd: [15, 15, 15, 15, 15, 15, 4, 2, 2, 2], dur: [5, 5, 7, 7, 13, 23, 20, 10, 5, 5], iq: [15, 15, 15, 5, 25, 10, 5, 5, 3, 2], biq: [2, 3, 4, 5, 6, 35, 18, 12, 8, 7], ma: [10, 5, 5, 15, 10, 20, 15, 10, 5, 5] },
-  merfolk: { str: [5, 10, 10, 10, 25, 20, 10, 5, 3, 2], spd: [5, 5, 5, 10, 15, 20, 15, 15, 5, 5], dur: [7, 8, 14, 16, 20, 20, 5, 5, 3, 2], iq: [5, 5, 7, 9, 28, 18, 10, 8, 5, 5], biq: [10, 10, 15, 15, 15, 15, 5, 5, 5, 5], ma: [20, 15, 15, 15, 10, 5, 5, 5, 5, 5] },
-  dryad: { str: [30, 10, 10, 5, 5, 5, 5, 5, 5, 20], spd: [45, 10, 10, 5, 5, 5, 5, 5, 5, 5], dur: [30, 5, 5, 10, 10, 5, 5, 5, 5, 20], iq: [20, 5, 5, 5, 20, 10, 10, 5, 5, 15], biq: [20, 20, 20, 10, 5, 5, 5, 5, 5, 5], ma: [55, 5, 5, 5, 5, 5, 5, 5, 5, 5] },
-  elf: { str: [15, 10, 5, 10, 20, 15, 10, 5, 5, 5], spd: [15, 5, 10, 5, 10, 25, 15, 5, 5, 5], dur: [10, 10, 5, 5, 10, 25, 20, 5, 5, 5], iq: [10, 5, 5, 5, 15, 25, 12, 10, 8, 5], biq: [20, 4, 4, 4, 4, 30, 15, 10, 5, 4], ma: [10, 5, 15, 5, 15, 15, 15, 8, 7, 5] },
-  spirit: { str: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], spd: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], dur: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], iq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], biq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], ma: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10] },
-  uma: { str: [5, 7, 7, 7, 15, 25, 20, 8, 3, 3], spd: [3, 3, 6, 6, 24, 24, 16, 6, 7, 5], dur: [8, 7, 7, 14, 16, 16, 12, 12, 4, 4], iq: [5, 10, 15, 10, 25, 15, 5, 5, 5, 5], biq: [10, 10, 15, 10, 15, 15, 10, 5, 5, 5], ma: [55, 5, 5, 5, 5, 5, 5, 5, 5, 5] },
-  werebeast: { str: [10, 5, 5, 15, 15, 15, 15, 10, 5, 5], spd: [10, 10, 5, 5, 20, 20, 10, 10, 5, 5], dur: [15, 5, 5, 5, 30, 5, 15, 10, 5, 5], iq: [10, 10, 5, 10, 20, 20, 10, 5, 5, 5], biq: [5, 5, 5, 15, 20, 20, 15, 5, 5, 5], ma: [15, 5, 5, 15, 15, 10, 10, 15, 5, 5] },
-  vampire: { str: [20, 5, 5, 5, 5, 20, 20, 5, 5, 10], spd: [5, 5, 7, 7, 8, 18, 33, 7, 5, 5], dur: [10, 5, 5, 5, 15, 20, 20, 5, 5, 10], iq: [5, 5, 5, 15, 25, 20, 15, 5, 3, 2], biq: [5, 5, 5, 15, 20, 20, 15, 5, 5, 5], ma: [15, 5, 5, 15, 15, 10, 10, 15, 5, 5] },
-  giant: { str: [5, 5, 5, 10, 10, 25, 25, 5, 5, 5], spd: [15, 15, 15, 15, 15, 15, 4, 2, 2, 2], dur: [5, 5, 5, 10, 10, 20, 20, 5, 5, 15], iq: [10, 10, 5, 5, 10, 15, 25, 10, 5, 5], biq: [15, 10, 10, 5, 15, 15, 5, 10, 10, 5], ma: [40, 5, 5, 5, 5, 5, 20, 5, 5, 5] },
-  dragon: { str: [12, 3, 3, 3, 3, 25, 31, 5, 5, 10], spd: [15, 5, 5, 5, 15, 15, 15, 15, 5, 5], dur: [5, 5, 5, 10, 10, 20, 15, 10, 10, 10], iq: [15, 5, 5, 5, 15, 20, 5, 10, 15, 5], biq: [20, 10, 5, 5, 10, 20, 15, 5, 5, 5], ma: [20, 5, 5, 5, 20, 15, 15, 5, 5, 5] },
-  angel: { str: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], spd: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], dur: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], iq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], biq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], ma: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10] },
-  "demi-god": { str: [20, 5, 5, 5, 10, 20, 5, 5, 5, 20], spd: [15, 5, 5, 5, 35, 10, 5, 5, 5, 10], dur: [15, 10, 5, 5, 5, 25, 15, 5, 5, 10], iq: [25, 5, 5, 5, 10, 15, 15, 5, 5, 10], biq: [20, 5, 5, 5, 5, 25, 10, 5, 5, 15], ma: [20, 5, 5, 5, 10, 15, 5, 15, 5, 15] },
-  "primordial being": { str: [15, 5, 5, 5, 5, 5, 35, 10, 5, 10], spd: [15, 5, 5, 5, 20, 20, 5, 5, 5, 15], dur: [15, 5, 5, 10, 5, 25, 10, 10, 10, 5], iq: [15, 5, 5, 15, 5, 15, 15, 5, 5, 15], biq: [15, 5, 5, 15, 15, 15, 15, 5, 5, 5], ma: [20, 5, 5, 5, 20, 10, 10, 5, 5, 15] },
-  demon: { str: [20, 5, 5, 5, 5, 10, 10, 10, 15, 15], spd: [10, 4, 4, 4, 4, 35, 14, 11, 4, 10], dur: [15, 5, 5, 5, 15, 15, 15, 5, 5, 15], iq: [20, 5, 5, 5, 20, 10, 5, 5, 5, 20], biq: [20, 5, 5, 5, 5, 5, 35, 5, 5, 10], ma: [15, 5, 5, 5, 15, 25, 5, 5, 5, 15] },
-  god: { str: [20, 5, 5, 5, 5, 10, 10, 10, 15, 15], spd: [15, 2, 3, 4, 4, 4, 44, 4, 5, 15], dur: [15, 5, 5, 5, 10, 5, 30, 5, 5, 15], iq: [20, 5, 5, 5, 5, 5, 30, 5, 5, 15], biq: [20, 5, 5, 5, 5, 5, 20, 10, 5, 20], ma: [20, 5, 5, 5, 25, 5, 5, 5, 5, 20] },
-  reincarnator: { str: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], spd: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], dur: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], iq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], biq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], ma: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10] },
-  symbiosis: { str: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], spd: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], dur: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], iq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], biq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10], ma: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10] },
+const RACE_STAT_WEIGHTS: Record<
+  string,
+  Record<keyof CharacterStats, number[]>
+> = {
+  goblin: {
+    str: [10, 10, 15, 18, 25, 10, 5, 3, 2, 2],
+    spd: [10, 15, 15, 15, 15, 15, 5, 5, 3, 2],
+    dur: [10, 10, 15, 20, 15, 15, 10, 2, 2, 1],
+    iq: [15, 15, 10, 10, 20, 15, 5, 5, 3, 2],
+    biq: [5, 10, 10, 15, 23, 15, 10, 5, 5, 2],
+    ma: [15, 15, 15, 10, 10, 10, 10, 5, 5, 5],
+  },
+  gnome: {
+    str: [15, 10, 10, 13, 22, 15, 5, 5, 3, 2],
+    spd: [10, 15, 15, 15, 15, 15, 5, 5, 3, 2],
+    dur: [15, 10, 10, 10, 30, 10, 7, 3, 3, 2],
+    iq: [10, 10, 5, 5, 15, 25, 15, 5, 5, 5],
+    biq: [15, 15, 15, 15, 10, 10, 10, 5, 3, 2],
+    ma: [20, 20, 15, 15, 10, 5, 5, 5, 3, 2],
+  },
+  human: {
+    str: [15, 15, 10, 10, 20, 10, 5, 5, 5, 5],
+    spd: [15, 10, 10, 10, 20, 15, 10, 5, 3, 2],
+    dur: [15, 7, 8, 9, 20, 16, 14, 6, 3, 2],
+    iq: [15, 5, 5, 5, 15, 15, 15, 12, 8, 5],
+    biq: [10, 5, 5, 5, 15, 15, 20, 10, 10, 5],
+    ma: [15, 5, 5, 5, 20, 10, 15, 5, 5, 15],
+  },
+  dwarf: {
+    str: [5, 7, 8, 7, 13, 20, 15, 10, 9, 6],
+    spd: [20, 15, 15, 15, 15, 5, 5, 5, 3, 2],
+    dur: [5, 5, 5, 5, 15, 20, 20, 10, 8, 7],
+    iq: [15, 10, 10, 5, 20, 12, 12, 8, 5, 3],
+    biq: [5, 5, 5, 10, 15, 20, 20, 10, 5, 5],
+    ma: [12, 12, 12, 4, 4, 12, 24, 10, 5, 5],
+  },
+  troll: {
+    str: [10, 5, 10, 5, 20, 20, 15, 5, 5, 5],
+    spd: [15, 10, 10, 10, 20, 15, 5, 5, 5, 5],
+    dur: [6, 7, 8, 9, 10, 35, 10, 5, 5, 5],
+    iq: [15, 15, 15, 5, 25, 10, 5, 5, 3, 2],
+    biq: [5, 5, 5, 10, 15, 20, 20, 10, 5, 5],
+    ma: [12, 12, 12, 4, 4, 12, 24, 10, 5, 5],
+  },
+  orc: {
+    str: [2, 3, 4, 5, 6, 35, 20, 10, 8, 7],
+    spd: [15, 15, 15, 15, 15, 15, 4, 2, 2, 2],
+    dur: [5, 5, 7, 7, 13, 23, 20, 10, 5, 5],
+    iq: [15, 15, 15, 5, 25, 10, 5, 5, 3, 2],
+    biq: [2, 3, 4, 5, 6, 35, 18, 12, 8, 7],
+    ma: [10, 5, 5, 15, 10, 20, 15, 10, 5, 5],
+  },
+  merfolk: {
+    str: [5, 10, 10, 10, 25, 20, 10, 5, 3, 2],
+    spd: [5, 5, 5, 10, 15, 20, 15, 15, 5, 5],
+    dur: [7, 8, 14, 16, 20, 20, 5, 5, 3, 2],
+    iq: [5, 5, 7, 9, 28, 18, 10, 8, 5, 5],
+    biq: [10, 10, 15, 15, 15, 15, 5, 5, 5, 5],
+    ma: [20, 15, 15, 15, 10, 5, 5, 5, 5, 5],
+  },
+  dryad: {
+    str: [30, 10, 10, 5, 5, 5, 5, 5, 5, 20],
+    spd: [45, 10, 10, 5, 5, 5, 5, 5, 5, 5],
+    dur: [30, 5, 5, 10, 10, 5, 5, 5, 5, 20],
+    iq: [20, 5, 5, 5, 20, 10, 10, 5, 5, 15],
+    biq: [20, 20, 20, 10, 5, 5, 5, 5, 5, 5],
+    ma: [55, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+  },
+  elf: {
+    str: [15, 10, 5, 10, 20, 15, 10, 5, 5, 5],
+    spd: [15, 5, 10, 5, 10, 25, 15, 5, 5, 5],
+    dur: [10, 10, 5, 5, 10, 25, 20, 5, 5, 5],
+    iq: [10, 5, 5, 5, 15, 25, 12, 10, 8, 5],
+    biq: [20, 4, 4, 4, 4, 30, 15, 10, 5, 4],
+    ma: [10, 5, 15, 5, 15, 15, 15, 8, 7, 5],
+  },
+  spirit: {
+    str: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    spd: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    dur: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    iq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    biq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    ma: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+  },
+  uma: {
+    str: [5, 7, 7, 7, 15, 25, 20, 8, 3, 3],
+    spd: [3, 3, 6, 6, 24, 24, 16, 6, 7, 5],
+    dur: [8, 7, 7, 14, 16, 16, 12, 12, 4, 4],
+    iq: [5, 10, 15, 10, 25, 15, 5, 5, 5, 5],
+    biq: [10, 10, 15, 10, 15, 15, 10, 5, 5, 5],
+    ma: [55, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+  },
+  werebeast: {
+    str: [10, 5, 5, 15, 15, 15, 15, 10, 5, 5],
+    spd: [10, 10, 5, 5, 20, 20, 10, 10, 5, 5],
+    dur: [15, 5, 5, 5, 30, 5, 15, 10, 5, 5],
+    iq: [10, 10, 5, 10, 20, 20, 10, 5, 5, 5],
+    biq: [5, 5, 5, 15, 20, 20, 15, 5, 5, 5],
+    ma: [15, 5, 5, 15, 15, 10, 10, 15, 5, 5],
+  },
+  vampire: {
+    str: [20, 5, 5, 5, 5, 20, 20, 5, 5, 10],
+    spd: [5, 5, 7, 7, 8, 18, 33, 7, 5, 5],
+    dur: [10, 5, 5, 5, 15, 20, 20, 5, 5, 10],
+    iq: [5, 5, 5, 15, 25, 20, 15, 5, 3, 2],
+    biq: [5, 5, 5, 15, 20, 20, 15, 5, 5, 5],
+    ma: [15, 5, 5, 15, 15, 10, 10, 15, 5, 5],
+  },
+  giant: {
+    str: [5, 5, 5, 10, 10, 25, 25, 5, 5, 5],
+    spd: [15, 15, 15, 15, 15, 15, 4, 2, 2, 2],
+    dur: [5, 5, 5, 10, 10, 20, 20, 5, 5, 15],
+    iq: [10, 10, 5, 5, 10, 15, 25, 10, 5, 5],
+    biq: [15, 10, 10, 5, 15, 15, 5, 10, 10, 5],
+    ma: [40, 5, 5, 5, 5, 5, 20, 5, 5, 5],
+  },
+  dragon: {
+    str: [12, 3, 3, 3, 3, 25, 31, 5, 5, 10],
+    spd: [15, 5, 5, 5, 15, 15, 15, 15, 5, 5],
+    dur: [5, 5, 5, 10, 10, 20, 15, 10, 10, 10],
+    iq: [15, 5, 5, 5, 15, 20, 5, 10, 15, 5],
+    biq: [20, 10, 5, 5, 10, 20, 15, 5, 5, 5],
+    ma: [20, 5, 5, 5, 20, 15, 15, 5, 5, 5],
+  },
+  angel: {
+    str: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    spd: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    dur: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    iq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    biq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    ma: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+  },
+  "demi-god": {
+    str: [20, 5, 5, 5, 10, 20, 5, 5, 5, 20],
+    spd: [15, 5, 5, 5, 35, 10, 5, 5, 5, 10],
+    dur: [15, 10, 5, 5, 5, 25, 15, 5, 5, 10],
+    iq: [25, 5, 5, 5, 10, 15, 15, 5, 5, 10],
+    biq: [20, 5, 5, 5, 5, 25, 10, 5, 5, 15],
+    ma: [20, 5, 5, 5, 10, 15, 5, 15, 5, 15],
+  },
+  "primordial being": {
+    str: [15, 5, 5, 5, 5, 5, 35, 10, 5, 10],
+    spd: [15, 5, 5, 5, 20, 20, 5, 5, 5, 15],
+    dur: [15, 5, 5, 10, 5, 25, 10, 10, 10, 5],
+    iq: [15, 5, 5, 15, 5, 15, 15, 5, 5, 15],
+    biq: [15, 5, 5, 15, 15, 15, 15, 5, 5, 5],
+    ma: [20, 5, 5, 5, 20, 10, 10, 5, 5, 15],
+  },
+  demon: {
+    str: [20, 5, 5, 5, 5, 10, 10, 10, 15, 15],
+    spd: [10, 4, 4, 4, 4, 35, 14, 11, 4, 10],
+    dur: [15, 5, 5, 5, 15, 15, 15, 5, 5, 15],
+    iq: [20, 5, 5, 5, 20, 10, 5, 5, 5, 20],
+    biq: [20, 5, 5, 5, 5, 5, 35, 5, 5, 10],
+    ma: [15, 5, 5, 5, 15, 25, 5, 5, 5, 15],
+  },
+  god: {
+    str: [20, 5, 5, 5, 5, 10, 10, 10, 15, 15],
+    spd: [15, 2, 3, 4, 4, 4, 44, 4, 5, 15],
+    dur: [15, 5, 5, 5, 10, 5, 30, 5, 5, 15],
+    iq: [20, 5, 5, 5, 5, 5, 30, 5, 5, 15],
+    biq: [20, 5, 5, 5, 5, 5, 20, 10, 5, 20],
+    ma: [20, 5, 5, 5, 25, 5, 5, 5, 5, 20],
+  },
+  reincarnator: {
+    str: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    spd: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    dur: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    iq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    biq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    ma: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+  },
+  symbiosis: {
+    str: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    spd: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    dur: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    iq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    biq: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+    ma: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
+  },
 };
 
-function getRaceForStatRoll(character: { race?: { race?: string; subRace?: string } } | undefined): string {
+function getRaceForStatRoll(
+  character: { race?: { race?: string; subRace?: string } } | undefined,
+): string {
   const race = (character?.race?.race || "").toLowerCase();
   if (race === "skeleton") {
     // Dùng sub-race (có thể là "Dwarf", "Human", etc.)
-    const sub = (character?.race?.subRace || "").replace(/[()]/g, "").trim().toLowerCase();
+    const sub = (character?.race?.subRace || "")
+      .replace(/[()]/g, "")
+      .trim()
+      .toLowerCase();
     return sub || "human"; // fallback human nếu không có sub-race
   }
   return race;
 }
 
 const STAT_COLORS: Record<keyof CharacterStats, string> = {
-  str: "#ef4444", spd: "#3b82f6", dur: "#84cc16", iq: "#06b6d4", biq: "#a855f7", ma: "#f97316",
+  str: "#ef4444",
+  spd: "#3b82f6",
+  dur: "#84cc16",
+  iq: "#06b6d4",
+  biq: "#a855f7",
+  ma: "#f97316",
 };
 
 /**
@@ -719,11 +895,15 @@ function resolveStatTargets(
   if (!stat || stat === "all") return _ALL_STAT_KEYS;
   if (stat === "highest") {
     const maxVal = Math.max(..._ALL_STAT_KEYS.map((k) => currentStats[k] || 0));
-    return [_ALL_STAT_KEYS.find((k) => (currentStats[k] || 0) === maxVal) ?? "str"];
+    return [
+      _ALL_STAT_KEYS.find((k) => (currentStats[k] || 0) === maxVal) ?? "str",
+    ];
   }
   if (stat === "lowest") {
     const minVal = Math.min(..._ALL_STAT_KEYS.map((k) => currentStats[k] || 0));
-    return [_ALL_STAT_KEYS.find((k) => (currentStats[k] || 0) === minVal) ?? "str"];
+    return [
+      _ALL_STAT_KEYS.find((k) => (currentStats[k] || 0) === minVal) ?? "str",
+    ];
   }
   if (stat === "random") {
     return [_ALL_STAT_KEYS[Math.floor(Math.random() * _ALL_STAT_KEYS.length)]];
@@ -811,7 +991,10 @@ function buildInventoryList(char: Character): InventoryItem[] {
   const items: InventoryItem[] = [];
   const add = (sourceType: string, name: string, description?: string) => {
     if (!name) return;
-    const desc = description ?? EffectRegistry.get(sourceType as any, name)?.description ?? "";
+    const desc =
+      description ??
+      EffectRegistry.get(sourceType as any, name)?.description ??
+      "";
     items.push({ sourceType, name, description: desc });
   };
   if (char.race?.race) add("race", char.race.race);
@@ -901,13 +1084,16 @@ function calcStatsWithDisabled(
   }
 
   // Slow Metabolism: SPD không thể tăng — chỉ tính các effect giảm SPD, bỏ qua tăng
-  const hasSlowMetabolism = ((char as any).quirks || [])
-    .filter((q: any) => !q.isLost)
-    .some((q: any) => (q.name ?? "").toLowerCase() === "slow metabolism")
-    && !disabledItems.has(`${playerNo}-quirk-Slow Metabolism`);
+  const hasSlowMetabolism =
+    ((char as any).quirks || [])
+      .filter((q: any) => !q.isLost)
+      .some((q: any) => (q.name ?? "").toLowerCase() === "slow metabolism") &&
+    !disabledItems.has(`${playerNo}-quirk-Slow Metabolism`);
   if (hasSlowMetabolism) {
     const spdDecrease = result.statModifiers
-      .filter((m: any) => (m.stat === "speed" || m.stat === "spd") && m.value < 0)
+      .filter(
+        (m: any) => (m.stat === "speed" || m.stat === "spd") && m.value < 0,
+      )
       .reduce((sum: number, m: any) => sum + m.value, 0);
     final.spd = char.stats.spd + spdDecrease;
   }
@@ -941,18 +1127,25 @@ function applyBeforeCombatStatMods(
     // Skip effects with customHandler — those are resolved separately (e.g. via wheel)
     // Exception: kings_landing_penalty_check applies -10 IQ in before_combat phase
     const handler = (ce.effect as any).customHandler;
-    if (handler && handler !== "kings_landing_penalty_check" && handler !== "banana_peel_iq_compare") continue;
+    if (
+      handler &&
+      handler !== "kings_landing_penalty_check" &&
+      handler !== "banana_peel_iq_compare"
+    )
+      continue;
     if (handler === "kings_landing_penalty_check") {
       // Check exempt conditions: God/Demi-God race or Devotee archetype
-      const selfRace = (char as any).race?.race?.toLowerCase() ?? '';
-      const exemptRaces = ['god', 'demi god', 'demi-god', 'demigod'];
+      const selfRace = (char as any).race?.race?.toLowerCase() ?? "";
+      const exemptRaces = ["god", "demi god", "demi-god", "demigod"];
       const isExemptByRace = exemptRaces.some((r) => selfRace.includes(r));
-      const archetypes: string[] = ((char as any).archetypes || []).map((a: any) =>
-        typeof a === 'string' ? a : (a?.name ?? '')
+      const archetypes: string[] = ((char as any).archetypes || []).map(
+        (a: any) => (typeof a === "string" ? a : (a?.name ?? "")),
       );
-      const isDevotee = archetypes.some((a: string) => a.toLowerCase().includes('devotee'));
+      const isDevotee = archetypes.some((a: string) =>
+        a.toLowerCase().includes("devotee"),
+      );
       if (isExemptByRace || isDevotee) continue;
-      applyStatDelta(base, 'iq', -10);
+      applyStatDelta(base, "iq", -10);
       continue;
     }
     if (handler === "banana_peel_iq_compare") {
@@ -962,7 +1155,14 @@ function applyBeforeCombatStatMods(
       if (targetFilter !== "self") continue;
       const selfBaseIQ = (char as any).stats?.iq ?? 0;
       const oppBaseIQ = (opponentChar as any)?.stats?.iq ?? 0;
-      const _ALL_STAT_KEYS_BC: (keyof CharacterStats)[] = ["str", "spd", "dur", "iq", "biq", "ma"];
+      const _ALL_STAT_KEYS_BC: (keyof CharacterStats)[] = [
+        "str",
+        "spd",
+        "dur",
+        "iq",
+        "biq",
+        "ma",
+      ];
       if (selfBaseIQ > oppBaseIQ) {
         for (const k of _ALL_STAT_KEYS_BC) applyStatDelta(base, k, 1);
       } else if (selfBaseIQ < oppBaseIQ) {
@@ -992,14 +1192,25 @@ function applyBeforeCombatStatMods(
         );
       }
       if (cond.type === "race_tier_compare") {
-        if (!cond.tierOperator || selfRaceTier === undefined || opponentRaceTier === undefined) return false;
+        if (
+          !cond.tierOperator ||
+          selfRaceTier === undefined ||
+          opponentRaceTier === undefined
+        )
+          return false;
         if (cond.tierOperator === "<") return selfRaceTier < opponentRaceTier;
         if (cond.tierOperator === ">") return selfRaceTier > opponentRaceTier;
         if (cond.tierOperator === "=") return selfRaceTier === opponentRaceTier;
         return false;
       }
-      if (cond.type === "stat_compare" && cond.stat && cond.compareWith === "opponent" && opponentChar) {
-        const selfStatVal = (char as any).stats?.[cond.stat] ?? (base as any)[cond.stat] ?? 0;
+      if (
+        cond.type === "stat_compare" &&
+        cond.stat &&
+        cond.compareWith === "opponent" &&
+        opponentChar
+      ) {
+        const selfStatVal =
+          (char as any).stats?.[cond.stat] ?? (base as any)[cond.stat] ?? 0;
         const oppStatVal = (opponentChar as any).stats?.[cond.stat] ?? 0;
         if (cond.operator === ">") return selfStatVal > oppStatVal;
         if (cond.operator === "<") return selfStatVal < oppStatVal;
@@ -1046,23 +1257,34 @@ function calcStatsWithBeforeCombat(
   );
 
   // Uno Reverse Card: debuff từ đối thủ quay lại đối thủ, debuff của ta áp vào ta
-  const hasUnoReverse = ((char as any).powers || [])
-    .filter((pw: any) => !pw.isLost)
-    .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "uno reverse card")
-    && !disabledItems.has(`${playerNo}-power-Uno Reverse Card`);
+  const hasUnoReverse =
+    ((char as any).powers || [])
+      .filter((pw: any) => !pw.isLost)
+      .some(
+        (pw: any) =>
+          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+          "uno reverse card",
+      ) && !disabledItems.has(`${playerNo}-power-Uno Reverse Card`);
 
   // Apply opponent's before_combat effects that target "opponent" (i.e., affect us)
   // Skip if we have Uno Reverse Card (debuffs bounce back to opponent instead)
   // Skip debuffs if either player has Fair Duel active
-  const selfHasFairDuel = ((char as any).powers || [])
-    .filter((pw: any) => !pw.isLost)
-    .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "fair duel")
-    && !disabledItems.has(`${playerNo}-power-Fair Duel`);
+  const selfHasFairDuel =
+    ((char as any).powers || [])
+      .filter((pw: any) => !pw.isLost)
+      .some(
+        (pw: any) =>
+          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+          "fair duel",
+      ) && !disabledItems.has(`${playerNo}-power-Fair Duel`);
   const oppHasFairDuelBC = opponentChar
     ? ((opponentChar as any).powers || [])
-      .filter((pw: any) => !pw.isLost)
-      .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "fair duel")
-    && !opponentDisabledItems.has(`${opponentNo}-power-Fair Duel`)
+        .filter((pw: any) => !pw.isLost)
+        .some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "fair duel",
+        ) && !opponentDisabledItems.has(`${opponentNo}-power-Fair Duel`)
     : false;
   const fairDuelActiveBC = selfHasFairDuel || oppHasFairDuelBC;
 
@@ -1150,10 +1372,11 @@ const FloatingStatBubblesOverlay = ({
           style={{ left: `${b.x}%`, bottom: `${b.startY}%` }}
         >
           <span
-            className={`inline-block px-2.5 py-1 rounded-full text-sm font-black shadow-xl select-none whitespace-nowrap ${b.isPositive
-              ? "bg-green-500 text-white drop-shadow-[0_0_8px_rgba(74,222,128,0.9)]"
-              : "bg-red-500 text-white drop-shadow-[0_0_8px_rgba(239,68,68,0.9)]"
-              }`}
+            className={`inline-block px-2.5 py-1 rounded-full text-sm font-black shadow-xl select-none whitespace-nowrap ${
+              b.isPositive
+                ? "bg-green-500 text-white drop-shadow-[0_0_8px_rgba(74,222,128,0.9)]"
+                : "bg-red-500 text-white drop-shadow-[0_0_8px_rgba(239,68,68,0.9)]"
+            }`}
           >
             {b.text}
           </span>
@@ -1199,7 +1422,9 @@ const SidebarAvatarBanner = ({
         </div>
       )}
       {/* Avatar area — overflow-hidden chỉ áp dụng ở đây */}
-      <div className={`relative rounded-t-2xl overflow-hidden h-48 bg-gray-800 ${false && blurred ? "blur-sm" : ""}`}>
+      <div
+        className={`relative rounded-t-2xl overflow-hidden h-48 bg-gray-800 ${false && blurred ? "blur-sm" : ""}`}
+      >
         {!allFailed ? (
           <img
             key={extIndex}
@@ -1397,7 +1622,9 @@ export const StatsComparisonMode = ({
   const [focus1, setFocus1] = useState(false);
   const [focus2, setFocus2] = useState(false);
   const [leftTab, setLeftTab] = useState<"effects" | "inventory">("inventory");
-  const [rightTab, setRightTab] = useState<"effects" | "inventory">("inventory");
+  const [rightTab, setRightTab] = useState<"effects" | "inventory">(
+    "inventory",
+  );
 
   // Roundtable Hold pending state
   const [isPendingRoundtable, setIsPendingRoundtable] = useState(false);
@@ -1409,7 +1636,10 @@ export const StatsComparisonMode = ({
   const [stepState, setStepState] = useState<StepCombatState | null>(null);
   const [stepRoundIndex, setStepRoundIndex] = useState(-1);
   const [zoltraakBiq2Pending, setZoltraakBiq2Pending] = useState(false);
-  const [zoltraakPreBiqFired, setZoltraakPreBiqFired] = useState<{ p1: Set<string>; p2: Set<string> } | null>(null);
+  const [zoltraakPreBiqFired, setZoltraakPreBiqFired] = useState<{
+    p1: Set<string>;
+    p2: Set<string>;
+  } | null>(null);
   const [pendingPreCombatCount, setPendingPreCombatCount] = useState(0);
 
   // Disabled items (click-to-disable in inventory panel)
@@ -1447,15 +1677,20 @@ export const StatsComparisonMode = ({
   const [subIsAnimating] = useState(false);
   // Sub-combat round animation is not shown gradually; no-op setter used
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _setSubCurrentRound = (_: number) => { };
+  const _setSubCurrentRound = (_: number) => {};
 
   // Roundtable Hold full sub-combat mode
   const [roundtableSubMode, setRoundtableSubMode] = useState(false);
   // Snapshot of main combat state before sub-combat
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [roundtableSnapshot, setRoundtableSnapshot] = useState<Record<string, any> | null>(null);
+  const [roundtableSnapshot, setRoundtableSnapshot] = useState<Record<
+    string,
+    any
+  > | null>(null);
   // Override effectiveWinner after Tarnished wins sub-combat (pendingLoser gets saved)
-  const [roundtableWinnerOverride, setRoundtableWinnerOverride] = useState<"player1" | "player2" | null>(null);
+  const [roundtableWinnerOverride, setRoundtableWinnerOverride] = useState<
+    "player1" | "player2" | null
+  >(null);
 
   // Load all players
   useEffect(() => {
@@ -1509,7 +1744,7 @@ export const StatsComparisonMode = ({
                   });
                 }
               })
-              .catch(() => { }),
+              .catch(() => {}),
           );
         }
 
@@ -1621,37 +1856,47 @@ export const StatsComparisonMode = ({
 
     // Bash / Luminescence: apply debuff -3 random stat từ spin round trước (trước khi tính round này)
     if (roundIndex > 0) {
-      const STAT_KEYS_FOR_DEBUFF: (keyof CharacterStats)[] = ["str", "spd", "dur", "iq", "biq", "ma"];
-      const prevRoundWinner = state.resolvedRounds[state.resolvedRounds.length - 1]?.winner;
-      const applyBashDebuffEarly = (winnerSide: "player1" | "player2", sourceName: string) => {
-        const oppSide: "player1" | "player2" = winnerSide === "player1" ? "player2" : "player1";
+      const prevRoundWinner =
+        state.resolvedRounds[state.resolvedRounds.length - 1]?.winner;
+      const applyBashDebuffEarly = (
+        winnerSide: "player1" | "player2",
+        sourceName: string,
+      ) => {
+        const oppSide: "player1" | "player2" =
+          winnerSide === "player1" ? "player2" : "player1";
         const spinKey = `${roundIndex - 1}-${sourceName}-${winnerSide}`;
         const spinResult = roundSpinResults[spinKey];
         if (!spinResult?.isSuccess) return;
         const alreadyApplied = events.some(
-          (ev) => ev.player === oppSide && ev.source === sourceName && ev.type === "stat_debuff",
+          (ev) =>
+            ev.player === oppSide &&
+            ev.source === sourceName &&
+            ev.type === "stat_debuff",
         );
         if (alreadyApplied) return;
         // Bash debuff -3 vào stat của round kế (p1Val/p2Val), random stat chỉ để log
-        const randomStat = STAT_KEYS_FOR_DEBUFF[Math.floor(Math.random() * STAT_KEYS_FOR_DEBUFF.length)];
         if (oppSide === "player1") p1Val -= 3;
         else p2Val -= 3;
         events.push({
           player: oppSide,
           source: sourceName,
-          description: `${sourceName}: -3 ${(randomStat as string).toUpperCase()} round này (debuff từ round trước)`,
+          description: `${sourceName}: -3 stat round này (debuff từ round trước)`,
           type: "stat_debuff",
         });
       };
       const p1EffBash = getPerRoundEffects(p1.character, p1.no);
       const p2EffBash = getPerRoundEffects(p2.character, p2.no);
       if (prevRoundWinner === "player1") {
-        if (p1EffBash.onWin.includes("Bash")) applyBashDebuffEarly("player1", "Bash");
-        if (p1EffBash.onWin.includes("Luminescence")) applyBashDebuffEarly("player1", "Luminescence");
+        if (p1EffBash.onWin.includes("Bash"))
+          applyBashDebuffEarly("player1", "Bash");
+        if (p1EffBash.onWin.includes("Luminescence"))
+          applyBashDebuffEarly("player1", "Luminescence");
       }
       if (prevRoundWinner === "player2") {
-        if (p2EffBash.onWin.includes("Bash")) applyBashDebuffEarly("player2", "Bash");
-        if (p2EffBash.onWin.includes("Luminescence")) applyBashDebuffEarly("player2", "Luminescence");
+        if (p2EffBash.onWin.includes("Bash"))
+          applyBashDebuffEarly("player2", "Bash");
+        if (p2EffBash.onWin.includes("Luminescence"))
+          applyBashDebuffEarly("player2", "Luminescence");
       }
     }
 
@@ -1659,25 +1904,43 @@ export const StatsComparisonMode = ({
     if (roundIndex === 0) {
       const weaponEntries = EffectRegistry.getAllByType("weapon");
       const getCleanWeaponName = (w: any) =>
-        (typeof w === "string" ? w : w?.name ?? "").replace(/\s*\(.*?\)/g, "").trim();
+        (typeof w === "string" ? w : (w?.name ?? ""))
+          .replace(/\s*\(.*?\)/g, "")
+          .trim();
       const hasPhysicalWeapon = (char: any) =>
         (char?.weapons || []).some((w: any) => {
           if (w?.isLost) return false;
           const wName = getCleanWeaponName(w);
           if (!wName) return false;
-          const entry = weaponEntries.find(e => e.name.toLowerCase() === wName.toLowerCase());
+          const entry = weaponEntries.find(
+            (e) => e.name.toLowerCase() === wName.toLowerCase(),
+          );
           return entry?.tags?.includes("physical") ?? false;
         });
-      const p1HasMorningstar = (p1.character?.weapons || []).some((w: any) =>
-        !w?.isLost && getCleanWeaponName(w).toLowerCase() === "morningstar"
-      ) && !disabledItems.has(`${p1.no}-weapon-Morningstar`);
-      const p2HasMorningstar = (p2.character?.weapons || []).some((w: any) =>
-        !w?.isLost && getCleanWeaponName(w).toLowerCase() === "morningstar"
-      ) && !disabledItems.has(`${p2.no}-weapon-Morningstar`);
+      const p1HasMorningstar =
+        (p1.character?.weapons || []).some(
+          (w: any) =>
+            !w?.isLost && getCleanWeaponName(w).toLowerCase() === "morningstar",
+        ) && !disabledItems.has(`${p1.no}-weapon-Morningstar`);
+      const p2HasMorningstar =
+        (p2.character?.weapons || []).some(
+          (w: any) =>
+            !w?.isLost && getCleanWeaponName(w).toLowerCase() === "morningstar",
+        ) && !disabledItems.has(`${p2.no}-weapon-Morningstar`);
       if (p1HasMorningstar && hasPhysicalWeapon(p2.character))
-        events.push({ player: "player1", source: "Morningstar", description: "+2 STR (Morningstar — đối thủ dùng vũ khí Physical)", type: "stat_boost" });
+        events.push({
+          player: "player1",
+          source: "Morningstar",
+          description: "+2 STR (Morningstar — đối thủ dùng vũ khí Physical)",
+          type: "stat_boost",
+        });
       if (p2HasMorningstar && hasPhysicalWeapon(p1.character))
-        events.push({ player: "player2", source: "Morningstar", description: "+2 STR (Morningstar — đối thủ dùng vũ khí Physical)", type: "stat_boost" });
+        events.push({
+          player: "player2",
+          source: "Morningstar",
+          description: "+2 STR (Morningstar — đối thủ dùng vũ khí Physical)",
+          type: "stat_boost",
+        });
     }
 
     // Dothraki: log active rule at round 0 (stats already swapped/boosted in startCombat)
@@ -1828,6 +2091,7 @@ export const StatsComparisonMode = ({
     if (winner === "player1") {
       if (p1HasOTP) {
         p1Points = p1OTPStat ? (p1OTPStat === roundStatLabel ? 3 : 0) : 1; // 1 if wheel not spun yet (pending)
+        console.log(`[OTP DEBUG] p1 winner, round=${roundStatLabel}, otpStat=${p1OTPStat}, p1Points=${p1Points}`);
       } else {
         p1Points = 1;
       }
@@ -1836,6 +2100,7 @@ export const StatsComparisonMode = ({
       p1Points = 0;
       if (p2HasOTP) {
         p2Points = p2OTPStat ? (p2OTPStat === roundStatLabel ? 3 : 0) : 1;
+        console.log(`[OTP DEBUG] p2 winner, round=${roundStatLabel}, otpStat=${p2OTPStat}, p2Points=${p2Points}`);
       } else {
         p2Points = 1;
       }
@@ -1886,30 +2151,72 @@ export const StatsComparisonMode = ({
     const p2LostSoFar = p1WonSoFar;
 
     // Borrowed Time: nếu player thua đúng 2 round trước → block điểm đối thủ round này (1 lần/combat)
-    const hasBorrowedTimeP1 = (p1.character?.powers || []).filter((pw: any) => !pw.isLost)
-      .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "borrowed time")
-      && !disabledItems.has(`${p1.no}-power-Borrowed Time`);
-    const hasBorrowedTimeP2 = (p2.character?.powers || []).filter((pw: any) => !pw.isLost)
-      .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "borrowed time")
-      && !disabledItems.has(`${p2.no}-power-Borrowed Time`);
+    const hasBorrowedTimeP1 =
+      (p1.character?.powers || [])
+        .filter((pw: any) => !pw.isLost)
+        .some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "borrowed time",
+        ) && !disabledItems.has(`${p1.no}-power-Borrowed Time`);
+    const hasBorrowedTimeP2 =
+      (p2.character?.powers || [])
+        .filter((pw: any) => !pw.isLost)
+        .some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "borrowed time",
+        ) && !disabledItems.has(`${p2.no}-power-Borrowed Time`);
     const p1BorrowedTimeFired = state.p1FiredHandlers.has("borrowed_time");
     const p2BorrowedTimeFired = state.p2FiredHandlers.has("borrowed_time");
 
     // p1 có Borrowed Time, thua đúng 2 round → block điểm p2 round này
-    if (hasBorrowedTimeP1 && !p1BorrowedTimeFired && p1LostSoFar === 2 && winner === "player2") {
+    if (
+      hasBorrowedTimeP1 &&
+      !p1BorrowedTimeFired &&
+      p1LostSoFar === 2 &&
+      winner === "player2"
+    ) {
       p2Points = 0;
       // Ghi đè pointChange của p2
       const idx = pointChanges.findIndex((pc) => pc.player === "player2");
-      if (idx !== -1) pointChanges[idx] = { player: "player2", delta: 0, reason: "Borrowed Time: bị chặn điểm" };
-      events.push({ player: "player1", source: "Borrowed Time", description: "Borrowed Time: Đã thua 2 round — đối thủ không nhận điểm round này!", type: "stat_boost" });
+      if (idx !== -1)
+        pointChanges[idx] = {
+          player: "player2",
+          delta: 0,
+          reason: "Borrowed Time: bị chặn điểm",
+        };
+      events.push({
+        player: "player1",
+        source: "Borrowed Time",
+        description:
+          "Borrowed Time: Đã thua 2 round — đối thủ không nhận điểm round này!",
+        type: "stat_boost",
+      });
       state.p1FiredHandlers.add("borrowed_time");
     }
     // p2 có Borrowed Time, thua đúng 2 round → block điểm p1 round này
-    if (hasBorrowedTimeP2 && !p2BorrowedTimeFired && p2LostSoFar === 2 && winner === "player1") {
+    if (
+      hasBorrowedTimeP2 &&
+      !p2BorrowedTimeFired &&
+      p2LostSoFar === 2 &&
+      winner === "player1"
+    ) {
       p1Points = 0;
       const idx = pointChanges.findIndex((pc) => pc.player === "player1");
-      if (idx !== -1) pointChanges[idx] = { player: "player1", delta: 0, reason: "Borrowed Time: bị chặn điểm" };
-      events.push({ player: "player2", source: "Borrowed Time", description: "Borrowed Time: Đã thua 2 round — đối thủ không nhận điểm round này!", type: "stat_boost" });
+      if (idx !== -1)
+        pointChanges[idx] = {
+          player: "player1",
+          delta: 0,
+          reason: "Borrowed Time: bị chặn điểm",
+        };
+      events.push({
+        player: "player2",
+        source: "Borrowed Time",
+        description:
+          "Borrowed Time: Đã thua 2 round — đối thủ không nhận điểm round này!",
+        type: "stat_boost",
+      });
       state.p2FiredHandlers.add("borrowed_time");
     }
 
@@ -1932,33 +2239,33 @@ export const StatsComparisonMode = ({
         hasLover: isSelf
           ? (p1.character?.lover || []).filter((l: any) => !l.isLost).length > 0
           : (p2.character?.lover || []).filter((l: any) => !l.isLost).length >
-          0,
+            0,
         powers: isSelf
           ? (p1.character?.powers || [])
-            .filter((p: any) => !p.isLost)
-            .map((p: any) => (typeof p === "string" ? p : p.name))
+              .filter((p: any) => !p.isLost)
+              .map((p: any) => (typeof p === "string" ? p : p.name))
           : (p2.character?.powers || [])
-            .filter((p: any) => !p.isLost)
-            .map((p: any) => (typeof p === "string" ? p : p.name)),
+              .filter((p: any) => !p.isLost)
+              .map((p: any) => (typeof p === "string" ? p : p.name)),
         quirks: isSelf
           ? (p1.character?.quirks || [])
-            .filter((q: any) => !q.isLost)
-            .map((q: any) => q.name)
+              .filter((q: any) => !q.isLost)
+              .map((q: any) => q.name)
           : (p2.character?.quirks || [])
-            .filter((q: any) => !q.isLost)
-            .map((q: any) => q.name),
+              .filter((q: any) => !q.isLost)
+              .map((q: any) => q.name),
         weapons: isSelf
           ? p1.character?.weapons || []
           : p2.character?.weapons || [],
         gears: isSelf
           ? [
-            ...(p1.character?.gear?.normalGear || []),
-            ...(p1.character?.gear?.legacyGear || []),
-          ].map((g: any) => g.name)
+              ...(p1.character?.gear?.normalGear || []),
+              ...(p1.character?.gear?.legacyGear || []),
+            ].map((g: any) => g.name)
           : [
-            ...(p2.character?.gear?.normalGear || []),
-            ...(p2.character?.gear?.legacyGear || []),
-          ].map((g: any) => g.name),
+              ...(p2.character?.gear?.normalGear || []),
+              ...(p2.character?.gear?.legacyGear || []),
+            ].map((g: any) => g.name),
         roundsWon: isSelf ? p1WonSoFar : p2WonSoFar,
         roundsLost: isSelf ? p1LostSoFar : p2LostSoFar,
       },
@@ -1973,48 +2280,59 @@ export const StatsComparisonMode = ({
         hasLover: isSelf
           ? (p2.character?.lover || []).filter((l: any) => !l.isLost).length > 0
           : (p1.character?.lover || []).filter((l: any) => !l.isLost).length >
-          0,
+            0,
         powers: isSelf
           ? (p2.character?.powers || [])
-            .filter((p: any) => !p.isLost)
-            .map((p: any) => (typeof p === "string" ? p : p.name))
+              .filter((p: any) => !p.isLost)
+              .map((p: any) => (typeof p === "string" ? p : p.name))
           : (p1.character?.powers || [])
-            .filter((p: any) => !p.isLost)
-            .map((p: any) => (typeof p === "string" ? p : p.name)),
+              .filter((p: any) => !p.isLost)
+              .map((p: any) => (typeof p === "string" ? p : p.name)),
         quirks: isSelf
           ? (p2.character?.quirks || [])
-            .filter((q: any) => !q.isLost)
-            .map((q: any) => q.name)
+              .filter((q: any) => !q.isLost)
+              .map((q: any) => q.name)
           : (p1.character?.quirks || [])
-            .filter((q: any) => !q.isLost)
-            .map((q: any) => q.name),
+              .filter((q: any) => !q.isLost)
+              .map((q: any) => q.name),
         weapons: isSelf
           ? p2.character?.weapons || []
           : p1.character?.weapons || [],
         gears: isSelf
           ? [
-            ...(p2.character?.gear?.normalGear || []),
-            ...(p2.character?.gear?.legacyGear || []),
-          ].map((g: any) => g.name)
+              ...(p2.character?.gear?.normalGear || []),
+              ...(p2.character?.gear?.legacyGear || []),
+            ].map((g: any) => g.name)
           : [
-            ...(p1.character?.gear?.normalGear || []),
-            ...(p1.character?.gear?.legacyGear || []),
-          ].map((g: any) => g.name),
+              ...(p1.character?.gear?.normalGear || []),
+              ...(p1.character?.gear?.legacyGear || []),
+            ].map((g: any) => g.name),
       },
       isFinals: false,
       isPvE: false,
       currentRound: roundIndex,
       currentRoundStat: key, // short key: str/spd/dur/iq/biq/ma
-      currentRoundResult: winner === "tie" ? "tie" : winner === (isSelf ? "player1" : "player2") ? "win" : "lose",
+      currentRoundResult:
+        winner === "tie"
+          ? "tie"
+          : winner === (isSelf ? "player1" : "player2")
+            ? "win"
+            : "lose",
       totalRounds: 6,
       roundResults: (() => {
         const longKey: Record<string, string> = {
-          str: "strength", spd: "speed", dur: "durability",
-          iq: "iq", biq: "biq", ma: "ma",
+          str: "strength",
+          spd: "speed",
+          dur: "durability",
+          iq: "iq",
+          biq: "biq",
+          ma: "ma",
         };
         const toResult = (w: "player1" | "player2" | "tie", self: boolean) =>
-          w === (self ? "player1" : "player2") ? "win"
-            : w === (self ? "player2" : "player1") ? "lose"
+          w === (self ? "player1" : "player2")
+            ? "win"
+            : w === (self ? "player2" : "player1")
+              ? "lose"
               : "tie";
         const entries = state.resolvedRounds.map((r) => [
           longKey[r.stat] ?? r.stat,
@@ -2077,19 +2395,29 @@ export const StatsComparisonMode = ({
 
       // Fair Duel: nếu bất kỳ ai có Fair Duel active → cả 2 miễn nhiễm debuff từ đối thủ
       const oppPlayer = isSelf ? p2 : p1;
-      const selfHasFairDuel = (player.character?.powers || [])
-        .filter((pw: any) => !pw.isLost)
-        .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "fair duel")
-        && !disabledItems.has(`${player.no}-power-Fair Duel`);
-      const oppHasFairDuel = (oppPlayer.character?.powers || [])
-        .filter((pw: any) => !pw.isLost)
-        .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "fair duel")
-        && !disabledItems.has(`${oppPlayer.no}-power-Fair Duel`);
+      const selfHasFairDuel =
+        (player.character?.powers || [])
+          .filter((pw: any) => !pw.isLost)
+          .some(
+            (pw: any) =>
+              (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+              "fair duel",
+          ) && !disabledItems.has(`${player.no}-power-Fair Duel`);
+      const oppHasFairDuel =
+        (oppPlayer.character?.powers || [])
+          .filter((pw: any) => !pw.isLost)
+          .some(
+            (pw: any) =>
+              (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+              "fair duel",
+          ) && !disabledItems.has(`${oppPlayer.no}-power-Fair Duel`);
       const fairDuelActive = selfHasFairDuel || oppHasFairDuel;
 
       // Spell Flux: power "Trong Combat" đầu tiên kích hoạt được apply 2 lần
-      const hasSpellFlux = (player.character?.powers || []).some((p: any) =>
-        (typeof p === "string" ? p : p.name)?.toLowerCase() === "spell flux" && !p.isLost
+      const hasSpellFlux = (player.character?.powers || []).some(
+        (p: any) =>
+          (typeof p === "string" ? p : p.name)?.toLowerCase() ===
+            "spell flux" && !p.isLost,
       );
       let spellFluxUsed = false; // true sau khi đã double lần đầu
 
@@ -2125,21 +2453,40 @@ export const StatsComparisonMode = ({
           // Bloodthirsty: extra_point_on_win → +bonus điểm khi thắng
           if (ce.effect?.type === "extra_point_on_win" && isWinner) {
             const effectConditions = (ce.effect as any).conditions || [];
-            if (effectConditions.some((c: any) => c.type === "probability")) continue; // handled via spin wheel
+            if (effectConditions.some((c: any) => c.type === "probability"))
+              continue; // handled via spin wheel
             const pts = (ce.effect as any).points ?? 1;
-            if (playerSide === "player1") p1Points += pts; else p2Points += pts;
-            pointChanges.push({ player: playerSide, delta: pts, reason: `${sourceName}: thắng round → +${pts} điểm bonus` });
-            events.push({ player: playerSide, source: sourceName, description: `+${pts} điểm bonus (${sourceName})`, type: "info" });
+            if (playerSide === "player1") p1Points += pts;
+            else p2Points += pts;
+            pointChanges.push({
+              player: playerSide,
+              delta: pts,
+              reason: `${sourceName}: thắng round → +${pts} điểm bonus`,
+            });
+            events.push({
+              player: playerSide,
+              source: sourceName,
+              description: `+${pts} điểm bonus (${sourceName})`,
+              type: "info",
+            });
             continue;
           }
           // Bloodthirsty: lose_points_on_lose → reset toàn bộ điểm khi thua
           if (ce.effect?.type === "lose_points_on_lose" && isLoser) {
-            if (playerSide === "player1") p1ResetScore = true; else p2ResetScore = true;
-            events.push({ player: playerSide, source: sourceName, description: `Thua round → mất toàn bộ điểm tích lũy (${sourceName})`, type: "info" });
+            if (playerSide === "player1") p1ResetScore = true;
+            else p2ResetScore = true;
+            events.push({
+              player: playerSide,
+              source: sourceName,
+              description: `Thua round → mất toàn bộ điểm tích lũy (${sourceName})`,
+              type: "info",
+            });
             continue;
           }
           if (
-            (timing === "during_combat" || timing === "on_round_win" || timing === "on_round_lose") &&
+            (timing === "during_combat" ||
+              timing === "on_round_win" ||
+              timing === "on_round_lose") &&
             (ce.effect?.type === "stat_modifier" ||
               ce.effect?.type === "debuff") &&
             ce.effect.value !== undefined &&
@@ -2152,10 +2499,20 @@ export const StatsComparisonMode = ({
             const conditions: Condition[] = [...(ce.effect.conditions || [])];
             // Look for probability condition in the raw source as well
             if (ce.source?.effects) {
-              const srcEffect = ce.source.effects.find(e => e.type === ce.effect.type && e.timing === ce.effect.timing && JSON.stringify(e.stat) === JSON.stringify(ce.effect.stat));
+              const srcEffect = ce.source.effects.find(
+                (e) =>
+                  e.type === ce.effect.type &&
+                  e.timing === ce.effect.timing &&
+                  JSON.stringify(e.stat) === JSON.stringify(ce.effect.stat),
+              );
               if (srcEffect?.conditions) {
                 for (const c of srcEffect.conditions) {
-                  if (!conditions.some(existing => JSON.stringify(existing) === JSON.stringify(c))) {
+                  if (
+                    !conditions.some(
+                      (existing) =>
+                        JSON.stringify(existing) === JSON.stringify(c),
+                    )
+                  ) {
                     conditions.push(c);
                   }
                 }
@@ -2185,10 +2542,18 @@ export const StatsComparisonMode = ({
                 );
               }
               if (cond.type === "race_tier_compare") {
-                if (!cond.tierOperator || selfRaceTier === undefined || oppRaceTier === undefined) return false;
-                if (cond.tierOperator === "<") return selfRaceTier < oppRaceTier;
-                if (cond.tierOperator === ">") return selfRaceTier > oppRaceTier;
-                if (cond.tierOperator === "=") return selfRaceTier === oppRaceTier;
+                if (
+                  !cond.tierOperator ||
+                  selfRaceTier === undefined ||
+                  oppRaceTier === undefined
+                )
+                  return false;
+                if (cond.tierOperator === "<")
+                  return selfRaceTier < oppRaceTier;
+                if (cond.tierOperator === ">")
+                  return selfRaceTier > oppRaceTier;
+                if (cond.tierOperator === "=")
+                  return selfRaceTier === oppRaceTier;
                 return false;
               }
               if (cond.type === "bracket" && cond.bracket) {
@@ -2198,14 +2563,19 @@ export const StatsComparisonMode = ({
                 const oppChar = isSelf ? p2.character : p1.character;
                 if (cond.itemType === "archetype") {
                   const archetypes = (oppChar?.archetypes || []).map((a: any) =>
-                    (typeof a === "string" ? a : a?.name ?? "").toLowerCase()
+                    (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase(),
                   );
                   return archetypes.includes(cond.itemName.toLowerCase());
                 }
                 if (cond.itemType === "power") {
-                  const powers = (oppChar?.powers || []).filter((p: any) => !p.isLost).map((p: any) =>
-                    (typeof p === "string" ? p : p?.name ?? "").toLowerCase()
-                  );
+                  const powers = (oppChar?.powers || [])
+                    .filter((p: any) => !p.isLost)
+                    .map((p: any) =>
+                      (typeof p === "string"
+                        ? p
+                        : (p?.name ?? "")
+                      ).toLowerCase(),
+                    );
                   return powers.includes(cond.itemName.toLowerCase());
                 }
               }
@@ -2221,24 +2591,41 @@ export const StatsComparisonMode = ({
               : playerSide;
             const currentStats =
               affectedSide === "player1" ? newP1Stats : newP2Stats;
-            const statTargets = resolveStatTargets(ce.effect.stat, currentStats);
+            const statTargets = resolveStatTargets(
+              ce.effect.stat,
+              currentStats,
+            );
             const val = ce.effect.value;
             // Fair Duel: opponent immune to debuffs (negative stat changes targeting them)
             if (isOpponentTarget && val < 0 && fairDuelActive) {
-              events.push({ player: affectedSide, source: sourceName, description: `Fair Duel: miễn nhiễm debuff từ ${sourceName}`, type: "info" });
+              events.push({
+                player: affectedSide,
+                source: sourceName,
+                description: `Fair Duel: miễn nhiễm debuff từ ${sourceName}`,
+                type: "info",
+              });
               continue;
             }
-            const targetStats = affectedSide === "player1" ? newP1Stats : newP2Stats;
-            const affectedChar = affectedSide === "player1" ? p1.character : p2.character;
+            const targetStats =
+              affectedSide === "player1" ? newP1Stats : newP2Stats;
+            const affectedChar =
+              affectedSide === "player1" ? p1.character : p2.character;
             const affectedRace = (affectedChar?.race?.race || "").toLowerCase();
             for (const csKey of statTargets) {
               if (csKey === "iq" && affectedRace === "skeleton") {
-                events.push({ player: affectedSide, source: sourceName, description: `[Skeleton] IQ không thể thay đổi — bỏ qua ${val >= 0 ? "+" : ""}${val} IQ`, type: "info" });
+                events.push({
+                  player: affectedSide,
+                  source: sourceName,
+                  description: `[Skeleton] IQ không thể thay đổi — bỏ qua ${val >= 0 ? "+" : ""}${val} IQ`,
+                  type: "info",
+                });
                 continue;
               }
               applyStatDelta(targetStats, csKey, val);
             }
-            const appliedTargets = statTargets.filter(k => !(k === "iq" && affectedRace === "skeleton"));
+            const appliedTargets = statTargets.filter(
+              (k) => !(k === "iq" && affectedRace === "skeleton"),
+            );
             if (appliedTargets.length > 0) {
               events.push({
                 player: affectedSide,
@@ -2254,9 +2641,19 @@ export const StatsComparisonMode = ({
         if (handlerName === "divine_smite_ma_round") {
           if (key === "ma" && isWinner) {
             const pts = (ce.effect as any).points ?? 1;
-            if (playerSide === "player1") p1Points += pts; else p2Points += pts;
-            pointChanges.push({ player: playerSide, delta: pts, reason: `Divine Smite: thắng round MA → +${pts} điểm` });
-            events.push({ player: playerSide, source: sourceName, description: `+${pts} điểm (Divine Smite — thắng round MA)`, type: "info" });
+            if (playerSide === "player1") p1Points += pts;
+            else p2Points += pts;
+            pointChanges.push({
+              player: playerSide,
+              delta: pts,
+              reason: `Divine Smite: thắng round MA → +${pts} điểm`,
+            });
+            events.push({
+              player: playerSide,
+              source: sourceName,
+              description: `+${pts} điểm (Divine Smite — thắng round MA)`,
+              type: "info",
+            });
           }
           continue;
         }
@@ -2285,7 +2682,8 @@ export const StatsComparisonMode = ({
         if (
           handlerName === "conquerer_speed_win" &&
           (playerSide === "player1" ? newP1ConquerorFired : newP2ConquerorFired)
-        ) continue;
+        )
+          continue;
         // during_combat handlers tự guard bằng currentRoundStat trong handler
         // FiredHandlers vẫn giữ để phòng các handler không có guard (fallback)
         // Handlers có nhiều effect dùng cùng handlerName (e.g. angling_scheming_str_win) không dùng firedSet
@@ -2293,8 +2691,12 @@ export const StatsComparisonMode = ({
           "angling_scheming_str_win",
           "the_world_speed_win",
         ];
-        if (timing === "during_combat" && !MULTI_EFFECT_HANDLERS.includes(handlerName)) {
-          const firedSet = playerSide === "player1" ? newP1FiredHandlers : newP2FiredHandlers;
+        if (
+          timing === "during_combat" &&
+          !MULTI_EFFECT_HANDLERS.includes(handlerName)
+        ) {
+          const firedSet =
+            playerSide === "player1" ? newP1FiredHandlers : newP2FiredHandlers;
           const handlerKey = `${handlerName}__${ce.source?.name ?? sourceName}`;
           if (firedSet.has(handlerKey)) continue;
         }
@@ -2305,19 +2707,43 @@ export const StatsComparisonMode = ({
         // Skip handlers that require spin wheel (probability condition) — they are handled via UI spin buttons
         {
           const effectConditions2 = (ce.effect as any).conditions || [];
-          if (effectConditions2.some((c: any) => c.type === "probability")) continue;
+          if (effectConditions2.some((c: any) => c.type === "probability"))
+            continue;
         }
         const result = HandlerRegistry.executeCombat(handlerName, ctx);
         if (!result || result.skipDefault) continue;
 
         // Mark handler đã fired thành công (chống stack nếu handler không có currentRoundStat guard)
-        if (timing === "during_combat" && !MULTI_EFFECT_HANDLERS.includes(handlerName)) {
-          const firedSet = playerSide === "player1" ? newP1FiredHandlers : newP2FiredHandlers;
+        if (
+          timing === "during_combat" &&
+          !MULTI_EFFECT_HANDLERS.includes(handlerName)
+        ) {
+          const firedSet =
+            playerSide === "player1" ? newP1FiredHandlers : newP2FiredHandlers;
           firedSet.add(`${handlerName}__${ce.source?.name ?? sourceName}`);
         }
 
+        // blockOpponentPoint: chặn điểm đối thủ về 0 (không trừ nếu đang 0)
+        if ((result as any).blockOpponentPoint) {
+          const oppSide = playerSide === "player1" ? "player2" : "player1";
+          if (oppSide === "player1" && p1Points > 0) p1Points = 0;
+          else if (oppSide === "player2" && p2Points > 0) p2Points = 0;
+          if (result.description)
+            events.push({
+              player: oppSide,
+              source: sourceName,
+              description: result.description,
+              type: "info",
+            });
+          continue;
+        }
+
         // Accelerating Sorcery: đếm số power during_combat đã kích hoạt (không tính AS)
-        if (timing === "during_combat" && ce.source?.type === "power" && handlerName !== "accelerating_sorcery_count") {
+        if (
+          timing === "during_combat" &&
+          ce.source?.type === "power" &&
+          handlerName !== "accelerating_sorcery_count"
+        ) {
           duringPowerActivations++;
         }
 
@@ -2376,7 +2802,11 @@ export const StatsComparisonMode = ({
                 });
               } else {
                 // Skeleton: IQ cannot change (locked at base value)
-                const playerRace = (player.character?.race?.race || player.race || "").toLowerCase();
+                const playerRace = (
+                  player.character?.race?.race ||
+                  player.race ||
+                  ""
+                ).toLowerCase();
                 if (csKey === "iq" && playerRace === "skeleton") {
                   events.push({
                     player: playerSide,
@@ -2386,7 +2816,11 @@ export const StatsComparisonMode = ({
                   });
                 } else {
                   // Permanent buff this combat (Tenacity, Conqueror, etc.)
-                  applyStatDelta(playerSide === "player1" ? newP1Stats : newP2Stats, csKey, mod.value);
+                  applyStatDelta(
+                    playerSide === "player1" ? newP1Stats : newP2Stats,
+                    csKey,
+                    mod.value,
+                  );
                   events.push({
                     player: playerSide,
                     source: sourceName,
@@ -2420,12 +2854,24 @@ export const StatsComparisonMode = ({
                   type: "carry_over",
                 });
               } else {
-                const oppChar = oppSide === "player1" ? p1.character : p2.character;
-                const oppRaceForLock = (oppChar?.race?.race || "").toLowerCase();
+                const oppChar =
+                  oppSide === "player1" ? p1.character : p2.character;
+                const oppRaceForLock = (
+                  oppChar?.race?.race || ""
+                ).toLowerCase();
                 if (csKey === "iq" && oppRaceForLock === "skeleton") {
-                  events.push({ player: oppSide, source: sourceName, description: `[Skeleton] IQ không thể thay đổi — bỏ qua ${mod.value >= 0 ? "+" : ""}${mod.value} IQ`, type: "info" });
+                  events.push({
+                    player: oppSide,
+                    source: sourceName,
+                    description: `[Skeleton] IQ không thể thay đổi — bỏ qua ${mod.value >= 0 ? "+" : ""}${mod.value} IQ`,
+                    type: "info",
+                  });
                 } else {
-                  applyStatDelta(oppSide === "player1" ? newP1Stats : newP2Stats, csKey, mod.value);
+                  applyStatDelta(
+                    oppSide === "player1" ? newP1Stats : newP2Stats,
+                    csKey,
+                    mod.value,
+                  );
                   events.push({
                     player: oppSide,
                     source: sourceName,
@@ -2463,7 +2909,6 @@ export const StatsComparisonMode = ({
               reason: `${sourceName} (từ đối thủ)`,
             });
           }
-
         } // end applyTimes loop
 
         // Tenacity one-shot tracking (outside applyTimes — only fires once)
@@ -2485,28 +2930,59 @@ export const StatsComparisonMode = ({
     const applyNeedle = (playerSide: "player1" | "player2") => {
       const player = playerSide === "player1" ? p1 : p2;
       if (!player.character) return;
-      const hasNeedle = (player.character.weapons || []).some((w: any) => !w.isLost && (typeof w === "string" ? w : w?.name ?? "").toLowerCase().startsWith("needle"));
+      const hasNeedle = (player.character.weapons || []).some(
+        (w: any) =>
+          !w.isLost &&
+          (typeof w === "string" ? w : (w?.name ?? ""))
+            .toLowerCase()
+            .startsWith("needle"),
+      );
       if (!hasNeedle) return;
       if (winner !== playerSide) return;
-      const oppBaseStats = playerSide === "player1" ? p2.baseStats : p1.baseStats;
-      const STAT_SHORT: (keyof CharacterStats)[] = ["str", "spd", "dur", "iq", "biq", "ma"];
+      const oppBaseStats =
+        playerSide === "player1" ? p2.baseStats : p1.baseStats;
+      const STAT_SHORT: (keyof CharacterStats)[] = [
+        "str",
+        "spd",
+        "dur",
+        "iq",
+        "biq",
+        "ma",
+      ];
       let lowestShort: keyof CharacterStats = STAT_SHORT[0];
       let lowestVal = oppBaseStats[STAT_SHORT[0]] || 0;
       for (const s of STAT_SHORT) {
-        if ((oppBaseStats[s] || 0) < lowestVal) { lowestVal = oppBaseStats[s] || 0; lowestShort = s; }
+        if ((oppBaseStats[s] || 0) < lowestVal) {
+          lowestVal = oppBaseStats[s] || 0;
+          lowestShort = s;
+        }
       }
       if (key !== lowestShort) return;
       const pts = 2;
-      if (playerSide === "player1") p1Points += pts; else p2Points += pts;
-      pointChanges.push({ player: playerSide, delta: pts, reason: `Needle: thắng round ${lowestShort.toUpperCase()} (stat thấp nhất đối thủ) → +${pts} điểm` });
-      events.push({ player: playerSide, source: "Needle", description: `+${pts} điểm (Needle — thắng round ${lowestShort.toUpperCase()}, stat thấp nhất của đối thủ)`, type: "info" });
+      if (playerSide === "player1") p1Points += pts;
+      else p2Points += pts;
+      pointChanges.push({
+        player: playerSide,
+        delta: pts,
+        reason: `Needle: thắng round ${lowestShort.toUpperCase()} (stat thấp nhất đối thủ) → +${pts} điểm`,
+      });
+      events.push({
+        player: playerSide,
+        source: "Needle",
+        description: `+${pts} điểm (Needle — thắng round ${lowestShort.toUpperCase()}, stat thấp nhất của đối thủ)`,
+        type: "info",
+      });
     };
     applyNeedle("player1");
     applyNeedle("player2");
 
     // One Trick Pony: nếu thắng round nhưng không phải stat đã chọn → clamp về 0 (không nhận bất kỳ điểm nào)
-    const p1HasOTPFinal = (p1.character?.quirks || []).filter((q: any) => !q.isLost).some((q: any) => q.name.toLowerCase() === "one trick pony");
-    const p2HasOTPFinal = (p2.character?.quirks || []).filter((q: any) => !q.isLost).some((q: any) => q.name.toLowerCase() === "one trick pony");
+    const p1HasOTPFinal = (p1.character?.quirks || [])
+      .filter((q: any) => !q.isLost)
+      .some((q: any) => q.name.toLowerCase() === "one trick pony");
+    const p2HasOTPFinal = (p2.character?.quirks || [])
+      .filter((q: any) => !q.isLost)
+      .some((q: any) => q.name.toLowerCase() === "one trick pony");
     if (p1HasOTPFinal && winner === "player1") {
       const chosenStat = otpStats["player1"]; // short key e.g. "str"
       if (chosenStat && chosenStat !== key) {
@@ -2584,7 +3060,8 @@ export const StatsComparisonMode = ({
           (co) => co.player === winnerSide && co.source === "Ranger-Silver",
         );
         if (alreadyAdded) return;
-        const nextStatKey = STAT_ORDER[roundIndex + 1].key as keyof CharacterStats;
+        const nextStatKey = STAT_ORDER[roundIndex + 1]
+          .key as keyof CharacterStats;
         const winnerStats = winnerSide === "player1" ? newP1Stats : newP2Stats;
         const currentStatValue = (winnerStats[nextStatKey] as number) || 0;
         carryOverToNext.push({
@@ -2612,8 +3089,18 @@ export const StatsComparisonMode = ({
     // Bloodthirsty: nếu thua round → reset điểm về 0 (ghi nhận trước khi cộng điểm round này)
     const newP1Score = p1ResetScore ? 0 : state.p1Score + Math.max(0, p1Points);
     const newP2Score = p2ResetScore ? 0 : state.p2Score + Math.max(0, p2Points);
-    if (p1ResetScore) pointChanges.push({ player: "player1", delta: -state.p1Score, reason: "Bloodthirsty: thua round → mất toàn bộ điểm" });
-    if (p2ResetScore) pointChanges.push({ player: "player2", delta: -state.p2Score, reason: "Bloodthirsty: thua round → mất toàn bộ điểm" });
+    if (p1ResetScore)
+      pointChanges.push({
+        player: "player1",
+        delta: -state.p1Score,
+        reason: "Bloodthirsty: thua round → mất toàn bộ điểm",
+      });
+    if (p2ResetScore)
+      pointChanges.push({
+        player: "player2",
+        delta: -state.p2Score,
+        reason: "Bloodthirsty: thua round → mất toàn bộ điểm",
+      });
 
     const roundResult: RoundResult = {
       stat: key,
@@ -2686,24 +3173,30 @@ export const StatsComparisonMode = ({
 
     // Fancy Feet: disable rune/runeword của đối thủ nếu player có Power "Fancy Feet"
     const hasFancyFeet = (p: PvPPlayerData) =>
-      (p.character?.powers || []).some((pw: any) =>
-        !pw.isLost && (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "fancy feet"
+      (p.character?.powers || []).some(
+        (pw: any) =>
+          !pw.isLost &&
+          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "fancy feet",
       );
-    const buildFancyFeetDisables = (source: PvPPlayerData, target: PvPPlayerData): string[] => {
+    const buildFancyFeetDisables = (
+      source: PvPPlayerData,
+      target: PvPPlayerData,
+    ): string[] => {
       if (!hasFancyFeet(source)) return [];
       const keys: string[] = [];
       // Disable runes
       const runes: any[] = target.character?.runes?.runes || [];
       const runeword: string | undefined = target.character?.runes?.runeword;
       for (const r of runes) {
-        const rname = typeof r === "string" ? r : r?.name ?? "";
+        const rname = typeof r === "string" ? r : (r?.name ?? "");
         if (rname) keys.push(`${target.no}-rune-${rname}`);
       }
       if (runeword) keys.push(`${target.no}-runeword-${runeword}`);
       // Disable weapons (stat bonuses, effects — không disable power đã gắn vào character)
       const weapons: any[] = target.character?.weapons || [];
       for (const w of weapons) {
-        const wname = typeof w === "string" ? w : w?.name ?? "";
+        const wname = typeof w === "string" ? w : (w?.name ?? "");
         if (wname && !w.isLost) keys.push(`${target.no}-weapon-${wname}`);
       }
       return keys;
@@ -2713,9 +3206,10 @@ export const StatsComparisonMode = ({
       ...buildFancyFeetDisables(player2, player1),
     ];
     // Merge into effectiveDisabledItems for this combat session
-    const effectiveDisabledItems = fancyFeetKeys.length > 0
-      ? new Set([...disabledItems, ...fancyFeetKeys])
-      : disabledItems;
+    const effectiveDisabledItems =
+      fancyFeetKeys.length > 0
+        ? new Set([...disabledItems, ...fancyFeetKeys])
+        : disabledItems;
     if (fancyFeetKeys.length > 0) setDisabledItems(effectiveDisabledItems);
 
     setCombatResult(null);
@@ -2779,19 +3273,31 @@ export const StatsComparisonMode = ({
         // Check disabled
         const srcName = ce.source?.name || "?";
         const srcType = ce.source?.type || "?";
-        if (effectiveDisabledItems.has(`${selfNo}-${srcType}-${srcName}`)) continue;
+        if (effectiveDisabledItems.has(`${selfNo}-${srcType}-${srcName}`))
+          continue;
         // PvE-only effects: skip in PvP
         if (srcName === "Misty Step Ahead") continue;
         // customHandler: anduril_evil_race_bonus → +1 per 3 summons vs evil race
         if ((ce.effect as any)?.type === "custom") {
           const customHandler2 = (ce.effect as any).customHandler;
           if (customHandler2 === "anduril_evil_race_bonus") {
-            const ANDURIL_EVIL = ['demon', 'vampire', 'spirit', 'orc', 'skeleton', 'goblin'];
+            const ANDURIL_EVIL = [
+              "demon",
+              "vampire",
+              "spirit",
+              "orc",
+              "skeleton",
+              "goblin",
+            ];
             if (ANDURIL_EVIL.includes(oppRace.toLowerCase())) {
-              const selfPowerList = (self.character?.powers || []).filter((p: any) => !p?.isLost);
+              const selfPowerList = (self.character?.powers || []).filter(
+                (p: any) => !p?.isLost,
+              );
               const summonCount = selfPowerList.filter((p: any) => {
-                const n = (typeof p === 'string' ? p : p?.name ?? '').toLowerCase();
-                return n.startsWith('summon:');
+                const n = (
+                  typeof p === "string" ? p : (p?.name ?? "")
+                ).toLowerCase();
+                return n.startsWith("summon:");
               }).length;
               pts += Math.floor(summonCount / 3);
             }
@@ -2803,7 +3309,9 @@ export const StatsComparisonMode = ({
         if (customHandler === "spear_of_fire_2_rune_check") {
           const weapons: any[] = self.character?.weapons || [];
           const equipped = weapons.find((w: any) => !w.isLost && w.equipped);
-          const runeCount = (equipped?.runes || []).filter((r: any) => !r.isLost).length;
+          const runeCount = (equipped?.runes || []).filter(
+            (r: any) => !r.isLost,
+          ).length;
           if (runeCount >= 2) pts += (ce.effect as any).points || 0;
           continue;
         }
@@ -2841,36 +3349,38 @@ export const StatsComparisonMode = ({
     if (raumanianSuccess["player1"]) p1StartScore += 1;
     if (raumanianSuccess["player2"]) p2StartScore += 1;
     // Golden Coin: add points from wheel result
-    if (goldenCoinPoints["player1"]) p1StartScore += goldenCoinPoints["player1"];
-    if (goldenCoinPoints["player2"]) p2StartScore += goldenCoinPoints["player2"];
+    if (goldenCoinPoints["player1"])
+      p1StartScore += goldenCoinPoints["player1"];
+    if (goldenCoinPoints["player2"])
+      p2StartScore += goldenCoinPoints["player2"];
 
     const p1BaseStats: CharacterStats = player1.character
       ? calcStatsWithBeforeCombat(
-        player1.character,
-        player1.no,
-        effectiveDisabledItems,
-        p2Race,
-        player2.character ?? null,
-        player2.no,
-        effectiveDisabledItems,
-        p1Race,
-        player1.raceTier,
-        player2.raceTier,
-      )
+          player1.character,
+          player1.no,
+          effectiveDisabledItems,
+          p2Race,
+          player2.character ?? null,
+          player2.no,
+          effectiveDisabledItems,
+          p1Race,
+          player1.raceTier,
+          player2.raceTier,
+        )
       : { ...player1.stats };
     const p2BaseStats: CharacterStats = player2.character
       ? calcStatsWithBeforeCombat(
-        player2.character,
-        player2.no,
-        effectiveDisabledItems,
-        p1Race,
-        player1.character ?? null,
-        player1.no,
-        effectiveDisabledItems,
-        p2Race,
-        player2.raceTier,
-        player1.raceTier,
-      )
+          player2.character,
+          player2.no,
+          effectiveDisabledItems,
+          p1Race,
+          player1.character ?? null,
+          player1.no,
+          effectiveDisabledItems,
+          p2Race,
+          player2.raceTier,
+          player1.raceTier,
+        )
       : { ...player2.stats };
 
     // Trickster: apply stat delta từ subtype (King +1, Queen -1, Jack +97)
@@ -2882,32 +3392,50 @@ export const StatsComparisonMode = ({
     const p1TricksterSub = (tricksterResult["player1"] ?? "").toLowerCase();
     const p2TricksterSub = (tricksterResult["player2"] ?? "").toLowerCase();
     if (TRICKSTER_STAT_DELTA[p1TricksterSub] != null)
-      for (const k of _ALL_STAT_KEYS) applyStatDelta(p1BaseStats, k, TRICKSTER_STAT_DELTA[p1TricksterSub]);
+      for (const k of _ALL_STAT_KEYS)
+        applyStatDelta(p1BaseStats, k, TRICKSTER_STAT_DELTA[p1TricksterSub]);
     if (TRICKSTER_STAT_DELTA[p2TricksterSub] != null)
-      for (const k of _ALL_STAT_KEYS) applyStatDelta(p2BaseStats, k, TRICKSTER_STAT_DELTA[p2TricksterSub]);
+      for (const k of _ALL_STAT_KEYS)
+        applyStatDelta(p2BaseStats, k, TRICKSTER_STAT_DELTA[p2TricksterSub]);
 
     // Encroaching Shadow: +7 Speed nếu wheel thành công
-    if (encroachingShadowSuccess["player1"]) applyStatDelta(p1BaseStats, "spd", 7);
-    if (encroachingShadowSuccess["player2"]) applyStatDelta(p2BaseStats, "spd", 7);
+    if (encroachingShadowSuccess["player1"])
+      applyStatDelta(p1BaseStats, "spd", 7);
+    if (encroachingShadowSuccess["player2"])
+      applyStatDelta(p2BaseStats, "spd", 7);
 
     // Black Magic: -2 vào stat được chọn của đối thủ
     // Uno Reverse Card: nếu target có URC thì debuff quay lại người dùng Black Magic
-    const hasUnoP1 = (player1.character?.powers || []).filter((pw: any) => !pw.isLost)
-      .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "uno reverse card")
-      && !effectiveDisabledItems.has(`${player1.no}-power-Uno Reverse Card`);
-    const hasUnoP2 = (player2.character?.powers || []).filter((pw: any) => !pw.isLost)
-      .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "uno reverse card")
-      && !effectiveDisabledItems.has(`${player2.no}-power-Uno Reverse Card`);
+    const hasUnoP1 =
+      (player1.character?.powers || [])
+        .filter((pw: any) => !pw.isLost)
+        .some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "uno reverse card",
+        ) &&
+      !effectiveDisabledItems.has(`${player1.no}-power-Uno Reverse Card`);
+    const hasUnoP2 =
+      (player2.character?.powers || [])
+        .filter((pw: any) => !pw.isLost)
+        .some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "uno reverse card",
+        ) &&
+      !effectiveDisabledItems.has(`${player2.no}-power-Uno Reverse Card`);
     if (blackMagicStat["player1"]) {
       // player1 dùng BM → debuff nhắm vào player2
       // URC bounce nếu player1 tự có URC HOẶC player2 có URC
-      if (hasUnoP1 || hasUnoP2) applyStatDelta(p1BaseStats, blackMagicStat["player1"]!, -2);
+      if (hasUnoP1 || hasUnoP2)
+        applyStatDelta(p1BaseStats, blackMagicStat["player1"]!, -2);
       else applyStatDelta(p2BaseStats, blackMagicStat["player1"]!, -2);
     }
     if (blackMagicStat["player2"]) {
       // player2 dùng BM → debuff nhắm vào player1
       // URC bounce nếu player2 tự có URC HOẶC player1 có URC
-      if (hasUnoP2 || hasUnoP1) applyStatDelta(p2BaseStats, blackMagicStat["player2"]!, -2);
+      if (hasUnoP2 || hasUnoP1)
+        applyStatDelta(p2BaseStats, blackMagicStat["player2"]!, -2);
       else applyStatDelta(p1BaseStats, blackMagicStat["player2"]!, -2);
     }
 
@@ -2923,27 +3451,39 @@ export const StatsComparisonMode = ({
 
     // Scrying: player có Scrying thành công → đối thủ bị -4 stat cao nhất
     if (scryingSuccess["player1"]) {
-      const highestStat = _ALL_STAT_KEYS.reduce((a, b) => (p2BaseStats[a] || 0) >= (p2BaseStats[b] || 0) ? a : b);
+      const highestStat = _ALL_STAT_KEYS.reduce((a, b) =>
+        (p2BaseStats[a] || 0) >= (p2BaseStats[b] || 0) ? a : b,
+      );
       applyStatDelta(p2BaseStats, highestStat, -4);
     }
     if (scryingSuccess["player2"]) {
-      const highestStat = _ALL_STAT_KEYS.reduce((a, b) => (p1BaseStats[a] || 0) >= (p1BaseStats[b] || 0) ? a : b);
+      const highestStat = _ALL_STAT_KEYS.reduce((a, b) =>
+        (p1BaseStats[a] || 0) >= (p1BaseStats[b] || 0) ? a : b,
+      );
       applyStatDelta(p1BaseStats, highestStat, -4);
     }
 
     // Mad Scientist: Shrinking (true) = bản thân +6 SPD, -3 STR, -3 DUR; Enlarging (false) = bản thân +3 STR, +3 DUR, -6 SPD
     if (madScientistResult["player1"] != null) {
       if (madScientistResult["player1"]) {
-        applyStatDelta(p1BaseStats, "spd", 6); applyStatDelta(p1BaseStats, "str", -3); applyStatDelta(p1BaseStats, "dur", -3);
+        applyStatDelta(p1BaseStats, "spd", 6);
+        applyStatDelta(p1BaseStats, "str", -3);
+        applyStatDelta(p1BaseStats, "dur", -3);
       } else {
-        applyStatDelta(p1BaseStats, "str", 3); applyStatDelta(p1BaseStats, "dur", 3); applyStatDelta(p1BaseStats, "spd", -6);
+        applyStatDelta(p1BaseStats, "str", 3);
+        applyStatDelta(p1BaseStats, "dur", 3);
+        applyStatDelta(p1BaseStats, "spd", -6);
       }
     }
     if (madScientistResult["player2"] != null) {
       if (madScientistResult["player2"]) {
-        applyStatDelta(p2BaseStats, "spd", 6); applyStatDelta(p2BaseStats, "str", -3); applyStatDelta(p2BaseStats, "dur", -3);
+        applyStatDelta(p2BaseStats, "spd", 6);
+        applyStatDelta(p2BaseStats, "str", -3);
+        applyStatDelta(p2BaseStats, "dur", -3);
       } else {
-        applyStatDelta(p2BaseStats, "str", 3); applyStatDelta(p2BaseStats, "dur", 3); applyStatDelta(p2BaseStats, "spd", -6);
+        applyStatDelta(p2BaseStats, "str", 3);
+        applyStatDelta(p2BaseStats, "dur", 3);
+        applyStatDelta(p2BaseStats, "spd", -6);
       }
     }
 
@@ -2954,33 +3494,47 @@ export const StatsComparisonMode = ({
       for (const [k, v] of Object.entries(p1Summon.statDeltas)) {
         applyStatDelta(p1BaseStats, k as keyof CharacterStats, v as number);
       }
-      if (p1Summon.startScoreDelta > 0) p1StartScore += p1Summon.startScoreDelta;
+      if (p1Summon.startScoreDelta > 0)
+        p1StartScore += p1Summon.startScoreDelta;
     }
     if (p2Summon) {
       for (const [k, v] of Object.entries(p2Summon.statDeltas)) {
         applyStatDelta(p2BaseStats, k as keyof CharacterStats, v as number);
       }
-      if (p2Summon.startScoreDelta > 0) p2StartScore += p2Summon.startScoreDelta;
+      if (p2Summon.startScoreDelta > 0)
+        p2StartScore += p2Summon.startScoreDelta;
     }
 
     // Morningstar: +2 STR nếu đối thủ dùng vũ khí Physical — apply ngay khi bắt đầu combat
     {
       const weapEnts = EffectRegistry.getAllByType("weapon");
-      const cleanName = (w: any) => (typeof w === "string" ? w : w?.name ?? "").replace(/\s*\(.*?\)/g, "").trim();
-      const hasPhysWep = (char: any) => (char?.weapons || []).some((w: any) => {
-        if (w?.isLost) return false;
-        const n = cleanName(w);
-        const ent = weapEnts.find(e => e.name.toLowerCase() === n.toLowerCase());
-        return ent?.tags?.includes("physical") ?? false;
-      });
-      const p1Morning = (player1.character?.weapons || []).some((w: any) =>
-        !w?.isLost && cleanName(w).toLowerCase() === "morningstar"
-      ) && !disabledItems.has(`${player1.no}-weapon-Morningstar`);
-      const p2Morning = (player2.character?.weapons || []).some((w: any) =>
-        !w?.isLost && cleanName(w).toLowerCase() === "morningstar"
-      ) && !disabledItems.has(`${player2.no}-weapon-Morningstar`);
-      if (p1Morning && hasPhysWep(player2.character)) applyStatDelta(p1BaseStats, "str", 2);
-      if (p2Morning && hasPhysWep(player1.character)) applyStatDelta(p2BaseStats, "str", 2);
+      const cleanName = (w: any) =>
+        (typeof w === "string" ? w : (w?.name ?? ""))
+          .replace(/\s*\(.*?\)/g, "")
+          .trim();
+      const hasPhysWep = (char: any) =>
+        (char?.weapons || []).some((w: any) => {
+          if (w?.isLost) return false;
+          const n = cleanName(w);
+          const ent = weapEnts.find(
+            (e) => e.name.toLowerCase() === n.toLowerCase(),
+          );
+          return ent?.tags?.includes("physical") ?? false;
+        });
+      const p1Morning =
+        (player1.character?.weapons || []).some(
+          (w: any) =>
+            !w?.isLost && cleanName(w).toLowerCase() === "morningstar",
+        ) && !disabledItems.has(`${player1.no}-weapon-Morningstar`);
+      const p2Morning =
+        (player2.character?.weapons || []).some(
+          (w: any) =>
+            !w?.isLost && cleanName(w).toLowerCase() === "morningstar",
+        ) && !disabledItems.has(`${player2.no}-weapon-Morningstar`);
+      if (p1Morning && hasPhysWep(player2.character))
+        applyStatDelta(p1BaseStats, "str", 2);
+      if (p2Morning && hasPhysWep(player1.character))
+        applyStatDelta(p2BaseStats, "str", 2);
     }
 
     const init: StepCombatState = {
@@ -3060,9 +3614,17 @@ export const StatsComparisonMode = ({
     {
       const preCombatEvents: RoundEvent[] = [];
       const STAT_LABEL: Record<string, string> = {
-        str: 'STR', spd: 'SPD', dur: 'DUR', iq: 'IQ', ma: 'MA', biq: 'BIQ',
-        strength: 'STR', speed: 'SPD', durability: 'DUR', biq2: 'BIQ',
-        all: 'All Stats',
+        str: "STR",
+        spd: "SPD",
+        dur: "DUR",
+        iq: "IQ",
+        ma: "MA",
+        biq: "BIQ",
+        strength: "STR",
+        speed: "SPD",
+        durability: "DUR",
+        biq2: "BIQ",
+        all: "All Stats",
       };
       const buildPreCombatEvents = (
         player: PvPPlayerData,
@@ -3073,40 +3635,52 @@ export const StatsComparisonMode = ({
         oppBaseStats: CharacterStats,
       ) => {
         if (!player.character) return;
-        const fx = EffectResolver.calculateCharacterEffects(player.character, { isPvE: false });
-        const selfPowers = (player.character?.powers || []).filter((p: any) => !p?.isLost);
+        const fx = EffectResolver.calculateCharacterEffects(player.character, {
+          isPvE: false,
+        });
+        const selfPowers = (player.character?.powers || []).filter(
+          (p: any) => !p?.isLost,
+        );
         const selfPowerCount = selfPowers.length;
-        const oppPowers = (oppChar?.powers || []).filter((p: any) => !p?.isLost) || [];
+        const oppPowers =
+          (oppChar?.powers || []).filter((p: any) => !p?.isLost) || [];
         const oppPowerCount = oppPowers.length;
+        console.log(selfPowerCount, oppPowerCount);
 
         for (const ce of fx.combatEffects) {
           if (ce.isActive === false) continue;
-          if (ce.effect?.timing !== 'before_combat') continue;
-          const srcName = ce.source?.name || '?';
-          const srcType = ce.source?.type || '?';
-          if (effectiveDisabledItems.has(`${player.no}-${srcType}-${srcName}`)) continue;
+          if (ce.effect?.timing !== "before_combat") continue;
+          const srcName = ce.source?.name || "?";
+          const srcType = ce.source?.type || "?";
+          if (effectiveDisabledItems.has(`${player.no}-${srcType}-${srcName}`))
+            continue;
 
           const effectType = ce.effect?.type;
           const handler = (ce.effect as any).customHandler;
 
           // Guidance: apply +1 vào 2 stats đã chọn qua wheel (nếu đối thủ ít power hơn)
-          if (handler === 'guidance_fewer_powers_check') {
-            if (selfPowerCount > oppPowerCount) {
+          if (handler === "guidance_fewer_powers_check") {
+            if (selfPowerCount.toFixed(0) > oppPowerCount.toFixed(0)) {
               const chosen = guidanceStats[playerSide] || [];
               if (chosen.length === 2) {
-                for (const stat of chosen) applyStatDelta(selfBaseStats, stat as keyof CharacterStats, 1);
+                for (const stat of chosen)
+                  applyStatDelta(
+                    selfBaseStats,
+                    stat as keyof CharacterStats,
+                    1,
+                  );
                 preCombatEvents.push({
                   player: playerSide,
                   source: srcName,
-                  description: `Đối thủ ít Power hơn (${oppPowerCount} < ${selfPowerCount}) → +1 ${chosen.map(s => s.toUpperCase()).join(', ')} (Guidance)`,
-                  type: 'stat_boost',
+                  description: `Đối thủ ít Power hơn (${oppPowerCount} < ${selfPowerCount}) → +1 ${chosen.map((s) => s.toUpperCase()).join(", ")} (Guidance)`,
+                  type: "stat_boost",
                 });
               } else {
                 preCombatEvents.push({
                   player: playerSide,
                   source: srcName,
                   description: `Guidance: Đối thủ ít Power hơn nhưng chưa chọn stat qua wheel`,
-                  type: 'info',
+                  type: "info",
                 });
               }
             } else {
@@ -3114,32 +3688,45 @@ export const StatsComparisonMode = ({
                 player: playerSide,
                 source: srcName,
                 description: `Đối thủ không ít Power hơn (${oppPowerCount} vs ${selfPowerCount}) → không áp dụng (Guidance)`,
-                type: 'info',
+                type: "info",
               });
             }
             continue;
           }
 
           // Power Negation / Anti-Magic Barrier: handled via CombatEffectsPanel wheel — skip pre-combat log
-          if (effectType === 'power_disable' || effectType === 'disable_powers') {
+          if (
+            effectType === "power_disable" ||
+            effectType === "disable_powers"
+          ) {
             continue;
           }
 
           // Fair Duel: immunity notice
-          if (effectType === 'immunity') {
+          if (effectType === "immunity") {
             preCombatEvents.push({
               player: playerSide,
               source: srcName,
               description: `[${srcName}] Cả 2 miễn nhiễm Debuff từ nhau trong trận này`,
-              type: 'info',
+              type: "info",
             });
             continue;
           }
 
           // Chastiefol: before_combat → chủ nhân nhận +3 vào 2 stat thấp nhất của đối thủ
-          if (handler === 'chastiefol_lowest_stats') {
-            const STAT_KEYS_SHORT: (keyof CharacterStats)[] = ['str', 'spd', 'dur', 'iq', 'biq', 'ma'];
-            const sorted = [...STAT_KEYS_SHORT].sort((a, b) => (Number(oppBaseStats[a]) || 0) - (Number(oppBaseStats[b]) || 0));
+          if (handler === "chastiefol_lowest_stats") {
+            const STAT_KEYS_SHORT: (keyof CharacterStats)[] = [
+              "str",
+              "spd",
+              "dur",
+              "iq",
+              "biq",
+              "ma",
+            ];
+            const sorted = [...STAT_KEYS_SHORT].sort(
+              (a, b) =>
+                (Number(oppBaseStats[a]) || 0) - (Number(oppBaseStats[b]) || 0),
+            );
             const [low1, low2] = sorted;
             applyStatDelta(selfBaseStats, low1, 3);
             applyStatDelta(selfBaseStats, low2, 3);
@@ -3147,75 +3734,108 @@ export const StatsComparisonMode = ({
               player: playerSide,
               source: srcName,
               description: `Chastiefol: +3 ${low1.toUpperCase()}, +3 ${low2.toUpperCase()} (2 stat thấp nhất của đối thủ)`,
-              type: 'stat_boost',
+              type: "stat_boost",
             });
             continue;
           }
 
           // Adapt: log GM action
-          if (handler === 'adapt_disable_known_powers') {
+          if (handler === "adapt_disable_known_powers") {
             preCombatEvents.push({
               player: playerSide,
               source: srcName,
               description: `[${srcName}] GM vô hiệu hóa các Power đối thủ đã gặp trong quá khứ (track riêng)`,
-              type: 'info',
+              type: "info",
             });
             continue;
           }
 
           // stat_modifier target 'self' (no customHandler): apply trực tiếp vào stats (e.g. Storm Calling +2 BIQ)
-          if (!handler && (effectType === 'stat_modifier' || effectType === 'debuff') && (ce.effect as any).target === 'self') {
+          if (
+            !handler &&
+            (effectType === "stat_modifier" || effectType === "debuff") &&
+            (ce.effect as any).target === "self"
+          ) {
             const val = ce.effect?.value ?? 0;
-            const stat = ce.effect?.stat ?? '';
+            const stat = ce.effect?.stat ?? "";
             if (val && stat) {
+              // Check conditions trước khi log (e.g. Gigachad race_tier_compare)
+              const effectConditions: any[] = (ce.effect as any).conditions || [];
+              const selfTier = player.raceTier ?? 0;
+              const oppPlayer = playerSide === "player1" ? player2 : player1;
+              const oppTier = oppPlayer?.raceTier ?? 0;
+              const oppRaceStr = (oppChar as any)?.race?.race?.toLowerCase() ?? "";
+              const condMet = effectConditions.every((cond: any) => {
+                if (cond.type === "race_tier_compare") {
+                  if (!cond.tierOperator) return false;
+                  if (cond.tierOperator === ">") return selfTier > oppTier;
+                  if (cond.tierOperator === "<") return selfTier < oppTier;
+                  if (cond.tierOperator === "=") return selfTier === oppTier;
+                  return false;
+                }
+                if (cond.type === "race_match" && cond.races) {
+                  return cond.races.some((r: string) => r.toLowerCase() === oppRaceStr);
+                }
+                if (cond.type === "probability") return false; // handled via wheel
+                return true;
+              });
+              if (!condMet) continue;
               const statLabel = STAT_LABEL[stat] ?? stat.toUpperCase();
               applyStatDelta(selfBaseStats, stat as keyof CharacterStats, val);
               preCombatEvents.push({
                 player: playerSide,
                 source: srcName,
-                description: `${val > 0 ? '+' : ''}${val} ${statLabel} (${srcName})`,
-                type: val > 0 ? 'stat_boost' : 'stat_debuff',
+                description: `${val > 0 ? "+" : ""}${val} ${statLabel} (${srcName})`,
+                type: val > 0 ? "stat_boost" : "stat_debuff",
               });
             }
             continue;
           }
 
           // debuffOpponent: stat_modifier or debuff with target 'opponent' (no customHandler)
-          if (!handler && (effectType === 'stat_modifier' || effectType === 'debuff') && (ce.effect as any).target === 'opponent') {
+          if (
+            !handler &&
+            (effectType === "stat_modifier" || effectType === "debuff") &&
+            (ce.effect as any).target === "opponent"
+          ) {
             const val = ce.effect?.value ?? 0;
-            const stat = ce.effect?.stat ?? '';
+            const stat = ce.effect?.stat ?? "";
             if (val && stat) {
               const statLabel = STAT_LABEL[stat] ?? stat.toUpperCase();
               preCombatEvents.push({
                 player: oppSide,
                 source: srcName,
-                description: `${val > 0 ? '+' : ''}${val} ${statLabel} (debuff từ ${player.name ?? playerSide})`,
-                type: val < 0 ? 'stat_debuff' : 'stat_boost',
+                description: `${val > 0 ? "+" : ""}${val} ${statLabel} (debuff từ ${player.name ?? playerSide})`,
+                type: val < 0 ? "stat_debuff" : "stat_boost",
               });
             }
             continue;
           }
 
           // Mind Control: log if condition met (opponent IQ <= 5)
-          if (handler === 'mind_control_iq_check') {
+          if (handler === "mind_control_iq_check") {
             const oppIq = (oppChar as any)?.stats?.iq ?? 0;
             if (oppIq <= 5) {
               preCombatEvents.push({
                 player: playerSide,
                 source: srcName,
                 description: `Đối thủ IQ ≤ 5 (IQ=${oppIq}) → +1 all stats`,
-                type: 'stat_boost',
+                type: "stat_boost",
               });
             }
             continue;
           }
 
           // Eternal Mangekyou Sharingan: chọn ngẫu nhiên 1 trong 3 hiệu ứng → debuff đối thủ ngay
-          if (handler === 'eternal_mangekyou_random_effect') {
-            const emOptions: Array<{ stat: keyof typeof selfBaseStats; label: string; effect: string }> = [
-              { stat: 'dur', label: 'DUR', effect: 'Amaterasu' },
-              { stat: 'iq', label: 'IQ', effect: 'Tsukuyomi' },
-              { stat: 'str', label: 'STR', effect: 'Susanoo' },
+          if (handler === "eternal_mangekyou_random_effect") {
+            const emOptions: Array<{
+              stat: keyof typeof selfBaseStats;
+              label: string;
+              effect: string;
+            }> = [
+              { stat: "dur", label: "DUR", effect: "Amaterasu" },
+              { stat: "iq", label: "IQ", effect: "Tsukuyomi" },
+              { stat: "str", label: "STR", effect: "Susanoo" },
             ];
             const chosen = emOptions[Math.floor(Math.random() * 3)];
             // Debuff applied to opponent base stats
@@ -3223,65 +3843,103 @@ export const StatsComparisonMode = ({
               player: oppSide,
               source: srcName,
               description: `${chosen.effect} — -6 ${chosen.label} (Eternal Mangekyou Sharingan từ ${player.name ?? playerSide})`,
-              type: 'stat_debuff',
+              type: "stat_debuff",
             });
             continue;
           }
 
           // Uno Reverse Card: log info — engine phải đảo chiều debuff khi tính stat
-          if (handler === 'uno_reverse_card_swap_debuffs') {
+          if (handler === "uno_reverse_card_swap_debuffs") {
             preCombatEvents.push({
               player: playerSide,
               source: srcName,
               description: `[Uno Reverse Card] Debuff từ đối thủ bị phản lại chính đối thủ và ngược lại (GM xử lý khi tính stat)`,
-              type: 'info',
+              type: "info",
             });
             continue;
           }
 
           // Enhanced Hearing: kiểm tra opp weapon (nhạc cụ) → -1 all; opp power (âm thanh) → -2 all
-          if (handler === 'enhanced_hearing_instrument_check' || handler === 'enhanced_hearing_sound_power_check') {
-            const INSTRUMENT_NAMES = ['bagpipe', 'drums', 'flute', 'guitar', 'violin', 'trumpet', 'piano', 'harp', 'lute', 'saxophone', 'bass', 'cello', 'harmonica', 'ukulele', 'nunchuck', 'ruan mei'];
-            const SOUND_POWERS_LIST = ['zoltraak', 'rickrolling', 'music', 'sound', 'melody', 'siren', 'bard', 'singer'];
+          if (
+            handler === "enhanced_hearing_instrument_check" ||
+            handler === "enhanced_hearing_sound_power_check"
+          ) {
+            const INSTRUMENT_NAMES = [
+              "bagpipe",
+              "drums",
+              "flute",
+              "guitar",
+              "violin",
+              "trumpet",
+              "piano",
+              "harp",
+              "lute",
+              "saxophone",
+              "bass",
+              "cello",
+              "harmonica",
+              "ukulele",
+              "nunchuck",
+              "ruan mei",
+            ];
+            const SOUND_POWERS_LIST = [
+              "zoltraak",
+              "rickrolling",
+              "music",
+              "sound",
+              "melody",
+              "siren",
+              "bard",
+              "singer",
+            ];
             const oppWeapons: any[] = (oppChar as any)?.weapons || [];
-            const oppPowerNames: string[] = (oppChar?.powers || []).map((p: any) => (typeof p === 'string' ? p : p?.name ?? '').toLowerCase());
+            const oppPowerNames: string[] = (oppChar?.powers || []).map(
+              (p: any) =>
+                (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
+            );
             const hasInstrument = oppWeapons.some((w: any) => {
-              const wn = (typeof w === 'string' ? w : w?.name ?? '').toLowerCase();
-              return INSTRUMENT_NAMES.some(inst => wn.includes(inst));
+              const wn = (
+                typeof w === "string" ? w : (w?.name ?? "")
+              ).toLowerCase();
+              return INSTRUMENT_NAMES.some((inst) => wn.includes(inst));
             });
-            const hasSoundPower = oppPowerNames.some(p => SOUND_POWERS_LIST.some(sp => p.includes(sp)));
-            if (handler === 'enhanced_hearing_instrument_check') {
+            const hasSoundPower = oppPowerNames.some((p) =>
+              SOUND_POWERS_LIST.some((sp) => p.includes(sp)),
+            );
+            if (handler === "enhanced_hearing_instrument_check") {
               if (hasInstrument) {
-                for (const s of _ALL_STAT_KEYS) applyStatDelta(selfBaseStats, s, -1);
+                for (const s of _ALL_STAT_KEYS)
+                  applyStatDelta(selfBaseStats, s, -1);
                 preCombatEvents.push({
                   player: playerSide,
                   source: srcName,
                   description: `Đối thủ dùng nhạc cụ → -1 tất cả stats (Enhanced Hearing)`,
-                  type: 'stat_debuff',
+                  type: "stat_debuff",
                 });
               } else {
                 preCombatEvents.push({
                   player: playerSide,
                   source: srcName,
                   description: `Đối thủ không dùng nhạc cụ → không áp dụng (Enhanced Hearing)`,
-                  type: 'info',
+                  type: "info",
                 });
               }
             } else {
               if (hasSoundPower) {
-                for (const s of _ALL_STAT_KEYS) applyStatDelta(selfBaseStats, s, -2);
+                for (const s of _ALL_STAT_KEYS)
+                  applyStatDelta(selfBaseStats, s, -2);
                 preCombatEvents.push({
                   player: playerSide,
                   source: srcName,
                   description: `Đối thủ có power âm thanh → -2 tất cả stats (Enhanced Hearing)`,
-                  type: 'stat_debuff',
+                  type: "stat_debuff",
                 });
               } else {
                 preCombatEvents.push({
                   player: playerSide,
                   source: srcName,
                   description: `Đối thủ không có power âm thanh → không áp dụng (Enhanced Hearing)`,
-                  type: 'info',
+                  type: "info",
                 });
               }
             }
@@ -3289,64 +3947,100 @@ export const StatsComparisonMode = ({
           }
 
           // Andúril: vs evil race, +1 điểm khởi đầu per 3 summons
-          if (handler === 'anduril_evil_race_bonus') {
-            const ANDURIL_EVIL = ['demon', 'vampire', 'spirit', 'orc', 'skeleton', 'goblin'];
-            const oppRace = (oppChar?.race?.race || '').toLowerCase();
+          if (handler === "anduril_evil_race_bonus") {
+            const ANDURIL_EVIL = [
+              "demon",
+              "vampire",
+              "spirit",
+              "orc",
+              "skeleton",
+              "goblin",
+            ];
+            const oppRace = (oppChar?.race?.race || "").toLowerCase();
             if (!ANDURIL_EVIL.includes(oppRace)) {
-              preCombatEvents.push({ player: playerSide, source: srcName, description: `Andúril: Đối thủ không phải evil race (${oppChar?.race?.race || '?'}) → không áp dụng`, type: 'info' });
+              preCombatEvents.push({
+                player: playerSide,
+                source: srcName,
+                description: `Andúril: Đối thủ không phải evil race (${oppChar?.race?.race || "?"}) → không áp dụng`,
+                type: "info",
+              });
             } else {
-              const selfPowerList = (player.character?.powers || []).filter((p: any) => !p?.isLost);
+              const selfPowerList = (player.character?.powers || []).filter(
+                (p: any) => !p?.isLost,
+              );
               const summonCount = selfPowerList.filter((p: any) => {
-                const n = (typeof p === 'string' ? p : p?.name ?? '').toLowerCase();
-                return n.startsWith('summon:');
+                const n = (
+                  typeof p === "string" ? p : (p?.name ?? "")
+                ).toLowerCase();
+                return n.startsWith("summon:");
               }).length;
               const bonusPoints = Math.floor(summonCount / 3);
               if (bonusPoints <= 0) {
-                preCombatEvents.push({ player: playerSide, source: srcName, description: `Andúril: vs ${oppChar?.race?.race}, chỉ có ${summonCount} Summon (cần ≥3) → không có điểm bonus`, type: 'info' });
+                preCombatEvents.push({
+                  player: playerSide,
+                  source: srcName,
+                  description: `Andúril: vs ${oppChar?.race?.race}, chỉ có ${summonCount} Summon (cần ≥3) → không có điểm bonus`,
+                  type: "info",
+                });
               } else {
-                preCombatEvents.push({ player: playerSide, source: srcName, description: `Andúril: vs ${oppChar?.race?.race}, ${summonCount} Summons → +${bonusPoints} điểm khởi đầu`, type: 'stat_boost' });
+                preCombatEvents.push({
+                  player: playerSide,
+                  source: srcName,
+                  description: `Andúril: vs ${oppChar?.race?.race}, ${summonCount} Summons → +${bonusPoints} điểm khởi đầu`,
+                  type: "stat_boost",
+                });
               }
             }
             continue;
           }
 
           // Luck Manipulation: từ vòng 64 (pvpWins ≥ 2) → 15% +1 all, 5% +2 all
-          if (handler === 'luck_manipulation_round_64_check') {
-            const pvpWins = (player.character as any)?.tournament?.pvpWins ?? (player.character as any)?.pvpWins ?? 0;
+          if (handler === "luck_manipulation_round_64_check") {
+            const pvpWins =
+              (player.character as any)?.tournament?.pvpWins ??
+              (player.character as any)?.pvpWins ??
+              0;
             if (pvpWins < 2) {
               preCombatEvents.push({
                 player: playerSide,
                 source: srcName,
                 description: `Chưa đến vòng 64 (pvpWins=${pvpWins}) → không áp dụng (Luck Manipulation)`,
-                type: 'info',
+                type: "info",
               });
             } else {
               // Only run once (two effects registered, skip second if already logged)
-              const alreadyLogged = preCombatEvents.some(e => e.source === srcName && e.player === playerSide && e.type !== 'info');
+              const alreadyLogged = preCombatEvents.some(
+                (e) =>
+                  e.source === srcName &&
+                  e.player === playerSide &&
+                  e.type !== "info",
+              );
               if (!alreadyLogged) {
                 const roll = Math.random() * 100;
                 if (roll < 5) {
-                  for (const s of _ALL_STAT_KEYS) applyStatDelta(selfBaseStats, s, 2);
+                  for (const s of _ALL_STAT_KEYS)
+                    applyStatDelta(selfBaseStats, s, 2);
                   preCombatEvents.push({
                     player: playerSide,
                     source: srcName,
                     description: `+2 tất cả stats (Luck Manipulation — 5%, roll: ${roll.toFixed(1)}%)`,
-                    type: 'stat_boost',
+                    type: "stat_boost",
                   });
                 } else if (roll < 20) {
-                  for (const s of _ALL_STAT_KEYS) applyStatDelta(selfBaseStats, s, 1);
+                  for (const s of _ALL_STAT_KEYS)
+                    applyStatDelta(selfBaseStats, s, 1);
                   preCombatEvents.push({
                     player: playerSide,
                     source: srcName,
                     description: `+1 tất cả stats (Luck Manipulation — 15%, roll: ${roll.toFixed(1)}%)`,
-                    type: 'stat_boost',
+                    type: "stat_boost",
                   });
                 } else {
                   preCombatEvents.push({
                     player: playerSide,
                     source: srcName,
                     description: `Không kích hoạt (Luck Manipulation — roll: ${roll.toFixed(1)}%)`,
-                    type: 'info',
+                    type: "info",
                   });
                 }
               }
@@ -3356,17 +4050,31 @@ export const StatsComparisonMode = ({
         }
       };
 
-      buildPreCombatEvents(player1, "player1", init.p1Stats, player2.character ?? null, "player2", init.p2Stats);
-      buildPreCombatEvents(player2, "player2", init.p2Stats, player1.character ?? null, "player1", init.p1Stats);
+      buildPreCombatEvents(
+        player1,
+        "player1",
+        init.p1Stats,
+        player2.character ?? null,
+        "player2",
+        init.p2Stats,
+      );
+      buildPreCombatEvents(
+        player2,
+        "player2",
+        init.p2Stats,
+        player1.character ?? null,
+        "player1",
+        init.p1Stats,
+      );
 
       if (preCombatEvents.length > 0) {
         init.roundLogs.push({
           roundIndex: -1,
-          statLabel: 'PRE-COMBAT',
-          statKey: '',
+          statLabel: "PRE-COMBAT",
+          statKey: "",
           p1ValueUsed: 0,
           p2ValueUsed: 0,
-          winner: 'tie',
+          winner: "tie",
           p1Score: init.p1Score,
           p2Score: init.p2Score,
           events: preCombatEvents,
@@ -3390,18 +4098,46 @@ export const StatsComparisonMode = ({
       const lastRoundIdx = stepRoundIndex - 1;
       const p1Effs = getPerRoundEffects(player1.character, player1.no);
       const p2Effs = getPerRoundEffects(player2.character, player2.no);
-      const lastRound = [...stepState.roundLogs].reverse().find((l) => l.roundIndex === lastRoundIdx);
+      const lastRound = [...stepState.roundLogs]
+        .reverse()
+        .find((l) => l.roundIndex === lastRoundIdx);
       if (lastRound) {
         const w = lastRound.winner;
-        if (computeRoundPoints("player1", w, lastRoundIdx, p1Effs, lastRound.statKey).pending) return;
-        if (computeRoundPoints("player2", w, lastRoundIdx, p2Effs, lastRound.statKey).pending) return;
+        if (
+          computeRoundPoints(
+            "player1",
+            w,
+            lastRoundIdx,
+            p1Effs,
+            lastRound.statKey,
+          ).pending
+        )
+          return;
+        if (
+          computeRoundPoints(
+            "player2",
+            w,
+            lastRoundIdx,
+            p2Effs,
+            lastRound.statKey,
+          ).pending
+        )
+          return;
         if (lastRoundIdx < 5) {
           const SPINS = ["Bash", "Luminescence", "Ranger-Silver"];
           const p1WinEffs = w === "player1" ? p1Effs.onWin : [];
           const p2WinEffs = w === "player2" ? p2Effs.onWin : [];
           for (const eff of SPINS) {
-            if (p1WinEffs.includes(eff) && !roundSpinResults[`${lastRoundIdx}-${eff}-player1`]) return;
-            if (p2WinEffs.includes(eff) && !roundSpinResults[`${lastRoundIdx}-${eff}-player2`]) return;
+            if (
+              p1WinEffs.includes(eff) &&
+              !roundSpinResults[`${lastRoundIdx}-${eff}-player1`]
+            )
+              return;
+            if (
+              p2WinEffs.includes(eff) &&
+              !roundSpinResults[`${lastRoundIdx}-${eff}-player2`]
+            )
+              return;
           }
         }
       }
@@ -3412,16 +4148,35 @@ export const StatsComparisonMode = ({
     let patchedState = stepState;
     if (stepRoundIndex > 0) {
       const lastRoundIdx = stepRoundIndex - 1;
-      const lastRound = [...stepState.roundLogs].reverse().find((l) => l.roundIndex === lastRoundIdx);
+      const lastRound = [...stepState.roundLogs]
+        .reverse()
+        .find((l) => l.roundIndex === lastRoundIdx);
       if (lastRound) {
         const w = lastRound.winner;
         const p1Effs = getPerRoundEffects(player1.character, player1.no);
         const p2Effs = getPerRoundEffects(player2.character, player2.no);
-        const p1Pts = computeRoundPoints("player1", w, lastRoundIdx, p1Effs, lastRound.statKey);
-        const p2Pts = computeRoundPoints("player2", w, lastRoundIdx, p2Effs, lastRound.statKey);
-        // base score đã cộng 1 khi winner thắng; diff = actualPts - 1
-        const p1Diff = p1Pts.pts - (w === "player1" ? 1 : 0);
-        const p2Diff = p2Pts.pts - (w === "player2" ? 1 : 0);
+        const p1Pts = computeRoundPoints(
+          "player1",
+          w,
+          lastRoundIdx,
+          p1Effs,
+          lastRound.statKey,
+        );
+        const p2Pts = computeRoundPoints(
+          "player2",
+          w,
+          lastRoundIdx,
+          p2Effs,
+          lastRound.statKey,
+        );
+        // base score đã cộng 1 khi winner thắng; diff = actualPts - base
+        // autoApplied: effect đã được xử lý trong computeRoundStep → score thực = pts (không phải 1)
+        // → base = pts (diff=0, không patch thêm)
+        const p1Base = p1Pts.autoApplied ? p1Pts.pts : w === "player1" ? 1 : 0;
+        const p2Base = p2Pts.autoApplied ? p2Pts.pts : w === "player2" ? 1 : 0;
+        const p1Diff = p1Pts.pts - p1Base;
+        const p2Diff = p2Pts.pts - p2Base;
+        console.log(`[OTP PATCH DEBUG] lastRound=${lastRoundIdx} w=${w} p1Pts=${JSON.stringify(p1Pts)} p2Pts=${JSON.stringify(p2Pts)} p1Base=${p1Base} p2Base=${p2Base} p1Diff=${p1Diff} p2Diff=${p2Diff} prevP1Score=${patchedState.p1Score} prevP2Score=${patchedState.p2Score}`);
         if (p1Diff !== 0 || p2Diff !== 0) {
           patchedState = {
             ...patchedState,
@@ -3436,7 +4191,12 @@ export const StatsComparisonMode = ({
         let newP2Stats = { ...patchedState.p2Stats };
         let statsChanged = false;
 
-        const applySpinStat = (side: "player1" | "player2", effName: string, statKey: keyof CharacterStats, amount: number) => {
+        const applySpinStat = (
+          side: "player1" | "player2",
+          effName: string,
+          statKey: keyof CharacterStats,
+          amount: number,
+        ) => {
           const spun = roundSpinResults[`${lastRoundIdx}-${effName}-${side}`];
           if (spun && spun.isSuccess) {
             if (side === "player1") newP1Stats[statKey] += amount;
@@ -3445,10 +4205,18 @@ export const StatsComparisonMode = ({
           }
         };
 
-        if (w === "player1" && p1Effs.onWin.includes("Ranger-Blue") && lastRound.statKey === "spd") {
+        if (
+          w === "player1" &&
+          p1Effs.onWin.includes("Ranger-Blue") &&
+          lastRound.statKey === "spd"
+        ) {
           applySpinStat("player1", "Ranger-Blue", "spd", 3);
         }
-        if (w === "player2" && p2Effs.onWin.includes("Ranger-Blue") && lastRound.statKey === "spd") {
+        if (
+          w === "player2" &&
+          p2Effs.onWin.includes("Ranger-Blue") &&
+          lastRound.statKey === "spd"
+        ) {
           applySpinStat("player2", "Ranger-Blue", "spd", 3);
         }
 
@@ -3456,10 +4224,9 @@ export const StatsComparisonMode = ({
           patchedState = {
             ...patchedState,
             p1Stats: newP1Stats,
-            p2Stats: newP2Stats
+            p2Stats: newP2Stats,
           };
         }
-
       }
     }
 
@@ -3467,14 +4234,29 @@ export const StatsComparisonMode = ({
     if (zoltraakBiq2Pending) {
       // Restore firedHandlers về trạng thái trước BIQ lần 1 để effects có thể fire lại
       const stateForBiq2 = zoltraakPreBiqFired
-        ? { ...patchedState, p1FiredHandlers: new Set(zoltraakPreBiqFired.p1), p2FiredHandlers: new Set(zoltraakPreBiqFired.p2) }
+        ? {
+            ...patchedState,
+            p1FiredHandlers: new Set(zoltraakPreBiqFired.p1),
+            p2FiredHandlers: new Set(zoltraakPreBiqFired.p2),
+          }
         : patchedState;
-      const { newState: newState2, log: log2 } = computeRoundStep(4, stateForBiq2, player1, player2, oneTrickPonyStat);
+      const { newState: newState2, log: log2 } = computeRoundStep(
+        4,
+        stateForBiq2,
+        player1,
+        player2,
+        oneTrickPonyStat,
+      );
       const log2marked: typeof log2 = {
         ...log2,
         statLabel: "BIQ×2",
         events: [
-          { player: "player1", source: "Zoltraak", description: "── BIQ Round lần 2 (Zoltraak) ──", type: "info" },
+          {
+            player: "player1",
+            source: "Zoltraak",
+            description: "── BIQ Round lần 2 (Zoltraak) ──",
+            type: "info",
+          },
           ...log2.events,
         ],
       };
@@ -3491,7 +4273,10 @@ export const StatsComparisonMode = ({
         .filter((e) => e.type === "stat_boost" || e.type === "stat_debuff")
         .map((e) => ({
           player: e.player,
-          text: e.description.replace(/\s*\(.*?\)\s*$/, "").replace(/\s*permanent\s*$/, "").trim(),
+          text: e.description
+            .replace(/\s*\(.*?\)\s*$/, "")
+            .replace(/\s*permanent\s*$/, "")
+            .trim(),
           isPositive: e.type === "stat_boost",
         }));
       spawnStatBubbles(bubbleItems2);
@@ -3511,9 +4296,13 @@ export const StatsComparisonMode = ({
     // Sau BIQ (index 4): nếu có Zoltraak, set pending BIQ×2 — không chạy MA ngay
     if (stepRoundIndex === 4) {
       const hasZoltraak = (side: PvPPlayerData) =>
-        (side.character?.powers || []).filter((pw: any) => !pw.isLost)
-          .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "zoltraak")
-        && !disabledItems.has(`${side.no}-power-Zoltraak`);
+        (side.character?.powers || [])
+          .filter((pw: any) => !pw.isLost)
+          .some(
+            (pw: any) =>
+              (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+              "zoltraak",
+          ) && !disabledItems.has(`${side.no}-power-Zoltraak`);
       if (hasZoltraak(player1) || hasZoltraak(player2)) {
         // Lưu firedHandlers TRƯỚC khi BIQ lần 1 chạy (từ stepState gốc) để restore cho BIQ×2
         setZoltraakPreBiqFired({
@@ -3534,7 +4323,10 @@ export const StatsComparisonMode = ({
       .filter((e) => e.type === "stat_boost" || e.type === "stat_debuff")
       .map((e) => ({
         player: e.player,
-        text: e.description.replace(/\s*\(.*?\)\s*$/, "").replace(/\s*permanent\s*$/, "").trim(),
+        text: e.description
+          .replace(/\s*\(.*?\)\s*$/, "")
+          .replace(/\s*permanent\s*$/, "")
+          .trim(),
         isPositive: e.type === "stat_boost",
       }));
     spawnStatBubbles(bubbleItems);
@@ -3542,19 +4334,38 @@ export const StatsComparisonMode = ({
     if (nextIdx === 6) {
       // Finalize — apply before_combat_end effects (e.g. Edgelord) before determining winner
       // Patch score round cuối (MA, index 5) từ spin results trước khi finalize
-      const lastRoundLogMA = [...finalState.roundLogs].reverse().find((l) => l.roundIndex === 5);
+      const lastRoundLogMA = [...finalState.roundLogs]
+        .reverse()
+        .find((l) => l.roundIndex === 5);
       let finalP1Score = finalState.p1Score;
       let finalP2Score = finalState.p2Score;
       if (lastRoundLogMA) {
         const p1EffsMA = getPerRoundEffects(player1.character, player1.no);
         const p2EffsMA = getPerRoundEffects(player2.character, player2.no);
         const wMA = lastRoundLogMA.winner;
-        const p1PtsMA = computeRoundPoints("player1", wMA, 5, p1EffsMA, lastRoundLogMA.statKey);
-        const p2PtsMA = computeRoundPoints("player2", wMA, 5, p2EffsMA, lastRoundLogMA.statKey);
-        if (!p1PtsMA.pending) finalP1Score += p1PtsMA.pts - (wMA === "player1" ? 1 : 0);
-        if (!p2PtsMA.pending) finalP2Score += p2PtsMA.pts - (wMA === "player2" ? 1 : 0);
+        const p1PtsMA = computeRoundPoints(
+          "player1",
+          wMA,
+          5,
+          p1EffsMA,
+          lastRoundLogMA.statKey,
+        );
+        const p2PtsMA = computeRoundPoints(
+          "player2",
+          wMA,
+          5,
+          p2EffsMA,
+          lastRoundLogMA.statKey,
+        );
+        const p1BaseMA = p1PtsMA.autoApplied ? p1PtsMA.pts : wMA === "player1" ? 1 : 0;
+        const p2BaseMA = p2PtsMA.autoApplied ? p2PtsMA.pts : wMA === "player2" ? 1 : 0;
+        if (!p1PtsMA.pending) finalP1Score += p1PtsMA.pts - p1BaseMA;
+        if (!p2PtsMA.pending) finalP2Score += p2PtsMA.pts - p2BaseMA;
       }
-      let { p1Score, p2Score } = { p1Score: finalP1Score, p2Score: finalP2Score };
+      let { p1Score, p2Score } = {
+        p1Score: finalP1Score,
+        p2Score: finalP2Score,
+      };
       const { resolvedRounds } = finalState;
 
       const p1WonTotal = resolvedRounds.filter(
@@ -3564,6 +4375,7 @@ export const StatsComparisonMode = ({
         (r) => r.winner === "player2",
       ).length;
 
+      const beforeCombatEndEntries: Array<{ player: "player1" | "player2"; sourceName: string; description: string }> = [];
       const applyBeforeCombatEnd = (
         player: PvPPlayerData,
         playerSide: "player1" | "player2",
@@ -3611,16 +4423,36 @@ export const StatsComparisonMode = ({
             ce.effect.customHandler as string,
             ctx,
           );
-          if (!result || result.skipDefault) continue;
+          if (!result) continue;
+          // Kể cả skipDefault: vẫn hiện log nếu có description (e.g. Edgelord bằng điểm)
+          if (result.skipDefault) {
+            if (result.description)
+              beforeCombatEndEntries.push({ player: playerSide, sourceName, description: result.description });
+            continue;
+          }
           if (result.description) {
             finalState.roundLogs.push({
               roundIndex: 6,
               stat: "final",
               winner: "tie",
-              events: [{ player: playerSide, source: sourceName, description: result.description, type: "info" }],
-              p1Score: playerSide === "player1" ? p1Score + (result.selfPoints || 0) : p1Score + (result.opponentPoints || 0),
-              p2Score: playerSide === "player2" ? p2Score + (result.selfPoints || 0) : p2Score + (result.opponentPoints || 0),
+              events: [
+                {
+                  player: playerSide,
+                  source: sourceName,
+                  description: result.description,
+                  type: "info",
+                },
+              ],
+              p1Score:
+                playerSide === "player1"
+                  ? p1Score + (result.selfPoints || 0)
+                  : p1Score + (result.opponentPoints || 0),
+              p2Score:
+                playerSide === "player2"
+                  ? p2Score + (result.selfPoints || 0)
+                  : p2Score + (result.opponentPoints || 0),
             } as any);
+            beforeCombatEndEntries.push({ player: playerSide, sourceName, description: result.description });
           }
           if (result.selfPoints) {
             if (playerSide === "player1") p1Score += result.selfPoints;
@@ -3633,16 +4465,24 @@ export const StatsComparisonMode = ({
         }
       };
 
-      const p1LostTotal = resolvedRounds.filter((r) => r.winner === "player2").length;
-      const p2LostTotal = resolvedRounds.filter((r) => r.winner === "player1").length;
+      const p1LostTotal = resolvedRounds.filter(
+        (r) => r.winner === "player2",
+      ).length;
+      const p2LostTotal = resolvedRounds.filter(
+        (r) => r.winner === "player1",
+      ).length;
       applyBeforeCombatEnd(player1, "player1", p1WonTotal, p1LostTotal);
       applyBeforeCombatEnd(player2, "player2", p2WonTotal, p2LostTotal);
 
       // Trickster - Ace of Spades: hoán đổi điểm 2 bên sau khi tính toán
-      if ((tricksterResult["player1"] ?? "").toLowerCase() === "ace of spades") {
+      if (
+        (tricksterResult["player1"] ?? "").toLowerCase() === "ace of spades"
+      ) {
         [p1Score, p2Score] = [p2Score, p1Score];
       }
-      if ((tricksterResult["player2"] ?? "").toLowerCase() === "ace of spades") {
+      if (
+        (tricksterResult["player2"] ?? "").toLowerCase() === "ace of spades"
+      ) {
         [p1Score, p2Score] = [p2Score, p1Score];
       }
 
@@ -3714,15 +4554,24 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: name,
-              description: "+1 IQ (Compassionate). [GM Action] Tặng 1 Gear cho đối thủ.",
+              description:
+                "+1 IQ (Compassionate). [GM Action] Tặng 1 Gear cho đối thủ.",
               statMods: [{ stat: "iq", delta: 1 }],
               gmAction: true,
             });
           }
           // Resilient: 36% +1 stat từng round thua — mỗi round thua = 1 entry riêng
           else if (lname === "resilient") {
-            const lostStats = (["str", "spd", "dur", "iq", "biq", "ma"] as (keyof CharacterStats)[])
-              .filter((s) => roundResults[s] === "lose");
+            const lostStats = (
+              [
+                "str",
+                "spd",
+                "dur",
+                "iq",
+                "biq",
+                "ma",
+              ] as (keyof CharacterStats)[]
+            ).filter((s) => roundResults[s] === "lose");
             lostStats.forEach((s, i) => {
               const label = s.toUpperCase();
               const wk = `after-Resilient-${side}-${i}`;
@@ -3732,8 +4581,20 @@ export const StatsComparisonMode = ({
                 description: `36% +1 ${label} (Resilient — round ${i + 1}/${lostStats.length})`,
                 wheelKey: wk,
                 wheelItems: [
-                  { label: `+1 ${label} (36%)`, weight: 36, isSuccess: true, color: "#34d399", meta: { stat: s } },
-                  { label: "Không kích hoạt (64%)", weight: 64, isSuccess: false, color: "#6b7280", meta: { stat: s } },
+                  {
+                    label: `+1 ${label} (36%)`,
+                    weight: 36,
+                    isSuccess: true,
+                    color: "#34d399",
+                    meta: { stat: s },
+                  },
+                  {
+                    label: "Không kích hoạt (64%)",
+                    weight: 64,
+                    isSuccess: false,
+                    color: "#6b7280",
+                    meta: { stat: s },
+                  },
                 ],
                 statMods: [{ stat: s, delta: 1 }],
               });
@@ -3741,9 +4602,11 @@ export const StatsComparisonMode = ({
           }
           // Fast Learner: 33% copy power (spin)
           else if (lname === "fast learner") {
-            const oppPowers = ((side === "player1" ? player2 : player1)?.character?.powers || [])
+            const oppPowers = (
+              (side === "player1" ? player2 : player1)?.character?.powers || []
+            )
               .filter((p: any) => !p.isLost)
-              .map((p: any) => typeof p === "string" ? p : p.name);
+              .map((p: any) => (typeof p === "string" ? p : p.name));
             if (oppPowers.length > 0) {
               const wk = `after-FastLearner-${side}`;
               acEntries.push({
@@ -3752,8 +4615,18 @@ export const StatsComparisonMode = ({
                 description: "33% học 1 Power của đối thủ (Fast Learner)",
                 wheelKey: wk,
                 wheelItems: [
-                  { label: "Học được Power! (33%)", weight: 33, isSuccess: true, color: "#818cf8" },
-                  { label: "Không học được (67%)", weight: 67, isSuccess: false, color: "#6b7280" },
+                  {
+                    label: "Học được Power! (33%)",
+                    weight: 33,
+                    isSuccess: true,
+                    color: "#818cf8",
+                  },
+                  {
+                    label: "Không học được (67%)",
+                    weight: 67,
+                    isSuccess: false,
+                    color: "#6b7280",
+                  },
                 ],
                 gmAction: true,
               });
@@ -3768,8 +4641,16 @@ export const StatsComparisonMode = ({
               description: "10% nhận -1 all stats (Night Owl)",
               wheelKey: wk,
               wheelItems: AFTER_COMBAT_WHEEL_ITEMS["Night Owl"],
-              statMods: (["str", "spd", "dur", "iq", "biq", "ma"] as (keyof CharacterStats)[])
-                .map((s) => ({ stat: s, delta: -1 })),
+              statMods: (
+                [
+                  "str",
+                  "spd",
+                  "dur",
+                  "iq",
+                  "biq",
+                  "ma",
+                ] as (keyof CharacterStats)[]
+              ).map((s) => ({ stat: s, delta: -1 })),
             });
           }
           // Open-minded: 33% biến đối thủ thành Lover (spin, GM action)
@@ -3789,7 +4670,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: name,
-              description: '[GM Action] Xóa "Under the Weather", nhận "Shining Brightly"',
+              description:
+                '[GM Action] Xóa "Under the Weather", nhận "Shining Brightly"',
               gmAction: true,
             });
           }
@@ -3798,7 +4680,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: name,
-              description: '[GM Action] Xóa "Shining Brightly", nhận "Under the Weather"',
+              description:
+                '[GM Action] Xóa "Shining Brightly", nhận "Under the Weather"',
               gmAction: true,
             });
           }
@@ -3806,24 +4689,47 @@ export const StatsComparisonMode = ({
           else if (lname === "herbalist") {
             const HERB_COLORS: Record<string, string> = {
               "Mirage Flower": "#f472b6",
-              "Sunberry": "#f59e0b",
+              Sunberry: "#f59e0b",
               "Dragon's Weed": "#22c55e",
-              "Moonroot": "#818cf8",
-              "Mistpetal": "#67e8f9",
+              Moonroot: "#818cf8",
+              Mistpetal: "#67e8f9",
               "Eldritch Mushroom": "#a78bfa",
             };
             const HERB_WEIGHTS: Record<string, number> = {
-              "Mirage Flower": 20, "Sunberry": 15, "Dragon's Weed": 15,
-              "Moonroot": 15, "Mistpetal": 20, "Eldritch Mushroom": 15,
+              "Mirage Flower": 20,
+              Sunberry: 15,
+              "Dragon's Weed": 15,
+              Moonroot: 15,
+              Mistpetal: 20,
+              "Eldritch Mushroom": 15,
             };
-            const HERB_EFFECTS: Record<string, { win: string; lose: string }> = {
-              "Mirage Flower": { win: "Nhận thêm 1 phần thưởng PvP", lose: "Nhận ngẫu nhiên 1 Char Dev" },
-              "Sunberry": { win: "+2 vào chỉ số cao nhất", lose: "+6 vào chỉ số thấp nhất" },
-              "Dragon's Weed": { win: "Nhận ngẫu nhiên 1 Power", lose: "Mất toàn bộ Power, sau đó nhận 4 Power" },
-              "Moonroot": { win: "+1 điểm khởi đầu combat kế tiếp", lose: "+3 điểm khởi đầu combat kế tiếp" },
-              "Mistpetal": { win: "Nhận thêm 1 Quirk", lose: "Nhận thêm 6 Quirk" },
-              "Eldritch Mushroom": { win: "-1 all stats", lose: "+1 all stats" },
-            };
+            const HERB_EFFECTS: Record<string, { win: string; lose: string }> =
+              {
+                "Mirage Flower": {
+                  win: "Nhận thêm 1 phần thưởng PvP",
+                  lose: "Nhận ngẫu nhiên 1 Char Dev",
+                },
+                Sunberry: {
+                  win: "+2 vào chỉ số cao nhất",
+                  lose: "+6 vào chỉ số thấp nhất",
+                },
+                "Dragon's Weed": {
+                  win: "Nhận ngẫu nhiên 1 Power",
+                  lose: "Mất toàn bộ Power, sau đó nhận 4 Power",
+                },
+                Moonroot: {
+                  win: "+1 điểm khởi đầu combat kế tiếp",
+                  lose: "+3 điểm khởi đầu combat kế tiếp",
+                },
+                Mistpetal: {
+                  win: "Nhận thêm 1 Quirk",
+                  lose: "Nhận thêm 6 Quirk",
+                },
+                "Eldritch Mushroom": {
+                  win: "-1 all stats",
+                  lose: "+1 all stats",
+                },
+              };
             const wk = `after-Herbalist-${side}`;
             acEntries.push({
               player: side,
@@ -3831,7 +4737,9 @@ export const StatsComparisonMode = ({
               description: `Herbalist: Quay Thảo Dược Wheel (${didWin ? "Thắng" : "Thua"})`,
               wheelKey: wk,
               wheelItems: Object.entries(HERB_WEIGHTS).map(([herb, weight]) => {
-                const eff = didWin ? HERB_EFFECTS[herb].win : HERB_EFFECTS[herb].lose;
+                const eff = didWin
+                  ? HERB_EFFECTS[herb].win
+                  : HERB_EFFECTS[herb].lose;
                 return {
                   label: `${herb}: ${eff}`,
                   weight,
@@ -3844,10 +4752,33 @@ export const StatsComparisonMode = ({
           }
           // Artistic: +2 IQ nếu đối thủ dùng nhạc cụ
           else if (lname === "artistic") {
-            const INSTRUMENTS = ["bagpipe", "drums", "flute", "guitar", "violin", "trumpet", "piano", "harp", "lute", "saxophone", "bass", "cello", "harmonica", "ukulele", "nunchuck", "ruan mei"];
-            const oppWeapons = (opponent?.character?.weapons || [])
-              .map((w: any) => (typeof w === "string" ? w : w?.name ?? "").toLowerCase());
-            if (oppWeapons.some((w: string) => INSTRUMENTS.some(i => w.includes(i)))) {
+            const INSTRUMENTS = [
+              "bagpipe",
+              "drums",
+              "flute",
+              "guitar",
+              "violin",
+              "trumpet",
+              "piano",
+              "harp",
+              "lute",
+              "saxophone",
+              "bass",
+              "cello",
+              "harmonica",
+              "ukulele",
+              "nunchuck",
+              "ruan mei",
+            ];
+            const oppWeapons = (opponent?.character?.weapons || []).map(
+              (w: any) =>
+                (typeof w === "string" ? w : (w?.name ?? "")).toLowerCase(),
+            );
+            if (
+              oppWeapons.some((w: string) =>
+                INSTRUMENTS.some((i) => w.includes(i)),
+              )
+            ) {
               acEntries.push({
                 player: side,
                 quirkName: name,
@@ -3861,7 +4792,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: name,
-              description: "[GM Action] Quay lại toàn bộ stats. Nếu tổng mới > cũ → +1 all stats (Progressive)",
+              description:
+                "[GM Action] Quay lại toàn bộ stats. Nếu tổng mới > cũ → +1 all stats (Progressive)",
               gmAction: true,
             });
           }
@@ -3878,7 +4810,8 @@ export const StatsComparisonMode = ({
               acEntries.push({
                 player: side,
                 quirkName: name,
-                description: "[GM Action] +1 Power và +1 chỉ số thấp nhất mỗi PvP Reward đã tặng (Generous)",
+                description:
+                  "[GM Action] +1 Power và +1 chỉ số thấp nhất mỗi PvP Reward đã tặng (Generous)",
                 gmAction: true,
               });
             }
@@ -3888,10 +4821,16 @@ export const StatsComparisonMode = ({
             const playerPowers = new Set(
               (char.powers || [])
                 .filter((p: any) => !p.isLost)
-                .map((p: any) => (typeof p === "string" ? p : p?.name ?? "").toLowerCase())
+                .map((p: any) =>
+                  (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
+                ),
             );
-            const allPowers = EffectRegistry.getAllByType("power").map((e) => e.name);
-            const availablePowers = allPowers.filter((p) => !playerPowers.has(p.toLowerCase()));
+            const allPowers = EffectRegistry.getAllByType("power").map(
+              (e) => e.name,
+            );
+            const availablePowers = allPowers.filter(
+              (p) => !playerPowers.has(p.toLowerCase()),
+            );
             if (availablePowers.length > 0) {
               const wheelItems: WheelSpinItem[] = availablePowers.map((p) => ({
                 label: p,
@@ -3922,11 +4861,15 @@ export const StatsComparisonMode = ({
         }
 
         // ── Gear after_combat effects ──────────────────────────────────────
-        const normalGears = (char.gear?.normalGear || []).filter((g: any) => !g.isLost);
-        const legacyGears = (char.gear?.legacyGear || []).filter((g: any) => !g.isLost);
+        const normalGears = (char.gear?.normalGear || []).filter(
+          (g: any) => !g.isLost,
+        );
+        const legacyGears = (char.gear?.legacyGear || []).filter(
+          (g: any) => !g.isLost,
+        );
         const allGears = [...normalGears, ...legacyGears];
         for (const g of allGears) {
-          const gname: string = typeof g === "string" ? g : g?.name ?? "";
+          const gname: string = typeof g === "string" ? g : (g?.name ?? "");
           const lname = gname.toLowerCase();
           const gDisabled = disabledItems.has(`${player.no}-gear-${gname}`);
           if (gDisabled) continue;
@@ -3938,12 +4881,16 @@ export const StatsComparisonMode = ({
               // Lấy house của player và tìm members cùng nhà (trừ chính player)
               const playerHouses: string[] = (char.houses || [])
                 .filter((h: any) => !h.isLost)
-                .map((h: any) => (typeof h === "string" ? h : h?.name ?? "").toLowerCase());
+                .map((h: any) =>
+                  (typeof h === "string" ? h : (h?.name ?? "")).toLowerCase(),
+                );
               const houseMembers = allPlayers.filter((p) => {
                 if (p.no === player.no) return false;
                 const pHouses = (p.character?.houses || [])
                   .filter((h: any) => !h.isLost)
-                  .map((h: any) => (typeof h === "string" ? h : h?.name ?? "").toLowerCase());
+                  .map((h: any) =>
+                    (typeof h === "string" ? h : (h?.name ?? "")).toLowerCase(),
+                  );
                 return pHouses.some((ph) => playerHouses.includes(ph));
               });
               if (houseMembers.length > 0) {
@@ -3985,22 +4932,35 @@ export const StatsComparisonMode = ({
               player: side,
               quirkName: gname,
               description: "-3 All Stats (Đá — thua combat)",
-              statMods: (["str", "spd", "dur", "iq", "biq", "ma"] as (keyof CharacterStats)[])
-                .map((s) => ({ stat: s, delta: -3 })),
+              statMods: (
+                [
+                  "str",
+                  "spd",
+                  "dur",
+                  "iq",
+                  "biq",
+                  "ma",
+                ] as (keyof CharacterStats)[]
+              ).map((s) => ({ stat: s, delta: -3 })),
             });
           }
 
           // The Tamer Straight Sword: sau combat thắng → vòng quay chọn 1 power của đối thủ
-          if ((lname === "the tamer straight sword" || lname === "tamer straight sword") && didWin) {
+          if (
+            (lname === "the tamer straight sword" ||
+              lname === "tamer straight sword") &&
+            didWin
+          ) {
             const oppPowers = (opponent?.character?.powers || [])
               .filter((p: any) => !p?.isLost)
-              .map((p: any) => typeof p === "string" ? p : p?.name ?? "")
+              .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
               .filter((n: string) => n.length > 0);
             if (oppPowers.length === 0) {
               acEntries.push({
                 player: side,
                 quirkName: gname,
-                description: "[The Tamer Straight Sword] Đối thủ không còn Power nào để đánh cắp",
+                description:
+                  "[The Tamer Straight Sword] Đối thủ không còn Power nào để đánh cắp",
               });
             } else {
               const wheelItems = oppPowers.map((n: string) => ({
@@ -4012,7 +4972,8 @@ export const StatsComparisonMode = ({
               acEntries.push({
                 player: side,
                 quirkName: gname,
-                description: "The Tamer Straight Sword: Chọn 1 Power của đối thủ để đánh cắp",
+                description:
+                  "The Tamer Straight Sword: Chọn 1 Power của đối thủ để đánh cắp",
                 wheelKey: `after-TamerSword-${side}`,
                 wheelItems,
                 gmAction: true,
@@ -4048,23 +5009,25 @@ export const StatsComparisonMode = ({
 
           // Khung hình thờ: nếu cả 2 có → huỷ hiệu ứng + xóa cả 2; nếu người này thua → chuyển cho người thắng
           if (lname === "khung hình thờ") {
-            const oppGears = (opponent?.character?.gear?.normalGear || []);
+            const oppGears = opponent?.character?.gear?.normalGear || [];
             const oppHasKhung = oppGears.some((g: any) => {
-              const n = typeof g === "string" ? g : g?.name ?? "";
+              const n = typeof g === "string" ? g : (g?.name ?? "");
               return n.toLowerCase().startsWith("khung hình thờ");
             });
             if (oppHasKhung) {
               acEntries.push({
                 player: side,
                 quirkName: gname,
-                description: "[GM Action] Khung Hình Thờ: Cả hai đều có → loại bỏ hiệu ứng và xóa gear của cả hai sau trận",
+                description:
+                  "[GM Action] Khung Hình Thờ: Cả hai đều có → loại bỏ hiệu ứng và xóa gear của cả hai sau trận",
                 gmAction: true,
               });
             } else if (!didWin) {
               acEntries.push({
                 player: side,
                 quirkName: gname,
-                description: "[GM Action] Khung Hình Thờ: Người này bị loại → chuyển gear sang người thắng",
+                description:
+                  "[GM Action] Khung Hình Thờ: Người này bị loại → chuyển gear sang người thắng",
                 gmAction: true,
               });
             }
@@ -4075,18 +5038,44 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: gname,
-              description: "[GM Action] Kuro's Charm: Phá hủy gear này sau combat thắng",
+              description:
+                "[GM Action] Kuro's Charm: Phá hủy gear này sau combat thắng",
               gmAction: true,
             });
           }
 
           // Shaggydog: sau combat → +1 stat thấp nhất nếu nhà Stark
           if (lname === "shaggydog") {
-            const house = ((char as any).house || (char as any).character?.house || "").toLowerCase();
+            const house = (
+              (char as any).house ||
+              (char as any).character?.house ||
+              ""
+            ).toLowerCase();
             if (house.includes("stark")) {
-              const statKeys = ["str", "spd", "dur", "iq", "biq", "ma"] as (keyof CharacterStats)[];
-              const currentStats = stepState ? (side === "player1" ? stepState.p1Stats : stepState.p2Stats) : (player?.character ? calcStatsWithDisabled(player.character, player.no, disabledItems) : player?.stats);
-              const lowestStat = currentStats ? statKeys.reduce((a, b) => ((currentStats[a] ?? 0) <= (currentStats[b] ?? 0) ? a : b)) : "str";
+              const statKeys = [
+                "str",
+                "spd",
+                "dur",
+                "iq",
+                "biq",
+                "ma",
+              ] as (keyof CharacterStats)[];
+              const currentStats = stepState
+                ? side === "player1"
+                  ? stepState.p1Stats
+                  : stepState.p2Stats
+                : player?.character
+                  ? calcStatsWithDisabled(
+                      player.character,
+                      player.no,
+                      disabledItems,
+                    )
+                  : player?.stats;
+              const lowestStat = currentStats
+                ? statKeys.reduce((a, b) =>
+                    (currentStats[a] ?? 0) <= (currentStats[b] ?? 0) ? a : b,
+                  )
+                : "str";
               acEntries.push({
                 player: side,
                 quirkName: gname,
@@ -4098,14 +5087,17 @@ export const StatsComparisonMode = ({
         }
 
         // ── Archetype after_combat effects ─────────────────────────────────
-        const archetypes: string[] = (char.archetypes || []).map((a: string) => a.toLowerCase());
+        const archetypes: string[] = (char.archetypes || []).map((a: string) =>
+          a.toLowerCase(),
+        );
 
         // Hero Grave Keeper: thắng combat → GM tự chọn player để quay gear
         if (archetypes.includes("hero grave keeper") && didWin) {
           acEntries.push({
             player: side,
             quirkName: "Hero Grave Keeper",
-            description: "[GM Action] Hero Grave Keeper: GM tự chọn player và quay ngẫu nhiên 1 Gear từ kho của player đó để trao cho người thắng.",
+            description:
+              "[GM Action] Hero Grave Keeper: GM tự chọn player và quay ngẫu nhiên 1 Gear từ kho của player đó để trao cho người thắng.",
             gmAction: true,
           });
         }
@@ -4113,37 +5105,99 @@ export const StatsComparisonMode = ({
         // Summoner: thắng combat → quay Summon Wheel (loại bỏ summons đã sở hữu)
         if (archetypes.includes("summoner") && didWin) {
           const ALL_SUMMONS = [
-            { label: "Chihuahua: -1 All Stats", weight: 10, isSuccess: false, color: "#6b7280" },
-            { label: "Mufasa: +3 STR", weight: 12, isSuccess: true, color: "#ef4444" },
-            { label: "Pack of Wolves: +3 SPD", weight: 12, isSuccess: true, color: "#3b82f6" },
-            { label: "Earth Golem: +3 DUR", weight: 12, isSuccess: true, color: "#84cc16" },
-            { label: "Water Elemental: +3 IQ", weight: 12, isSuccess: true, color: "#06b6d4" },
-            { label: "Imp: +3 BIQ", weight: 12, isSuccess: true, color: "#a855f7" },
-            { label: "Igris: +3 MA", weight: 12, isSuccess: true, color: "#f97316" },
-            { label: "Numby: +4 vào 1 chỉ số ngẫu nhiên", weight: 12, isSuccess: true, color: "#eab308" },
-            { label: "Wyvern's Egg: +2 điểm khởi đầu (Chung kết tổng)", weight: 3, isSuccess: true, color: "#14b8a6" },
-            { label: "Creator's Cat: Nhận Char Dev 'Creator's Favor'", weight: 3, isSuccess: true, color: "#ec4899" },
+            {
+              label: "Chihuahua: -1 All Stats",
+              weight: 10,
+              isSuccess: false,
+              color: "#6b7280",
+            },
+            {
+              label: "Mufasa: +3 STR",
+              weight: 12,
+              isSuccess: true,
+              color: "#ef4444",
+            },
+            {
+              label: "Pack of Wolves: +3 SPD",
+              weight: 12,
+              isSuccess: true,
+              color: "#3b82f6",
+            },
+            {
+              label: "Earth Golem: +3 DUR",
+              weight: 12,
+              isSuccess: true,
+              color: "#84cc16",
+            },
+            {
+              label: "Water Elemental: +3 IQ",
+              weight: 12,
+              isSuccess: true,
+              color: "#06b6d4",
+            },
+            {
+              label: "Imp: +3 BIQ",
+              weight: 12,
+              isSuccess: true,
+              color: "#a855f7",
+            },
+            {
+              label: "Igris: +3 MA",
+              weight: 12,
+              isSuccess: true,
+              color: "#f97316",
+            },
+            {
+              label: "Numby: +4 vào 1 chỉ số ngẫu nhiên",
+              weight: 12,
+              isSuccess: true,
+              color: "#eab308",
+            },
+            {
+              label: "Wyvern's Egg: +2 điểm khởi đầu (Chung kết tổng)",
+              weight: 3,
+              isSuccess: true,
+              color: "#14b8a6",
+            },
+            {
+              label: "Creator's Cat: Nhận Char Dev 'Creator's Favor'",
+              weight: 3,
+              isSuccess: true,
+              color: "#ec4899",
+            },
           ];
           // Lấy tên summons đã sở hữu (powers dạng "Summon: X")
           const ownedSummons = (char.powers || [])
             .filter((p: any) => !p.isLost)
-            .map((p: any) => (typeof p === "string" ? p : p?.name ?? "").toLowerCase())
+            .map((p: any) =>
+              (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
+            )
             .filter((n: string) => n.startsWith("summon:"))
-            .map((n: string) => n.replace(/^summon:\s*/, "").split("(")[0].trim());
+            .map((n: string) =>
+              n
+                .replace(/^summon:\s*/, "")
+                .split("(")[0]
+                .trim(),
+            );
           const availableSummons = ALL_SUMMONS.filter(
-            (s) => !ownedSummons.some((owned: string) => s.label.toLowerCase().startsWith(owned))
+            (s) =>
+              !ownedSummons.some((owned: string) =>
+                s.label.toLowerCase().startsWith(owned),
+              ),
           );
           if (availableSummons.length === 0) {
             acEntries.push({
               player: side,
               quirkName: "Summoner",
-              description: "[Summoner] Đã sở hữu tất cả Summon — không quay thêm",
+              description:
+                "[Summoner] Đã sở hữu tất cả Summon — không quay thêm",
             });
           } else {
             acEntries.push({
               player: side,
               quirkName: "Summoner",
-              description: "Summoner: Quay Summon Wheel (không trùng summon đã có)",
+              description:
+                "Summoner: Quay Summon Wheel (không trùng summon đã có)",
               wheelKey: `after-Summoner-${side}`,
               wheelItems: availableSummons,
               gmAction: true,
@@ -4154,7 +5208,7 @@ export const StatsComparisonMode = ({
         // ── Weapon after_combat effects ────────────────────────────────────
         const weapons = (char.weapons || []).filter((w: any) => !w.isLost);
         for (const w of weapons) {
-          const wname: string = typeof w === "string" ? w : w?.name ?? "";
+          const wname: string = typeof w === "string" ? w : (w?.name ?? "");
           const lname = wname.toLowerCase();
           const wDisabled = disabledItems.has(`${player.no}-weapon-${wname}`);
           if (wDisabled) continue;
@@ -4183,7 +5237,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: wname,
-              description: "[GM Action] PvP Reward gấp đôi (Labrys Axe — thắng combat)",
+              description:
+                "[GM Action] PvP Reward gấp đôi (Labrys Axe — thắng combat)",
               gmAction: true,
             });
           }
@@ -4193,12 +5248,31 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: wname,
-              description: "[GM Action] Hậu Nghệ: Quay xem bắn rụng bao nhiêu mặt trời → GM apply +3 all stats.",
+              description:
+                "[GM Action] Hậu Nghệ: Quay xem bắn rụng bao nhiêu mặt trời → GM apply +3 all stats.",
               wheelKey: `after-HouYi-${side}`,
               wheelItems: [
-                { label: "1 mặt trời", weight: 30, isSuccess: true, color: "#fbbf24", meta: { suns: 1 } },
-                { label: "2 mặt trời", weight: 40, isSuccess: true, color: "#f97316", meta: { suns: 2 } },
-                { label: "3 mặt trời", weight: 30, isSuccess: true, color: "#ef4444", meta: { suns: 3 } },
+                {
+                  label: "1 mặt trời",
+                  weight: 30,
+                  isSuccess: true,
+                  color: "#fbbf24",
+                  meta: { suns: 1 },
+                },
+                {
+                  label: "2 mặt trời",
+                  weight: 40,
+                  isSuccess: true,
+                  color: "#f97316",
+                  meta: { suns: 2 },
+                },
+                {
+                  label: "3 mặt trời",
+                  weight: 30,
+                  isSuccess: true,
+                  color: "#ef4444",
+                  meta: { suns: 3 },
+                },
               ],
             });
           }
@@ -4224,7 +5298,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: wname + " (Power)",
-              description: "[GM Action] Wand: Quay Power Wheel, trao 1 Power ngẫu nhiên",
+              description:
+                "[GM Action] Wand: Quay Power Wheel, trao 1 Power ngẫu nhiên",
               gmAction: true,
             });
           }
@@ -4234,7 +5309,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: wname,
-              description: "[GM Action] Glass Bottle: Vỡ sau combat — loại bỏ vũ khí này",
+              description:
+                "[GM Action] Glass Bottle: Vỡ sau combat — loại bỏ vũ khí này",
               gmAction: true,
             });
           }
@@ -4242,43 +5318,104 @@ export const StatsComparisonMode = ({
           // Andúril: sau combat → nhận Summon Wheel
           if (lname === "andúril" || lname === "anduril") {
             const ALL_SUMMONS = [
-              { label: "Chihuahua: -1 All Stats", weight: 10, isSuccess: false, color: "#6b7280" },
-              { label: "Mufasa: +3 STR", weight: 12, isSuccess: true, color: "#ef4444" },
-              { label: "Pack of Wolves: +3 SPD", weight: 12, isSuccess: true, color: "#3b82f6" },
-              { label: "Earth Golem: +3 DUR", weight: 12, isSuccess: true, color: "#84cc16" },
-              { label: "Water Elemental: +3 IQ", weight: 12, isSuccess: true, color: "#06b6d4" },
-              { label: "Imp: +3 BIQ", weight: 12, isSuccess: true, color: "#a855f7" },
-              { label: "Igris: +3 MA", weight: 12, isSuccess: true, color: "#f97316" },
-              { label: "Numby: +4 vào 1 chỉ số ngẫu nhiên", weight: 12, isSuccess: true, color: "#eab308" },
-              { label: "Wyvern's Egg: +2 điểm khởi đầu (Chung kết tổng)", weight: 3, isSuccess: true, color: "#14b8a6" },
-              { label: "Creator's Cat: Nhận Char Dev 'Creator's Favor'", weight: 3, isSuccess: true, color: "#ec4899" },
+              {
+                label: "Chihuahua: -1 All Stats",
+                weight: 10,
+                isSuccess: false,
+                color: "#6b7280",
+              },
+              {
+                label: "Mufasa: +3 STR",
+                weight: 12,
+                isSuccess: true,
+                color: "#ef4444",
+              },
+              {
+                label: "Pack of Wolves: +3 SPD",
+                weight: 12,
+                isSuccess: true,
+                color: "#3b82f6",
+              },
+              {
+                label: "Earth Golem: +3 DUR",
+                weight: 12,
+                isSuccess: true,
+                color: "#84cc16",
+              },
+              {
+                label: "Water Elemental: +3 IQ",
+                weight: 12,
+                isSuccess: true,
+                color: "#06b6d4",
+              },
+              {
+                label: "Imp: +3 BIQ",
+                weight: 12,
+                isSuccess: true,
+                color: "#a855f7",
+              },
+              {
+                label: "Igris: +3 MA",
+                weight: 12,
+                isSuccess: true,
+                color: "#f97316",
+              },
+              {
+                label: "Numby: +4 vào 1 chỉ số ngẫu nhiên",
+                weight: 12,
+                isSuccess: true,
+                color: "#eab308",
+              },
+              {
+                label: "Wyvern's Egg: +2 điểm khởi đầu (Chung kết tổng)",
+                weight: 3,
+                isSuccess: true,
+                color: "#14b8a6",
+              },
+              {
+                label: "Creator's Cat: Nhận Char Dev 'Creator's Favor'",
+                weight: 3,
+                isSuccess: true,
+                color: "#ec4899",
+              },
             ];
             const ownedSummons = (char.powers || [])
               .filter((p: any) => !p.isLost)
-              .map((p: any) => (typeof p === "string" ? p : p?.name ?? "").toLowerCase())
+              .map((p: any) =>
+                (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
+              )
               .filter((n: string) => n.startsWith("summon:"))
-              .map((n: string) => n.replace(/^summon:\s*/, "").split("(")[0].trim());
+              .map((n: string) =>
+                n
+                  .replace(/^summon:\s*/, "")
+                  .split("(")[0]
+                  .trim(),
+              );
             const availableSummons = ALL_SUMMONS.filter(
-              (s) => !ownedSummons.some((owned: string) => s.label.toLowerCase().startsWith(owned))
+              (s) =>
+                !ownedSummons.some((owned: string) =>
+                  s.label.toLowerCase().startsWith(owned),
+                ),
             );
             if (availableSummons.length === 0) {
               acEntries.push({
                 player: side,
                 quirkName: wname,
-                description: "[Andúril] Đã sở hữu tất cả Summon — không quay thêm",
+                description:
+                  "[Andúril] Đã sở hữu tất cả Summon — không quay thêm",
               });
             } else {
               acEntries.push({
                 player: side,
                 quirkName: wname,
-                description: "Andúril: Quay Summon Wheel (không trùng summon đã có)",
+                description:
+                  "Andúril: Quay Summon Wheel (không trùng summon đã có)",
                 wheelKey: `after-Anduril-${side}`,
                 wheelItems: availableSummons,
                 gmAction: true,
               });
             }
           }
-
 
           // Halberd: sau combat thắng round STR → +1 BIQ, +1 MA
           if (lname === "halberd") {
@@ -4299,20 +5436,28 @@ export const StatsComparisonMode = ({
         // ── Power after_combat / after_combat_lose effects ─────────────────
         const powers = (char.powers || []).filter((p: any) => !p.isLost);
         for (const pw of powers) {
-          const pname: string = typeof pw === "string" ? pw : pw?.name ?? "";
+          const pname: string = typeof pw === "string" ? pw : (pw?.name ?? "");
           const lname = pname.toLowerCase();
           const pDisabled = disabledItems.has(`${player.no}-power-${pname}`);
           if (pDisabled) continue;
 
           // Bloody Strike: sau combat → +1 mỗi stat đã thắng round
           if (lname === "bloody strike") {
-            const wonStats = (["str", "spd", "dur", "iq", "biq", "ma"] as (keyof CharacterStats)[])
-              .filter((s) => roundResults[s] === "win");
+            const wonStats = (
+              [
+                "str",
+                "spd",
+                "dur",
+                "iq",
+                "biq",
+                "ma",
+              ] as (keyof CharacterStats)[]
+            ).filter((s) => roundResults[s] === "win");
             if (wonStats.length > 0) {
               acEntries.push({
                 player: side,
                 quirkName: pname,
-                description: `+1 ${wonStats.map(s => s.toUpperCase()).join("/")} (Bloody Strike — thắng round)`,
+                description: `+1 ${wonStats.map((s) => s.toUpperCase()).join("/")} (Bloody Strike — thắng round)`,
                 statMods: wonStats.map((s) => ({ stat: s, delta: 1 })),
               });
             }
@@ -4346,10 +5491,29 @@ export const StatsComparisonMode = ({
               description: "36% +1 All Stats (Rampage — thắng combat)",
               wheelKey: `after-Rampage-${side}`,
               wheelItems: [
-                { label: "+1 All Stats (36%)", weight: 36, isSuccess: true, color: "#f59e0b" },
-                { label: "Không kích hoạt (64%)", weight: 64, isSuccess: false, color: "#6b7280" },
+                {
+                  label: "+1 All Stats (36%)",
+                  weight: 36,
+                  isSuccess: true,
+                  color: "#f59e0b",
+                },
+                {
+                  label: "Không kích hoạt (64%)",
+                  weight: 64,
+                  isSuccess: false,
+                  color: "#6b7280",
+                },
               ],
-              statMods: (["str", "spd", "dur", "iq", "biq", "ma"] as (keyof CharacterStats)[]).map(s => ({ stat: s, delta: 1 })),
+              statMods: (
+                [
+                  "str",
+                  "spd",
+                  "dur",
+                  "iq",
+                  "biq",
+                  "ma",
+                ] as (keyof CharacterStats)[]
+              ).map((s) => ({ stat: s, delta: 1 })),
             });
           }
 
@@ -4358,7 +5522,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: pname,
-              description: "-1 IQ, -1 MA, +1 STR, +1 SPD, +2 DUR (Bloodlust — thắng combat)",
+              description:
+                "-1 IQ, -1 MA, +1 STR, +1 SPD, +2 DUR (Bloodlust — thắng combat)",
               statMods: [
                 { stat: "iq" as keyof CharacterStats, delta: -1 },
                 { stat: "ma" as keyof CharacterStats, delta: -1 },
@@ -4381,7 +5546,7 @@ export const StatsComparisonMode = ({
             const lovers: any[] = player.character?.lover || [];
             const activeLoverNames = lovers
               .filter((l: any) => !l.isLost)
-              .map((l: any) => (typeof l === "string" ? l : l?.name ?? ""))
+              .map((l: any) => (typeof l === "string" ? l : (l?.name ?? "")))
               .filter(Boolean);
             if (activeLoverNames.length > 0) {
               acEntries.push({
@@ -4398,7 +5563,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: pname,
-              description: "[GM Action] Chuyển +2 STR thành +2 Stat cao nhất (Odin Blessing — thua combat)",
+              description:
+                "[GM Action] Chuyển +2 STR thành +2 Stat cao nhất (Odin Blessing — thua combat)",
               gmAction: true,
             });
           }
@@ -4408,7 +5574,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: pname,
-              description: '[GM Action] Nhận Power "Poison Breath" (Acid Breath — thắng combat)',
+              description:
+                '[GM Action] Nhận Power "Poison Breath" (Acid Breath — thắng combat)',
               gmAction: true,
             });
           }
@@ -4418,7 +5585,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: pname,
-              description: '[GM Action] Nhận Power "Garlic Breath" (Poison Breath — thua combat)',
+              description:
+                '[GM Action] Nhận Power "Garlic Breath" (Poison Breath — thua combat)',
               gmAction: true,
             });
           }
@@ -4428,7 +5596,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: pname,
-              description: "[GM Action] Primordial Being kích hoạt sau combat thắng",
+              description:
+                "[GM Action] Primordial Being kích hoạt sau combat thắng",
               gmAction: true,
             });
           }
@@ -4438,7 +5607,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: pname,
-              description: "[GM Action] +1 Stat ngẫu nhiên (Spirit Link — thắng combat, loại đối thủ)",
+              description:
+                "[GM Action] +1 Stat ngẫu nhiên (Spirit Link — thắng combat, loại đối thủ)",
               gmAction: true,
             });
           }
@@ -4448,7 +5618,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: pname,
-              description: "[GM Action] +1 vào chỉ số cao nhất của đối thủ (Stat Absorption — thắng combat)",
+              description:
+                "[GM Action] +1 vào chỉ số cao nhất của đối thủ (Stat Absorption — thắng combat)",
               gmAction: true,
             });
           }
@@ -4458,7 +5629,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: pname,
-              description: "[GM Action] Hấp thụ 1 Power ngẫu nhiên của đối thủ (Power Absorption — thắng combat)",
+              description:
+                "[GM Action] Hấp thụ 1 Power ngẫu nhiên của đối thủ (Power Absorption — thắng combat)",
               gmAction: true,
             });
           }
@@ -4485,7 +5657,8 @@ export const StatsComparisonMode = ({
               acEntries.push({
                 player: side,
                 quirkName: pname,
-                description: "+1 MA (Bucking Bronco — thắng round MA và thắng combat)",
+                description:
+                  "+1 MA (Bucking Bronco — thắng round MA và thắng combat)",
                 statMods: [{ stat: "ma" as keyof CharacterStats, delta: 1 }],
               });
             }
@@ -4495,14 +5668,15 @@ export const StatsComparisonMode = ({
           if (lname === "lone wolf") {
             const oppPowers: any[] = opponent?.character?.powers || [];
             const oppHasLoneWolf = oppPowers.some((p: any) => {
-              const n = typeof p === "string" ? p : p?.name ?? "";
+              const n = typeof p === "string" ? p : (p?.name ?? "");
               return n.toLowerCase().includes("lone wolf");
             });
             if (oppHasLoneWolf) {
               acEntries.push({
                 player: side,
                 quirkName: pname,
-                description: "[GM Action] Cả hai đều có Lone Wolf → mất power Lone Wolf (Lone Wolf)",
+                description:
+                  "[GM Action] Cả hai đều có Lone Wolf → mất power Lone Wolf (Lone Wolf)",
                 gmAction: true,
               });
             }
@@ -4518,7 +5692,9 @@ export const StatsComparisonMode = ({
                 player: side,
                 quirkName: pname,
                 description: `+${bonus} DUR (Healing Factor — ${roundsLost} round thua)`,
-                statMods: [{ stat: "dur" as keyof CharacterStats, delta: bonus }],
+                statMods: [
+                  { stat: "dur" as keyof CharacterStats, delta: bonus },
+                ],
               });
             }
           }
@@ -4527,14 +5703,15 @@ export const StatsComparisonMode = ({
           if (lname === "cinder flickering" && didWin) {
             const oppPowers: any[] = opponent?.character?.powers || [];
             const oppHasCinder = oppPowers.some((p: any) => {
-              const n = typeof p === "string" ? p : p?.name ?? "";
+              const n = typeof p === "string" ? p : (p?.name ?? "");
               return n.toLowerCase().includes("cinder flickering");
             });
             if (oppHasCinder) {
               acEntries.push({
                 player: side,
                 quirkName: pname,
-                description: '[GM Action] Người thắng nhận Char Dev "Lord of Cinder" (Cinder Flickering — cả 2 có power)',
+                description:
+                  '[GM Action] Người thắng nhận Char Dev "Lord of Cinder" (Cinder Flickering — cả 2 có power)',
                 gmAction: true,
               });
             }
@@ -4545,7 +5722,8 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: pname,
-              description: "[GM Action] Thăng hạng chủng tộc +1 bậc (Darwin Evolution Theory)",
+              description:
+                "[GM Action] Thăng hạng chủng tộc +1 bậc (Darwin Evolution Theory)",
               gmAction: true,
             });
           }
@@ -4554,16 +5732,29 @@ export const StatsComparisonMode = ({
           if (lname === "algorithms are clear") {
             const oppChar = opponent?.character;
             if (oppChar) {
-              const STAT_KEYS: (keyof CharacterStats)[] = ["str", "spd", "dur", "iq", "biq", "ma"];
+              const STAT_KEYS: (keyof CharacterStats)[] = [
+                "str",
+                "spd",
+                "dur",
+                "iq",
+                "biq",
+                "ma",
+              ];
               const oppStats = oppChar.stats as CharacterStats;
-              const totalOppBase = STAT_KEYS.reduce((sum, s) => sum + (Number(oppStats?.[s]) || 0), 0);
+              const totalOppBase = STAT_KEYS.reduce(
+                (sum, s) => sum + (Number(oppStats?.[s]) || 0),
+                0,
+              );
               const avgOppBase = Math.round(totalOppBase / 6);
               const selfStats = char.stats as CharacterStats;
               let lowestStat: keyof CharacterStats = "str";
               let lowestVal = Number(selfStats["str"]) || 0;
               for (const s of STAT_KEYS) {
                 const v = Number(selfStats[s]) || 0;
-                if (v < lowestVal) { lowestVal = v; lowestStat = s; }
+                if (v < lowestVal) {
+                  lowestVal = v;
+                  lowestStat = s;
+                }
               }
               const diff = avgOppBase - lowestVal;
               if (diff !== 0) {
@@ -4588,7 +5779,7 @@ export const StatsComparisonMode = ({
             const roll1 = Math.random();
             const flipped = roll1 < 0.15;
             const roll2 = flipped ? null : Math.random();
-            const flipped2 = !flipped && roll2 !== null && roll2 < 0.10;
+            const flipped2 = !flipped && roll2 !== null && roll2 < 0.1;
             acEntries.push({
               player: side,
               quirkName: pname,
@@ -4606,7 +5797,7 @@ export const StatsComparisonMode = ({
             const oppPowers: any[] = opponent?.character?.powers || [];
             const oppPowerNames = oppPowers
               .filter((p: any) => !p.isLost)
-              .map((p: any) => (typeof p === "string" ? p : p?.name ?? ""))
+              .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
               .filter(Boolean);
             if (oppPowerNames.length > 0) {
               acEntries.push({
@@ -4619,7 +5810,8 @@ export const StatsComparisonMode = ({
               acEntries.push({
                 player: side,
                 quirkName: pname,
-                description: "[Adapt] Đối thủ không có Power — không có gì mới để ghi nhớ",
+                description:
+                  "[Adapt] Đối thủ không có Power — không có gì mới để ghi nhớ",
               });
             }
           }
@@ -4631,7 +5823,7 @@ export const StatsComparisonMode = ({
           ...(char.gear?.legacyGear || []).filter((g: any) => !g.isLost),
         ];
         for (const g of gears) {
-          const gname: string = typeof g === "string" ? g : g?.name ?? "";
+          const gname: string = typeof g === "string" ? g : (g?.name ?? "");
           if (gname.toLowerCase() !== "book of a small dog") continue;
           if (disabledItems.has(`${player.no}-gear-${gname}`)) continue;
           if (!didWin) continue;
@@ -4653,7 +5845,9 @@ export const StatsComparisonMode = ({
         if (!char) continue;
         const playerHouses: string[] = ((char as any).houses || [])
           .filter((h: any) => !h.isLost)
-          .map((h: any) => (typeof h === "string" ? h : h?.name ?? "").toLowerCase());
+          .map((h: any) =>
+            (typeof h === "string" ? h : (h?.name ?? "")).toLowerCase(),
+          );
         const hasCoven = playerHouses.includes("coven council");
         if (!hasCoven) continue;
 
@@ -4662,7 +5856,9 @@ export const StatsComparisonMode = ({
           if (p.no === player.no) return false;
           const pHouses: string[] = ((p.character?.houses || []) as any[])
             .filter((h: any) => !h.isLost)
-            .map((h: any) => (typeof h === "string" ? h : h?.name ?? "").toLowerCase());
+            .map((h: any) =>
+              (typeof h === "string" ? h : (h?.name ?? "")).toLowerCase(),
+            );
           return !pHouses.includes("coven council");
         });
 
@@ -4670,7 +5866,8 @@ export const StatsComparisonMode = ({
           acEntries.push({
             player: side,
             quirkName: "Coven Council",
-            description: "[GM Action] Không tìm thấy player nào ngoài Coven Council để Re-Spin",
+            description:
+              "[GM Action] Không tìm thấy player nào ngoài Coven Council để Re-Spin",
             gmAction: true,
           });
           continue;
@@ -4680,14 +5877,19 @@ export const StatsComparisonMode = ({
         acEntries.push({
           player: side,
           quirkName: "Coven Council",
-          description: "Bị loại — quay chọn 1 player không thuộc Coven Council để Re-Spin 1 stat:",
+          description:
+            "Bị loại — quay chọn 1 player không thuộc Coven Council để Re-Spin 1 stat:",
           wheelKey: wk,
           wheelItems: nonCovenPlayers.map((p) => ({
             label: `${p.name} (#${p.no})`,
             weight: 1,
             isSuccess: true,
             color: "#a855f7",
-            meta: { playerNo: p.no, playerName: p.name, race: p.character?.race?.race || p.race || "human" },
+            meta: {
+              playerNo: p.no,
+              playerName: p.name,
+              race: p.character?.race?.race || p.race || "human",
+            },
           })),
           gmAction: true,
         });
@@ -4699,24 +5901,44 @@ export const StatsComparisonMode = ({
         const player = side === "player1" ? player1 : player2;
         const char = player.character;
         if (!char) continue;
-        const charDevs: any[] = ((char as any).charDevs || []).filter((c: any) => !c.isLost);
-        const hasMrBeast = charDevs.some((c: any) =>
-          (typeof c === "string" ? c : c?.name ?? "").toLowerCase() === "mrbeast"
+        const charDevs: any[] = ((char as any).charDevs || []).filter(
+          (c: any) => !c.isLost,
+        );
+        const hasMrBeast = charDevs.some(
+          (c: any) =>
+            (typeof c === "string" ? c : (c?.name ?? "")).toLowerCase() ===
+            "mrbeast",
         );
         if (!hasMrBeast) continue;
 
-        const normalGears: any[] = ((char as any).gear?.normalGear || []).filter((g: any) => !g.isLost);
-        const legacyGears: any[] = ((char as any).gear?.legacyGear || []).filter((g: any) => !g.isLost);
+        const normalGears: any[] = (
+          (char as any).gear?.normalGear || []
+        ).filter((g: any) => !g.isLost);
+        const legacyGears: any[] = (
+          (char as any).gear?.legacyGear || []
+        ).filter((g: any) => !g.isLost);
         const allGears = [...normalGears, ...legacyGears];
-        const gearNames = allGears.map((g: any) => typeof g === "string" ? g : g?.name ?? "").filter(Boolean);
+        const gearNames = allGears
+          .map((g: any) => (typeof g === "string" ? g : (g?.name ?? "")))
+          .filter(Boolean);
 
         if (gearNames.length > 0) {
           const wk = `after-MrBeast-${side}`;
-          const gearColors = ["#f59e0b", "#10b981", "#3b82f6", "#a855f7", "#ef4444", "#06b6d4", "#84cc16", "#ec4899"];
+          const gearColors = [
+            "#f59e0b",
+            "#10b981",
+            "#3b82f6",
+            "#a855f7",
+            "#ef4444",
+            "#06b6d4",
+            "#84cc16",
+            "#ec4899",
+          ];
           acEntries.push({
             player: side,
             quirkName: "MrBeast",
-            description: "Sau thắng — quay chọn 1 Gear để tặng 5 player ngẫu nhiên còn sống (Wheel Of Name):",
+            description:
+              "Sau thắng — quay chọn 1 Gear để tặng 5 player ngẫu nhiên còn sống (Wheel Of Name):",
             wheelKey: wk,
             wheelItems: gearNames.map((g: string, i: number) => ({
               label: g,
@@ -4731,7 +5953,8 @@ export const StatsComparisonMode = ({
           acEntries.push({
             player: side,
             quirkName: "MrBeast",
-            description: "[GM Action] Không có Gear — GM quay 1 stat ngẫu nhiên → bản thân -5 stat đó, 5 player được chọn nhận +1 stat đó. Nếu người nhận cũng là MrBeast: +2 All Stats thêm.",
+            description:
+              "[GM Action] Không có Gear — GM quay 1 stat ngẫu nhiên → bản thân -5 stat đó, 5 player được chọn nhận +1 stat đó. Nếu người nhận cũng là MrBeast: +2 All Stats thêm.",
             gmAction: true,
           });
         }
@@ -4743,22 +5966,53 @@ export const StatsComparisonMode = ({
         const player = side === "player1" ? player1 : player2;
         const char = player.character;
         if (!char) continue;
-        const race = ((char as any).race?.race || (char as any).race || "").toLowerCase();
+        const race = (
+          (char as any).race?.race ||
+          (char as any).race ||
+          ""
+        ).toLowerCase();
         const subRace = ((char as any).race?.subRace || "").toLowerCase();
-        const isPrimordial = race.includes("primordial being") || subRace.includes("primordial being");
+        const isPrimordial =
+          race.includes("primordial being") ||
+          subRace.includes("primordial being");
         if (!isPrimordial) continue;
 
         const wk = `after-PrimordialElemental-${side}`;
         acEntries.push({
           player: side,
           quirkName: "Primordial Being",
-          description: "Thắng combat → Elemental Wheel: nhận nguyên tố và hiệu ứng tương ứng.",
+          description:
+            "Thắng combat → Elemental Wheel: nhận nguyên tố và hiệu ứng tương ứng.",
           wheelKey: wk,
           wheelItems: [
-            { label: "Air", weight: 25, isSuccess: true, color: "#93c5fd", meta: { element: "air" } },
-            { label: "Water", weight: 25, isSuccess: true, color: "#38bdf8", meta: { element: "water" } },
-            { label: "Fire", weight: 25, isSuccess: true, color: "#f97316", meta: { element: "fire" } },
-            { label: "Earth", weight: 25, isSuccess: true, color: "#84cc16", meta: { element: "earth" } },
+            {
+              label: "Air",
+              weight: 25,
+              isSuccess: true,
+              color: "#93c5fd",
+              meta: { element: "air" },
+            },
+            {
+              label: "Water",
+              weight: 25,
+              isSuccess: true,
+              color: "#38bdf8",
+              meta: { element: "water" },
+            },
+            {
+              label: "Fire",
+              weight: 25,
+              isSuccess: true,
+              color: "#f97316",
+              meta: { element: "fire" },
+            },
+            {
+              label: "Earth",
+              weight: 25,
+              isSuccess: true,
+              color: "#84cc16",
+              meta: { element: "earth" },
+            },
           ],
         });
       }
@@ -4770,130 +6024,304 @@ export const StatsComparisonMode = ({
         const map: Record<string, "win" | "lose" | "tie"> = {};
         for (const r of resolvedRounds) {
           const key = r.stat;
-          map[key] = r.winner === forSide ? "win" : r.winner === "tie" ? "tie" : "lose";
+          map[key] =
+            r.winner === forSide ? "win" : r.winner === "tie" ? "tie" : "lose";
         }
         return map;
       };
 
-      processAfterCombat(player1, "player1", p1WonCombat, buildRoundResultsMap("player1"), player2);
-      processAfterCombat(player2, "player2", p2WonCombat, buildRoundResultsMap("player2"), player1);
+      processAfterCombat(
+        player1,
+        "player1",
+        p1WonCombat,
+        buildRoundResultsMap("player1"),
+        player2,
+      );
+      processAfterCombat(
+        player2,
+        "player2",
+        p2WonCombat,
+        buildRoundResultsMap("player2"),
+        player1,
+      );
 
-      // ── PvP Reward wheels ──────────────────────────────────────────────────
-      const PVP_REWARD_ITEMS: WheelSpinItem[] = [
-        { label: "+1 Strength", weight: 10, isSuccess: true, color: "#ef4444", meta: { stat: "str", delta: 1 } },
-        { label: "+1 Speed", weight: 10, isSuccess: true, color: "#3b82f6", meta: { stat: "spd", delta: 1 } },
-        { label: "+1 Durability", weight: 10, isSuccess: true, color: "#84cc16", meta: { stat: "dur", delta: 1 } },
-        { label: "+1 IQ", weight: 10, isSuccess: true, color: "#06b6d4", meta: { stat: "iq", delta: 1 } },
-        { label: "+1 BIQ", weight: 10, isSuccess: true, color: "#a855f7", meta: { stat: "biq", delta: 1 } },
-        { label: "+1 Martial Arts", weight: 10, isSuccess: true, color: "#f97316", meta: { stat: "ma", delta: 1 } },
-        { label: "Nhận 1 Gear", weight: 10, isSuccess: true, color: "#fbbf24", meta: { gmAction: "gear" } },
-        { label: "+2 Stat Thấp Nhất", weight: 6, isSuccess: true, color: "#34d399", meta: { gmAction: "lowest2" } },
-        { label: "+2 Stat Cao Nhất", weight: 6, isSuccess: true, color: "#f472b6", meta: { gmAction: "highest2" } },
-        { label: "Nhận 1 Power", weight: 6, isSuccess: true, color: "#818cf8", meta: { gmAction: "power1" } },
-        { label: "Nhận 2 Power", weight: 2, isSuccess: true, color: "#c084fc", meta: { gmAction: "power2" } },
-        { label: "Nhận 1 Char Dev", weight: 4, isSuccess: true, color: "#fb923c", meta: { gmAction: "chardev1" } },
-        { label: "Nhận 2 Char Dev", weight: 1, isSuccess: true, color: "#f87171", meta: { gmAction: "chardev2" } },
-        { label: "+2 Stat ngẫu nhiên ×3", weight: 0.64, isSuccess: true, color: "#4ade80", meta: { gmAction: "rand2x3" } },
-        { label: "+2 Stat ngẫu nhiên ×6", weight: 0.36, isSuccess: true, color: "#86efac", meta: { gmAction: "rand2x6" } },
-        { label: "+1 All Stats", weight: 4, isSuccess: true, color: "#e2e8f0", meta: { gmAction: "allstats1" } },
-      ];
-      const POWER_RANGER_STAT_ITEMS: WheelSpinItem[] = [
-        { label: "+1 Strength", weight: 1, isSuccess: true, color: "#ef4444", meta: { stat: "str", delta: 1 } },
-        { label: "+1 Speed", weight: 1, isSuccess: true, color: "#3b82f6", meta: { stat: "spd", delta: 1 } },
-        { label: "+1 Durability", weight: 1, isSuccess: true, color: "#84cc16", meta: { stat: "dur", delta: 1 } },
-        { label: "+1 IQ", weight: 1, isSuccess: true, color: "#06b6d4", meta: { stat: "iq", delta: 1 } },
-        { label: "+1 BIQ", weight: 1, isSuccess: true, color: "#a855f7", meta: { stat: "biq", delta: 1 } },
-        { label: "+1 Martial Arts", weight: 1, isSuccess: true, color: "#f97316", meta: { stat: "ma", delta: 1 } },
-      ];
-      const BRAVEST_POWER_ITEMS: WheelSpinItem[] = EffectRegistry.getAllByType("power").map((e) => ({
-        label: e.name, weight: 1, isSuccess: true, color: "#818cf8",
-      }));
+      // ── PvP Reward wheels ── (bỏ qua nếu là Roundtable Hold sub-combat) ──
+      if (!roundtableSubMode) {
+        const PVP_REWARD_ITEMS: WheelSpinItem[] = [
+          {
+            label: "+1 Strength",
+            weight: 10,
+            isSuccess: true,
+            color: "#ef4444",
+            meta: { stat: "str", delta: 1 },
+          },
+          {
+            label: "+1 Speed",
+            weight: 10,
+            isSuccess: true,
+            color: "#3b82f6",
+            meta: { stat: "spd", delta: 1 },
+          },
+          {
+            label: "+1 Durability",
+            weight: 10,
+            isSuccess: true,
+            color: "#84cc16",
+            meta: { stat: "dur", delta: 1 },
+          },
+          {
+            label: "+1 IQ",
+            weight: 10,
+            isSuccess: true,
+            color: "#06b6d4",
+            meta: { stat: "iq", delta: 1 },
+          },
+          {
+            label: "+1 BIQ",
+            weight: 10,
+            isSuccess: true,
+            color: "#a855f7",
+            meta: { stat: "biq", delta: 1 },
+          },
+          {
+            label: "+1 Martial Arts",
+            weight: 10,
+            isSuccess: true,
+            color: "#f97316",
+            meta: { stat: "ma", delta: 1 },
+          },
+          {
+            label: "Nhận 1 Gear",
+            weight: 10,
+            isSuccess: true,
+            color: "#fbbf24",
+            meta: { gmAction: "gear" },
+          },
+          {
+            label: "+2 Stat Thấp Nhất",
+            weight: 6,
+            isSuccess: true,
+            color: "#34d399",
+            meta: { gmAction: "lowest2" },
+          },
+          {
+            label: "+2 Stat Cao Nhất",
+            weight: 6,
+            isSuccess: true,
+            color: "#f472b6",
+            meta: { gmAction: "highest2" },
+          },
+          {
+            label: "Nhận 1 Power",
+            weight: 6,
+            isSuccess: true,
+            color: "#818cf8",
+            meta: { gmAction: "power1" },
+          },
+          {
+            label: "Nhận 2 Power",
+            weight: 2,
+            isSuccess: true,
+            color: "#c084fc",
+            meta: { gmAction: "power2" },
+          },
+          {
+            label: "Nhận 1 Char Dev",
+            weight: 4,
+            isSuccess: true,
+            color: "#fb923c",
+            meta: { gmAction: "chardev1" },
+          },
+          {
+            label: "Nhận 2 Char Dev",
+            weight: 1,
+            isSuccess: true,
+            color: "#f87171",
+            meta: { gmAction: "chardev2" },
+          },
+          {
+            label: "+2 Stat ngẫu nhiên ×3",
+            weight: 0.64,
+            isSuccess: true,
+            color: "#4ade80",
+            meta: { gmAction: "rand2x3" },
+          },
+          {
+            label: "+2 Stat ngẫu nhiên ×6",
+            weight: 0.36,
+            isSuccess: true,
+            color: "#86efac",
+            meta: { gmAction: "rand2x6" },
+          },
+          {
+            label: "+1 All Stats",
+            weight: 4,
+            isSuccess: true,
+            color: "#e2e8f0",
+            meta: { gmAction: "allstats1" },
+          },
+        ];
+        const POWER_RANGER_STAT_ITEMS: WheelSpinItem[] = [
+          {
+            label: "+1 Strength",
+            weight: 1,
+            isSuccess: true,
+            color: "#ef4444",
+            meta: { stat: "str", delta: 1 },
+          },
+          {
+            label: "+1 Speed",
+            weight: 1,
+            isSuccess: true,
+            color: "#3b82f6",
+            meta: { stat: "spd", delta: 1 },
+          },
+          {
+            label: "+1 Durability",
+            weight: 1,
+            isSuccess: true,
+            color: "#84cc16",
+            meta: { stat: "dur", delta: 1 },
+          },
+          {
+            label: "+1 IQ",
+            weight: 1,
+            isSuccess: true,
+            color: "#06b6d4",
+            meta: { stat: "iq", delta: 1 },
+          },
+          {
+            label: "+1 BIQ",
+            weight: 1,
+            isSuccess: true,
+            color: "#a855f7",
+            meta: { stat: "biq", delta: 1 },
+          },
+          {
+            label: "+1 Martial Arts",
+            weight: 1,
+            isSuccess: true,
+            color: "#f97316",
+            meta: { stat: "ma", delta: 1 },
+          },
+        ];
+        const BRAVEST_POWER_ITEMS: WheelSpinItem[] =
+          EffectRegistry.getAllByType("power").map((e) => ({
+            label: e.name,
+            weight: 1,
+            isSuccess: true,
+            color: "#818cf8",
+          }));
 
-      for (const side of ["player1", "player2"] as const) {
-        const player = side === "player1" ? player1 : player2;
-        const char = player.character;
-        if (!char) continue;
+        for (const side of ["player1", "player2"] as const) {
+          const player = side === "player1" ? player1 : player2;
+          const char = player.character;
+          if (!char) continue;
 
-        // Chỉ player thắng mới nhận PvP Reward
-        const isWinnerSide = side === "player1" ? p1WonCombat : p2WonCombat;
-        if (!isWinnerSide) continue;
+          // Chỉ player thắng mới nhận PvP Reward
+          const isWinnerSide = side === "player1" ? p1WonCombat : p2WonCombat;
+          if (!isWinnerSide) continue;
 
-        const quirks = (char.quirks || []).filter((q: any) => !q.isLost).map((q: any) => (typeof q === "string" ? q : q?.name ?? "").toLowerCase());
-        const archetypes = (char.archetypes || []).map((a: string) => a.toLowerCase());
-        const weapons = (char.weapons || []).filter((w: any) => !w.isLost).map((w: any) => (typeof w === "string" ? w : w?.name ?? "").toLowerCase());
+          const quirks = (char.quirks || [])
+            .filter((q: any) => !q.isLost)
+            .map((q: any) =>
+              (typeof q === "string" ? q : (q?.name ?? "")).toLowerCase(),
+            );
+          const archetypes = (char.archetypes || []).map((a: string) =>
+            a.toLowerCase(),
+          );
+          const weapons = (char.weapons || [])
+            .filter((w: any) => !w.isLost)
+            .map((w: any) =>
+              (typeof w === "string" ? w : (w?.name ?? "")).toLowerCase(),
+            );
 
-        // Impatient quirk → không nhận PvP Reward
-        if (quirks.includes("impatient")) {
-          acEntries.push({
-            player: side,
-            quirkName: "Impatient",
-            description: "Impatient: Không nhận PvP Reward vòng này.",
-          });
-          continue;
-        }
-
-        // Power Ranger archetype → thay PvP Reward bằng 1 vòng quay stat (6 chỉ số)
-        const isPowerRanger = archetypes.some(a => a === "power ranger" || a.startsWith("power ranger"));
-        if (isPowerRanger) {
-          const wk = `after-PvPReward-PowerRanger-${side}`;
-          acEntries.push({
-            player: side,
-            quirkName: "Power Ranger",
-            description: "Power Ranger: Quay 1 vòng chọn chỉ số được tăng (thay PvP Reward)",
-            wheelKey: wk,
-            wheelItems: POWER_RANGER_STAT_ITEMS,
-            statMods: [{ stat: "str", delta: 1 }], // placeholder, actual stat from spin result
-            gmAction: true,
-          });
-          continue;
-        }
-
-        // Tính số vòng quay PvP Reward
-        let rewardCount = 1;
-
-        // Bravest of the Brave archetype → 2 vòng quay Power (không phải PvP Reward thường)
-        const isBravest = archetypes.includes("bravest of the brave");
-        if (isBravest) {
-          for (let i = 1; i <= 2; i++) {
-            const wk = `after-PvPReward-Bravest-${side}-${i}`;
+          // Impatient quirk → không nhận PvP Reward
+          if (quirks.some((q) => q === "impatient" || q.startsWith("impatient ("))) {
             acEntries.push({
               player: side,
-              quirkName: "Bravest of the Brave",
-              description: `Bravest of the Brave: Quay Power Wheel (${i}/2)`,
+              quirkName: "Impatient",
+              description: "Impatient: Không nhận PvP Reward vòng này.",
+            });
+            continue;
+          }
+
+          // Power Ranger archetype → thay PvP Reward bằng 1 vòng quay stat (6 chỉ số)
+          const isPowerRanger = archetypes.some(
+            (a) => a === "power ranger" || a.startsWith("power ranger"),
+          );
+          if (isPowerRanger) {
+            const wk = `after-PvPReward-PowerRanger-${side}`;
+            acEntries.push({
+              player: side,
+              quirkName: "Power Ranger",
+              description:
+                "Power Ranger: Quay 1 vòng chọn chỉ số được tăng (thay PvP Reward)",
               wheelKey: wk,
-              wheelItems: BRAVEST_POWER_ITEMS,
+              wheelItems: POWER_RANGER_STAT_ITEMS,
+              statMods: [{ stat: "str", delta: 1 }], // placeholder, actual stat from spin result
+              gmAction: true,
+            });
+            continue;
+          }
+
+          // Tính số vòng quay PvP Reward
+          let rewardCount = 1;
+
+          // Bravest of the Brave archetype → 2 vòng quay Power (không phải PvP Reward thường)
+          const isBravest = archetypes.includes("bravest of the brave");
+          if (isBravest) {
+            for (let i = 1; i <= 2; i++) {
+              const wk = `after-PvPReward-Bravest-${side}-${i}`;
+              acEntries.push({
+                player: side,
+                quirkName: "Bravest of the Brave",
+                description: `Bravest of the Brave: Quay Power Wheel (${i}/2)`,
+                wheelKey: wk,
+                wheelItems: BRAVEST_POWER_ITEMS,
+                gmAction: true,
+              });
+            }
+            continue;
+          }
+
+          // Drums weapon → +1 vòng quay PvP Reward
+          if (weapons.includes("drums")) {
+            rewardCount += 1;
+          }
+
+          // Thêm vòng quay PvP Reward
+          for (let i = 1; i <= rewardCount; i++) {
+            const wk = `after-PvPReward-${side}-${i}`;
+            const suffix = rewardCount > 1 ? ` (${i}/${rewardCount})` : "";
+            acEntries.push({
+              player: side,
+              quirkName: `PvP Reward${suffix}`,
+              description: `Quay PvP Reward${rewardCount > 1 && i === rewardCount ? " (Drums +1)" : ""}`,
+              wheelKey: wk,
+              wheelItems: PVP_REWARD_ITEMS,
               gmAction: true,
             });
           }
-          continue;
         }
+      } // end !roundtableSubMode
 
-        // Drums weapon → +1 vòng quay PvP Reward
-        if (weapons.includes("drums")) {
-          rewardCount += 1;
-        }
-
-        // Thêm vòng quay PvP Reward
-        for (let i = 1; i <= rewardCount; i++) {
-          const wk = `after-PvPReward-${side}-${i}`;
-          const suffix = rewardCount > 1 ? ` (${i}/${rewardCount})` : "";
-          acEntries.push({
-            player: side,
-            quirkName: `PvP Reward${suffix}`,
-            description: `Quay PvP Reward${rewardCount > 1 && i === rewardCount ? " (Drums +1)" : ""}`,
-            wheelKey: wk,
-            wheelItems: PVP_REWARD_ITEMS,
-            gmAction: true,
-          });
-        }
-      }
-
-      setAfterCombatEntries(acEntries);
+      // Prepend before_combat_end entries (e.g. Edgelord) để hiển thị ở đầu danh sách sau combat
+      const beforeEndAcEntries: AfterCombatEntry[] = beforeCombatEndEntries.map((e) => ({
+        player: e.player,
+        quirkName: e.sourceName,
+        description: e.description,
+      }));
+      setAfterCombatEntries([...beforeEndAcEntries, ...acEntries]);
       setAfterCombatSpinResults({});
 
       // Auto-apply non-wheel stat mods immediately to player stats
       // (These are permanent changes to character stats that GMs track)
-      const acBubbles: { player: "player1" | "player2"; text: string; isPositive: boolean }[] = [];
+      const acBubbles: {
+        player: "player1" | "player2";
+        text: string;
+        isPositive: boolean;
+      }[] = [];
       for (const entry of acEntries) {
         if (entry.wheelKey) continue; // wheel-pending, apply after spin
         if (!entry.statMods || entry.statMods.length === 0) continue;
@@ -4913,7 +6341,8 @@ export const StatsComparisonMode = ({
           const now = new Date().toLocaleString("vi-VN");
           const sep = `\n${"─".repeat(60)}\nPVP SESSION: ${now}\n${"─".repeat(60)}\n`;
           const line = "═".repeat(60);
-          const p1name = player1.name, p2name = player2.name;
+          const p1name = player1.name,
+            p2name = player2.name;
           const winnerName = overallWinner === "player1" ? p1name : p2name;
           const loserName = overallWinner === "player1" ? p2name : p1name;
           const ls: string[] = [];
@@ -4922,27 +6351,37 @@ export const StatsComparisonMode = ({
           ls.push(`Thời gian: ${now}`);
           ls.push(line);
           ls.push(`${p1name} (#${player1.no}) vs ${p2name} (#${player2.no})`);
-          ls.push(`Race: ${player1.character?.race?.race ?? "?"} (T${player1.raceTier}) vs ${player2.character?.race?.race ?? "?"} (T${player2.raceTier})`);
+          ls.push(
+            `Race: ${player1.character?.race?.race ?? "?"} (T${player1.raceTier}) vs ${player2.character?.race?.race ?? "?"} (T${player2.raceTier})`,
+          );
           ls.push(line);
 
           // Inventory
           const renderInv = (p: PvPPlayerData) => {
-            const char = p.character; if (!char) return;
+            const char = p.character;
+            if (!char) return;
             ls.push(`\nItems & hiệu ứng — ${p.name}:`);
             const inv = buildInventoryList(char);
             if (inv.length === 0) ls.push("  (không có)");
             for (const it of inv) ls.push(`  [${it.sourceType}] ${it.name}`);
-            if (char.runes?.runeword) ls.push(`  [runeword] ${char.runes.runeword}`);
+            if (char.runes?.runeword)
+              ls.push(`  [runeword] ${char.runes.runeword}`);
           };
-          renderInv(player1); renderInv(player2);
+          renderInv(player1);
+          renderInv(player2);
 
           // Stats before combat
-          const SKEYS: { key: keyof typeof newState.p1Stats; label: string }[] = [
-            { key: "str", label: "STR" }, { key: "spd", label: "SPD" },
-            { key: "dur", label: "DUR" }, { key: "iq", label: "IQ" },
-            { key: "biq", label: "BIQ" }, { key: "ma", label: "MA" },
-          ];
-          const fmtStats = (s: typeof newState.p1Stats) => SKEYS.map(({ key, label }) => `${label}:${s[key] ?? 0}`).join(" ");
+          const SKEYS: { key: keyof typeof newState.p1Stats; label: string }[] =
+            [
+              { key: "str", label: "STR" },
+              { key: "spd", label: "SPD" },
+              { key: "dur", label: "DUR" },
+              { key: "iq", label: "IQ" },
+              { key: "biq", label: "BIQ" },
+              { key: "ma", label: "MA" },
+            ];
+          const fmtStats = (s: typeof newState.p1Stats) =>
+            SKEYS.map(({ key, label }) => `${label}:${s[key] ?? 0}`).join(" ");
           ls.push(`\nStats vào combat:`);
           ls.push(`  ${p1name}: ${fmtStats(newState.p1Stats)}`);
           ls.push(`  ${p2name}: ${fmtStats(newState.p2Stats)}`);
@@ -4958,8 +6397,15 @@ export const StatsComparisonMode = ({
               }
               continue;
             }
-            const rw = log.winner === "player1" ? p1name : log.winner === "player2" ? p2name : "HÒA";
-            ls.push(`  ${log.statLabel}: ${rw} (${log.p1ValueUsed} vs ${log.p2ValueUsed})`);
+            const rw =
+              log.winner === "player1"
+                ? p1name
+                : log.winner === "player2"
+                  ? p2name
+                  : "HÒA";
+            ls.push(
+              `  ${log.statLabel}: ${rw} (${log.p1ValueUsed} vs ${log.p2ValueUsed})`,
+            );
             for (const ev of log.events) {
               const pname = ev.player === "player1" ? p1name : p2name;
               ls.push(`    [${pname}] ${ev.source}: ${ev.description}`);
@@ -4967,12 +6413,16 @@ export const StatsComparisonMode = ({
             if ((log.carryOverToNext?.length ?? 0) > 0) {
               for (const co of log.carryOverToNext) {
                 const pname = co.player === "player1" ? p1name : p2name;
-                ls.push(`    → Carry [${pname}]: ${co.source} ${co.value > 0 ? "+" : ""}${co.value} ${co.stat.toUpperCase()} round kế`);
+                ls.push(
+                  `    → Carry [${pname}]: ${co.source} ${co.value > 0 ? "+" : ""}${co.value} ${co.stat.toUpperCase()} round kế`,
+                );
               }
             }
           }
 
-          ls.push(`\nKết quả: ${winnerName} WIN ${Math.max(p1Score, p2Score)}-${Math.min(p1Score, p2Score)}`);
+          ls.push(
+            `\nKết quả: ${winnerName} WIN ${Math.max(p1Score, p2Score)}-${Math.min(p1Score, p2Score)}`,
+          );
           ls.push(`  ${loserName} thua`);
           if (tieBreaker === "race") ls.push(`  (Tie-breaker: Race Tier)`);
 
@@ -4982,13 +6432,17 @@ export const StatsComparisonMode = ({
             for (const entry of acEntries) {
               const pname = entry.player === "player1" ? p1name : p2name;
               const prefix = entry.gmAction ? "[GM Action] " : "[Auto] ";
-              ls.push(`  [${pname}] ${prefix}${entry.quirkName}: ${entry.description}`);
+              ls.push(
+                `  [${pname}] ${prefix}${entry.quirkName}: ${entry.description}`,
+              );
             }
           }
 
           ls.push(`\n${line}`);
 
-          appendReportToDrive(REPORT_FILE_ID, sep + ls.join("\n") + "\n").catch(() => { });
+          appendReportToDrive(REPORT_FILE_ID, sep + ls.join("\n") + "\n").catch(
+            () => {},
+          );
         });
       });
     }
@@ -5004,16 +6458,34 @@ export const StatsComparisonMode = ({
   ) => {
     // Save snapshot of current main combat state
     const snapshot = {
-      player1, player2, searchTerm1, searchTerm2,
+      player1,
+      player2,
+      searchTerm1,
+      searchTerm2,
       combatResult: mainCombatResult,
-      stepState, stepRoundIndex, combatConfirmed,
-      roundSpinResults, oneTrickPonyStat, huntersMarkStat, guidanceStats,
-      raumanianSuccess, goldenCoinPoints, scryingSuccess, encroachingShadowSuccess,
-      goldShipResult, madScientistResult, summoningScrollResult,
-      tricksterResult, blackMagicStat, dothrakiSpinResult,
-      afterCombatEntries, afterCombatSpinResults,
-      isPendingRoundtable: true, pendingLoser: pendingLoserSide,
-      tarnishedList: savedTarnishedList, selectedTarnished: tarnished,
+      stepState,
+      stepRoundIndex,
+      combatConfirmed,
+      roundSpinResults,
+      oneTrickPonyStat,
+      huntersMarkStat,
+      guidanceStats,
+      raumanianSuccess,
+      goldenCoinPoints,
+      scryingSuccess,
+      encroachingShadowSuccess,
+      goldShipResult,
+      madScientistResult,
+      summoningScrollResult,
+      tricksterResult,
+      blackMagicStat,
+      dothrakiSpinResult,
+      afterCombatEntries,
+      afterCombatSpinResults,
+      isPendingRoundtable: true,
+      pendingLoser: pendingLoserSide,
+      tarnishedList: savedTarnishedList,
+      selectedTarnished: tarnished,
       disabledItems,
     };
     setRoundtableSnapshot(snapshot);
@@ -5085,7 +6557,27 @@ export const StatsComparisonMode = ({
     setTricksterResult(snap.tricksterResult);
     setBlackMagicStat(snap.blackMagicStat);
     setDothrakiSpinResult(snap.dothrakiSpinResult);
-    setAfterCombatEntries(snap.afterCombatEntries);
+    // Fix PvP Reward ownership: nếu roundtable thay đổi winner, reassign PvP Reward sang đúng bên
+    const finalWinnerSide = tarnishedWon
+      ? (snap.pendingLoser as "player1" | "player2")
+      : null;
+    const fixedAfterCombatEntries = finalWinnerSide
+      ? snap.afterCombatEntries.map((e: any) => {
+          if (
+            !e.quirkName?.startsWith("PvP Reward") &&
+            e.quirkName !== "Impatient" &&
+            e.quirkName !== "Power Ranger" &&
+            e.quirkName !== "Bravest of the Brave"
+          )
+            return e;
+          // Reassign PvP Reward entries to the actual winner side
+          const otherSide =
+            finalWinnerSide === "player1" ? "player2" : "player1";
+          if (e.player === otherSide) return { ...e, player: finalWinnerSide };
+          return e;
+        })
+      : snap.afterCombatEntries;
+    setAfterCombatEntries(fixedAfterCombatEntries);
     setAfterCombatSpinResults(snap.afterCombatSpinResults);
     setTarnishedList(snap.tarnishedList);
     setSelectedTarnished(snap.selectedTarnished);
@@ -5142,7 +6634,7 @@ export const StatsComparisonMode = ({
     setZoltraakBiq2Pending(false);
     setZoltraakPreBiqFired(null);
     setCombatConfirmed(false);
-    setAudioResetKey(k => k + 1);
+    setAudioResetKey((k) => k + 1);
     setViewLogIndex(null);
     setRoundtableSubMode(false);
     setRoundtableSnapshot(null);
@@ -5229,8 +6721,9 @@ export const StatsComparisonMode = ({
       onLose.push("Pennyworthy-Lose");
     }
     // Power Ranger colors: detect subType from nestedArchetypes
-    const rangerColor = (char.nestedArchetypes || [])
-      .find((na: any) => na.name === "Power Ranger" && na.subType)?.subType;
+    const rangerColor = (char.nestedArchetypes || []).find(
+      (na: any) => na.name === "Power Ranger" && na.subType,
+    )?.subType;
     if (rangerColor === "Red") onWin.push("Ranger-Red");
     if (rangerColor === "Blue") onWin.push("Ranger-Blue");
     if (rangerColor === "Black") onWin.push("Ranger-Black");
@@ -5238,11 +6731,17 @@ export const StatsComparisonMode = ({
     if (rangerColor === "Pink") onWin.push("Ranger-Pink");
     if (rangerColor === "Silver") onWin.push("Ranger-Silver");
     // Bloodthirsty: thắng +1 bonus (thua mất hết điểm — auto, không cần spin)
-    if (sources.some((s) => s === "bloodthirsty") && isEffectActive("Bloodthirsty")) {
+    if (
+      sources.some((s) => s === "bloodthirsty") &&
+      isEffectActive("Bloodthirsty")
+    ) {
       onWin.push("Bloodthirsty");
     }
     // Divine Smite: +1 điểm khi thắng round MA
-    if (sources.some((s) => s === "divine smite") && isEffectActive("Divine Smite")) {
+    if (
+      sources.some((s) => s === "divine smite") &&
+      isEffectActive("Divine Smite")
+    ) {
       onWin.push("Divine Smite");
     }
     // Cautious (quirk on self): đối thủ không nhận điểm round STR
@@ -5251,10 +6750,16 @@ export const StatsComparisonMode = ({
       onWin.push("Cautious-Self"); // marker: this player has Cautious (opponent's STR win = 0)
     }
     // Hunter's Mark: +1 bonus khi thắng round stat đã chọn trước combat
-    if (sources.some((s) => s === "hunter's mark") && isEffectActive("Hunter's Mark"))
+    if (
+      sources.some((s) => s === "hunter's mark") &&
+      isEffectActive("Hunter's Mark")
+    )
       onWin.push("Hunter's Mark");
     // Golden Parry: 35% chặn đối thủ không nhận điểm khi thua round
-    if (sources.some((s) => s === "golden parry") && isEffectActive("Golden Parry"))
+    if (
+      sources.some((s) => s === "golden parry") &&
+      isEffectActive("Golden Parry")
+    )
       onLose.push("Golden Parry");
     return { onWin, onLose, onTie };
   };
@@ -5281,7 +6786,11 @@ export const StatsComparisonMode = ({
     items: WheelSpinItem[];
     side: "player1" | "player2";
     effectKey: string; // unique key để store result
-    onResult?: (result: { label: string; isSuccess: boolean; meta?: Record<string, unknown> }) => void;
+    onResult?: (result: {
+      label: string;
+      isSuccess: boolean;
+      meta?: Record<string, unknown>;
+    }) => void;
   }>({
     isOpen: false,
     title: "",
@@ -5297,10 +6806,14 @@ export const StatsComparisonMode = ({
   >({});
 
   // Hunter's Mark: stat được chọn trước combat (key = "player1" | "player2")
-  const [huntersMarkStat, setHuntersMarkStat] = useState<Record<string, string>>({});
+  const [huntersMarkStat, setHuntersMarkStat] = useState<
+    Record<string, string>
+  >({});
 
   // Guidance: 2 stats được chọn qua wheel trước combat (key = "player1" | "player2", value = [stat1, stat2])
-  const [guidanceStats, setGuidanceStats] = useState<Record<string, string[]>>({});
+  const [guidanceStats, setGuidanceStats] = useState<Record<string, string[]>>(
+    {},
+  );
 
   // Raumanian: +1 điểm khởi đầu nếu thành công (key = "player1" | "player2")
   const [raumanianSuccess, setRaumanianSuccess] = useState<
@@ -5308,10 +6821,14 @@ export const StatsComparisonMode = ({
   >({});
 
   // Golden Coin: điểm khởi đầu từ wheel result (key = "player1" | "player2")
-  const [goldenCoinPoints, setGoldenCoinPoints] = useState<Record<string, number>>({});
+  const [goldenCoinPoints, setGoldenCoinPoints] = useState<
+    Record<string, number>
+  >({});
 
   // Scrying: 40% debuff -4 stat cao nhất đối thủ trước combat (key = "player1" | "player2", true = thành công)
-  const [scryingSuccess, setScryingSuccess] = useState<Record<string, boolean>>({});
+  const [scryingSuccess, setScryingSuccess] = useState<Record<string, boolean>>(
+    {},
+  );
 
   // Encroaching Shadow: +7 Speed trước combat nếu thành công (key = "player1" | "player2")
   const [encroachingShadowSuccess, setEncroachingShadowSuccess] = useState<
@@ -5319,28 +6836,52 @@ export const StatsComparisonMode = ({
   >({});
 
   // Gold Ship: kết quả wheel 50/50 (true = +1 all, false = -1 all, undefined = chưa quay)
-  const [goldShipResult, setGoldShipResult] = useState<Record<string, boolean | null>>({});
+  const [goldShipResult, setGoldShipResult] = useState<
+    Record<string, boolean | null>
+  >({});
 
   // Mad Scientist: kết quả wheel (true = Shrinking: self +6 SPD -3 STR -3 DUR, false = Enlarging: self +3 STR +3 DUR -6 SPD)
-  const [madScientistResult, setMadScientistResult] = useState<Record<string, boolean | null>>({});
+  const [madScientistResult, setMadScientistResult] = useState<
+    Record<string, boolean | null>
+  >({});
 
   // Summoning Scroll: stat deltas từ summon wheel (key = "player1" | "player2")
   const [summoningScrollResult, setSummoningScrollResult] = useState<
-    Record<string, { statDeltas: Partial<Record<keyof CharacterStats, number>>; startScoreDelta: number; summonName: string } | null>
+    Record<
+      string,
+      {
+        statDeltas: Partial<Record<keyof CharacterStats, number>>;
+        startScoreDelta: number;
+        summonName: string;
+      } | null
+    >
   >({});
 
   // Trickster: subtype được chọn từ wheel trước combat (key = "player1" | "player2")
   // "ace of spades" | "king of diamonds" | "queen of clubs" | "jack of 97" | "ten of hearts" | null
-  const [tricksterResult, setTricksterResult] = useState<Record<string, string | null>>({});
+  const [tricksterResult, setTricksterResult] = useState<
+    Record<string, string | null>
+  >({});
 
   // Black Magic: stat bị -2 của đối thủ (key = playerLabel của người dùng Black Magic, value = stat key)
-  const [blackMagicStat, setBlackMagicStat] = useState<Record<string, keyof CharacterStats | null>>({});
+  const [blackMagicStat, setBlackMagicStat] = useState<
+    Record<string, keyof CharacterStats | null>
+  >({});
 
   // Creator's Cat modal: chọn hiệu ứng Creator's Favor
   const [creatorsCatModal, setCreatorsCatModal] = useState<{
     isOpen: boolean;
     playerLabel: "player1" | "player2";
-    step: "choose_effect" | "choose_stats" | "choose_power" | "choose_gear" | "choose_weapon" | "choose_archetypes" | "choose_runeword" | "spin_power" | "spin_archetype";
+    step:
+      | "choose_effect"
+      | "choose_stats"
+      | "choose_power"
+      | "choose_gear"
+      | "choose_weapon"
+      | "choose_archetypes"
+      | "choose_runeword"
+      | "spin_power"
+      | "spin_archetype";
     selectedEffect: string;
     chosenStats: (keyof CharacterStats)[];
     chosenArchetypesToRemove: string[];
@@ -5370,7 +6911,8 @@ export const StatsComparisonMode = ({
     const raceName = creatorsCatModal.rollRaceName;
     const weights = RACE_STAT_WEIGHTS[raceName]?.[stat] || Array(10).fill(10);
     const statLabel = stat.toUpperCase();
-    const currentRoll = creatorsCatModal.rollTotal - creatorsCatModal.rollQueue.length + 1;
+    const currentRoll =
+      creatorsCatModal.rollTotal - creatorsCatModal.rollQueue.length + 1;
     setPreCombatModal({
       isOpen: true,
       title: `Creator's Favor: Roll ${statLabel} (${currentRoll}/${creatorsCatModal.rollTotal})`,
@@ -5385,7 +6927,10 @@ export const StatsComparisonMode = ({
       effectKey: `creators-cat-roll-${creatorsCatModal.playerLabel}-${stat}-${currentRoll}`,
       onResult: (result) => {
         const newValue = parseInt(result.label.split("=")[1].trim(), 10);
-        const newAccumulated = [...creatorsCatModal.rollAccumulated, { stat, value: newValue }];
+        const newAccumulated = [
+          ...creatorsCatModal.rollAccumulated,
+          { stat, value: newValue },
+        ];
         const newQueue = creatorsCatModal.rollQueue.slice(1);
         if (newQueue.length === 0) {
           // Xong hết — apply vào character.stats (base) rồi recalculate player.stats
@@ -5394,7 +6939,7 @@ export const StatsComparisonMode = ({
           setP((prev) => {
             if (!prev) return prev;
             // Set character base stats
-            const newCharStats = { ...prev.character?.stats ?? prev.stats };
+            const newCharStats = { ...(prev.character?.stats ?? prev.stats) };
             for (const { stat: s, value: v } of newAccumulated) {
               (newCharStats as any)[s] = v;
             }
@@ -5403,7 +6948,11 @@ export const StatsComparisonMode = ({
               : undefined;
             // Recalculate display stats từ character mới
             const newDisplayStats = updatedChar
-              ? calcStatsWithDisabled(updatedChar as Character, prev.no, disabledItems)
+              ? calcStatsWithDisabled(
+                  updatedChar as Character,
+                  prev.no,
+                  disabledItems,
+                )
               : { ...newCharStats };
             return {
               ...prev,
@@ -5411,14 +6960,24 @@ export const StatsComparisonMode = ({
               stats: newDisplayStats,
             };
           });
-          spawnStatBubbles(newAccumulated.map(({ stat: s, value: v }) => ({
-            player: pLabel,
-            text: `Creator's Favor: ${s.toUpperCase()} → ${v} (rolled)`,
-            isPositive: true,
-          })));
-          setCreatorsCatModal((p) => ({ ...p, rollQueue: [], rollAccumulated: [] }));
+          spawnStatBubbles(
+            newAccumulated.map(({ stat: s, value: v }) => ({
+              player: pLabel,
+              text: `Creator's Favor: ${s.toUpperCase()} → ${v} (rolled)`,
+              isPositive: true,
+            })),
+          );
+          setCreatorsCatModal((p) => ({
+            ...p,
+            rollQueue: [],
+            rollAccumulated: [],
+          }));
         } else {
-          setCreatorsCatModal((p) => ({ ...p, rollQueue: newQueue, rollAccumulated: newAccumulated }));
+          setCreatorsCatModal((p) => ({
+            ...p,
+            rollQueue: newQueue,
+            rollAccumulated: newAccumulated,
+          }));
         }
       },
     });
@@ -5436,7 +6995,9 @@ export const StatsComparisonMode = ({
     statMods?: Array<{ stat: keyof CharacterStats; delta: number }>;
     gmAction?: boolean; // GM must do manually
   };
-  const [afterCombatEntries, setAfterCombatEntries] = useState<AfterCombatEntry[]>([]);
+  const [afterCombatEntries, setAfterCombatEntries] = useState<
+    AfterCombatEntry[]
+  >([]);
   const [afterCombatSpinResults, setAfterCombatSpinResults] = useState<
     Record<string, { label: string; isSuccess: boolean }>
   >({});
@@ -5461,7 +7022,19 @@ export const StatsComparisonMode = ({
     const p2Summon = summoningScrollResult["player2"] ?? null;
     const p1Scrying = scryingSuccess["player1"] ?? false;
     const p2Scrying = scryingSuccess["player2"] ?? false;
-    if (p1Rule === null && p2Rule === null && p1GoldShip === null && p2GoldShip === null && p1MadScientist === null && p2MadScientist === null && !p1Summon && !p2Summon && !p1Scrying && !p2Scrying) return null;
+    if (
+      p1Rule === null &&
+      p2Rule === null &&
+      p1GoldShip === null &&
+      p2GoldShip === null &&
+      p1MadScientist === null &&
+      p2MadScientist === null &&
+      !p1Summon &&
+      !p2Summon &&
+      !p1Scrying &&
+      !p2Scrying
+    )
+      return null;
     if (!player1 || !player2) return null;
     const s1: CharacterStats = player1.character
       ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
@@ -5489,36 +7062,50 @@ export const StatsComparisonMode = ({
     // Gold Ship: apply ngay khi quay xong
     if (p1GoldShip !== null) {
       const d1 = p1GoldShip ? 1 : -1;
-      DSTAT_KEYS.forEach((k) => { s1[k] = (s1[k] || 0) + d1; });
+      DSTAT_KEYS.forEach((k) => {
+        s1[k] = (s1[k] || 0) + d1;
+      });
     }
     if (p2GoldShip !== null) {
       const d2 = p2GoldShip ? 1 : -1;
-      DSTAT_KEYS.forEach((k) => { s2[k] = (s2[k] || 0) + d2; });
+      DSTAT_KEYS.forEach((k) => {
+        s2[k] = (s2[k] || 0) + d2;
+      });
     }
     // Mad Scientist: Shrinking (true) = bản thân +6 SPD, -3 STR, -3 DUR; Enlarging (false) = bản thân +3 STR, +3 DUR, -6 SPD
     if (p1MadScientist !== null) {
       if (p1MadScientist) {
-        s1["spd"] = (s1["spd"] || 0) + 6; s1["str"] = (s1["str"] || 0) - 3; s1["dur"] = (s1["dur"] || 0) - 3;
+        s1["spd"] = (s1["spd"] || 0) + 6;
+        s1["str"] = (s1["str"] || 0) - 3;
+        s1["dur"] = (s1["dur"] || 0) - 3;
       } else {
-        s1["str"] = (s1["str"] || 0) + 3; s1["dur"] = (s1["dur"] || 0) + 3; s1["spd"] = (s1["spd"] || 0) - 6;
+        s1["str"] = (s1["str"] || 0) + 3;
+        s1["dur"] = (s1["dur"] || 0) + 3;
+        s1["spd"] = (s1["spd"] || 0) - 6;
       }
     }
     if (p2MadScientist !== null) {
       if (p2MadScientist) {
-        s2["spd"] = (s2["spd"] || 0) + 6; s2["str"] = (s2["str"] || 0) - 3; s2["dur"] = (s2["dur"] || 0) - 3;
+        s2["spd"] = (s2["spd"] || 0) + 6;
+        s2["str"] = (s2["str"] || 0) - 3;
+        s2["dur"] = (s2["dur"] || 0) - 3;
       } else {
-        s2["str"] = (s2["str"] || 0) + 3; s2["dur"] = (s2["dur"] || 0) + 3; s2["spd"] = (s2["spd"] || 0) - 6;
+        s2["str"] = (s2["str"] || 0) + 3;
+        s2["dur"] = (s2["dur"] || 0) + 3;
+        s2["spd"] = (s2["spd"] || 0) - 6;
       }
     }
     // Summoning Scroll: apply stat deltas vào preview
     if (p1Summon) {
       for (const [k, v] of Object.entries(p1Summon.statDeltas)) {
-        s1[k as keyof CharacterStats] = (s1[k as keyof CharacterStats] || 0) + (v as number);
+        s1[k as keyof CharacterStats] =
+          (s1[k as keyof CharacterStats] || 0) + (v as number);
       }
     }
     if (p2Summon) {
       for (const [k, v] of Object.entries(p2Summon.statDeltas)) {
-        s2[k as keyof CharacterStats] = (s2[k as keyof CharacterStats] || 0) + (v as number);
+        s2[k as keyof CharacterStats] =
+          (s2[k as keyof CharacterStats] || 0) + (v as number);
       }
     }
     // Pass 1: boosts
@@ -5565,15 +7152,29 @@ export const StatsComparisonMode = ({
     }
     // Scrying: p1 thành công → s2 bị -4 stat cao nhất; p2 thành công → s1 bị -4 stat cao nhất
     if (p1Scrying) {
-      const highest = DSTAT_KEYS.reduce((a, b) => (s2[a] || 0) >= (s2[b] || 0) ? a : b);
+      const highest = DSTAT_KEYS.reduce((a, b) =>
+        (s2[a] || 0) >= (s2[b] || 0) ? a : b,
+      );
       s2[highest] = (s2[highest] || 0) - 4;
     }
     if (p2Scrying) {
-      const highest = DSTAT_KEYS.reduce((a, b) => (s1[a] || 0) >= (s1[b] || 0) ? a : b);
+      const highest = DSTAT_KEYS.reduce((a, b) =>
+        (s1[a] || 0) >= (s1[b] || 0) ? a : b,
+      );
       s1[highest] = (s1[highest] || 0) - 4;
     }
     return { s1, s2 };
-  }, [stepState, dothrakiSpinResult, goldShipResult, madScientistResult, summoningScrollResult, scryingSuccess, player1, player2, disabledItems]);
+  }, [
+    stepState,
+    dothrakiSpinResult,
+    goldShipResult,
+    madScientistResult,
+    summoningScrollResult,
+    scryingSuccess,
+    player1,
+    player2,
+    disabledItems,
+  ]);
 
   const TRICKSTER_DISPLAY_DELTA: Record<string, number> = {
     "king of diamonds": 1,
@@ -5586,27 +7187,42 @@ export const StatsComparisonMode = ({
     const base = player1?.character
       ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
       : (player1?.stats ?? null);
-    const delta = TRICKSTER_DISPLAY_DELTA[(tricksterResult["player1"] ?? "").toLowerCase()];
+    const delta =
+      TRICKSTER_DISPLAY_DELTA[(tricksterResult["player1"] ?? "").toLowerCase()];
     if (base && delta != null) {
       const s = { ...base };
       for (const k of _ALL_STAT_KEYS) s[k] = Math.max(0, (s[k] ?? 0) + delta);
       return s;
     }
     // Black Magic debuff lên player1
-    const p1HasUno = (player1?.character?.powers || []).filter((pw: any) => !pw.isLost)
-      .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "uno reverse card")
-      && !disabledItems.has(`${player1?.no}-power-Uno Reverse Card`);
-    const p2HasUnoForP1 = (player2?.character?.powers || []).filter((pw: any) => !pw.isLost)
-      .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "uno reverse card")
-      && !disabledItems.has(`${player2?.no}-power-Uno Reverse Card`);
+    const p1HasUno =
+      (player1?.character?.powers || [])
+        .filter((pw: any) => !pw.isLost)
+        .some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "uno reverse card",
+        ) && !disabledItems.has(`${player1?.no}-power-Uno Reverse Card`);
+    const p2HasUnoForP1 =
+      (player2?.character?.powers || [])
+        .filter((pw: any) => !pw.isLost)
+        .some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "uno reverse card",
+        ) && !disabledItems.has(`${player2?.no}-power-Uno Reverse Card`);
     if (base) {
       const s = { ...base };
       let changed = false;
       // player2 dùng BM: bounce về p2 nếu p2 tự có URC hoặc p1 có URC; ngược lại trừ p1
       const bmFromP2 = blackMagicStat["player2"];
       if (bmFromP2) {
-        if (p1HasUno || p2HasUnoForP1) { /* bounce về p2, handled in p2DisplayStats */ }
-        else { s[bmFromP2] = (s[bmFromP2] ?? 0) - 2; changed = true; }
+        if (p1HasUno || p2HasUnoForP1) {
+          /* bounce về p2, handled in p2DisplayStats */
+        } else {
+          s[bmFromP2] = (s[bmFromP2] ?? 0) - 2;
+          changed = true;
+        }
       }
       // player1 dùng BM: bounce về p1 nếu p1 tự có URC hoặc p2 có URC
       const bmFromP1 = blackMagicStat["player1"];
@@ -5617,7 +7233,15 @@ export const StatsComparisonMode = ({
       if (changed) return s;
     }
     return base;
-  }, [player1, player2, disabledItems, stepState, dothrakiPreviewStats, tricksterResult, blackMagicStat]);
+  }, [
+    player1,
+    player2,
+    disabledItems,
+    stepState,
+    dothrakiPreviewStats,
+    tricksterResult,
+    blackMagicStat,
+  ]);
 
   const p2DisplayStats = useMemo(() => {
     if (stepState) return stepState.p2Stats;
@@ -5625,7 +7249,8 @@ export const StatsComparisonMode = ({
     const base = player2?.character
       ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
       : (player2?.stats ?? null);
-    const delta = TRICKSTER_DISPLAY_DELTA[(tricksterResult["player2"] ?? "").toLowerCase()];
+    const delta =
+      TRICKSTER_DISPLAY_DELTA[(tricksterResult["player2"] ?? "").toLowerCase()];
     if (base && delta != null) {
       const s = { ...base };
       for (const k of _ALL_STAT_KEYS) s[k] = Math.max(0, (s[k] ?? 0) + delta);
@@ -5633,20 +7258,34 @@ export const StatsComparisonMode = ({
     }
     // Black Magic của player1 debuff player2 (trừ khi player2 có Uno Reverse Card)
     const bmStatOnP2 = blackMagicStat["player1"];
-    const p2HasUno = (player2?.character?.powers || []).filter((pw: any) => !pw.isLost)
-      .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "uno reverse card")
-      && !disabledItems.has(`${player2?.no}-power-Uno Reverse Card`);
+    const p2HasUno =
+      (player2?.character?.powers || [])
+        .filter((pw: any) => !pw.isLost)
+        .some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "uno reverse card",
+        ) && !disabledItems.has(`${player2?.no}-power-Uno Reverse Card`);
     const bmStatOnP2FromSelf = blackMagicStat["player2"]; // debuff của player2 bị URC từ player1 bounce lại
-    const p1HasUnoForP2 = (player1?.character?.powers || []).filter((pw: any) => !pw.isLost)
-      .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "uno reverse card")
-      && !disabledItems.has(`${player1?.no}-power-Uno Reverse Card`);
+    const p1HasUnoForP2 =
+      (player1?.character?.powers || [])
+        .filter((pw: any) => !pw.isLost)
+        .some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "uno reverse card",
+        ) && !disabledItems.has(`${player1?.no}-power-Uno Reverse Card`);
     if (base) {
       const s = { ...base };
       let changed = false;
       // player1 dùng BM: bounce về p1 nếu p1 tự có URC hoặc p2 có URC; ngược lại trừ p2
       if (bmStatOnP2) {
-        if (p1HasUnoForP2 || p2HasUno) { /* bounce về p1, handled in p1DisplayStats */ }
-        else { s[bmStatOnP2] = (s[bmStatOnP2] ?? 0) - 2; changed = true; }
+        if (p1HasUnoForP2 || p2HasUno) {
+          /* bounce về p1, handled in p1DisplayStats */
+        } else {
+          s[bmStatOnP2] = (s[bmStatOnP2] ?? 0) - 2;
+          changed = true;
+        }
       }
       // player2 dùng BM: bounce về p2 nếu p2 tự có URC hoặc p1 có URC
       if (bmStatOnP2FromSelf && (p2HasUno || p1HasUnoForP2)) {
@@ -5656,7 +7295,15 @@ export const StatsComparisonMode = ({
       if (changed) return s;
     }
     return base;
-  }, [player1, player2, disabledItems, stepState, dothrakiPreviewStats, tricksterResult, blackMagicStat]);
+  }, [
+    player1,
+    player2,
+    disabledItems,
+    stepState,
+    dothrakiPreviewStats,
+    tricksterResult,
+    blackMagicStat,
+  ]);
 
   // Dev Mode: wheel weight overrides (effectName -> itemIndex -> weight)
   const [devMode, setDevMode] = useState(false);
@@ -5720,10 +7367,21 @@ export const StatsComparisonMode = ({
         effectKey: `guidance-stat2-${playerLabel}`,
         onResult: (result) => {
           const stat2 = result.label;
-          setGuidanceStats((prev) => ({ ...prev, [playerLabel]: [stat1, stat2] }));
+          setGuidanceStats((prev) => ({
+            ...prev,
+            [playerLabel]: [stat1, stat2],
+          }));
           spawnStatBubbles([
-            { player: playerLabel, text: `+1 ${stat1.toUpperCase()} (Guidance)`, isPositive: true },
-            { player: playerLabel, text: `+1 ${stat2.toUpperCase()} (Guidance)`, isPositive: true },
+            {
+              player: playerLabel,
+              text: `+1 ${stat1.toUpperCase()} (Guidance)`,
+              isPositive: true,
+            },
+            {
+              player: playerLabel,
+              text: `+1 ${stat2.toUpperCase()} (Guidance)`,
+              isPositive: true,
+            },
           ]);
         },
       });
@@ -5732,9 +7390,16 @@ export const StatsComparisonMode = ({
     } else if (sourceName === "golden coin") {
       // label là "+X điểm khởi đầu (Y%)" — parse số điểm từ label
       const match = item.label.match(/\+(\d+)\s*điểm/);
-      const pts = match ? parseInt(match[1], 10) : (item.isSuccess ? 1 : 0);
+      const pts = match ? parseInt(match[1], 10) : item.isSuccess ? 1 : 0;
       setGoldenCoinPoints((prev) => ({ ...prev, [playerLabel]: pts }));
-      if (pts > 0) spawnStatBubbles([{ player: playerLabel, text: `+${pts} điểm khởi đầu (Golden Coin)`, isPositive: true }]);
+      if (pts > 0)
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: `+${pts} điểm khởi đầu (Golden Coin)`,
+            isPositive: true,
+          },
+        ]);
     } else if (sourceName === "raumanian" || sourceName === "raumanian🍀") {
       setRaumanianSuccess((prev) => ({
         ...prev,
@@ -5743,32 +7408,70 @@ export const StatsComparisonMode = ({
       try {
         new Audio(getAssetPath("/assets/sfx/raumanian.mp3"))
           .play()
-          .catch(() => { });
-      } catch (_) { }
+          .catch(() => {});
+      } catch (_) {}
     } else if (sourceName === "scrying") {
       const success = item.isSuccess === true;
       setScryingSuccess((prev) => ({ ...prev, [playerLabel]: success }));
       if (success) {
         const oppLabel = playerLabel === "player1" ? "player2" : "player1";
-        spawnStatBubbles([{ player: oppLabel, text: "-4 Stat cao nhất (Scrying)", isPositive: false }]);
+        spawnStatBubbles([
+          {
+            player: oppLabel,
+            text: "-4 Stat cao nhất (Scrying)",
+            isPositive: false,
+          },
+        ]);
       }
     } else if (sourceName === "encroaching shadow") {
       const success = item.isSuccess === true;
-      setEncroachingShadowSuccess((prev) => ({ ...prev, [playerLabel]: success }));
+      setEncroachingShadowSuccess((prev) => ({
+        ...prev,
+        [playerLabel]: success,
+      }));
       if (success) {
-        spawnStatBubbles([{ player: playerLabel, text: "+7 SPD (Encroaching Shadow)", isPositive: true }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "+7 SPD (Encroaching Shadow)",
+            isPositive: true,
+          },
+        ]);
       }
     } else if (sourceName === "gold ship") {
       const isPositive = item.isSuccess === true;
       setGoldShipResult((prev) => ({ ...prev, [playerLabel]: isPositive }));
-      spawnStatBubbles([{ player: playerLabel, text: isPositive ? "+1 All Stats (Gold Ship)" : "-1 All Stats (Gold Ship)", isPositive }]);
+      spawnStatBubbles([
+        {
+          player: playerLabel,
+          text: isPositive
+            ? "+1 All Stats (Gold Ship)"
+            : "-1 All Stats (Gold Ship)",
+          isPositive,
+        },
+      ]);
     } else if (sourceName === "mad scientist") {
       const isShrinking = item.label.toLowerCase().includes("shrinking");
-      setMadScientistResult((prev) => ({ ...prev, [playerLabel]: isShrinking }));
+      setMadScientistResult((prev) => ({
+        ...prev,
+        [playerLabel]: isShrinking,
+      }));
       if (isShrinking) {
-        spawnStatBubbles([{ player: playerLabel, text: "Mad Scientist: Shrinking → +6 SPD, -3 STR, -3 DUR", isPositive: true }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Mad Scientist: Shrinking → +6 SPD, -3 STR, -3 DUR",
+            isPositive: true,
+          },
+        ]);
       } else {
-        spawnStatBubbles([{ player: playerLabel, text: "Mad Scientist: Enlarging → +3 STR, +3 DUR, -6 SPD", isPositive: true }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Mad Scientist: Enlarging → +3 STR, +3 DUR, -6 SPD",
+            isPositive: true,
+          },
+        ]);
       }
     } else if (sourceName === "dothraki") {
       const rule = (item.meta?.ruleIndex ?? null) as DothrakiRule;
@@ -5778,7 +7481,8 @@ export const StatsComparisonMode = ({
     } else if (sourceName === "cursed pennywort") {
       if (!item.isSuccess) return; // 64% không kích hoạt
       // Kích hoạt: vô hiệu 3 power của đối thủ (hoặc tất cả nếu ≤3)
-      const disableTarget: "player1" | "player2" = playerLabel === "player1" ? "player2" : "player1";
+      const disableTarget: "player1" | "player2" =
+        playerLabel === "player1" ? "player2" : "player1";
       const oppPlayer = disableTarget === "player1" ? player1 : player2;
       if (!oppPlayer) return;
       const oppPowers = (oppPlayer.character?.powers || [])
@@ -5786,7 +7490,16 @@ export const StatsComparisonMode = ({
         .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
         .filter(Boolean);
       if (oppPowers.length === 0) return;
-      const POWER_COLORS = ["#ef4444", "#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ec4899", "#06b6d4", "#84cc16"];
+      const POWER_COLORS = [
+        "#ef4444",
+        "#f59e0b",
+        "#22c55e",
+        "#3b82f6",
+        "#a855f7",
+        "#ec4899",
+        "#06b6d4",
+        "#84cc16",
+      ];
       const maxDisable = 3;
       if (oppPowers.length <= maxDisable) {
         // Auto-disable tất cả
@@ -5831,7 +7544,12 @@ export const StatsComparisonMode = ({
         });
       };
       openPennyWheelSpin(1, oppPowers);
-    } else if ((sourceName === "power negation" || sourceName === "anti-magic barrier" || sourceName === "memory alter") && item.meta?.powerName) {
+    } else if (
+      (sourceName === "power negation" ||
+        sourceName === "anti-magic barrier" ||
+        sourceName === "memory alter") &&
+      item.meta?.powerName
+    ) {
       // Power Negation / Anti-Magic Barrier: disable power được chọn của đối thủ
       const powerName = item.meta.powerName as string;
       const disableTarget = item.meta.disableTarget as "player1" | "player2";
@@ -5845,7 +7563,14 @@ export const StatsComparisonMode = ({
         });
       }
     } else if (sourceName === "black magic") {
-      const statMap: Record<string, keyof CharacterStats> = { STR: "str", SPD: "spd", DUR: "dur", IQ: "iq", BIQ: "biq", MA: "ma" };
+      const statMap: Record<string, keyof CharacterStats> = {
+        STR: "str",
+        SPD: "spd",
+        DUR: "dur",
+        IQ: "iq",
+        BIQ: "biq",
+        MA: "ma",
+      };
       const stat = statMap[item.label];
       if (stat) {
         setBlackMagicStat((prev) => ({ ...prev, [playerLabel]: stat }));
@@ -5853,9 +7578,15 @@ export const StatsComparisonMode = ({
         const selfPlayer = playerLabel === "player1" ? player1 : player2;
         const oppPlayer = oppLabel === "player1" ? player1 : player2;
         const checkUno = (p: typeof player1) =>
-          (p?.character?.powers || []).filter((pw: any) => !pw.isLost)
-            .some((pw: any) => (typeof pw === "string" ? pw : pw?.name ?? "").toLowerCase() === "uno reverse card")
-          && !disabledItems.has(`${p?.no}-power-Uno Reverse Card`);
+          (p?.character?.powers || [])
+            .filter((pw: any) => !pw.isLost)
+            .some(
+              (pw: any) =>
+                (typeof pw === "string"
+                  ? pw
+                  : (pw?.name ?? "")
+                ).toLowerCase() === "uno reverse card",
+            ) && !disabledItems.has(`${p?.no}-power-Uno Reverse Card`);
         // URC: nếu chính người dùng BM có URC → debuff quay lại họ; nếu đối thủ có URC → debuff quay lại người dùng BM
         const selfHasUno = checkUno(selfPlayer);
         const oppHasUno = checkUno(oppPlayer);
@@ -5864,7 +7595,9 @@ export const StatsComparisonMode = ({
         const bubbleText = unoActive
           ? `-2 ${item.label} (Black Magic — Uno Reverse!)`
           : `-2 ${item.label} (Black Magic)`;
-        spawnStatBubbles([{ player: actualTarget, text: bubbleText, isPositive: false }]);
+        spawnStatBubbles([
+          { player: actualTarget, text: bubbleText, isPositive: false },
+        ]);
       }
     } else if (sourceName === "summoning scroll") {
       const label = item.label;
@@ -5872,28 +7605,71 @@ export const StatsComparisonMode = ({
       let startScoreDelta = 0;
       if (label.startsWith("Chihuahua")) {
         for (const k of _ALL_STAT_KEYS) statDeltas[k] = -1;
-        spawnStatBubbles([{ player: playerLabel, text: "Chihuahua: -1 All Stats (Summon)", isPositive: false }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Chihuahua: -1 All Stats (Summon)",
+            isPositive: false,
+          },
+        ]);
       } else if (label.startsWith("Mufasa")) {
         statDeltas.str = 3;
-        spawnStatBubbles([{ player: playerLabel, text: "Mufasa: +3 STR (Summon)", isPositive: true }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Mufasa: +3 STR (Summon)",
+            isPositive: true,
+          },
+        ]);
       } else if (label.startsWith("Pack of Wolves")) {
         statDeltas.spd = 3;
-        spawnStatBubbles([{ player: playerLabel, text: "Pack of Wolves: +3 SPD (Summon)", isPositive: true }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Pack of Wolves: +3 SPD (Summon)",
+            isPositive: true,
+          },
+        ]);
       } else if (label.startsWith("Earth Golem")) {
         statDeltas.dur = 3;
-        spawnStatBubbles([{ player: playerLabel, text: "Earth Golem: +3 DUR (Summon)", isPositive: true }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Earth Golem: +3 DUR (Summon)",
+            isPositive: true,
+          },
+        ]);
       } else if (label.startsWith("Water Elemental")) {
         statDeltas.iq = 3;
-        spawnStatBubbles([{ player: playerLabel, text: "Water Elemental: +3 IQ (Summon)", isPositive: true }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Water Elemental: +3 IQ (Summon)",
+            isPositive: true,
+          },
+        ]);
       } else if (label.startsWith("Imp")) {
         statDeltas.biq = 3;
-        spawnStatBubbles([{ player: playerLabel, text: "Imp: +3 BIQ (Summon)", isPositive: true }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Imp: +3 BIQ (Summon)",
+            isPositive: true,
+          },
+        ]);
       } else if (label.startsWith("Igris")) {
         statDeltas.ma = 3;
-        spawnStatBubbles([{ player: playerLabel, text: "Igris: +3 MA (Summon)", isPositive: true }]);
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Igris: +3 MA (Summon)",
+            isPositive: true,
+          },
+        ]);
       } else if (label.startsWith("Numby") && item.meta?.needsStatRoll) {
         // Numby: cần quay thêm wheel 6 chỉ số
-        const playerName = playerLabel === "player1" ? player1?.name : player2?.name;
+        const playerName =
+          playerLabel === "player1" ? player1?.name : player2?.name;
         setPreCombatModal({
           isOpen: true,
           title: "Numby: Chọn chỉ số +4",
@@ -5909,14 +7685,31 @@ export const StatsComparisonMode = ({
           side: playerLabel,
           effectKey: `numby-${playerLabel}`,
           onResult: (result) => {
-            const statMap: Record<string, keyof CharacterStats> = { STR: "str", SPD: "spd", DUR: "dur", IQ: "iq", BIQ: "biq", MA: "ma" };
+            const statMap: Record<string, keyof CharacterStats> = {
+              STR: "str",
+              SPD: "spd",
+              DUR: "dur",
+              IQ: "iq",
+              BIQ: "biq",
+              MA: "ma",
+            };
             const sk = statMap[result.label] as keyof CharacterStats;
             if (sk) {
               setSummoningScrollResult((prev) => ({
                 ...prev,
-                [playerLabel]: { statDeltas: { [sk]: 4 }, startScoreDelta: 0, summonName: "Numby" },
+                [playerLabel]: {
+                  statDeltas: { [sk]: 4 },
+                  startScoreDelta: 0,
+                  summonName: "Numby",
+                },
               }));
-              spawnStatBubbles([{ player: playerLabel, text: `Numby: +4 ${result.label} (Summon)`, isPositive: true }]);
+              spawnStatBubbles([
+                {
+                  player: playerLabel,
+                  text: `Numby: +4 ${result.label} (Summon)`,
+                  isPositive: true,
+                },
+              ]);
             }
           },
         });
@@ -5924,8 +7717,17 @@ export const StatsComparisonMode = ({
       } else if (label.startsWith("Wyvern's Egg") && item.meta?.isWyvernsEgg) {
         // Placeholder: +2 điểm khởi đầu nếu là chung kết tổng — xử lý sau
         startScoreDelta = 0; // TODO: check if match is grand final
-        spawnStatBubbles([{ player: playerLabel, text: "Wyvern's Egg: Pending — +2 điểm nếu là chung kết tổng", isPositive: true }]);
-      } else if (label.startsWith("Creator's Cat") && item.meta?.isCreatorsCat) {
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "Wyvern's Egg: Pending — +2 điểm nếu là chung kết tổng",
+            isPositive: true,
+          },
+        ]);
+      } else if (
+        label.startsWith("Creator's Cat") &&
+        item.meta?.isCreatorsCat
+      ) {
         // Creator's Cat: thêm charDev + mở modal chọn hiệu ứng
         const setPlayer = playerLabel === "player1" ? setPlayer1 : setPlayer2;
         setPlayer((prev) => {
@@ -5953,27 +7755,42 @@ export const StatsComparisonMode = ({
         });
         return;
       }
-      if (Object.keys(statDeltas).length > 0 || startScoreDelta > 0 || label.startsWith("Wyvern")) {
+      if (
+        Object.keys(statDeltas).length > 0 ||
+        startScoreDelta > 0 ||
+        label.startsWith("Wyvern")
+      ) {
         setSummoningScrollResult((prev) => ({
           ...prev,
-          [playerLabel]: { statDeltas, startScoreDelta, summonName: label.split(":")[0] },
+          [playerLabel]: {
+            statDeltas,
+            startScoreDelta,
+            summonName: label.split(":")[0],
+          },
         }));
       }
     } else if (sourceName === "trickster") {
       const subtype = item.label.toLowerCase();
       setTricksterResult((prev) => ({ ...prev, [playerLabel]: subtype }));
-      const msg = subtype === "ten of hearts"
-        ? "Trickster: Ten of Hearts — Không có gì xảy ra"
-        : subtype === "ace of spades"
-          ? "Trickster: Ace of Spades — Điểm 2 bên sẽ hoán đổi sau combat!"
-          : subtype === "king of diamonds"
-            ? "Trickster: King of Diamonds — +1 All Stats"
-            : subtype === "queen of clubs"
-              ? "Trickster: Queen of Clubs — -1 All Stats"
-              : subtype === "jack of 97"
-                ? "Trickster: Jack of 97 — +97 All Stats"
-                : `Trickster: ${item.label}`;
-      spawnStatBubbles([{ player: playerLabel, text: msg, isPositive: subtype !== "queen of clubs" }]);
+      const msg =
+        subtype === "ten of hearts"
+          ? "Trickster: Ten of Hearts — Không có gì xảy ra"
+          : subtype === "ace of spades"
+            ? "Trickster: Ace of Spades — Điểm 2 bên sẽ hoán đổi sau combat!"
+            : subtype === "king of diamonds"
+              ? "Trickster: King of Diamonds — +1 All Stats"
+              : subtype === "queen of clubs"
+                ? "Trickster: Queen of Clubs — -1 All Stats"
+                : subtype === "jack of 97"
+                  ? "Trickster: Jack of 97 — +97 All Stats"
+                  : `Trickster: ${item.label}`;
+      spawnStatBubbles([
+        {
+          player: playerLabel,
+          text: msg,
+          isPositive: subtype !== "queen of clubs",
+        },
+      ]);
     } else if (sourceName === "invoker" && item.meta?.powerName) {
       // Invoker: thêm power vào character rồi recalculate stats
       const powerName = item.meta.powerName as string;
@@ -6018,15 +7835,40 @@ export const StatsComparisonMode = ({
     { label: "Không", weight: 65, isSuccess: false, color: "#6b7280" },
   ];
   const PENNYWORTHY_WIN_ITEMS: WheelSpinItem[] = [
-    { label: "+1 điểm bonus (36%)", weight: 36, isSuccess: true, color: "#a3e635" },
-    { label: "Không kích hoạt (64%)", weight: 64, isSuccess: false, color: "#6b7280" },
+    {
+      label: "+1 điểm bonus (36%)",
+      weight: 36,
+      isSuccess: true,
+      color: "#a3e635",
+    },
+    {
+      label: "Không kích hoạt (64%)",
+      weight: 64,
+      isSuccess: false,
+      color: "#6b7280",
+    },
   ];
   const PENNYWORTHY_LOSE_ITEMS: WheelSpinItem[] = [
-    { label: "+2 vào chỉ số thua (36%)", weight: 36, isSuccess: true, color: "#34d399" },
-    { label: "Không kích hoạt (64%)", weight: 64, isSuccess: false, color: "#6b7280" },
+    {
+      label: "+2 vào chỉ số thua (36%)",
+      weight: 36,
+      isSuccess: true,
+      color: "#34d399",
+    },
+    {
+      label: "Không kích hoạt (64%)",
+      weight: 64,
+      isSuccess: false,
+      color: "#6b7280",
+    },
   ];
   const BASH_ITEMS: WheelSpinItem[] = [
-    { label: "-3 stat đối thủ round kế (35%)", weight: 35, isSuccess: true, color: "#a855f7" },
+    {
+      label: "-3 stat đối thủ round kế (35%)",
+      weight: 35,
+      isSuccess: true,
+      color: "#a855f7",
+    },
     { label: "Không có (65%)", weight: 65, isSuccess: false, color: "#6b7280" },
   ];
   const CRIT_ITEMS: WheelSpinItem[] = [
@@ -6099,32 +7941,62 @@ export const StatsComparisonMode = ({
   ];
   // Power Ranger: Red — 20% +2 điểm khi thắng Strength
   const RANGER_RED_ITEMS: WheelSpinItem[] = [
-    { label: "⚡ +2 điểm! (20%)", weight: 20, isSuccess: true, color: "#ef4444" },
+    {
+      label: "⚡ +2 điểm! (20%)",
+      weight: 20,
+      isSuccess: true,
+      color: "#ef4444",
+    },
     { label: "Không (80%)", weight: 80, isSuccess: false, color: "#6b7280" },
   ];
   // Power Ranger: Blue — 33% +3 Base Speed khi thắng Speed
   const RANGER_BLUE_ITEMS: WheelSpinItem[] = [
-    { label: "⚡ +3 Base Speed! (33%)", weight: 33, isSuccess: true, color: "#3b82f6" },
+    {
+      label: "⚡ +3 Base Speed! (33%)",
+      weight: 33,
+      isSuccess: true,
+      color: "#3b82f6",
+    },
     { label: "Không (67%)", weight: 67, isSuccess: false, color: "#6b7280" },
   ];
   // Power Ranger: Black — 20% nhận 1 Power khi thắng Durability
   const RANGER_BLACK_ITEMS: WheelSpinItem[] = [
-    { label: "⚡ Nhận 1 Power! (20%)", weight: 20, isSuccess: true, color: "#1f2937" },
+    {
+      label: "⚡ Nhận 1 Power! (20%)",
+      weight: 20,
+      isSuccess: true,
+      color: "#1f2937",
+    },
     { label: "Không (80%)", weight: 80, isSuccess: false, color: "#6b7280" },
   ];
   // Power Ranger: Yellow — 25% nhận 1 Gear khi thắng IQ
   const RANGER_YELLOW_ITEMS: WheelSpinItem[] = [
-    { label: "⚡ Nhận 1 Gear! (25%)", weight: 25, isSuccess: true, color: "#eab308" },
+    {
+      label: "⚡ Nhận 1 Gear! (25%)",
+      weight: 25,
+      isSuccess: true,
+      color: "#eab308",
+    },
     { label: "Không (75%)", weight: 75, isSuccess: false, color: "#6b7280" },
   ];
   // Power Ranger: Pink — 25% +1 Base stat ngẫu nhiên khi thắng BIQ/MA
   const RANGER_PINK_ITEMS: WheelSpinItem[] = [
-    { label: "⚡ +1 Base stat ngẫu nhiên! (25%)", weight: 25, isSuccess: true, color: "#ec4899" },
+    {
+      label: "⚡ +1 Base stat ngẫu nhiên! (25%)",
+      weight: 25,
+      isSuccess: true,
+      color: "#ec4899",
+    },
     { label: "Không (75%)", weight: 75, isSuccess: false, color: "#6b7280" },
   ];
   // Power Ranger: Silver — 15% gấp đôi chỉ số round tiếp theo khi thắng bất kỳ round
   const RANGER_SILVER_ITEMS: WheelSpinItem[] = [
-    { label: "⚡ Gấp đôi stat round kế! (15%)", weight: 15, isSuccess: true, color: "#9ca3af" },
+    {
+      label: "⚡ Gấp đôi stat round kế! (15%)",
+      weight: 15,
+      isSuccess: true,
+      color: "#9ca3af",
+    },
     { label: "Không (85%)", weight: 85, isSuccess: false, color: "#6b7280" },
   ];
   // Night Owl / Open-minded: after-combat wheels (referenced via preCombatModal)
@@ -6162,7 +8034,12 @@ export const StatsComparisonMode = ({
     effects: { onWin: string[]; onLose: string[]; onTie: string[] },
     statKey?: string, // e.g. "str", "spd", ... for One Trick Pony
     roundsWonBefore?: number, // số round đã thắng trước round này (dùng cho Weak-Knee)
-  ): { pts: number; pending: boolean; color: string } => {
+  ): {
+    pts: number;
+    pending: boolean;
+    color: string;
+    autoApplied?: boolean;
+  } => {
     const isWinner = winner === side;
     const isLoser = winner !== side && winner !== "tie";
     const isTie = winner === "tie";
@@ -6195,21 +8072,41 @@ export const StatsComparisonMode = ({
     ];
     // Weak-Knee: round thắng đầu tiên không nhận điểm
     if (roundsWonBefore !== undefined) {
-      const hasWeakKnee = (char?.quirks || []).filter((q: any) => !q.isLost).some((q: any) => q.name === "Weak-Knee")
-        && !disabledItems.has(`${(side === "player1" ? player1 : player2)?.no}-quirk-Weak-Knee`);
+      const hasWeakKnee =
+        (char?.quirks || [])
+          .filter((q: any) => !q.isLost)
+          .some((q: any) => q.name === "Weak-Knee") &&
+        !disabledItems.has(
+          `${(side === "player1" ? player1 : player2)?.no}-quirk-Weak-Knee`,
+        );
       if (hasWeakKnee && isWinner && roundsWonBefore === 0) {
         return { pts: 0, pending: false, color: "text-gray-500" };
       }
     }
+    // Golden Parry check helper — dùng sau khi tính base OTP hoặc normal
+    const oppSideForParry = side === "player1" ? "player2" : "player1";
+    const oppEffsForParry = isWinner ? getPerRoundEffects(
+      oppSideForParry === "player1" ? player1?.character : player2?.character,
+      oppSideForParry === "player1" ? player1?.no : player2?.no,
+    ) : { onWin: [], onLose: [], onTie: [] };
+    const goldenParrySpun = isWinner
+      ? roundSpinResults[`${roundIdx}-Golden Parry-${oppSideForParry}`]
+      : undefined;
+    const oppHasGoldenParry = oppEffsForParry.onLose.includes("Golden Parry");
+
     const hasOTP = charSources.includes("one trick pony");
     if (hasOTP && isWinner && statKey) {
       const otpChosenStat = oneTrickPonyStat[side]; // short key e.g. "str"
       if (otpChosenStat) {
-        if (otpChosenStat === statKey) {
-          return { pts: 3, pending: false, color: "text-yellow-300" };
-        } else {
-          return { pts: 0, pending: false, color: "text-gray-500" };
+        const otpBase = otpChosenStat === statKey ? 3 : 0;
+        // Check Golden Parry sau khi biết otpBase
+        if (oppHasGoldenParry) {
+          if (!goldenParrySpun)
+            return { pts: otpBase, pending: true, color: "text-amber-400", autoApplied: true };
+          if (goldenParrySpun.isSuccess)
+            return { pts: 0, pending: false, color: "text-amber-300", autoApplied: true };
         }
+        return { pts: otpBase, pending: false, color: otpChosenStat === statKey ? "text-yellow-300" : "text-gray-500", autoApplied: true };
       }
       // Wheel chưa quay — không block next round, dùng điểm mặc định +1
       return { pts: 1, pending: false, color: "text-yellow-400" };
@@ -6244,25 +8141,28 @@ export const StatsComparisonMode = ({
     }
 
     if (isWinner) {
-      // Golden Parry (from opponent): nếu đối thủ thua và parry thành công → ta không nhận điểm
-      const oppSideForParry = side === "player1" ? "player2" : "player1";
-      const oppEffsForParry = getPerRoundEffects(
-        oppSideForParry === "player1" ? player1?.character : player2?.character,
-        oppSideForParry === "player1" ? player1?.no : player2?.no,
-      );
-      const goldenParrySpun = roundSpinResults[`${roundIdx}-Golden Parry-${oppSideForParry}`];
-      if (oppEffsForParry.onLose.includes("Golden Parry")) {
-        if (!goldenParrySpun) return { pts: 1, pending: true, color: "text-amber-400" };
-        if (goldenParrySpun.isSuccess) return { pts: 0, pending: false, color: "text-amber-300" };
-      }
       // Cautious (on opponent): đối thủ có Cautious → ta không nhận điểm round STR
       if (statKey === "str") {
         const oppSideForCautious = side === "player1" ? "player2" : "player1";
-        const oppCharForCautious = oppSideForCautious === "player1" ? player1?.character : player2?.character;
-        const oppNoForCautious = oppSideForCautious === "player1" ? player1?.no : player2?.no;
-        const oppEffsForCautious = getPerRoundEffects(oppCharForCautious, oppNoForCautious);
+        const oppCharForCautious =
+          oppSideForCautious === "player1"
+            ? player1?.character
+            : player2?.character;
+        const oppNoForCautious =
+          oppSideForCautious === "player1" ? player1?.no : player2?.no;
+        const oppEffsForCautious = getPerRoundEffects(
+          oppCharForCautious,
+          oppNoForCautious,
+        );
         if (oppEffsForCautious.onWin.includes("Cautious-Self")) {
-          return { pts: 0, pending: false, color: "text-gray-500" };
+          // autoApplied: true vì computeRoundStep đã chặn điểm qua blockOpponentPoint
+          // patchedState phải biết base score là 0 (không phải 1) → diff = 0 - 0 = 0
+          return {
+            pts: 0,
+            pending: false,
+            color: "text-gray-500",
+            autoApplied: true,
+          };
         }
       }
       // Blind: 15% không nhận điểm round này (kiểm tra trước Gambler/Crit)
@@ -6290,14 +8190,20 @@ export const StatsComparisonMode = ({
       }
       // Pennyworthy: 36% +1 điểm khi thắng
       const hasPennyworthyWin = effects.onWin.includes("Pennyworthy-Win");
-      const pennyworthyWinSpun = roundSpinResults[`${roundIdx}-Pennyworthy-Win-${side}`];
+      const pennyworthyWinSpun =
+        roundSpinResults[`${roundIdx}-Pennyworthy-Win-${side}`];
       if (hasPennyworthyWin && !pennyworthyWinSpun)
         return { pts: base, pending: true, color: "text-lime-400" };
       if (hasPennyworthyWin && pennyworthyWinSpun?.isSuccess) base += 1;
       if (effects.onWin.includes("Hunter's Mark")) {
         const hmsChosen = huntersMarkStat[side];
         const STAT_KEY_TO_LABEL_HM: Record<string, string> = {
-          str: "Strength", spd: "Speed", dur: "Durability", iq: "IQ", biq: "BIQ", ma: "MA",
+          str: "Strength",
+          spd: "Speed",
+          dur: "Durability",
+          iq: "IQ",
+          biq: "BIQ",
+          ma: "MA",
         };
         const roundStatLabelHM = STAT_KEY_TO_LABEL_HM[statKey ?? ""] ?? "";
         if (hmsChosen === roundStatLabelHM) {
@@ -6305,6 +8211,13 @@ export const StatsComparisonMode = ({
           base += 1;
         }
         // Chưa chọn stat hoặc sai stat → bình thường (tiếp tục)
+      }
+      // Golden Parry (from opponent): check sau khi tính xong base để override toàn bộ điểm về 0
+      if (oppHasGoldenParry) {
+        if (!goldenParrySpun)
+          return { pts: base, pending: true, color: "text-amber-400" };
+        if (goldenParrySpun.isSuccess)
+          return { pts: 0, pending: false, color: "text-amber-300" };
       }
       const color =
         base === 0
@@ -6321,7 +8234,8 @@ export const StatsComparisonMode = ({
         return { pts: 0, pending: true, color: "text-pink-400" };
       // Pennyworthy-Lose: 36% +2 stat round thua — không ảnh hưởng điểm, GM tự apply
       const hasPennyworthyLose = effects.onLose.includes("Pennyworthy-Lose");
-      const pennyworthyLoseSpun = roundSpinResults[`${roundIdx}-Pennyworthy-Lose-${side}`];
+      const pennyworthyLoseSpun =
+        roundSpinResults[`${roundIdx}-Pennyworthy-Lose-${side}`];
       if (hasPennyworthyLose && !pennyworthyLoseSpun)
         return { pts: 0, pending: true, color: "text-emerald-400" };
       if (hasEvasion) {
@@ -6333,7 +8247,8 @@ export const StatsComparisonMode = ({
       // Golden Parry: 35% chặn đối thủ không nhận điểm khi thua round
       // Nếu có Golden Parry, cần quay để xác định — kết quả ảnh hưởng lên điểm của đối thủ
       const hasGoldenParry = effects.onLose.includes("Golden Parry");
-      const goldenParryLoserSpun = roundSpinResults[`${roundIdx}-Golden Parry-${side}`];
+      const goldenParryLoserSpun =
+        roundSpinResults[`${roundIdx}-Golden Parry-${side}`];
       if (hasGoldenParry && !goldenParryLoserSpun)
         return { pts: 0, pending: true, color: "text-amber-400" };
       // Golden Parry không ảnh hưởng điểm của người thua (luôn 0)
@@ -6410,10 +8325,11 @@ export const StatsComparisonMode = ({
                 side,
               })
             }
-            className={`inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded font-bold border transition-colors ${result.isSuccess
-              ? "bg-amber-600/30 text-amber-300 border-amber-500/40 hover:bg-amber-600/50"
-              : "bg-gray-700/60 text-gray-400 border-gray-600/40 hover:bg-gray-700/80"
-              }`}
+            className={`inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded font-bold border transition-colors ${
+              result.isSuccess
+                ? "bg-amber-600/30 text-amber-300 border-amber-500/40 hover:bg-amber-600/50"
+                : "bg-gray-700/60 text-gray-400 border-gray-600/40 hover:bg-gray-700/80"
+            }`}
             title={`${effectName}: ${result.label} — click để quay lại`}
           >
             {result.isSuccess ? "✦" : "·"}{" "}
@@ -6479,28 +8395,50 @@ export const StatsComparisonMode = ({
     };
 
     // Build display rows — insert BIQ×2 row after BIQ if rounds has extra entry or flag set
-    const hasZoltraakExtra = rounds.length > STAT_ORDER.length || !!extraBiqRound;
-    const displayRows: { key: keyof CharacterStats; label: string; statOrderIndex: number; roundArrayIndex: number }[] = [];
+    const hasZoltraakExtra =
+      rounds.length > STAT_ORDER.length || !!extraBiqRound;
+    const displayRows: {
+      key: keyof CharacterStats;
+      label: string;
+      statOrderIndex: number;
+      roundArrayIndex: number;
+    }[] = [];
     let roundArrayCursor = 0;
     for (let si = 0; si < STAT_ORDER.length; si++) {
-      displayRows.push({ key: STAT_ORDER[si].key, label: STAT_ORDER[si].label, statOrderIndex: si, roundArrayIndex: roundArrayCursor });
+      displayRows.push({
+        key: STAT_ORDER[si].key,
+        label: STAT_ORDER[si].label,
+        statOrderIndex: si,
+        roundArrayIndex: roundArrayCursor,
+      });
       roundArrayCursor++;
       // If this is BIQ (index 4) and there's an extra round (Zoltraak BIQ×2)
       if (si === 4 && hasZoltraakExtra) {
-        displayRows.push({ key: STAT_ORDER[si].key, label: "BIQ×2", statOrderIndex: si, roundArrayIndex: roundArrayCursor });
+        displayRows.push({
+          key: STAT_ORDER[si].key,
+          label: "BIQ×2",
+          statOrderIndex: si,
+          roundArrayIndex: roundArrayCursor,
+        });
         roundArrayCursor++;
       }
     }
     // Convert revealedUpTo (stat order index) to roundArrayIndex
-    const revealedUpToArr = revealedUpTo !== null
-      ? (hasZoltraakExtra && revealedUpTo >= 4 ? revealedUpTo + 1 : revealedUpTo)
-      : null;
+    const revealedUpToArr =
+      revealedUpTo !== null
+        ? hasZoltraakExtra && revealedUpTo >= 4
+          ? revealedUpTo + 1
+          : revealedUpTo
+        : null;
 
     return (
       <div className="space-y-1">
         {displayRows.map(({ key, label, roundArrayIndex }) => {
           const round = rounds[roundArrayIndex];
-          const revealed = revealedUpToArr !== null ? roundArrayIndex <= revealedUpToArr : true;
+          const revealed =
+            revealedUpToArr !== null
+              ? roundArrayIndex <= revealedUpToArr
+              : true;
           const p1Win = revealed && round?.winner === "player1";
           const p2Win = revealed && round?.winner === "player2";
           const tie = revealed && round?.winner === "tie";
@@ -6517,11 +8455,20 @@ export const StatsComparisonMode = ({
             "Ranger-Pink": ["biq", "ma"],
             // Ranger-Silver: mọi round trừ round cuối (index < 5)
           };
-          const isLastDisplayRow = roundArrayIndex === displayRows[displayRows.length - 1].roundArrayIndex;
+          const isLastDisplayRow =
+            roundArrayIndex ===
+            displayRows[displayRows.length - 1].roundArrayIndex;
           const filterLastRound = (effs: string[]) =>
             effs.filter((e) => {
-              if (e === "Bloodthirsty" || e === "Divine Smite" || e === "Cautious-Self" || e === "Hunter's Mark") return false;
-              if ((e === "Bash" || e === "Luminescence") && isLastDisplayRow) return false;
+              if (
+                e === "Bloodthirsty" ||
+                e === "Divine Smite" ||
+                e === "Cautious-Self" ||
+                e === "Hunter's Mark"
+              )
+                return false;
+              if ((e === "Bash" || e === "Luminescence") && isLastDisplayRow)
+                return false;
               if (e === "Ranger-Silver" && isLastDisplayRow) return false;
               if (e in RANGER_ROUND_STAT) {
                 const required = RANGER_ROUND_STAT[e];
@@ -6530,45 +8477,53 @@ export const StatsComparisonMode = ({
               }
               return true;
             });
-          const p1SpinEffects = filterLastRound(p1Win
-            ? p1Effects.onWin
-            : tie
-              ? p1Effects.onTie
-              : revealed
-                ? p1Effects.onLose
-                : []);
-          const p2SpinEffects = filterLastRound(p2Win
-            ? p2Effects.onWin
-            : tie
-              ? p2Effects.onTie
-              : revealed
-                ? p2Effects.onLose
-                : []);
+          const p1SpinEffects = filterLastRound(
+            p1Win
+              ? p1Effects.onWin
+              : tie
+                ? p1Effects.onTie
+                : revealed
+                  ? p1Effects.onLose
+                  : [],
+          );
+          const p2SpinEffects = filterLastRound(
+            p2Win
+              ? p2Effects.onWin
+              : tie
+                ? p2Effects.onTie
+                : revealed
+                  ? p2Effects.onLose
+                  : [],
+          );
 
           // Effective points after spins (only if chars provided)
-          const p1WonBeforeThis = rounds.slice(0, roundArrayIndex).filter(r => r.winner === "player1").length;
-          const p2WonBeforeThis = rounds.slice(0, roundArrayIndex).filter(r => r.winner === "player2").length;
+          const p1WonBeforeThis = rounds
+            .slice(0, roundArrayIndex)
+            .filter((r) => r.winner === "player1").length;
+          const p2WonBeforeThis = rounds
+            .slice(0, roundArrayIndex)
+            .filter((r) => r.winner === "player2").length;
           const p1Pts =
             revealed && round && showSpins
               ? computeRoundPoints(
-                "player1",
-                round.winner,
-                roundArrayIndex,
-                p1Effects,
-                key,
-                p1WonBeforeThis,
-              )
+                  "player1",
+                  round.winner,
+                  roundArrayIndex,
+                  p1Effects,
+                  key,
+                  p1WonBeforeThis,
+                )
               : null;
           const p2Pts =
             revealed && round && showSpins
               ? computeRoundPoints(
-                "player2",
-                round.winner,
-                roundArrayIndex,
-                p2Effects,
-                key,
-                p2WonBeforeThis,
-              )
+                  "player2",
+                  round.winner,
+                  roundArrayIndex,
+                  p2Effects,
+                  key,
+                  p2WonBeforeThis,
+                )
               : null;
 
           // Show point badge: only when pts > 0 or pending (OTP stat wrong = 0 pts → hide badge)
@@ -6591,8 +8546,9 @@ export const StatsComparisonMode = ({
           return (
             <div
               key={`${key}-${roundArrayIndex}`}
-              className={`rounded-lg border transition-all duration-500 overflow-hidden ${revealed ? "opacity-100" : "opacity-20"
-                } ${rowBg}`}
+              className={`rounded-lg border transition-all duration-500 overflow-hidden ${
+                revealed ? "opacity-100" : "opacity-20"
+              } ${rowBg}`}
             >
               <div className="grid grid-cols-[1fr_56px_1fr] gap-1 items-center px-2 py-1.5">
                 {/* P1 value + pts */}
@@ -6603,14 +8559,15 @@ export const StatsComparisonMode = ({
                     </span>
                   )}
                   <span
-                    className={`text-sm font-black tabular-nums ${p1Win
-                      ? "text-blue-300"
-                      : tie
-                        ? "text-yellow-400"
-                        : revealed
-                          ? "text-gray-500"
-                          : "text-gray-700"
-                      }`}
+                    className={`text-sm font-black tabular-nums ${
+                      p1Win
+                        ? "text-blue-300"
+                        : tie
+                          ? "text-yellow-400"
+                          : revealed
+                            ? "text-gray-500"
+                            : "text-gray-700"
+                    }`}
                   >
                     {revealed ? (round?.player1Value ?? "?") : "?"}
                   </span>
@@ -6624,14 +8581,15 @@ export const StatsComparisonMode = ({
                 {/* Stat label + round indicator */}
                 <div className="text-center">
                   <div
-                    className={`text-[10px] font-black tracking-wider ${p1Win
-                      ? "text-blue-400/70"
-                      : p2Win
-                        ? "text-red-400/70"
-                        : tie
-                          ? "text-yellow-400/70"
-                          : "text-gray-600"
-                      }`}
+                    className={`text-[10px] font-black tracking-wider ${
+                      p1Win
+                        ? "text-blue-400/70"
+                        : p2Win
+                          ? "text-red-400/70"
+                          : tie
+                            ? "text-yellow-400/70"
+                            : "text-gray-600"
+                    }`}
                   >
                     {label}
                   </div>
@@ -6648,14 +8606,15 @@ export const StatsComparisonMode = ({
                     </span>
                   )}
                   <span
-                    className={`text-sm font-black tabular-nums ${p2Win
-                      ? "text-red-300"
-                      : tie
-                        ? "text-yellow-400"
-                        : revealed
-                          ? "text-gray-500"
-                          : "text-gray-700"
-                      }`}
+                    className={`text-sm font-black tabular-nums ${
+                      p2Win
+                        ? "text-red-300"
+                        : tie
+                          ? "text-yellow-400"
+                          : revealed
+                            ? "text-gray-500"
+                            : "text-gray-700"
+                    }`}
                   >
                     {revealed ? (round?.player2Value ?? "?") : "?"}
                   </span>
@@ -6702,18 +8661,28 @@ export const StatsComparisonMode = ({
     const p1Effects = getPerRoundEffects(player1?.character, player1?.no);
     const p2Effects = getPerRoundEffects(player2?.character, player2?.no);
     // Tìm log theo roundIndex (không phải array index — roundLogs có thể có pre-combat log ở đầu)
-    const lastRound = stepState?.roundLogs && [...stepState.roundLogs].reverse().find((l) => l.roundIndex === lastRoundIdx);
+    const lastRound =
+      stepState?.roundLogs &&
+      [...stepState.roundLogs]
+        .reverse()
+        .find((l) => l.roundIndex === lastRoundIdx);
     if (!lastRound) return false;
     const winner = lastRound.winner;
     // Check pending từ computeRoundPoints (Crit, Evasion, Cruelty, OTP...)
-    if (computeRoundPoints("player1", winner, lastRoundIdx, p1Effects).pending) return true;
-    if (computeRoundPoints("player2", winner, lastRoundIdx, p2Effects).pending) return true;
+    if (computeRoundPoints("player1", winner, lastRoundIdx, p1Effects).pending)
+      return true;
+    if (computeRoundPoints("player2", winner, lastRoundIdx, p2Effects).pending)
+      return true;
     // Check Bash/Luminescence/Scrying/Ranger-Silver chưa spin (không phải round cuối)
     if (lastRoundIdx < 5) {
       const AFTER_WIN_SPINS = ["Bash", "Luminescence", "Ranger-Silver"];
       const checkSide = (side: "player1" | "player2", effs: string[]) => {
         for (const eff of AFTER_WIN_SPINS) {
-          if (effs.includes(eff) && !roundSpinResults[`${lastRoundIdx}-${eff}-${side}`]) return true;
+          if (
+            effs.includes(eff) &&
+            !roundSpinResults[`${lastRoundIdx}-${eff}-${side}`]
+          )
+            return true;
         }
         return false;
       };
@@ -6724,7 +8693,14 @@ export const StatsComparisonMode = ({
     }
     return false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stepInProgress, stepRoundIndex, roundSpinResults, player1, player2, stepState]);
+  }, [
+    stepInProgress,
+    stepRoundIndex,
+    roundSpinResults,
+    player1,
+    player2,
+    stepState,
+  ]);
 
   // Compute effective scores accounting for crit/gambler/evasion/blind spins
   // Rounds còn pending spin → chưa tính vào score
@@ -6753,15 +8729,31 @@ export const StatsComparisonMode = ({
       let s2 = stepState.p2Score;
       if (player1 && player2 && stepRoundIndex > 0) {
         const lastRoundIdx = stepRoundIndex - 1;
-        const lastRLog = [...stepState.roundLogs].reverse().find((l) => l.roundIndex === lastRoundIdx);
+        const lastRLog = [...stepState.roundLogs]
+          .reverse()
+          .find((l) => l.roundIndex === lastRoundIdx);
         if (lastRLog) {
           const p1Effs = getPerRoundEffects(player1.character, player1.no);
           const p2Effs = getPerRoundEffects(player2.character, player2.no);
           const w = lastRLog.winner;
-          const p1Pts = computeRoundPoints('player1', w, lastRoundIdx, p1Effs, lastRLog.statKey);
-          const p2Pts = computeRoundPoints('player2', w, lastRoundIdx, p2Effs, lastRLog.statKey);
-          if (!p1Pts.pending) s1 += p1Pts.pts - (w === 'player1' ? 1 : 0);
-          if (!p2Pts.pending) s2 += p2Pts.pts - (w === 'player2' ? 1 : 0);
+          const p1Pts = computeRoundPoints(
+            "player1",
+            w,
+            lastRoundIdx,
+            p1Effs,
+            lastRLog.statKey,
+          );
+          const p2Pts = computeRoundPoints(
+            "player2",
+            w,
+            lastRoundIdx,
+            p2Effs,
+            lastRLog.statKey,
+          );
+          const p1Base = p1Pts.autoApplied ? p1Pts.pts : w === "player1" ? 1 : 0;
+          const p2Base = p2Pts.autoApplied ? p2Pts.pts : w === "player2" ? 1 : 0;
+          if (!p1Pts.pending) s1 += p1Pts.pts - p1Base;
+          if (!p2Pts.pending) s2 += p2Pts.pts - p2Base;
         }
       }
       return { s1, s2 };
@@ -6875,7 +8867,8 @@ export const StatsComparisonMode = ({
     }
     // Also block if any after-combat wheel entry hasn't been spun yet
     for (const entry of afterCombatEntries) {
-      if (entry.wheelKey && !afterCombatSpinResults[entry.wheelKey]) return true;
+      if (entry.wheelKey && !afterCombatSpinResults[entry.wheelKey])
+        return true;
     }
     return false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -6901,7 +8894,13 @@ export const StatsComparisonMode = ({
     if (s2 > s1) return "player2";
     // Tie: use race tier
     return player1.raceTier <= player2.raceTier ? "player1" : "player2";
-  }, [combatResult, effectiveScores, player1, player2, roundtableWinnerOverride]);
+  }, [
+    combatResult,
+    effectiveScores,
+    player1,
+    player2,
+    roundtableWinnerOverride,
+  ]);
 
   // User must explicitly confirm result after spins are done
   const [combatConfirmed, setCombatConfirmed] = useState(false);
@@ -6930,7 +8929,13 @@ export const StatsComparisonMode = ({
 
   // Helper: spawn floating bubbles — accumulate, each auto-removes after 3s
   const spawnStatBubbles = useCallback(
-    (items: { player: "player1" | "player2"; text: string; isPositive: boolean }[]) => {
+    (
+      items: {
+        player: "player1" | "player2";
+        text: string;
+        isPositive: boolean;
+      }[],
+    ) => {
       if (items.length === 0) return;
       const newP1: StatBubble[] = [];
       const newP2: StatBubble[] = [];
@@ -7077,11 +9082,18 @@ export const StatsComparisonMode = ({
               : [];
             const p1AudioTracks = detectCombatAudioTracks(player1?.character);
             const p2AudioTracks = detectCombatAudioTracks(player2?.character);
-            const p1Quirks = (player1?.character?.quirks || []).filter((q: any) => !q.isLost).map((q: any) => (typeof q === "string" ? q : q.name).toLowerCase());
-            const p1Silenced = p1Quirks.includes("mute") || p1Quirks.includes("deaf");
+            const p1Quirks = (player1?.character?.quirks || [])
+              .filter((q: any) => !q.isLost)
+              .map((q: any) =>
+                (typeof q === "string" ? q : q.name).toLowerCase(),
+              );
+            const p1Silenced =
+              p1Quirks.includes("mute") || p1Quirks.includes("deaf");
             const p1Blurred = p1Quirks.includes("blind");
             return (
-              <div className={`w-[360px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-blue-500/30 max-h-[85vh] ${false && p1Blurred ? "blur-sm pointer-events-none select-none" : ""}`}>
+              <div
+                className={`w-[360px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-blue-500/30 max-h-[85vh] ${false && p1Blurred ? "blur-sm pointer-events-none select-none" : ""}`}
+              >
                 {/* Avatar lớn P1 */}
                 {player1 && (
                   <SidebarAvatarBanner
@@ -7200,7 +9212,7 @@ export const StatsComparisonMode = ({
                             const disabled = disabledItems.has(k);
                             const colorClass =
                               (sourceTypeColors as Record<string, string>)[
-                              item.sourceType
+                                item.sourceType
                               ] || "text-gray-400";
                             return (
                               <button
@@ -7215,7 +9227,11 @@ export const StatsComparisonMode = ({
                                 className={`w-full text-left text-[11px] px-2 py-1.5 rounded transition-all ${disabled ? "opacity-35 bg-gray-800/20" : "hover:bg-gray-700/40 bg-gray-800/10"}`}
                               >
                                 <div className="flex items-center gap-1.5">
-                                  <span className={`${colorClass} ${disabled ? "line-through" : ""}`}>{item.name}</span>
+                                  <span
+                                    className={`${colorClass} ${disabled ? "line-through" : ""}`}
+                                  >
+                                    {item.name}
+                                  </span>
                                   <span className="text-gray-700 text-[9px]">
                                     [{item.sourceType}]
                                   </span>
@@ -7226,7 +9242,9 @@ export const StatsComparisonMode = ({
                                   )}
                                 </div>
                                 {item.description && !disabled && (
-                                  <div className="text-gray-500 text-[10px] mt-0.5 leading-snug">{item.description}</div>
+                                  <div className="text-gray-500 text-[10px] mt-0.5 leading-snug">
+                                    {item.description}
+                                  </div>
                                 )}
                               </button>
                             );
@@ -7366,10 +9384,11 @@ export const StatsComparisonMode = ({
                             )}
                           {!isPendingRoundtable && mainWinner && (
                             <div
-                              className={`text-[11px] font-black mt-1 px-3 py-1 rounded-lg border tracking-wide ${effectiveWinner === "player1"
-                                ? "text-blue-300 bg-blue-500/10 border-blue-500/30"
-                                : "text-red-300 bg-red-500/10 border-red-500/30"
-                                }`}
+                              className={`text-[11px] font-black mt-1 px-3 py-1 rounded-lg border tracking-wide ${
+                                effectiveWinner === "player1"
+                                  ? "text-blue-300 bg-blue-500/10 border-blue-500/30"
+                                  : "text-red-300 bg-red-500/10 border-red-500/30"
+                              }`}
                               style={{
                                 textShadow: `0 0 10px ${effectiveWinner === "player1" ? "#3b82f6" : "#ef4444"}`,
                               }}
@@ -7433,17 +9452,20 @@ export const StatsComparisonMode = ({
                 </div>
 
                 {/* Swap button */}
-                {player1 && player2 && !isTournamentMode && !roundtableSubMode && (
-                  <div className="mt-2 flex justify-center">
-                    <button
-                      onClick={swapPlayers}
-                      disabled={stepInProgress}
-                      className="px-3 py-1 rounded-lg text-gray-500 hover:text-gray-200 hover:bg-gray-800/60 disabled:opacity-20 disabled:cursor-not-allowed transition-all text-xs border border-gray-700/40 hover:border-purple-500/40"
-                    >
-                      ⇄ Swap
-                    </button>
-                  </div>
-                )}
+                {player1 &&
+                  player2 &&
+                  !isTournamentMode &&
+                  !roundtableSubMode && (
+                    <div className="mt-2 flex justify-center">
+                      <button
+                        onClick={swapPlayers}
+                        disabled={stepInProgress}
+                        className="px-3 py-1 rounded-lg text-gray-500 hover:text-gray-200 hover:bg-gray-800/60 disabled:opacity-20 disabled:cursor-not-allowed transition-all text-xs border border-gray-700/40 hover:border-purple-500/40"
+                      >
+                        ⇄ Swap
+                      </button>
+                    </div>
+                  )}
               </div>
             </div>
 
@@ -7455,17 +9477,18 @@ export const StatsComparisonMode = ({
                   player2={{ name: player2.name, character: player2.character }}
                   player1ComputedStats={p1DisplayStats ?? undefined}
                   player2ComputedStats={p2DisplayStats ?? undefined}
+                  resetKey={roundtableSubMode ? "sub" : "main"}
                   combatResult={
                     battleDone && combatConfirmed && effectiveWinner
                       ? {
-                        winner: effectiveWinner,
-                        player1Score: effectiveScores.s1,
-                        player2Score: effectiveScores.s2,
-                        rounds: combatResult!.rounds.map((r) => ({
-                          stat: r.stat,
-                          winner: r.winner,
-                        })),
-                      }
+                          winner: effectiveWinner,
+                          player1Score: effectiveScores.s1,
+                          player2Score: effectiveScores.s2,
+                          rounds: combatResult!.rounds.map((r) => ({
+                            stat: r.stat,
+                            winner: r.winner,
+                          })),
+                        }
                       : undefined
                   }
                   onWheelResolved={handleWheelResolved}
@@ -7496,8 +9519,16 @@ export const StatsComparisonMode = ({
                     player1.character,
                     player2.character,
                     (() => {
-                      const rr = combatResult ? combatResult.rounds : stepState?.resolvedRounds ?? [];
-                      return zoltraakBiq2Pending || (rr.length >= 5 && rr[4]?.stat === 'biq' && rr[5]?.stat === 'biq') || rr.length > STAT_ORDER.length;
+                      const rr = combatResult
+                        ? combatResult.rounds
+                        : (stepState?.resolvedRounds ?? []);
+                      return (
+                        zoltraakBiq2Pending ||
+                        (rr.length >= 5 &&
+                          rr[4]?.stat === "biq" &&
+                          rr[5]?.stat === "biq") ||
+                        rr.length > STAT_ORDER.length
+                      );
                     })(),
                   )
                 ) : (
@@ -7568,7 +9599,10 @@ export const StatsComparisonMode = ({
                 {(() => {
                   const logs = stepState?.roundLogs ?? [];
                   if (logs.length === 0) return null;
-                  const viewIdx = Math.min(viewLogIndex ?? logs.length - 1, logs.length - 1);
+                  const viewIdx = Math.min(
+                    viewLogIndex ?? logs.length - 1,
+                    logs.length - 1,
+                  );
                   const log = logs[viewIdx];
                   // Tính adjusted score tại round này:
                   // - round chưa patch (round cuối = stepRoundIndex-1): log.p1Score là base, cần cộng diff từ spin
@@ -7576,78 +9610,218 @@ export const StatsComparisonMode = ({
                   let displayP1Score = log.p1Score;
                   let displayP2Score = log.p2Score;
                   const latestUnpatchedRoundIdx = stepRoundIndex - 1;
-                  if (log.roundIndex >= 0 && log.roundIndex === latestUnpatchedRoundIdx && player1 && player2) {
-                    const p1EffsLog = getPerRoundEffects(player1.character, player1.no);
-                    const p2EffsLog = getPerRoundEffects(player2.character, player2.no);
-                    const p1PtsLog = computeRoundPoints("player1", log.winner, log.roundIndex, p1EffsLog, log.statKey);
-                    const p2PtsLog = computeRoundPoints("player2", log.winner, log.roundIndex, p2EffsLog, log.statKey);
-                    if (!p1PtsLog.pending) displayP1Score += p1PtsLog.pts - (log.winner === "player1" ? 1 : 0);
-                    if (!p2PtsLog.pending) displayP2Score += p2PtsLog.pts - (log.winner === "player2" ? 1 : 0);
+                  if (
+                    log.roundIndex >= 0 &&
+                    log.roundIndex === latestUnpatchedRoundIdx &&
+                    player1 &&
+                    player2
+                  ) {
+                    const p1EffsLog = getPerRoundEffects(
+                      player1.character,
+                      player1.no,
+                    );
+                    const p2EffsLog = getPerRoundEffects(
+                      player2.character,
+                      player2.no,
+                    );
+                    const p1PtsLog = computeRoundPoints(
+                      "player1",
+                      log.winner,
+                      log.roundIndex,
+                      p1EffsLog,
+                      log.statKey,
+                    );
+                    const p2PtsLog = computeRoundPoints(
+                      "player2",
+                      log.winner,
+                      log.roundIndex,
+                      p2EffsLog,
+                      log.statKey,
+                    );
+                    const p1BaseLog = p1PtsLog.autoApplied
+                      ? p1PtsLog.pts
+                      : log.winner === "player1"
+                        ? 1
+                        : 0;
+                    const p2BaseLog = p2PtsLog.autoApplied
+                      ? p2PtsLog.pts
+                      : log.winner === "player2"
+                        ? 1
+                        : 0;
+                    if (!p1PtsLog.pending)
+                      displayP1Score += p1PtsLog.pts - p1BaseLog;
+                    if (!p2PtsLog.pending)
+                      displayP2Score += p2PtsLog.pts - p2BaseLog;
                   }
-                  const borderColor = log.winner === "player1" ? "rgba(59,130,246,0.3)" : log.winner === "player2" ? "rgba(239,68,68,0.3)" : "rgba(234,179,8,0.3)";
+                  const borderColor =
+                    log.winner === "player1"
+                      ? "rgba(59,130,246,0.3)"
+                      : log.winner === "player2"
+                        ? "rgba(239,68,68,0.3)"
+                        : "rgba(234,179,8,0.3)";
                   return (
-                    <div className="mt-2 rounded-xl border overflow-hidden text-xs" style={{ background: "rgba(0,0,0,0.4)", borderColor }}>
+                    <div
+                      className="mt-2 rounded-xl border overflow-hidden text-xs"
+                      style={{ background: "rgba(0,0,0,0.4)", borderColor }}
+                    >
                       {/* Navigation header */}
                       <div className="flex items-center gap-1 px-2 py-1.5 border-b border-gray-800/60">
-                        <button onClick={() => setViewLogIndex(0)} disabled={viewIdx === 0}
-                          className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">«</button>
-                        <button onClick={() => setViewLogIndex(Math.max(0, viewIdx - 1))} disabled={viewIdx === 0}
-                          className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">‹</button>
+                        <button
+                          onClick={() => setViewLogIndex(0)}
+                          disabled={viewIdx === 0}
+                          className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20"
+                        >
+                          «
+                        </button>
+                        <button
+                          onClick={() =>
+                            setViewLogIndex(Math.max(0, viewIdx - 1))
+                          }
+                          disabled={viewIdx === 0}
+                          className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20"
+                        >
+                          ‹
+                        </button>
                         <div className="flex gap-0.5 flex-1 justify-center">
                           {logs.map((lg, i) => (
-                            <button key={i} onClick={() => setViewLogIndex(i)}
-                              className={`w-5 h-5 rounded text-[9px] font-black transition-colors ${i === viewIdx ? (lg.roundIndex === -1 ? "bg-yellow-700/70 text-white" : "bg-purple-600/70 text-white") : "bg-gray-800/60 text-gray-500 hover:bg-gray-700/60 hover:text-gray-300"}`}>
-                              {lg.roundIndex === -1 ? "P" : i + (logs[0]?.roundIndex === -1 ? 0 : 1)}
+                            <button
+                              key={i}
+                              onClick={() => setViewLogIndex(i)}
+                              className={`w-5 h-5 rounded text-[9px] font-black transition-colors ${i === viewIdx ? (lg.roundIndex === -1 ? "bg-yellow-700/70 text-white" : "bg-purple-600/70 text-white") : "bg-gray-800/60 text-gray-500 hover:bg-gray-700/60 hover:text-gray-300"}`}
+                            >
+                              {lg.roundIndex === -1
+                                ? "P"
+                                : i + (logs[0]?.roundIndex === -1 ? 0 : 1)}
                             </button>
                           ))}
                         </div>
-                        <button onClick={() => setViewLogIndex(Math.min(logs.length - 1, viewIdx + 1))} disabled={viewIdx === logs.length - 1}
-                          className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">›</button>
-                        <button onClick={() => setViewLogIndex(logs.length - 1)} disabled={viewIdx === logs.length - 1}
-                          className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">»</button>
+                        <button
+                          onClick={() =>
+                            setViewLogIndex(
+                              Math.min(logs.length - 1, viewIdx + 1),
+                            )
+                          }
+                          disabled={viewIdx === logs.length - 1}
+                          className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20"
+                        >
+                          ›
+                        </button>
+                        <button
+                          onClick={() => setViewLogIndex(logs.length - 1)}
+                          disabled={viewIdx === logs.length - 1}
+                          className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20"
+                        >
+                          »
+                        </button>
                       </div>
                       {/* Round content */}
-                      <div className="px-2.5 py-1.5 space-y-0.5" style={{ borderLeft: `3px solid ${borderColor}` }}>
+                      <div
+                        className="px-2.5 py-1.5 space-y-0.5"
+                        style={{ borderLeft: `3px solid ${borderColor}` }}
+                      >
                         <div className="flex items-center gap-1.5 font-bold">
-                          <span className="text-[10px] px-1.5 py-0.5 rounded font-black tracking-widest" style={{ background: log.roundIndex === -1 ? "rgba(234,179,8,0.2)" : "rgba(168,85,247,0.2)", color: log.roundIndex === -1 ? "#fbbf24" : "#c084fc", border: `1px solid ${log.roundIndex === -1 ? "rgba(234,179,8,0.3)" : "rgba(168,85,247,0.3)"}` }}>
-                            {log.roundIndex === -1 ? "PRE" : `R${log.roundIndex + 1}`}
+                          <span
+                            className="text-[10px] px-1.5 py-0.5 rounded font-black tracking-widest"
+                            style={{
+                              background:
+                                log.roundIndex === -1
+                                  ? "rgba(234,179,8,0.2)"
+                                  : "rgba(168,85,247,0.2)",
+                              color:
+                                log.roundIndex === -1 ? "#fbbf24" : "#c084fc",
+                              border: `1px solid ${log.roundIndex === -1 ? "rgba(234,179,8,0.3)" : "rgba(168,85,247,0.3)"}`,
+                            }}
+                          >
+                            {log.roundIndex === -1
+                              ? "PRE"
+                              : `R${log.roundIndex + 1}`}
                           </span>
-                          <span className="text-gray-400 text-[11px] font-bold">{log.statLabel}</span>
-                          {log.roundIndex !== -1 && <>
-                            <span className="text-blue-300 font-black">{log.p1ValueUsed}</span>
-                            <span className="text-gray-600 text-[9px]">vs</span>
-                            <span className="text-red-300 font-black">{log.p2ValueUsed}</span>
-                          </>}
+                          <span className="text-gray-400 text-[11px] font-bold">
+                            {log.statLabel}
+                          </span>
+                          {log.roundIndex !== -1 && (
+                            <>
+                              <span className="text-blue-300 font-black">
+                                {log.p1ValueUsed}
+                              </span>
+                              <span className="text-gray-600 text-[9px]">
+                                vs
+                              </span>
+                              <span className="text-red-300 font-black">
+                                {log.p2ValueUsed}
+                              </span>
+                            </>
+                          )}
                           <span className="ml-auto text-[11px] font-black">
-                            {log.roundIndex === -1 ? <span className="text-yellow-400/70 text-[10px] font-normal italic">Hiệu ứng trước combat</span>
-                              : log.winner === "tie" ? <span className="text-yellow-400">═ HÒA</span>
-                                : log.winner === "player1" ? <span className="text-blue-300">▶ {player1.name}</span>
-                                  : <span className="text-red-300">◀ {player2.name}</span>}
+                            {log.roundIndex === -1 ? (
+                              <span className="text-yellow-400/70 text-[10px] font-normal italic">
+                                Hiệu ứng trước combat
+                              </span>
+                            ) : log.winner === "tie" ? (
+                              <span className="text-yellow-400">═ HÒA</span>
+                            ) : log.winner === "player1" ? (
+                              <span className="text-blue-300">
+                                ▶ {player1.name}
+                              </span>
+                            ) : (
+                              <span className="text-red-300">
+                                ◀ {player2.name}
+                              </span>
+                            )}
                           </span>
                         </div>
                         {log.events.map((ev, i) => (
-                          <div key={i} className={`pl-2 border-l-2 text-[11px] ${ev.type === "stat_boost" ? "border-green-500/50 text-green-400"
-                            : ev.type === "stat_debuff" ? "border-red-500/50 text-red-400"
-                              : ev.type === "carry_over" ? "border-amber-500/50 text-amber-400"
-                                : ev.type === "point_change" ? "border-blue-500/50 text-blue-300"
-                                  : "border-gray-600/50 text-gray-400"
-                            }`}>
-                            <span className="text-gray-600">[{ev.player === "player1" ? player1.name : player2.name}]</span>
-                            {" "}<span className="text-gray-500">{ev.source}:</span>
-                            {" "}{ev.description}
+                          <div
+                            key={i}
+                            className={`pl-2 border-l-2 text-[11px] ${
+                              ev.type === "stat_boost"
+                                ? "border-green-500/50 text-green-400"
+                                : ev.type === "stat_debuff"
+                                  ? "border-red-500/50 text-red-400"
+                                  : ev.type === "carry_over"
+                                    ? "border-amber-500/50 text-amber-400"
+                                    : ev.type === "point_change"
+                                      ? "border-blue-500/50 text-blue-300"
+                                      : "border-gray-600/50 text-gray-400"
+                            }`}
+                          >
+                            <span className="text-gray-600">
+                              [
+                              {ev.player === "player1"
+                                ? player1.name
+                                : player2.name}
+                              ]
+                            </span>{" "}
+                            <span className="text-gray-500">{ev.source}:</span>{" "}
+                            {ev.description}
                           </div>
                         ))}
                         {(log.carryOverToNext?.length ?? 0) > 0 && (
                           <div className="pl-2 text-amber-400/70 italic text-[11px]">
-                            → Carry: {log.carryOverToNext.map(co =>
-                              `${co.source} ${co.value > 0 ? "+" : ""}${co.value} ${co.stat.toUpperCase()}`
-                            ).join(", ")}
+                            → Carry:{" "}
+                            {log.carryOverToNext
+                              .map(
+                                (co) =>
+                                  `${co.source} ${co.value > 0 ? "+" : ""}${co.value} ${co.stat.toUpperCase()}`,
+                              )
+                              .join(", ")}
                           </div>
                         )}
                         <div className="flex justify-between text-[10px] text-gray-600 border-t border-gray-700/30 pt-1 mt-0.5">
-                          <span>Score <span className="text-blue-400 font-bold">{displayP1Score}</span> : <span className="text-red-400 font-bold">{displayP2Score}</span></span>
+                          <span>
+                            Score{" "}
+                            <span className="text-blue-400 font-bold">
+                              {displayP1Score}
+                            </span>{" "}
+                            :{" "}
+                            <span className="text-red-400 font-bold">
+                              {displayP2Score}
+                            </span>
+                          </span>
                           {stepInProgress && viewIdx === logs.length - 1 && (
-                            <span className="text-gray-600 animate-pulse">R{stepRoundIndex + 1}/6 →</span>
+                            <span className="text-gray-600 animate-pulse">
+                              R{stepRoundIndex + 1}/6 →
+                            </span>
                           )}
                         </div>
                       </div>
@@ -7664,27 +9838,39 @@ export const StatsComparisonMode = ({
                   <span>⚔️</span> TRẬN PHỤ — Roundtable Hold
                 </div>
                 <div className="text-orange-200/80 text-xs mb-2">
-                  <strong>{roundtableSnapshot.selectedTarnished?.name}</strong> thách đấu{" "}
+                  <strong>{roundtableSnapshot.selectedTarnished?.name}</strong>{" "}
+                  thách đấu{" "}
                   <strong>
                     {roundtableSnapshot.pendingLoser === "player1"
                       ? roundtableSnapshot.player1?.name
                       : roundtableSnapshot.player2?.name}
                   </strong>{" "}
-                  (người vừa thắng trận chính). Kết quả trận này sẽ quyết định ai tiến vào vòng tiếp theo.
+                  (người vừa thắng trận chính). Kết quả trận này sẽ quyết định
+                  ai tiến vào vòng tiếp theo.
                 </div>
                 {combatResult && combatConfirmed && effectiveWinner && (
                   <div className="mt-2 space-y-1">
-                    <div className="text-xs text-orange-300/70 font-semibold">Kết quả trận phụ:</div>
-                    <div className={`text-sm font-bold px-3 py-2 rounded-lg border ${effectiveWinner === "player1"
-                      ? "text-green-300 bg-green-900/30 border-green-500/40"
-                      : "text-red-300 bg-red-900/30 border-red-500/40"
-                      }`}>
+                    <div className="text-xs text-orange-300/70 font-semibold">
+                      Kết quả trận phụ:
+                    </div>
+                    <div
+                      className={`text-sm font-bold px-3 py-2 rounded-lg border ${
+                        effectiveWinner === "player1"
+                          ? "text-green-300 bg-green-900/30 border-green-500/40"
+                          : "text-red-300 bg-red-900/30 border-red-500/40"
+                      }`}
+                    >
                       {effectiveWinner === "player1"
                         ? `Tarnished (${player1?.name}) THẮNG → ${roundtableSnapshot.pendingLoser === "player1" ? roundtableSnapshot.player1?.name : roundtableSnapshot.player2?.name} được cứu!`
                         : `Tarnished (${player1?.name}) THUA → ${roundtableSnapshot.pendingLoser === "player1" ? roundtableSnapshot.player1?.name : roundtableSnapshot.player2?.name} vẫn bị loại.`}
                     </div>
                     <button
-                      onClick={() => confirmRoundtableSubCombat({ ...combatResult, winner: effectiveWinner })}
+                      onClick={() =>
+                        confirmRoundtableSubCombat({
+                          ...combatResult,
+                          winner: effectiveWinner,
+                        })
+                      }
                       className="w-full mt-2 px-4 py-2 bg-gradient-to-r from-green-700 to-emerald-700 hover:from-green-600 hover:to-emerald-600 text-white font-bold text-sm rounded-xl border border-green-500/50 transition-all"
                     >
                       Xác nhận & Quay về trận chính
@@ -7693,400 +9879,607 @@ export const StatsComparisonMode = ({
                 )}
                 {!combatConfirmed && (
                   <div className="text-xs text-orange-300/60 italic">
-                    Chạy combat bình thường và xác nhận kết quả bên trên để quay về trận chính.
+                    Chạy combat bình thường và xác nhận kết quả bên trên để quay
+                    về trận chính.
                   </div>
                 )}
               </div>
             )}
 
-            {/* Roundtable Hold Pending Banner */}
-            {!roundtableSubMode && battleDone && isPendingRoundtable && pendingLoser && (
-              <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-xl p-4 mb-3">
-                <div className="text-yellow-400 font-bold text-base mb-1 flex items-center gap-2">
-                  <span>⏳</span> KẾT QUẢ TẠM HOÃN — Roundtable Hold kích hoạt
-                </div>
-                <div className="text-yellow-300/80 text-sm mb-3">
-                  <strong>
-                    {pendingLoser === "player1" ? player1?.name : player2?.name}
-                  </strong>{" "}
-                  thua nhưng có Roundtable Hold. Chọn một Tarnished còn sống lên
-                  đấu trận phụ.
-                </div>
-
-                {!selectedTarnished ? (
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="text-xs text-gray-400">
-                        {tarnishedList.length} Tarnished còn hoạt động:
+            {/* Before-combat-end entries (e.g. Edgelord) — hiển thị trước Roundtable Hold */}
+            {battleDone &&
+              afterCombatEntries.some((e) => e.quirkName === "Edgelord") && (
+                <div className="space-y-1 mb-3">
+                  {afterCombatEntries
+                    .filter((e) => e.quirkName === "Edgelord")
+                    .map((entry, i) => (
+                      <div
+                        key={`edgelord-pre-${i}`}
+                        className={`text-xs px-3 py-1.5 rounded-lg border ${
+                          entry.player === "player1"
+                            ? "bg-blue-900/20 border-blue-500/30 text-blue-200"
+                            : "bg-red-900/20 border-red-500/30 text-red-200"
+                        }`}
+                      >
+                        <span className="font-bold text-purple-300">
+                          Edgelord
+                        </span>{" "}
+                        — {entry.description}
                       </div>
-                      <button
-                        onClick={() => {
-                          const colors = ["#f59e0b", "#10b981", "#3b82f6", "#a855f7", "#ef4444", "#06b6d4", "#84cc16", "#ec4899"];
-                          setPreCombatModal({
-                            isOpen: true,
-                            title: "Roundtable Hold — Quay chọn Tarnished",
-                            description: "Quay ngẫu nhiên để chọn Tarnished tham chiến trận phụ",
-                            items: tarnishedList.map((p, i) => ({
-                              label: `${p.name} (#${p.no})`,
-                              weight: 1,
-                              isSuccess: true,
-                              color: colors[i % colors.length],
-                              meta: { playerNo: p.no },
-                            })),
-                            side: (pendingLoser ?? "player1") as "player1" | "player2",
-                            effectKey: "roundtable-tarnished-spin",
-                            onResult: (result) => {
-                              const no = result.meta?.playerNo as number;
-                              const chosen = tarnishedList.find((p) => p.no === no);
-                              if (chosen) setSelectedTarnished(chosen);
-                            },
-                          });
-                        }}
-                        className="px-3 py-1 bg-yellow-700/50 hover:bg-yellow-600/60 border border-yellow-500/50 rounded-lg text-yellow-200 text-xs font-bold transition-colors"
-                      >
-                        🎡 Quay ngẫu nhiên
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Tìm Tarnished..."
-                      value={tarnishedSearchTerm}
-                      onChange={(e) => setTarnishedSearchTerm(e.target.value)}
-                      className="w-full px-3 py-1.5 bg-gray-800 border border-yellow-600/40 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500 mb-2"
-                    />
-                    <div className="max-h-40 overflow-y-auto space-y-1">
-                      {filteredTarnished.map((p) => (
-                        <button
-                          key={p.no}
-                          onClick={() => setSelectedTarnished(p)}
-                          className="w-full px-3 py-2 text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-yellow-500/50 rounded-lg text-white text-sm flex justify-between items-center transition-all"
-                        >
-                          <span>
-                            <span className="text-yellow-400">#{p.no}</span>{" "}
-                            {p.name}
-                          </span>
-                          <span className="text-xs text-gray-400">
-                            {p.race}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
+                    ))}
+                </div>
+              )}
+
+            {/* Roundtable Hold Pending Banner */}
+            {!roundtableSubMode &&
+              battleDone &&
+              isPendingRoundtable &&
+              pendingLoser && (
+                <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-xl p-4 mb-3">
+                  <div className="text-yellow-400 font-bold text-base mb-1 flex items-center gap-2">
+                    <span>⏳</span> KẾT QUẢ TẠM HOÃN — Roundtable Hold kích hoạt
                   </div>
-                ) : (
-                  <div>
-                    <div className="text-sm text-gray-300 mb-3 flex items-center gap-2">
-                      <span className="text-yellow-400">
-                        Tarnished được chọn:
-                      </span>
-                      <span className="font-bold text-white">
-                        {selectedTarnished.name}
-                      </span>
-                      <button
-                        onClick={() => {
-                          setSelectedTarnished(null);
-                          setSubCombatResult(null);
-                          _setSubCurrentRound(-1);
-                        }}
-                        className="text-xs text-gray-500 hover:text-white ml-auto"
-                      >
-                        ✕ Đổi
-                      </button>
+                  <div className="text-yellow-300/80 text-sm mb-3">
+                    <strong>
+                      {pendingLoser === "player1"
+                        ? player1?.name
+                        : player2?.name}
+                    </strong>{" "}
+                    thua nhưng có Roundtable Hold. Chọn một Tarnished còn sống
+                    lên đấu trận phụ.
+                  </div>
+
+                  {!selectedTarnished ? (
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="text-xs text-gray-400">
+                          {tarnishedList.length} Tarnished còn hoạt động:
+                        </div>
+                        <button
+                          onClick={() => {
+                            const colors = [
+                              "#f59e0b",
+                              "#10b981",
+                              "#3b82f6",
+                              "#a855f7",
+                              "#ef4444",
+                              "#06b6d4",
+                              "#84cc16",
+                              "#ec4899",
+                            ];
+                            setPreCombatModal({
+                              isOpen: true,
+                              title: "Roundtable Hold — Quay chọn Tarnished",
+                              description:
+                                "Quay ngẫu nhiên để chọn Tarnished tham chiến trận phụ",
+                              items: tarnishedList.map((p, i) => ({
+                                label: `${p.name} (#${p.no})`,
+                                weight: 1,
+                                isSuccess: true,
+                                color: colors[i % colors.length],
+                                meta: { playerNo: p.no },
+                              })),
+                              side: (pendingLoser ?? "player1") as
+                                | "player1"
+                                | "player2",
+                              effectKey: "roundtable-tarnished-spin",
+                              onResult: (result) => {
+                                const no = result.meta?.playerNo as number;
+                                const chosen = tarnishedList.find(
+                                  (p) => p.no === no,
+                                );
+                                if (chosen) setSelectedTarnished(chosen);
+                              },
+                            });
+                          }}
+                          className="px-3 py-1 bg-yellow-700/50 hover:bg-yellow-600/60 border border-yellow-500/50 rounded-lg text-yellow-200 text-xs font-bold transition-colors"
+                        >
+                          🎡 Quay ngẫu nhiên
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Tìm Tarnished..."
+                        value={tarnishedSearchTerm}
+                        onChange={(e) => setTarnishedSearchTerm(e.target.value)}
+                        className="w-full px-3 py-1.5 bg-gray-800 border border-yellow-600/40 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500 mb-2"
+                      />
+                      <div className="max-h-40 overflow-y-auto space-y-1">
+                        {filteredTarnished.map((p) => (
+                          <button
+                            key={p.no}
+                            onClick={() => setSelectedTarnished(p)}
+                            className="w-full px-3 py-2 text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-yellow-500/50 rounded-lg text-white text-sm flex justify-between items-center transition-all"
+                          >
+                            <span>
+                              <span className="text-yellow-400">#{p.no}</span>{" "}
+                              {p.name}
+                            </span>
+                            <span className="text-xs text-gray-400">
+                              {p.race}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                    {(subIsAnimating || subCombatResult) &&
+                  ) : (
+                    <div>
+                      <div className="text-sm text-gray-300 mb-3 flex items-center gap-2">
+                        <span className="text-yellow-400">
+                          Tarnished được chọn:
+                        </span>
+                        <span className="font-bold text-white">
+                          {selectedTarnished.name}
+                        </span>
+                        <button
+                          onClick={() => {
+                            setSelectedTarnished(null);
+                            setSubCombatResult(null);
+                            _setSubCurrentRound(-1);
+                          }}
+                          className="text-xs text-gray-500 hover:text-white ml-auto"
+                        >
+                          ✕ Đổi
+                        </button>
+                      </div>
+                      {(subIsAnimating || subCombatResult) &&
                       player1 &&
                       player2 ? (
-                      <div className="mb-3">
-                        <div className="text-xs text-gray-400 mb-2 text-center">
-                          Trận phụ:{" "}
-                          <span className="text-yellow-300">
-                            {selectedTarnished.name}
-                          </span>{" "}
-                          vs{" "}
-                          <span
-                            className={
-                              combatResult!.winner === "player1"
-                                ? "text-blue-300"
-                                : "text-red-300"
-                            }
-                          >
-                            {mainWinner?.name}
-                          </span>
-                        </div>
-                        {subCombatResult ? (
-                          <>
-                            {renderRounds(
-                              subCombatResult.rounds,
-                              null,
-                              selectedTarnished.character,
-                              mainWinner?.character,
-                            )}
-                            <div className="mt-3 text-center">
-                              <div className="text-lg font-bold">
-                                <span className="text-blue-400">
-                                  {subCombatResult.player1Score}
-                                </span>
-                                <span className="text-gray-500 mx-2">:</span>
-                                <span className="text-red-400">
-                                  {subCombatResult.player2Score}
-                                </span>
-                              </div>
-                              {subCombatResult.winner === "player1" ? (
-                                <div className="mt-2 text-green-400 font-bold text-sm bg-green-900/30 border border-green-500/40 rounded-lg px-3 py-2">
-                                  Tarnished thắng →{" "}
-                                  <strong>
-                                    {pendingLoser === "player1"
-                                      ? player1?.name
-                                      : player2?.name}
-                                  </strong>{" "}
-                                  được cứu!
-                                </div>
-                              ) : (
-                                <div className="mt-2 text-red-400 font-bold text-sm bg-red-900/30 border border-red-500/40 rounded-lg px-3 py-2">
-                                  Tarnished thua →{" "}
-                                  <strong>
-                                    {pendingLoser === "player1"
-                                      ? player1?.name
-                                      : player2?.name}
-                                  </strong>{" "}
-                                  vẫn bị loại.
-                                </div>
+                        <div className="mb-3">
+                          <div className="text-xs text-gray-400 mb-2 text-center">
+                            Trận phụ:{" "}
+                            <span className="text-yellow-300">
+                              {selectedTarnished.name}
+                            </span>{" "}
+                            vs{" "}
+                            <span
+                              className={
+                                combatResult!.winner === "player1"
+                                  ? "text-blue-300"
+                                  : "text-red-300"
+                              }
+                            >
+                              {mainWinner?.name}
+                            </span>
+                          </div>
+                          {subCombatResult ? (
+                            <>
+                              {renderRounds(
+                                subCombatResult.rounds,
+                                null,
+                                selectedTarnished.character,
+                                mainWinner?.character,
                               )}
-                              <button
-                                onClick={() => setIsPendingRoundtable(false)}
-                                className="mt-3 px-4 py-1.5 bg-green-700 hover:bg-green-600 text-white text-xs rounded-lg border border-green-500 font-bold transition-colors"
-                              >
-                                Xác nhận kết quả cuối
-                              </button>
+                              <div className="mt-3 text-center">
+                                <div className="text-lg font-bold">
+                                  <span className="text-blue-400">
+                                    {subCombatResult.player1Score}
+                                  </span>
+                                  <span className="text-gray-500 mx-2">:</span>
+                                  <span className="text-red-400">
+                                    {subCombatResult.player2Score}
+                                  </span>
+                                </div>
+                                {subCombatResult.winner === "player1" ? (
+                                  <div className="mt-2 text-green-400 font-bold text-sm bg-green-900/30 border border-green-500/40 rounded-lg px-3 py-2">
+                                    Tarnished thắng →{" "}
+                                    <strong>
+                                      {pendingLoser === "player1"
+                                        ? player1?.name
+                                        : player2?.name}
+                                    </strong>{" "}
+                                    được cứu!
+                                  </div>
+                                ) : (
+                                  <div className="mt-2 text-red-400 font-bold text-sm bg-red-900/30 border border-red-500/40 rounded-lg px-3 py-2">
+                                    Tarnished thua →{" "}
+                                    <strong>
+                                      {pendingLoser === "player1"
+                                        ? player1?.name
+                                        : player2?.name}
+                                    </strong>{" "}
+                                    vẫn bị loại.
+                                  </div>
+                                )}
+                                <button
+                                  onClick={() => setIsPendingRoundtable(false)}
+                                  className="mt-3 px-4 py-1.5 bg-green-700 hover:bg-green-600 text-white text-xs rounded-lg border border-green-500 font-bold transition-colors"
+                                >
+                                  Xác nhận kết quả cuối
+                                </button>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-center text-gray-400 text-sm py-4">
+                              Đang chạy trận phụ...
                             </div>
-                          </>
-                        ) : (
-                          <div className="text-center text-gray-400 text-sm py-4">
-                            Đang chạy trận phụ...
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            if (!combatResult) return;
+                            const mainWinnerP =
+                              combatResult.winner === "player1"
+                                ? player1!
+                                : player2!;
+                            startRoundtableSubCombat(
+                              selectedTarnished,
+                              mainWinnerP,
+                              combatResult,
+                              pendingLoser!,
+                              tarnishedList,
+                            );
+                          }}
+                          className="w-full px-4 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-sm rounded-xl transition-all"
+                        >
+                          ⚔️ Chạy Trận Phụ (Full PvP)
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+            {/* Roundtable Hold sub-combat result (after snapshot restored) */}
+            {!roundtableSubMode &&
+              subCombatResult &&
+              selectedTarnished &&
+              !isPendingRoundtable && (
+                <div className="bg-gray-900/60 border border-orange-600/40 rounded-xl p-3 mb-3">
+                  <div className="text-orange-300 font-bold text-xs mb-2">
+                    Kết quả trận phụ Roundtable Hold:{" "}
+                    <span className="text-yellow-300">
+                      {selectedTarnished.name}
+                    </span>
+                  </div>
+                  {renderRounds(
+                    subCombatResult.rounds,
+                    null,
+                    selectedTarnished.character,
+                    undefined,
+                  )}
+                  <div className="mt-2 text-center text-sm font-bold">
+                    <span className="text-blue-400">
+                      {subCombatResult.player1Score}
+                    </span>
+                    <span className="text-gray-500 mx-2">:</span>
+                    <span className="text-red-400">
+                      {subCombatResult.player2Score}
+                    </span>
+                  </div>
+                  <div
+                    className={`mt-2 text-xs font-bold text-center px-3 py-1.5 rounded-lg border ${
+                      subCombatResult.winner === "player1"
+                        ? "text-green-300 bg-green-900/30 border-green-500/40"
+                        : "text-red-300 bg-red-900/30 border-red-500/40"
+                    }`}
+                  >
+                    {subCombatResult.winner === "player1"
+                      ? `Tarnished (${selectedTarnished.name}) thắng → Người thua được cứu`
+                      : `Tarnished (${selectedTarnished.name}) thua → Kết quả trận chính giữ nguyên`}
+                  </div>
+                </div>
+              )}
+
+            {/* After-combat quirk effects */}
+            {battleDone &&
+              afterCombatEntries.length > 0 &&
+              (() => {
+                const pvpRewardEntries = afterCombatEntries.filter(
+                  (e) =>
+                    e.quirkName.startsWith("PvP Reward") ||
+                    e.quirkName === "Power Ranger" ||
+                    e.quirkName === "Bravest of the Brave" ||
+                    e.quirkName === "Impatient",
+                );
+                const otherEntries = afterCombatEntries.filter(
+                  (e) =>
+                    !e.quirkName.startsWith("PvP Reward") &&
+                    e.quirkName !== "Power Ranger" &&
+                    e.quirkName !== "Bravest of the Brave" &&
+                    e.quirkName !== "Impatient",
+                );
+                const renderEntry = (
+                  entry: (typeof afterCombatEntries)[0],
+                  idx: number,
+                  big: boolean,
+                ) => {
+                  const pname =
+                    entry.player === "player1" ? player1?.name : player2?.name;
+                  const spinKey = entry.wheelKey ?? null;
+                  const spunResult = spinKey
+                    ? afterCombatSpinResults[spinKey]
+                    : null;
+                  const isP1 = entry.player === "player1";
+                  return (
+                    <div
+                      key={idx}
+                      className={`flex items-start gap-2 rounded-lg border ${
+                        big
+                          ? `px-4 py-3 ${isP1 ? "bg-blue-900/30 border-blue-500/50" : "bg-red-900/30 border-red-500/50"}`
+                          : `px-3 py-2 text-xs ${isP1 ? "bg-blue-900/20 border-blue-600/30" : "bg-red-900/20 border-red-600/30"}`
+                      }`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <span
+                          className={`font-bold mr-1 ${big ? "text-sm" : ""} ${isP1 ? "text-blue-300" : "text-red-300"}`}
+                        >
+                          [{pname}]
+                        </span>
+                        <span
+                          className={`font-semibold ${big ? "text-sm text-yellow-300" : "text-purple-200"}`}
+                        >
+                          {entry.quirkName}:
+                        </span>{" "}
+                        <span
+                          className={
+                            big ? "text-sm text-gray-200" : "text-gray-300"
+                          }
+                        >
+                          {entry.description}
+                        </span>
+                        {spunResult && (
+                          <div
+                            className={`mt-1 font-bold ${big ? "text-base" : ""} ${spunResult.isSuccess ? "text-green-400" : "text-gray-400"}`}
+                          >
+                            → {spunResult.label}
                           </div>
                         )}
                       </div>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          if (!combatResult) return;
-                          const mainWinnerP = combatResult.winner === "player1" ? player1! : player2!;
-                          startRoundtableSubCombat(
-                            selectedTarnished,
-                            mainWinnerP,
-                            combatResult,
-                            pendingLoser!,
-                            tarnishedList,
-                          );
-                        }}
-                        className="w-full px-4 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-sm rounded-xl transition-all"
-                      >
-                        ⚔️ Chạy Trận Phụ (Full PvP)
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Roundtable Hold sub-combat result (after snapshot restored) */}
-            {!roundtableSubMode && subCombatResult && selectedTarnished && !isPendingRoundtable && (
-              <div className="bg-gray-900/60 border border-orange-600/40 rounded-xl p-3 mb-3">
-                <div className="text-orange-300 font-bold text-xs mb-2">
-                  Kết quả trận phụ Roundtable Hold: <span className="text-yellow-300">{selectedTarnished.name}</span>
-                </div>
-                {renderRounds(subCombatResult.rounds, null, selectedTarnished.character, undefined)}
-                <div className="mt-2 text-center text-sm font-bold">
-                  <span className="text-blue-400">{subCombatResult.player1Score}</span>
-                  <span className="text-gray-500 mx-2">:</span>
-                  <span className="text-red-400">{subCombatResult.player2Score}</span>
-                </div>
-                <div className={`mt-2 text-xs font-bold text-center px-3 py-1.5 rounded-lg border ${subCombatResult.winner === "player1"
-                  ? "text-green-300 bg-green-900/30 border-green-500/40"
-                  : "text-red-300 bg-red-900/30 border-red-500/40"
-                  }`}>
-                  {subCombatResult.winner === "player1"
-                    ? `Tarnished (${selectedTarnished.name}) thắng → Người thua được cứu`
-                    : `Tarnished (${selectedTarnished.name}) thua → Kết quả trận chính giữ nguyên`}
-                </div>
-              </div>
-            )}
-
-            {/* After-combat quirk effects */}
-            {battleDone && afterCombatEntries.length > 0 && (() => {
-              const pvpRewardEntries = afterCombatEntries.filter(e =>
-                e.quirkName.startsWith("PvP Reward") || e.quirkName === "Power Ranger" || e.quirkName === "Bravest of the Brave" || e.quirkName === "Impatient"
-              );
-              const otherEntries = afterCombatEntries.filter(e =>
-                !e.quirkName.startsWith("PvP Reward") && e.quirkName !== "Power Ranger" && e.quirkName !== "Bravest of the Brave" && e.quirkName !== "Impatient"
-              );
-              const renderEntry = (entry: (typeof afterCombatEntries)[0], idx: number, big: boolean) => {
-                const pname = entry.player === "player1" ? player1?.name : player2?.name;
-                const spinKey = entry.wheelKey ?? null;
-                const spunResult = spinKey ? afterCombatSpinResults[spinKey] : null;
-                const isP1 = entry.player === "player1";
-                return (
-                  <div
-                    key={idx}
-                    className={`flex items-start gap-2 rounded-lg border ${big
-                      ? `px-4 py-3 ${isP1 ? "bg-blue-900/30 border-blue-500/50" : "bg-red-900/30 border-red-500/50"}`
-                      : `px-3 py-2 text-xs ${isP1 ? "bg-blue-900/20 border-blue-600/30" : "bg-red-900/20 border-red-600/30"}`
-                      }`}
-                  >
-                    <div className="flex-1 min-w-0">
-                      <span className={`font-bold mr-1 ${big ? "text-sm" : ""} ${isP1 ? "text-blue-300" : "text-red-300"}`}>
-                        [{pname}]
-                      </span>
-                      <span className={`font-semibold ${big ? "text-sm text-yellow-300" : "text-purple-200"}`}>{entry.quirkName}:</span>{" "}
-                      <span className={big ? "text-sm text-gray-200" : "text-gray-300"}>{entry.description}</span>
-                      {spunResult && (
-                        <div className={`mt-1 font-bold ${big ? "text-base" : ""} ${spunResult.isSuccess ? "text-green-400" : "text-gray-400"}`}>
-                          → {spunResult.label}
-                        </div>
-                      )}
-                    </div>
-                    {spinKey && !spunResult && (
-                      <button
-                        onClick={() => {
-                          setPreCombatModal({
-                            isOpen: true,
-                            title: `${entry.quirkName} — ${pname}`,
-                            description: entry.description,
-                            items: entry.wheelItems ?? [],
-                            side: entry.player,
-                            effectKey: spinKey,
-                            onResult: (result: { label: string; isSuccess: boolean; meta?: Record<string, unknown> }) => {
-                              setAfterCombatSpinResults((prev) => ({ ...prev, [spinKey]: result }));
-                              if (result.isSuccess && entry.statMods && entry.statMods.length > 0) {
-                                const bubbles: { player: "player1" | "player2"; text: string; isPositive: boolean }[] = [];
-                                for (const mod of entry.statMods) {
-                                  bubbles.push({ player: entry.player, text: `${mod.delta >= 0 ? "+" : ""}${mod.delta} ${mod.stat.toUpperCase()} (${entry.quirkName})`, isPositive: mod.delta >= 0 });
+                      {spinKey && !spunResult && (
+                        <button
+                          onClick={() => {
+                            setPreCombatModal({
+                              isOpen: true,
+                              title: `${entry.quirkName} — ${pname}`,
+                              description: entry.description,
+                              items: entry.wheelItems ?? [],
+                              side: entry.player,
+                              effectKey: spinKey,
+                              onResult: (result: {
+                                label: string;
+                                isSuccess: boolean;
+                                meta?: Record<string, unknown>;
+                              }) => {
+                                setAfterCombatSpinResults((prev) => ({
+                                  ...prev,
+                                  [spinKey]: result,
+                                }));
+                                if (
+                                  result.isSuccess &&
+                                  entry.statMods &&
+                                  entry.statMods.length > 0
+                                ) {
+                                  const bubbles: {
+                                    player: "player1" | "player2";
+                                    text: string;
+                                    isPositive: boolean;
+                                  }[] = [];
+                                  for (const mod of entry.statMods) {
+                                    bubbles.push({
+                                      player: entry.player,
+                                      text: `${mod.delta >= 0 ? "+" : ""}${mod.delta} ${mod.stat.toUpperCase()} (${entry.quirkName})`,
+                                      isPositive: mod.delta >= 0,
+                                    });
+                                  }
+                                  if (bubbles.length > 0)
+                                    spawnStatBubbles(bubbles);
                                 }
-                                if (bubbles.length > 0) spawnStatBubbles(bubbles);
-                              }
-                              // Fast Learner: nếu thành công → mở wheel chọn power từ đối thủ
-                              if (entry.quirkName === "Fast Learner" && result.isSuccess) {
-                                const successItem = entry.wheelItems?.find((it) => it.isSuccess);
-                                const oppPowers = (successItem?.meta?.oppPowers as string[]) ?? [];
-                                if (oppPowers.length > 0) {
-                                  const colors = ["#ef4444", "#f59e0b", "#22c55e", "#3b82f6", "#a855f7", "#ec4899", "#06b6d4", "#84cc16"];
+                                // Fast Learner: nếu thành công → mở wheel chọn power từ đối thủ
+                                if (
+                                  entry.quirkName === "Fast Learner" &&
+                                  result.isSuccess
+                                ) {
+                                  const successItem = entry.wheelItems?.find(
+                                    (it) => it.isSuccess,
+                                  );
+                                  const oppPowers =
+                                    (successItem?.meta
+                                      ?.oppPowers as string[]) ?? [];
+                                  if (oppPowers.length > 0) {
+                                    const colors = [
+                                      "#ef4444",
+                                      "#f59e0b",
+                                      "#22c55e",
+                                      "#3b82f6",
+                                      "#a855f7",
+                                      "#ec4899",
+                                      "#06b6d4",
+                                      "#84cc16",
+                                    ];
+                                    setTimeout(() => {
+                                      setPreCombatModal({
+                                        isOpen: true,
+                                        title: `Fast Learner — Chọn Power để học`,
+                                        description: `${entry.player === "player1" ? player1?.name : player2?.name} — Học 1 Power từ đối thủ:`,
+                                        items: oppPowers.map(
+                                          (p: string, i: number) => ({
+                                            label: p,
+                                            weight: 1,
+                                            isSuccess: true,
+                                            color: colors[i % colors.length],
+                                          }),
+                                        ),
+                                        side: entry.player,
+                                        effectKey: `fast-learner-power-${spinKey}`,
+                                        onResult: (powerResult) => {
+                                          spawnStatBubbles([
+                                            {
+                                              player: entry.player,
+                                              text: `Fast Learner: Học được Power "${powerResult.label}" [GM apply]`,
+                                              isPositive: true,
+                                            },
+                                          ]);
+                                        },
+                                      });
+                                    }, 100);
+                                  }
+                                }
+                                // Hou Yi's Divine Bow
+                                if (spinKey.startsWith("after-HouYi-")) {
+                                  const suns =
+                                    (result.meta?.suns as number) ?? 1;
+                                  spawnStatBubbles([
+                                    {
+                                      player: entry.player,
+                                      text: `☀ Bắn rụng ${suns} mặt trời → +3 all stats`,
+                                      isPositive: true,
+                                    },
+                                  ]);
+                                }
+                                // MrBeast
+                                if (spinKey.startsWith("after-MrBeast-")) {
+                                  const pname2 =
+                                    entry.player === "player1"
+                                      ? player1?.name
+                                      : player2?.name;
+                                  spawnStatBubbles([
+                                    {
+                                      player: entry.player,
+                                      text: `MrBeast: ${pname2} tặng "${result.label}" cho 5 player ngẫu nhiên — GM dùng Wheel Of Name để chọn 5 người`,
+                                      isPositive: true,
+                                    },
+                                  ]);
+                                }
+                                // Coven Council bước 2: sau khi chọn player, spin stat theo race
+                                if (spinKey.startsWith("after-CovenCouncil-")) {
+                                  const chosenItem = entry.wheelItems?.find(
+                                    (it) => it.label === result.label,
+                                  );
+                                  const raceName = (
+                                    (chosenItem?.meta?.race as string) ||
+                                    "human"
+                                  ).toLowerCase();
+                                  const chosenName =
+                                    (chosenItem?.meta?.playerName as string) ||
+                                    result.label;
+                                  const ALL_STATS: (keyof CharacterStats)[] = [
+                                    "str",
+                                    "spd",
+                                    "dur",
+                                    "iq",
+                                    "biq",
+                                    "ma",
+                                  ];
+                                  const statItems = ALL_STATS.map((s) => ({
+                                    label: s.toUpperCase(),
+                                    weight: 1,
+                                    isSuccess: true,
+                                    color: STAT_COLORS[s],
+                                    meta: { stat: s, raceName, chosenName },
+                                  }));
                                   setTimeout(() => {
                                     setPreCombatModal({
                                       isOpen: true,
-                                      title: `Fast Learner — Chọn Power để học`,
-                                      description: `${entry.player === "player1" ? player1?.name : player2?.name} — Học 1 Power từ đối thủ:`,
-                                      items: oppPowers.map((p: string, i: number) => ({
-                                        label: p,
-                                        weight: 1,
-                                        isSuccess: true,
-                                        color: colors[i % colors.length],
-                                      })),
+                                      title: `Coven Council — Chọn stat Re-Spin cho ${chosenName}`,
+                                      description: `Quay chọn 1 chỉ số của ${chosenName} để Re-Spin (theo race ${raceName})`,
+                                      items: statItems,
                                       side: entry.player,
-                                      effectKey: `fast-learner-power-${spinKey}`,
-                                      onResult: (powerResult) => {
-                                        spawnStatBubbles([{ player: entry.player, text: `Fast Learner: Học được Power "${powerResult.label}" [GM apply]`, isPositive: true }]);
+                                      effectKey: `coven-stat-${spinKey}`,
+                                      onResult: (statResult) => {
+                                        const stat2 = statResult.meta
+                                          ?.stat as keyof CharacterStats;
+                                        const rName =
+                                          (statResult.meta
+                                            ?.raceName as string) || "human";
+                                        const pName =
+                                          (statResult.meta
+                                            ?.chosenName as string) || "?";
+                                        const weights =
+                                          RACE_STAT_WEIGHTS[rName]?.[stat2] ||
+                                          Array(10).fill(10);
+                                        setTimeout(() => {
+                                          setPreCombatModal({
+                                            isOpen: true,
+                                            title: `Coven Council — Re-Spin ${stat2.toUpperCase()} cho ${pName}`,
+                                            description: `${pName} — Re-Spin ${stat2.toUpperCase()} theo race ${rName}`,
+                                            items: weights.map(
+                                              (w: number, i: number) => ({
+                                                label: `${i + 1}`,
+                                                weight: w,
+                                                isSuccess: true,
+                                                color: STAT_COLORS[stat2],
+                                              }),
+                                            ),
+                                            side: entry.player,
+                                            effectKey: `coven-respin-${spinKey}-${stat2}`,
+                                            onResult: (spinResult) => {
+                                              const newVal = parseInt(
+                                                spinResult.label,
+                                                10,
+                                              );
+                                              spawnStatBubbles([
+                                                {
+                                                  player: entry.player,
+                                                  text: `Coven Council: ${pName} Re-Spin ${stat2.toUpperCase()} = ${newVal} [GM apply]`,
+                                                  isPositive: true,
+                                                },
+                                              ]);
+                                            },
+                                          });
+                                        }, 100);
                                       },
                                     });
                                   }, 100);
                                 }
-                              }
-                              // Hou Yi's Divine Bow
-                              if (spinKey.startsWith("after-HouYi-")) {
-                                const suns = (result.meta?.suns as number) ?? 1;
-                                spawnStatBubbles([{ player: entry.player, text: `☀ Bắn rụng ${suns} mặt trời → +3 all stats`, isPositive: true }]);
-                              }
-                              // MrBeast
-                              if (spinKey.startsWith("after-MrBeast-")) {
-                                const pname2 = entry.player === "player1" ? player1?.name : player2?.name;
-                                spawnStatBubbles([{ player: entry.player, text: `MrBeast: ${pname2} tặng "${result.label}" cho 5 player ngẫu nhiên — GM dùng Wheel Of Name để chọn 5 người`, isPositive: true }]);
-                              }
-                              // Coven Council bước 2: sau khi chọn player, spin stat theo race
-                              if (spinKey.startsWith("after-CovenCouncil-")) {
-                                const chosenItem = entry.wheelItems?.find((it) => it.label === result.label);
-                                const raceName = ((chosenItem?.meta?.race as string) || "human").toLowerCase();
-                                const chosenName = chosenItem?.meta?.playerName as string || result.label;
-                                const ALL_STATS: (keyof CharacterStats)[] = ["str", "spd", "dur", "iq", "biq", "ma"];
-                                const statItems = ALL_STATS.map((s) => ({
-                                  label: s.toUpperCase(),
-                                  weight: 1,
-                                  isSuccess: true,
-                                  color: STAT_COLORS[s],
-                                  meta: { stat: s, raceName, chosenName },
-                                }));
-                                setTimeout(() => {
-                                  setPreCombatModal({
-                                    isOpen: true,
-                                    title: `Coven Council — Chọn stat Re-Spin cho ${chosenName}`,
-                                    description: `Quay chọn 1 chỉ số của ${chosenName} để Re-Spin (theo race ${raceName})`,
-                                    items: statItems,
-                                    side: entry.player,
-                                    effectKey: `coven-stat-${spinKey}`,
-                                    onResult: (statResult) => {
-                                      const stat2 = statResult.meta?.stat as keyof CharacterStats;
-                                      const rName = statResult.meta?.raceName as string || "human";
-                                      const pName = statResult.meta?.chosenName as string || "?";
-                                      const weights = RACE_STAT_WEIGHTS[rName]?.[stat2] || Array(10).fill(10);
-                                      setTimeout(() => {
-                                        setPreCombatModal({
-                                          isOpen: true,
-                                          title: `Coven Council — Re-Spin ${stat2.toUpperCase()} cho ${pName}`,
-                                          description: `${pName} — Re-Spin ${stat2.toUpperCase()} theo race ${rName}`,
-                                          items: weights.map((w: number, i: number) => ({
-                                            label: `${i + 1}`,
-                                            weight: w,
-                                            isSuccess: true,
-                                            color: STAT_COLORS[stat2],
-                                          })),
-                                          side: entry.player,
-                                          effectKey: `coven-respin-${spinKey}-${stat2}`,
-                                          onResult: (spinResult) => {
-                                            const newVal = parseInt(spinResult.label, 10);
-                                            spawnStatBubbles([{ player: entry.player, text: `Coven Council: ${pName} Re-Spin ${stat2.toUpperCase()} = ${newVal} [GM apply]`, isPositive: true }]);
-                                          },
-                                        });
-                                      }, 100);
-                                    },
-                                  });
-                                }, 100);
-                              }
-                            },
-                          });
-                        }}
-                        className={`shrink-0 font-bold rounded-lg border transition-colors ${big
-                          ? "px-5 py-2 text-sm bg-yellow-600/80 hover:bg-yellow-500/90 text-white border-yellow-400/60"
-                          : "px-2 py-1 text-[10px] bg-purple-700/60 hover:bg-purple-600/70 text-purple-100 border-purple-500/40"
+                              },
+                            });
+                          }}
+                          className={`shrink-0 font-bold rounded-lg border transition-colors ${
+                            big
+                              ? "px-5 py-2 text-sm bg-yellow-600/80 hover:bg-yellow-500/90 text-white border-yellow-400/60"
+                              : "px-2 py-1 text-[10px] bg-purple-700/60 hover:bg-purple-600/70 text-purple-100 border-purple-500/40"
                           }`}
-                      >
-                        Quay
-                      </button>
+                        >
+                          Quay
+                        </button>
+                      )}
+                      {!spinKey && !entry.wheelKey && entry.gmAction && (
+                        <span
+                          className={`shrink-0 text-amber-400 ${big ? "text-sm font-bold" : "text-[10px] font-semibold"}`}
+                        >
+                          GM
+                        </span>
+                      )}
+                      {!spinKey &&
+                        !entry.wheelKey &&
+                        !entry.gmAction &&
+                        big && (
+                          <span className="shrink-0 text-xs font-bold px-2 py-1 rounded bg-green-700/40 border border-green-500/30 text-green-300">
+                            Auto
+                          </span>
+                        )}
+                    </div>
+                  );
+                };
+                return (
+                  <div className="mt-3 space-y-3">
+                    {/* PvP Reward — to, nổi bật */}
+                    {pvpRewardEntries.length > 0 && (
+                      <div className="bg-yellow-900/20 rounded-xl border border-yellow-500/40 p-3 space-y-2">
+                        <div className="text-sm font-bold text-yellow-300 tracking-wide mb-1">
+                          PvP Reward
+                        </div>
+                        {pvpRewardEntries.map((entry, idx) =>
+                          renderEntry(entry, idx, true),
+                        )}
+                      </div>
                     )}
-                    {!spinKey && !entry.wheelKey && entry.gmAction && (
-                      <span className={`shrink-0 text-amber-400 ${big ? "text-sm font-bold" : "text-[10px] font-semibold"}`}>GM</span>
-                    )}
-                    {!spinKey && !entry.wheelKey && !entry.gmAction && big && (
-                      <span className="shrink-0 text-xs font-bold px-2 py-1 rounded bg-green-700/40 border border-green-500/30 text-green-300">Auto</span>
+                    {/* Hiệu ứng khác — nhỏ hơn */}
+                    {otherEntries.length > 0 && (
+                      <div className="bg-gray-800/60 rounded-xl border border-purple-600/30 p-3 space-y-2">
+                        <div className="text-xs font-semibold text-purple-300 mb-1">
+                          Hiệu ứng sau combat
+                        </div>
+                        {otherEntries.map((entry, idx) =>
+                          renderEntry(entry, idx, false),
+                        )}
+                      </div>
                     )}
                   </div>
                 );
-              };
-              return (
-                <div className="mt-3 space-y-3">
-                  {/* PvP Reward — to, nổi bật */}
-                  {pvpRewardEntries.length > 0 && (
-                    <div className="bg-yellow-900/20 rounded-xl border border-yellow-500/40 p-3 space-y-2">
-                      <div className="text-sm font-bold text-yellow-300 tracking-wide mb-1">PvP Reward</div>
-                      {pvpRewardEntries.map((entry, idx) => renderEntry(entry, idx, true))}
-                    </div>
-                  )}
-                  {/* Hiệu ứng khác — nhỏ hơn */}
-                  {otherEntries.length > 0 && (
-                    <div className="bg-gray-800/60 rounded-xl border border-purple-600/30 p-3 space-y-2">
-                      <div className="text-xs font-semibold text-purple-300 mb-1">Hiệu ứng sau combat</div>
-                      {otherEntries.map((entry, idx) => renderEntry(entry, idx, false))}
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
+              })()}
 
             {/* Action buttons */}
             <div className="flex justify-center gap-3 flex-wrap">
@@ -8166,10 +10559,11 @@ export const StatsComparisonMode = ({
                 <button
                   onClick={() => setCombatConfirmed(true)}
                   disabled={pendingSpins}
-                  className={`px-6 py-2.5 font-bold rounded-xl text-sm transition-all shadow-lg ${pendingSpins
-                    ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
-                    : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-green-500/20 hover:shadow-green-500/40"
-                    }`}
+                  className={`px-6 py-2.5 font-bold rounded-xl text-sm transition-all shadow-lg ${
+                    pendingSpins
+                      ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
+                      : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-green-500/20 hover:shadow-green-500/40"
+                  }`}
                   title={
                     pendingSpins
                       ? "Quay hết các hiệu ứng trước"
@@ -8221,26 +10615,30 @@ export const StatsComparisonMode = ({
                     />
                   </div>
                 </div>
-                {combatConfirmed && effectiveWinner && player1 && player2 && !roundtableSubMode && (
-                  <button
-                    onClick={() => {
-                      const winner =
-                        effectiveWinner === "player1" ? player1 : player2;
-                      const score = tournamentSpecialEvent
-                        ? null
-                        : `${effectiveScores.s1}-${effectiveScores.s2}`;
-                      onSaveTournamentResult?.({
-                        winnerNo: winner.no,
-                        score,
-                        specialEvent: tournamentSpecialEvent || null,
-                        note: tournamentNote || null,
-                      });
-                    }}
-                    className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold rounded-lg text-sm transition-all"
-                  >
-                    💾 Lưu kết quả Match #{tournamentMatch!.matchNumber}
-                  </button>
-                )}
+                {combatConfirmed &&
+                  effectiveWinner &&
+                  player1 &&
+                  player2 &&
+                  !roundtableSubMode && (
+                    <button
+                      onClick={() => {
+                        const winner =
+                          effectiveWinner === "player1" ? player1 : player2;
+                        const score = tournamentSpecialEvent
+                          ? null
+                          : `${effectiveScores.s1}-${effectiveScores.s2}`;
+                        onSaveTournamentResult?.({
+                          winnerNo: winner.no,
+                          score,
+                          specialEvent: tournamentSpecialEvent || null,
+                          note: tournamentNote || null,
+                        });
+                      }}
+                      className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold rounded-lg text-sm transition-all"
+                    >
+                      💾 Lưu kết quả Match #{tournamentMatch!.matchNumber}
+                    </button>
+                  )}
               </div>
             )}
 
@@ -8284,324 +10682,946 @@ export const StatsComparisonMode = ({
             items={preCombatModal.items}
             onResult={(item: WheelSpinItem) => {
               if (preCombatModal.onResult) {
-                preCombatModal.onResult({ label: item.label, isSuccess: !!item.isSuccess, meta: item.meta as Record<string, unknown> | undefined });
+                preCombatModal.onResult({
+                  label: item.label,
+                  isSuccess: !!item.isSuccess,
+                  meta: item.meta as Record<string, unknown> | undefined,
+                });
               }
               setPreCombatModal((prev) => ({ ...prev, isOpen: false }));
             }}
           />
 
           {/* Creator's Cat modal */}
-          {creatorsCatModal.isOpen && (() => {
-            const pLabel = creatorsCatModal.playerLabel;
-            const pName = pLabel === "player1" ? player1?.name : player2?.name;
-            const pChar = pLabel === "player1" ? player1?.character : player2?.character;
-            const setPlayer = pLabel === "player1" ? setPlayer1 : setPlayer2;
-            const CREATORS_FAVOR_EFFECTS = [
-              "Nhận +1 all stats",
-              "Roll lại 3 chỉ số",
-              "Tặng 1 Power chỉ định có trong vòng quay Power",
-              "Tặng 1 Normal Gear chỉ định",
-              "Tặng 1 Normal Weapon chỉ định và 100% dùng được",
-              "Loại bỏ Archetype hiện tại, nhận 1 archetype random",
-              "Tặng 2 random Power",
-              "Nhận +2 vào 2 chỉ số chỉ định",
-              "Tặng 1 Runeword",
-            ];
-            const ALL_STATS: { key: keyof CharacterStats; label: string }[] = [
-              { key: "str", label: "STR" }, { key: "spd", label: "SPD" },
-              { key: "dur", label: "DUR" }, { key: "iq", label: "IQ" },
-              { key: "biq", label: "BIQ" }, { key: "ma", label: "MA" },
-            ];
-            const ALL_POWERS = ["Artist", "Writer", "Red Shift/LP1211-M", "Shooting for Victory", "Let's Pump Some Iron!", "U=ma2", "Healing Factor", "Hunter's Rewards", "Quirkful", "Quirkless", "Sybaurafarming", "Gourmand", "Lone Wolf", "Swinging Maestro", "The Coast is Clear!", "AIDS", "Angling and Scheming", "Quas", "Wex", "Exort", "Critical Strike", "Evasion", "Petrification", "Magma Strike", "EscAPADe", "Spirit Link", "The Sand of Time", "Memory Alter", "Frost Fingers", "Ice Hammer", "Storm Calling", "Spear of Fire", "Metamagic", "Gaze of the Abyss", "Memory Freeze", "Railroad Realm 🍀", "Mewing", "Master of War", "Armor Piercing", "Borrowed Time", "Bonk Bonk Bonk", "Accelerating Sorcery", "Homeguard", "Guidance", "Bash", "Hunter's Mark", "Gate to Heaven", "Ice Liquefactors", "Bloody Strike", "Divine Smite", "Fire Control", "Thunder Orb", "Water Breathing", "Mind Control", "Blood Manipulation", "Sonic Scream", "Drunken Boxing", "Cursed", "Divine Lightning", "Fist Fighting", "Enhanced Hearing", "Rampage", "Bloodlust", "Rickrolling", "Power Absorption", "Hand Washing", "67", "Power Negation", "Invulnerability", "Overdrive", "Age Manipulation", "Enlarging", "Shrinking", "Garlic Breath", "The Goat", "Fancy Feet", "Weapon Enhancing", "Body Enhancing", "Clear Mind", "Force Field", "Anti-Magic Barrier", "Black Magic", "The Great Storm", "Continental Super Storm", "Sacred Fire", "Capybara", "Tsunami Control", "Rising tide", "Seismic", "Night Vision", "Gotta go Fast", "Fair Duel", "Uno Reverse Card", "Burning Hand", "Tick-tock", "Frost Armor", "Lightning Enchant", "Chaos Enchantment", "Dream Manipulation", "Powerful Strike", "Fragrant", "Voidwalking", "Odin Blessing", "Misty Step Ahead", "Ballet Dancing", "Luck Manipulation", "Scrying", "Baldening", "Cold Breeze", "Bucking Bronco", "Detect Thoughts", "Arcana Blast", "Blood Frenzy", "Analysis Sins", "Cleaning Sins", "Hydrate", "Groundwork", "Dominator", "Ice Spike", "Stat Absorption", "Golden Vow", "Acid Breath", "Poison Breath", "Zoltraak", "Encroaching Shadow", "No Stopping Me", "Mystifying Murmur", "Spell Flux"];
-            const ALL_NORMAL_GEAR = ["Fishing Rod", "Sổ tay", "Văn tế", "Silver Steed", "Wooden Shield", "Wizard Hat", "Love Letter", "Holy Symbol", "Fingerthing", "Healing Flasks", "Leather Jacket", "Baguette", "Frying Pan", "Spatula", "Gold Pine Resin", "Knight's Armor", "Cursed Charm", "Đai Trinh Tiết", "Swift Boots", "Kuro's Charm", "Buckler", "Soap", "Magical Scroll", "Ba hoa trắng", "Xương sống lưỡi", "Thuốc tráng dương", "Ancient Protector", "Cuộn khăn giấy", "Academie Ring", "Dark Lanthorn", "Lover's Glover", "Storage Room Key", "Giấy Nợ Gia Truyền", "Cursed Coin", "Shot Glass", "Empty Stein", "Golden Coin", "Kẹo", "Ớt", "Mì Tôm", "Bò Khô", "Radio", "Đá", "Beer", "Wine", "Kryptonite", "Glock", "Baron Buff", "Leviathan's Mark", "Darkin Blade", "Stellaron Hunter's Member Card", "Khung hình thờ", "Trứng Rồng", "Soul Sucker", "Soul of the Lazy Spirit", "Almighty Vampire's Blood", "King Gnome's Banana", "Human NPC's Axe", "God of War's Entry Ticket", "The First Dragon Scale"];
-            const ALL_NORMAL_WEAPONS = ["Banana Peel", "Broken Straight Sword", "Ukulele", "Uchigatana", "Kunai", "Drums", "Magical Staff", "Glass Bottle", "Wooden Sword", "Cursed Pennywort", "Slingshot", "B.F Sword", "Long Bow", "Hidden Blade", "Summoning Scroll", "Nunchuck", "Grimoire", "Whip", "Halberd", "Saxophone", "Guitar", "Flute", "Bass", "Long Sword", "Caestus", "War Axe", "Wand", "Morningstar", "Blood Sword", "Rapier", "Claymore", "Zweihänd'r", "Astrologer's Staff", "Backhand Blade", "Clawmark Seal"];
-            const ALL_RUNEWORDS = ["Razorsharp", "Unbreakable", "Pennyworthy", "Double Claws", "Extraordinary", "Elven Night", "Blackjack", "Dead Touch", "Affection", "Highroller", "The Twin", "Redemption", "Flawless", "Death's Dance", "Undying Rage", "Cure", "Adventurous", "Resonance", "Kinetics", "Belligerence", "Constitution", "Sagacity", "Momentum", "Preservation", "Bastion", "Tenacity", "Dialectics", "Epiphany", "Metaphysics", "Luminescence", "Prudence", "Apotheosis"];
-            const ALL_ARCHETYPES = (pChar?.archetypes || []);
+          {creatorsCatModal.isOpen &&
+            (() => {
+              const pLabel = creatorsCatModal.playerLabel;
+              const pName =
+                pLabel === "player1" ? player1?.name : player2?.name;
+              const pChar =
+                pLabel === "player1" ? player1?.character : player2?.character;
+              const setPlayer = pLabel === "player1" ? setPlayer1 : setPlayer2;
+              const CREATORS_FAVOR_EFFECTS = [
+                "Nhận +1 all stats",
+                "Roll lại 3 chỉ số",
+                "Tặng 1 Power chỉ định có trong vòng quay Power",
+                "Tặng 1 Normal Gear chỉ định",
+                "Tặng 1 Normal Weapon chỉ định và 100% dùng được",
+                "Loại bỏ Archetype hiện tại, nhận 1 archetype random",
+                "Tặng 2 random Power",
+                "Nhận +2 vào 2 chỉ số chỉ định",
+                "Tặng 1 Runeword",
+              ];
+              const ALL_STATS: { key: keyof CharacterStats; label: string }[] =
+                [
+                  { key: "str", label: "STR" },
+                  { key: "spd", label: "SPD" },
+                  { key: "dur", label: "DUR" },
+                  { key: "iq", label: "IQ" },
+                  { key: "biq", label: "BIQ" },
+                  { key: "ma", label: "MA" },
+                ];
+              const ALL_POWERS = [
+                "Artist",
+                "Writer",
+                "Red Shift/LP1211-M",
+                "Shooting for Victory",
+                "Let's Pump Some Iron!",
+                "U=ma2",
+                "Healing Factor",
+                "Hunter's Rewards",
+                "Quirkful",
+                "Quirkless",
+                "Sybaurafarming",
+                "Gourmand",
+                "Lone Wolf",
+                "Swinging Maestro",
+                "The Coast is Clear!",
+                "AIDS",
+                "Angling and Scheming",
+                "Quas",
+                "Wex",
+                "Exort",
+                "Critical Strike",
+                "Evasion",
+                "Petrification",
+                "Magma Strike",
+                "EscAPADe",
+                "Spirit Link",
+                "The Sand of Time",
+                "Memory Alter",
+                "Frost Fingers",
+                "Ice Hammer",
+                "Storm Calling",
+                "Spear of Fire",
+                "Metamagic",
+                "Gaze of the Abyss",
+                "Memory Freeze",
+                "Railroad Realm 🍀",
+                "Mewing",
+                "Master of War",
+                "Armor Piercing",
+                "Borrowed Time",
+                "Bonk Bonk Bonk",
+                "Accelerating Sorcery",
+                "Homeguard",
+                "Guidance",
+                "Bash",
+                "Hunter's Mark",
+                "Gate to Heaven",
+                "Ice Liquefactors",
+                "Bloody Strike",
+                "Divine Smite",
+                "Fire Control",
+                "Thunder Orb",
+                "Water Breathing",
+                "Mind Control",
+                "Blood Manipulation",
+                "Sonic Scream",
+                "Drunken Boxing",
+                "Cursed",
+                "Divine Lightning",
+                "Fist Fighting",
+                "Enhanced Hearing",
+                "Rampage",
+                "Bloodlust",
+                "Rickrolling",
+                "Power Absorption",
+                "Hand Washing",
+                "67",
+                "Power Negation",
+                "Invulnerability",
+                "Overdrive",
+                "Age Manipulation",
+                "Enlarging",
+                "Shrinking",
+                "Garlic Breath",
+                "The Goat",
+                "Fancy Feet",
+                "Weapon Enhancing",
+                "Body Enhancing",
+                "Clear Mind",
+                "Force Field",
+                "Anti-Magic Barrier",
+                "Black Magic",
+                "The Great Storm",
+                "Continental Super Storm",
+                "Sacred Fire",
+                "Capybara",
+                "Tsunami Control",
+                "Rising tide",
+                "Seismic",
+                "Night Vision",
+                "Gotta go Fast",
+                "Fair Duel",
+                "Uno Reverse Card",
+                "Burning Hand",
+                "Tick-tock",
+                "Frost Armor",
+                "Lightning Enchant",
+                "Chaos Enchantment",
+                "Dream Manipulation",
+                "Powerful Strike",
+                "Fragrant",
+                "Voidwalking",
+                "Odin Blessing",
+                "Misty Step Ahead",
+                "Ballet Dancing",
+                "Luck Manipulation",
+                "Scrying",
+                "Baldening",
+                "Cold Breeze",
+                "Bucking Bronco",
+                "Detect Thoughts",
+                "Arcana Blast",
+                "Blood Frenzy",
+                "Analysis Sins",
+                "Cleaning Sins",
+                "Hydrate",
+                "Groundwork",
+                "Dominator",
+                "Ice Spike",
+                "Stat Absorption",
+                "Golden Vow",
+                "Acid Breath",
+                "Poison Breath",
+                "Zoltraak",
+                "Encroaching Shadow",
+                "No Stopping Me",
+                "Mystifying Murmur",
+                "Spell Flux",
+              ];
+              const ALL_NORMAL_GEAR = [
+                "Fishing Rod",
+                "Sổ tay",
+                "Văn tế",
+                "Silver Steed",
+                "Wooden Shield",
+                "Wizard Hat",
+                "Love Letter",
+                "Holy Symbol",
+                "Fingerthing",
+                "Healing Flasks",
+                "Leather Jacket",
+                "Baguette",
+                "Frying Pan",
+                "Spatula",
+                "Gold Pine Resin",
+                "Knight's Armor",
+                "Cursed Charm",
+                "Đai Trinh Tiết",
+                "Swift Boots",
+                "Kuro's Charm",
+                "Buckler",
+                "Soap",
+                "Magical Scroll",
+                "Ba hoa trắng",
+                "Xương sống lưỡi",
+                "Thuốc tráng dương",
+                "Ancient Protector",
+                "Cuộn khăn giấy",
+                "Academie Ring",
+                "Dark Lanthorn",
+                "Lover's Glover",
+                "Storage Room Key",
+                "Giấy Nợ Gia Truyền",
+                "Cursed Coin",
+                "Shot Glass",
+                "Empty Stein",
+                "Golden Coin",
+                "Kẹo",
+                "Ớt",
+                "Mì Tôm",
+                "Bò Khô",
+                "Radio",
+                "Đá",
+                "Beer",
+                "Wine",
+                "Kryptonite",
+                "Glock",
+                "Baron Buff",
+                "Leviathan's Mark",
+                "Darkin Blade",
+                "Stellaron Hunter's Member Card",
+                "Khung hình thờ",
+                "Trứng Rồng",
+                "Soul Sucker",
+                "Soul of the Lazy Spirit",
+                "Almighty Vampire's Blood",
+                "King Gnome's Banana",
+                "Human NPC's Axe",
+                "God of War's Entry Ticket",
+                "The First Dragon Scale",
+              ];
+              const ALL_NORMAL_WEAPONS = [
+                "Banana Peel",
+                "Broken Straight Sword",
+                "Ukulele",
+                "Uchigatana",
+                "Kunai",
+                "Drums",
+                "Magical Staff",
+                "Glass Bottle",
+                "Wooden Sword",
+                "Cursed Pennywort",
+                "Slingshot",
+                "B.F Sword",
+                "Long Bow",
+                "Hidden Blade",
+                "Summoning Scroll",
+                "Nunchuck",
+                "Grimoire",
+                "Whip",
+                "Halberd",
+                "Saxophone",
+                "Guitar",
+                "Flute",
+                "Bass",
+                "Long Sword",
+                "Caestus",
+                "War Axe",
+                "Wand",
+                "Morningstar",
+                "Blood Sword",
+                "Rapier",
+                "Claymore",
+                "Zweihänd'r",
+                "Astrologer's Staff",
+                "Backhand Blade",
+                "Clawmark Seal",
+              ];
+              const ALL_RUNEWORDS = [
+                "Razorsharp",
+                "Unbreakable",
+                "Pennyworthy",
+                "Double Claws",
+                "Extraordinary",
+                "Elven Night",
+                "Blackjack",
+                "Dead Touch",
+                "Affection",
+                "Highroller",
+                "The Twin",
+                "Redemption",
+                "Flawless",
+                "Death's Dance",
+                "Undying Rage",
+                "Cure",
+                "Adventurous",
+                "Resonance",
+                "Kinetics",
+                "Belligerence",
+                "Constitution",
+                "Sagacity",
+                "Momentum",
+                "Preservation",
+                "Bastion",
+                "Tenacity",
+                "Dialectics",
+                "Epiphany",
+                "Metaphysics",
+                "Luminescence",
+                "Prudence",
+                "Apotheosis",
+              ];
+              const ALL_ARCHETYPES = pChar?.archetypes || [];
 
-            const applyEffect = (effect: string) => {
-              if (effect === "Nhận +1 all stats") {
-                setSummoningScrollResult((prev) => {
-                  const existing = prev[pLabel];
-                  const base = existing?.statDeltas || {};
-                  const newDeltas = { ...base };
-                  for (const k of _ALL_STAT_KEYS) newDeltas[k] = (newDeltas[k] || 0) + 1;
-                  return { ...prev, [pLabel]: { statDeltas: newDeltas, startScoreDelta: existing?.startScoreDelta || 0, summonName: existing?.summonName || "Creator's Cat" } };
-                });
-                spawnStatBubbles([{ player: pLabel, text: "Creator's Favor: +1 All Stats", isPositive: true }]);
-                setCreatorsCatModal((p) => ({ ...p, isOpen: false }));
-              } else if (effect === "Roll lại 3 chỉ số") {
-                setCreatorsCatModal((p) => ({ ...p, step: "choose_stats", selectedEffect: effect, chosenStats: [] }));
-              } else if (effect === "Tặng 1 Power chỉ định có trong vòng quay Power") {
-                setCreatorsCatModal((p) => ({ ...p, step: "choose_power", selectedEffect: effect }));
-              } else if (effect === "Tặng 1 Normal Gear chỉ định") {
-                setCreatorsCatModal((p) => ({ ...p, step: "choose_gear", selectedEffect: effect }));
-              } else if (effect === "Tặng 1 Normal Weapon chỉ định và 100% dùng được") {
-                setCreatorsCatModal((p) => ({ ...p, step: "choose_weapon", selectedEffect: effect }));
-              } else if (effect === "Loại bỏ Archetype hiện tại, nhận 1 archetype random") {
-                setCreatorsCatModal((p) => ({ ...p, step: "choose_archetypes", selectedEffect: effect, chosenArchetypesToRemove: [] }));
-              } else if (effect === "Tặng 2 random Power") {
-                // Mở wheel power 2 lần
-                const spinPowerWheel = (remaining: number, accumulated: string[]) => {
-                  setPreCombatModal({
-                    isOpen: true,
-                    title: `Creator's Favor: Power Wheel (${3 - remaining}/2)`,
-                    description: `${pName} — Quay Power Wheel (lần ${3 - remaining}/2)`,
-                    items: ALL_POWERS.map((p) => ({ label: p, weight: 1, isSuccess: true, color: "#a855f7" })),
-                    side: pLabel,
-                    effectKey: `creators-cat-power-${pLabel}-${remaining}`,
-                    onResult: (result) => {
-                      const newAccumulated = [...accumulated, result.label];
-                      if (remaining - 1 > 0) {
-                        spinPowerWheel(remaining - 1, newAccumulated);
-                      } else {
-                        // Apply cả 2 powers
-                        setPlayer((prev) => {
-                          if (!prev?.character) return prev;
-                          return { ...prev, character: { ...prev.character, powers: [...(prev.character.powers || []), ...newAccumulated.map((n) => ({ name: n, isLost: false }))] } };
-                        });
-                        spawnStatBubbles(newAccumulated.map((n) => ({ player: pLabel, text: `Creator's Favor: +Power ${n}`, isPositive: true })));
-                        setCreatorsCatModal((p) => ({ ...p, isOpen: false }));
-                      }
-                    },
+              const applyEffect = (effect: string) => {
+                if (effect === "Nhận +1 all stats") {
+                  setSummoningScrollResult((prev) => {
+                    const existing = prev[pLabel];
+                    const base = existing?.statDeltas || {};
+                    const newDeltas = { ...base };
+                    for (const k of _ALL_STAT_KEYS)
+                      newDeltas[k] = (newDeltas[k] || 0) + 1;
+                    return {
+                      ...prev,
+                      [pLabel]: {
+                        statDeltas: newDeltas,
+                        startScoreDelta: existing?.startScoreDelta || 0,
+                        summonName: existing?.summonName || "Creator's Cat",
+                      },
+                    };
                   });
-                };
-                spinPowerWheel(2, []);
-                setCreatorsCatModal((p) => ({ ...p, isOpen: false }));
-              } else if (effect === "Nhận +2 vào 2 chỉ số chỉ định") {
-                setCreatorsCatModal((p) => ({ ...p, step: "choose_stats", selectedEffect: effect, chosenStats: [] }));
-              } else if (effect === "Tặng 1 Runeword") {
-                setCreatorsCatModal((p) => ({ ...p, step: "choose_runeword", selectedEffect: effect }));
-              }
-            };
+                  spawnStatBubbles([
+                    {
+                      player: pLabel,
+                      text: "Creator's Favor: +1 All Stats",
+                      isPositive: true,
+                    },
+                  ]);
+                  setCreatorsCatModal((p) => ({ ...p, isOpen: false }));
+                } else if (effect === "Roll lại 3 chỉ số") {
+                  setCreatorsCatModal((p) => ({
+                    ...p,
+                    step: "choose_stats",
+                    selectedEffect: effect,
+                    chosenStats: [],
+                  }));
+                } else if (
+                  effect === "Tặng 1 Power chỉ định có trong vòng quay Power"
+                ) {
+                  setCreatorsCatModal((p) => ({
+                    ...p,
+                    step: "choose_power",
+                    selectedEffect: effect,
+                  }));
+                } else if (effect === "Tặng 1 Normal Gear chỉ định") {
+                  setCreatorsCatModal((p) => ({
+                    ...p,
+                    step: "choose_gear",
+                    selectedEffect: effect,
+                  }));
+                } else if (
+                  effect === "Tặng 1 Normal Weapon chỉ định và 100% dùng được"
+                ) {
+                  setCreatorsCatModal((p) => ({
+                    ...p,
+                    step: "choose_weapon",
+                    selectedEffect: effect,
+                  }));
+                } else if (
+                  effect ===
+                  "Loại bỏ Archetype hiện tại, nhận 1 archetype random"
+                ) {
+                  setCreatorsCatModal((p) => ({
+                    ...p,
+                    step: "choose_archetypes",
+                    selectedEffect: effect,
+                    chosenArchetypesToRemove: [],
+                  }));
+                } else if (effect === "Tặng 2 random Power") {
+                  // Mở wheel power 2 lần
+                  const spinPowerWheel = (
+                    remaining: number,
+                    accumulated: string[],
+                  ) => {
+                    setPreCombatModal({
+                      isOpen: true,
+                      title: `Creator's Favor: Power Wheel (${3 - remaining}/2)`,
+                      description: `${pName} — Quay Power Wheel (lần ${3 - remaining}/2)`,
+                      items: ALL_POWERS.map((p) => ({
+                        label: p,
+                        weight: 1,
+                        isSuccess: true,
+                        color: "#a855f7",
+                      })),
+                      side: pLabel,
+                      effectKey: `creators-cat-power-${pLabel}-${remaining}`,
+                      onResult: (result) => {
+                        const newAccumulated = [...accumulated, result.label];
+                        if (remaining - 1 > 0) {
+                          spinPowerWheel(remaining - 1, newAccumulated);
+                        } else {
+                          // Apply cả 2 powers
+                          setPlayer((prev) => {
+                            if (!prev?.character) return prev;
+                            return {
+                              ...prev,
+                              character: {
+                                ...prev.character,
+                                powers: [
+                                  ...(prev.character.powers || []),
+                                  ...newAccumulated.map((n) => ({
+                                    name: n,
+                                    isLost: false,
+                                  })),
+                                ],
+                              },
+                            };
+                          });
+                          spawnStatBubbles(
+                            newAccumulated.map((n) => ({
+                              player: pLabel,
+                              text: `Creator's Favor: +Power ${n}`,
+                              isPositive: true,
+                            })),
+                          );
+                          setCreatorsCatModal((p) => ({ ...p, isOpen: false }));
+                        }
+                      },
+                    });
+                  };
+                  spinPowerWheel(2, []);
+                  setCreatorsCatModal((p) => ({ ...p, isOpen: false }));
+                } else if (effect === "Nhận +2 vào 2 chỉ số chỉ định") {
+                  setCreatorsCatModal((p) => ({
+                    ...p,
+                    step: "choose_stats",
+                    selectedEffect: effect,
+                    chosenStats: [],
+                  }));
+                } else if (effect === "Tặng 1 Runeword") {
+                  setCreatorsCatModal((p) => ({
+                    ...p,
+                    step: "choose_runeword",
+                    selectedEffect: effect,
+                  }));
+                }
+              };
 
-            return (
-              <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-                <div className="bg-gray-900 border border-pink-500/40 rounded-2xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-pink-400 text-xl">🐱</span>
-                    <h2 className="text-white font-bold text-lg">Creator's Cat — {pName}</h2>
-                  </div>
-                  <p className="text-gray-400 text-sm mb-4">Creator's Favor: Chọn 1 hiệu ứng cho <span className="text-pink-300 font-semibold">{pName}</span></p>
+              return (
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+                  <div className="bg-gray-900 border border-pink-500/40 rounded-2xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-pink-400 text-xl">🐱</span>
+                      <h2 className="text-white font-bold text-lg">
+                        Creator's Cat — {pName}
+                      </h2>
+                    </div>
+                    <p className="text-gray-400 text-sm mb-4">
+                      Creator's Favor: Chọn 1 hiệu ứng cho{" "}
+                      <span className="text-pink-300 font-semibold">
+                        {pName}
+                      </span>
+                    </p>
 
-                  {creatorsCatModal.step === "choose_effect" && (
-                    <div className="flex flex-col gap-2">
-                      {CREATORS_FAVOR_EFFECTS.map((eff) => (
-                        <button key={eff} onClick={() => applyEffect(eff)}
-                          className="text-left px-4 py-2 bg-gray-800 hover:bg-pink-900/40 border border-gray-700 hover:border-pink-500/60 rounded-lg text-sm text-white transition-all">
-                          {eff}
+                    {creatorsCatModal.step === "choose_effect" && (
+                      <div className="flex flex-col gap-2">
+                        {CREATORS_FAVOR_EFFECTS.map((eff) => (
+                          <button
+                            key={eff}
+                            onClick={() => applyEffect(eff)}
+                            className="text-left px-4 py-2 bg-gray-800 hover:bg-pink-900/40 border border-gray-700 hover:border-pink-500/60 rounded-lg text-sm text-white transition-all"
+                          >
+                            {eff}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {creatorsCatModal.step === "choose_stats" && (
+                      <div>
+                        <p className="text-gray-400 text-sm mb-3">
+                          {creatorsCatModal.selectedEffect ===
+                          "Roll lại 3 chỉ số"
+                            ? "Chọn 3 chỉ số để roll lại (theo race weights):"
+                            : "Chọn 2 chỉ số để nhận +2:"}
+                        </p>
+                        <div className="grid grid-cols-3 gap-2 mb-4">
+                          {ALL_STATS.map(({ key, label }) => {
+                            const selected =
+                              creatorsCatModal.chosenStats.includes(key);
+                            const maxCount =
+                              creatorsCatModal.selectedEffect ===
+                              "Roll lại 3 chỉ số"
+                                ? 3
+                                : 2;
+                            // Skeleton: IQ cố định 1, không cho chọn khi Roll lại
+                            const isSkeletonIQ =
+                              creatorsCatModal.selectedEffect ===
+                                "Roll lại 3 chỉ số" &&
+                              key === "iq" &&
+                              (pChar?.race?.race || "").toLowerCase() ===
+                                "skeleton";
+                            return (
+                              <button
+                                key={key}
+                                disabled={isSkeletonIQ}
+                                onClick={() => {
+                                  setCreatorsCatModal((p) => {
+                                    const already = p.chosenStats.includes(key);
+                                    if (already)
+                                      return {
+                                        ...p,
+                                        chosenStats: p.chosenStats.filter(
+                                          (s) => s !== key,
+                                        ),
+                                      };
+                                    if (p.chosenStats.length >= maxCount)
+                                      return p;
+                                    return {
+                                      ...p,
+                                      chosenStats: [...p.chosenStats, key],
+                                    };
+                                  });
+                                }}
+                                className={`px-3 py-2 rounded-lg text-sm font-bold transition-all ${isSkeletonIQ ? "opacity-30 cursor-not-allowed bg-gray-700 text-gray-500 border border-gray-600" : selected ? "bg-pink-600 text-white border border-pink-400" : "bg-gray-800 text-gray-300 border border-gray-700 hover:border-pink-500/50"}`}
+                              >
+                                {label}
+                                {isSkeletonIQ ? " (cố định)" : ""}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        {(() => {
+                          const maxCount =
+                            creatorsCatModal.selectedEffect ===
+                            "Roll lại 3 chỉ số"
+                              ? 3
+                              : 2;
+                          const ready =
+                            creatorsCatModal.chosenStats.length === maxCount;
+                          return (
+                            <button
+                              disabled={!ready}
+                              onClick={() => {
+                                if (
+                                  creatorsCatModal.selectedEffect ===
+                                  "Nhận +2 vào 2 chỉ số chỉ định"
+                                ) {
+                                  setSummoningScrollResult((prev) => {
+                                    const existing = prev[pLabel];
+                                    const base = existing?.statDeltas || {};
+                                    const newDeltas = { ...base };
+                                    for (const k of creatorsCatModal.chosenStats)
+                                      newDeltas[k] = (newDeltas[k] || 0) + 2;
+                                    return {
+                                      ...prev,
+                                      [pLabel]: {
+                                        statDeltas: newDeltas,
+                                        startScoreDelta:
+                                          existing?.startScoreDelta || 0,
+                                        summonName:
+                                          existing?.summonName ||
+                                          "Creator's Cat",
+                                      },
+                                    };
+                                  });
+                                  spawnStatBubbles(
+                                    creatorsCatModal.chosenStats.map((k) => ({
+                                      player: pLabel,
+                                      text: `Creator's Favor: +2 ${k.toUpperCase()}`,
+                                      isPositive: true,
+                                    })),
+                                  );
+                                  setCreatorsCatModal((p) => ({
+                                    ...p,
+                                    isOpen: false,
+                                  }));
+                                } else {
+                                  // Roll lại 3 chỉ số — dùng rollQueue state machine
+                                  const raceName = getRaceForStatRoll(
+                                    pChar as any,
+                                  );
+                                  setCreatorsCatModal((p) => ({
+                                    ...p,
+                                    isOpen: false,
+                                    rollQueue: [...p.chosenStats],
+                                    rollAccumulated: [],
+                                    rollRaceName: raceName,
+                                    rollTotal: p.chosenStats.length,
+                                  }));
+                                }
+                              }}
+                              className="w-full px-4 py-2 bg-pink-700 hover:bg-pink-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg text-sm font-bold transition-all"
+                            >
+                              Xác nhận ({creatorsCatModal.chosenStats.length}/
+                              {maxCount})
+                            </button>
+                          );
+                        })()}
+                      </div>
+                    )}
+
+                    {creatorsCatModal.step === "choose_power" && (
+                      <div>
+                        <p className="text-gray-400 text-sm mb-3">
+                          Chọn Power từ danh sách:
+                        </p>
+                        <div className="max-h-64 overflow-y-auto flex flex-col gap-1 mb-3">
+                          {ALL_POWERS.map((p) => (
+                            <button
+                              key={p}
+                              onClick={() => {
+                                setPlayer((prev) => {
+                                  if (!prev?.character) return prev;
+                                  return {
+                                    ...prev,
+                                    character: {
+                                      ...prev.character,
+                                      powers: [
+                                        ...(prev.character.powers || []),
+                                        { name: p, isLost: false },
+                                      ],
+                                    },
+                                  };
+                                });
+                                spawnStatBubbles([
+                                  {
+                                    player: pLabel,
+                                    text: `Creator's Favor: +Power ${p}`,
+                                    isPositive: true,
+                                  },
+                                ]);
+                                setCreatorsCatModal((prev) => ({
+                                  ...prev,
+                                  isOpen: false,
+                                }));
+                              }}
+                              className="text-left px-3 py-1.5 bg-gray-800 hover:bg-purple-900/40 border border-gray-700 hover:border-purple-500/60 rounded text-xs text-white transition-all"
+                            >
+                              {p}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {creatorsCatModal.step === "choose_gear" && (
+                      <div>
+                        <p className="text-gray-400 text-sm mb-3">
+                          Chọn Normal Gear:
+                        </p>
+                        <div className="max-h-64 overflow-y-auto flex flex-col gap-1 mb-3">
+                          {ALL_NORMAL_GEAR.map((g) => (
+                            <button
+                              key={g}
+                              onClick={() => {
+                                setPlayer((prev) => {
+                                  if (!prev?.character) return prev;
+                                  const updatedGear = {
+                                    ...(prev.character as any).gear,
+                                    normalGear: [
+                                      ...((prev.character as any).gear
+                                        ?.normalGear || []),
+                                      { name: g, isLost: false },
+                                    ],
+                                  };
+                                  return {
+                                    ...prev,
+                                    character: {
+                                      ...prev.character,
+                                      gear: updatedGear,
+                                    } as any,
+                                  };
+                                });
+                                spawnStatBubbles([
+                                  {
+                                    player: pLabel,
+                                    text: `Creator's Favor: +Gear ${g}`,
+                                    isPositive: true,
+                                  },
+                                ]);
+                                setCreatorsCatModal((prev) => ({
+                                  ...prev,
+                                  isOpen: false,
+                                }));
+                              }}
+                              className="text-left px-3 py-1.5 bg-gray-800 hover:bg-green-900/40 border border-gray-700 hover:border-green-500/60 rounded text-xs text-white transition-all"
+                            >
+                              {g}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {creatorsCatModal.step === "choose_weapon" && (
+                      <div>
+                        <p className="text-gray-400 text-sm mb-3">
+                          Chọn Normal Weapon (100% dùng được):
+                        </p>
+                        <div className="max-h-64 overflow-y-auto flex flex-col gap-1 mb-3">
+                          {ALL_NORMAL_WEAPONS.map((w) => (
+                            <button
+                              key={w}
+                              onClick={() => {
+                                setPlayer((prev) => {
+                                  if (!prev?.character) return prev;
+                                  const updatedWeapons = [
+                                    ...((prev.character as any).weapons || []),
+                                    {
+                                      name: w,
+                                      type: "Normal",
+                                      usable: true,
+                                      isLost: false,
+                                    },
+                                  ];
+                                  return {
+                                    ...prev,
+                                    character: {
+                                      ...prev.character,
+                                      weapons: updatedWeapons,
+                                    } as any,
+                                  };
+                                });
+                                spawnStatBubbles([
+                                  {
+                                    player: pLabel,
+                                    text: `Creator's Favor: +Weapon ${w} (dùng được)`,
+                                    isPositive: true,
+                                  },
+                                ]);
+                                setCreatorsCatModal((prev) => ({
+                                  ...prev,
+                                  isOpen: false,
+                                }));
+                              }}
+                              className="text-left px-3 py-1.5 bg-gray-800 hover:bg-blue-900/40 border border-gray-700 hover:border-blue-500/60 rounded text-xs text-white transition-all"
+                            >
+                              {w}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {creatorsCatModal.step === "choose_archetypes" && (
+                      <div>
+                        <p className="text-gray-400 text-sm mb-3">
+                          Chọn Archetype muốn loại bỏ:
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {ALL_ARCHETYPES.map((a: string) => {
+                            const selected =
+                              creatorsCatModal.chosenArchetypesToRemove.includes(
+                                a,
+                              );
+                            return (
+                              <button
+                                key={a}
+                                onClick={() =>
+                                  setCreatorsCatModal((p) => ({
+                                    ...p,
+                                    chosenArchetypesToRemove: selected
+                                      ? p.chosenArchetypesToRemove.filter(
+                                          (x) => x !== a,
+                                        )
+                                      : [...p.chosenArchetypesToRemove, a],
+                                  }))
+                                }
+                                className={`px-3 py-1 rounded text-xs font-medium transition-all ${selected ? "bg-red-700 text-white border border-red-400" : "bg-gray-800 text-gray-300 border border-gray-700 hover:border-red-500/50"}`}
+                              >
+                                {a}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <button
+                          onClick={() => {
+                            // Loại bỏ archetypes đã chọn, sau đó mở archetype wheel
+                            const toRemove = new Set(
+                              creatorsCatModal.chosenArchetypesToRemove,
+                            );
+                            setPlayer((prev) => {
+                              if (!prev?.character) return prev;
+                              return {
+                                ...prev,
+                                character: {
+                                  ...prev.character,
+                                  archetypes: (
+                                    prev.character.archetypes || []
+                                  ).filter((a) => !toRemove.has(a)),
+                                },
+                              };
+                            });
+                            // Mở archetype wheel
+                            const ALL_ARCHETYPES_WHEEL = [
+                              "Promised Consort",
+                              "Cinderheart",
+                              "Stargazer",
+                              "Superhero",
+                              "NPC 💀",
+                              "Slayer",
+                              "Gigachad",
+                              "Egoist",
+                              "Masochist",
+                              "Femboy",
+                              "Người Trong Ban Nhạc",
+                              "Hero Grave Keeper",
+                              "Dual Wielder",
+                              "Bookworm",
+                              "Gambler",
+                              "Pacifist",
+                              "Anti-Social",
+                              "Follower of the Two Fingers",
+                              "Devotee",
+                              "Atheist",
+                              "X",
+                              "Glass Cannon",
+                              "Mid",
+                              "Time Traveller",
+                              "Zealot",
+                              "Hand Fighter",
+                              "Loyal",
+                              "Conquerer",
+                              "Trickster",
+                              "Paladin",
+                              "Summoner",
+                              "Him",
+                              "Wibu",
+                              "Perfectionist",
+                              "Edgelord",
+                              "Hero of the Emirate🍀",
+                              "Fisher",
+                              "Farmer",
+                              "Chokevy",
+                              "Blacksmith",
+                              "Sentinel of Purity",
+                              "Infirmarian",
+                              "Gambler Bloodline",
+                              "Power Ranger",
+                              "Philosopher",
+                              "Herald",
+                              "Invoker",
+                              "Bravest of the Brave",
+                            ];
+                            setPreCombatModal({
+                              isOpen: true,
+                              title: "Creator's Favor: Archetype Wheel",
+                              description: `${pName} — Quay để nhận 1 Archetype mới`,
+                              items: ALL_ARCHETYPES_WHEEL.map((a) => ({
+                                label: a,
+                                weight: 1,
+                                isSuccess: true,
+                                color: "#f59e0b",
+                              })),
+                              side: pLabel,
+                              effectKey: `creators-cat-archetype-${pLabel}`,
+                              onResult: (result) => {
+                                setPlayer((prev) => {
+                                  if (!prev?.character) return prev;
+                                  return {
+                                    ...prev,
+                                    character: {
+                                      ...prev.character,
+                                      archetypes: [
+                                        ...(prev.character.archetypes || []),
+                                        result.label,
+                                      ],
+                                    },
+                                  };
+                                });
+                                spawnStatBubbles([
+                                  {
+                                    player: pLabel,
+                                    text: `Creator's Favor: +Archetype ${result.label}`,
+                                    isPositive: true,
+                                  },
+                                ]);
+                              },
+                            });
+                            setCreatorsCatModal((p) => ({
+                              ...p,
+                              isOpen: false,
+                            }));
+                          }}
+                          className="w-full px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white rounded-lg text-sm font-bold transition-all"
+                        >
+                          Loại bỏ đã chọn & Quay Archetype Wheel
                         </button>
-                      ))}
-                    </div>
-                  )}
+                      </div>
+                    )}
 
-                  {creatorsCatModal.step === "choose_stats" && (
-                    <div>
-                      <p className="text-gray-400 text-sm mb-3">
-                        {creatorsCatModal.selectedEffect === "Roll lại 3 chỉ số" ? "Chọn 3 chỉ số để roll lại (theo race weights):" : "Chọn 2 chỉ số để nhận +2:"}
-                      </p>
-                      <div className="grid grid-cols-3 gap-2 mb-4">
-                        {ALL_STATS.map(({ key, label }) => {
-                          const selected = creatorsCatModal.chosenStats.includes(key);
-                          const maxCount = creatorsCatModal.selectedEffect === "Roll lại 3 chỉ số" ? 3 : 2;
-                          // Skeleton: IQ cố định 1, không cho chọn khi Roll lại
-                          const isSkeletonIQ = creatorsCatModal.selectedEffect === "Roll lại 3 chỉ số"
-                            && key === "iq"
-                            && (pChar?.race?.race || "").toLowerCase() === "skeleton";
-                          return (
-                            <button key={key} disabled={isSkeletonIQ} onClick={() => {
-                              setCreatorsCatModal((p) => {
-                                const already = p.chosenStats.includes(key);
-                                if (already) return { ...p, chosenStats: p.chosenStats.filter((s) => s !== key) };
-                                if (p.chosenStats.length >= maxCount) return p;
-                                return { ...p, chosenStats: [...p.chosenStats, key] };
-                              });
-                            }}
-                              className={`px-3 py-2 rounded-lg text-sm font-bold transition-all ${isSkeletonIQ ? "opacity-30 cursor-not-allowed bg-gray-700 text-gray-500 border border-gray-600" : selected ? "bg-pink-600 text-white border border-pink-400" : "bg-gray-800 text-gray-300 border border-gray-700 hover:border-pink-500/50"}`}>
-                              {label}{isSkeletonIQ ? " (cố định)" : ""}
+                    {creatorsCatModal.step === "choose_runeword" && (
+                      <div>
+                        <p className="text-gray-400 text-sm mb-3">
+                          Chọn Runeword mới (runeword cũ sẽ bị xóa):
+                        </p>
+                        <div className="max-h-64 overflow-y-auto flex flex-col gap-1 mb-3">
+                          {ALL_RUNEWORDS.map((r) => (
+                            <button
+                              key={r}
+                              onClick={() => {
+                                setPlayer((prev) => {
+                                  if (!prev?.character) return prev;
+                                  // Xóa runeword cũ, thêm runeword mới (simplified — just set runeword name)
+                                  const updatedRunes = {
+                                    ...((prev.character as any).runes || {}),
+                                    runeword: r,
+                                  };
+                                  return {
+                                    ...prev,
+                                    character: {
+                                      ...prev.character,
+                                      runes: updatedRunes,
+                                    } as any,
+                                  };
+                                });
+                                spawnStatBubbles([
+                                  {
+                                    player: pLabel,
+                                    text: `Creator's Favor: Runeword → ${r}`,
+                                    isPositive: true,
+                                  },
+                                ]);
+                                setCreatorsCatModal((prev) => ({
+                                  ...prev,
+                                  isOpen: false,
+                                }));
+                              }}
+                              className="text-left px-3 py-1.5 bg-gray-800 hover:bg-yellow-900/40 border border-gray-700 hover:border-yellow-500/60 rounded text-xs text-white transition-all"
+                            >
+                              {r}
                             </button>
-                          );
-                        })}
+                          ))}
+                        </div>
                       </div>
-                      {(() => {
-                        const maxCount = creatorsCatModal.selectedEffect === "Roll lại 3 chỉ số" ? 3 : 2;
-                        const ready = creatorsCatModal.chosenStats.length === maxCount;
-                        return (
-                          <button disabled={!ready} onClick={() => {
-                            if (creatorsCatModal.selectedEffect === "Nhận +2 vào 2 chỉ số chỉ định") {
-                              setSummoningScrollResult((prev) => {
-                                const existing = prev[pLabel];
-                                const base = existing?.statDeltas || {};
-                                const newDeltas = { ...base };
-                                for (const k of creatorsCatModal.chosenStats) newDeltas[k] = (newDeltas[k] || 0) + 2;
-                                return { ...prev, [pLabel]: { statDeltas: newDeltas, startScoreDelta: existing?.startScoreDelta || 0, summonName: existing?.summonName || "Creator's Cat" } };
-                              });
-                              spawnStatBubbles(creatorsCatModal.chosenStats.map((k) => ({ player: pLabel, text: `Creator's Favor: +2 ${k.toUpperCase()}`, isPositive: true })));
-                              setCreatorsCatModal((p) => ({ ...p, isOpen: false }));
-                            } else {
-                              // Roll lại 3 chỉ số — dùng rollQueue state machine
-                              const raceName = getRaceForStatRoll(pChar as any);
-                              setCreatorsCatModal((p) => ({
-                                ...p,
-                                isOpen: false,
-                                rollQueue: [...p.chosenStats],
-                                rollAccumulated: [],
-                                rollRaceName: raceName,
-                                rollTotal: p.chosenStats.length,
-                              }));
-                            }
-                          }}
-                            className="w-full px-4 py-2 bg-pink-700 hover:bg-pink-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg text-sm font-bold transition-all">
-                            Xác nhận ({creatorsCatModal.chosenStats.length}/{maxCount})
-                          </button>
-                        );
-                      })()}
-                    </div>
-                  )}
+                    )}
 
-                  {creatorsCatModal.step === "choose_power" && (
-                    <div>
-                      <p className="text-gray-400 text-sm mb-3">Chọn Power từ danh sách:</p>
-                      <div className="max-h-64 overflow-y-auto flex flex-col gap-1 mb-3">
-                        {ALL_POWERS.map((p) => (
-                          <button key={p} onClick={() => {
-                            setPlayer((prev) => {
-                              if (!prev?.character) return prev;
-                              return { ...prev, character: { ...prev.character, powers: [...(prev.character.powers || []), { name: p, isLost: false }] } };
-                            });
-                            spawnStatBubbles([{ player: pLabel, text: `Creator's Favor: +Power ${p}`, isPositive: true }]);
-                            setCreatorsCatModal((prev) => ({ ...prev, isOpen: false }));
-                          }}
-                            className="text-left px-3 py-1.5 bg-gray-800 hover:bg-purple-900/40 border border-gray-700 hover:border-purple-500/60 rounded text-xs text-white transition-all">
-                            {p}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {creatorsCatModal.step === "choose_gear" && (
-                    <div>
-                      <p className="text-gray-400 text-sm mb-3">Chọn Normal Gear:</p>
-                      <div className="max-h-64 overflow-y-auto flex flex-col gap-1 mb-3">
-                        {ALL_NORMAL_GEAR.map((g) => (
-                          <button key={g} onClick={() => {
-                            setPlayer((prev) => {
-                              if (!prev?.character) return prev;
-                              const updatedGear = { ...(prev.character as any).gear, normalGear: [...((prev.character as any).gear?.normalGear || []), { name: g, isLost: false }] };
-                              return { ...prev, character: { ...prev.character, gear: updatedGear } as any };
-                            });
-                            spawnStatBubbles([{ player: pLabel, text: `Creator's Favor: +Gear ${g}`, isPositive: true }]);
-                            setCreatorsCatModal((prev) => ({ ...prev, isOpen: false }));
-                          }}
-                            className="text-left px-3 py-1.5 bg-gray-800 hover:bg-green-900/40 border border-gray-700 hover:border-green-500/60 rounded text-xs text-white transition-all">
-                            {g}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {creatorsCatModal.step === "choose_weapon" && (
-                    <div>
-                      <p className="text-gray-400 text-sm mb-3">Chọn Normal Weapon (100% dùng được):</p>
-                      <div className="max-h-64 overflow-y-auto flex flex-col gap-1 mb-3">
-                        {ALL_NORMAL_WEAPONS.map((w) => (
-                          <button key={w} onClick={() => {
-                            setPlayer((prev) => {
-                              if (!prev?.character) return prev;
-                              const updatedWeapons = [...((prev.character as any).weapons || []), { name: w, type: "Normal", usable: true, isLost: false }];
-                              return { ...prev, character: { ...prev.character, weapons: updatedWeapons } as any };
-                            });
-                            spawnStatBubbles([{ player: pLabel, text: `Creator's Favor: +Weapon ${w} (dùng được)`, isPositive: true }]);
-                            setCreatorsCatModal((prev) => ({ ...prev, isOpen: false }));
-                          }}
-                            className="text-left px-3 py-1.5 bg-gray-800 hover:bg-blue-900/40 border border-gray-700 hover:border-blue-500/60 rounded text-xs text-white transition-all">
-                            {w}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {creatorsCatModal.step === "choose_archetypes" && (
-                    <div>
-                      <p className="text-gray-400 text-sm mb-3">Chọn Archetype muốn loại bỏ:</p>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {ALL_ARCHETYPES.map((a: string) => {
-                          const selected = creatorsCatModal.chosenArchetypesToRemove.includes(a);
-                          return (
-                            <button key={a} onClick={() => setCreatorsCatModal((p) => ({
-                              ...p, chosenArchetypesToRemove: selected ? p.chosenArchetypesToRemove.filter((x) => x !== a) : [...p.chosenArchetypesToRemove, a]
-                            }))}
-                              className={`px-3 py-1 rounded text-xs font-medium transition-all ${selected ? "bg-red-700 text-white border border-red-400" : "bg-gray-800 text-gray-300 border border-gray-700 hover:border-red-500/50"}`}>
-                              {a}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      <button onClick={() => {
-                        // Loại bỏ archetypes đã chọn, sau đó mở archetype wheel
-                        const toRemove = new Set(creatorsCatModal.chosenArchetypesToRemove);
-                        setPlayer((prev) => {
-                          if (!prev?.character) return prev;
-                          return { ...prev, character: { ...prev.character, archetypes: (prev.character.archetypes || []).filter((a) => !toRemove.has(a)) } };
-                        });
-                        // Mở archetype wheel
-                        const ALL_ARCHETYPES_WHEEL = ["Promised Consort", "Cinderheart", "Stargazer", "Superhero", "NPC 💀", "Slayer", "Gigachad", "Egoist", "Masochist", "Femboy", "Người Trong Ban Nhạc", "Hero Grave Keeper", "Dual Wielder", "Bookworm", "Gambler", "Pacifist", "Anti-Social", "Follower of the Two Fingers", "Devotee", "Atheist", "X", "Glass Cannon", "Mid", "Time Traveller", "Zealot", "Hand Fighter", "Loyal", "Conquerer", "Trickster", "Paladin", "Summoner", "Him", "Wibu", "Perfectionist", "Edgelord", "Hero of the Emirate🍀", "Fisher", "Farmer", "Chokevy", "Blacksmith", "Sentinel of Purity", "Infirmarian", "Gambler Bloodline", "Power Ranger", "Philosopher", "Herald", "Invoker", "Bravest of the Brave"];
-                        setPreCombatModal({
-                          isOpen: true,
-                          title: "Creator's Favor: Archetype Wheel",
-                          description: `${pName} — Quay để nhận 1 Archetype mới`,
-                          items: ALL_ARCHETYPES_WHEEL.map((a) => ({ label: a, weight: 1, isSuccess: true, color: "#f59e0b" })),
-                          side: pLabel,
-                          effectKey: `creators-cat-archetype-${pLabel}`,
-                          onResult: (result) => {
-                            setPlayer((prev) => {
-                              if (!prev?.character) return prev;
-                              return { ...prev, character: { ...prev.character, archetypes: [...(prev.character.archetypes || []), result.label] } };
-                            });
-                            spawnStatBubbles([{ player: pLabel, text: `Creator's Favor: +Archetype ${result.label}`, isPositive: true }]);
-                          },
-                        });
-                        setCreatorsCatModal((p) => ({ ...p, isOpen: false }));
-                      }}
-                        className="w-full px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white rounded-lg text-sm font-bold transition-all">
-                        Loại bỏ đã chọn & Quay Archetype Wheel
-                      </button>
-                    </div>
-                  )}
-
-                  {creatorsCatModal.step === "choose_runeword" && (
-                    <div>
-                      <p className="text-gray-400 text-sm mb-3">Chọn Runeword mới (runeword cũ sẽ bị xóa):</p>
-                      <div className="max-h-64 overflow-y-auto flex flex-col gap-1 mb-3">
-                        {ALL_RUNEWORDS.map((r) => (
-                          <button key={r} onClick={() => {
-                            setPlayer((prev) => {
-                              if (!prev?.character) return prev;
-                              // Xóa runeword cũ, thêm runeword mới (simplified — just set runeword name)
-                              const updatedRunes = { ...((prev.character as any).runes || {}), runeword: r };
-                              return { ...prev, character: { ...prev.character, runes: updatedRunes } as any };
-                            });
-                            spawnStatBubbles([{ player: pLabel, text: `Creator's Favor: Runeword → ${r}`, isPositive: true }]);
-                            setCreatorsCatModal((prev) => ({ ...prev, isOpen: false }));
-                          }}
-                            className="text-left px-3 py-1.5 bg-gray-800 hover:bg-yellow-900/40 border border-gray-700 hover:border-yellow-500/60 rounded text-xs text-white transition-all">
-                            {r}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <button onClick={() => setCreatorsCatModal((p) => ({ ...p, isOpen: false }))}
-                    className="mt-4 w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg text-xs transition-all">
-                    Đóng
-                  </button>
+                    <button
+                      onClick={() =>
+                        setCreatorsCatModal((p) => ({ ...p, isOpen: false }))
+                      }
+                      className="mt-4 w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg text-xs transition-all"
+                    >
+                      Đóng
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })()}
+              );
+            })()}
 
           {/* ── RIGHT SIDEBAR: Player 2 ── */}
           {(() => {
@@ -8610,11 +11630,18 @@ export const StatsComparisonMode = ({
               : [];
             const _p1AudioTracks = detectCombatAudioTracks(player1?.character);
             const _p2AudioTracks = detectCombatAudioTracks(player2?.character);
-            const p2Quirks = (player2?.character?.quirks || []).filter((q: any) => !q.isLost).map((q: any) => (typeof q === "string" ? q : q.name).toLowerCase());
-            const p2Silenced = p2Quirks.includes("mute") || p2Quirks.includes("deaf");
+            const p2Quirks = (player2?.character?.quirks || [])
+              .filter((q: any) => !q.isLost)
+              .map((q: any) =>
+                (typeof q === "string" ? q : q.name).toLowerCase(),
+              );
+            const p2Silenced =
+              p2Quirks.includes("mute") || p2Quirks.includes("deaf");
             const p2Blurred = p2Quirks.includes("blind");
             return (
-              <div className={`w-[360px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-red-500/30 max-h-[85vh] ${false && p2Blurred ? "blur-sm pointer-events-none select-none" : ""}`}>
+              <div
+                className={`w-[360px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border border-red-500/30 max-h-[85vh] ${false && p2Blurred ? "blur-sm pointer-events-none select-none" : ""}`}
+              >
                 {/* Avatar lớn P2 */}
                 {player2 && (
                   <SidebarAvatarBanner
@@ -8731,7 +11758,7 @@ export const StatsComparisonMode = ({
                             const disabled = disabledItems.has(k);
                             const colorClass =
                               (sourceTypeColors as Record<string, string>)[
-                              item.sourceType
+                                item.sourceType
                               ] || "text-gray-400";
                             return (
                               <button
@@ -8746,7 +11773,11 @@ export const StatsComparisonMode = ({
                                 className={`w-full text-left text-[11px] px-2 py-1.5 rounded transition-all ${disabled ? "opacity-35 bg-gray-800/20" : "hover:bg-gray-700/40 bg-gray-800/10"}`}
                               >
                                 <div className="flex items-center gap-1.5">
-                                  <span className={`${colorClass} ${disabled ? "line-through" : ""}`}>{item.name}</span>
+                                  <span
+                                    className={`${colorClass} ${disabled ? "line-through" : ""}`}
+                                  >
+                                    {item.name}
+                                  </span>
                                   <span className="text-gray-700 text-[9px]">
                                     [{item.sourceType}]
                                   </span>
@@ -8757,7 +11788,9 @@ export const StatsComparisonMode = ({
                                   )}
                                 </div>
                                 {item.description && !disabled && (
-                                  <div className="text-gray-500 text-[10px] mt-0.5 leading-snug">{item.description}</div>
+                                  <div className="text-gray-500 text-[10px] mt-0.5 leading-snug">
+                                    {item.description}
+                                  </div>
                                 )}
                               </button>
                             );
@@ -8906,7 +11939,7 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                   });
                 }
               })
-              .catch(() => { }),
+              .catch(() => {}),
           );
         }
 
@@ -9348,10 +12381,11 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                     {roundResults.map((result, index) => (
                       <div
                         key={index}
-                        className={`grid gap-2 items-center p-2.5 rounded-lg ${result.winner === "player1"
-                          ? "bg-blue-900/30 border border-blue-500/50"
-                          : "bg-red-900/30 border border-red-500/50"
-                          }`}
+                        className={`grid gap-2 items-center p-2.5 rounded-lg ${
+                          result.winner === "player1"
+                            ? "bg-blue-900/30 border border-blue-500/50"
+                            : "bg-red-900/30 border border-red-500/50"
+                        }`}
                         style={{ gridTemplateColumns: "1fr 70px 1fr" }}
                       >
                         <div className="text-right">
@@ -9427,14 +12461,14 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                 combatResult={
                   finalWinner
                     ? {
-                      winner: finalWinner,
-                      player1Score: p1Score,
-                      player2Score: p2Score,
-                      rounds: roundResults.map((r) => ({
-                        stat: r.stat,
-                        winner: r.winner,
-                      })),
-                    }
+                        winner: finalWinner,
+                        player1Score: p1Score,
+                        player2Score: p2Score,
+                        rounds: roundResults.map((r) => ({
+                          stat: r.stat,
+                          winner: r.winner,
+                        })),
+                      }
                     : undefined
                 }
                 preCombatOnly={battleState === "idle"}
@@ -9532,7 +12566,6 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
@@ -9671,7 +12704,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                   });
                 }
               })
-              .catch(() => { }),
+              .catch(() => {}),
           );
         }
 
@@ -9947,25 +12980,27 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
             return (
               <div
                 key={battle.teamId}
-                className={`bg-gray-800/90 backdrop-blur-sm border-2 rounded-xl overflow-hidden transition-all hover:scale-[1.02] ${result
-                  ? result.outcome === "win"
-                    ? "border-green-500/50"
-                    : "border-red-500/50"
-                  : hasBoss
-                    ? "border-red-500/50"
-                    : "border-gray-600"
-                  }`}
+                className={`bg-gray-800/90 backdrop-blur-sm border-2 rounded-xl overflow-hidden transition-all hover:scale-[1.02] ${
+                  result
+                    ? result.outcome === "win"
+                      ? "border-green-500/50"
+                      : "border-red-500/50"
+                    : hasBoss
+                      ? "border-red-500/50"
+                      : "border-gray-600"
+                }`}
               >
                 {/* Card Header */}
                 <div
-                  className={`px-4 py-3 ${result
-                    ? result.outcome === "win"
-                      ? "bg-green-600/20"
-                      : "bg-red-600/20"
-                    : hasBoss
-                      ? "bg-red-600/20"
-                      : "bg-gray-700/50"
-                    }`}
+                  className={`px-4 py-3 ${
+                    result
+                      ? result.outcome === "win"
+                        ? "bg-green-600/20"
+                        : "bg-red-600/20"
+                      : hasBoss
+                        ? "bg-red-600/20"
+                        : "bg-gray-700/50"
+                  }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -9977,10 +13012,11 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                       </span>
                       {result && (
                         <span
-                          className={`px-2 py-0.5 rounded text-xs font-bold ${result.outcome === "win"
-                            ? "bg-green-500/30 text-green-300 border border-green-500/50"
-                            : "bg-red-500/30 text-red-300 border border-red-500/50"
-                            }`}
+                          className={`px-2 py-0.5 rounded text-xs font-bold ${
+                            result.outcome === "win"
+                              ? "bg-green-500/30 text-green-300 border border-green-500/50"
+                              : "bg-red-500/30 text-red-300 border border-red-500/50"
+                          }`}
                         >
                           {result.outcome === "win" ? "WIN" : "LOSE"}
                         </span>
@@ -10011,17 +13047,18 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                           return (
                             <div
                               key={stat}
-                              className={`rounded p-1 ${roundResult === "win"
-                                ? "bg-green-900/50 border border-green-500/30"
-                                : roundResult === "lose"
-                                  ? "bg-red-900/50 border border-red-500/30"
-                                  : roundResult === "tie"
-                                    ? "bg-yellow-900/50 border border-yellow-500/30"
-                                    : roundResult === "parry" ||
-                                      roundResult === "other"
-                                      ? "bg-gray-700/50 border border-yellow-500/30"
-                                      : "bg-gray-700/50"
-                                }`}
+                              className={`rounded p-1 ${
+                                roundResult === "win"
+                                  ? "bg-green-900/50 border border-green-500/30"
+                                  : roundResult === "lose"
+                                    ? "bg-red-900/50 border border-red-500/30"
+                                    : roundResult === "tie"
+                                      ? "bg-yellow-900/50 border border-yellow-500/30"
+                                      : roundResult === "parry" ||
+                                          roundResult === "other"
+                                        ? "bg-gray-700/50 border border-yellow-500/30"
+                                        : "bg-gray-700/50"
+                              }`}
                             >
                               <div className="text-gray-400 text-[10px]">
                                 {STAT_LABELS[stat]}
@@ -10031,12 +13068,13 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                               </div>
                               {roundResult && (
                                 <div
-                                  className={`text-[10px] font-bold mt-0.5 ${roundResult === "win"
-                                    ? "text-green-400"
-                                    : roundResult === "lose"
-                                      ? "text-red-400"
-                                      : "text-yellow-400"
-                                    }`}
+                                  className={`text-[10px] font-bold mt-0.5 ${
+                                    roundResult === "win"
+                                      ? "text-green-400"
+                                      : roundResult === "lose"
+                                        ? "text-red-400"
+                                        : "text-yellow-400"
+                                  }`}
                                 >
                                   {roundResult === "win"
                                     ? "W"
@@ -10059,10 +13097,11 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                         <div className="text-center text-xs mb-2">
                           <span className="text-gray-400">Tie-break: </span>
                           <span
-                            className={`font-bold ${result.tiebreak === "win"
-                              ? "text-green-400"
-                              : "text-red-400"
-                              }`}
+                            className={`font-bold ${
+                              result.tiebreak === "win"
+                                ? "text-green-400"
+                                : "text-red-400"
+                            }`}
                           >
                             {result.tiebreak === "win" ? "Win" : "Lose"}
                           </span>
@@ -10176,12 +13215,13 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                     onClick={() =>
                       setEditForm((prev) => ({ ...prev, outcome: o }))
                     }
-                    className={`flex-1 px-3 py-2 rounded font-bold text-sm transition-all ${editForm.outcome === o
-                      ? o === "win"
-                        ? "bg-green-600 text-white"
-                        : "bg-red-600 text-white"
-                      : "bg-gray-700 text-gray-400 hover:bg-gray-600"
-                      }`}
+                    className={`flex-1 px-3 py-2 rounded font-bold text-sm transition-all ${
+                      editForm.outcome === o
+                        ? o === "win"
+                          ? "bg-green-600 text-white"
+                          : "bg-red-600 text-white"
+                        : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+                    }`}
                   >
                     {o === "win" ? "WIN" : "LOSE"}
                   </button>
@@ -10215,23 +13255,24 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                               rounds: { ...prev.rounds, [stat]: opt.val },
                             }))
                           }
-                          className={`flex-1 px-2 py-1 rounded text-xs font-bold transition-all ${editForm.rounds[stat] === opt.val
-                            ? `bg-${opt.color}-600 text-white`
-                            : "bg-gray-700 text-gray-400 hover:bg-gray-600"
-                            }`}
+                          className={`flex-1 px-2 py-1 rounded text-xs font-bold transition-all ${
+                            editForm.rounds[stat] === opt.val
+                              ? `bg-${opt.color}-600 text-white`
+                              : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+                          }`}
                           style={
                             editForm.rounds[stat] === opt.val
                               ? {
-                                backgroundColor:
-                                  opt.color === "green"
-                                    ? "#16a34a"
-                                    : opt.color === "red"
-                                      ? "#dc2626"
-                                      : opt.color === "yellow"
-                                        ? "#ca8a04"
-                                        : "#4b5563",
-                                color: "white",
-                              }
+                                  backgroundColor:
+                                    opt.color === "green"
+                                      ? "#16a34a"
+                                      : opt.color === "red"
+                                        ? "#dc2626"
+                                        : opt.color === "yellow"
+                                          ? "#ca8a04"
+                                          : "#4b5563",
+                                  color: "white",
+                                }
                               : undefined
                           }
                         >
@@ -10262,14 +13303,15 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                     onClick={() =>
                       setEditForm((prev) => ({ ...prev, tiebreak: opt.val }))
                     }
-                    className={`flex-1 px-3 py-1.5 rounded text-sm font-medium transition-all ${editForm.tiebreak === opt.val
-                      ? opt.val === "win"
-                        ? "bg-green-600 text-white"
-                        : opt.val === "lose"
-                          ? "bg-red-600 text-white"
-                          : "bg-gray-600 text-white"
-                      : "bg-gray-700 text-gray-400 hover:bg-gray-600"
-                      }`}
+                    className={`flex-1 px-3 py-1.5 rounded text-sm font-medium transition-all ${
+                      editForm.tiebreak === opt.val
+                        ? opt.val === "win"
+                          ? "bg-green-600 text-white"
+                          : opt.val === "lose"
+                            ? "bg-red-600 text-white"
+                            : "bg-gray-600 text-white"
+                        : "bg-gray-700 text-gray-400 hover:bg-gray-600"
+                    }`}
                   >
                     {opt.label}
                   </button>

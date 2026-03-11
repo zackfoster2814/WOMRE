@@ -134,6 +134,7 @@ export interface CombatHandlerResult {
   // Combat points
   selfPoints?: number;
   opponentPoints?: number;
+  blockOpponentPoint?: boolean; // Chặn điểm đối thủ về 0 (không trừ thêm nếu đang 0)
 
   // Special effects
   autoWin?: boolean;
