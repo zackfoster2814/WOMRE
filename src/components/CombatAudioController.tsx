@@ -52,69 +52,69 @@ const mkDefault = (ytVol = false): TrackState => ({
 
 // Local file lists — fallback to YouTube nếu folder trống
 const KEO_LOCAL_FILES = [
-  "01 - Ngọt - Thấy Chưa (Official Music Video).mp3",
-  "02 - Ngọt - Thấy Chưa.mp3",
-  "03 - Ngọt - Mấy Khi (Official Music Video).mp3",
-  "04 - Ngọt - LẦN CUỐI (đi bên em xót xa người ơi).mp3",
-  "05 - Ngọt - Em dạo này (Official Music Video).mp3",
-  "06 - Ngọt - CHUYỂN KÊNH (sản phẩm này không phải là thuốc).mp3",
-  "07 - Ngọt vc. Đen - Cho Tôi Lang Thang.mp3",
-  "08 - Ngọt - Em Trang Trí.mp3",
-  "09 - Ngọt - Đốt.mp3",
-  "10 - Ngọt - Cho.mp3",
-  "11 - Ngọt - để quên.mp3",
-  "12 - Ngọt - HẾT THỜI.mp3",
-  "13 - Ngọt - NỨT (đôi chân đôi tay đôi mắt trái tim).mp3",
-  "14 - Ngọt - (bé).mp3",
-  "15 - Ngọt -  (sau đây là) DỰ BÁO THỜI TIẾT (cho các vùng vào ngày mai).mp3",
-  "16 - Ngọt - Mấy Khi ｜ Director's Cut.mp3",
-  "17 - Ngọt - CHUÔNG BÁO THỨC (sáng rồi).mp3",
-  "18 - Ngọt - Tìm Người Nhà.mp3",
-  "19 - Ngọt - VÉ ĐI THIÊN ĐƯỜNG (một chiều).mp3",
-  "20 - Ngọt - GIẢ VỜ.mp3",
-  "21 - Ngọt - EM CÓ CHẮC KHÔNG (？) (bài ca rebound).mp3",
-  "22 - Ngọt - MÀU (đen trắng).mp3",
-  "23 - Ngọt -  (tôi) ĐI TRÚ ĐÔNG (Official Music Video).mp3",
-  "24 - Ngọt - MẾU MÁO (T.T).mp3",
-  "25 - Ngọt - Một ngày không mưa.mp3",
-  "26 - Ngọt - Mèo hoang.mp3",
-  "27 - Ngọt - Kẻ thù.mp3",
-  "28 - Ngọt - Kho báu.mp3",
-  "29 - Ngọt - Xin cho tôi.mp3",
-  "30 - Ngọt - Em Dạo Này (bản CNGDC).mp3",
-  "31 - Ngọt - Kẻ Thù (bản CNGDC).mp3",
-  "32 - Ngọt - Bartender (Official Music Video).mp3",
-  "33 - Ngọt - Bartender (bản CNGDC).mp3",
-  "34 - Ngọt - Mèo Hoang (bản CNGDC).mp3",
-  "35 - Ngọt - Ng`bthg Hà Nội 23⧸9⧸2017.mp3",
-  "36 - Ngọt - Drama Queen.mp3",
-  "37 - Ngọt - Khắp Xung Quanh.mp3",
-  "38 - Ngọt - Những Chuyến Phiêu Lưu.mp3",
-  "39 - Ngọt - À Ơi.mp3",
-  "40 - Ngọt - Xanh.mp3",
-  "41 - Ngọt - Be Cool.mp3",
-  "42 - Ngọt - Vì Ai.mp3",
-  "43 - Ngọt - Xanh (fingerstyle).mp3",
-  "44 - Ngọt - Không Làm Gì (Official Music Video).mp3",
-  "45 - Ngọt - Cho Tôi Đi Theo (trực tiếp tại Bữa Trưa Vui Vẻ VTV6).mp3",
-  "47 - Ngọt - Cá hồi.mp3",
-  "48 - Ngọt - Cho Tôi Đi Theo.mp3",
-  "49 - Ngọt - Khắp Xung Quanh.mp3",
-  "50 - Ngọt - Cá Hồi.mp3",
+  "01 - Ngọt - Thấy Chưa (Official Music Video).ogg",
+  "02 - Ngọt - Thấy Chưa.ogg",
+  "03 - Ngọt - Mấy Khi (Official Music Video).ogg",
+  "04 - Ngọt - LẦN CUỐI (đi bên em xót xa người ơi).ogg",
+  "05 - Ngọt - Em dạo này (Official Music Video).ogg",
+  "06 - Ngọt - CHUYỂN KÊNH (sản phẩm này không phải là thuốc).ogg",
+  "07 - Ngọt vc. Đen - Cho Tôi Lang Thang.ogg",
+  "08 - Ngọt - Em Trang Trí.ogg",
+  "09 - Ngọt - Đốt.ogg",
+  "10 - Ngọt - Cho.ogg",
+  "11 - Ngọt - để quên.ogg",
+  "12 - Ngọt - HẾT THỜI.ogg",
+  "13 - Ngọt - NỨT (đôi chân đôi tay đôi mắt trái tim).ogg",
+  "14 - Ngọt - (bé).ogg",
+  "15 - Ngọt -  (sau đây là) DỰ BÁO THỜI TIẾT (cho các vùng vào ngày mai).ogg",
+  "16 - Ngọt - Mấy Khi ｜ Director's Cut.ogg",
+  "17 - Ngọt - CHUÔNG BÁO THỨC (sáng rồi).ogg",
+  "18 - Ngọt - Tìm Người Nhà.ogg",
+  "19 - Ngọt - VÉ ĐI THIÊN ĐƯỜNG (một chiều).ogg",
+  "20 - Ngọt - GIẢ VỜ.ogg",
+  "21 - Ngọt - EM CÓ CHẮC KHÔNG (？) (bài ca rebound).ogg",
+  "22 - Ngọt - MÀU (đen trắng).ogg",
+  "23 - Ngọt -  (tôi) ĐI TRÚ ĐÔNG (Official Music Video).ogg",
+  "24 - Ngọt - MẾU MÁO (T.T).ogg",
+  "25 - Ngọt - Một ngày không mưa.ogg",
+  "26 - Ngọt - Mèo hoang.ogg",
+  "27 - Ngọt - Kẻ thù.ogg",
+  "28 - Ngọt - Kho báu.ogg",
+  "29 - Ngọt - Xin cho tôi.ogg",
+  "30 - Ngọt - Em Dạo Này (bản CNGDC).ogg",
+  "31 - Ngọt - Kẻ Thù (bản CNGDC).ogg",
+  "32 - Ngọt - Bartender (Official Music Video).ogg",
+  "33 - Ngọt - Bartender (bản CNGDC).ogg",
+  "34 - Ngọt - Mèo Hoang (bản CNGDC).ogg",
+  "35 - Ngọt - Ng`bthg Hà Nội 23⧸9⧸2017.ogg",
+  "36 - Ngọt - Drama Queen.ogg",
+  "37 - Ngọt - Khắp Xung Quanh.ogg",
+  "38 - Ngọt - Những Chuyến Phiêu Lưu.ogg",
+  "39 - Ngọt - À Ơi.ogg",
+  "40 - Ngọt - Xanh.ogg",
+  "41 - Ngọt - Be Cool.ogg",
+  "42 - Ngọt - Vì Ai.ogg",
+  "43 - Ngọt - Xanh (fingerstyle).ogg",
+  "44 - Ngọt - Không Làm Gì (Official Music Video).ogg",
+  "45 - Ngọt - Cho Tôi Đi Theo (trực tiếp tại Bữa Trưa Vui Vẻ VTV6).ogg",
+  "47 - Ngọt - Cá hồi.ogg",
+  "48 - Ngọt - Cho Tôi Đi Theo.ogg",
+  "49 - Ngọt - Khắp Xung Quanh.ogg",
+  "50 - Ngọt - Cá Hồi.ogg",
 ];
 
 const OT_LOCAL_FILES = [
-  "01 - Lần Cuối - Bocchi (AI cover).mp3",
-  "02 - Trước Khi Em Tồn Tại (Peter Griffin Cover).mp3",
-  "03 - CHẾT TRUYỀN THÔNG - VŨ ĐINH TRỌNG THẮNG ( Arisu AI Cover ).mp3",
-  "04 - Trước Khi Em Tồn Tại - Tokai Teio (AI cover).mp3",
-  "05 - Em dạo này (Ngọt) - Mejiro McQueen (AI Cover).mp3",
-  "06 - LẦN CUỐI - Tokai Teio (AI Cover).mp3",
-  "07 - Kẻ Thù - Ngọt (Sorasaki Hina AI Cover).mp3",
-  "08 - Mèo Hoang - Ngọt (Takanashi Hoshino AI Cover).mp3",
-  "09 - Lần Cuối - Drake x Ngọt (AI Cover).mp3",
-  "10 - Peter Griffin Hát Chuyển Kênh.mp3",
-  "11 - Ngọt - Hết Thời (Tokai Teio Cover).mp3",
+  "01 - Lần Cuối - Bocchi (AI cover).ogg",
+  "02 - Trước Khi Em Tồn Tại (Peter Griffin Cover).ogg",
+  "03 - CHẾT TRUYỀN THÔNG - VŨ ĐINH TRỌNG THẮNG ( Arisu AI Cover ).ogg",
+  "04 - Trước Khi Em Tồn Tại - Tokai Teio (AI cover).ogg",
+  "05 - Em dạo này (Ngọt) - Mejiro McQueen (AI Cover).ogg",
+  "06 - LẦN CUỐI - Tokai Teio (AI Cover).ogg",
+  "07 - Kẻ Thù - Ngọt (Sorasaki Hina AI Cover).ogg",
+  "08 - Mèo Hoang - Ngọt (Takanashi Hoshino AI Cover).ogg",
+  "09 - Lần Cuối - Drake x Ngọt (AI Cover).ogg",
+  "10 - Peter Griffin Hát Chuyển Kênh.ogg",
+  "11 - Ngọt - Hết Thời (Tokai Teio Cover).ogg",
 ];
 
 // YouTube fallback seeds
@@ -150,7 +150,7 @@ export function detectCombatAudioTracks(character: any): CombatAudioTrack[] {
   if (quirks.some(q => q === "raumanian" || q === "raumanian🍀"))
     tracks.push({
       id: "quirk-raumanian", itemName: "Raumanian🍀", type: "local",
-      src: "/assets/combatSFX/Raumanian.mp3",
+      src: "/assets/combatSFX/Raumanian.ogg",
       label: "Raumanian🍀 – Khúc Tình Ca Thanh Hoá", loop: true,
     });
 
@@ -161,21 +161,21 @@ export function detectCombatAudioTracks(character: any): CombatAudioTrack[] {
   if (powers.includes("67"))
     tracks.push({
       id: "power-67", itemName: "67", type: "local",
-      src: "/assets/combatSFX/67_sfx.mp3",
+      src: "/assets/combatSFX/67_sfx.ogg",
       label: "67", loop: true,
     });
 
   if (powers.some(p => p.toLowerCase().includes("railroad realm")))
     tracks.push({
       id: "power-railroad", itemName: "Railroad Realm 🍀", type: "local",
-      src: "/assets/combatSFX/railroad.mp3",
+      src: "/assets/combatSFX/railroad.ogg",
       label: "Railroad Realm 🍀", loop: true,
     });
 
   if (powers.some(p => p.toLowerCase().includes("tick-tock") || p.toLowerCase() === "tick tock"))
     tracks.push({
       id: "power-ticktock", itemName: "Tick-tock", type: "local",
-      src: "/assets/combatSFX/ticktock.mp3",
+      src: "/assets/combatSFX/ticktock.ogg",
       label: "Tick-tock", loop: true,
     });
 
@@ -190,7 +190,7 @@ export function detectCombatAudioTracks(character: any): CombatAudioTrack[] {
       tracks.push({
         id: `gear-keo-${i}`, itemName: "Kẹo", type: "local",
         src: `/assets/combatSFX/NhacNgot/${file}`,
-        label: `Kẹo #${i + 1} – ${file.replace(/^\d+ - /, "").replace(".mp3", "")}`,
+        label: `Kẹo #${i + 1} – ${file.replace(/^\d+ - /, "").replace(".ogg", "")}`,
         localPlaylist: KEO_LOCAL_FILES,
         localPlaylistFolder: "/assets/combatSFX/NhacNgot/",
       });
@@ -210,7 +210,7 @@ export function detectCombatAudioTracks(character: any): CombatAudioTrack[] {
       tracks.push({
         id: `gear-ot-${i}`, itemName: "Ớt", type: "local",
         src: `/assets/combatSFX/NhacNgotAI/${file}`,
-        label: `Ớt #${i + 1} – ${file.replace(/^\d+ - /, "").replace(".mp3", "")}`,
+        label: `Ớt #${i + 1} – ${file.replace(/^\d+ - /, "").replace(".ogg", "")}`,
         localPlaylist: OT_LOCAL_FILES,
         localPlaylistFolder: "/assets/combatSFX/NhacNgotAI/",
       });
@@ -340,7 +340,7 @@ const LocalTrackCard = ({ track, pan, accent, visible, stopped, silenced }: Loca
           a.src = nextSrc;
           a.load();
           a.play().catch(() => {});
-          setState(s => ({ ...s, currentTime: 0, duration: 0, title: nextFile.replace(/^\d+ - /, "").replace(".mp3", "") }));
+          setState(s => ({ ...s, currentTime: 0, duration: 0, title: nextFile.replace(/^\d+ - /, "").replace(".ogg", "") }));
         }
       } else {
         setState(s => ({ ...s, isPlaying: !t.loop }));
