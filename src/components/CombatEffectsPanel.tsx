@@ -990,7 +990,7 @@ const EFFECT_DEFS: EffectDef[] = [
       ).filter((g: any) => !g.isLost);
       const coinCount = [...gears, ...legacyGears].filter((g: any) => {
         const name = typeof g === "string" ? g : (g?.name ?? "");
-        return name === "Golden Coin";
+        return name.startsWith("Golden Coin");
       }).length;
       if (coinCount === 0) return null;
       const totalPct = coinCount * 10;
@@ -2125,7 +2125,7 @@ function buildPendingEffects(
       ),
     // Weapons (for weapon effects with wheel probability, e.g. Saitama's Gloves, Rhitta, Cursed Pennywort)
     ...((character as any).weapons || [])
-      .filter((w: any) => !w.isLost)
+      .filter((w: any) => !w.isLost && w.usable !== false)
       .map((w: any) =>
         (typeof w === "string" ? w : (w?.name ?? ""))
           .replace(/\s*\([^)]*\)\s*$/g, "")

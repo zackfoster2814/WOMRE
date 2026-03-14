@@ -223,10 +223,15 @@ const StatModifiersTable = ({
           {sourcesWithStats.map((source, idx) => (
             <tr key={idx} className="border-b border-gray-700/30">
               <td
-                className={`py-1.5 px-2 ${sourceTypeColors[source.type]} truncate max-w-[120px]`}
-                title={source.name}
+                className={`py-1.5 px-2 ${sourceTypeColors[source.type]} max-w-[120px]`}
+                title={source.description || source.name}
               >
-                {source.name}
+                <span className="truncate block">{source.name}</span>
+                {source.description && (
+                  <span className="text-gray-500 text-[9px] leading-tight block truncate" title={source.description}>
+                    {source.description}
+                  </span>
+                )}
               </td>
               {statKeys.map((statKey) => (
                 <td key={statKey} className="text-center py-1.5 px-1.5">
@@ -365,12 +370,12 @@ const StatModifiersTable = ({
                                     ({statSummary})
                                   </span>
                                 )}
-                                {source.description && !statSummary && (
+                                {source.description && (
                                   <span
                                     className="text-gray-500 truncate"
                                     title={source.description}
                                   >
-                                    {source.description}
+                                    — {source.description}
                                   </span>
                                 )}
                                 {source.isDisabled && (

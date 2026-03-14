@@ -2498,10 +2498,10 @@ registerCombatHandler(
     }
     return {
       skipDefault: true,
-      description: `Edgelord: bằng nhau (${selfScore} vs ${oppScore}), không kích hoạt`,
+      description: `Edgelord: hai bên bằng nhau (${selfScore} vs ${oppScore}), không ai nhận thêm điểm`,
     };
   },
-  "Edgelord: +1 point if losing on score before end",
+  "Edgelord: lower-score side gets +1 point before combat end",
 );
 
 registerCombatHandler(

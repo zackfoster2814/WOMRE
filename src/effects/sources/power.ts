@@ -304,13 +304,13 @@ registerImmediateHandler(
   '+1 MA on MA round win',
 );
 
+// Hunter's Mark immediate handler: không làm gì (stat được roll trong BattleZonePage trước combat)
 registerImmediateHandler(
   'hunters_mark_random_round',
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const randomRound = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
-    return { skipDefault: true, description: `Hunter's Mark on ${randomRound} round` };
+    return { skipDefault: true };
   },
-  '+1 point on marked round win',
+  'Hunter\'s Mark: stat roll handled by BattleZonePage pre-combat',
 );
 
 registerImmediateHandler(
@@ -896,19 +896,6 @@ registerCombatHandler(
   '+1 to 2 random stats if opponent has fewer powers (Guidance)',
 );
 
-registerCombatHandler(
-  'hunters_mark_random_round',
-  (ctx: CombatHandlerContext): CombatHandlerResult => {
-    // Trigger sau round MA (cuối cùng) — khi đã có đủ tất cả kết quả
-    if ((ctx as any).currentRoundStat !== 'ma') return { skipDefault: true };
-    const chosenStat = STAT_NAMES[Math.floor(Math.random() * STAT_NAMES.length)];
-    if (ctx.roundResults?.[chosenStat] === 'win') {
-      return { selfPoints: 1, description: `Hunter's Mark: Round được chọn = ${chosenStat} → thắng → +1 điểm` };
-    }
-    return { skipDefault: true, description: `Hunter's Mark: Round được chọn = ${chosenStat} → không thắng → không điểm` };
-  },
-  "Random round chosen before combat; win that round = +1 point (Hunter's Mark)",
-);
 
 registerCombatHandler(
   'garlic_breath_check',
@@ -964,7 +951,7 @@ registerCombatHandler(
     if (Math.random() > 0.35) {
       return { skipDefault: true, description: 'Golden Parry: không kích hoạt (65%)' };
     }
-    return { opponentPoints: -1, description: 'Đối thủ không nhận điểm (Golden Parry – 35% khi thua round)' };
+    return { blockOpponentPoint: true, description: 'Đối thủ không nhận điểm round này (Golden Parry – 35% khi thua round)' };
   },
   '35% opponent does not score when you lose a round (Golden Parry)',
 );

@@ -439,7 +439,7 @@ export function registerAllQuirkEffects() {
 
   // Bloodthirsty
   defineEffect('quirk', 'Bloodthirsty')
-    .description('+1 MA. Thắng round +1 điểm, thua round mất hết điểm.')
+    .description('+1 MA. Thắng round +2 điểm, thua round mất hết điểm.')
     .weight(2.38)
     .addStat('ma', 1)
     .effect({ type: 'extra_point_on_win', points: 1, timing: 'on_round_win', target: 'self' })
