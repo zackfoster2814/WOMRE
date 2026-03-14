@@ -1406,9 +1406,9 @@ const SidebarAvatarBanner = ({
   blurred?: boolean;
 }) => {
   const [extIndex, setExtIndex] = React.useState(0);
-  const nameColor = accent === "blue" ? "text-blue-300/80" : "text-red-300/80";
-  const race = player.character?.race?.race || player.race || "";
-  const subRace = player.character?.race?.subRace || "";
+  // const nameColor = accent === "blue" ? "text-blue-300/80" : "text-red-300/80";
+  // const race = player.character?.race?.race || player.race || "";
+  // const subRace = player.character?.race?.subRace || "";
   const allFailed = extIndex >= AVATAR_EXTENSIONS.length;
   const side = accent === "blue" ? "left" : "right";
   const tracks = audioTracks ?? [];
