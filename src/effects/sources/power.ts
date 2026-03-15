@@ -164,18 +164,15 @@ registerImmediateHandler(
   'spear_of_fire_2_rune_check',
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     const weapons = ctx.character.weapons || [];
-    const equippedWeapon = weapons.find((w: any) => !w.isLost && w.equipped) as any;
-    if (
-      equippedWeapon &&
-      equippedWeapon.runes &&
-      Array.isArray(equippedWeapon.runes) &&
-      equippedWeapon.runes.length >= 2
-    ) {
-      return { skipDefault: false, description: '+1 starting point (weapon has 2+ runes)' };
+    const hasUsableWeapon = weapons.some((w: any) => !w.isLost);
+    const charRunes: any[] = (ctx.character as any).runes?.runes || [];
+    const activeRuneCount = charRunes.filter((r: any) => !r.isLost).length;
+    if (hasUsableWeapon && activeRuneCount >= 2) {
+      return { skipDefault: false, description: '+1 starting point (có vũ khí dùng được + 2 rune)' };
     }
     return { skipDefault: true };
   },
-  '+1 point if weapon has 2 runes',
+  '+1 point if has usable weapon and 2+ active runes',
 );
 
 registerImmediateHandler(
@@ -783,21 +780,25 @@ registerCombatHandler(
 registerCombatHandler(
   'spear_of_fire_2_rune_check',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    const rune = (ctx.self.character as any)?.rune;
-    const runes: any[] = rune?.runes || [];
-    const activeRunes = runes.filter((r: any) => !r.isLost);
-    if (activeRunes.length >= 2) {
+    const weapons: any[] = (ctx.self.character as any)?.weapons || [];
+    const hasUsableWeapon = weapons.some((w: any) => !w.isLost);
+    const charRunes: any[] = (ctx.self.character as any)?.runes?.runes || [];
+    const activeRuneCount = charRunes.filter((r: any) => !r.isLost).length;
+    if (hasUsableWeapon && activeRuneCount >= 2) {
       return {
         selfPoints: 1,
-        description: `Spear of Fire: ${activeRunes.length} Rune → +1 điểm khởi đầu`,
+        description: `Spear of Fire: Có vũ khí dùng được + ${activeRuneCount} Rune → +1 điểm khởi đầu`,
       };
     }
+    const reason = !hasUsableWeapon
+      ? 'Không có vũ khí dùng được'
+      : `Chỉ có ${activeRuneCount} Rune (cần ≥2)`;
     return {
       skipDefault: true,
-      description: `Spear of Fire: Chỉ có ${activeRunes.length} Rune (cần 2+)`,
+      description: `Spear of Fire: ${reason} → không kích hoạt`,
     };
   },
-  '+1 starting point if weapon has 2+ runes (Spear of Fire)',
+  '+1 starting point if has usable weapon and 2+ active runes (Spear of Fire)',
 );
 
 registerCombatHandler(
@@ -935,10 +936,25 @@ registerCombatHandler(
 registerCombatHandler(
   'four_hit_combo_biq_equalize',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (ctx.roundResults?.biq !== 'win') return { skipDefault: true };
+    const biqResult = ctx.roundResults?.biq ?? ctx.roundResults?.['biq'];
+    if (biqResult !== 'win') return { skipDefault: true, description: '4 Hit Combo: Không thắng round BIQ → không kích hoạt' };
+    // Tính score chỉ đến hết round BIQ (5 round đầu, không tính MA)
+    const PRE_BIQ_STATS = ['str', 'spd', 'dur', 'iq', 'biq'];
+    const rr = ctx.roundResults ?? {};
+    let selfScore = 0;
+    let oppScore = 0;
+    for (const stat of PRE_BIQ_STATS) {
+      const result = rr[stat] ?? rr[{ str: 'strength', spd: 'speed', dur: 'durability', iq: 'iq', biq: 'biq' }[stat] ?? stat];
+      if (result === 'win') selfScore++;
+      else if (result === 'lose') oppScore++;
+    }
+    if (selfScore >= oppScore) {
+      return { skipDefault: true, description: `4 Hit Combo: Thắng BIQ nhưng đang không thua điểm đến round BIQ (${selfScore} vs ${oppScore}) → không kích hoạt` };
+    }
+    const diff = oppScore - selfScore;
     return {
-      description: '[4 Hit Combo] Thắng round BIQ → điểm bằng đối thủ nếu đang thua (GM/engine xử lý equalize)',
-      skipDefault: false,
+      selfPoints: diff,
+      description: `4 Hit Combo: Thắng round BIQ → +${diff} điểm để bằng đối thủ tính đến round BIQ (${selfScore} → ${oppScore})`,
     };
   },
   'BIQ win: equalize own score to opponent score if behind (4 Hit Combo)',
@@ -1057,15 +1073,15 @@ registerCombatHandler(
   'adapt_disable_known_powers',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     if (!ctx.opponent) return { skipDefault: true };
-    const oppPowers: any[] = ctx.opponent.powers || [];
-    if (oppPowers.length === 0) {
-      return { skipDefault: true, description: 'Adapt: Đối thủ không có Power' };
+    const knownPowers: string[] = (ctx.self.character as any)?.adaptKnownPowers || [];
+    if (knownPowers.length === 0) {
+      return {
+        skipDefault: true,
+        description: 'Adapt: Chưa có Power nào được ghi nhớ — không vô hiệu hóa được Power nào',
+      };
     }
-    const oppPowerNames = oppPowers
-      .map((p: any) => typeof p === 'string' ? p : p?.name ?? '')
-      .filter(Boolean);
     return {
-      description: `[Adapt] Vô hiệu hóa các power đối thủ đã gặp trong quá khứ: ${oppPowerNames.join(', ')} (GM track danh sách powers đã gặp)`,
+      description: `[Adapt] Vô hiệu hóa các Power đối thủ đã gặp trong quá khứ: ${knownPowers.join(', ')}`,
       skipDefault: false,
     };
   },
@@ -1199,9 +1215,9 @@ export function registerAllPowerEffects() {
     .debuffOpponent('strength', 2)
     .debuffOpponent('speed', 2)
     .debuffOpponent('durability', 2)
-    .effect({ type: 'debuff', stat: 'iq', value: -2, timing: 'during_combat', target: 'opponent', conditions: [{ type: 'has_item', itemType: 'archetype', itemName: 'Gigachad' }] })
-    .effect({ type: 'debuff', stat: 'biq', value: -2, timing: 'during_combat', target: 'opponent', conditions: [{ type: 'has_item', itemType: 'archetype', itemName: 'Gigachad' }] })
-    .effect({ type: 'debuff', stat: 'ma', value: -2, timing: 'during_combat', target: 'opponent', conditions: [{ type: 'has_item', itemType: 'archetype', itemName: 'Gigachad' }] })
+    .effect({ type: 'debuff', stat: 'iq', value: -2, timing: 'before_combat', target: 'opponent', conditions: [{ type: 'has_item', itemType: 'archetype', itemName: 'Gigachad', checkTarget: 'self' }] })
+    .effect({ type: 'debuff', stat: 'biq', value: -2, timing: 'before_combat', target: 'opponent', conditions: [{ type: 'has_item', itemType: 'archetype', itemName: 'Gigachad', checkTarget: 'self' }] })
+    .effect({ type: 'debuff', stat: 'ma', value: -2, timing: 'before_combat', target: 'opponent', conditions: [{ type: 'has_item', itemType: 'archetype', itemName: 'Gigachad', checkTarget: 'self' }] })
     .register();
 
   defineEffect('power', 'Invulnerability')
@@ -1975,7 +1991,7 @@ export function registerAllPowerEffects() {
   defineEffect('power', '4 Hit Combo')
     .description('Trong Combat: Round BIQ thắng sẽ nhận điểm để bằng với đối thủ. Không có tác dụng nếu đang hơn điểm.')
     .weight(0)
-    .effect({ type: 'custom', timing: 'during_combat', target: 'self', customHandler: 'four_hit_combo_biq_equalize' })
+    .effect({ type: 'custom', timing: 'before_combat_end', target: 'self', customHandler: 'four_hit_combo_biq_equalize' })
     .register();
 
   defineEffect('power', "Sovngarde's Blessing")

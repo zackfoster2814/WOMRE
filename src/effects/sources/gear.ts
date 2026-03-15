@@ -63,18 +63,18 @@ export function registerAllGearEffects() {
     .register();
 
   // 3. Văn tế
-  defineEffect("gear", "Văn tế")
-    .description(
-      "Khi bạn bị loại mà có Văn Tế trong người, Re-spin lại stat cao nhất của một người còn sống ngẫu nhiên.",
-    )
-    .weight(2174)
-    .effect({
-      type: "custom",
-      timing: "on_death",
-      target: "random_player",
-      customHandler: "van_te_respin_highest",
-    })
-    .register();
+  // defineEffect("gear", "Văn tế")
+  //   .description(
+  //     "Khi bạn bị loại mà có Văn Tế trong người, Re-spin lại stat cao nhất của một người còn sống ngẫu nhiên.",
+  //   )
+  //   .weight(2174)
+  //   .effect({
+  //     type: "custom",
+  //     timing: "on_death",
+  //     target: "random_player",
+  //     customHandler: "van_te_respin_highest",
+  //   })
+  //   .register();
 
   // 4. Silver Steed
   defineEffect("gear", "Silver Steed")

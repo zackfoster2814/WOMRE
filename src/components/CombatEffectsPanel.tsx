@@ -30,7 +30,9 @@ type EffectTiming =
   | "during_combat"
   | "after_combat"
   | "after_win"
-  | "after_lose";
+  | "after_lose"
+  | "on_round_win"
+  | "on_round_lose";
 
 interface StatChange {
   stat: string;
@@ -1342,7 +1344,7 @@ const EFFECT_DEFS: EffectDef[] = [
   // Rhitta: 33% gấp đôi hiệu ứng cộng stat từ vũ khí trong combat
   {
     source: "rhitta",
-    timing: "during_combat",
+    timing: "before_combat",
     category: "wheel",
     description:
       "Rhitta: 33% gấp đôi stat bonus từ vũ khí (+3 STR, +2 Dura thêm).",
@@ -1360,8 +1362,6 @@ const EFFECT_DEFS: EffectDef[] = [
         color: "#6b7280",
       },
     ],
-    gmNote:
-      "[GM Action] Nếu thành công: thêm +3 STR và +2 Dura vào stats của player trong combat",
   },
 
   // Ruyi Jingu Bang: 72% nhận 1 Power ngẫu nhiên sau combat thắng
@@ -2039,6 +2039,68 @@ const EFFECT_DEFS: EffectDef[] = [
     resolved: true,
     resolvedNote: "Engine tự apply +1 IQ, +1 BIQ, +2 MA khi thắng round STR",
   },
+
+  // Nymeria: Sau Combat Thua → nhận Power "Weapon Enhancing"
+  {
+    source: "nymeria",
+    timing: "after_lose",
+    category: "gm",
+    description: 'Nymeria: Sau Combat Thua → nhận Power "Weapon Enhancing".',
+    gmNote: '[GM Action] Thêm Power "Weapon Enhancing" vào inventory của player',
+  },
+
+  // Labourers: Sau Combat → Strength +1
+  {
+    source: "labourers",
+    timing: "after_combat",
+    category: "auto",
+    description: "Labourers: Sau Combat → +1 Strength.",
+    autoChanges: [{ stat: "strength", label: "STR", value: 1 }],
+  },
+
+  // Grey Wind: khi bị loại → tất cả thành viên House Stark nhận +1 all stats
+  {
+    source: "grey wind",
+    timing: "after_lose",
+    category: "gm",
+    description: "Grey Wind: Bị loại → tất cả thành viên House Stark nhận +1 tất cả chỉ số.",
+    gmNote: "[GM Action] Tìm tất cả player còn sống thuộc House Stark, cộng +1 tất cả chỉ số cho mỗi người",
+  },
+
+  // Merchants: Sau Combat: Bán 1 Gear lấy 1 "Đồng Tiền Vàng" (Gear bị bán ko thể là đồng tiền vàng)
+  {
+    source: "merchants",
+    timing: "after_combat",
+    category: "wheel",
+    description: 'Merchants: Bán 1 Gear lấy 1 "Đồng Tiền Vàng".',
+    resolver: (ctx) => {
+      const allGear = [
+        ...((ctx.character as any).gear?.normalGear || []),
+        ...((ctx.character as any).gear?.legacyGear || []),
+      ]
+        .filter((g: any) => !g.isLost)
+        .map((g: any) => (typeof g === "string" ? g : g?.name ?? ""))
+        .filter((name: string) => !["đồng tiền vàng", "golden coin"].includes(name.toLowerCase()));
+      if (allGear.length === 0) {
+        return {
+          category: "gm",
+          description: 'Merchants: Không có Gear hợp lệ để bán.',
+          gmNote: "Không có Gear nào (ngoài Đồng Tiền Vàng) để bán.",
+        };
+      }
+      const wheelItems: WheelSpinItem[] = allGear.map((name: string) => ({
+        label: name,
+        weight: 1,
+        isSuccess: true,
+        color: "#f59e0b",
+      }));
+      return {
+        category: "wheel",
+        description: 'Merchants: Chọn 1 Gear để bán lấy 1 "Đồng Tiền Vàng".',
+        wheelItems,
+      };
+    },
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -2089,14 +2151,14 @@ function buildPendingEffects(
   const sources: string[] = [
     ...(character.quirks || [])
       .filter((q) => !q.isLost)
-      .map((q) => q.name.toLowerCase()),
+      .map((q) => q.name.replace(/\s*\(.*?\)/g, "").trim().toLowerCase()),
     ...(character.archetypes || []).map((a) => a.toLowerCase()),
     // Archetype sub-types (e.g., Power Ranger → "Blue", "Red"; Trickster → "Ace of Spades")
     ...((character as any).nestedArchetypes || [])
-      .filter((na: any) => na.subType)
+      .filter((na: any) => !na.isLost && na.subType)
       .map((na: any) => (na.subType as string).toLowerCase()),
     ...((character as any).nestedArchetypes || [])
-      .filter((na: any) => na.subSubType)
+      .filter((na: any) => !na.isLost && na.subSubType)
       .map((na: any) => (na.subSubType as string).toLowerCase()),
     // Active house names (e.g. "dothraki", "roundtable hold")
     ...((character as any).houses || [])
@@ -2143,6 +2205,14 @@ function buildPendingEffects(
       .map((c: any) =>
         (typeof c === "string" ? c : (c?.name ?? "")).toLowerCase(),
       ),
+    // Char Dev subtype extraction: "Become A Power Ranger (Black)" → "black"
+    ...((character as any).charDevs || [])
+      .filter((c: any) => !c.isLost)
+      .flatMap((c: any) => {
+        const name: string = typeof c === "string" ? c : (c?.name ?? "");
+        const match = name.match(/\(([^)]+)\)/);
+        return match ? [match[1].toLowerCase()] : [];
+      }),
   ];
 
   const effects: CombatPendingEffect[] = [];
@@ -2217,6 +2287,8 @@ const TIMING_LABELS: Record<EffectTiming, string> = {
   after_combat: "Sau combat",
   after_win: "Sau thắng",
   after_lose: "Sau thua",
+  on_round_win: "Sau combat",
+  on_round_lose: "Sau combat",
 };
 
 // Group timings into 3 phases for display
@@ -2235,7 +2307,7 @@ const PHASE_GROUPS: {
   {
     label: "Sau Combat",
     icon: "⚡",
-    timings: ["after_combat"],
+    timings: ["after_combat", "on_round_win", "on_round_lose"],
     color: "border-gray-500/40 text-gray-300",
   },
   {
@@ -2266,6 +2338,8 @@ const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
     after_combat: "bg-gray-700/50 text-gray-300",
     after_win: "bg-green-700/50 text-green-300",
     after_lose: "bg-red-700/50 text-red-300",
+    on_round_win: "bg-emerald-700/50 text-emerald-300",
+    on_round_lose: "bg-rose-700/50 text-rose-300",
   };
 
   return (

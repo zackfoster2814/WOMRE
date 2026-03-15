@@ -39,7 +39,7 @@ Houses:
 2 Gear: 
  + 2 Normal gear:
   - Thuốc tráng dương
-  - Golden coin (Merchants)
+  - Golden coin
  + 0 Legacy gear:
   - 
 ```

@@ -298,9 +298,10 @@ interface LocalTrackCardProps {
   visible: boolean;
   stopped?: boolean;
   silenced?: boolean;
+  volumeScale?: number;
 }
 
-const LocalTrackCard = ({ track, pan, accent, visible, stopped, silenced }: LocalTrackCardProps) => {
+const LocalTrackCard = ({ track, pan, accent, visible, stopped, silenced, volumeScale = 1 }: LocalTrackCardProps) => {
   const [state, setState] = useState<TrackState>(mkDefault(false));
   const audioRef  = useRef<HTMLAudioElement | null>(null);
   const gainRef   = useRef<GainNode | null>(null);
@@ -364,9 +365,9 @@ const LocalTrackCard = ({ track, pan, accent, visible, stopped, silenced }: Loca
   useEffect(() => { if (pannerRef.current) pannerRef.current.pan.value = pan; }, [pan]);
   useEffect(() => { if (stopped) audioRef.current?.pause(); }, [stopped]);
   useEffect(() => {
-    if (gainRef.current) gainRef.current.gain.value = silenced ? 0 : state.volume;
+    if (gainRef.current) gainRef.current.gain.value = silenced ? 0 : state.volume * volumeScale;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [silenced]);
+  }, [silenced, volumeScale]);
 
   const togglePlay = useCallback(() => {
     const a = audioRef.current; if (!a) return;
@@ -380,8 +381,8 @@ const LocalTrackCard = ({ track, pan, accent, visible, stopped, silenced }: Loca
 
   const handleVolume = useCallback((v: number) => {
     setState(s => ({ ...s, volume: v }));
-    if (gainRef.current) gainRef.current.gain.value = v;
-  }, []);
+    if (gainRef.current) gainRef.current.gain.value = v * volumeScale;
+  }, [volumeScale]);
 
   return (
     <div style={{ display: visible ? undefined : "none" }}>
@@ -401,9 +402,10 @@ interface YouTubeTrackCardProps {
   visible: boolean;
   stopped?: boolean;
   silenced?: boolean;
+  volumeScale?: number;
 }
 
-const YouTubeTrackCard = ({ track, accent, visible, stopped, silenced }: YouTubeTrackCardProps) => {
+const YouTubeTrackCard = ({ track, accent, visible, stopped, silenced, volumeScale = 1 }: YouTubeTrackCardProps) => {
   const [state, setState] = useState<TrackState>(mkDefault(true));
   const playerRef  = useRef<any>(null);
   const pollRef    = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -514,9 +516,9 @@ const YouTubeTrackCard = ({ track, accent, visible, stopped, silenced }: YouTube
   useEffect(() => { if (stopped) playerRef.current?.pauseVideo?.(); }, [stopped]);
   useEffect(() => {
     if (silenced) playerRef.current?.setVolume?.(0);
-    else playerRef.current?.setVolume?.(state.volume);
+    else playerRef.current?.setVolume?.(state.volume * volumeScale);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [silenced]);
+  }, [silenced, volumeScale]);
 
   const togglePlay = useCallback(() => {
     const p = playerRef.current; if (!p) return;
@@ -530,8 +532,8 @@ const YouTubeTrackCard = ({ track, accent, visible, stopped, silenced }: YouTube
 
   const handleVolume = useCallback((v: number) => {
     setState(s => ({ ...s, volume: v }));
-    playerRef.current?.setVolume?.(v);
-  }, []);
+    playerRef.current?.setVolume?.(v * volumeScale);
+  }, [volumeScale]);
 
   return (
     <div style={{ display: visible ? undefined : "none" }}>
@@ -552,6 +554,7 @@ export interface CombatAudioControllerProps {
   accent: "blue" | "red";
   stopped?: boolean;
   silenced?: boolean;
+  volumeScale?: number; // 0–1, nhân với volume của từng track
 }
 
 export const CombatAudioController = ({
@@ -561,6 +564,7 @@ export const CombatAudioController = ({
   accent,
   stopped,
   silenced,
+  volumeScale = 1,
 }: CombatAudioControllerProps) => {
   const [open, setOpen] = useState(false);
 
@@ -597,8 +601,8 @@ export const CombatAudioController = ({
 
         {stableTracks.map(track =>
           track.type === "local"
-            ? <LocalTrackCard key={track.id} track={track} pan={pan} accent={accent} visible stopped={stopped} silenced={silenced} />
-            : <YouTubeTrackCard key={track.id} track={track} accent={accent} visible stopped={stopped} silenced={silenced} />
+            ? <LocalTrackCard key={track.id} track={track} pan={pan} accent={accent} visible stopped={stopped} silenced={silenced} volumeScale={volumeScale} />
+            : <YouTubeTrackCard key={track.id} track={track} accent={accent} visible stopped={stopped} silenced={silenced} volumeScale={volumeScale} />
         )}
       </div>
 

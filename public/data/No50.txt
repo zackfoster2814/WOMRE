@@ -38,11 +38,11 @@ Houses:
 ```
 7 Gear:
  + 7 Normal gear:
-  - Thuốc Tráng dương (Lannister)
-  - Fingerthing (Lannister)
-  - Golden Coin (Lannister)
-  - Golden Coin (Lannister)
-  - Golden Coin (Lannister)
+  - Thuốc Tráng dương 
+  - Fingerthing 
+  - Golden Coin 
+  - Golden Coin 
+  - Golden Coin 
   - Empty Stein
   - Wine
  + 0 Legacy gear:

@@ -19,7 +19,7 @@ Archetype:
 ``` 
 2 Quirk:  
 + Progressive
-+ Charming (Dương Quá Quá (duongquaqua), tặng Critical Strike)
++ Charming (Dương Quá Quá (duongquaqua), tặng 'Critical Strike')
 ```
 ```
 Str:10
@@ -56,12 +56,12 @@ Runeword:
 ```
 
 ```
-2 Power: 
+5 Power:
 + Fire Control (Từ Sub-race)
-+ Critical Strike (Từ Dương Quá Quá (duongquaqua))
-+ Powerful Strike(Từ Sub-race)
++ Critical Strike (Từ Dương Quá Quá)
++ Powerful Strike (Từ Sub-race)
 + Ballet Dancing
-+ Rickrolling 
++ Rickrolling
 ```
 
 ```

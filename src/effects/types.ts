@@ -162,6 +162,7 @@ export interface Condition {
   // For has_item
   itemType?: 'power' | 'quirk' | 'gear' | 'weapon' | 'rune' | 'lover' | 'archetype';
   itemName?: string;
+  checkTarget?: 'self' | 'opponent'; // Mặc định 'opponent'
 
   // For race_match
   races?: string[];

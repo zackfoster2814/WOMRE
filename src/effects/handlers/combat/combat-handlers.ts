@@ -122,10 +122,7 @@ registerCombatHandler(
 registerCombatHandler(
   'conquerer_speed_win',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    // Chỉ apply từ round IQ trở đi (sau khi SPD đã kết thúc)
-    // Không apply tại round SPD vì stat đó đã được so sánh rồi
-    if ((ctx as any).currentRoundStat === 'spd') return { skipDefault: true };
-    const speedResult = ctx.roundResults?.['spd'] ?? ctx.roundResults?.speed;
+    const speedResult = ctx.roundResults?.speed ?? ctx.roundResults?.['spd'];
     if (speedResult !== 'win') return { skipDefault: true };
 
     return {

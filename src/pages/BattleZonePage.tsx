@@ -1396,6 +1396,7 @@ const SidebarAvatarBanner = ({
   audioStopped,
   silenced,
   blurred,
+  bgmVolumeScale = 1,
 }: {
   player: PvPPlayerData;
   accent: "blue" | "red";
@@ -1404,6 +1405,7 @@ const SidebarAvatarBanner = ({
   audioStopped?: boolean;
   silenced?: boolean;
   blurred?: boolean;
+  bgmVolumeScale?: number;
 }) => {
   const [extIndex, setExtIndex] = React.useState(0);
   // const nameColor = accent === "blue" ? "text-blue-300/80" : "text-red-300/80";
@@ -1451,6 +1453,7 @@ const SidebarAvatarBanner = ({
             accent={accent}
             stopped={audioStopped}
             silenced={silenced}
+            volumeScale={bgmVolumeScale}
           />
         </div>
       )}
@@ -1634,6 +1637,13 @@ export const StatsComparisonMode = ({
   } | null>(null);
   const [pendingPreCombatCount, setPendingPreCombatCount] = useState(0);
   const [showIntro, setShowIntro] = useState(false);
+
+  // Settings
+  const [showSettings, setShowSettings] = useState(false);
+  const [masterVolume, setMasterVolume] = useState(1);
+  const [bgmVolume, setBgmVolume] = useState(1);
+  const [introVolume, setIntroVolume] = useState(1);
+  const [introEnabled, setIntroEnabled] = useState(true);
 
   // Disabled items (click-to-disable in inventory panel)
   const [disabledItems, setDisabledItems] = useState<Set<string>>(new Set());
@@ -2150,9 +2160,6 @@ export const StatsComparisonMode = ({
     if (winner === "player1") {
       if (p1HasOTP) {
         p1Points = p1OTPStat ? (p1OTPStat === roundStatLabel ? 3 : 0) : 1; // 1 if wheel not spun yet (pending)
-        console.log(
-          `[OTP DEBUG] p1 winner, round=${roundStatLabel}, otpStat=${p1OTPStat}, p1Points=${p1Points}`,
-        );
       } else {
         p1Points = 1;
       }
@@ -2161,9 +2168,6 @@ export const StatsComparisonMode = ({
       p1Points = 0;
       if (p2HasOTP) {
         p2Points = p2OTPStat ? (p2OTPStat === roundStatLabel ? 3 : 0) : 1;
-        console.log(
-          `[OTP DEBUG] p2 winner, round=${roundStatLabel}, otpStat=${p2OTPStat}, p2Points=${p2Points}`,
-        );
       } else {
         p2Points = 1;
       }
@@ -2487,8 +2491,9 @@ export const StatsComparisonMode = ({
       // Spell Flux: power "Trong Combat" đầu tiên kích hoạt được apply 2 lần
       const hasSpellFlux = (player.character?.powers || []).some(
         (p: any) =>
-          (typeof p === "string" ? p : p.name)?.toLowerCase() ===
-            "spell flux" && !p.isLost,
+          (typeof p === "string" ? p : p.name)
+            ?.toLowerCase()
+            .startsWith("spell flux") && !p.isLost,
       );
       let spellFluxUsed = false; // true sau khi đã double lần đầu
 
@@ -2648,15 +2653,27 @@ export const StatsComparisonMode = ({
                 return selfBracket.toLowerCase() === cond.bracket.toLowerCase();
               }
               if (cond.type === "has_item" && cond.itemType && cond.itemName) {
-                const oppChar = isSelf ? p2.character : p1.character;
+                // cond.checkTarget: "self" = check người sở hữu effect, "opponent" = check đối thủ (default)
+                const checkSelf = cond.checkTarget === "self";
+                const checkChar = checkSelf
+                  ? isSelf
+                    ? p1.character
+                    : p2.character
+                  : isSelf
+                    ? p2.character
+                    : p1.character;
                 if (cond.itemType === "archetype") {
-                  const archetypes = (oppChar?.archetypes || []).map((a: any) =>
-                    (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase(),
+                  const archetypes = (checkChar?.archetypes || []).map(
+                    (a: any) =>
+                      (typeof a === "string"
+                        ? a
+                        : (a?.name ?? "")
+                      ).toLowerCase(),
                   );
                   return archetypes.includes(cond.itemName.toLowerCase());
                 }
                 if (cond.itemType === "power") {
-                  const powers = (oppChar?.powers || [])
+                  const powers = (checkChar?.powers || [])
                     .filter((p: any) => !p.isLost)
                     .map((p: any) =>
                       (typeof p === "string"
@@ -3193,8 +3210,7 @@ export const StatsComparisonMode = ({
     // Silver Ranger: 15% gấp đôi chỉ số round tiếp theo khi thắng bất kỳ round
     if (roundIndex < 5) {
       const addSilverRangerCarryOver = (winnerSide: "player1" | "player2") => {
-        const spinRoundIndex = roundIndex - 1;
-        const key2 = `${spinRoundIndex}-Ranger-Silver-${winnerSide}`;
+        const key2 = `${roundIndex}-Ranger-Silver-${winnerSide}`;
         const spinResult = roundSpinResults[key2];
         if (!spinResult?.isSuccess) return;
         const alreadyAdded = carryOverToNext.some(
@@ -3308,11 +3324,14 @@ export const StatsComparisonMode = ({
     }
   };
 
-  // Hiển thị intro screen 5s trước khi bắt đầu combat (TEMP: disabled)
+  // Hiển thị intro screen 5s trước khi bắt đầu combat
   const handleStartWithIntro = () => {
     if (!player1 || !player2) return;
-    // setShowIntro(true); // TEMP disabled
-    startCombat();
+    if (introEnabled) {
+      setShowIntro(true);
+    } else {
+      startCombat();
+    }
   };
 
   // Start combat (init step state)
@@ -3452,15 +3471,17 @@ export const StatsComparisonMode = ({
           }
           continue;
         }
-        // customHandler: spear_of_fire_2_rune_check → check equipped weapon has 2+ runes
+        // customHandler: spear_of_fire_2_rune_check → check có vũ khí dùng được + ≥2 rune không bị mất
         const customHandler = (ce.effect as any).customHandler;
         if (customHandler === "spear_of_fire_2_rune_check") {
           const weapons: any[] = self.character?.weapons || [];
-          const equipped = weapons.find((w: any) => !w.isLost && w.equipped);
-          const runeCount = (equipped?.runes || []).filter(
+          const hasUsableWeapon = weapons.some((w: any) => !w.isLost);
+          const charRunes: any[] = self.character?.runes?.runes || [];
+          const activeRuneCount = charRunes.filter(
             (r: any) => !r.isLost,
           ).length;
-          if (runeCount >= 2) pts += (ce.effect as any).points || 0;
+          if (hasUsableWeapon && activeRuneCount >= 2)
+            pts += (ce.effect as any).points || 0;
           continue;
         }
         // Check conditions
@@ -3597,6 +3618,16 @@ export const StatsComparisonMode = ({
       if (hasUnoP2 || hasUnoP1)
         applyStatDelta(p2BaseStats, blackMagicStat["player2"]!, -2);
       else applyStatDelta(p1BaseStats, blackMagicStat["player2"]!, -2);
+    }
+
+    // Rhitta: nếu quay thành công trước combat → +3 STR, +2 DUR
+    if (rhittaResult["player1"]) {
+      applyStatDelta(p1BaseStats, "str", 3);
+      applyStatDelta(p1BaseStats, "dur", 2);
+    }
+    if (rhittaResult["player2"]) {
+      applyStatDelta(p2BaseStats, "str", 3);
+      applyStatDelta(p2BaseStats, "dur", 2);
     }
 
     // Gold Ship: +1 hoặc -1 all stats tùy kết quả wheel
@@ -3805,7 +3836,6 @@ export const StatsComparisonMode = ({
         const oppPowers =
           (oppChar?.powers || []).filter((p: any) => !p?.isLost) || [];
         const oppPowerCount = oppPowers.length;
-        console.log(selfPowerCount, oppPowerCount);
 
         for (const ce of fx.combatEffects) {
           if (ce.isActive === false) continue;
@@ -3899,12 +3929,49 @@ export const StatsComparisonMode = ({
             continue;
           }
 
+          // Sarastro's Flute: -1 all stats đối thủ với mỗi 3 power họ có (không tính isLost)
+          if (handler === "sarastro_flute_debuff") {
+            const debuff = Math.floor(oppPowerCount / 3);
+            if (debuff > 0) {
+              const STAT_KEYS_SHORT: (keyof CharacterStats)[] = [
+                "str",
+                "spd",
+                "dur",
+                "iq",
+                "biq",
+                "ma",
+              ];
+              for (const stat of STAT_KEYS_SHORT)
+                applyStatDelta(oppBaseStats, stat, -debuff);
+              preCombatEvents.push({
+                player: oppSide,
+                source: srcName,
+                description: `Sarastro's Flute: Đối thủ có ${oppPowerCount} Power → -${debuff} tất cả chỉ số`,
+                type: "stat_debuff",
+              });
+            } else {
+              preCombatEvents.push({
+                player: playerSide,
+                source: srcName,
+                description: `Sarastro's Flute: Đối thủ chưa đủ 3 Power (${oppPowerCount}) → không kích hoạt`,
+                type: "info",
+              });
+            }
+            continue;
+          }
+
           // Adapt: log GM action
           if (handler === "adapt_disable_known_powers") {
+            const knownPowers: string[] =
+              (player.character as any)?.adaptKnownPowers || [];
+            const desc =
+              knownPowers.length === 0
+                ? `[Adapt] Chưa có Power nào được ghi nhớ — không vô hiệu hóa được Power nào`
+                : `[Adapt] Vô hiệu hóa các Power đối thủ đã gặp: ${knownPowers.join(", ")}`;
             preCombatEvents.push({
               player: playerSide,
               source: srcName,
-              description: `[${srcName}] GM vô hiệu hóa các Power đối thủ đã gặp trong quá khứ (track riêng)`,
+              description: desc,
               type: "info",
             });
             continue;
@@ -3990,15 +4057,27 @@ export const StatsComparisonMode = ({
             continue;
           }
 
-          // Mind Control: log if condition met (opponent IQ <= 5)
+          // Mind Control: apply +1 all stats if opponent base IQ <= 5
           if (handler === "mind_control_iq_check") {
-            const oppIq = (oppChar as any)?.stats?.iq ?? 0;
-            if (oppIq <= 5) {
+            const oppBaseIq =
+              (oppChar as any)?.baseStats?.iq ??
+              (oppChar as any)?.stats?.iq ??
+              0;
+            if (oppBaseIq <= 5) {
+              for (const s of _ALL_STAT_KEYS)
+                applyStatDelta(selfBaseStats, s, 1);
               preCombatEvents.push({
                 player: playerSide,
                 source: srcName,
-                description: `Đối thủ IQ ≤ 5 (IQ=${oppIq}) → +1 all stats`,
+                description: `Đối thủ Base IQ ≤ 5 (IQ=${oppBaseIq}) → +1 all stats (Mind Control)`,
                 type: "stat_boost",
+              });
+            } else {
+              preCombatEvents.push({
+                player: playerSide,
+                source: srcName,
+                description: `Đối thủ Base IQ = ${oppBaseIq} > 5 → không kích hoạt (Mind Control)`,
+                type: "info",
               });
             }
             continue;
@@ -4168,6 +4247,32 @@ export const StatsComparisonMode = ({
                   type: "stat_boost",
                 });
               }
+            }
+            continue;
+          }
+
+          // Affection: đảo (inversion = 11 - value) 1 chỉ số ngẫu nhiên của cả 2
+          if (effectType === "stat_inversion" && srcName === "Affection") {
+            // Chỉ xử lý 1 lần (player1 kích hoạt, player2 skip)
+            const alreadyProcessed = preCombatEvents.some(
+              (e) => e.source === "Affection" && e.type !== "info",
+            );
+            if (!alreadyProcessed) {
+              const statKeys = _ALL_STAT_KEYS as (keyof CharacterStats)[];
+              const randomStat =
+                statKeys[Math.floor(Math.random() * statKeys.length)];
+              const p1Val = Number(selfBaseStats[randomStat]) || 0;
+              const p2Val = Number(oppBaseStats[randomStat]) || 0;
+              const p1New = 11 - p1Val;
+              const p2New = 11 - p2Val;
+              (selfBaseStats as any)[randomStat] = p1New;
+              (oppBaseStats as any)[randomStat] = p2New;
+              preCombatEvents.push({
+                player: playerSide,
+                source: srcName,
+                description: `Affection: Đảo ${randomStat.toUpperCase()} của cả hai → ${playerSide === "player1" ? "P1" : "P2"}: ${p1Val} → ${p1New}, ${playerSide === "player1" ? "P2" : "P1"}: ${p2Val} → ${p2New}`,
+                type: "stat_boost",
+              });
             }
             continue;
           }
@@ -4354,9 +4459,6 @@ export const StatsComparisonMode = ({
         const p2Base = p2Pts.autoApplied ? p2Pts.pts : w === "player2" ? 1 : 0;
         const p1Diff = p1Pts.pts - p1Base;
         const p2Diff = p2Pts.pts - p2Base;
-        console.log(
-          `[OTP PATCH DEBUG] lastRound=${lastRoundIdx} w=${w} p1Pts=${JSON.stringify(p1Pts)} p2Pts=${JSON.stringify(p2Pts)} p1Base=${p1Base} p2Base=${p2Base} p1Diff=${p1Diff} p2Diff=${p2Diff} prevP1Score=${patchedState.p1Score} prevP2Score=${patchedState.p2Score}`,
-        );
         if (p1Diff !== 0 || p2Diff !== 0) {
           patchedState = {
             ...patchedState,
@@ -4364,6 +4466,9 @@ export const StatsComparisonMode = ({
             p2Score: patchedState.p2Score + p2Diff,
           };
         }
+
+        // The Sand of Time: winner nhận pts=0 từ computeRoundPoints khi Sand thành công
+        // → p(winner)Base = 1, p(winner)Pts.pts = 0, diff = -1 → patchedState.p(winner)Score - 1
 
         // Patch stat round trước dựa vào spin kết quả mang tính permanent (ví dụ Ranger Blue: +3 Speed)
         // Lưu ý: create a simple helper to apply stats without pushing duplicate events to logs
@@ -4406,6 +4511,53 @@ export const StatsComparisonMode = ({
             p1Stats: newP1Stats,
             p2Stats: newP2Stats,
           };
+        }
+
+        // Ranger-Silver: nếu spin thành công → thêm carry-over vào patchedState cho round tiếp theo
+        if (lastRoundIdx < 5) {
+          const addSilverCarryOver = (
+            side: "player1" | "player2",
+            effs: string[],
+          ) => {
+            if (!effs.includes("Ranger-Silver")) return;
+            const spun =
+              roundSpinResults[`${lastRoundIdx}-Ranger-Silver-${side}`];
+            if (!spun?.isSuccess) return;
+            const currentCarry =
+              side === "player1"
+                ? patchedState.p1CarryOver
+                : patchedState.p2CarryOver;
+            const alreadyAdded = currentCarry.some(
+              (co) => co.source === "Ranger-Silver",
+            );
+            if (alreadyAdded) return;
+            const nextStatKey = STAT_ORDER[lastRoundIdx + 1]
+              ?.key as keyof CharacterStats;
+            if (!nextStatKey) return;
+            const stats =
+              side === "player1" ? patchedState.p1Stats : patchedState.p2Stats;
+            const statValue = (stats[nextStatKey] as number) || 0;
+            const newCarry: CarryOverEffect = {
+              player: side,
+              source: "Ranger-Silver",
+              stat: nextStatKey,
+              value: statValue,
+              description: `Silver Ranger: gấp đôi ${String(nextStatKey).toUpperCase()} round kế (+${statValue})`,
+            };
+            if (side === "player1") {
+              patchedState = {
+                ...patchedState,
+                p1CarryOver: [...patchedState.p1CarryOver, newCarry],
+              };
+            } else {
+              patchedState = {
+                ...patchedState,
+                p2CarryOver: [...patchedState.p2CarryOver, newCarry],
+              };
+            }
+          };
+          addSilverCarryOver("player1", w === "player1" ? p1Effs.onWin : []);
+          addSilverCarryOver("player2", w === "player2" ? p2Effs.onWin : []);
         }
       }
     }
@@ -4592,6 +4744,26 @@ export const StatsComparisonMode = ({
 
           const selfScore = playerSide === "player1" ? p1Score : p2Score;
           const oppScore = playerSide === "player1" ? p2Score : p1Score;
+          // Build roundResults map for before_combat_end handlers (e.g. 4 Hit Combo)
+          const bceRoundResults: Record<string, "win" | "lose" | "tie"> = {};
+          for (const r of resolvedRounds) {
+            const longKey: Record<string, string> = {
+              str: "strength",
+              spd: "speed",
+              dur: "durability",
+              iq: "iq",
+              biq: "biq",
+              ma: "ma",
+            };
+            const key = longKey[r.stat] ?? r.stat;
+            bceRoundResults[key] =
+              r.winner === playerSide
+                ? "win"
+                : r.winner === "tie"
+                  ? "tie"
+                  : "lose";
+            bceRoundResults[r.stat] = bceRoundResults[key]; // short key alias
+          }
           const ctx: any = {
             self: {
               character: player.character,
@@ -4611,6 +4783,7 @@ export const StatsComparisonMode = ({
             },
             isFinals: false,
             isPvE: false,
+            roundResults: bceRoundResults,
           };
 
           const result = HandlerRegistry.executeCombat(
@@ -5858,6 +6031,52 @@ export const StatsComparisonMode = ({
           }
         }
 
+        // ── Mason archetype: enhanced house after_combat effects ───────────
+        // Mason không có subType trong file data → detect qua archetype + house name
+        const hasMasonArchetype = (char.archetypes || []).some((a: any) => {
+          const n = (typeof a === "string" ? a : (a?.name ?? ""))
+            .replace(/\s*\(.*?\)/g, "")
+            .trim()
+            .toLowerCase();
+          return n === "mason";
+        });
+        if (hasMasonArchetype) {
+          const activeHouses = nestedHouses.filter(
+            (nh: any) => !nh.isLost && !nh.subType,
+          );
+          for (const nh of activeHouses) {
+            const masonSubKey = `${nh.name} Mason`;
+            if (disabledItems.has(`${player.no}-house_sub-${masonSubKey}`))
+              continue;
+            const masonEntry = EffectRegistry.get("house_sub", masonSubKey);
+            if (!masonEntry) continue;
+            for (const eff of masonEntry.effects) {
+              if (eff.timing !== "after_combat") continue;
+              if (eff.type !== "stat_modifier") continue;
+              const delta = eff.value ?? 0;
+              if (delta === 0) continue;
+              if (eff.stat === "lowest") {
+                const st = player.stats;
+                const lowestStat = (
+                  ["str", "spd", "dur", "iq", "biq", "ma"] as const
+                ).reduce(
+                  (low, s) =>
+                    st[s] < st[low as keyof CharacterStats] ? s : low,
+                  "str" as string,
+                );
+                acEntries.push({
+                  player: side,
+                  quirkName: masonSubKey,
+                  description: `${masonSubKey}: Sau combat → +${delta} ${lowestStat.toUpperCase()} (stat thấp nhất)`,
+                  statMods: [
+                    { stat: lowestStat as keyof CharacterStats, delta },
+                  ],
+                });
+              }
+            }
+          }
+        }
+
         // ── Power after_combat / after_combat_lose effects ─────────────────
         const powers = (char.powers || []).filter((p: any) => !p.isLost);
         for (const pw of powers) {
@@ -6040,12 +6259,40 @@ export const StatsComparisonMode = ({
 
           // Stat Absorption: sau combat thắng → +1 stat cao nhất của đối thủ
           if (lname === "stat absorption" && didWin) {
+            const oppChar = opponent?.character;
+            const statKeys: (keyof CharacterStats)[] = [
+              "str",
+              "spd",
+              "dur",
+              "iq",
+              "biq",
+              "ma",
+            ];
+            const oppStats = oppChar?.stats as CharacterStats | undefined;
+            let highestStat: keyof CharacterStats = "str";
+            let highestVal = -Infinity;
+            if (oppStats) {
+              for (const s of statKeys) {
+                const v = Number(oppStats[s]) || 0;
+                if (v > highestVal) {
+                  highestVal = v;
+                  highestStat = s;
+                }
+              }
+            }
+            const statLabel: Record<string, string> = {
+              str: "STR",
+              spd: "SPD",
+              dur: "DUR",
+              iq: "IQ",
+              biq: "BIQ",
+              ma: "MA",
+            };
             acEntries.push({
               player: side,
               quirkName: pname,
-              description:
-                "[GM Action] +1 vào chỉ số cao nhất của đối thủ (Stat Absorption — thắng combat)",
-              gmAction: true,
+              description: `Stat Absorption: Thắng combat → +1 ${statLabel[highestStat]} (stat cao nhất của đối thủ: ${highestVal})`,
+              statMods: [{ stat: highestStat, delta: 1 }],
             });
           }
 
@@ -6237,6 +6484,29 @@ export const StatsComparisonMode = ({
                 quirkName: pname,
                 description:
                   "[Adapt] Đối thủ không có Power — không có gì mới để ghi nhớ",
+              });
+            }
+          }
+        }
+
+        // ── Runeword after_combat effects ──────────────────────────────────
+        const runeword: string | undefined = (char as any).runes?.runeword;
+        if (runeword) {
+          const rwDisabled = disabledItems.has(
+            `${player.no}-runeword-${runeword}`,
+          );
+          if (!rwDisabled) {
+            // Affection: sau combat → 69% make love (spin wheel, GM action)
+            if (runeword === "Affection") {
+              const wk = `after-Affection-${side}`;
+              acEntries.push({
+                player: side,
+                quirkName: runeword,
+                description:
+                  "Affection: Sau combat → 69% Make Love (cả 2 GM action)",
+                wheelKey: wk,
+                wheelItems: AFTER_COMBAT_WHEEL_ITEMS["Affection"],
+                gmAction: true,
               });
             }
           }
@@ -6936,6 +7206,7 @@ export const StatsComparisonMode = ({
       scryingSuccess,
       encroachingShadowSuccess,
       goldShipResult,
+      rhittaResult,
       madScientistResult,
       summoningScrollResult,
       tricksterResult,
@@ -6975,6 +7246,7 @@ export const StatsComparisonMode = ({
     setScryingSuccess({});
     setEncroachingShadowSuccess({});
     setGoldShipResult({});
+    setRhittaResult({});
     setMadScientistResult({});
     setSummoningScrollResult({});
     setTricksterResult({});
@@ -7015,6 +7287,7 @@ export const StatsComparisonMode = ({
     setScryingSuccess(snap.scryingSuccess);
     setEncroachingShadowSuccess(snap.encroachingShadowSuccess);
     setGoldShipResult(snap.goldShipResult);
+    setRhittaResult(snap.rhittaResult || {});
     setMadScientistResult(snap.madScientistResult);
     setSummoningScrollResult(snap.summoningScrollResult);
     setTricksterResult(snap.tricksterResult);
@@ -7155,6 +7428,7 @@ export const StatsComparisonMode = ({
     setScryingSuccess({});
     setEncroachingShadowSuccess({});
     setGoldShipResult({});
+    setRhittaResult({});
     setMadScientistResult({});
     setSummoningScrollResult({});
     setTricksterResult({});
@@ -7232,6 +7506,10 @@ export const StatsComparisonMode = ({
           .trim()
           .toLowerCase(),
       ),
+      // Archetype sub-types (Power Ranger → "red", "black", ...)
+      ...((char as any).nestedArchetypes || [])
+        .filter((na: any) => !na.isLost && na.subType)
+        .map((na: any) => (na.subType as string).toLowerCase()),
       ...(char.powers || [])
         .filter((p) => (typeof p === "object" ? !p.isLost : true))
         .map((p) =>
@@ -7248,6 +7526,14 @@ export const StatsComparisonMode = ({
             .trim()
             .toLowerCase(),
         ),
+      // Char Dev subtype extraction: "Become A Power Ranger (Black)" → "black"
+      ...((char as any).charDevs || [])
+        .filter((c: any) => !c.isLost)
+        .flatMap((c: any) => {
+          const name: string = typeof c === "string" ? c : (c?.name ?? "");
+          const match = name.match(/\(([^)]+)\)/);
+          return match ? [match[1].toLowerCase()] : [];
+        }),
     ];
     const onWin: string[] = [];
     const onLose: string[] = [];
@@ -7336,6 +7622,27 @@ export const StatsComparisonMode = ({
       isEffectActive("Misericorde")
     )
       onLose.push("Misericorde");
+    // The Sand of Time: 40% +1 điểm bản thân -1 điểm đối thủ lần đầu thua round
+    if (
+      sources.some((s) => s === "the sand of time") &&
+      isEffectActive("The Sand of Time")
+    )
+      onLose.push("The Sand of Time");
+    // Power Ranger per-round spin buttons (triggered on winning specific stat round)
+    // isEffectActive không dùng vì Ranger có thể từ charDev không tạo inventory item tên "Ranger-X"
+    // Chỉ add nếu chưa được add từ nestedArchetypes ở trên
+    if (sources.some((s) => s === "red") && !onWin.includes("Ranger-Red"))
+      onWin.push("Ranger-Red");
+    if (sources.some((s) => s === "blue") && !onWin.includes("Ranger-Blue"))
+      onWin.push("Ranger-Blue");
+    if (sources.some((s) => s === "black") && !onWin.includes("Ranger-Black"))
+      onWin.push("Ranger-Black");
+    if (sources.some((s) => s === "yellow") && !onWin.includes("Ranger-Yellow"))
+      onWin.push("Ranger-Yellow");
+    if (sources.some((s) => s === "pink") && !onWin.includes("Ranger-Pink"))
+      onWin.push("Ranger-Pink");
+    if (sources.some((s) => s === "silver") && !onWin.includes("Ranger-Silver"))
+      onWin.push("Ranger-Silver");
     return { onWin, onLose, onTie };
   };
 
@@ -7419,6 +7726,9 @@ export const StatsComparisonMode = ({
   const [goldShipResult, setGoldShipResult] = useState<
     Record<string, boolean | null>
   >({});
+
+  // Rhitta: kết quả wheel before_combat (true = thành công +3 STR +2 DUR, false/undefined = không)
+  const [rhittaResult, setRhittaResult] = useState<Record<string, boolean>>({});
 
   // Mad Scientist: kết quả wheel (true = Shrinking: self +6 SPD -3 STR -3 DUR, false = Enlarging: self +3 STR +3 DUR -6 SPD)
   const [madScientistResult, setMadScientistResult] = useState<
@@ -7902,6 +8212,10 @@ export const StatsComparisonMode = ({
         e.target instanceof HTMLTextAreaElement
       )
         return;
+      if (e.ctrlKey && e.shiftKey && e.key === "D") {
+        setDevMode((prev) => !prev);
+        return;
+      }
       buf.push(e.key.toLowerCase());
       if (buf.length > SEQ.length) buf = buf.slice(-SEQ.length);
       if (buf.join("") === SEQ.join("")) {
@@ -8444,6 +8758,17 @@ export const StatsComparisonMode = ({
           breakdown: newBreakdown,
         };
       });
+    } else if (sourceName === "rhitta") {
+      setRhittaResult((prev) => ({ ...prev, [playerLabel]: !!item.isSuccess }));
+      if (item.isSuccess) {
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: "+3 STR, +2 DUR (Rhitta)",
+            isPositive: true,
+          },
+        ]);
+      }
     }
   };
 
@@ -8515,6 +8840,16 @@ export const StatsComparisonMode = ({
       color: "#a78bfa",
     },
     { label: "Không (90%)", weight: 90, isSuccess: false, color: "#6b7280" },
+  ];
+  // The Sand of Time: 40% +1 điểm bản thân và -1 điểm đối thủ khi thua round đầu tiên
+  const SAND_OF_TIME_ITEMS: WheelSpinItem[] = [
+    {
+      label: "Cát thời gian! +1 điểm, -1 đối thủ (40%)",
+      weight: 40,
+      isSuccess: true,
+      color: "#f59e0b",
+    },
+    { label: "Không (60%)", weight: 60, isSuccess: false, color: "#6b7280" },
   ];
   const GAMBLER_ITEMS: WheelSpinItem[] = [
     // Gambler REPLACES normal +1: 50% = +2, 50% = +0
@@ -8650,6 +8985,15 @@ export const StatsComparisonMode = ({
         color: "#f472b6",
       },
       { label: "Không (67%)", weight: 67, isSuccess: false, color: "#6b7280" },
+    ],
+    Affection: [
+      {
+        label: "Make Love! (69%)",
+        weight: 69,
+        isSuccess: true,
+        color: "#f472b6",
+      },
+      { label: "Không (31%)", weight: 31, isSuccess: false, color: "#6b7280" },
     ],
   };
   // 6-stat wheel (dùng cho Independent, One Trick Pony)
@@ -8788,6 +9132,42 @@ export const StatsComparisonMode = ({
     }
 
     if (isWinner) {
+      // The Sand of Time (from opponent/loser): nếu thành công → winner không nhận điểm base
+      {
+        const oppSideForSand = side === "player1" ? "player2" : "player1";
+        const oppCharForSand =
+          oppSideForSand === "player1"
+            ? player1?.character
+            : player2?.character;
+        const oppNoForSand =
+          oppSideForSand === "player1" ? player1?.no : player2?.no;
+        const oppEffsForSand = getPerRoundEffects(oppCharForSand, oppNoForSand);
+        if (oppEffsForSand.onLose.includes("The Sand of Time")) {
+          // Kiểm tra isFirstLoss cho loser side
+          const isFirstLossForOpp = (() => {
+            const logs = stepState?.roundLogs ?? [];
+            for (const log of logs) {
+              if (log.roundIndex >= roundIdx) break;
+              if (log.winner !== "tie" && log.winner !== oppSideForSand)
+                return false;
+            }
+            return true;
+          })();
+          if (isFirstLossForOpp) {
+            const sandOppKey = `${roundIdx}-The Sand of Time-${oppSideForSand}`;
+            const sandOppSpun = roundSpinResults[sandOppKey];
+            if (!sandOppSpun) {
+              // Chưa spin → hiển thị +1? (pending ở loser side sẽ block Next Round)
+              // Không return ở đây, để hiển thị +1 bình thường cho đến khi biết kết quả
+            } else if (sandOppSpun.isSuccess) {
+              // Sand thành công → winner không nhận điểm base
+              // autoApplied=false → diff = pts(0) - base(1) = -1 → patchedState trừ 1 đúng
+              return { pts: 0, pending: false, color: "text-amber-400" };
+            }
+            // Sand thất bại → winner vẫn nhận +1 bình thường
+          }
+        }
+      }
       // Cautious (on opponent): đối thủ có Cautious → ta không nhận điểm round STR
       if (statKey === "str") {
         const oppSideForCautious = side === "player1" ? "player2" : "player1";
@@ -8817,10 +9197,11 @@ export const StatsComparisonMode = ({
         return { pts: 1, pending: true, color: "text-violet-400" };
       if (hasBlind && blindSpun.isSuccess)
         return { pts: 0, pending: false, color: "text-gray-500" };
-      // Gambler replaces base point
+      // Gambler replaces base point (spin decides 2 or 0 — patch mechanism applies diff)
       if (hasGambler && !gamblerSpun)
         return { pts: 1, pending: true, color: "text-amber-400" };
       let base = hasGambler ? (gamblerSpun!.isSuccess ? 2 : 0) : 1;
+      const hasSpinEffect = hasGambler; // track whether a spin effect changed base from 1
       // Critical Strike adds +1 bonus
       if (hasCrit && !critSpun)
         return { pts: base, pending: true, color: "text-amber-400" };
@@ -8835,7 +9216,7 @@ export const StatsComparisonMode = ({
           return { pts: base, pending: true, color: "text-red-400" };
         if (rangerRedSpun.isSuccess) base += 2;
       }
-      // Pennyworthy: 36% +1 điểm khi thắng
+      // Pennyworthy: 36% +1 điểm khi thắng (spin effect — patch needed)
       const hasPennyworthyWin = effects.onWin.includes("Pennyworthy-Win");
       const pennyworthyWinSpun =
         roundSpinResults[`${roundIdx}-Pennyworthy-Win-${side}`];
@@ -8864,22 +9245,12 @@ export const StatsComparisonMode = ({
           };
         }
       }
-      // Golden Parry (from opponent): check sau khi tính xong base để override toàn bộ điểm về 0
+      // Golden Parry (from opponent): override toàn bộ điểm về 0 (spin effect — patch needed)
       if (oppHasGoldenParry) {
         if (!goldenParrySpun)
-          return {
-            pts: base,
-            pending: true,
-            color: "text-amber-400",
-            autoApplied: true,
-          };
+          return { pts: base, pending: true, color: "text-amber-400" };
         if (goldenParrySpun.isSuccess)
-          return {
-            pts: 0,
-            pending: false,
-            color: "text-amber-300",
-            autoApplied: true,
-          }; // block toàn bộ điểm
+          return { pts: 0, pending: false, color: "text-amber-300" }; // block toàn bộ điểm
       }
       const color =
         base === 0
@@ -8887,9 +9258,15 @@ export const StatsComparisonMode = ({
           : base >= 2
             ? "text-amber-300"
             : "text-blue-400";
-      // autoApplied: true khi base > 1 do effects auto (Bloodthirsty, Divine Smite, Yamato...)
-      // để patchedState không patch thêm (score thực đã được stepCombatRound tính đúng)
-      const autoApplied = base !== 1;
+      // autoApplied: true chỉ khi computeRoundStep đã xử lý effect trong engine
+      // (Bloodthirsty, Divine Smite, Hunter's Mark, OTP, Yamato...) — KHÔNG dùng cho spin effects
+      const isSpinDriven =
+        hasSpinEffect ||
+        hasCrit ||
+        hasRangerRed ||
+        hasPennyworthyWin ||
+        oppHasGoldenParry;
+      const autoApplied = base !== 1 && !isSpinDriven;
       return { pts: base, pending: false, color, autoApplied };
     }
 
@@ -8917,6 +9294,39 @@ export const StatsComparisonMode = ({
           return { pts: 0, pending: true, color: "text-violet-400" };
         if (misericordeSpun.isSuccess)
           return { pts: 1, pending: false, color: "text-violet-300" };
+      }
+      // The Sand of Time: 40% +1 điểm bản thân -1 điểm đối thủ, chỉ lần đầu thua
+      // triggerOnce: chỉ quay nếu chưa có round thua nào trước đó (roundIdx là lần thua đầu)
+      const hasSandOfTime = effects.onLose.includes("The Sand of Time");
+      if (hasSandOfTime) {
+        const isFirstLoss = (() => {
+          const logs = stepState?.roundLogs ?? [];
+          for (const log of logs) {
+            if (log.roundIndex >= roundIdx) break;
+            if (log.winner !== "tie" && log.winner !== side) return false;
+          }
+          return true;
+        })();
+        const sandSpun =
+          roundSpinResults[`${roundIdx}-The Sand of Time-${side}`];
+        if (isFirstLoss) {
+          if (!sandSpun)
+            return { pts: 0, pending: true, color: "text-amber-500" };
+          if (sandSpun.isSuccess) {
+            const charForFlux =
+              side === "player1" ? player1?.character : player2?.character;
+            const powers = charForFlux?.powers || [];
+            const hasSpellFlux = powers.some(
+              (p: any) =>
+                !p?.isLost &&
+                (typeof p === "string" ? p : p.name)
+                  ?.toLowerCase()
+                  .startsWith("spell flux"),
+            );
+            const pts = hasSpellFlux ? 2 : 1;
+            return { pts, pending: false, color: "text-amber-300" };
+          }
+        }
       }
       // Golden Parry: 35% chặn đối thủ không nhận điểm khi thua round
       // Nếu có Golden Parry, cần quay để xác định — kết quả ảnh hưởng lên điểm của đối thủ
@@ -8984,7 +9394,9 @@ export const StatsComparisonMode = ({
                                       ? PENNYWORTHY_LOSE_ITEMS
                                       : effectName === "Misericorde"
                                         ? MISERICORDE_ITEMS
-                                        : GAMBLER_ITEMS;
+                                        : effectName === "The Sand of Time"
+                                          ? SAND_OF_TIME_ITEMS
+                                          : GAMBLER_ITEMS;
       const items = applyDevWeights(effectName, baseItems);
 
       if (result) {
@@ -9025,9 +9437,15 @@ export const StatsComparisonMode = ({
                           ? "Parry"
                           : effectName === "Misericorde"
                             ? "Miseri"
-                            : effectName.startsWith("Ranger-")
-                              ? effectName.replace("Ranger-", "") + "🦸"
-                              : "Gambler"}
+                            : effectName === "Pennyworthy-Win"
+                              ? "PW+"
+                              : effectName === "Pennyworthy-Lose"
+                                ? "PW-"
+                                : effectName === "The Sand of Time"
+                                  ? "Sand"
+                                  : effectName.startsWith("Ranger-")
+                                    ? effectName.replace("Ranger-", "") + "🦸"
+                                    : "Gambler"}
           </button>
         );
       }
@@ -9067,9 +9485,11 @@ export const StatsComparisonMode = ({
                             ? "PW+"
                             : effectName === "Pennyworthy-Lose"
                               ? "PW-"
-                              : effectName.startsWith("Ranger-")
-                                ? effectName.replace("Ranger-", "") + "🦸"
-                                : "Gambler"}
+                              : effectName === "The Sand of Time"
+                                ? "Sand"
+                                : effectName.startsWith("Ranger-")
+                                  ? effectName.replace("Ranger-", "") + "🦸"
+                                  : "Gambler"}
         </button>
       );
     };
@@ -9138,7 +9558,19 @@ export const StatsComparisonMode = ({
           const isLastDisplayRow =
             roundArrayIndex ===
             displayRows[displayRows.length - 1].roundArrayIndex;
-          const filterLastRound = (effs: string[]) =>
+          // Sand of Time: chỉ hiện button nếu đây là lần đầu tiên side đó thua
+          const isSandFirstLoss = (loserSide: "player1" | "player2") => {
+            for (let ri = 0; ri < roundArrayIndex; ri++) {
+              const r = rounds[ri];
+              if (r && r.winner !== "tie" && r.winner !== loserSide)
+                return false;
+            }
+            return true;
+          };
+          const filterLastRound = (
+            effs: string[],
+            loserSide?: "player1" | "player2",
+          ) =>
             effs.filter((e) => {
               if (
                 e === "Bloodthirsty" ||
@@ -9157,6 +9589,10 @@ export const StatsComparisonMode = ({
                 if (Array.isArray(required)) return required.includes(key);
                 return required === key;
               }
+              // Sand of Time: chỉ hiện khi là lần đầu thua
+              if (e === "The Sand of Time" && loserSide) {
+                return isSandFirstLoss(loserSide);
+              }
               return true;
             });
           const p1SpinEffects = filterLastRound(
@@ -9167,6 +9603,7 @@ export const StatsComparisonMode = ({
                 : revealed
                   ? p1Effects.onLose
                   : [],
+            p2Win ? "player1" : undefined,
           );
           const p2SpinEffects = filterLastRound(
             p2Win
@@ -9176,6 +9613,7 @@ export const StatsComparisonMode = ({
                 : revealed
                   ? p2Effects.onLose
                   : [],
+            p1Win ? "player2" : undefined,
           );
 
           // Effective points after spins (only if chars provided)
@@ -9727,6 +10165,7 @@ export const StatsComparisonMode = ({
           player2No={player2.no}
           player1AvatarUrl={getAvatarUrl(player1.no, 0)}
           player2AvatarUrl={getAvatarUrl(player2.no, 0)}
+          volume={masterVolume * introVolume}
           onComplete={() => {
             setShowIntro(false);
             startCombat();
@@ -9811,6 +10250,7 @@ export const StatsComparisonMode = ({
                     audioStopped={!!combatResult}
                     silenced={p1Silenced}
                     blurred={p1Blurred}
+                    bgmVolumeScale={masterVolume * bgmVolume}
                   />
                 )}
                 {/* Header: search + tab switcher */}
@@ -11263,19 +11703,110 @@ export const StatsComparisonMode = ({
             <div className="flex justify-center gap-3 flex-wrap">
               {/* Not started */}
               {!stepState && !combatResult && player1 && player2 && (
-                <div className="flex flex-col items-center gap-1">
+                <div className="flex flex-col items-center gap-2">
                   {pendingPreCombatCount > 0 && (
                     <div className="text-[10px] text-amber-400 animate-pulse font-bold">
                       ● Xử lý {pendingPreCombatCount} wheel trước combat đã
                     </div>
                   )}
-                  <button
-                    onClick={handleStartWithIntro}
-                    disabled={pendingPreCombatCount > 0}
-                    className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all"
-                  >
-                    ⚔ Bắt đầu
-                  </button>
+                  <div className="relative flex items-center gap-2">
+                    <button
+                      onClick={handleStartWithIntro}
+                      disabled={pendingPreCombatCount > 0}
+                      className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all"
+                    >
+                      ⚔ Bắt đầu
+                    </button>
+                    {/* Settings toggle */}
+                    <button
+                      onClick={() => setShowSettings((s) => !s)}
+                      className="p-2 rounded-xl bg-gray-700/60 hover:bg-gray-600/80 text-gray-300 hover:text-white transition-colors text-sm"
+                      title="Cài đặt"
+                    >
+                      ⚙
+                    </button>
+
+                    {/* Settings panel — absolute để không đẩy layout */}
+                    {showSettings && (
+                      <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-900/95 border border-gray-600/50 rounded-xl p-4 w-72 space-y-3 text-sm shadow-2xl z-50">
+                        {/* Master volume */}
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-xs text-gray-400">
+                            <span>Âm lượng tổng</span>
+                            <span className="tabular-nums text-white">
+                              {Math.round(masterVolume * 100)}%
+                            </span>
+                          </div>
+                          <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.01}
+                            value={masterVolume}
+                            onChange={(e) =>
+                              setMasterVolume(Number(e.target.value))
+                            }
+                            className="w-full h-1.5 cursor-pointer rounded-full accent-purple-500"
+                          />
+                        </div>
+
+                        {/* BGM volume */}
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-xs text-gray-400">
+                            <span>Âm lượng nhạc nền</span>
+                            <span className="tabular-nums text-white">
+                              {Math.round(bgmVolume * 100)}%
+                            </span>
+                          </div>
+                          <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.01}
+                            value={bgmVolume}
+                            onChange={(e) =>
+                              setBgmVolume(Number(e.target.value))
+                            }
+                            className="w-full h-1.5 cursor-pointer rounded-full accent-blue-500"
+                          />
+                        </div>
+
+                        {/* Intro volume */}
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-xs text-gray-400">
+                            <span>Âm lượng intro</span>
+                            <span className="tabular-nums text-white">
+                              {Math.round(introVolume * 100)}%
+                            </span>
+                          </div>
+                          <input
+                            type="range"
+                            min={0}
+                            max={1}
+                            step={0.01}
+                            value={introVolume}
+                            onChange={(e) =>
+                              setIntroVolume(Number(e.target.value))
+                            }
+                            className="w-full h-1.5 cursor-pointer rounded-full accent-cyan-500"
+                          />
+                        </div>
+
+                        {/* Intro toggle */}
+                        <div className="flex items-center justify-between pt-1 border-t border-gray-700/50">
+                          <span className="text-xs text-gray-400">Intro</span>
+                          <button
+                            onClick={() => setIntroEnabled((v) => !v)}
+                            className={`relative w-10 h-5 rounded-full transition-colors ${introEnabled ? "bg-purple-600" : "bg-gray-600"}`}
+                          >
+                            <span
+                              className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${introEnabled ? "translate-x-5" : "translate-x-0"}`}
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
               {/* Tournament: manual winner override (before battle) */}
@@ -12431,6 +12962,7 @@ export const StatsComparisonMode = ({
                     audioStopped={!!combatResult}
                     silenced={p2Silenced}
                     blurred={p2Blurred}
+                    bgmVolumeScale={masterVolume * bgmVolume}
                   />
                 )}
                 <div className="relative z-10 -mt-16 p-3 border-b border-red-500/20 shrink-0 space-y-2">
@@ -13580,6 +14112,10 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
         e.target instanceof HTMLTextAreaElement
       )
         return;
+      if (e.ctrlKey && e.shiftKey && e.key === "D") {
+        setDevMode((prev) => !prev);
+        return;
+      }
       buf.push(e.key.toLowerCase());
       if (buf.length > SEQ.length) buf = buf.slice(-SEQ.length);
       if (buf.join("") === SEQ.join("")) {
