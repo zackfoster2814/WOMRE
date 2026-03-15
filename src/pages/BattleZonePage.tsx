@@ -1131,7 +1131,8 @@ function applyBeforeCombatStatMods(
     if (
       handler &&
       handler !== "kings_landing_penalty_check" &&
-      handler !== "banana_peel_iq_compare"
+      handler !== "banana_peel_iq_compare" &&
+      handler !== "sarastro_flute_debuff"
     )
       continue;
     if (handler === "kings_landing_penalty_check") {
@@ -1168,6 +1169,24 @@ function applyBeforeCombatStatMods(
         for (const k of _ALL_STAT_KEYS_BC) applyStatDelta(base, k, 1);
       } else if (selfBaseIQ < oppBaseIQ) {
         for (const k of _ALL_STAT_KEYS_BC) applyStatDelta(base, k, -1);
+      }
+      continue;
+    }
+    if (handler === "sarastro_flute_debuff") {
+      // Sarastro's Flute: debuff opponent -1 all stats per 3 powers họ có
+      if (targetFilter !== "opponent") continue;
+      const srcName = ce.source?.name || "?";
+      const srcType = ce.source?.type || "?";
+      if (disabledItems.has(`${charNo}-${srcType}-${srcName}`)) continue;
+      const oppPowers = ((opponentChar as any)?.powers || []).filter(
+        (p: any) => !p?.isLost,
+      );
+      const debuff = Math.floor(oppPowers.length / 3);
+      if (debuff > 0) {
+        const _STAT_KEYS_SF: (keyof CharacterStats)[] = [
+          "str", "spd", "dur", "iq", "biq", "ma",
+        ];
+        for (const k of _STAT_KEYS_SF) applyStatDelta(base, k, -debuff);
       }
       continue;
     }
