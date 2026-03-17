@@ -38,6 +38,7 @@ import StatModifiersTable, {
 } from "../components/StatModifiersTable";
 import { PvPBackground3D } from "../components/three/PvPBackground3D";
 import { CombatIntroScreen } from "../components/three/CombatIntroScreen";
+import { CombatOutroScreen } from "../components/three/CombatOutroScreen";
 import { PlayerCard3DFrame } from "../components/three/PlayerCard3D";
 import { ScoreDisplay3D } from "../components/three/ScoreDisplay3D";
 import { CombatEffects3D } from "../components/three/CombatEffects3D";
@@ -1755,6 +1756,7 @@ export const StatsComparisonMode = ({
   const [stepRoundIndex, setStepRoundIndex] = useState(-1);
   const [pendingPreCombatCount, setPendingPreCombatCount] = useState(0);
   const [showIntro, setShowIntro] = useState(false);
+  const [showOutro, setShowOutro] = useState(false);
 
   // Settings
   const [showSettings, setShowSettings] = useState(false);
@@ -8958,6 +8960,11 @@ export const StatsComparisonMode = ({
 
   // Confirm combat + append after-combat spin results to Drive log
   const handleConfirmCombat = () => {
+    setShowOutro(true);
+  };
+
+  const doConfirmCombat = () => {
+    setShowOutro(false);
     setCombatConfirmed(true);
     if (!player1 || !player2) return;
     const p1name = player1.name;
@@ -12014,6 +12021,18 @@ export const StatsComparisonMode = ({
             setShowIntro(false);
             startCombat();
           }}
+        />
+      )}
+
+      {/* Combat outro screen */}
+      {showOutro && player1 && player2 && effectiveWinner && (
+        <CombatOutroScreen
+          winnerName={effectiveWinner === "player1" ? player1.name : player2.name}
+          winnerNo={effectiveWinner === "player1" ? player1.no : player2.no}
+          loserName={effectiveWinner === "player1" ? player2.name : player1.name}
+          loserNo={effectiveWinner === "player1" ? player2.no : player1.no}
+          winnerSide={effectiveWinner}
+          onComplete={doConfirmCombat}
         />
       )}
 
