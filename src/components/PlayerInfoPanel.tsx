@@ -8,7 +8,7 @@ import type {
   CharacterStats as EffectStats,
   EffectSourceType,
 } from "../effects/types";
-import { getAssetPath, getPlayerNumbers } from "../utils/basePath";
+import { fetchAllPlayerTexts } from "../utils/googleDrive";
 
 // Initialize effect data once
 let effectsInitialized = false;
@@ -79,43 +79,27 @@ export const PlayerInfoPanel = ({
       setIsLoadingList(true);
 
       try {
-        // Get player numbers using shared utility
-        const playerNumbers = await getPlayerNumbers();
-
-        // Fetch all player files in parallel
-        const fetchPromises = playerNumbers.map(
-          async (no): Promise<PlayerSummary | null> => {
-            try {
-              const response = await fetch(getAssetPath(`/data/No${no}.txt`));
-              if (response.ok) {
-                const content = await response.text();
-                const char = CharacterParser.parseCharacterFile(content);
-                // Get first active house (not lost)
-                const activeHouse = char.houses?.find((h) => !h.isLost);
-                return {
-                  no: char.no || no,
-                  name: char.name || `Player ${no}`,
-                  username: char.username || "",
-                  race: char.race?.race || "",
-                  house: activeHouse?.name,
-                  isParasite: char.isParasite,
-                  parasiteInfo: char.parasiteInfo,
-                  isSymbiosis: char.isSymbiosis,
-                  symbiosisType: char.symbiosisType,
-                  symbiosisHost: char.symbiosisHost,
-                };
-              }
-            } catch (error) {
-              console.error(`Failed to load player ${no}:`, error);
-            }
-            return null;
-          },
-        );
-
-        const results = await Promise.all(fetchPromises);
-        const validPlayers = results.filter(
-          (p): p is PlayerSummary => p !== null,
-        );
+        // Load tất cả player từ Google Drive
+        const texts = await fetchAllPlayerTexts();
+        const validPlayers: PlayerSummary[] = [];
+        for (const [no, content] of texts) {
+          try {
+            const char = CharacterParser.parseCharacterFile(content);
+            const activeHouse = char.houses?.find((h) => !h.isLost);
+            validPlayers.push({
+              no: char.no || no,
+              name: char.name || `Player ${no}`,
+              username: char.username || "",
+              race: char.race?.race || "",
+              house: activeHouse?.name,
+              isParasite: char.isParasite,
+              parasiteInfo: char.parasiteInfo,
+              isSymbiosis: char.isSymbiosis,
+              symbiosisType: char.symbiosisType,
+              symbiosisHost: char.symbiosisHost,
+            });
+          } catch { /* bỏ qua */ }
+        }
         setPlayerList(validPlayers.sort((a, b) => a.no - b.no));
       } catch (error) {
         console.error("Failed to load player list:", error);

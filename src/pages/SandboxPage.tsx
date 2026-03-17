@@ -8,7 +8,7 @@ import { EffectResolver } from "../effects/resolver";
 import { EffectRegistry } from "../effects/registry";
 import { initializeEffectData } from "../effects/data";
 import { CharacterParser } from "../utils/characterParser";
-import { getAssetPath } from "../utils/basePath";
+import { fetchAllPlayerTexts, fetchPlayerText } from "../utils/googleDrive";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { CharacterBuilder, characterToBuilderState, type CharacterBuilderInitialState } from "../components/sandbox/CharacterBuilder";
 import { SandboxStatDisplay } from "../components/sandbox/SandboxStatDisplay";
@@ -56,28 +56,18 @@ export const SandboxPage = () => {
     setLoadingPlayers(true);
     try {
       const players: ExistingPlayer[] = [];
-      const promises: Promise<void>[] = [];
-
-      for (let i = 1; i <= 260; i++) {
-        promises.push(
-          fetch(getAssetPath(`/data/No${i}.txt`))
-            .then(async (res) => {
-              if (res.ok) {
-                const content = await res.text();
-                const char = CharacterParser.parseCharacterFile(content);
-                players.push({
-                  no: char.no || i,
-                  name: char.name || `Player ${i}`,
-                  username: char.username || "",
-                  race: char.race?.race || "Human",
-                });
-              }
-            })
-            .catch(() => {}),
-        );
+      const texts = await fetchAllPlayerTexts();
+      for (const [no, content] of texts) {
+        try {
+          const char = CharacterParser.parseCharacterFile(content);
+          players.push({
+            no: char.no || no,
+            name: char.name || `Player ${no}`,
+            username: char.username || "",
+            race: char.race?.race || "Human",
+          });
+        } catch { /* bỏ qua */ }
       }
-
-      await Promise.all(promises);
       players.sort((a, b) => a.no - b.no);
       setExistingPlayers(players);
     } finally {
@@ -89,9 +79,7 @@ export const SandboxPage = () => {
   const loadExistingPlayer = useCallback(
     async (playerNo: number, target: 1 | 2) => {
       try {
-        const res = await fetch(getAssetPath(`/data/No${playerNo}.txt`));
-        if (!res.ok) return;
-        const content = await res.text();
+        const content = await fetchPlayerText(playerNo);
         const char = CharacterParser.parseCharacterFile(content);
         if (target === 1) {
           setCharacter1(char);
@@ -246,24 +234,19 @@ export const SandboxPage = () => {
       const tryLoad = async () => {
         const no = Math.floor(Math.random() * maxNo) + 1;
         try {
-          const res = await fetch(getAssetPath(`/data/No${no}.txt`));
-          if (res.ok) {
-            const content = await res.text();
-            const char = CharacterParser.parseCharacterFile(content);
-            if (char.isSymbiosis || char.race?.race === "Symbiosis") {
-              return tryLoad(); // Skip symbiosis, try again
-            }
-            if (target === 1) {
-              setCharacter1(char);
-              setBuilder1Key((k) => k + 1);
-              setBuilder1Initial(characterToBuilderState(char));
-            } else {
-              setCharacter2(char);
-              setBuilder2Key((k) => k + 1);
-              setBuilder2Initial(characterToBuilderState(char));
-            }
+          const content = await fetchPlayerText(no);
+          const char = CharacterParser.parseCharacterFile(content);
+          if (char.isSymbiosis || char.race?.race === "Symbiosis") {
+            return tryLoad(); // Skip symbiosis, try again
+          }
+          if (target === 1) {
+            setCharacter1(char);
+            setBuilder1Key((k) => k + 1);
+            setBuilder1Initial(characterToBuilderState(char));
           } else {
-            return tryLoad();
+            setCharacter2(char);
+            setBuilder2Key((k) => k + 1);
+            setBuilder2Initial(characterToBuilderState(char));
           }
         } catch {
           return tryLoad();

@@ -22,11 +22,14 @@ import StatModifiersTable from "../components/StatModifiersTable";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import {
   getAssetPath,
-  getPlayerNumbers,
-  clearPlayerNumbersCache,
   getAvatarUrl,
   AVATAR_EXTENSIONS,
 } from "../utils/basePath";
+import {
+  fetchAllPlayerTexts,
+  fetchPlayerText,
+  clearPlayerIndexCache,
+} from "../utils/googleDrive";
 import { isTauri } from "../utils/localStorage";
 import { PvEBattlePage } from "./BattleZonePage";
 import { BattleType } from "../types";
@@ -504,65 +507,48 @@ export const PlayerListPage = () => {
         });
       });
 
-      // Load players
+      // Load players từ Google Drive
       const playerList: PlayerSummary[] = [];
-
-      // Get player numbers from player-index.json
-      const playerNumbers = await getPlayerNumbers();
-      const fetchPromises: Promise<void>[] = [];
-
-      for (const playerNo of playerNumbers) {
-        fetchPromises.push(
-          fetch(getAssetPath(`/data/No${playerNo}.txt`))
-            .then(async (response) => {
-              if (response.ok) {
-                const content = await response.text();
-                const char = CharacterParser.parseCharacterFile(content);
-                const username = char.username || "";
-                // Get team from teams.json mapping, fallback to player file
-                const teamId =
-                  usernameToTeam.get(username.toLowerCase()) ?? char.team;
-                playerList.push({
-                  no: char.no || playerNo,
-                  name: char.name || `Player ${playerNo}`,
-                  username: username,
-                  race: char.race?.race || "Unknown",
-                  subRace: char.race?.subRace,
-                  isReincarnator: char.race?.race === "Reincarnator",
-                  actualRace: char.race?.actualRace,
-                  archetypes: char.archetypes || [],
-                  nestedArchetypes: char.nestedArchetypes,
-                  quirks: char.quirks || [],
-                  powers: char.powers || [],
-                  houses: char.houses || [],
-                  nestedHouses: char.nestedHouses,
-                  team: teamId,
-                  stats: char.stats,
-                  gear: char.gear,
-                  weapons: char.weapons,
-                  runes: char.runes,
-                  charDevs: char.charDevs || [],
-                  lover: char.lover,
-                  pvpRewards: char.pvpRewards,
-                  giantBonusApplied: char.giantBonusApplied,
-                  isParasite: char.isParasite,
-                  parasiteInfo: char.parasiteInfo,
-                  parasiteName: char.parasiteName,
-                  parasiteType: char.parasiteType,
-                  isSymbiosis: char.isSymbiosis,
-                  symbiosisType: char.symbiosisType,
-                  symbiosisHost: char.symbiosisHost,
-                  tournament: char.tournament,
-                });
-              }
-            })
-            .catch(() => {
-              // File doesn't exist, skip
-            }),
-        );
+      const texts = await fetchAllPlayerTexts();
+      for (const [playerNo, content] of texts) {
+        try {
+          const char = CharacterParser.parseCharacterFile(content);
+          const username = char.username || "";
+          const teamId = usernameToTeam.get(username.toLowerCase()) ?? char.team;
+          playerList.push({
+            no: char.no || playerNo,
+            name: char.name || `Player ${playerNo}`,
+            username,
+            race: char.race?.race || "Unknown",
+            subRace: char.race?.subRace,
+            isReincarnator: char.race?.race === "Reincarnator",
+            actualRace: char.race?.actualRace,
+            archetypes: char.archetypes || [],
+            nestedArchetypes: char.nestedArchetypes,
+            quirks: char.quirks || [],
+            powers: char.powers || [],
+            houses: char.houses || [],
+            nestedHouses: char.nestedHouses,
+            team: teamId,
+            stats: char.stats,
+            gear: char.gear,
+            weapons: char.weapons,
+            runes: char.runes,
+            charDevs: char.charDevs || [],
+            lover: char.lover,
+            pvpRewards: char.pvpRewards,
+            giantBonusApplied: char.giantBonusApplied,
+            isParasite: char.isParasite,
+            parasiteInfo: char.parasiteInfo,
+            parasiteName: char.parasiteName,
+            parasiteType: char.parasiteType,
+            isSymbiosis: char.isSymbiosis,
+            symbiosisType: char.symbiosisType,
+            symbiosisHost: char.symbiosisHost,
+            tournament: char.tournament,
+          });
+        } catch { /* bỏ qua */ }
       }
-
-      await Promise.all(fetchPromises);
       setPlayers(playerList.sort((a, b) => a.no - b.no));
       setIsLoading(false);
     };
@@ -574,8 +560,8 @@ export const PlayerListPage = () => {
   const refreshPlayers = () => {
     setPlayers([]);
     setIsLoading(true);
-    // Clear cache to get fresh player list
-    clearPlayerNumbersCache();
+    // Clear cache để force reload dữ liệu mới nhất
+    clearPlayerIndexCache();
     // Trigger re-fetch by clearing and re-running
     const loadPlayers = async () => {
       // Reload teams data
@@ -601,59 +587,46 @@ export const PlayerListPage = () => {
       });
 
       const playerList: PlayerSummary[] = [];
-      // Force reload player numbers from file
-      const playerNumbers = await getPlayerNumbers(true);
-      const fetchPromises: Promise<void>[] = [];
-
-      for (const playerNo of playerNumbers) {
-        fetchPromises.push(
-          fetch(getAssetPath(`/data/No${playerNo}.txt`), { cache: "no-store" })
-            .then(async (response) => {
-              if (response.ok) {
-                const content = await response.text();
-                const char = CharacterParser.parseCharacterFile(content);
-                const username = char.username || "";
-                const teamId =
-                  usernameToTeam.get(username.toLowerCase()) ?? char.team;
-                playerList.push({
-                  no: char.no || playerNo,
-                  name: char.name || `Player ${playerNo}`,
-                  username: username,
-                  race: char.race?.race || "Unknown",
-                  subRace: char.race?.subRace,
-                  isReincarnator: char.race?.race === "Reincarnator",
-                  actualRace: char.race?.actualRace,
-                  archetypes: char.archetypes || [],
-                  nestedArchetypes: char.nestedArchetypes,
-                  quirks: char.quirks || [],
-                  powers: char.powers || [],
-                  houses: char.houses || [],
-                  nestedHouses: char.nestedHouses,
-                  team: teamId,
-                  stats: char.stats,
-                  gear: char.gear,
-                  weapons: char.weapons,
-                  runes: char.runes,
-                  charDevs: char.charDevs || [],
-                  lover: char.lover,
-                  pvpRewards: char.pvpRewards,
-                  giantBonusApplied: char.giantBonusApplied,
-                  isParasite: char.isParasite,
-                  parasiteInfo: char.parasiteInfo,
-                  parasiteName: char.parasiteName,
-                  parasiteType: char.parasiteType,
-                  isSymbiosis: char.isSymbiosis,
-                  symbiosisType: char.symbiosisType,
-                  symbiosisHost: char.symbiosisHost,
-                  tournament: char.tournament,
-                });
-              }
-            })
-            .catch(() => {}),
-        );
+      const texts = await fetchAllPlayerTexts();
+      for (const [playerNo, content] of texts) {
+        try {
+          const char = CharacterParser.parseCharacterFile(content);
+          const username = char.username || "";
+          const teamId = usernameToTeam.get(username.toLowerCase()) ?? char.team;
+          playerList.push({
+            no: char.no || playerNo,
+            name: char.name || `Player ${playerNo}`,
+            username,
+            race: char.race?.race || "Unknown",
+            subRace: char.race?.subRace,
+            isReincarnator: char.race?.race === "Reincarnator",
+            actualRace: char.race?.actualRace,
+            archetypes: char.archetypes || [],
+            nestedArchetypes: char.nestedArchetypes,
+            quirks: char.quirks || [],
+            powers: char.powers || [],
+            houses: char.houses || [],
+            nestedHouses: char.nestedHouses,
+            team: teamId,
+            stats: char.stats,
+            gear: char.gear,
+            weapons: char.weapons,
+            runes: char.runes,
+            charDevs: char.charDevs || [],
+            lover: char.lover,
+            pvpRewards: char.pvpRewards,
+            giantBonusApplied: char.giantBonusApplied,
+            isParasite: char.isParasite,
+            parasiteInfo: char.parasiteInfo,
+            parasiteName: char.parasiteName,
+            parasiteType: char.parasiteType,
+            isSymbiosis: char.isSymbiosis,
+            symbiosisType: char.symbiosisType,
+            symbiosisHost: char.symbiosisHost,
+            tournament: char.tournament,
+          });
+        } catch { /* bỏ qua */ }
       }
-
-      await Promise.all(fetchPromises);
       setPlayers(playerList.sort((a, b) => a.no - b.no));
       setIsLoading(false);
     };
@@ -664,12 +637,9 @@ export const PlayerListPage = () => {
   const handleSelectPlayer = async (playerNo: number) => {
     setIsLoadingDetail(true);
     try {
-      const response = await fetch(getAssetPath(`/data/No${playerNo}.txt`));
-      if (response.ok) {
-        const content = await response.text();
-        const character = CharacterParser.parseCharacterFile(content);
-        setSelectedPlayer(character);
-      }
+      const content = await fetchPlayerText(playerNo);
+      const character = CharacterParser.parseCharacterFile(content);
+      setSelectedPlayer(character);
     } catch (error) {
       console.error("Failed to load player:", error);
     } finally {

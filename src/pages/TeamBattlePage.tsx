@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CharacterStats } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
 import { getAssetPath } from "../utils/basePath";
+import { fetchAllPlayerTexts } from "../utils/googleDrive";
 import { isTauri } from "../utils/localStorage";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { BossBattleRoom } from "../components/BossBattleRoom";
@@ -103,30 +104,20 @@ export const TeamBattlePage = () => {
 
         // Load all players to get stats
         const playerList: PlayerData[] = [];
-        const fetchPromises: Promise<void>[] = [];
-
-        for (let i = 1; i <= 256; i++) {
-          fetchPromises.push(
-            fetch(getAssetPath(`/data/No${i}.txt`))
-              .then(async (response) => {
-                if (response.ok) {
-                  const content = await response.text();
-                  const char = CharacterParser.parseCharacterFile(content);
-                  playerList.push({
-                    no: char.no || i,
-                    name: char.name || `Player ${i}`,
-                    username: char.username || "",
-                    stats: char.stats,
-                    team: char.team,
-                    race: char.race?.race,
-                  });
-                }
-              })
-              .catch(() => {}),
-          );
+        const texts = await fetchAllPlayerTexts();
+        for (const [no, content] of texts) {
+          try {
+            const char = CharacterParser.parseCharacterFile(content);
+            playerList.push({
+              no: char.no || no,
+              name: char.name || `Player ${no}`,
+              username: char.username || "",
+              stats: char.stats,
+              team: char.team,
+              race: char.race?.race,
+            });
+          } catch { /* bỏ qua */ }
         }
-
-        await Promise.all(fetchPromises);
         setPlayers(playerList);
       } catch (error) {
         console.error("Failed to load data:", error);

@@ -38,11 +38,18 @@ import StatModifiersTable, {
 } from "../components/StatModifiersTable";
 import { PvPBackground3D } from "../components/three/PvPBackground3D";
 import { CombatIntroScreen } from "../components/three/CombatIntroScreen";
+import { ArenaLoadingScreen } from "../components/three/ArenaLoadingScreen";
 import { CombatOutroScreen } from "../components/three/CombatOutroScreen";
 import { PlayerCard3DFrame } from "../components/three/PlayerCard3D";
 import { ScoreDisplay3D } from "../components/three/ScoreDisplay3D";
 import { CombatEffects3D } from "../components/three/CombatEffects3D";
 import { Canvas } from "@react-three/fiber";
+import {
+  readDriveFile,
+  readDriveFileAsText,
+  fetchAllPlayerTexts,
+} from "../utils/googleDrive";
+import { PLAYER_INDEX_FILE_ID } from "../config/googleDrive";
 
 // Initialize effect data
 let effectsInitialized = false;
@@ -1818,82 +1825,76 @@ export const StatsComparisonMode = ({
   // Zoltraak: BIQ×2 là round riêng biệt (click thứ 2 sau BIQ)
   const [zoltraakBiq2Pending, setZoltraakBiq2Pending] = useState(false);
 
-  // Load all players
-  useEffect(() => {
-    const loadPlayers = async () => {
-      try {
-        ensureEffectsInitialized();
-        const playerList: PvPPlayerData[] = [];
-        const fetchPromises: Promise<void>[] = [];
-
-        for (let i = 1; i <= 260; i++) {
-          fetchPromises.push(
-            fetch(getAssetPath(`/data/No${i}.txt`))
-              .then(async (response) => {
-                if (response.ok) {
-                  const content = await response.text();
-                  const char = CharacterParser.parseCharacterFile(content);
-
-                  // Calculate stats with PvP context (isPvE: false)
-                  const effects = EffectResolver.calculateCharacterEffects(
-                    char,
-                    { isPvE: false },
-                  );
-                  const pvpStats: CharacterStats = {
-                    str: effects.totalStats.strength,
-                    spd: effects.totalStats.speed,
-                    dur: effects.totalStats.durability,
-                    iq: effects.totalStats.iq,
-                    biq: effects.totalStats.biq,
-                    ma: effects.totalStats.ma,
-                  };
-                  // Raw spin-wheel stats (before any effect modifiers) for display in breakdown table
-                  const pvpBaseStats: CharacterStats = { ...char.stats };
-                  // Skeleton: IQ luôn là 1 trong baseStats
-                  if ((char.race?.race || "").toLowerCase() === "skeleton") {
-                    pvpBaseStats.iq = 1;
-                  }
-                  const breakdown =
-                    EffectResolver.getCharacterEffectBreakdown(char);
-
-                  const race = char.race?.race || "Human";
-                  playerList.push({
-                    no: char.no || i,
-                    name: char.name || `Player ${i}`,
-                    username: char.username || "",
-                    race,
-                    raceTier: getRaceTierForTiebreak(char),
-                    stats: pvpStats,
-                    baseStats: pvpBaseStats,
-                    breakdown,
-                    character: char,
-                  });
-                }
-              })
-              .catch(() => {}),
-          );
-        }
-
-        await Promise.all(fetchPromises);
-        // Sort by player number
-        playerList.sort((a, b) => a.no - b.no);
-        setAllPlayers(playerList);
-        // Auto-select tournament players
-        if (tournamentMatch) {
-          const p1 =
-            playerList.find((p) => p.no === tournamentMatch.player1No) ?? null;
-          const p2 =
-            playerList.find((p) => p.no === tournamentMatch.player2No) ?? null;
-          setPlayer1(p1);
-          setPlayer2(p2);
-        }
-      } catch (error) {
-        console.error("Error loading players:", error);
-      } finally {
-        setLoading(false);
+  // Parse 1 player từ text content
+  const parsePlayerFromText = (content: string, fallbackNo: number): PvPPlayerData | null => {
+    try {
+      const char = CharacterParser.parseCharacterFile(content);
+      const effects = EffectResolver.calculateCharacterEffects(char, { isPvE: false });
+      const pvpStats: CharacterStats = {
+        str: effects.totalStats.strength,
+        spd: effects.totalStats.speed,
+        dur: effects.totalStats.durability,
+        iq: effects.totalStats.iq,
+        biq: effects.totalStats.biq,
+        ma: effects.totalStats.ma,
+      };
+      const pvpBaseStats: CharacterStats = { ...char.stats };
+      if ((char.race?.race || "").toLowerCase() === "skeleton") {
+        pvpBaseStats.iq = 1;
       }
-    };
+      return {
+        no: char.no || fallbackNo,
+        name: char.name || `Player ${fallbackNo}`,
+        username: char.username || "",
+        race: char.race?.race || "Human",
+        raceTier: getRaceTierForTiebreak(char),
+        stats: pvpStats,
+        baseStats: pvpBaseStats,
+        breakdown: EffectResolver.getCharacterEffectBreakdown(char),
+        character: char,
+      };
+    } catch {
+      return null;
+    }
+  };
 
+  // Load all players từ Drive (gọi lại được khi cần refresh)
+  const loadPlayers = useCallback(async (silent = false) => {
+    try {
+      if (!silent) setLoading(true);
+      ensureEffectsInitialized();
+      const playerList: PvPPlayerData[] = [];
+
+      const index = await readDriveFile<Record<string, string>>(PLAYER_INDEX_FILE_ID);
+      const fetchPromises = Object.entries(index).map(([name, fileId]) =>
+        readDriveFileAsText(fileId)
+          .then((content) => {
+            const no = parseInt(name.replace(/\D/g, ""));
+            const player = parsePlayerFromText(content, no);
+            if (player) playerList.push(player);
+          })
+          .catch(() => {}),
+      );
+      await Promise.all(fetchPromises);
+
+      playerList.sort((a, b) => a.no - b.no);
+      setAllPlayers(playerList);
+
+      if (tournamentMatch) {
+        const p1 = playerList.find((p) => p.no === tournamentMatch.player1No) ?? null;
+        const p2 = playerList.find((p) => p.no === tournamentMatch.player2No) ?? null;
+        setPlayer1(p1);
+        setPlayer2(p2);
+      }
+    } catch (error) {
+      console.error("Error loading players:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Load lần đầu khi mount
+  useEffect(() => {
     loadPlayers();
   }, []);
 
@@ -3425,7 +3426,10 @@ export const StatsComparisonMode = ({
     const opponentHasRT = hasRoundtableHold(opponent);
     if (loserHasRT && !opponentHasRT) {
       const tarnished = allPlayers.filter(
-        (p) => p.no !== loser.no && hasRoundtableHold(p),
+        (p) =>
+          p.no !== loser.no &&
+          hasRoundtableHold(p) &&
+          p.character?.tournament?.status !== "eliminated",
       );
       if (tarnished.length > 0) {
         setTarnishedList(tarnished);
@@ -3438,8 +3442,10 @@ export const StatsComparisonMode = ({
   };
 
   // Hiển thị intro screen 5s trước khi bắt đầu combat
-  const handleStartWithIntro = () => {
+  const handleStartWithIntro = async () => {
     if (!player1 || !player2) return;
+    // Reload data player mới nhất từ Drive trước khi bắt đầu combat
+    await loadPlayers(true);
     if (introEnabled) {
       setShowIntro(true);
     } else {
@@ -7891,9 +7897,10 @@ export const StatsComparisonMode = ({
           const hasCoven = playerHouses.includes("coven council");
           if (!hasCoven) continue;
 
-          // Lấy tất cả player không thuộc Coven Council
+          // Lấy tất cả player còn sống không thuộc Coven Council
           const nonCovenPlayers = allPlayers.filter((p) => {
             if (p.no === player.no) return false;
+            if (p.character?.tournament?.status === "eliminated") return false;
             const pHouses: string[] = ((p.character?.houses || []) as any[])
               .filter((h: any) => !h.isLost)
               .map((h: any) =>
@@ -8019,11 +8026,89 @@ export const StatsComparisonMode = ({
           );
           if (!hasVanTe) continue;
 
+          const alivePlayers = allPlayers.filter(
+            (p) =>
+              p.no !== player.no &&
+              p.character?.tournament?.status !== "eliminated",
+          );
+          if (alivePlayers.length === 0) {
+            acEntries.push({
+              player: side,
+              quirkName: "Văn tế",
+              description: "[GM Action] Văn Tế — Không còn player nào đang sống.",
+              gmAction: true,
+            });
+          } else {
+            const wkVT = `after-VanTe-${side}`;
+            const vtColors = ["#f59e0b","#10b981","#3b82f6","#a855f7","#ef4444","#06b6d4","#84cc16","#ec4899"];
+            acEntries.push({
+              player: side,
+              quirkName: "Văn tế",
+              description: "Bị loại — quay chọn 1 player còn sống để Re-Spin stat cao nhất:",
+              wheelKey: wkVT,
+              wheelItems: alivePlayers.map((p, i) => ({
+                label: `${p.name} (#${p.no})`,
+                weight: 1,
+                isSuccess: true,
+                color: vtColors[i % vtColors.length],
+                meta: { playerNo: p.no, playerName: p.name },
+              })),
+              gmAction: true,
+            });
+          }
+        }
+
+        // ── Hero Grave Keeper: sau mỗi combat → quay chọn 1 player bị loại → lấy 1 Gear của player đó ──
+        for (const side of ["player1", "player2"] as const) {
+          const player = side === "player1" ? player1 : player2;
+          const char = player.character;
+          if (!char) continue;
+          const archetypes: string[] = ((char as any).archetypes || []).map(
+            (a: any) => (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase(),
+          );
+          const hasHGK = archetypes.includes("hero grave keeper");
+          if (!hasHGK) continue;
+
+          // Lọc player bị loại (không phải chính mình)
+          const eliminatedPlayers = allPlayers.filter(
+            (p) =>
+              p.no !== player.no &&
+              p.character?.tournament?.status === "eliminated",
+          );
+
+          if (eliminatedPlayers.length === 0) {
+            acEntries.push({
+              player: side,
+              quirkName: "Hero Grave Keeper",
+              description: "[GM Action] Hero Grave Keeper — Chưa có player nào bị loại.",
+              gmAction: true,
+            });
+            continue;
+          }
+
+          const hgkColors = ["#f59e0b","#10b981","#3b82f6","#a855f7","#ef4444","#06b6d4","#84cc16","#ec4899"];
+          const wkHGK = `after-HeroGraveKeeper-${side}`;
           acEntries.push({
             player: side,
-            quirkName: "Văn tế",
-            description:
-              "[GM Action] Bị loại với Văn Tế → GM re-spin stat cao nhất của 1 player còn sống ngẫu nhiên.",
+            quirkName: "Hero Grave Keeper",
+            description: "Sau combat — quay chọn 1 player đã bị loại để lấy Gear:",
+            wheelKey: wkHGK,
+            wheelItems: eliminatedPlayers.map((p, i) => {
+              const normalGear: any[] = ((p.character?.gear?.normalGear || []) as any[]).filter((g: any) => !g.isLost);
+              const legacyGear: any[] = ((p.character?.gear?.legacyGear || []) as any[]).filter((g: any) => !g.isLost);
+              const allGear = [...normalGear, ...legacyGear];
+              return {
+                label: `${p.name} (#${p.no})${allGear.length === 0 ? " — không có Gear" : ""}`,
+                weight: 1,
+                isSuccess: allGear.length > 0,
+                color: hgkColors[i % hgkColors.length],
+                meta: {
+                  playerNo: p.no,
+                  playerName: p.name,
+                  gearList: allGear.map((g: any) => (typeof g === "string" ? g : (g?.name ?? ""))).filter(Boolean),
+                },
+              };
+            }),
             gmAction: true,
           });
         }
@@ -11990,19 +12075,7 @@ export const StatsComparisonMode = ({
   }, [roundSpinResults]);
 
   if (loading) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{
-          backgroundImage: `url(${wheelBgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }}
-      >
-        <div className="text-white text-2xl">Loading players...</div>
-      </div>
-    );
+    return <ArenaLoadingScreen />;
   }
 
   return (
@@ -13431,6 +13504,57 @@ export const StatsComparisonMode = ({
                                       isPositive: true,
                                     },
                                   ]);
+                                }
+                                // Văn tế bước 2: sau khi chọn player còn sống, GM re-spin stat cao nhất
+                                if (spinKey.startsWith("after-VanTe-")) {
+                                  const chosenItem = entry.wheelItems?.find(
+                                    (it) => it.label === result.label,
+                                  );
+                                  const chosenName = (chosenItem?.meta?.playerName as string) || result.label;
+                                  spawnStatBubbles([{
+                                    player: entry.player,
+                                    text: `Văn Tế: ${chosenName} được chọn — GM re-spin stat cao nhất của ${chosenName} [GM apply]`,
+                                    isPositive: true,
+                                  }]);
+                                }
+                                // Hero Grave Keeper bước 2: sau khi chọn player bị loại, spin chọn Gear của player đó
+                                if (spinKey.startsWith("after-HeroGraveKeeper-")) {
+                                  const chosenItem = entry.wheelItems?.find(
+                                    (it) => it.label === result.label,
+                                  );
+                                  const gearList = (chosenItem?.meta?.gearList as string[]) || [];
+                                  const chosenName = (chosenItem?.meta?.playerName as string) || result.label;
+                                  if (gearList.length === 0) {
+                                    spawnStatBubbles([{
+                                      player: entry.player,
+                                      text: `Hero Grave Keeper: ${chosenName} không có Gear nào.`,
+                                      isPositive: false,
+                                    }]);
+                                  } else {
+                                    const gearColors = ["#f59e0b","#10b981","#3b82f6","#a855f7","#ef4444","#06b6d4","#84cc16","#ec4899"];
+                                    setTimeout(() => {
+                                      setPreCombatModal({
+                                        isOpen: true,
+                                        title: `Hero Grave Keeper — Chọn Gear từ ${chosenName}`,
+                                        description: `Quay chọn 1 Gear từ kho của ${chosenName}`,
+                                        items: gearList.map((g: string, i: number) => ({
+                                          label: g,
+                                          weight: 1,
+                                          isSuccess: true,
+                                          color: gearColors[i % gearColors.length],
+                                        })),
+                                        side: entry.player,
+                                        effectKey: `hgk-gear-${spinKey}`,
+                                        onResult: (gearResult) => {
+                                          spawnStatBubbles([{
+                                            player: entry.player,
+                                            text: `Hero Grave Keeper: Nhận Gear "${gearResult.label}" từ ${chosenName} [GM apply]`,
+                                            isPositive: true,
+                                          }]);
+                                        },
+                                      });
+                                    }, 100);
+                                  }
                                 }
                                 // Coven Council bước 2: sau khi chọn player, spin stat theo race
                                 if (spinKey.startsWith("after-CovenCouncil-")) {
@@ -15452,58 +15576,40 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     }
   };
 
-  // Load all players
+  // Load all players (PvE mode)
   useEffect(() => {
     const loadPlayers = async () => {
       try {
         ensureEffectsInitialized();
         const playerList: PvPPlayerData[] = [];
-        const fetchPromises: Promise<void>[] = [];
-
-        for (let i = 1; i <= 260; i++) {
-          fetchPromises.push(
-            fetch(getAssetPath(`/data/No${i}.txt`))
-              .then(async (response) => {
-                if (response.ok) {
-                  const content = await response.text();
-                  const char = CharacterParser.parseCharacterFile(content);
-                  const effects = EffectResolver.calculateCharacterEffects(
-                    char,
-                    { isPvE: false },
-                  );
-                  const pvpStats: CharacterStats = {
-                    str: effects.totalStats.strength,
-                    spd: effects.totalStats.speed,
-                    dur: effects.totalStats.durability,
-                    iq: effects.totalStats.iq,
-                    biq: effects.totalStats.biq,
-                    ma: effects.totalStats.ma,
-                  };
-                  // Raw spin-wheel stats (before any effect modifiers) for display in breakdown table
-                  const pvpBaseStats: CharacterStats = { ...char.stats };
-                  // Skeleton: IQ luôn là 1 trong baseStats
-                  if ((char.race?.race || "").toLowerCase() === "skeleton") {
-                    pvpBaseStats.iq = 1;
-                  }
-                  const race = char.race?.race || "Human";
-                  playerList.push({
-                    no: char.no || i,
-                    name: char.name || `Player ${i}`,
-                    username: char.username || "",
-                    race,
-                    raceTier: getRaceTierForTiebreak(char),
-                    stats: pvpStats,
-                    baseStats: pvpBaseStats,
-                    breakdown: EffectResolver.getCharacterEffectBreakdown(char),
-                    character: char,
-                  });
-                }
-              })
-              .catch(() => {}),
-          );
+        const texts = await fetchAllPlayerTexts();
+        for (const [i, content] of texts) {
+          try {
+            const char = CharacterParser.parseCharacterFile(content);
+            const effects = EffectResolver.calculateCharacterEffects(char, { isPvE: false });
+            const pvpStats: CharacterStats = {
+              str: effects.totalStats.strength,
+              spd: effects.totalStats.speed,
+              dur: effects.totalStats.durability,
+              iq: effects.totalStats.iq,
+              biq: effects.totalStats.biq,
+              ma: effects.totalStats.ma,
+            };
+            const pvpBaseStats: CharacterStats = { ...char.stats };
+            if ((char.race?.race || "").toLowerCase() === "skeleton") pvpBaseStats.iq = 1;
+            playerList.push({
+              no: char.no || i,
+              name: char.name || `Player ${i}`,
+              username: char.username || "",
+              race: char.race?.race || "Human",
+              raceTier: getRaceTierForTiebreak(char),
+              stats: pvpStats,
+              baseStats: pvpBaseStats,
+              breakdown: EffectResolver.getCharacterEffectBreakdown(char),
+              character: char,
+            });
+          } catch { /* bỏ qua */ }
         }
-
-        await Promise.all(fetchPromises);
         playerList.sort((a, b) => a.no - b.no);
         setAllPlayers(playerList);
       } catch (error) {
@@ -15964,19 +16070,7 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     currentWeightTotal > 0 ? (currentP1Weight / currentWeightTotal) * 100 : 50;
 
   if (loading) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{
-          backgroundImage: `url(${wheelBgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }}
-      >
-        <div className="text-white text-2xl">Loading players...</div>
-      </div>
-    );
+    return <ArenaLoadingScreen />;
   }
 
   return (
@@ -16499,80 +16593,53 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
         ensureEffectsInitialized();
 
         const playerList: PlayerData[] = [];
-        const fetchPromises: Promise<void>[] = [];
-
-        for (let i = 1; i <= 260; i++) {
-          fetchPromises.push(
-            fetch(getAssetPath(`/data/No${i}.txt`))
-              .then(async (response) => {
-                if (response.ok) {
-                  const content = await response.text();
-                  const char = CharacterParser.parseCharacterFile(content);
-
-                  // Calculate stats with PvE context to apply PvE-only effects
-                  const effects = EffectResolver.calculateCharacterEffects(
-                    char,
-                    { isPvE: true },
-                  );
-                  const pveStats: CharacterStats = {
-                    str: effects.totalStats.strength,
-                    spd: effects.totalStats.speed,
-                    dur: effects.totalStats.durability,
-                    iq: effects.totalStats.iq,
-                    biq: effects.totalStats.biq,
-                    ma: effects.totalStats.ma,
-                  };
-
-                  playerList.push({
-                    no: char.no || i,
-                    name: char.name || `Player ${i}`,
-                    username: char.username || "",
-                    stats: pveStats,
-                    baseStats: {
-                      str: effects.baseStats.strength,
-                      spd: effects.baseStats.speed,
-                      dur: effects.baseStats.durability,
-                      iq: effects.baseStats.iq,
-                      biq: effects.baseStats.biq,
-                      ma: effects.baseStats.ma,
-                    },
-                    statModifiers: effects.statModifiers.map((m) => ({
-                      stat: m.stat,
-                      value: m.value,
-                      isBase: m.isBase,
-                      source: m.source,
-                    })),
-                    team: char.team,
-                    quirks: char.quirks.map((q) => q.name),
-                    race: char.race?.race,
-                    subRace: char.race?.subRace,
-                    archetypes: char.archetypes,
-                    powers:
-                      char.powers
-                        ?.filter((p) => !p.isLost)
-                        .map((p) => p.name) || [],
-                    weapons:
-                      char.weapons
-                        ?.filter((w) => !w.isLost && w.usable !== false)
-                        .map((w) => w.name) || [],
-                    gear: [
-                      ...(char.gear?.normalGear || [])
-                        .filter((g) => !g.isLost)
-                        .map((g) => g.name),
-                      ...(char.gear?.legacyGear || [])
-                        .filter((g) => !g.isLost)
-                        .map((g) => g.name),
-                    ],
-                    effectBreakdown:
-                      EffectResolver.getCharacterEffectBreakdown(char),
-                  });
-                }
-              })
-              .catch(() => {}),
-          );
+        const texts = await fetchAllPlayerTexts();
+        for (const [i, content] of texts) {
+          try {
+            const char = CharacterParser.parseCharacterFile(content);
+            const effects = EffectResolver.calculateCharacterEffects(char, { isPvE: true });
+            const pveStats: CharacterStats = {
+              str: effects.totalStats.strength,
+              spd: effects.totalStats.speed,
+              dur: effects.totalStats.durability,
+              iq: effects.totalStats.iq,
+              biq: effects.totalStats.biq,
+              ma: effects.totalStats.ma,
+            };
+            playerList.push({
+              no: char.no || i,
+              name: char.name || `Player ${i}`,
+              username: char.username || "",
+              stats: pveStats,
+              baseStats: {
+                str: effects.baseStats.strength,
+                spd: effects.baseStats.speed,
+                dur: effects.baseStats.durability,
+                iq: effects.baseStats.iq,
+                biq: effects.baseStats.biq,
+                ma: effects.baseStats.ma,
+              },
+              statModifiers: effects.statModifiers.map((m) => ({
+                stat: m.stat,
+                value: m.value,
+                isBase: m.isBase,
+                source: m.source,
+              })),
+              team: char.team,
+              quirks: char.quirks.map((q) => q.name),
+              race: char.race?.race,
+              subRace: char.race?.subRace,
+              archetypes: char.archetypes,
+              powers: char.powers?.filter((p) => !p.isLost).map((p) => p.name) || [],
+              weapons: char.weapons?.filter((w) => !w.isLost && w.usable !== false).map((w) => w.name) || [],
+              gear: [
+                ...(char.gear?.normalGear || []).filter((g) => !g.isLost).map((g) => g.name),
+                ...(char.gear?.legacyGear || []).filter((g) => !g.isLost).map((g) => g.name),
+              ],
+              effectBreakdown: EffectResolver.getCharacterEffectBreakdown(char),
+            });
+          } catch { /* bỏ qua */ }
         }
-
-        await Promise.all(fetchPromises);
         setAllPlayers(playerList);
       } catch (error) {
         console.error("Error loading data:", error);

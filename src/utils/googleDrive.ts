@@ -1,7 +1,78 @@
 import {
   GOOGLE_API_KEY,
   APPS_SCRIPT_URL,
+  PLAYER_INDEX_FILE_ID,
 } from "../config/googleDrive";
+
+// Cache player index sau lần đầu load
+let _playerIndexCache: Record<string, string> | null = null;
+
+/**
+ * Lấy player index map {No1: fileId, No2: fileId, ...}
+ * Cache lại sau lần đầu để không fetch lại nhiều lần
+ */
+export async function getPlayerIndex(): Promise<Record<string, string>> {
+  if (_playerIndexCache) return _playerIndexCache;
+  _playerIndexCache = await readDriveFile<Record<string, string>>(PLAYER_INDEX_FILE_ID);
+  return _playerIndexCache;
+}
+
+/** Reset cache index (dùng khi cần force reload dữ liệu mới nhất) */
+export function clearPlayerIndexCache(): void {
+  _playerIndexCache = null;
+}
+
+/**
+ * Fetch nội dung text của 1 player theo số (No)
+ * Ví dụ: fetchPlayerText(1) → nội dung No1.txt từ Drive
+ */
+export async function fetchPlayerText(no: number): Promise<string> {
+  const index = await getPlayerIndex();
+  const fileId = index[`No${no}`];
+  if (!fileId) throw new Error(`Player No${no} not found in index`);
+  return readDriveFileAsText(fileId);
+}
+
+/**
+ * Fetch nhiều player song song theo danh sách số
+ * Trả về map {no: text} — bỏ qua player không tìm thấy
+ */
+export async function fetchPlayerTexts(
+  nos: number[],
+): Promise<Map<number, string>> {
+  const index = await getPlayerIndex();
+  const result = new Map<number, string>();
+  // Giới hạn 20 concurrent requests để tránh flood browser
+  const CONCURRENCY = 20;
+  for (let i = 0; i < nos.length; i += CONCURRENCY) {
+    const batch = nos.slice(i, i + CONCURRENCY);
+    await Promise.all(
+      batch.map(async (no) => {
+        const fileId = index[`No${no}`];
+        if (!fileId) return;
+        try {
+          const text = await readDriveFileAsText(fileId);
+          result.set(no, text);
+        } catch {
+          // bỏ qua nếu lỗi
+        }
+      }),
+    );
+  }
+  return result;
+}
+
+/**
+ * Fetch tất cả player trong index song song
+ * Trả về map {no: text}
+ */
+export async function fetchAllPlayerTexts(): Promise<Map<number, string>> {
+  const index = await getPlayerIndex();
+  const nos = Object.keys(index)
+    .filter((k) => /^No\d+$/.test(k))
+    .map((k) => parseInt(k.replace("No", "")));
+  return fetchPlayerTexts(nos);
+}
 
 /**
  * Append plain text to a Drive file (read current → append → overwrite).
@@ -99,6 +170,44 @@ export async function writeDriveFile<T>(fileId: string, data: T): Promise<void> 
   if (result && !result.success) {
     throw new Error(`Apps Script error: ${JSON.stringify(result)}`);
   }
+}
+
+/**
+ * Read a file from Google Drive as plain text (for .txt player files)
+ */
+export async function readDriveFileAsText(fileId: string): Promise<string> {
+  // Try Apps Script first
+  if (APPS_SCRIPT_URL) {
+    try {
+      const url = `${APPS_SCRIPT_URL}?fileId=${fileId}`;
+      const response = await fetch(url, { method: "GET", redirect: "follow" });
+      if (response.ok) return response.text();
+    } catch {
+      // CORS or network error — fall through to API key
+    }
+  }
+  // Fallback: Google Drive API with API key
+  if (GOOGLE_API_KEY) {
+    try {
+      const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${GOOGLE_API_KEY}`;
+      const response = await fetch(url);
+      if (response.ok) return response.text();
+    } catch {
+      // fall through
+    }
+  }
+  throw new Error(`Failed to read text file from Drive: ${fileId}`);
+}
+
+/**
+ * List all files in a Drive folder, returns {filename_without_ext: fileId}
+ */
+export async function listDriveFolder(folderId: string): Promise<Record<string, string>> {
+  if (!APPS_SCRIPT_URL) throw new Error("Apps Script URL not configured.");
+  const url = `${APPS_SCRIPT_URL}?action=listFolder&folderId=${folderId}`;
+  const response = await fetch(url, { method: "GET", redirect: "follow" });
+  if (!response.ok) throw new Error(`listDriveFolder failed: ${response.status}`);
+  return response.json();
 }
 
 /**
