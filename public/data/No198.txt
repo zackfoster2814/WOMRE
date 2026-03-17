@@ -46,7 +46,7 @@ Houses:
 ```
 1 Normal Weapon
 + Uchigatana (Dùng được) (Đã mất)
-+ Banana Peel (Creator's Reforge)
++ Banana Peel
 ```
 
 ``` 

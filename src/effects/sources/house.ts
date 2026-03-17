@@ -401,15 +401,6 @@ function registerHouseSubTypes() {
       type: "stat_modifier",
       stat: "all",
       value: 2,
-      timing: "during_combat",
-      target: "self",
-      duration: "combat",
-      triggerOnce: true,
-    })
-    .effect({
-      type: "stat_modifier",
-      stat: "all",
-      value: 2,
       timing: "after_combat_lose",
       target: "self",
       duration: "combat",

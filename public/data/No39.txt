@@ -58,7 +58,7 @@ Runeword: Không
 6 Power: 
 + Let's Pump Some Iron!
 + The Sand of Time (Shurima)
-+ Stat Absorption (Shurima)
++ Stat Absorption
 + Mewing (Lockalock Skill Book)
 + Gotta go Fast (Lockalock Skill Book)
 + The Coast is Clear! (Lockalock Skill Book)

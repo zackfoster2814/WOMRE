@@ -39,7 +39,7 @@ Houses:
 4 Gear: 
  + 3 Normal gear:
   - Empty Stein
-  - Kuro's Charm (Artisan)
+  - Kuro's Charm
   - Fishing Rod (Artisan)
  + 1 Legacy gear:
   - Soul of the Lazy Spirit

@@ -714,15 +714,9 @@ registerCombatHandler(
 registerCombatHandler(
   'zoltraak_double_biq_round',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    // Chỉ trigger đúng round BIQ
+    // Handler này chỉ dùng để detect — điểm được tính tự nhiên qua computeRoundStep lần 2
     if (ctx.currentRoundStat !== 'biq') return { skipDefault: true };
-    if (ctx.currentRoundResult === 'win') {
-      return { selfPoints: 1, description: 'Zoltraak: BIQ round diễn ra 2 lần → thắng BIQ lần 2, +1 điểm thêm' };
-    }
-    if (ctx.currentRoundResult === 'lose') {
-      return { opponentPoints: 1, description: 'Zoltraak: BIQ round diễn ra 2 lần → thua BIQ lần 2, đối thủ +1 điểm thêm' };
-    }
-    return { description: 'Zoltraak: BIQ round diễn ra 2 lần → Hòa lần 2, không điểm thêm' };
+    return { skipDefault: true };
   },
   'BIQ round happens twice, each scored separately (Zoltraak)',
 );
@@ -780,25 +774,27 @@ registerCombatHandler(
 registerCombatHandler(
   'spear_of_fire_2_rune_check',
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    const weapons: any[] = (ctx.self.character as any)?.weapons || [];
-    const hasUsableWeapon = weapons.some((w: any) => !w.isLost);
-    const charRunes: any[] = (ctx.self.character as any)?.runes?.runes || [];
-    const activeRuneCount = charRunes.filter((r: any) => !r.isLost).length;
+    const oppWeapons: any[] = (ctx.opponent?.character as any)?.weapons || [];
+    const hasUsableWeapon = oppWeapons.some(
+      (w: any) => !w.isLost && !(typeof w === 'string' ? w : (w?.name ?? '')).toLowerCase().includes('không dùng được'),
+    );
+    const oppRunes: any[] = (ctx.opponent?.character as any)?.runes?.runes || [];
+    const activeRuneCount = oppRunes.filter((r: any) => !r.isLost).length;
     if (hasUsableWeapon && activeRuneCount >= 2) {
       return {
         selfPoints: 1,
-        description: `Spear of Fire: Có vũ khí dùng được + ${activeRuneCount} Rune → +1 điểm khởi đầu`,
+        description: `Spear of Fire: Đối thủ có vũ khí dùng được + ${activeRuneCount} Rune → +1 điểm khởi đầu`,
       };
     }
     const reason = !hasUsableWeapon
-      ? 'Không có vũ khí dùng được'
-      : `Chỉ có ${activeRuneCount} Rune (cần ≥2)`;
+      ? 'Đối thủ không có vũ khí dùng được'
+      : `Đối thủ chỉ có ${activeRuneCount} Rune (cần ≥2)`;
     return {
       skipDefault: true,
       description: `Spear of Fire: ${reason} → không kích hoạt`,
     };
   },
-  '+1 starting point if has usable weapon and 2+ active runes (Spear of Fire)',
+  '+1 starting point if opponent has usable weapon and 2+ active runes (Spear of Fire)',
 );
 
 registerCombatHandler(
@@ -1510,7 +1506,7 @@ export function registerAllPowerEffects() {
   defineEffect('power', 'Frost Fingers')
     .description('Debuff: Mỗi Gear đối thủ có, -1 Stat cao nhất đối thủ (tối đa 5).')
     .weight(0.78)
-    .effect({ type: 'debuff', stat: 'highest', value: -1, timing: 'during_combat', target: 'opponent', customHandler: 'frost_fingers_per_gear' })
+    .effect({ type: 'debuff', stat: 'highest', value: -1, timing: 'before_combat', target: 'opponent', customHandler: 'frost_fingers_per_gear' })
     .register();
 
   defineEffect('power', 'Gaze of the Abyss')

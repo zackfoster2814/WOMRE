@@ -59,7 +59,7 @@ Runeword: Không
 3 Power: 
 + Black Magic
 + Uno Reverse Card
-+ AIDS (Metamorphosis)
++ AIDS
 ```
 
 ```

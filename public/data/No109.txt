@@ -63,8 +63,8 @@ Runeword: Không
 + The Sand of Time
 + Capybara
 + Divine Lightning (Demonic Pact) (Đã mất do PvE Punishment)
-+ Detect Thoughts (Demonic Pact)
-+ Spell Flux (Demonic Pact)
++ Detect Thoughts 
++ Spell Flux 
 ```
 
 ```

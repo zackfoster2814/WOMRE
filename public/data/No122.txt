@@ -15,7 +15,7 @@ Sub-race:
 ```
 Archetype: 
 + Conquerer
-+ Merchants (Từ New London)
++ Merchants
 ```
 ``` 
 1 Quirk:  
@@ -38,7 +38,7 @@ Houses:
 ```
 3 Gear: 
  + 3 Normal gear:
-  - Golden Coin (Từ Merchants)
+  - Golden Coin
   - Kẹo
   - Knight's Armor
  + 0 Legacy gear:

@@ -785,6 +785,7 @@ export function registerAllGearEffects() {
       value: -4,
       timing: "immediate",
       target: "self",
+      isBase: true,
     })
     .effect({
       type: "custom",
@@ -956,9 +957,9 @@ export function registerAllGearEffects() {
       type: "stat_modifier",
       stat: "all",
       value: 1,
-      timing: "during_combat",
+      timing: "before_combat",
       target: "self",
-      conditions: [{ type: "race_tier_compare", tierOperator: ">" }],
+      conditions: [{ type: "race_tier_compare", tierOperator: "<" }],
     })
     .register();
 

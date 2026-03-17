@@ -14,7 +14,7 @@ Sub-race: Ice Troll
 
 ```
 Archetype: Infirmarian
-+ Machinists (Từ New London)
++ Machinists 
 ```
 ``` 
 1 Quirk:  

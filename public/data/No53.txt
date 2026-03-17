@@ -38,7 +38,7 @@ Houses:
 2 Gear: 
  + 2 Normal gear:
   - Leather Jacket
-  - Radio (Ban nhạc Ngọt đoàn kết)
+  - Radio
  + 0 Legacy gear:
   - 
 ```
@@ -59,7 +59,7 @@ Runeword: Không
 + Armor Piercing
 + Cold Breeze
 + Drunken Boxing
-+ Cleaning Sins (từ Cá trê vượt thác nhé hehe(huypui))
++ Cleaning Sins (từ Cá trê vượt thác nhé hehe)
 ```
 
 ```

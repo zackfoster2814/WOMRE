@@ -40,7 +40,7 @@ Houses:
   - Thuốc tráng dương
   - Đai trinh tiết
   - Wizard hat
-  - Kẹo (Người trong ban nhạc)
+  - Kẹo 
  + 0 Legacy gear:
   - 
 ```

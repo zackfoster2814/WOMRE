@@ -204,22 +204,31 @@ function IntroScene({ vsVisible }: { vsVisible: boolean }) {
 }
 
 // ── Avatar with fallback placeholder ─────────────────────────────────────────
+const AVATAR_EXTS = ["png", "jpg", "jpeg", "gif", "webp"];
+
 function AvatarWithFallback({
-  src,
+  no,
   name,
   side,
 }: {
-  src?: string;
+  no: number;
   name: string;
   side: "left" | "right";
 }) {
-  const [failed, setFailed] = useState(false);
+  const [extIndex, setExtIndex] = useState(0);
   const initial = name.charAt(0).toUpperCase();
   const isLeft = side === "left";
 
-  if (src && !failed) {
+  const basePath = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
+  const src =
+    extIndex < AVATAR_EXTS.length
+      ? `${basePath}/data/avatars/no${no}.${AVATAR_EXTS[extIndex]}`
+      : null;
+
+  if (src) {
     return (
       <img
+        key={src}
         src={src}
         alt={name}
         className="absolute inset-0"
@@ -229,7 +238,7 @@ function AvatarWithFallback({
           objectFit: "cover",
           objectPosition: "center top",
         }}
-        onError={() => setFailed(true)}
+        onError={() => setExtIndex((i) => i + 1)}
       />
     );
   }
@@ -367,8 +376,6 @@ interface CombatIntroScreenProps {
   player1No: number;
   player2Name: string;
   player2No: number;
-  player1AvatarUrl?: string;
-  player2AvatarUrl?: string;
   onComplete: () => void;
   volume?: number;
 }
@@ -378,8 +385,6 @@ export function CombatIntroScreen({
   player1No,
   player2Name,
   player2No,
-  player1AvatarUrl,
-  player2AvatarUrl,
   onComplete,
   volume = 1,
 }: CombatIntroScreenProps) {
@@ -531,7 +536,7 @@ export function CombatIntroScreen({
           }}
         >
           <AvatarWithFallback
-            src={player1AvatarUrl}
+            no={player1No}
             name={player1Name}
             side="left"
           />
@@ -614,7 +619,7 @@ export function CombatIntroScreen({
           }}
         >
           <AvatarWithFallback
-            src={player2AvatarUrl}
+            no={player2No}
             name={player2Name}
             side="right"
           />

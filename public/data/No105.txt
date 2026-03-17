@@ -15,7 +15,7 @@ Sub-race: Werebat
 ```
 Archetype: 
 + Trickster
-+ Lords (Từ House)
++ Lords
 ```
 ``` 
 1 Quirk:  

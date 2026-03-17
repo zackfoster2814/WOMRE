@@ -15,7 +15,7 @@ Sub-race: Air
 ```
 Archetype: 
 + Gambler Bloodline
-+ Thinkers (Từ New London)
++ Thinkers 
 ```
 ``` 
 2 Quirk:  

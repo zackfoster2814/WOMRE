@@ -940,26 +940,35 @@ export class CharacterParser {
       if (subMatch && currentHouse) {
         const subValue = subMatch[1].trim();
         if (subValue) {
-          // Check if this is a stat bonus
-          // Patterns: "+4 Dura", "+6 Str", "-2 IQ", "Nhận +2 Str", etc.
-          const statBonusMatch = subValue.match(/([+-]\d+)\s+(\w+)/);
-          if (statBonusMatch) {
-            // Extract the stat bonus part (e.g., "+2 Str" from "Nhận +2 Str")
-            const bonusPart = statBonusMatch[0];
-            if (!currentHouse.statBonuses) {
-              currentHouse.statBonuses = [];
-            }
-            currentHouse.statBonuses.push(bonusPart);
+          // Check if this is a sub-type with bonus notation (e.g., "Lady (+2)")
+          const subTypeBonusMatch = subValue.match(/^([A-Za-z][^(]*?)\s*\(([+-]?\d+)\)\s*$/);
+          if (subTypeBonusMatch) {
+            const subTypeName = subTypeBonusMatch[1].trim();
+            const bonusVal = parseInt(subTypeBonusMatch[2], 10);
+            currentHouse.subType = subTypeName;
+            currentHouse.subTypeBonus = bonusVal;
           } else {
-            // Check if subType is lost (e.g., "Godrick (đã mất)")
-            const subTypeIsLost = isLostItem(subValue);
-            // Strip "(đã mất...)" from subType name for registry lookup
-            const cleanSubType = subValue
-              .replace(/\s*\(đã mất[^)]*\)/gi, "")
-              .replace(/\s*\(mất do[^)]*\)/gi, "")
-              .trim();
-            currentHouse.subType = cleanSubType;
-            currentHouse.subTypeIsLost = subTypeIsLost;
+            // Check if this is a stat bonus
+            // Patterns: "+4 Dura", "+6 Str", "-2 IQ", "Nhận +2 Str", etc.
+            const statBonusMatch = subValue.match(/([+-]\d+)\s+(\w+)/);
+            if (statBonusMatch) {
+              // Extract the stat bonus part (e.g., "+2 Str" from "Nhận +2 Str")
+              const bonusPart = statBonusMatch[0];
+              if (!currentHouse.statBonuses) {
+                currentHouse.statBonuses = [];
+              }
+              currentHouse.statBonuses.push(bonusPart);
+            } else {
+              // Check if subType is lost (e.g., "Godrick (đã mất)")
+              const subTypeIsLost = isLostItem(subValue);
+              // Strip "(đã mất...)" from subType name for registry lookup
+              const cleanSubType = subValue
+                .replace(/\s*\(đã mất[^)]*\)/gi, "")
+                .replace(/\s*\(mất do[^)]*\)/gi, "")
+                .trim();
+              currentHouse.subType = cleanSubType;
+              currentHouse.subTypeIsLost = subTypeIsLost;
+            }
           }
         }
         continue;

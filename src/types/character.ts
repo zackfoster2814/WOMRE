@@ -65,6 +65,7 @@ export interface NestedHouse {
   name: string; // Main house (e.g., "New London", "House Stark")
   subType?: string; // Sub-type (e.g., "Thinkers", "Grey Wind", "Godrick")
   subTypeIsLost?: boolean; // Sub-type can be lost (e.g., "Godrick (đã mất)")
+  subTypeBonus?: number; // Bonus value from sub-type notation (e.g., "Lady (+2)" → 2)
   statBonuses?: string[]; // Stat bonuses from house (e.g., ["+2 Str", "+1 Spd", "+2 Dura"] for Tracen Academy)
   isLost?: boolean; // House can be lost (kicked out)
   // Loại mất nhà:

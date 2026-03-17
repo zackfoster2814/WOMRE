@@ -1156,17 +1156,29 @@ export class EffectResolver {
         }
         break;
 
-      case "has_item":
+      case "has_item": {
+        const checkSide = condition.checkTarget === "opponent" ? context.opponent : context.self;
         if (condition.itemType === "lover") {
-          result = context.self.hasLover;
+          result = checkSide?.hasLover ?? false;
         } else if (condition.itemType === "power" && condition.itemName) {
-          result = context.self.powers.includes(condition.itemName);
+          result = checkSide?.powers.includes(condition.itemName) ?? false;
         } else if (condition.itemType === "quirk" && condition.itemName) {
-          result = context.self.quirks.includes(condition.itemName);
+          result = checkSide?.quirks.includes(condition.itemName) ?? false;
         } else if (condition.itemType === "weapon" && condition.itemName) {
-          result = context.self.weapons.includes(condition.itemName);
+          result = checkSide?.weapons.includes(condition.itemName) ?? false;
+        } else if (condition.itemType === "archetype" && condition.itemName) {
+          const char = condition.checkTarget === "opponent"
+            ? (context.opponent as any)?.character
+            : (context.self as any)?.character;
+          const archetypes: string[] = Array.isArray(char?.archetypes)
+            ? char.archetypes.map((a: any) => typeof a === "string" ? a : (a?.name ?? ""))
+            : [];
+          result = archetypes.some(
+            (a) => a.toLowerCase() === condition.itemName!.toLowerCase(),
+          );
         }
         break;
+      }
 
       case "opponent_has":
         if (context.opponent) {
@@ -1367,6 +1379,13 @@ export class EffectResolver {
               } else {
                 result = (character.powers || []).some((p) => !p.isLost);
               }
+            } else if (condition.itemType === "archetype" && condition.itemName) {
+              const archetypes: string[] = Array.isArray((character as any).archetypes)
+                ? (character as any).archetypes.map((a: any) => typeof a === "string" ? a : (a?.name ?? ""))
+                : [];
+              result = archetypes.some(
+                (a) => a.toLowerCase() === condition.itemName!.toLowerCase(),
+              );
             } else {
               result = true; // Unknown item type, default to true
             }
@@ -1785,7 +1804,8 @@ export class EffectResolver {
     for (const { effect } of effects) {
       if (
         effect.type === "combat_points" &&
-        effect.timing === "before_combat"
+        effect.timing === "before_combat" &&
+        !(effect as any).customHandler
       ) {
         points += effect.points || 0;
       }

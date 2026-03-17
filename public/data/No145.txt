@@ -16,7 +16,7 @@ Sub-race: 1000
 ```
 Archetype: 
 + Perfectionist
-+ Foragers (Từ New London)
++ Foragers
 ```
 ``` 
 3 Quirk:  

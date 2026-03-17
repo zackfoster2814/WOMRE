@@ -75,7 +75,7 @@ Runeword:
 Char dev: 
 + Transmute: Chaos
 + Fate's Trick (Chia đôi Str) (Transmute: Chaos)
-+ Mad Scientist (Transmute: Chaos)
++ Mad Scientist
 ```
 
 ```
