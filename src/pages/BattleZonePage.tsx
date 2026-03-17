@@ -1949,7 +1949,6 @@ export const StatsComparisonMode = ({
     p2: PvPPlayerData,
     otpStats: Record<string, string> = {},
     hmStats: Record<string, string> = {},
-    hmStats2: Record<string, string> = {},
   ): { newState: StepCombatState; log: RoundLog } => {
     const { key, label } = STAT_ORDER[roundIndex];
     const events: RoundEvent[] = [];
@@ -2286,10 +2285,6 @@ export const StatsComparisonMode = ({
     };
     const p1HMStat = HM_LABEL_TO_KEY[hmStats["player1"]] ?? hmStats["player1"];
     const p2HMStat = HM_LABEL_TO_KEY[hmStats["player2"]] ?? hmStats["player2"];
-    const p1HMStat2 =
-      HM_LABEL_TO_KEY[hmStats2["player1"]] ?? hmStats2["player1"];
-    const p2HMStat2 =
-      HM_LABEL_TO_KEY[hmStats2["player2"]] ?? hmStats2["player2"];
 
     // key là short key của round (str/spd/dur/iq/biq/ma)
     const roundStatLabel = key;
@@ -2318,19 +2313,22 @@ export const StatsComparisonMode = ({
       p2Points = 0;
     }
 
-    // Hunter's Mark: thắng đúng round đã chọn → +1 bonus ngay trong round này
+    // Hunter's Mark: thắng đúng round đã chọn → +1 bonus (Spell Flux: +2)
+    const p1HasSpellFlux = (p1.character?.powers || []).some(
+      (pw: any) =>
+        !pw?.isLost &&
+        (typeof pw === "string" ? pw : pw.name)?.toLowerCase().startsWith("spell flux"),
+    );
+    const p2HasSpellFlux = (p2.character?.powers || []).some(
+      (pw: any) =>
+        !pw?.isLost &&
+        (typeof pw === "string" ? pw : pw.name)?.toLowerCase().startsWith("spell flux"),
+    );
     if (p1HasHM && winner === "player1" && p1HMStat && p1HMStat === key) {
-      p1Points += 1;
+      p1Points += p1HasSpellFlux ? 2 : 1;
     }
     if (p2HasHM && winner === "player2" && p2HMStat && p2HMStat === key) {
-      p2Points += 1;
-    }
-    // Hunter's Mark lần 2 (Spell Flux): +1 bonus nếu round khớp stat lần 2
-    if (p1HasHM && winner === "player1" && p1HMStat2 && p1HMStat2 === key) {
-      p1Points += 1;
-    }
-    if (p2HasHM && winner === "player2" && p2HMStat2 && p2HMStat2 === key) {
-      p2Points += 1;
+      p2Points += p2HasSpellFlux ? 2 : 1;
     }
 
     // Base point change records
@@ -4309,6 +4307,58 @@ export const StatsComparisonMode = ({
             continue;
           }
 
+          // Frost Fingers: -1 stat cao nhất đối thủ per gear đối thủ có (tối đa 5)
+          if (handler === "frost_fingers_per_gear") {
+            const oppNormalGear = (
+              (oppChar as any)?.gear?.normalGear || []
+            ).filter((g: any) => !g?.isLost);
+            const oppLegacyGear = (
+              (oppChar as any)?.gear?.legacyGear || []
+            ).filter((g: any) => !g?.isLost);
+            const gearCount = oppNormalGear.length + oppLegacyGear.length;
+            const penalty = Math.min(gearCount, 5);
+            if (penalty === 0) {
+              preCombatEvents.push({
+                player: playerSide,
+                source: srcName,
+                description: `[${player.name ?? playerSide}] Frost Fingers: Đối thủ không có Gear → không kích hoạt`,
+                type: "info",
+              });
+            } else {
+              // Tính xem stat nào bị trừ (lặp penalty lần, mỗi lần lấy cao nhất hiện tại)
+              const STAT_KEYS_FF: (keyof CharacterStats)[] = ["str","spd","dur","iq","biq","ma"];
+              // Dùng stats trước before_combat để tính đúng stat bị trừ (nhất quán với engine)
+              const oppPlayerData = oppSide === "player1" ? player1 : player2;
+              const oppPreStats = oppChar
+                ? calcStatsWithDisabled(oppChar, oppPlayerData.no, effectiveDisabledItems)
+                : { ...oppBaseStats };
+              const simStats = { ...oppPreStats };
+              const debuffRecord: Partial<Record<keyof CharacterStats, number>> = {};
+              for (let i = 0; i < penalty; i++) {
+                let highestKey: keyof CharacterStats = STAT_KEYS_FF[0];
+                let highestVal = simStats[STAT_KEYS_FF[0]] ?? 0;
+                for (const k of STAT_KEYS_FF) {
+                  if ((simStats[k] ?? 0) > highestVal) {
+                    highestVal = simStats[k] ?? 0;
+                    highestKey = k;
+                  }
+                }
+                simStats[highestKey] = (simStats[highestKey] ?? 0) - 1;
+                debuffRecord[highestKey] = (debuffRecord[highestKey] ?? 0) - 1;
+              }
+              const debuffDesc = (Object.entries(debuffRecord) as [keyof CharacterStats, number][])
+                .map(([k, v]) => `${v} ${k.toUpperCase()}`)
+                .join(", ");
+              preCombatEvents.push({
+                player: oppSide,
+                source: srcName,
+                description: `[${player.name ?? playerSide}] Frost Fingers: ${gearCount} Gear → ${debuffDesc}`,
+                type: "stat_debuff",
+              });
+            }
+            continue;
+          }
+
           // Adapt: log GM action
           if (handler === "adapt_disable_known_powers") {
             const knownPowers: string[] =
@@ -5022,7 +5072,6 @@ export const StatsComparisonMode = ({
       player2,
       oneTrickPonyStat,
       huntersMarkStat,
-      huntersMarkStat2,
     );
     let finalState = newState;
     let finalLog = log;
@@ -5061,7 +5110,6 @@ export const StatsComparisonMode = ({
           player2,
           oneTrickPonyStat,
           huntersMarkStat,
-          huntersMarkStat2,
         );
         const log2marked: typeof log2 = {
           ...log2,
@@ -9316,8 +9364,8 @@ export const StatsComparisonMode = ({
   const [huntersMarkStat, setHuntersMarkStat] = useState<
     Record<string, string>
   >({});
-  // Hunter's Mark lần 2 (Spell Flux): stat được chọn qua wheel lần 2 (key = "player1" | "player2")
-  const [huntersMarkStat2, setHuntersMarkStat2] = useState<
+  // huntersMarkStat2 không còn dùng — Spell Flux + HM chỉ quay 1 lần, thắng +2 điểm
+  const [_huntersMarkStat2, setHuntersMarkStat2] = useState<
     Record<string, string>
   >({});
 
@@ -9939,43 +9987,7 @@ export const StatsComparisonMode = ({
       ]);
     } else if (sourceName === "hunter's mark") {
       setHuntersMarkStat((prev) => ({ ...prev, [playerLabel]: item.label }));
-      // Spell Flux: nếu player có Spell Flux, mở vòng quay HM lần 2
-      const hmChar =
-        playerLabel === "player1" ? player1?.character : player2?.character;
-      const hmPlayerNo = playerLabel === "player1" ? player1?.no : player2?.no;
-      const hmHasSpellFlux =
-        (hmChar?.powers || []).some(
-          (p: any) =>
-            !p?.isLost &&
-            (typeof p === "string" ? p : p.name)
-              ?.toLowerCase()
-              .startsWith("spell flux"),
-        ) && !disabledItems.has(`${hmPlayerNo}-power-Spell Flux`);
-      if (hmHasSpellFlux) {
-        const HM_ALL_ITEMS: WheelSpinItem[] = [
-          { label: "Strength", weight: 1, isSuccess: true, color: "#ef4444" },
-          { label: "Speed", weight: 1, isSuccess: true, color: "#3b82f6" },
-          { label: "Durability", weight: 1, isSuccess: true, color: "#10b981" },
-          { label: "IQ", weight: 1, isSuccess: true, color: "#a855f7" },
-          { label: "BIQ", weight: 1, isSuccess: true, color: "#ec4899" },
-          { label: "MA", weight: 1, isSuccess: true, color: "#f59e0b" },
-        ];
-        const hm2Items = HM_ALL_ITEMS; // cho phép trùng stat lần 1 → cộng điểm 2 lần
-        setPreCombatModal({
-          isOpen: true,
-          title: `Hunter's Mark [Spell Flux lần 2] — ${playerLabel === "player1" ? player1?.name : player2?.name}`,
-          description: `Spell Flux kích hoạt Hunter's Mark lần 2`,
-          items: hm2Items,
-          side: playerLabel,
-          effectKey: `hunters-mark-2-${playerLabel}`,
-          onResult: (result) => {
-            setHuntersMarkStat2((prev) => ({
-              ...prev,
-              [playerLabel]: result.label,
-            }));
-          },
-        });
-      }
+      // Spell Flux + Hunter's Mark: chỉ 1 round được chọn, nhưng thắng round đó +2 điểm (xử lý trong engine)
     } else if (sourceName.startsWith("golden coin")) {
       // label là "+X điểm khởi đầu (Y%)" — parse số điểm từ label
       const match = item.label.match(/\+(\d+)\s*điểm/);
@@ -10916,7 +10928,6 @@ export const StatsComparisonMode = ({
       if (hasPennyworthyWin && pennyworthyWinSpun?.isSuccess) base += 1;
       if (effects.onWin.includes("Hunter's Mark")) {
         const hmsChosen = huntersMarkStat[side]; // label e.g. "Strength"
-        const hmsChosen2 = huntersMarkStat2[side]; // Spell Flux lần 2
         const STAT_KEY_TO_LABEL_HM: Record<string, string> = {
           str: "Strength",
           spd: "Speed",
@@ -10927,16 +10938,14 @@ export const StatsComparisonMode = ({
         };
         const roundStatLabelHM = STAT_KEY_TO_LABEL_HM[statKey ?? ""] ?? "";
         if (hmsChosen === roundStatLabelHM) {
-          base += 1;
-        }
-        if (hmsChosen2 && hmsChosen2 === roundStatLabelHM) {
-          base += 1;
-        }
-        if (
-          hmsChosen === roundStatLabelHM ||
-          (hmsChosen2 && hmsChosen2 === roundStatLabelHM)
-        ) {
-          // autoApplied: đã xử lý trong computeRoundStep → patch không cộng thêm
+          // Spell Flux + Hunter's Mark: thắng round đó +2 thay vì +1
+          const hmChar = side === "player1" ? player1?.character : player2?.character;
+          const hmHasSpellFlux = (hmChar?.powers || []).some(
+            (pw: any) =>
+              !pw?.isLost &&
+              (typeof pw === "string" ? pw : pw.name)?.toLowerCase().startsWith("spell flux"),
+          );
+          base += hmHasSpellFlux ? 2 : 1;
           return {
             pts: base,
             pending: false,
