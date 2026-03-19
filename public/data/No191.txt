@@ -84,3 +84,14 @@ Lover:
 PvP Reward:
 - +1 Spd
 ```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
+======

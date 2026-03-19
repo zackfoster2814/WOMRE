@@ -1,6 +1,6 @@
 No.254
 Name: Pilèy (piley.)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -88,5 +88,10 @@ PvE:
 - Reward: 
 - Punishment: 
 - Note: (4) Không bị phạt
+```
+PvP:
+- Đối thủ: CatShark
+- Kết quả: Thua
+- Tỉ số: 3-3
 ```
 ======

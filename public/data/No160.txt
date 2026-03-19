@@ -47,6 +47,7 @@ Houses:
   - Cuộn khăn giấy (Từ House)
   - Buckler
   - Love Letter
+  - Giấy Nợ Gia Truyền 
  + 0 Legacy gear:
   - 
 ```
@@ -84,3 +85,14 @@ Team:
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
+======

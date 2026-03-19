@@ -78,3 +78,14 @@ Team: 32
 Lover:
 + DK Yuri (longgg0058) (Quà từ Race)
 ```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
+======

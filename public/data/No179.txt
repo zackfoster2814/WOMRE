@@ -87,4 +87,9 @@ PvE:
   + Nhận -6 spd
 - Note: Đánh caro 2 lần (-2 vào stat thấp nhất (x3))
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

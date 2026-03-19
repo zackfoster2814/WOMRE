@@ -1,7 +1,7 @@
 No.257
 Name: Fen (fentf)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -37,10 +37,7 @@ Houses:
 ```
 3 Gear: 
  + 3 Normal gear:
-  - Thuốc tráng dương
-  - Đai trinh tiết
-  - Wizard hat
-  - Kẹo 
+
  + 0 Legacy gear:
   - 
 ```
@@ -58,9 +55,6 @@ Runeword: Không
 
 ```
 2 Power: 
-+ Invulnerability
-+ Rising tide
-+ Magma Strike (Star Elf)
 ```
 
 ```
@@ -77,6 +71,11 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 BIQ
+```
+
 ======
 Battle Log: 
 ```
@@ -87,5 +86,12 @@ PvE:
 - Punishment: 
  + Mất hết Vũ khí, Power và Gear
  + -1 All Stats
+```
+PvP:
+- Đối thủ: bachtuotkun
+- Kết quả: thắng 
+- Tỉ số: 3-3
+- Reward:
+  - +1 BIQ
 ```
 ======

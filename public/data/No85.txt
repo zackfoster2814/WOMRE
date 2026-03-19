@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 0 Quirk:  
-+ 
++ Athletic
 ```
 ```
 Str: 6 (Được quay)
@@ -37,7 +37,7 @@ Houses:
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Baguette
  + 0 Legacy gear:
   - 
 ```
@@ -73,3 +73,14 @@ Team:
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
+======

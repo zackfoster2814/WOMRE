@@ -1,6 +1,6 @@
 No.163
 Name: Julianus (khoi7435)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -83,6 +83,11 @@ Lover:
 + KaTsumi - ChillWithCafe (katsumi3000) (tặng Detect Thoughts)
 ```
 
+```
+Other Source:
+- +2 Speed (Cuồng đao)
+```
+
 
 ======
 Battle Log:
@@ -92,5 +97,11 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Reward: nhận 5 Gear và 5 Power (trùng Body Enhancing nên không nhận thêm)
+```
+PvP:
+- Đối thủ: Hà (huanghe11)
+- Kết quả: Thua
+- Tỉ số: 3-2
+- Note: Vl không kích Bash budai luôn
 ```
 ======

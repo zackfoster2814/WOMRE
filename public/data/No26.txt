@@ -96,4 +96,9 @@ PvE:
 - Punishment: Mất toàn bộ Power
 - Note: (1)
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

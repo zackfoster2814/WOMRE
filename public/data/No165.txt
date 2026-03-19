@@ -1,7 +1,7 @@
 No.165
 Name: Lov4 (huylova)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -82,6 +82,11 @@ PvP Reward:
 + 2 Stat thấp nhất
 ```
 
+```
+Other Source:
+- -1 Dura
+```
+
 ======
 Battle Log:
 ```
@@ -91,5 +96,10 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+```
+PvP:
+- Đối thủ: Lonely boy 
+- Kết quả: Thắng
+- Tỉ số: 6-0
 ```
 ======

@@ -1,14 +1,14 @@
 No.25
 Name: Roku da Poet (roku2807)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
 ```
 ```
-Race: Spirit
+Race: Spirit (Soul Stack: 3)
 Sub-race: 
 ```
 
@@ -74,6 +74,12 @@ Lover:
 + Lunar (huyvp1412)
 ```
 
+```
+Other Source:
+- -1 Dura
+- +2 BIQ
+```
+
 
 ======
 Battle Log:
@@ -83,4 +89,11 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: -5 base Str
+```
+PvP:
+- Đối thủ: Nega (thxwngs)
+- Kết quả: Thắng
+- Tỉ số: 3-3
+- Reward: +2 vào chỉ số cao nhất (+2 BIQ)
+```
 ======

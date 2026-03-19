@@ -1,6 +1,6 @@
 No.124
 Name: Lonely boy (zombieman7477)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -84,5 +84,10 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+```
+PvP:
+- Đối thủ: Lov4
+- Kết quả: Thua
+- Tỉ số: 6-0
 ```
 ======

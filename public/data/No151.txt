@@ -20,6 +20,7 @@ Archetype:
 ``` 
 1 Quirk:  
 + Cheater
++ Bloodthirsty
 ```
 ```
 Str: 3
@@ -38,7 +39,7 @@ Houses:
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Baguette
  + 0 Legacy gear:
   - 
 ```
@@ -83,5 +84,10 @@ PvE:
 - Tỉ số: 4-2
 - Reward: 
 - Punishment: 
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
 ```
 ======

@@ -1,6 +1,6 @@
 No.19
 Name: GoonNaga (goonaga)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -78,6 +78,11 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- +1 Dura
+```
+
 ======
 Battle Log:
 ```
@@ -87,5 +92,10 @@ PvE:
 - Tỉ số: 0-12
 - Reward: 
 - Punishment: Nhận Quirk "Impatient" nhưng không được nhận 2 PvP Reward mặc định của nó
+```
+PvP:
+- Đối thủ: Karu (karu_87369)
+- Kết quả: Thua
+- Tỉ số: 3-2
 ```
 ======

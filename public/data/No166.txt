@@ -1,6 +1,6 @@
 No.166
 Name: sarah (sarahaxtroll)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -84,4 +84,10 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: -5 base Str
+```
+PvP:
+- Đối thủ: Huy Le 
+- Kết quả: Thua
+- Tỉ số: 1-5
+```
 ======

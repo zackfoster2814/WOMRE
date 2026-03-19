@@ -92,4 +92,9 @@ PvE:
 - Punishment: Nhận Archetype "Cinderheart"
 - Note: Dành cho Ako Darling
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

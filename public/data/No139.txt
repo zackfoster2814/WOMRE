@@ -91,4 +91,9 @@ PvE:
   + +1 vào stat thấp nhất (BIQ)
 - Punishment: 
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

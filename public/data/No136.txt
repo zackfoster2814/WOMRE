@@ -72,6 +72,17 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- -1 STR
+- -1 DUR
+```
+
+```
+PvP Reward:
+- +1 BIQ
+```
+
 ======
 Battle Log:
 ```
@@ -83,5 +94,10 @@ PvE:
 - Punishment: 
   + Nhận -1 All stats
 - Note: Ca Cao né ở round SPD, crit ở round MA
+```
+PvP:
+- Đối thủ: Pilèy
+- Kết quả: Thắng
+- Tỉ số: 3-3
 ```
 ======

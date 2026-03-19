@@ -97,4 +97,9 @@ PvE:
 - Reward: 
 - Punishment: Mất 3 Power, giữ lại Power "U=ma2"
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

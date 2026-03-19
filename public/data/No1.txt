@@ -92,4 +92,9 @@ PvE:
   + Nhận Power 4 Hit combo
 - Note: Win BO3 round MA 2-0
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

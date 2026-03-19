@@ -83,4 +83,9 @@ PvE:
 - Reward: Bị Isekai do luật boss (poor)
 - Punishment: 
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

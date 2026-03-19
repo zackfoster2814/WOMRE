@@ -1,7 +1,7 @@
 No.129
 Name: Narita Taigoat (stan_taengoo)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -41,7 +41,6 @@ Houses:
  + 3 Normal gear:
   - Ancient Protector
   - Đai trinh tiết
-  - Baguette
  + 0 Legacy gear:
   - 
 ```
@@ -67,6 +66,7 @@ Runeword: Không
 ```
 Char dev: 
 + MrBeast
++ Obtain a Cultivation Technique
 ```
 
 ```
@@ -78,6 +78,11 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- Nhận 1 char dev: Obtain a Cultivation Technique
+```
+
 ======
 Battle Log:
 ```
@@ -87,5 +92,10 @@ PvE:
 - Tỉ số: 1-4
 - Reward: 
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
+```
+PvP:
+- Đối thủ: Mr. C.B.
+- Kết quả: thắng
+- Tỉ số: 2-3
 ```
 ======

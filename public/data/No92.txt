@@ -1,6 +1,6 @@
 No.92
 Name: PYBB113 (quang03022)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -85,4 +85,10 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: -5 base Str
+```
+PvP:
+- Đối thủ: Yuto
+- Kết quả: Thua
+- Tỉ số: 3-3
+```
 ======

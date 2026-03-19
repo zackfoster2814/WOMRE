@@ -88,4 +88,9 @@ PvE:
 - Punishment: Mất toàn bộ Archetype và Quirk
 - Note: (3)
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

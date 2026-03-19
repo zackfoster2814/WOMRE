@@ -1,6 +1,6 @@
 No.31
 Name: cá trê vượt thác nhé hehe (huypui)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -21,12 +21,12 @@ Archetype:
 + Cheater
 ```
 ```
-Str: 5
-Spd: 4 (ban đầu là 1, +3 từ Archetype)
-Dur: 1
-IQ: 7
-BIQ: 8
-MA: 1
+Str: 6
+Spd: 5 (ban đầu là 1, +3 từ Archetype)
+Dur: 2
+IQ: 8
+BIQ: 9
+MA: 2
 ```
 
 ```
@@ -85,5 +85,12 @@ PvE:
 - Punishment: 
   + Nhận -1 All stats
 - Note: Ca Cao né ở round SPD, crit ở round MA
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
+======
 ```
 ======

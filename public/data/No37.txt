@@ -71,3 +71,14 @@ Team:
 Lover:
 + Cá Trê vượt thác nhé hehe (huypui) (từ Graceful)
 ```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
+======

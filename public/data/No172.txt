@@ -84,4 +84,9 @@ PvE:
 - Reward: Đã Isekai theo luật boss
 - Punishment: 
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

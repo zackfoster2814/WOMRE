@@ -1,6 +1,6 @@
 No.242
 Name: bachtuotkun
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -75,3 +75,22 @@ Team:
 Lover:
 + 
 ```
+
+```
+Other Source:
+- +1 STR
+- +1 SPD
+- +1 DUR
+- +1 BIQ
+```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: Fen (fentf)
+- Kết quả: Thua
+- Tỉ số: 3-3
+```
+======

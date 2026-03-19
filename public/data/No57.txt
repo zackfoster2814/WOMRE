@@ -88,4 +88,9 @@ PvE:
 - Reward: Nhận Power "Golden Parry"
 - Punishment: 
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

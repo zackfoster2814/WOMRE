@@ -86,4 +86,9 @@ PvE:
 - Reward: 
 - Punishment: bị đuổi khỏi house
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

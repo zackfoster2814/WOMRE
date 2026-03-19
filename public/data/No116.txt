@@ -59,13 +59,22 @@ Runeword: Không
 
 ```
 0 Power: 
-+ 
++ Lone Wolf
++ Gate to Heaven
++ Red Shift/LP1211-M
++ Ice Spike
 ```
 
 ```
 Char dev: 
 + Creator's Favor (Favor: Tặng Rapier)
 ```
+
+```
+PvP Reward:
+- +1 MA
+```
+
 
 ```
 Team: 
@@ -75,3 +84,15 @@ Team:
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: sarah
+- Kết quả: Thắng
+- Tỉ số: 1-5
+- Reward: + 1MA
+```
+======

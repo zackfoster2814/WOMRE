@@ -85,4 +85,9 @@ PvE:
 - Reward: Nhận Empty Stein và Wine
 - Punishment:
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

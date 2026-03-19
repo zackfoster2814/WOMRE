@@ -91,4 +91,9 @@ PvE:
 - Reward: 
 - Punishment: Mất toàn bộ chardev
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

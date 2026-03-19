@@ -93,4 +93,9 @@ PvE:
 - Tỉ số: 5-1
 - Reward: nhận 5 Power và 4 Gear (trùng Gold Pine Resin nên không nhận thêm)
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

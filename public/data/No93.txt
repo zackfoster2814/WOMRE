@@ -19,7 +19,8 @@ Archetype:
 ```
 ``` 
 1 Quirk:  
-+ Shining Brightly
++ Under the Weather
++ Brainrot
 ```
 ```
 Str: 5
@@ -78,6 +79,13 @@ Lover:
 ```
 
 
+```
+Other Source:
+- +4 Dura (Zealot)
+- -1 Dura (Fancy Feet)
+```
+
+
 ======
 Battle Log:
 ```
@@ -86,5 +94,10 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: Không bị phạt
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
 ```
 ======

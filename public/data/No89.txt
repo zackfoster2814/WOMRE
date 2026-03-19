@@ -1,6 +1,6 @@
 No.89
 Name: Nega (thxwngs)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -88,4 +88,10 @@ PvE:
 - Tỉ số: 6-4 
 - Punishment: 
  + Chỉ số thấp nhất của team bị kéo xuống 0
+```
+PvP:
+- Đối thủ: Roku da Poet (roku2807)
+- Kết quả: Thua
+- Tỉ số: 3-3
+```
 ======

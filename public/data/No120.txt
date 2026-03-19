@@ -86,4 +86,9 @@ PvE:
   + +1 All stats
 - Punishment: 
 ```
+PvP:
+- Đối thủ: Narita Taigoat
+- Kết quả: thua 
+- Tỉ số: 2-3
+```
 ======

@@ -1,7 +1,7 @@
 No.83
 Name: h2c (h2cch2)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -60,6 +60,7 @@ Runeword: Không
 ```
 1 Power: 
 + Powerful Strike
++ Sonic Scream
 ```
 
 ```
@@ -75,3 +76,21 @@ Team:
 Lover:
 + 
 ```
+
+```
+PvP Reward:
+- 1 Power: Sonic Scream
+```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: Sami (saminoceda)
+- Kết quả: Thắng 
+- Tỉ số: 5-2
+- Reward:
+  + Nhận 1 power: Sonic Scream
+```
+======

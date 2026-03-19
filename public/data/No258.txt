@@ -20,6 +20,7 @@ Archetype:
 1 Quirk:  
 + Open-minded
 + One Trick Pony
++ Progressive
 ```
 ```
 Str: 7
@@ -39,6 +40,7 @@ Houses:
 1 Gear: 
  + 0 Normal gear:
   - Knight's Armor
+  - Baguette
  + 0 Legacy gear:
   - 
 ```
@@ -86,5 +88,10 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: Không bị phạt
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
 ```
 ======

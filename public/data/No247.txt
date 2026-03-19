@@ -1,6 +1,6 @@
 No.247
 Name: Creeper (creeper717)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -82,5 +82,10 @@ PvE:
 - Tỉ số: 7--1
 - Reward: 
 - Punishment: Mất toàn bộ chardev
+```
+PvP:
+- Đối thủ: Hayato (hayatoo_o)
+- Kết quả: Thua
+- Tỉ số:0-5
 ```
 ======

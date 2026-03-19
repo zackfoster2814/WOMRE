@@ -1,6 +1,6 @@
 No.127
 Name: Shiro (kuriyamashiro)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -64,7 +64,8 @@ Runeword: Không
 + Writer
 + Sacred Fire
 + Arcana Blast
-+ Hunter's Rewards
++ Hunter's Rewards'
++ Lone Wolf
 ```
 
 ```
@@ -81,6 +82,11 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- -1 Dura (Slow healer)
+```
+
 ======
 Battle Log:
 ```
@@ -90,5 +96,10 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+```
+PvP:
+- Đối thủ: zun (zuniee)
+- Kết quả: Thua
+- Tỉ số: 4-2
 ```
 ======

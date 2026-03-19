@@ -1,6 +1,6 @@
 No.212
 Name: Ngủyên (ender2910)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -76,3 +76,14 @@ Team: (Không được Quay)
 Lover:
 + 
 ```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: idontloveyou (iloveyou1233406)
+- Kết quả: 5-1
+- Tỉ số: Thua
+```
+======

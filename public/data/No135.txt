@@ -22,6 +22,7 @@ Archetype:
 2 Quirk:  
 + Slow Metabolism
 + Artisan
++ Herbalist
 ```
 ```
 Str: 3 (Ban đầu là 4, -1 từ Cursed of 36k)
@@ -45,6 +46,7 @@ Houses:
   - Storage Room Key (Tặng Spatula)
   - Spatula (Từ Storage Room Key)
   - Ancient Protector
+  - Baguette
  + 0 Legacy gear:
   - 
 ```
@@ -94,5 +96,10 @@ PvE:
   + Nhận power 67
   + +1 vào stat thấp nhất (spd)
 - Punishment: 
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
 ```
 ======

@@ -1,7 +1,7 @@
 No.167
 Name: zun (zuniee)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -66,8 +66,9 @@ Runeword:
 ```
 
 ```
-Char dev: Lost an Arm
-+ 
+Char dev: 
++ Lost an Arm
++ Old age
 ```
 
 ```
@@ -77,6 +78,11 @@ Team: 23
 ```
 Lover:
 + 
+```
+
+```
+Other Source:
+- +1 All stats (từ Rampage)
 ```
 
 ======
@@ -91,5 +97,12 @@ PvE:
   + Nhận +3 BIQ
   + Nhận Power 4 Hit combo
 - Note: Win BO3 round MA 2-0
+```
+PvP:
+- Đối thủ: Shiro (kuriyamashiro)
+- Kết quả: Thắng
+- Tỉ số: 4-2
+- Reward: 
+  -> Nhận Char dev: Old age
 ```
 ======

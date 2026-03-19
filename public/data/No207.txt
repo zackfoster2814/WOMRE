@@ -79,6 +79,11 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- +3 Str (power stone)
+```
+
 ======
 Battle Log:
 ```
@@ -91,5 +96,10 @@ PvE:
   + Nhận +1 stat cao nhất (dura)
   + Nhận +1 stat thấp nhất (ma)
 - Punishment: 
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
 ```
 ======

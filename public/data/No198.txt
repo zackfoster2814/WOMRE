@@ -88,4 +88,9 @@ PvE:
   + Nhận -2 spd
   + Mất Power AID và Frost Armor
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

@@ -89,7 +89,7 @@ PvP Reward:
 
 
 ```
-Nguồn khác:
+Other Source:
 - 
 - 
 ````
@@ -103,5 +103,10 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: bị đuổi khỏi house
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
 ```
 ======

@@ -92,4 +92,9 @@ PvE:
   + Nhận -2 spd
   + Mất Power Sybaurafarming và Red Shift/LP
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

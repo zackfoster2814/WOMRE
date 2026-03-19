@@ -90,4 +90,9 @@ PvE:
   + Nhận +2 BIQ
 - Punishment: 
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

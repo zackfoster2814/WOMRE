@@ -14,8 +14,12 @@ const _playerTextCache = new Map<number, string>();
  * Lấy player index map {No1: fileId, No2: fileId, ...}
  * Cache lại sau lần đầu để không fetch lại nhiều lần
  */
+// Web production (GitHub Pages) thì dùng local files, Tauri native vẫn dùng Drive
+const IS_WEB_PROD = import.meta.env.PROD && !import.meta.env.TAURI_ENV_TARGET_TRIPLE;
+
 export async function getPlayerIndex(): Promise<Record<string, string>> {
   if (_playerIndexCache) return _playerIndexCache;
+  if (IS_WEB_PROD) return getPlayerIndexLocal();
   _playerIndexCache = await readDriveFile<Record<string, string>>(PLAYER_INDEX_FILE_ID);
   return _playerIndexCache;
 }
@@ -40,12 +44,48 @@ export async function fetchPlayerText(no: number): Promise<string> {
 }
 
 /**
+ * Fetch player texts từ local public/data/ (dùng cho production/deploy)
+ */
+async function fetchPlayerTextsLocal(nos: number[]): Promise<Map<number, string>> {
+  const result = new Map<number, string>();
+  const toFetch = nos.filter((no) => !_playerTextCache.has(no));
+  await Promise.all(
+    toFetch.map(async (no) => {
+      try {
+        const res = await fetch(`/data/No${no}.txt`);
+        if (res.ok) {
+          const text = await res.text();
+          _playerTextCache.set(no, text);
+        }
+      } catch {
+        // file không tồn tại — bỏ qua
+      }
+    }),
+  );
+  for (const no of nos) {
+    if (_playerTextCache.has(no)) result.set(no, _playerTextCache.get(no)!);
+  }
+  return result;
+}
+
+/**
+ * Lấy player index local từ public/data/player-index.json
+ */
+async function getPlayerIndexLocal(): Promise<Record<string, string>> {
+  if (_playerIndexCache) return _playerIndexCache;
+  const res = await fetch('/data/player-index.json');
+  _playerIndexCache = await res.json();
+  return _playerIndexCache!;
+}
+
+/**
  * Fetch nhiều player qua Apps Script batchRead (1 request / chunk)
  * Trả về map {no: text} — dùng cache, chỉ fetch những player chưa có
  */
 export async function fetchPlayerTexts(
   nos: number[],
 ): Promise<Map<number, string>> {
+  if (IS_WEB_PROD) return fetchPlayerTextsLocal(nos);
   const index = await getPlayerIndex();
   const result = new Map<number, string>();
   const toFetch = nos.filter((no) => !_playerTextCache.has(no));

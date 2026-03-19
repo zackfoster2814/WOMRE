@@ -1,6 +1,6 @@
 No.121
 Name: Dopamine (surviveathust)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -38,7 +38,8 @@ Houses:
 ```
 1 Gear: 
  + 1 Normal gear:
-  - Đá (Từ Machinists)
+  - Đá (Từ Machinists) (đã mất)
+  - Fishing Rod
  + 0 Legacy gear:
   - 
 ```
@@ -74,6 +75,12 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- -3 All Stats (đá)
+- -2 Dura
+```
+
 ======
 Battle Log:
 ```
@@ -85,5 +92,10 @@ PvE:
 - Punishment: 
   + Nhận -1 All stats
 - Note: Ca Cao né ở round SPD, crit ở round MA
+```
+PvP:
+- Đối thủ: Hy
+- Kết quả: Thua
+- Tỉ số: 5-0
 ```
 ======

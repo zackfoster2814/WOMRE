@@ -22,6 +22,7 @@ Archetype:
 2 Quirk:  
 + Herbalist
 + Fast Learner
++ Athletic
 ```
 ```
 Str: 10 (Ban đầu là 5 God of War's Entry Ticket)
@@ -42,6 +43,7 @@ Houses:
  + 2 Normal gear:
   - Ancient Protector
   - Thuốc Tráng Dương
+  - Baguette
  + 1 Legacy gear:
   - God of War's Entry Ticket (Từ House)
 ```
@@ -91,5 +93,10 @@ PvE:
 - Punishment: 
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
 ```
 ======

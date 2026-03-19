@@ -89,4 +89,9 @@ PvE:
   + Nhận -2 spd
   + Mất hết Power
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

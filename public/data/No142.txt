@@ -87,4 +87,9 @@ PvE:
   + Nhận -2 spd
   + Mất Power Magma Strike và Dominator
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

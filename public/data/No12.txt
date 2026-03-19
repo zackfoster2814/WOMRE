@@ -92,4 +92,9 @@ PvE:
 - Reward: +1 vào Base Stat thấp nhất 10 lần
 - Punishment: 
 ```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
 ======

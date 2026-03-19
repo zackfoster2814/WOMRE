@@ -76,3 +76,14 @@ Team:
 Lover:
 + Silver Chariot (galangal)
 ```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
+```
+======

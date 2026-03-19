@@ -1,7 +1,7 @@
 No.243
 Name: Karu (karu_87369)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -43,6 +43,7 @@ Houses:
   - Ớt
   - Shot Glass
   - Radio
+  - Fishing Rod
  + 0 Legacy gear:
   - 
 ```
@@ -80,6 +81,8 @@ Lover:
 + 
 ```
 
+
+
 ======
 Battle Log:
 ```
@@ -91,5 +94,12 @@ PvE:
 - Punishment: 
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
+```
+PvP:
+- Đối thủ: GoonNaga (goonaga)
+- Kết quả: Thắng
+- Tỉ số: 3-2
+- Reward:
+  -> Nhận 1 Gear: Fishing Rod
 ```
 ======

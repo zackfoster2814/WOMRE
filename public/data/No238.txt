@@ -78,6 +78,11 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- +2 Spd (từ Yami Dryad)
+```
+
 ======
 Battle Log:
 ```
@@ -89,5 +94,10 @@ PvE:
 - Punishment: 
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
 ```
 ======

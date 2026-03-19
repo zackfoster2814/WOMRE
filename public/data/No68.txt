@@ -1,6 +1,6 @@
 No.68
 Name: Sami (saminoceda)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -83,5 +83,10 @@ PvE:
 - Tỉ số: 4-2
 - Reward: 
 - Punishment: 
+```
+PvP:
+- Đối thủ: h2c (h2cch2)
+- Kết quả: Thua
+- Tỉ số: 5-2
 ```
 ======

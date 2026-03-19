@@ -1,7 +1,7 @@
 No.80
 Name: Hà (huanghe11)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -74,6 +74,17 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +2 Str
+- +2 BIQ
+- +2 Str
+- +2 Dura
+- +2 IQ
+- +2 MA
+```
+
+
 ======
 Battle Log:
 ```
@@ -83,5 +94,18 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: bị đuổi khỏi house
+```
+PvP:
+- Đối thủ: Julianus (khoi7435)
+- Kết quả: Thắng
+- Tỉ số: 3-2
+- Note: +2 IQ từ Independent
+- Reward: +2 stats ngẫu nhiên x6 
+  -> +2 Str
+  -> +2 BIQ
+  -> +2 Str
+  -> +2 Dura
+  -> +2 IQ
+  -> +2 MA
 ```
 ======

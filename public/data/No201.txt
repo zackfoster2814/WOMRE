@@ -1,7 +1,7 @@
 No.201
 Name: Hy (hy3269)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -38,7 +38,7 @@ Houses:
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Thuốc Tráng Dương
  + 0 Legacy gear:
   - Creator's Cat Ring(Từ House)
     -> +1 all stats
@@ -78,6 +78,16 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- +2 Dura
+```
+
+```
+PvP Reward:
+- Nhận 1 gear: Thuốc Tráng Dương
+```
+
 ======
 Battle Log:
 ```
@@ -87,5 +97,10 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+```
+PvP:
+- Đối thủ: 
+- Kết quả: 
+- Tỉ số:
 ```
 ======

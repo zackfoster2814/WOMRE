@@ -1,7 +1,7 @@
 No.252
 Name: Hachi (hachi2378)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -40,6 +40,9 @@ Houses:
 1 Gear: 
  + 1 Normal gear:
   - Wine
+  - Kuro's Charm
+  - Soap
+  - Dark Lanthorn
  + 0 Legacy gear:
   - 
 ```
@@ -67,6 +70,7 @@ Char dev:
 + Transmute: Chaos 
 + Abused (Từ Transmute: Chaos)
 + Kinda Homeless
++ Armed to the Teeth
 ```
 
 ```
@@ -77,3 +81,19 @@ Team:
 Lover:
 + 
 ```
+
+```
+PvP Reward:
+- Nhận 1 char dev: Armed to the Teeth
+```
+
+======
+Battle Log:
+```
+```
+PvP:
+- Đối thủ: Yami
+- Kết quả: thắng 
+- Tỉ số: 5-2
+```
+======
