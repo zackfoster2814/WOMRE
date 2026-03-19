@@ -1,6 +1,6 @@
 No.223
 Name: Bamialoai2 (lmaooo1308)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -88,7 +88,10 @@ PvE:
 ```
 PvP:
 - Đối thủ: 
+Pui (pui19)
 - Kết quả: 
+Thua
 - Tỉ số:
+ 4-3
 ```
 ======

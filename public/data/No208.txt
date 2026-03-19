@@ -88,9 +88,5 @@ PvE:
 - Reward: Nhận Văn Tế
 - Punishment: 
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

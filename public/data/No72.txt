@@ -1,6 +1,6 @@
 No.72
 Name: 0reki (0rekihoutarou)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -81,6 +81,13 @@ PvP Reward:
 - +1 IQ
 ```
 
+```
+Other Source:
+- -1 STR
+- -1 DUR
+```
+
+
 ======
 Battle Log:
 ```
@@ -96,8 +103,8 @@ PvE:
 - Punishment: 
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: NPC (npc867)
+- Kết quả: thua
+- Tỉ số: 1-4
 ```
 ======

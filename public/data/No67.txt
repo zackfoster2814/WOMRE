@@ -1,7 +1,7 @@
 No.67
 Name: KuSenpai (kusenpai)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -77,13 +77,26 @@ Lover:
 + Silver Chariot (galangal)
 ```
 
+```
+PvP Reward:
+- +2 chỉ số ngẫu nhiên x3
+```
+
+```
+Other Source:
+- +2 str 
+- +2 spd
+- +2 IQ
+```
+
+
 ======
 Battle Log:
 ```
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: wibuslayer786 (wibuslayer786)
+- Kết quả: thắng
+- Tỉ số: 5-2
 ```
 ======

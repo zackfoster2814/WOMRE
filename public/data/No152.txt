@@ -38,7 +38,7 @@ Houses:
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Holy Symbol
  + 0 Legacy gear:
   - 
 ```
@@ -77,9 +77,5 @@ Lover:
 Battle Log:
 ```
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

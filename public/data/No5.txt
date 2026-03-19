@@ -39,6 +39,7 @@ Houses:
 1 Gear: 
  + 1 Normal gear:
   - Ancient Protector
+  - Holy Symbol
  + 0 Legacy gear:
   - 
 ```
@@ -58,6 +59,7 @@ Runeword: Không
 ```
 1 Power: 
 + Critical Strike
++ Ice Hammer
 ```
 
 ```
@@ -74,13 +76,22 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- +1 str
+- +3 base spd
+- +2 STR
+```
+
+
 ======
 Battle Log: 
 ```
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: trthesloth (_trthesloth)
+- Kết quả: thắng
+- Tỉ số: 3-4
+- note: học Ice Hammer, +1 str, +3 base speed
 ```
 ======

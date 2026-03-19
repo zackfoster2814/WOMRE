@@ -1,6 +1,6 @@
 No.147
 Name: bưởi béo (ntd2020)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -89,9 +89,12 @@ PvE:
   + Nhận +1 BIQ
 - Punishment: 
 ```
+
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Anh Thầy Bói
+- Kết quả: Thua
+- Tỉ số: 3-3
 ```
 ======

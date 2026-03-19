@@ -23,7 +23,7 @@ Archetype:
 ```
 Str: 4 (ban đầu là 8, do PvE Punishment)
 Spd: 0 (ban đầu là 2, do PvE Punishment)
-Dur: 5
+Dur: 6 (từ 5 đi lên)
 IQ: 2
 BIQ: 2 (Ban đầu là 1, nhân đôi nhờ Fate's Trick)
 MA: 3
@@ -84,9 +84,5 @@ PvE:
 - Reward: 
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

@@ -87,9 +87,5 @@ PvE:
   + +4 IQ
 - Punishment: 
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

@@ -100,9 +100,5 @@ PvE:
 - Tỉ số: 5-1
 - Reward: nhận 5 Gear và 5 Power
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

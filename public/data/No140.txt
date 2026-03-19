@@ -1,6 +1,6 @@
 No.140
 Name: King Zalo (chi404)
-Status: Còn sống
+Status: đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -98,7 +98,10 @@ PvE:
 ```
 PvP:
 - Đối thủ: 
+Elai
 - Kết quả: 
+thua
 - Tỉ số:
+ 3-2
 ```
 ======

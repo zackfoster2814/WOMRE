@@ -88,9 +88,5 @@ PvE:
   + Nhận -1 All Stats
 - Note: (5)
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

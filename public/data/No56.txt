@@ -1,7 +1,7 @@
 No.56
 Name: baonine (baonine)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -39,8 +39,8 @@ Houses:
 ```
 3 Gear: 
  + 3 Normal gear:
-  - Holy Symbol
-  - Thuốc Tráng Dương
+  - Holy Symbol (đã mất)
+  - Thuốc Tráng Dương (đã mất)
   - Đai Trinh Tiết
  + 0 Legacy gear:
   - 
@@ -61,6 +61,10 @@ Runeword: Không
 2 Power: 
 + Hand Washing
 + Let's Pump Some Iron!
++ Spirit Link
++ The Coast is Clear!
++ Chaos Enchantment
++ Weapon Enhancing
 ```
 
 ```
@@ -77,6 +81,12 @@ Lover:
 + cá trê vượt thác nhé hehe (huypui)
 ```
 
+```
+Other Source:
+- -1 STR
+- -1 DUR
+```
+
 ======
 Battle Log:
 ```
@@ -88,9 +98,12 @@ PvE:
 - Punishment: Nhận Quirk "Impatient" nhưng không được nhận 2 PvP Reward mặc định của nó
 ```
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+
 ```
+PvP:
+- Đối thủ: Zackie
+- Kết quả: Thắng
+- Tỉ số: 4-2
+```
+
 ======

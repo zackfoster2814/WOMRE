@@ -41,6 +41,8 @@ Houses:
  + 1 Normal gear:
   - Ớt (Từ House)
   - Holy Symbol
+  - Văn tế
+  - Khung hình thờ 
  + 0 Legacy gear:
   - 
 ```
@@ -72,8 +74,14 @@ Team: 17
 
 ```
 Lover:
-+ 
++ Moonice (muroku_18)
 ```
+
+```
+PvP Reward:
+- +1 Dura
+```
+
 
 ======
 Battle Log:
@@ -88,8 +96,8 @@ PvE:
   + Mất hết Power
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Moonice (muroku_18)
+- Kết quả: Thắng 
+- Tỉ số: 4-2
 ```
 ======

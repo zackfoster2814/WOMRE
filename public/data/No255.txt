@@ -85,9 +85,5 @@ PvE:
 - Punishment: Mất toàn bộ Archetype và Quirk (Cursed 36 hồi lại 1 All Base Stats)
 - Note: (3)
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

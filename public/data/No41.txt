@@ -1,70 +1,71 @@
 No.41
 Name: Nicre (.jan_01)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
 ```
 ```
-Race: Merfolk
-Sub-race: -
+Race: Troll
+Sub-race: Mountain Troll
 ```
 
 ```
 Archetype: 
-+ Summoner
++ Loyal
 ```
 ``` 
-0 Quirk:  
+2 Quirk:  
 + 
+Mute
++ Impatient
 ```
 ```
-Str: 8
+Str: 1
 Spd: 6
-Dur: 6
-IQ: 6
-BIQ: 5
-MA: 3
+Dur: 1
+IQ: 1
+BIQ: 
+6
+MA: 2
 ```
 
 ```
 Houses: 
-+ Naga
++ Dothraki
 ```
 
 ```
 1 Gear: 
  + 0 Normal gear:
   - 
+Ba hoa trắng
  + 1 Legacy gear:
-  - Book of a small dog
+  - 
 ```
 
 ```
-1 Normal Weapon
-+ Rapier
+1 unique Weapon
++ Moonlight Greatsword
 ```
 
 ``` 
-2 Rune: 
-+ El
-+ Tir
+0 Rune: 
++
 Runeword: Không
 ```
 
 ```
-4 Power: 
-+ Bash
-+ Quirkless
-+ Frost Armor
-+ Garlic Breath
+2 Power: 
++ Misty Step Ahead
++ Evasion
 ```
 
 ```
 Char dev: 
-+ A big Gift!
++ King's Landing
 ```
 
 ```
@@ -74,6 +75,13 @@ Team: 19
 ```
 Lover:
 + 
+Nime
+```
+
+```
+PvP Reward:
+- +1 Spd
+- +1 Dura
 ```
 
 ======
@@ -84,15 +92,14 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 4-2
 - Reward: 
-  + Nhận +2 Spd
-  + Nhận +2 Dur
-  + Nhận +2 BIQ
-  + Nhận +2 MA
 - Punishment: 
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: nat296
+- Kết quả: Thắng
+- Tỉ số: 6-0
+- note: isekai
 ```
 ======

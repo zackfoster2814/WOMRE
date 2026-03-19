@@ -94,9 +94,5 @@ PvE:
  + Mất hết Vũ khí, Power và Gear
  + -1 All Stats
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

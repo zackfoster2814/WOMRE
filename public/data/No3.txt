@@ -83,9 +83,5 @@ PvE:
 - Punishment: 
  + -2 vào stat thấp nhất (MA)
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

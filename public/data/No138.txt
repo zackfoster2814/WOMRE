@@ -94,9 +94,5 @@ PvE:
 - Punishment: 
 - Note: Lmao thua cả Mambo
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

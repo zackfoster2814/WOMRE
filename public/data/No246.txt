@@ -90,9 +90,5 @@ PvE:
 - Reward: Không được nhận 3 power Ice Hammer, Misty Step Ahead, Spear of Fire (player được nhận: trantrinhtri)
 - Punishment: 
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

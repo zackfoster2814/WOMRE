@@ -1,7 +1,7 @@
 No.245
 Name: trantrinhtri
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -39,6 +39,7 @@ Houses:
 1 Gear: 
  + 1 Normal gear:
   - Healing Flasks
+  - Golden Coin
  + 0 Legacy gear:
   - 
 ```
@@ -77,6 +78,11 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 spd
+```
+
 ======
 Battle Log:
 ```
@@ -87,9 +93,11 @@ PvE:
 - Reward: Nhận 3 power Ice Hammer, Misty Step Ahead, Spear of Fire (player được nhận: trantrinhtri)
 - Punishment: 
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Khogadetem
+- Kết quả: Thắng
+- Tỉ số: 4-1
 ```
 ======

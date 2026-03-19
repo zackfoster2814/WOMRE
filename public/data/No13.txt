@@ -44,6 +44,8 @@ Houses:
  + 2 Normal gear:
   - Dark Lanthorn
   - Văn Tế
+  - Storage room key (nhận đai tinh tiếc)
+  - Đai trinh tiết
  + 0 Legacy gear:
   - 
 ```
@@ -98,9 +100,5 @@ PvE:
   + +4 IQ
 - Punishment: 
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

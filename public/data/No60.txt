@@ -1,6 +1,6 @@
 No.60
 Name: nat296 (anhtai8340)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -89,9 +89,11 @@ PvE:
 - Reward: Nhận Empty Stein và Wine
 - Punishment:
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Nicre
+- Kết quả: Thua
+- Tỉ số: 6-0
 ```
 ======

@@ -1,7 +1,7 @@
 No.182
 Name: BLèBLè (amebear)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -77,6 +77,13 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- +2 str
+- +3 DUR
+```
+
+
 ======
 Battle Log:
 ```
@@ -88,8 +95,9 @@ PvE:
 - Punishment:
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Vollerei (thanhcraft)
+- Kết quả: thắng 
+- Tỉ số: 3-3
+- Note: Nhận +2 vào stats cao nhất 
 ```
 ======

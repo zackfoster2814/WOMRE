@@ -39,12 +39,13 @@ Houses:
 ```
 4 Gear: 
  + 4 Normal gear:
-  - Empty Stein (Từ House)
-  - Spatula(Từ House)
-  - Golden Coin (Từ House)
-  - Golden Coin (Từ House)
-  - Golden Coin (Từ House)
+  - Empty Stein 
+  - Spatula
+  - Golden Coin 
+  - Golden Coin 
+  - Golden Coin 
   - Radio
+  - Văn tế
  + 0 Legacy gear:
   - 
 ```
@@ -93,9 +94,5 @@ PvE:
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

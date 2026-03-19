@@ -1,7 +1,7 @@
 No.23
 Name: thomasjoec (thomasjoec)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -39,6 +39,7 @@ Houses:
 1 Gear: 
  + 1 Normal gear:
   - Dark Lanthorn
+  - Golden Coin
  + 0 Legacy gear:
   - 
 ```
@@ -73,6 +74,26 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +2 str (stats thấp nhất)
+```
+
+```
+Summon: 
++ Numby
+```
+
+```
+Other Source:
+- +2 STR 
+```
+```
+PvP Reward:
+- +2 str (Stat Thấp Nhất)
+```
+
+
 ======
 Battle Log:
 ```
@@ -83,9 +104,11 @@ PvE:
 - Reward: Bị Isekai do luật boss (poor)
 - Punishment: 
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: I'm Here W U
+- Kết quả: Thắng
+- Tỉ số: 3-2
 ```
 ======

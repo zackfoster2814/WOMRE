@@ -326,6 +326,26 @@ export class CharacterParser {
     const powerIndex = this.findSectionIndex(lines, "Power:");
     character.powers = this.parseListValue(lines, powerIndex);
 
+    // Extract adaptKnownPowers từ power "Adapt -> X -> Y"
+    for (const p of character.powers) {
+      if (/^Adapt\s*->/i.test(p.name)) {
+        character.adaptKnownPowers = p.name
+          .split("->")
+          .slice(1)
+          .map((s) => s.trim())
+          .filter(Boolean);
+        // Normalize tên power về "Adapt" để resolver lookup đúng
+        p.name = "Adapt";
+        break;
+      }
+    }
+
+    // Parse Summons (block riêng: "Summon:\n+ Numby\n+ Igris")
+    const summonIndex = this.findSectionIndex(lines, "Summon:");
+    if (summonIndex >= 0) {
+      character.summons = this.parseListValue(lines, summonIndex);
+    }
+
     // Parse Character Development (support multiple)
     const charDevIndex = this.findSectionIndex(lines, "Char dev:");
     character.charDevs = this.parseListValue(lines, charDevIndex);
@@ -513,8 +533,8 @@ export class CharacterParser {
         continue;
       }
 
-      // "+2 BIQ", "-1 Dura", "+1 Str", etc.
-      const simpleMatch = item.match(/^([+-]?\d+)\s+(\w+)/i);
+      // "+2 BIQ", "-1 Dura", "+1 Str", "+3 base speed", etc.
+      const simpleMatch = item.match(/^([+-]?\d+)\s+(?:base\s+)?(\w+)/i);
       if (simpleMatch) {
         const value = parseInt(simpleMatch[1]);
         const stat = statMap[simpleMatch[2].toLowerCase()];

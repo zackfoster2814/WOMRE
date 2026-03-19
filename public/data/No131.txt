@@ -1,7 +1,7 @@
 No.131
 Name: Pui (pui19)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -39,7 +39,8 @@ Houses:
 2 Gear: 
  + 2 Normal gear:
   - Thuốc tráng dương
-  - Văn tế
+  - Văn tế (đã mất)
+  - Magical Scroll
  + 0 Legacy gear:
   - 
 ```
@@ -58,6 +59,10 @@ Runeword: Không
 ```
 1 Power: 
 + Quirkless
++ Hunter's Mark
++ Critical Strike
++ The Great storm
++ Thunder Orb
 ```
 
 ```
@@ -76,6 +81,12 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- Nhận 2 power
+```
+
+
 ======
 Battle Log:
 ```
@@ -87,8 +98,18 @@ PvE:
 - Punishment: Nhận Archetype NPC
 ```
 PvP:
-- Đối thủ: 
+- Đối thủ: NPC (npc867)
+- Kết quả: thua
+- Tỉ số: 0-3
+- note: Đánh hộ 0reki (0rekihoutarou), bú Hunter's Mark
+```
+PvP:
+- Đối thủ: Bamialoai2 (lmaooo1308)
 - Kết quả: 
+thắng 
 - Tỉ số:
+ 4-3
+- note: bú 
+crit, đào mộ Pilèy Magical Scroll
 ```
 ======

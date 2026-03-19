@@ -1,6 +1,6 @@
 No.145
 Name: Nikki (huyhuhhuh)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -76,6 +76,11 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 dura
+```
+
 ======
 Battle Log:
 ```
@@ -86,9 +91,12 @@ PvE:
 - Reward: 
 - Punishment: Mất hết Power
 ```
+
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: catfish
+- Kết quả: Thua
+- Tỉ số: 3-3
 ```
 ======

@@ -69,6 +69,7 @@ Runeword:
 + U=ma2 (Từ Đừng Nhờn với Two Fingers)
 + Burning Hand (Từ Sub-race) (Đã mất do PvE punishment)
 + The Coast is Clear! (Đã mất do PvE punishment)
++ Invulnerability
 ```
 
 ```
@@ -87,6 +88,12 @@ Lover:
 + Đừng Nhờn với Two Fingers
 ```
 
+```
+PvP Reward:
+- Nhận 1 power: Invulnerability
+```
+
+
 ======
 Battle Log:
 ```
@@ -96,10 +103,5 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: Mất 3 Power, giữ lại Power "U=ma2"
-```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
 ```
 ======

@@ -94,9 +94,5 @@ PvE:
 - Reward: 
 - Punishment: Mất 3 Power, giữ lại Power "Quas"
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

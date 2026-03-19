@@ -89,8 +89,8 @@ PvE:
 - Punishment: 
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Duckie2369
+- Kết quả: thua
+- Tỉ số: 3-4
 ```
 ======

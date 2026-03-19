@@ -81,6 +81,7 @@ Lover:
 ```
 Other Source:
 - +2 Spd (từ Yami Dryad)
+- +2 MA (từ Bamialoai2)
 ```
 
 ======
@@ -95,9 +96,5 @@ PvE:
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

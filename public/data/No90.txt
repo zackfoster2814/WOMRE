@@ -40,6 +40,7 @@ Houses:
   - Dark Lanthorn
   - Storage Room Key (Tặng Love Letter)
   - Love Letter (Từ Storage Room Key)
+  - Văn tế
  + 1 Legacy gear:
   - Yamakunson's Wanted Poster (Từ House) (Ban đầu truy nã Nagi)
 ```
@@ -90,9 +91,5 @@ PvE:
 - Punishment: 
  + Chỉ số thấp nhất của team bị kéo xuống 0
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

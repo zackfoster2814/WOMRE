@@ -395,6 +395,29 @@ export const PvPTournamentPage = () => {
     [roundData, allRoundData, tournamentBattle, saveToDrive, saveRoundToDrive],
   );
 
+  const handleNextMatch = useCallback(
+    async (result: TournamentSaveResult) => {
+      if (!tournamentBattle) return;
+      await handleSaveTournamentResult(result);
+      const allMatches = [
+        ...(roundData?.matches ?? []),
+        ...Object.values(allRoundData).flatMap((rd) => rd.matches),
+      ];
+      const currentMatchNo = tournamentBattle.matchNumber;
+      const nextMatch = allMatches.find(
+        (m) => m.matchNumber > currentMatchNo && m.player1 && m.player2 && !m.winner,
+      );
+      if (nextMatch) {
+        setTournamentBattle({
+          matchNumber: nextMatch.matchNumber,
+          player1No: nextMatch.player1!.no,
+          player2No: nextMatch.player2!.no,
+        });
+      }
+    },
+    [tournamentBattle, roundData, allRoundData, handleSaveTournamentResult],
+  );
+
   const exportLocal = useCallback(() => {
     if (!roundData) return;
     const blob = new Blob([JSON.stringify(roundData, null, 2)], { type: "application/json" });
@@ -439,6 +462,7 @@ export const PvPTournamentPage = () => {
         onBack={() => setTournamentBattle(null)}
         tournamentMatch={tournamentBattle}
         onSaveTournamentResult={handleSaveTournamentResult}
+        onNextMatch={handleNextMatch}
       />
     );
   }

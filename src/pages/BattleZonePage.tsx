@@ -580,6 +580,7 @@ interface BattleModeProps {
   /** If set, StatsComparisonMode operates in tournament mode */
   tournamentMatch?: TournamentMatchContext;
   onSaveTournamentResult?: (result: TournamentSaveResult) => void;
+  onNextMatch?: (result: TournamentSaveResult) => void;
 }
 
 // Race tier for tie-breaker (lower tier number = stronger race, wins tie)
@@ -1741,6 +1742,7 @@ export const StatsComparisonMode = ({
   onBack,
   tournamentMatch,
   onSaveTournamentResult,
+  onNextMatch,
 }: BattleModeProps) => {
   const [allPlayers, setAllPlayers] = useState<PvPPlayerData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -8717,6 +8719,13 @@ export const StatsComparisonMode = ({
               color: "#e2e8f0",
               meta: { gmAction: "allstats1" },
             },
+            {
+              label: "Lời Nguyền Địa Ngục",
+              weight: 3,
+              isSuccess: false,
+              color: "#7c3aed",
+              meta: { gmAction: "loi_nguyen_dia_nguc" },
+            },
           ];
           const POWER_RANGER_STAT_ITEMS: WheelSpinItem[] = [
             {
@@ -14070,6 +14079,24 @@ export const StatsComparisonMode = ({
                   className="px-4 py-2 bg-gray-700/60 hover:bg-gray-600/60 text-gray-300 rounded-lg text-xs border border-gray-600/50 transition-colors"
                 >
                   ↺ Re-battle
+                </button>
+              )}
+              {/* Next Match — chỉ trong tournament mode, sau khi combat confirmed */}
+              {combatConfirmed && isTournamentMode && onNextMatch && effectiveWinner && (
+                <button
+                  onClick={() => {
+                    onNextMatch({
+                      winnerNo: effectiveWinner === "player1" ? (player1?.no ?? 0) : (player2?.no ?? 0),
+                      score: combatResult
+                        ? `${combatResult.player1Score}-${combatResult.player2Score}`
+                        : null,
+                      specialEvent: tournamentSpecialEvent || null,
+                      note: tournamentNote || null,
+                    });
+                  }}
+                  className="px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold rounded-lg text-xs shadow-lg shadow-violet-500/20 transition-all"
+                >
+                  Next Match ▶
                 </button>
               )}
             </div>

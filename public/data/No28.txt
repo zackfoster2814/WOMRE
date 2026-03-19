@@ -1,7 +1,7 @@
 No.28
 Name: Manhattan Cafe chơi TFT (randomguy5719)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -63,6 +63,7 @@ Runeword: Không
 + Water Breathing
 + Dominator
 + Sacred Fire
++ Arcana Blast
 ```
 
 ```
@@ -79,6 +80,21 @@ Lover:
 + 
 ```
 
+
+```
+Other Source:
+- +2 all stats
+- +2 BIQ
+- Dragon's Weed nhận Arcana Blast
+```
+
+```
+PvP Reward:
+- +2 BIQ (chỉ số thấp nhất)
+```
+
+
+
 ======
 Battle Log:
 ```
@@ -88,10 +104,11 @@ PvE:
 - Tỉ số: 3-3
 - Reward: Nhận Empty Stein và Wine
 - Punishment:
+
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Ethan
+- Kết quả: Thắng
+- Tỉ số: 5-1
 ```
 ======

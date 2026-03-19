@@ -38,7 +38,7 @@ Houses:
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Văn tế
  + 0 Legacy gear:
   - 
 ```
@@ -83,9 +83,5 @@ PvE:
 - Punishment: 
  + -2 vào stat thấp nhất (BIQ)
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

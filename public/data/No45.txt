@@ -15,6 +15,7 @@ Sub-race: Lùn Xám (Gray)
 ```
 Archetype: 
 + Bookworm
++ Paladin
 ```
 ``` 
 0 Quirk:  
@@ -38,6 +39,8 @@ Houses:
 2 Gear: 
  + 1 Normal gear:
   - Fingerthing
+  - Storage room key (Nhận Spatula)
+  - Spatula
  + 1 Legacy gear:
   - Ragnarok's Cobra
 ```
@@ -82,9 +85,5 @@ PvE:
 - Punishment: 
  + -2 vào stat thấp nhất (Str)
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

@@ -35,6 +35,13 @@ export function clearPlayerIndexCache(): void {
  */
 export async function fetchPlayerText(no: number): Promise<string> {
   if (_playerTextCache.has(no)) return _playerTextCache.get(no)!;
+  if (IS_WEB_PROD) {
+    const res = await fetch(`${BASE_URL}data/No${no}.txt`);
+    if (!res.ok) throw new Error(`Player No${no} not found`);
+    const text = await res.text();
+    _playerTextCache.set(no, text);
+    return text;
+  }
   const index = await getPlayerIndex();
   const fileId = index[`No${no}`];
   if (!fileId) throw new Error(`Player No${no} not found in index`);

@@ -1,6 +1,6 @@
 No.189
 Name: Tuyết Rơi Mùa Hè (asthewinterdawn)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -87,9 +87,11 @@ PvE:
 - Reward: 
 - Punishment: 
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Yoh Hai Kiếm
+- Kết quả: Thua
+- Tỉ số: 5-1
 ```
 ======

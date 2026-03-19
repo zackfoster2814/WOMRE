@@ -1,7 +1,7 @@
 No.162
 Name: mrcandy1612 (mrcandy1612)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -17,6 +17,7 @@ Archetype:
 + Wibu
  -> Jojo
   -> Tusk Act II
++ Devotee
 ```
 ``` 
 2 Quirk:  
@@ -44,6 +45,8 @@ Houses:
   - Ancient Protector
   - Thuốc Tráng Dương
   - Baguette
+  - Storage room key (nhận Spatula)
+  - Spatula
  + 1 Legacy gear:
   - God of War's Entry Ticket (Từ House)
 ```
@@ -82,6 +85,19 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- Mirage Flower - thêm 1 Pvp Reward
+```
+
+
+
+```
+PvP Reward:
+- +1 spd
+- +1 str
+```
+
 ======
 Battle Log:
 ```
@@ -94,9 +110,11 @@ PvE:
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Adrian Fahrenheit Țepeș
+- Kết quả: Thắng
+- Tỉ số: 3-2
 ```
 ======

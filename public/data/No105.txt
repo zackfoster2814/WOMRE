@@ -87,9 +87,5 @@ PvE:
   + Nhận power 67
 - Punishment: 
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

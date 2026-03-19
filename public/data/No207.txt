@@ -1,6 +1,6 @@
 No.207
 Name: I'm Here W U (mocvu170820)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -98,8 +98,8 @@ PvE:
 - Punishment: 
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: thomasjoec
+- Kết quả: Thua
+- Tỉ số: 3-2
 ```
 ======

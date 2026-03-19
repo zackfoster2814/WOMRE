@@ -22,6 +22,7 @@ Archetype:
 ``` 
 1 Quirk:  
 + Raumanian🍀
++ Bloodthirsty
 ```
 ```
 Str: 1
@@ -49,6 +50,8 @@ Houses:
   - Cursed Charm (Từ Armed to the Teeth)
   - Golden Coin (Từ Armed to the Teeth)
   - Love Letter (Từ Armed to the Teeth)
+  - Storage room key (nhận Baguette)
+  - Baguette
  + 0 Legacy gear:
   - 
 ```
@@ -103,9 +106,5 @@ PvE:
 - Punishment: 
  + -2 vào stat thấp nhất (str)
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

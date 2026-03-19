@@ -88,9 +88,5 @@ PvE:
 - Reward: 
 - Punishment: Mất 3 Power, giữ lại Power "Void Walking"
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

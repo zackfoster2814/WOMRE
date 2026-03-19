@@ -83,9 +83,5 @@ PvE:
 - Tỉ số: 5-1
 - Bị Isekai trong trận (đã Isekai)
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

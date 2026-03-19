@@ -1,6 +1,6 @@
 No.119
 Name: Ethan (sang_44301)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -77,8 +77,8 @@ Lover:
 Battle Log:
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Manhattan Cafe chơi TFT
+- Kết quả: Thua
+- Tỉ số: 5-1
 ```
 ======

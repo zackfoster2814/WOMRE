@@ -89,9 +89,5 @@ PvE:
 - Reward:
 - Punishment: Nhận Archetype NPC
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

@@ -93,9 +93,5 @@ PvE:
 - Tỉ số: 5-1
 - Reward: nhận 5 Gear và 5 Power (trùng Encroaching Shadow nên không nhận thêm)
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

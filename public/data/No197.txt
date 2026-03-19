@@ -1,7 +1,7 @@
 No.197
 Name: Anh Thầy Bói (nongnoc0977)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -72,6 +72,16 @@ Team: 22
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 str
+```
+
+```
+Other Source:
+- -1 Dura
+```
+
 
 ======
 Battle Log:
@@ -85,9 +95,12 @@ PvE:
   + Nhận -6 Str
 - Note: Đánh caro 2 lần (-2 vào stat thấp nhất (x3))
 ```
+
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: bưởi béo
+- Kết quả: Thắng
+- Tỉ số: 3-3
 ```
 ======

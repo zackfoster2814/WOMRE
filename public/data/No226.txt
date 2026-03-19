@@ -86,9 +86,5 @@ PvE:
 - Punishment: 
 - Note: (4) Không bị phạt
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

@@ -1,6 +1,6 @@
 No.193
 Name: Vollerei (thanhcraft)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -78,6 +78,11 @@ Team: 30
 Lover:
 + baonine (baonine) (Đơn Phương)
 ```
+```
+Other Source:
+- +1 SPD
+- +1 IQ
+```
 
 ======
 Battle Log:
@@ -90,8 +95,8 @@ PvE:
 - Punishment: Nhận Quirk "Impatient" nhưng không được nhận 2 PvP Reward mặc định của nó
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: BLèBLè (amebear)
+- Kết quả: thua 
+- Tỉ số: 3-3
 ```
 ======

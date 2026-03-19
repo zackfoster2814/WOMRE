@@ -79,13 +79,14 @@ Lover:
 + DK Yuri (longgg0058) (Quà từ Race)
 ```
 
+```
+Other Source:
+- +1 str
+```
+
 ======
 Battle Log:
 ```
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

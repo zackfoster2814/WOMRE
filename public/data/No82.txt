@@ -1,6 +1,6 @@
 No.82
 Name: Zackie (zackfoster___)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -93,9 +93,12 @@ PvE:
 - Reward: 
 - Punishment: Dura về 0
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+
 ```
+PvP:
+- Đối thủ: baonine
+- Kết quả: Thua
+- Tỉ số: 4-2
+```
+
 ======

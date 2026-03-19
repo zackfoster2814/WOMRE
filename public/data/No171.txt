@@ -82,9 +82,10 @@ PvE:
 - Reward: 
 - Punishment: 
 ```
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Tekachi
+- Kết quả: thua
+- Tỉ số: 3-0
 ```
 ======

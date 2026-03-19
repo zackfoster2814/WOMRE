@@ -78,16 +78,12 @@ Team:
 
 ```
 Lover:
-+ 
++ Nicre (.jan_01)
 ```
 
 ======
 Battle Log:
 ```
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

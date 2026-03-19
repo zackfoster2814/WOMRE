@@ -88,9 +88,5 @@ PvE:
   + +1 All stats
 - Punishment: 
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

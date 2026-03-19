@@ -17,6 +17,7 @@ import { SandboxPage } from "./pages/SandboxPage";
 // import { TeamBattlePage } from "./pages/TeamBattlePage";
 import { isTauri } from "./utils/localStorage";
 import { fetchAllPlayerTexts } from "./utils/googleDrive";
+import { SyncDataDialog } from "./components/SyncDataDialog";
 
 // Check if running in web-only mode (not Tauri)
 const isWebOnly = !isTauri();
@@ -182,12 +183,47 @@ const PrefetchToast = () => {
   );
 };
 
+const SYNC_SEQUENCE = "SYNCDATA";
+
 function App() {
+  const [showSync, setShowSync] = useState(false);
+  const syncKeyBuffer = useRef("");
+  const syncKeyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!isTauri()) return;
+
+    const handleKey = (e: KeyboardEvent) => {
+      // Chỉ nhận ký tự đơn, không modifier
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      if (e.key.length !== 1) return;
+
+      syncKeyBuffer.current += e.key.toUpperCase();
+
+      // Reset buffer sau 2s không gõ
+      if (syncKeyTimer.current) clearTimeout(syncKeyTimer.current);
+      syncKeyTimer.current = setTimeout(() => {
+        syncKeyBuffer.current = "";
+      }, 2000);
+
+      // Check nếu buffer kết thúc bằng SYNCDATA
+      if (syncKeyBuffer.current.endsWith(SYNC_SEQUENCE)) {
+        syncKeyBuffer.current = "";
+        if (syncKeyTimer.current) clearTimeout(syncKeyTimer.current);
+        setShowSync(true);
+      }
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   return (
     <HashRouter>
       {/* Hide navigation in web-only mode */}
       {!isWebOnly && <Navigation />}
       <PrefetchToast />
+      {showSync && <SyncDataDialog onClose={() => setShowSync(false)} />}
       <Routes>
         {isWebOnly ? (
           <>

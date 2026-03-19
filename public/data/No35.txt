@@ -45,6 +45,7 @@ Houses:
   - Golden Coin
   - Golden Coin
   - Love Letter
+  - Holy Symbol
  + 0 Legacy gear:
   - Space stone
 ```
@@ -93,9 +94,5 @@ PvE:
 - Punishment: 
 - Note: Lmao thua cả Mambo
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

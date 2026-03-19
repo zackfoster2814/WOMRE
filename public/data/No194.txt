@@ -1,6 +1,6 @@
 No.194
 Name: Vilhelm
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -85,9 +85,11 @@ PvE:
 - Reward: 
 - Punishment: Dura về 0
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Lệch rate Jingliu 2 lần
+- Kết quả: Thua
+- Tỉ số: 4-5
 ```
 ======

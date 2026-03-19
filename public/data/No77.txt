@@ -1,7 +1,7 @@
 No.77
 Name: Yoh Hai Kiếm (yoh711)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -86,6 +86,16 @@ Lover:
 +
 ```
 
+```
+Other Source:
+- -2 Dura
+```
+
+
+```
+PvP Reward:
+- +1 BIQ
+```
 
 ======
 Battle Log:
@@ -96,9 +106,11 @@ PvE:
 - Tỉ số: 5-1
 - Reward: nhận 5 Gear và 5 Power
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Tuyết Rơi Mùa Hè
+- Kết quả: Thắng
+- Tỉ số: 5-1
 ```
 ======

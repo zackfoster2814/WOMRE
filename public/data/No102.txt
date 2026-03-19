@@ -1,7 +1,7 @@
 No.102
 Name: Korokiri
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -78,6 +78,18 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- +1 str
+- +1 biq
+```
+
+```
+PvP Reward:
+- +1 str
+```
+
+
 ======
 Battle Log:
 ```
@@ -90,9 +102,12 @@ PvE:
   + +1 vào stat thấp nhất (spd)
 - Punishment: 
 ```
+
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: AsuK
+- Kết quả: Thắng
+- Tỉ số: 4-4
 ```
 ======

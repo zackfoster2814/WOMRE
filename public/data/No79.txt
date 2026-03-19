@@ -1,7 +1,7 @@
 No.79
 Name: Elai (elai2924)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: Primordial Being
-Sub-race: Water
+Sub-race: Earth
 ```
 
 ```
@@ -21,6 +21,7 @@ Archetype:
 + Clumsy
 + Independent
 + Impatient (Từ Bánh mì)
+- Lucky
 ```
 ```
 Str: 7
@@ -47,7 +48,7 @@ Houses:
 
 ```
 1 Unique Weapon
-+ Lusat's Glintstone Staff (Không dùng được.)
++ Lusat's Glintstone Staff (Không dùng được)
 ```
 
 ``` 
@@ -58,6 +59,7 @@ Runeword: Không
 
 ```
 5 Power: 
++ Earth-Shaking (Từ sub-race)
 + Water Breathing (Từ Sub-race)
 + Divine Smite (Từ Archetype)
 + Bucking Bronco
@@ -96,8 +98,8 @@ PvE:
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: King Zalo
+- Kết quả: thắng
+- Tỉ số: 3-2
 ```
 ======

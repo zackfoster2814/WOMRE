@@ -1,7 +1,7 @@
 No.240
 Name: kinbum
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -22,6 +22,7 @@ Archetype:
 2 Quirk:  
 + Herbalist
 + Brainrot
++ Blind
 ```
 ```
 Str:4 Cursed of 36k
@@ -78,6 +79,17 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- +2 str (Pennyworthy-Win)
+- +2 iq (Pennyworthy-Win)
+- +2 biq (Pennyworthy-Win)
+- Herbalist - Mistpetal
+- +1 all stats (Naga)
+```
+
+
+
 ======
 Battle Log:
 ```
@@ -90,9 +102,11 @@ PvE:
   + +1 All stats
 - Punishment: 
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Son WuKong
+- Kết quả: Thắng
+- Tỉ số: 3-4
 ```
 ======

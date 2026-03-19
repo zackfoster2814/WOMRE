@@ -1,6 +1,6 @@
 No.253
 Name: wibuslayer786 (wibuslayer786)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -74,6 +74,17 @@ Team: 20
 Lover:
 + 
 ```
+```
+Other Source:
+- -2 Durability
+```
+
+```
+PvP Reward:
+- +2 IQ (+2 Stat ngẫu nhiên ×3)
+- +2 Spd (+2 Stat ngẫu nhiên ×3)
+- +2 Str (+2 Stat ngẫu nhiên ×3)
+```
 
 ======
 Battle Log:
@@ -86,8 +97,8 @@ PvE:
 - Punishment: 
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: KuSenpai (kusenpai)
+- Kết quả: thua
+- Tỉ số: 5-2
 ```
 ======

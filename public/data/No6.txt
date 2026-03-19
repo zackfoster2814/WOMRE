@@ -40,6 +40,7 @@ Houses:
   - Cuộn khăn giấy
   - Thuốc Tráng Dương
   - Mì Tôm
+  - Holy Symbol
  + 0 Legacy gear:
   - 
 ```
@@ -93,9 +94,5 @@ PvE:
   + Nhận +1 BIQ
 - Punishment: 
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

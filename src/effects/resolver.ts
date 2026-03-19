@@ -521,6 +521,21 @@ export class EffectResolver {
       (weapon) => !weapon.isLost && weapon.usable !== false,
     );
 
+    // Summons từ block "Summon:" riêng (format mới)
+    for (const summon of character.summons || []) {
+      if (summon.isLost) continue;
+      const entry = EffectRegistry.get("summon", summon.name);
+      if (entry) {
+        sources.push({
+          type: "summon",
+          name: summon.name,
+          effects: entry.effects,
+          rawDescription: entry.description,
+          isActive: true,
+        });
+      }
+    }
+
     // Runes (skip lost items, only active if player has a usable weapon)
     for (const rune of character.runes?.runes || []) {
       if (rune.isLost) continue; // Skip lost items
@@ -819,6 +834,24 @@ export class EffectResolver {
           }
         }
 
+        // Handle Don't say it - check suffix for upgrade status
+        if (parsed.baseName.toLowerCase() === "don't say it") {
+          const suffix = charDev.name.slice(parsed.baseName.length).toLowerCase();
+          if (suffix.includes("(-)")) {
+            // (-) → skip toàn bộ effect (không cộng không trừ)
+            effects = [];
+          } else if (suffix.includes("+2 all stats") || suffix.includes("+2 all")) {
+            // (+2 all stats) → thay -2 all thành +2 all
+            effects = effects.map((e) => {
+              if (e.type === "stat_modifier" && (e as any).stat === "all" && (e as any).value === -2) {
+                return { ...e, value: 2 };
+              }
+              return e;
+            });
+          }
+          // Không có suffix → giữ nguyên -2 all stats
+        }
+
         // Handle In Love - replace custom handler with specific stat if provided in data
         if (parsed.baseName.toLowerCase() === "in love") {
           if (parsed.statBonus) {
@@ -934,7 +967,10 @@ export class EffectResolver {
         if (character.tournament?.status === "eliminated") continue;
 
         // Nếu người có Cheater đã bị loại → lover nhận +1 all stats thay vì -2 BIQ
-        if (other.tournament?.status === "eliminated") {
+        const otherHasCheater = other.quirks?.some(
+          (q) => !q.isLost && q.name.toLowerCase().startsWith("cheater"),
+        );
+        if (other.tournament?.status === "eliminated" && otherHasCheater) {
           sources.push({
             type: "quirk",
             name: `Cheater (từ ${other.name})`,
@@ -944,6 +980,8 @@ export class EffectResolver {
           });
           continue;
         }
+        // Nếu bị loại nhưng không có Cheater → skip (không nhận debuff từ người đã bị loại)
+        if (other.tournament?.status === "eliminated") continue;
 
         // Gather all effect sources from 'other' and find effects with target: "lover"
         const otherSources = this.gatherEffectSources(other); // No allCharacters to avoid recursion

@@ -1,6 +1,6 @@
 No.61
 Name: Khogadetem (font_bard)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -92,9 +92,11 @@ PvE:
   + +1 vào stat thấp nhất (IQ)
 - Punishment: 
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: trantrinhtri
+- Kết quả: Thua
+- Tỉ số: 4-1
 ```
 ======

@@ -40,7 +40,9 @@ Houses:
   - Radio
   - Văn Tế
   - Storage Room Key (Tặng Đai Trinh Tiết)
+ (đã mất)
   - Đai Trinh Tiết
+  - Wizard Hat
  + 0 Legacy gear:
   - 
 ```
@@ -78,6 +80,19 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- Nhận 1 gear: Wizard Hat
+```
+
+```
+
+Other Source:
+- +2 IQ
+
+```
+
+
 ======
 Battle Log:
 ```
@@ -89,8 +104,15 @@ PvE:
 - Punishment: 
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: NPC (npc867)
+- Kết quả: thắng
+- Tỉ số: 0-3
+- note: 0reki (0rekihoutarou) gọi mPui lên đánh hộ nhưng vẫn thua
+```
+```
+PvP:
+- Đối thủ: 0reki (0rekihoutarou)
+- Kết quả: Thắng
+- Tỉ số: 1-4
 ```
 ======

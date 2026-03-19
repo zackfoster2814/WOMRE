@@ -88,9 +88,5 @@ PvE:
   + Nhận +1 stat thấp nhất (dura)
 - Punishment: 
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

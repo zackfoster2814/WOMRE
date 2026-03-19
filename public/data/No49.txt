@@ -87,9 +87,5 @@ PvE:
 - Reward: 
 - Punishment: Dura về 0
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

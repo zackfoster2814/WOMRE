@@ -88,9 +88,5 @@ PvE:
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

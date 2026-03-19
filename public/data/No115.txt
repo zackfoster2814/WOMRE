@@ -1,6 +1,6 @@
 No.115
 Name: Son WuKong (maidinhhongson)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -86,9 +86,11 @@ PvE:
 - Reward: 
 - Punishment: bị đuổi khỏi house
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: kinbum
+- Kết quả: Thua
+- Tỉ số: 3-4
 ```
 ======

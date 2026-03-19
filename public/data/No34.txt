@@ -1,6 +1,6 @@
 No.34
 Name: Moonice (muroku_18)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -86,8 +86,9 @@ PvE:
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
 ```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: thợ lặn (normieyah)
+- Kết quả: thua
+- Tỉ số: 4-2
+- note: thành lover
 ```
 ======

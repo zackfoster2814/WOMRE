@@ -163,6 +163,8 @@ export interface Character {
 
   // Abilities
   powers: LossableItem[];
+  summons?: LossableItem[];
+  adaptKnownPowers?: string[];
 
   // Character Development
   charDevs: LossableItem[]; // Support multiple char devs

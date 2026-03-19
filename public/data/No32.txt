@@ -1,7 +1,7 @@
 No.32
 Name: Lệch rate Jingliu 2 lần (nguyentk24hlk)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -41,8 +41,12 @@ Houses:
   - Đá (Từ Quirk)
   - Frying Pan(Từ Quirk)
   - Giấy Nợ Gia Truyền
+ (đã mât
+  - Golden coin
+  - Golden coin
   - Radio
   - Lover's Glover (idontloveyou (iloveyou1233406))
+  - Leather Jacket
  + 0 Legacy gear:
   - 
 ```
@@ -79,6 +83,12 @@ Lover:
 + idontloveyou (iloveyou1233406)
 ```
 
+```
+PvP Reward:
+- Nhận 1 gear: Leather Jacket
+```
+
+
 ======
 Battle Log:
 ```
@@ -91,9 +101,11 @@ PvE:
   + +1 vào stat thấp nhất (IQ)
 - Punishment: 
 ```
+
+```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: Vilhelm
+- Kết quả: Thắng
+- Tỉ số: 4-5
 ```
 ======

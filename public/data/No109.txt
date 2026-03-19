@@ -93,9 +93,5 @@ PvE:
   + Nhận -2 spd
   + Mất Power Divine Lightning và Water Breathing
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

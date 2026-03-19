@@ -89,9 +89,5 @@ PvE:
 - Reward: 
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

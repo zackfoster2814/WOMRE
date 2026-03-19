@@ -26,7 +26,7 @@ Archetype:
 ```
 Str: 5 (Ban đầu là 7)
 Spd: 5
-Dur: 5
+Dur: 6 (5 trước đó bị nguyền thành 6)
 IQ: 5 (Ban đầu là 9)
 BIQ: 4
 MA: 2
@@ -92,9 +92,5 @@ PvE:
   + Nhận -2 spd
   + Mất Power Sybaurafarming và Red Shift/LP
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

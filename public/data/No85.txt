@@ -78,9 +78,5 @@ Lover:
 Battle Log:
 ```
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

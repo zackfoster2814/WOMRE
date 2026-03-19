@@ -94,9 +94,5 @@ PvE:
   + Mất vũ khí
 - Note: Ca Cao né ở round SPD, crit ở round MA
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

@@ -15,6 +15,7 @@ Sub-race: Ice Troll
 ```
 Archetype: 
 + NPC
++ Infirmarian
 ```
 ``` 
 1 Quirk:  
@@ -40,6 +41,9 @@ Houses:
   - Beer
   - Cursed Charm
   - Giấy Nợ Gia Truyền
+  - Storage room key (Nhận Spatula)
+  - Spatula
+  - Holy Symbol
  + 0 Legacy gear:
   - 
 ```
@@ -84,9 +88,5 @@ PvE:
 - Reward: 
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======

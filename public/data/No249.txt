@@ -1,7 +1,7 @@
 No.249
 Name: Tekachi (tekachi_kyun)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -60,13 +60,13 @@ Runeword:
 
 ```
 0 Power:  
-+ 
++ Encroaching Shadow
 + 
 ```
 
 ```
 Char dev: 
-+ Don't say it
++ Don't say it (+2 all stats)
 ```
 
 ```
@@ -87,10 +87,9 @@ PvP Reward:
 ======
 Battle Log:
 ```
-```
 PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
+- Đối thủ: luchii
+- Kết quả: thắng 
+- Tỉ số: 3-0
 ```
 ======

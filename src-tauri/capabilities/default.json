@@ -36,11 +36,16 @@
     "fs:allow-mkdir",
     "fs:allow-remove",
     "fs:allow-exists",
+    "fs:allow-copy-file",
     {
       "identifier": "fs:scope",
       "allow": [
         "$APPDATA/**",
-        "$RESOURCE/**"
+        "$RESOURCE/**",
+        "G:/My Drive/WOM/WON/PvPData/playerdata/**",
+        "G:/My Drive/WOM/WON/PvPData/playerdata",
+        "D:/WheelOfMultiverseRE/wheelofname/public/data/**",
+        "D:/WheelOfMultiverseRE/wheelofname/public/data"
       ]
     }
   ]

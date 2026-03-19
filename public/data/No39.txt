@@ -92,9 +92,5 @@ PvE:
   + Nhận +2 MA
 - Punishment: 
 ```
-PvP:
-- Đối thủ: 
-- Kết quả: 
-- Tỉ số:
-```
+
 ======
