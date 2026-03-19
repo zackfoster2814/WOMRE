@@ -1901,6 +1901,7 @@ export const StatsComparisonMode = ({
   ): PvPPlayerData => {
     try {
       const char = player.character;
+      if (!char) return player;
       const effects = EffectResolver.calculateCharacterEffects(
         char,
         { isPvE: false },
@@ -1949,8 +1950,12 @@ export const StatsComparisonMode = ({
           }
           playerList.sort((a, b) => a.no - b.no);
           // Re-resolve với allCharacters để cross-character effects hoạt động
-          const allChars = playerList.map((p) => p.character);
-          const resolved = playerList.map((p) => reResolveWithAllChars(p, allChars));
+          const allChars = playerList
+            .map((p) => p.character)
+            .filter((c): c is Character => !!c);
+          const resolved = playerList.map((p) =>
+            reResolveWithAllChars(p, allChars),
+          );
           setAllPlayers(resolved);
           setPlayer1(
             resolved.find((p) => p.no === tournamentMatch.player1No) ?? null,
@@ -1971,8 +1976,12 @@ export const StatsComparisonMode = ({
           }
           playerList.sort((a, b) => a.no - b.no);
           // Re-resolve với allCharacters để cross-character effects hoạt động
-          const allChars = playerList.map((p) => p.character);
-          const resolved = playerList.map((p) => reResolveWithAllChars(p, allChars));
+          const allChars = playerList
+            .map((p) => p.character)
+            .filter((c): c is Character => !!c);
+          const resolved = playerList.map((p) =>
+            reResolveWithAllChars(p, allChars),
+          );
           setAllPlayers(resolved);
         }
       } catch (error) {
