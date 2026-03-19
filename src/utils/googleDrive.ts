@@ -46,13 +46,16 @@ export async function fetchPlayerText(no: number): Promise<string> {
 /**
  * Fetch player texts từ local public/data/ (dùng cho production/deploy)
  */
+// Base path cho static assets (khác nhau giữa dev và GitHub Pages)
+const BASE_URL = import.meta.env.BASE_URL ?? '/';
+
 async function fetchPlayerTextsLocal(nos: number[]): Promise<Map<number, string>> {
   const result = new Map<number, string>();
   const toFetch = nos.filter((no) => !_playerTextCache.has(no));
   await Promise.all(
     toFetch.map(async (no) => {
       try {
-        const res = await fetch(`/data/No${no}.txt`);
+        const res = await fetch(`${BASE_URL}data/No${no}.txt`);
         if (res.ok) {
           const text = await res.text();
           _playerTextCache.set(no, text);
@@ -73,7 +76,7 @@ async function fetchPlayerTextsLocal(nos: number[]): Promise<Map<number, string>
  */
 async function getPlayerIndexLocal(): Promise<Record<string, string>> {
   if (_playerIndexCache) return _playerIndexCache;
-  const res = await fetch('/data/player-index.json');
+  const res = await fetch(`${BASE_URL}data/player-index.json`);
   _playerIndexCache = await res.json();
   return _playerIndexCache!;
 }
