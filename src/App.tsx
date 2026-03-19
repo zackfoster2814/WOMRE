@@ -16,6 +16,7 @@ import { WikiPage } from "./pages/WikiPage";
 import { SandboxPage } from "./pages/SandboxPage";
 // import { TeamBattlePage } from "./pages/TeamBattlePage";
 import { isTauri } from "./utils/localStorage";
+import { fetchAllPlayerTexts } from "./utils/googleDrive";
 
 // Check if running in web-only mode (not Tauri)
 const isWebOnly = !isTauri();
@@ -134,11 +135,59 @@ const Navigation = () => {
   );
 };
 
+type PrefetchStatus = "idle" | "loading" | "done" | "error";
+
+const PrefetchToast = () => {
+  const [status, setStatus] = useState<PrefetchStatus>("idle");
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    setStatus("loading");
+    fetchAllPlayerTexts()
+      .then((texts) => {
+        setCount(texts.size);
+        setStatus("done");
+        setTimeout(() => setStatus("idle"), 3000);
+      })
+      .catch(() => setStatus("error"));
+  }, []);
+
+  if (status === "idle") return null;
+
+  return (
+    <div className="fixed bottom-6 right-6 z-[9999] flex items-center gap-3 bg-gray-800 border border-gray-600 text-white px-5 py-3 rounded-xl shadow-xl text-sm">
+      {status === "loading" && (
+        <>
+          <span className="animate-bounce text-lg shrink-0">🍳</span>
+          <span className="text-gray-300">
+            SVIT đang nấu cái gì đó, đợi xíu nhé
+          </span>
+        </>
+      )}
+      {status === "done" && (
+        <>
+          <span className="text-green-400">✓</span>
+          <span className="text-gray-300">
+            Đã điều chỉnh thành công tỉ lệ của {count} con vợ
+          </span>
+        </>
+      )}
+      {status === "error" && (
+        <>
+          <span className="text-red-400">✗</span>
+          <span className="text-gray-300">Bug. Mai fix</span>
+        </>
+      )}
+    </div>
+  );
+};
+
 function App() {
   return (
     <HashRouter>
       {/* Hide navigation in web-only mode */}
       {!isWebOnly && <Navigation />}
+      <PrefetchToast />
       <Routes>
         {isWebOnly ? (
           <>

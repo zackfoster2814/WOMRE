@@ -205,6 +205,12 @@ function IntroScene({ vsVisible }: { vsVisible: boolean }) {
 
 // ── Avatar with fallback placeholder ─────────────────────────────────────────
 const AVATAR_EXTS = ["png", "jpg", "jpeg", "gif", "webp"];
+const RANDOM_AVATAR_COUNT = 20;
+
+function getRandomAvatarIndex(no: number): number {
+  // Deterministic per player number trong session
+  return (no % RANDOM_AVATAR_COUNT) + 1;
+}
 
 function AvatarWithFallback({
   no,
@@ -216,16 +222,43 @@ function AvatarWithFallback({
   side: "left" | "right";
 }) {
   const [extIndex, setExtIndex] = useState(0);
-  const initial = name.charAt(0).toUpperCase();
+  // Phase 0: thử avatar riêng của player (no{N}.ext)
+  // Phase 1: thử random avatar từ randomAvatar/
+  const [phase, setPhase] = useState<"player" | "random">("player");
+  const [randomExtIndex, setRandomExtIndex] = useState(0);
   const isLeft = side === "left";
 
   const basePath = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
-  const src =
-    extIndex < AVATAR_EXTS.length
+
+  // Player avatar
+  const playerSrc =
+    phase === "player" && extIndex < AVATAR_EXTS.length
       ? `${basePath}/data/avatars/no${no}.${AVATAR_EXTS[extIndex]}`
       : null;
 
+  // Random avatar fallback
+  const randomIndex = getRandomAvatarIndex(no);
+  const randomSrc =
+    phase === "random" && randomExtIndex < AVATAR_EXTS.length
+      ? `${basePath}/data/avatars/randomAvatar/${randomIndex}.${AVATAR_EXTS[randomExtIndex]}`
+      : null;
+
+  const src = playerSrc ?? randomSrc;
+
   if (src) {
+    const handleError = () => {
+      if (phase === "player") {
+        const next = extIndex + 1;
+        if (next < AVATAR_EXTS.length) {
+          setExtIndex(next);
+        } else {
+          setPhase("random");
+          setRandomExtIndex(0);
+        }
+      } else {
+        setRandomExtIndex((i) => i + 1);
+      }
+    };
     return (
       <img
         key={src}
@@ -238,7 +271,7 @@ function AvatarWithFallback({
           objectFit: "cover",
           objectPosition: "center top",
         }}
-        onError={() => setExtIndex((i) => i + 1)}
+        onError={handleError}
       />
     );
   }
@@ -263,7 +296,7 @@ function AvatarWithFallback({
           userSelect: "none",
         }}
       >
-        {initial}
+        {name.charAt(0).toUpperCase()}
       </span>
     </div>
   );

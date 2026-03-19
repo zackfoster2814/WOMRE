@@ -280,6 +280,7 @@ export type EffectSourceType =
   | 'pvp_reward'
   | 'pve_punishment'
   | 'pve_reward'
+  | 'other_source'
   | 'lover'
   | 'symbiosis';
 

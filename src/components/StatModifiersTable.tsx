@@ -44,6 +44,7 @@ const sourceTypeLabels: Record<EffectSourceType, string> = {
   pvp_reward: "PvP Reward",
   pve_punishment: "PvE Punishment",
   pve_reward: "PvE Reward",
+  other_source: "Nguồn khác",
   lover: "Lover",
   symbiosis: "Symbiosis",
 };
@@ -66,6 +67,7 @@ const sourceTypeColors: Record<EffectSourceType, string> = {
   pvp_reward: "text-green-400",
   pve_punishment: "text-red-500",
   pve_reward: "text-green-400",
+  other_source: "text-violet-400",
   lover: "text-pink-300",
   symbiosis: "text-red-300",
 };
@@ -299,6 +301,7 @@ const StatModifiersTable = ({
             "pvp_reward",
             "pve_reward",
             "pve_punishment",
+            "other_source",
             "lover",
             "symbiosis",
           ];

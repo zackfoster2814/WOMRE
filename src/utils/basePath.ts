@@ -19,6 +19,14 @@ export function getAvatarUrl(no: number, extIndex = 0): string {
   return getAssetPath(`/data/avatars/no${no}.${ext}`);
 }
 
+export const RANDOM_AVATAR_COUNT = 20;
+
+export function getRandomAvatarUrl(no: number, extIndex = 0): string {
+  const index = (no % RANDOM_AVATAR_COUNT) + 1;
+  const ext = AVATAR_EXTENSIONS[extIndex] ?? AVATAR_EXTENSIONS[0];
+  return getAssetPath(`/data/avatars/randomAvatar/${index}.${ext}`);
+}
+
 // Default fallback player range if player-index.json fails to load
 const DEFAULT_PLAYER_RANGE = { start: 1, end: 259 };
 

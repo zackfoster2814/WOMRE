@@ -7,6 +7,9 @@ import {
 // Cache player index sau lần đầu load
 let _playerIndexCache: Record<string, string> | null = null;
 
+// Cache nội dung từng player text {no: content}
+const _playerTextCache = new Map<number, string>();
+
 /**
  * Lấy player index map {No1: fileId, No2: fileId, ...}
  * Cache lại sau lần đầu để không fetch lại nhiều lần
@@ -24,47 +27,69 @@ export function clearPlayerIndexCache(): void {
 
 /**
  * Fetch nội dung text của 1 player theo số (No)
- * Ví dụ: fetchPlayerText(1) → nội dung No1.txt từ Drive
+ * Có cache: lần đầu fetch từ Drive, lần sau trả từ cache
  */
 export async function fetchPlayerText(no: number): Promise<string> {
+  if (_playerTextCache.has(no)) return _playerTextCache.get(no)!;
   const index = await getPlayerIndex();
   const fileId = index[`No${no}`];
   if (!fileId) throw new Error(`Player No${no} not found in index`);
-  return readDriveFileAsText(fileId);
+  const text = await readDriveFileAsText(fileId);
+  _playerTextCache.set(no, text);
+  return text;
 }
 
 /**
- * Fetch nhiều player song song theo danh sách số
- * Trả về map {no: text} — bỏ qua player không tìm thấy
+ * Fetch nhiều player qua Apps Script batchRead (1 request / chunk)
+ * Trả về map {no: text} — dùng cache, chỉ fetch những player chưa có
  */
 export async function fetchPlayerTexts(
   nos: number[],
 ): Promise<Map<number, string>> {
   const index = await getPlayerIndex();
   const result = new Map<number, string>();
-  // Giới hạn 20 concurrent requests để tránh flood browser
-  const CONCURRENCY = 20;
-  for (let i = 0; i < nos.length; i += CONCURRENCY) {
-    const batch = nos.slice(i, i + CONCURRENCY);
-    await Promise.all(
-      batch.map(async (no) => {
-        const fileId = index[`No${no}`];
-        if (!fileId) return;
-        try {
-          const text = await readDriveFileAsText(fileId);
-          result.set(no, text);
-        } catch {
-          // bỏ qua nếu lỗi
-        }
+  const toFetch = nos.filter((no) => !_playerTextCache.has(no));
+
+  if (toFetch.length > 0 && APPS_SCRIPT_URL) {
+    const validNos = toFetch.filter((no) => index[`No${no}`]);
+    const fileIds = validNos.map((no) => index[`No${no}`]);
+    const noByFileId = new Map<string, number>(
+      validNos.map((no) => [index[`No${no}`], no]),
+    );
+
+    const BATCH_SIZE = 65;
+    const chunks: string[][] = [];
+    for (let i = 0; i < fileIds.length; i += BATCH_SIZE) {
+      chunks.push(fileIds.slice(i, i + BATCH_SIZE));
+    }
+
+    const responses = await Promise.all(
+      chunks.map(async (chunk) => {
+        const url = `${APPS_SCRIPT_URL}?action=batchRead&fileIds=${chunk.join(",")}`;
+        const res = await fetch(url, { method: "GET", redirect: "follow" });
+        if (!res.ok) return {} as Record<string, string | null>;
+        return res.json() as Promise<Record<string, string | null>>;
       }),
     );
+
+    for (const batch of responses) {
+      for (const [fileId, content] of Object.entries(batch)) {
+        if (content == null) continue;
+        const no = noByFileId.get(fileId);
+        if (no !== undefined) _playerTextCache.set(no, content);
+      }
+    }
+  }
+
+  for (const no of nos) {
+    if (_playerTextCache.has(no)) result.set(no, _playerTextCache.get(no)!);
   }
   return result;
 }
 
 /**
  * Fetch tất cả player trong index song song
- * Trả về map {no: text}
+ * Trả về map {no: text} — dùng cache
  */
 export async function fetchAllPlayerTexts(): Promise<Map<number, string>> {
   const index = await getPlayerIndex();
@@ -72,6 +97,16 @@ export async function fetchAllPlayerTexts(): Promise<Map<number, string>> {
     .filter((k) => /^No\d+$/.test(k))
     .map((k) => parseInt(k.replace("No", "")));
   return fetchPlayerTexts(nos);
+}
+
+/** Reset toàn bộ cache player texts (dùng khi cần force reload) */
+export function clearPlayerTextCache(): void {
+  _playerTextCache.clear();
+}
+
+/** Xóa cache của 1 player để force fetch mới khi click vào */
+export function invalidatePlayerCache(no: number): void {
+  _playerTextCache.delete(no);
 }
 
 /**

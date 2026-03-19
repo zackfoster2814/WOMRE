@@ -281,8 +281,10 @@ export class EffectResolver {
     // Extract base name (before any parentheses or arrows)
     // Special case: "Become a Power Ranger (Color)" — keep the full name including color
     if (/^Become a Power Ranger\s*\(/i.test(fullName)) {
-      const colorMatch = fullName.match(/^(Become a Power Ranger\s*\([^)]+\))/i);
-      baseName = colorMatch ? colorMatch[1].trim() : 'Become a Power Ranger';
+      const colorMatch = fullName.match(
+        /^(Become a Power Ranger\s*\([^)]+\))/i,
+      );
+      baseName = colorMatch ? colorMatch[1].trim() : "Become a Power Ranger";
     } else {
       const baseNameMatch = fullName.match(/^([^(->]+)/);
       if (baseNameMatch) {
@@ -633,8 +635,8 @@ export class EffectResolver {
         // For houseBonusApplied: skip stat_modifier effects (already pre-applied, e.g. before Fate's Trick)
         let effectsToApply = isKindaHomeless
           ? entry.effects.filter(
-            (e) => e.type === "stat_modifier" && e.timing === "immediate",
-          )
+              (e) => e.type === "stat_modifier" && e.timing === "immediate",
+            )
           : entry.effects;
         if (character.houseBonusApplied) {
           effectsToApply = effectsToApply.filter(
@@ -790,7 +792,7 @@ export class EffectResolver {
                 !(
                   e.type === "grant_power" &&
                   (e as { grantName?: string }).grantName?.toLowerCase() ===
-                  "aids"
+                    "aids"
                 ),
             );
           }
@@ -802,7 +804,7 @@ export class EffectResolver {
                 !(
                   e.type === "custom" &&
                   (e as { customHandler?: string }).customHandler ===
-                  "metamorphosis_random_stat"
+                    "metamorphosis_random_stat"
                 ),
             );
             // Add specific stat modifier
@@ -825,7 +827,7 @@ export class EffectResolver {
                 !(
                   e.type === "custom" &&
                   (e as { customHandler?: string }).customHandler ===
-                  "in_love_stat_bonus"
+                    "in_love_stat_bonus"
                 ),
             );
             // Add specific stat modifier from data (e.g., "-> +2 IQ")
@@ -847,7 +849,7 @@ export class EffectResolver {
                 !(
                   e.type === "custom" &&
                   (e as { customHandler?: string }).customHandler ===
-                  "creators_limitation"
+                    "creators_limitation"
                 ),
             );
             effects.push({
@@ -927,6 +929,21 @@ export class EffectResolver {
         });
 
         if (!isLoverOfOther) continue;
+
+        // Nếu character này (lover) đã bị loại → không nhận debuff từ Cheater nữa
+        if (character.tournament?.status === "eliminated") continue;
+
+        // Nếu người có Cheater đã bị loại → lover nhận +1 all stats thay vì -2 BIQ
+        if (other.tournament?.status === "eliminated") {
+          sources.push({
+            type: "quirk",
+            name: `Cheater (từ ${other.name})`,
+            effects: [{ type: "stat_modifier", stat: "all", value: 1, timing: "immediate", target: "self" }],
+            rawDescription: `Cheater: ${other.name} bị loại → +1 All Stats`,
+            isActive: true,
+          });
+          continue;
+        }
 
         // Gather all effect sources from 'other' and find effects with target: "lover"
         const otherSources = this.gatherEffectSources(other); // No allCharacters to avoid recursion
@@ -1052,6 +1069,44 @@ export class EffectResolver {
       }
     }
 
+    // Other Source Modifiers (từ "Nguồn khác:" block trong Add info)
+    if (character.otherSourceMods && character.otherSourceMods.length > 0) {
+      const abbrevToStat: Record<string, StatName> = {
+        str: "strength",
+        spd: "speed",
+        dur: "durability",
+        iq: "iq",
+        biq: "biq",
+        ma: "ma",
+      };
+      const allEffects: Effect[] = [];
+      const allDescs: string[] = [];
+      for (const m of character.otherSourceMods) {
+        const statName = abbrevToStat[m.stat];
+        if (statName) {
+          allEffects.push({
+            type: "stat_modifier",
+            stat: statName,
+            value: m.value,
+            timing: "immediate",
+            target: "self",
+          });
+          allDescs.push(
+            `${m.value > 0 ? "+" : ""}${m.value} ${m.stat.toUpperCase()}${m.source ? ` (${m.source})` : ""}`,
+          );
+        }
+      }
+      if (allEffects.length > 0) {
+        sources.push({
+          type: "other_source",
+          name: `${allDescs.join(", ")}`,
+          effects: allEffects,
+          rawDescription: `Nguồn khác: ${allDescs.join(", ")}`,
+          isActive: true,
+        });
+      }
+    }
+
     return sources;
   }
 
@@ -1157,7 +1212,10 @@ export class EffectResolver {
         break;
 
       case "has_item": {
-        const checkSide = condition.checkTarget === "opponent" ? context.opponent : context.self;
+        const checkSide =
+          condition.checkTarget === "opponent"
+            ? context.opponent
+            : context.self;
         if (condition.itemType === "lover") {
           result = checkSide?.hasLover ?? false;
         } else if (condition.itemType === "power" && condition.itemName) {
@@ -1167,11 +1225,14 @@ export class EffectResolver {
         } else if (condition.itemType === "weapon" && condition.itemName) {
           result = checkSide?.weapons.includes(condition.itemName) ?? false;
         } else if (condition.itemType === "archetype" && condition.itemName) {
-          const char = condition.checkTarget === "opponent"
-            ? (context.opponent as any)?.character
-            : (context.self as any)?.character;
+          const char =
+            condition.checkTarget === "opponent"
+              ? (context.opponent as any)?.character
+              : (context.self as any)?.character;
           const archetypes: string[] = Array.isArray(char?.archetypes)
-            ? char.archetypes.map((a: any) => typeof a === "string" ? a : (a?.name ?? ""))
+            ? char.archetypes.map((a: any) =>
+                typeof a === "string" ? a : (a?.name ?? ""),
+              )
             : [];
           result = archetypes.some(
             (a) => a.toLowerCase() === condition.itemName!.toLowerCase(),
@@ -1379,9 +1440,16 @@ export class EffectResolver {
               } else {
                 result = (character.powers || []).some((p) => !p.isLost);
               }
-            } else if (condition.itemType === "archetype" && condition.itemName) {
-              const archetypes: string[] = Array.isArray((character as any).archetypes)
-                ? (character as any).archetypes.map((a: any) => typeof a === "string" ? a : (a?.name ?? ""))
+            } else if (
+              condition.itemType === "archetype" &&
+              condition.itemName
+            ) {
+              const archetypes: string[] = Array.isArray(
+                (character as any).archetypes,
+              )
+                ? (character as any).archetypes.map((a: any) =>
+                    typeof a === "string" ? a : (a?.name ?? ""),
+                  )
                 : [];
               result = archetypes.some(
                 (a) => a.toLowerCase() === condition.itemName!.toLowerCase(),
@@ -1539,7 +1607,10 @@ export class EffectResolver {
         }
 
         // Defer handlers that need fully-accumulated stats (e.g. EscAPADe)
-        if (effect.customHandler && DEFERRED_HANDLERS.has(effect.customHandler)) {
+        if (
+          effect.customHandler &&
+          DEFERRED_HANDLERS.has(effect.customHandler)
+        ) {
           deferredItems.push({ source, effect });
           continue;
         }
@@ -1603,7 +1674,7 @@ export class EffectResolver {
           // This ensures "Base Stat thấp nhất" looks at original base stats, not modified stats
           const statsForResolution =
             effect.isBase &&
-              (effect.stat === "lowest" || effect.stat === "highest")
+            (effect.stat === "lowest" || effect.stat === "highest")
               ? baseStats // Use original base stats passed to this function
               : result.totalStats;
           const targetStats = resolveStatTarget(
@@ -1990,11 +2061,15 @@ export class EffectResolver {
     for (const src of sources) {
       if (!src.isActive || src.isDisabled) continue;
       for (const eff of src.effects) {
-        if (eff.customHandler && DEFERRED_HANDLERS_BD.has(eff.customHandler)) continue;
+        if (eff.customHandler && DEFERRED_HANDLERS_BD.has(eff.customHandler))
+          continue;
         if (eff.timing !== "immediate" && eff.timing !== "pvp_only") continue;
         if (eff.type !== "stat_modifier" || eff.value === undefined) continue;
         if (eff.target && eff.target !== "self") continue;
-        const stats = resolveStatTarget(eff.stat as DynamicStatTarget, baseStats);
+        const stats = resolveStatTarget(
+          eff.stat as DynamicStatTarget,
+          baseStats,
+        );
         for (const s of stats) precomputedStats[s] += eff.value;
       }
     }
@@ -2046,8 +2121,7 @@ export class EffectResolver {
         // Note: pve_only handlers are NOT executed here because PvE phase is over (PvP context)
         if (
           effect.customHandler &&
-          (effect.timing === "immediate" ||
-            effect.timing === "pvp_only")
+          (effect.timing === "immediate" || effect.timing === "pvp_only")
         ) {
           if (executedHandlers.has(effect.customHandler)) continue;
           executedHandlers.add(effect.customHandler);
@@ -2099,7 +2173,9 @@ export class EffectResolver {
         // Skip effects that target others (lover, opponent, etc.) - only show self effects
         if (
           effect.type === "stat_modifier" &&
-          (effect.timing === "immediate" || effect.timing === "pvp_only" || isInMatchingBracket) &&
+          (effect.timing === "immediate" ||
+            effect.timing === "pvp_only" ||
+            isInMatchingBracket) &&
           effect.value !== undefined &&
           (!effect.target || effect.target === "self")
         ) {

@@ -353,6 +353,12 @@ export class CharacterParser {
     // Parse Spirit souls từ "Add info" block
     character.spiritSouls = this.parseSpiritSouls(lines);
 
+    // Parse Other Source Mods từ "Nguồn khác:" block
+    character.otherSourceMods = this.parseOtherSourceMods(lines);
+    if (character.otherSourceMods && character.otherSourceMods.length > 0) {
+      console.log(`[Parser] ${character.name} otherSourceMods:`, character.otherSourceMods);
+    }
+
     // Parse Battle Log
     character.battleLog = this.parseBattleLog(lines);
 
@@ -428,18 +434,97 @@ export class CharacterParser {
 
   /**
    * Parse Spirit souls from "Add info" block
-   * Format: "Spirit souls: X"
+   * Formats: "Spirit souls: X" or "Spirit (Soul Stack: X)"
    */
   private static parseSpiritSouls(lines: string[]): number | undefined {
     const addInfoIdx = lines.findIndex((l) => l.includes("Add info:"));
     if (addInfoIdx < 0) return undefined;
     for (let i = addInfoIdx + 1; i < Math.min(addInfoIdx + 20, lines.length); i++) {
-      const match = lines[i].match(/Spirit\s+souls?\s*:\s*(\d+)/i);
-      if (match) return parseInt(match[1]);
+      // Format cũ: "Spirit souls: X"
+      const oldMatch = lines[i].match(/Spirit\s+souls?\s*:\s*(\d+)/i);
+      if (oldMatch) return parseInt(oldMatch[1]);
+      // Format mới: "Spirit (Soul Stack: X)"
+      const newMatch = lines[i].match(/Spirit\s*\(\s*Soul\s+Stack\s*:\s*(\d+)\s*\)/i);
+      if (newMatch) return parseInt(newMatch[1]);
       // Stop at next section delimiter
       if (lines[i].startsWith("======")) break;
     }
     return undefined;
+  }
+
+  /**
+   * Parse "Nguồn khác:" block from "Add info"
+   * Format:
+   *   Nguồn khác:
+   *   - -1 Dura
+   *   - +2 BIQ
+   *   - +1 All stats
+   * Returns array of { stat, value, source? } modifiers
+   */
+  private static parseOtherSourceMods(
+    lines: string[],
+  ): { stat: string; value: number; source?: string }[] | undefined {
+    // Tìm "Nguồn khác:" ở bất kỳ đâu trong file (trước Battle Log)
+    const battleLogIdx = lines.findIndex((l) => l.includes("Battle Log:"));
+    const searchEnd = battleLogIdx >= 0 ? battleLogIdx : lines.length;
+    let nguonKhacIdx = -1;
+    for (let i = 0; i < searchEnd; i++) {
+      if (/Other\s+Source\s*:/i.test(lines[i])) {
+        nguonKhacIdx = i;
+        break;
+      }
+    }
+    if (nguonKhacIdx < 0) return undefined;
+
+    const statMap: Record<string, string> = {
+      str: "str", strength: "str",
+      spd: "spd", speed: "spd",
+      dur: "dur", dura: "dur", durability: "dur",
+      iq: "iq",
+      biq: "biq",
+      ma: "ma",
+      all: "all",
+    };
+
+    const result: { stat: string; value: number; source?: string }[] = [];
+
+    for (let i = nguonKhacIdx + 1; i < Math.min(nguonKhacIdx + 30, lines.length); i++) {
+      const line = lines[i].trim();
+      // Dừng ở block delimiter hoặc dòng trống tiếp theo sau backtick
+      if (!line || line.startsWith("======") || line.startsWith("```")) break;
+      // Bỏ qua dòng không phải list item (dòng chỉ có dấu - trắng cũng bỏ qua)
+      if (!line.startsWith("-")) continue;
+
+      // Bóc tách phần source trong ngoặc: "- -1 Dura (từ X)"
+      const sourceMatch = line.match(/\(([^)]+)\)\s*$/);
+      const source = sourceMatch ? sourceMatch[1].trim() : undefined;
+      const cleanLine = sourceMatch ? line.slice(0, sourceMatch.index).trim() : line;
+
+      // Bóc dấu - đầu dòng list: "- -1 Dura" → "-1 Dura"
+      const item = cleanLine.replace(/^-\s*/, "").trim();
+
+      // "+1 All stats" hoặc "-2 All stats"
+      const allMatch = item.match(/^([+-]?\d+)\s+All\s+[Ss]tats?/i);
+      if (allMatch) {
+        const value = parseInt(allMatch[1]);
+        for (const s of ["str", "spd", "dur", "iq", "biq", "ma"]) {
+          result.push({ stat: s, value, source });
+        }
+        continue;
+      }
+
+      // "+2 BIQ", "-1 Dura", "+1 Str", etc.
+      const simpleMatch = item.match(/^([+-]?\d+)\s+(\w+)/i);
+      if (simpleMatch) {
+        const value = parseInt(simpleMatch[1]);
+        const stat = statMap[simpleMatch[2].toLowerCase()];
+        if (stat && stat !== "all") {
+          result.push({ stat, value, source });
+        }
+      }
+    }
+
+    return result.length > 0 ? result : undefined;
   }
 
   /**

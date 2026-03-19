@@ -597,24 +597,51 @@ registerImmediateHandler(
 );
 
 // Cheater - +1 all stats nếu có hơn 1 Lover
+// Với mỗi lover bị loại (tournament.status === 'eliminated'): +1 all stats thay cho -2 BIQ
 registerImmediateHandler(
   'cheater_multi_lover_check',
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const lover = ctx.character.lover;
-    let loverCount = 0;
-    if (lover && Array.isArray(lover)) {
-      loverCount = lover.filter(l => !l.isLost).length;
-    }
+    const lovers = ctx.character.lover;
+    const activeLovers = lovers && Array.isArray(lovers) ? lovers.filter(l => !l.isLost) : [];
+    const loverCount = activeLovers.length;
+
+    const mods: Array<{ stat: StatName; value: number }> = [];
+    const descParts: string[] = [];
+
+    // +1 all stats nếu có hơn 1 lover
     if (loverCount > 1) {
-      return {
-        statModifiers: STAT_NAMES.map(stat => ({ stat, value: 1 })),
-        skipDefault: true,
-        description: `+1 All Stats từ Cheater (có ${loverCount} lovers)`,
-      };
+      STAT_NAMES.forEach(stat => mods.push({ stat, value: 1 }));
+      descParts.push(`+1 All Stats (có ${loverCount} lovers)`);
     }
-    return { skipDefault: true };
+
+    // Với mỗi lover bị loại: +1 all stats (thay cho -2 BIQ không còn áp dụng)
+    if (ctx.allCharacters && activeLovers.length > 0) {
+      const eliminatedLovers: string[] = [];
+      for (const loverItem of activeLovers) {
+        const loverName = loverItem.name.toLowerCase();
+        const loverChar = ctx.allCharacters.find(c => {
+          const u = c.username?.toLowerCase() || '';
+          const n = c.name?.toLowerCase() || '';
+          return (u && loverName.includes(u)) || (n && loverName.includes(n));
+        });
+        if (loverChar?.tournament?.status === 'eliminated') {
+          STAT_NAMES.forEach(stat => mods.push({ stat, value: 1 }));
+          eliminatedLovers.push(loverChar.name);
+        }
+      }
+      if (eliminatedLovers.length > 0) {
+        descParts.push(`+1 All Stats (lover bị loại: ${eliminatedLovers.join(', ')})`);
+      }
+    }
+
+    if (mods.length === 0) return { skipDefault: true };
+    return {
+      statModifiers: mods,
+      skipDefault: true,
+      description: `Cheater: ${descParts.join('; ')}`,
+    };
   },
-  '+1 All Stats if more than 1 lover'
+  '+1 All Stats if more than 1 lover; +1 All Stats per eliminated lover'
 );
 
 // Patient - No power wheel initially

@@ -36,6 +36,7 @@ const SOURCE_COLORS: Record<string, string> = {
   pvp_reward: "text-green-400",
   pve_reward: "text-green-300",
   pve_punishment: "text-red-500",
+  other_source: "text-violet-400",
   symbiosis: "text-red-300",
   summon: "text-indigo-400",
 };

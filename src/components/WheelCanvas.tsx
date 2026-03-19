@@ -21,6 +21,7 @@ interface WheelCanvasProps {
   onSpin?: () => void;
   startAngle?: number;
   spinButtonClassName?: string;
+  maxFontSize?: number;
 }
 
 export const WheelCanvas = ({
@@ -32,6 +33,7 @@ export const WheelCanvas = ({
   onSpin,
   startAngle = 0,
   spinButtonClassName,
+  maxFontSize,
 }: WheelCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = useState(0);
@@ -148,10 +150,12 @@ export const WheelCanvas = ({
 
     // Draw text
 
-    let fontSize = 16;
-    if (activeItems.length > 20) fontSize = 14;
-    if (activeItems.length > 40) fontSize = 12;
-    if (activeItems.length > 60) fontSize = 10;
+    let fontSize = maxFontSize ?? 26;
+    if (activeItems.length > 5) fontSize = Math.min(20, maxFontSize ?? 20);
+    if (activeItems.length > 10) fontSize = Math.min(16, maxFontSize ?? 16);
+    if (activeItems.length > 20) fontSize = Math.min(14, maxFontSize ?? 14);
+    if (activeItems.length > 40) fontSize = Math.min(12, maxFontSize ?? 12);
+    if (activeItems.length > 60) fontSize = Math.min(10, maxFontSize ?? 10);
 
     ctx.font = `bold ${fontSize}px Arial`;
     ctx.textAlign = "right";

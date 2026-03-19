@@ -90,41 +90,39 @@ export const ProbabilityWheelModal = ({
           </button>
         </div>
 
-        {/* Body: description bên trái, wheel bên phải */}
-        <div className="flex gap-6 items-start mb-4">
-          {/* Left: description + item list + result */}
-          <div className="flex-1 min-w-0 flex flex-col gap-3">
-            {description && (
-              <p className="text-gray-300 text-sm leading-relaxed">{description}</p>
-            )}
-            {result && (
-              <div
-                className={`p-3 rounded-lg ${
-                  result.isSuccess
-                    ? "bg-green-700/20 border border-green-500/60"
-                    : "bg-red-700/20 border border-red-500/60"
-                }`}
-              >
-                <div className="text-xs text-gray-400 mb-1 uppercase tracking-wide">Kết quả</div>
-                <div className="text-base font-bold text-white">{result.label}</div>
-                {result.description && (
-                  <div className="text-xs text-gray-300 mt-1 leading-relaxed">{result.description}</div>
-                )}
-              </div>
-            )}
+        {/* Body: description trên, wheel dưới */}
+        <div className="flex flex-col gap-4 mb-4">
+          {description && (
+            <p className="text-gray-300 text-sm leading-relaxed">{description}</p>
+          )}
+
+          {/* Wheel */}
+          <div className="w-80 h-80 mx-auto">
+            <WheelCanvas
+              items={wheelItems}
+              isSpinning={isSpinning}
+              onSpinComplete={handleSpinComplete}
+              spinButtonClassName="hidden"
+              maxFontSize={26}
+            />
           </div>
 
-          {/* Right: wheel */}
-          <div className="shrink-0">
-            <div className="w-64 h-64">
-              <WheelCanvas
-                items={wheelItems}
-                isSpinning={isSpinning}
-                onSpinComplete={handleSpinComplete}
-                spinButtonClassName="hidden"
-              />
+          {/* Result */}
+          {result && (
+            <div
+              className={`p-3 rounded-lg ${
+                result.isSuccess
+                  ? "bg-green-700/20 border border-green-500/60"
+                  : "bg-red-700/20 border border-red-500/60"
+              }`}
+            >
+              <div className="text-xs text-gray-400 mb-1 uppercase tracking-wide">Kết quả</div>
+              <div className="text-base font-bold text-white">{result.label}</div>
+              {result.description && (
+                <div className="text-xs text-gray-300 mt-1 leading-relaxed">{result.description}</div>
+              )}
             </div>
-          </div>
+          )}
         </div>
 
         {/* Buttons */}

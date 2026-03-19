@@ -21,6 +21,7 @@ import { BossBattleRoom } from "../components/BossBattleRoom";
 import {
   getAssetPath,
   getAvatarUrl,
+  getRandomAvatarUrl,
   AVATAR_EXTENSIONS,
 } from "../utils/basePath";
 import { CombatEffectsPanel } from "../components/CombatEffectsPanel";
@@ -45,11 +46,14 @@ import { ScoreDisplay3D } from "../components/three/ScoreDisplay3D";
 import { CombatEffects3D } from "../components/three/CombatEffects3D";
 import { Canvas } from "@react-three/fiber";
 import {
-  readDriveFile,
-  readDriveFileAsText,
+  // readDriveFile,
+  // readDriveFileAsText,
   fetchAllPlayerTexts,
+  fetchPlayerTexts,
+  // fetchPlayerText,
+  getPlayerIndex,
 } from "../utils/googleDrive";
-import { PLAYER_INDEX_FILE_ID } from "../config/googleDrive";
+// import { PLAYER_INDEX_FILE_ID } from "../config/googleDrive";
 
 // Initialize effect data
 let effectsInitialized = false;
@@ -1514,12 +1518,38 @@ const SidebarAvatarBanner = ({
   bgmVolumeScale?: number;
 }) => {
   const [extIndex, setExtIndex] = React.useState(0);
+  const [phase, setPhase] = React.useState<"player" | "random">("player");
+  const [randomExtIndex, setRandomExtIndex] = React.useState(0);
   // const nameColor = accent === "blue" ? "text-blue-300/80" : "text-red-300/80";
   // const race = player.character?.race?.race || player.race || "";
   // const subRace = player.character?.race?.subRace || "";
-  const allFailed = extIndex >= AVATAR_EXTENSIONS.length;
   const side = accent === "blue" ? "left" : "right";
   const tracks = audioTracks ?? [];
+
+  const playerSrc =
+    phase === "player" && extIndex < AVATAR_EXTENSIONS.length
+      ? getAvatarUrl(player.no, extIndex)
+      : null;
+  const randomSrc =
+    phase === "random" && randomExtIndex < AVATAR_EXTENSIONS.length
+      ? getRandomAvatarUrl(player.no, randomExtIndex)
+      : null;
+  const avatarSrc = playerSrc ?? randomSrc;
+
+  const handleAvatarError = () => {
+    if (phase === "player") {
+      const next = extIndex + 1;
+      if (next < AVATAR_EXTENSIONS.length) {
+        setExtIndex(next);
+      } else {
+        setPhase("random");
+        setRandomExtIndex(0);
+      }
+    } else {
+      setRandomExtIndex((i) => i + 1);
+    }
+  };
+
   return (
     // Outer wrapper — không overflow-hidden để panel popup không bị clip
     <div className="relative shrink-0">
@@ -1533,13 +1563,13 @@ const SidebarAvatarBanner = ({
       <div
         className={`relative rounded-t-2xl overflow-hidden h-72 bg-gray-800 ${false && blurred ? "blur-sm" : ""}`}
       >
-        {!allFailed ? (
+        {avatarSrc ? (
           <img
-            key={extIndex}
-            src={getAvatarUrl(player.no, extIndex)}
+            key={avatarSrc}
+            src={avatarSrc}
             alt={player.name}
             className="w-full h-full object-cover object-top"
-            onError={() => setExtIndex((i) => i + 1)}
+            onError={handleAvatarError}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-600 text-6xl font-black select-none">
@@ -1551,7 +1581,7 @@ const SidebarAvatarBanner = ({
       </div>
       {/* Audio button — nằm ngoài overflow-hidden, absolute so với outer wrapper */}
       {tracks.length > 0 && (
-        <div className="absolute bottom-16 right-2 z-20">
+        <div className="absolute bottom-6 right-2 z-20">
           <CombatAudioController
             tracks={tracks}
             otherSideHasAudio={otherSideHasAudio ?? false}
@@ -1826,10 +1856,15 @@ export const StatsComparisonMode = ({
   const [zoltraakBiq2Pending, setZoltraakBiq2Pending] = useState(false);
 
   // Parse 1 player từ text content
-  const parsePlayerFromText = (content: string, fallbackNo: number): PvPPlayerData | null => {
+  const parsePlayerFromText = (
+    content: string,
+    fallbackNo: number,
+  ): PvPPlayerData | null => {
     try {
       const char = CharacterParser.parseCharacterFile(content);
-      const effects = EffectResolver.calculateCharacterEffects(char, { isPvE: false });
+      const effects = EffectResolver.calculateCharacterEffects(char, {
+        isPvE: false,
+      });
       const pvpStats: CharacterStats = {
         str: effects.totalStats.strength,
         spd: effects.totalStats.speed,
@@ -1859,39 +1894,51 @@ export const StatsComparisonMode = ({
   };
 
   // Load all players từ Drive (gọi lại được khi cần refresh)
-  const loadPlayers = useCallback(async (silent = false) => {
-    try {
-      if (!silent) setLoading(true);
-      ensureEffectsInitialized();
-      const playerList: PvPPlayerData[] = [];
+  const loadPlayers = useCallback(
+    async (silent = false) => {
+      try {
+        if (!silent) setLoading(true);
+        ensureEffectsInitialized();
+        const playerList: PvPPlayerData[] = [];
 
-      const index = await readDriveFile<Record<string, string>>(PLAYER_INDEX_FILE_ID);
-      const fetchPromises = Object.entries(index).map(([name, fileId]) =>
-        readDriveFileAsText(fileId)
-          .then((content) => {
-            const no = parseInt(name.replace(/\D/g, ""));
+        if (tournamentMatch) {
+          // Chỉ load 2 player cần thiết khi vào từ bracket
+          const nos = [tournamentMatch.player1No, tournamentMatch.player2No];
+          const texts = await fetchPlayerTexts(nos);
+          for (const [no, content] of texts) {
             const player = parsePlayerFromText(content, no);
             if (player) playerList.push(player);
-          })
-          .catch(() => {}),
-      );
-      await Promise.all(fetchPromises);
-
-      playerList.sort((a, b) => a.no - b.no);
-      setAllPlayers(playerList);
-
-      if (tournamentMatch) {
-        const p1 = playerList.find((p) => p.no === tournamentMatch.player1No) ?? null;
-        const p2 = playerList.find((p) => p.no === tournamentMatch.player2No) ?? null;
-        setPlayer1(p1);
-        setPlayer2(p2);
+          }
+          playerList.sort((a, b) => a.no - b.no);
+          setAllPlayers(playerList);
+          setPlayer1(
+            playerList.find((p) => p.no === tournamentMatch.player1No) ?? null,
+          );
+          setPlayer2(
+            playerList.find((p) => p.no === tournamentMatch.player2No) ?? null,
+          );
+        } else {
+          // Không có tournament context: load hết để cho phép chọn tay
+          const index = await getPlayerIndex();
+          const nos = Object.keys(index)
+            .filter((k) => /^No\d+$/.test(k))
+            .map((k) => parseInt(k.replace(/\D/g, "")));
+          const texts = await fetchPlayerTexts(nos);
+          for (const [no, content] of texts) {
+            const player = parsePlayerFromText(content, no);
+            if (player) playerList.push(player);
+          }
+          playerList.sort((a, b) => a.no - b.no);
+          setAllPlayers(playerList);
+        }
+      } catch (error) {
+        console.error("Error loading players:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error loading players:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    },
+    [tournamentMatch],
+  );
 
   // Load lần đầu khi mount
   useEffect(() => {
@@ -2318,12 +2365,16 @@ export const StatsComparisonMode = ({
     const p1HasSpellFlux = (p1.character?.powers || []).some(
       (pw: any) =>
         !pw?.isLost &&
-        (typeof pw === "string" ? pw : pw.name)?.toLowerCase().startsWith("spell flux"),
+        (typeof pw === "string" ? pw : pw.name)
+          ?.toLowerCase()
+          .startsWith("spell flux"),
     );
     const p2HasSpellFlux = (p2.character?.powers || []).some(
       (pw: any) =>
         !pw?.isLost &&
-        (typeof pw === "string" ? pw : pw.name)?.toLowerCase().startsWith("spell flux"),
+        (typeof pw === "string" ? pw : pw.name)
+          ?.toLowerCase()
+          .startsWith("spell flux"),
     );
     if (p1HasHM && winner === "player1" && p1HMStat && p1HMStat === key) {
       p1Points += p1HasSpellFlux ? 2 : 1;
@@ -3444,8 +3495,6 @@ export const StatsComparisonMode = ({
   // Hiển thị intro screen 5s trước khi bắt đầu combat
   const handleStartWithIntro = async () => {
     if (!player1 || !player2) return;
-    // Reload data player mới nhất từ Drive trước khi bắt đầu combat
-    await loadPlayers(true);
     if (introEnabled) {
       setShowIntro(true);
     } else {
@@ -4332,14 +4381,27 @@ export const StatsComparisonMode = ({
               });
             } else {
               // Tính xem stat nào bị trừ (lặp penalty lần, mỗi lần lấy cao nhất hiện tại)
-              const STAT_KEYS_FF: (keyof CharacterStats)[] = ["str","spd","dur","iq","biq","ma"];
+              const STAT_KEYS_FF: (keyof CharacterStats)[] = [
+                "str",
+                "spd",
+                "dur",
+                "iq",
+                "biq",
+                "ma",
+              ];
               // Dùng stats trước before_combat để tính đúng stat bị trừ (nhất quán với engine)
               const oppPlayerData = oppSide === "player1" ? player1 : player2;
               const oppPreStats = oppChar
-                ? calcStatsWithDisabled(oppChar, oppPlayerData.no, effectiveDisabledItems)
+                ? calcStatsWithDisabled(
+                    oppChar,
+                    oppPlayerData.no,
+                    effectiveDisabledItems,
+                  )
                 : { ...oppBaseStats };
               const simStats = { ...oppPreStats };
-              const debuffRecord: Partial<Record<keyof CharacterStats, number>> = {};
+              const debuffRecord: Partial<
+                Record<keyof CharacterStats, number>
+              > = {};
               for (let i = 0; i < penalty; i++) {
                 let highestKey: keyof CharacterStats = STAT_KEYS_FF[0];
                 let highestVal = simStats[STAT_KEYS_FF[0]] ?? 0;
@@ -4352,7 +4414,9 @@ export const StatsComparisonMode = ({
                 simStats[highestKey] = (simStats[highestKey] ?? 0) - 1;
                 debuffRecord[highestKey] = (debuffRecord[highestKey] ?? 0) - 1;
               }
-              const debuffDesc = (Object.entries(debuffRecord) as [keyof CharacterStats, number][])
+              const debuffDesc = (
+                Object.entries(debuffRecord) as [keyof CharacterStats, number][]
+              )
                 .map(([k, v]) => `${v} ${k.toUpperCase()}`)
                 .join(", ");
               preCombatEvents.push({
@@ -8035,16 +8099,27 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: "Văn tế",
-              description: "[GM Action] Văn Tế — Không còn player nào đang sống.",
+              description:
+                "[GM Action] Văn Tế — Không còn player nào đang sống.",
               gmAction: true,
             });
           } else {
             const wkVT = `after-VanTe-${side}`;
-            const vtColors = ["#f59e0b","#10b981","#3b82f6","#a855f7","#ef4444","#06b6d4","#84cc16","#ec4899"];
+            const vtColors = [
+              "#f59e0b",
+              "#10b981",
+              "#3b82f6",
+              "#a855f7",
+              "#ef4444",
+              "#06b6d4",
+              "#84cc16",
+              "#ec4899",
+            ];
             acEntries.push({
               player: side,
               quirkName: "Văn tế",
-              description: "Bị loại — quay chọn 1 player còn sống để Re-Spin stat cao nhất:",
+              description:
+                "Bị loại — quay chọn 1 player còn sống để Re-Spin stat cao nhất:",
               wheelKey: wkVT,
               wheelItems: alivePlayers.map((p, i) => ({
                 label: `${p.name} (#${p.no})`,
@@ -8064,7 +8139,8 @@ export const StatsComparisonMode = ({
           const char = player.character;
           if (!char) continue;
           const archetypes: string[] = ((char as any).archetypes || []).map(
-            (a: any) => (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase(),
+            (a: any) =>
+              (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase(),
           );
           const hasHGK = archetypes.includes("hero grave keeper");
           if (!hasHGK) continue;
@@ -8080,22 +8156,37 @@ export const StatsComparisonMode = ({
             acEntries.push({
               player: side,
               quirkName: "Hero Grave Keeper",
-              description: "[GM Action] Hero Grave Keeper — Chưa có player nào bị loại.",
+              description:
+                "[GM Action] Hero Grave Keeper — Chưa có player nào bị loại.",
               gmAction: true,
             });
             continue;
           }
 
-          const hgkColors = ["#f59e0b","#10b981","#3b82f6","#a855f7","#ef4444","#06b6d4","#84cc16","#ec4899"];
+          const hgkColors = [
+            "#f59e0b",
+            "#10b981",
+            "#3b82f6",
+            "#a855f7",
+            "#ef4444",
+            "#06b6d4",
+            "#84cc16",
+            "#ec4899",
+          ];
           const wkHGK = `after-HeroGraveKeeper-${side}`;
           acEntries.push({
             player: side,
             quirkName: "Hero Grave Keeper",
-            description: "Sau combat — quay chọn 1 player đã bị loại để lấy Gear:",
+            description:
+              "Sau combat — quay chọn 1 player đã bị loại để lấy Gear:",
             wheelKey: wkHGK,
             wheelItems: eliminatedPlayers.map((p, i) => {
-              const normalGear: any[] = ((p.character?.gear?.normalGear || []) as any[]).filter((g: any) => !g.isLost);
-              const legacyGear: any[] = ((p.character?.gear?.legacyGear || []) as any[]).filter((g: any) => !g.isLost);
+              const normalGear: any[] = (
+                (p.character?.gear?.normalGear || []) as any[]
+              ).filter((g: any) => !g.isLost);
+              const legacyGear: any[] = (
+                (p.character?.gear?.legacyGear || []) as any[]
+              ).filter((g: any) => !g.isLost);
               const allGear = [...normalGear, ...legacyGear];
               return {
                 label: `${p.name} (#${p.no})${allGear.length === 0 ? " — không có Gear" : ""}`,
@@ -8105,7 +8196,11 @@ export const StatsComparisonMode = ({
                 meta: {
                   playerNo: p.no,
                   playerName: p.name,
-                  gearList: allGear.map((g: any) => (typeof g === "string" ? g : (g?.name ?? ""))).filter(Boolean),
+                  gearList: allGear
+                    .map((g: any) =>
+                      typeof g === "string" ? g : (g?.name ?? ""),
+                    )
+                    .filter(Boolean),
                 },
               };
             }),
@@ -11024,11 +11119,14 @@ export const StatsComparisonMode = ({
         const roundStatLabelHM = STAT_KEY_TO_LABEL_HM[statKey ?? ""] ?? "";
         if (hmsChosen === roundStatLabelHM) {
           // Spell Flux + Hunter's Mark: thắng round đó +2 thay vì +1
-          const hmChar = side === "player1" ? player1?.character : player2?.character;
+          const hmChar =
+            side === "player1" ? player1?.character : player2?.character;
           const hmHasSpellFlux = (hmChar?.powers || []).some(
             (pw: any) =>
               !pw?.isLost &&
-              (typeof pw === "string" ? pw : pw.name)?.toLowerCase().startsWith("spell flux"),
+              (typeof pw === "string" ? pw : pw.name)
+                ?.toLowerCase()
+                .startsWith("spell flux"),
           );
           base += hmHasSpellFlux ? 2 : 1;
           return {
@@ -12109,9 +12207,13 @@ export const StatsComparisonMode = ({
       {/* Combat outro screen */}
       {showOutro && player1 && player2 && effectiveWinner && (
         <CombatOutroScreen
-          winnerName={effectiveWinner === "player1" ? player1.name : player2.name}
+          winnerName={
+            effectiveWinner === "player1" ? player1.name : player2.name
+          }
           winnerNo={effectiveWinner === "player1" ? player1.no : player2.no}
-          loserName={effectiveWinner === "player1" ? player2.name : player1.name}
+          loserName={
+            effectiveWinner === "player1" ? player2.name : player1.name
+          }
           loserNo={effectiveWinner === "player1" ? player2.no : player1.no}
           winnerSide={effectiveWinner}
           onComplete={doConfirmCombat}
@@ -12199,7 +12301,7 @@ export const StatsComparisonMode = ({
                   />
                 )}
                 {/* Header: search + tab switcher */}
-                <div className="relative z-10 -mt-16 p-3 border-b border-blue-500/20 shrink-0 space-y-2">
+                <div className="relative z-10 p-3 border-b border-blue-500/20 shrink-0 space-y-2">
                   <div className="relative">
                     {player1 ? (
                       <div className="flex items-center gap-2 px-3 py-2 bg-gray-900/60 border border-blue-600/40 rounded-lg backdrop-blur-sm">
@@ -13510,47 +13612,73 @@ export const StatsComparisonMode = ({
                                   const chosenItem = entry.wheelItems?.find(
                                     (it) => it.label === result.label,
                                   );
-                                  const chosenName = (chosenItem?.meta?.playerName as string) || result.label;
-                                  spawnStatBubbles([{
-                                    player: entry.player,
-                                    text: `Văn Tế: ${chosenName} được chọn — GM re-spin stat cao nhất của ${chosenName} [GM apply]`,
-                                    isPositive: true,
-                                  }]);
+                                  const chosenName =
+                                    (chosenItem?.meta?.playerName as string) ||
+                                    result.label;
+                                  spawnStatBubbles([
+                                    {
+                                      player: entry.player,
+                                      text: `Văn Tế: ${chosenName} được chọn — GM re-spin stat cao nhất của ${chosenName} [GM apply]`,
+                                      isPositive: true,
+                                    },
+                                  ]);
                                 }
                                 // Hero Grave Keeper bước 2: sau khi chọn player bị loại, spin chọn Gear của player đó
-                                if (spinKey.startsWith("after-HeroGraveKeeper-")) {
+                                if (
+                                  spinKey.startsWith("after-HeroGraveKeeper-")
+                                ) {
                                   const chosenItem = entry.wheelItems?.find(
                                     (it) => it.label === result.label,
                                   );
-                                  const gearList = (chosenItem?.meta?.gearList as string[]) || [];
-                                  const chosenName = (chosenItem?.meta?.playerName as string) || result.label;
+                                  const gearList =
+                                    (chosenItem?.meta?.gearList as string[]) ||
+                                    [];
+                                  const chosenName =
+                                    (chosenItem?.meta?.playerName as string) ||
+                                    result.label;
                                   if (gearList.length === 0) {
-                                    spawnStatBubbles([{
-                                      player: entry.player,
-                                      text: `Hero Grave Keeper: ${chosenName} không có Gear nào.`,
-                                      isPositive: false,
-                                    }]);
+                                    spawnStatBubbles([
+                                      {
+                                        player: entry.player,
+                                        text: `Hero Grave Keeper: ${chosenName} không có Gear nào.`,
+                                        isPositive: false,
+                                      },
+                                    ]);
                                   } else {
-                                    const gearColors = ["#f59e0b","#10b981","#3b82f6","#a855f7","#ef4444","#06b6d4","#84cc16","#ec4899"];
+                                    const gearColors = [
+                                      "#f59e0b",
+                                      "#10b981",
+                                      "#3b82f6",
+                                      "#a855f7",
+                                      "#ef4444",
+                                      "#06b6d4",
+                                      "#84cc16",
+                                      "#ec4899",
+                                    ];
                                     setTimeout(() => {
                                       setPreCombatModal({
                                         isOpen: true,
                                         title: `Hero Grave Keeper — Chọn Gear từ ${chosenName}`,
                                         description: `Quay chọn 1 Gear từ kho của ${chosenName}`,
-                                        items: gearList.map((g: string, i: number) => ({
-                                          label: g,
-                                          weight: 1,
-                                          isSuccess: true,
-                                          color: gearColors[i % gearColors.length],
-                                        })),
+                                        items: gearList.map(
+                                          (g: string, i: number) => ({
+                                            label: g,
+                                            weight: 1,
+                                            isSuccess: true,
+                                            color:
+                                              gearColors[i % gearColors.length],
+                                          }),
+                                        ),
                                         side: entry.player,
                                         effectKey: `hgk-gear-${spinKey}`,
                                         onResult: (gearResult) => {
-                                          spawnStatBubbles([{
-                                            player: entry.player,
-                                            text: `Hero Grave Keeper: Nhận Gear "${gearResult.label}" từ ${chosenName} [GM apply]`,
-                                            isPositive: true,
-                                          }]);
+                                          spawnStatBubbles([
+                                            {
+                                              player: entry.player,
+                                              text: `Hero Grave Keeper: Nhận Gear "${gearResult.label}" từ ${chosenName} [GM apply]`,
+                                              isPositive: true,
+                                            },
+                                          ]);
                                         },
                                       });
                                     }, 100);
@@ -14961,7 +15089,7 @@ export const StatsComparisonMode = ({
                     bgmVolumeScale={masterVolume * bgmVolume}
                   />
                 )}
-                <div className="relative z-10 -mt-16 p-3 border-b border-red-500/20 shrink-0 space-y-2">
+                <div className="relative z-10 p-3 border-b border-red-500/20 shrink-0 space-y-2">
                   <div className="relative">
                     {player2 ? (
                       <div className="flex items-center gap-2 px-3 py-2 bg-gray-900/60 border border-red-600/40 rounded-lg backdrop-blur-sm">
@@ -15586,7 +15714,9 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
         for (const [i, content] of texts) {
           try {
             const char = CharacterParser.parseCharacterFile(content);
-            const effects = EffectResolver.calculateCharacterEffects(char, { isPvE: false });
+            const effects = EffectResolver.calculateCharacterEffects(char, {
+              isPvE: false,
+            });
             const pvpStats: CharacterStats = {
               str: effects.totalStats.strength,
               spd: effects.totalStats.speed,
@@ -15596,7 +15726,8 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
               ma: effects.totalStats.ma,
             };
             const pvpBaseStats: CharacterStats = { ...char.stats };
-            if ((char.race?.race || "").toLowerCase() === "skeleton") pvpBaseStats.iq = 1;
+            if ((char.race?.race || "").toLowerCase() === "skeleton")
+              pvpBaseStats.iq = 1;
             playerList.push({
               no: char.no || i,
               name: char.name || `Player ${i}`,
@@ -15608,7 +15739,9 @@ const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
               breakdown: EffectResolver.getCharacterEffectBreakdown(char),
               character: char,
             });
-          } catch { /* bỏ qua */ }
+          } catch {
+            /* bỏ qua */
+          }
         }
         playerList.sort((a, b) => a.no - b.no);
         setAllPlayers(playerList);
@@ -16597,7 +16730,9 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
         for (const [i, content] of texts) {
           try {
             const char = CharacterParser.parseCharacterFile(content);
-            const effects = EffectResolver.calculateCharacterEffects(char, { isPvE: true });
+            const effects = EffectResolver.calculateCharacterEffects(char, {
+              isPvE: true,
+            });
             const pveStats: CharacterStats = {
               str: effects.totalStats.strength,
               spd: effects.totalStats.speed,
@@ -16630,15 +16765,25 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
               race: char.race?.race,
               subRace: char.race?.subRace,
               archetypes: char.archetypes,
-              powers: char.powers?.filter((p) => !p.isLost).map((p) => p.name) || [],
-              weapons: char.weapons?.filter((w) => !w.isLost && w.usable !== false).map((w) => w.name) || [],
+              powers:
+                char.powers?.filter((p) => !p.isLost).map((p) => p.name) || [],
+              weapons:
+                char.weapons
+                  ?.filter((w) => !w.isLost && w.usable !== false)
+                  .map((w) => w.name) || [],
               gear: [
-                ...(char.gear?.normalGear || []).filter((g) => !g.isLost).map((g) => g.name),
-                ...(char.gear?.legacyGear || []).filter((g) => !g.isLost).map((g) => g.name),
+                ...(char.gear?.normalGear || [])
+                  .filter((g) => !g.isLost)
+                  .map((g) => g.name),
+                ...(char.gear?.legacyGear || [])
+                  .filter((g) => !g.isLost)
+                  .map((g) => g.name),
               ],
               effectBreakdown: EffectResolver.getCharacterEffectBreakdown(char),
             });
-          } catch { /* bỏ qua */ }
+          } catch {
+            /* bỏ qua */
+          }
         }
         setAllPlayers(playerList);
       } catch (error) {

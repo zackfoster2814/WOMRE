@@ -157,21 +157,51 @@ function OutroScene({ phase, loserOnRight }: { phase: "attack" | "winner"; loser
 
 // ── Avatar ─────────────────────────────────────────────────────────────────────
 const AVATAR_EXTS = ["png", "jpg", "jpeg", "gif", "webp"];
+const RANDOM_AVATAR_COUNT = 20;
+
+function getRandomAvatarIndex(no: number): number {
+  return (no % RANDOM_AVATAR_COUNT) + 1;
+}
 
 function AvatarImg({ no, name, side }: { no: number; name: string; side: "left" | "right" }) {
   const [extIndex, setExtIndex] = useState(0);
+  const [phase, setPhase] = useState<"player" | "random">("player");
+  const [randomExtIndex, setRandomExtIndex] = useState(0);
   const basePath = (import.meta.env.BASE_URL ?? "").replace(/\/$/, "");
-  const src = extIndex < AVATAR_EXTS.length
-    ? `${basePath}/data/avatars/no${no}.${AVATAR_EXTS[extIndex]}`
-    : null;
   const isLeft = side === "left";
 
+  const playerSrc =
+    phase === "player" && extIndex < AVATAR_EXTS.length
+      ? `${basePath}/data/avatars/no${no}.${AVATAR_EXTS[extIndex]}`
+      : null;
+
+  const randomIndex = getRandomAvatarIndex(no);
+  const randomSrc =
+    phase === "random" && randomExtIndex < AVATAR_EXTS.length
+      ? `${basePath}/data/avatars/randomAvatar/${randomIndex}.${AVATAR_EXTS[randomExtIndex]}`
+      : null;
+
+  const src = playerSrc ?? randomSrc;
+
   if (src) {
+    const handleError = () => {
+      if (phase === "player") {
+        const next = extIndex + 1;
+        if (next < AVATAR_EXTS.length) {
+          setExtIndex(next);
+        } else {
+          setPhase("random");
+          setRandomExtIndex(0);
+        }
+      } else {
+        setRandomExtIndex((i) => i + 1);
+      }
+    };
     return (
       <img key={src} src={src} alt={name}
         className="absolute inset-0"
         style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
-        onError={() => setExtIndex(i => i + 1)}
+        onError={handleError}
       />
     );
   }

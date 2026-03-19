@@ -182,6 +182,9 @@ export interface Character {
 
   // PvE Punishments (parsed from battle log, e.g., "-2 Str")
   pvePunishments?: { stat: string; value: number }[];
+
+  // Other Source Modifiers (parsed from "Nguồn khác:" block in Add info, e.g., "-1 Dura", "+2 BIQ")
+  otherSourceMods?: { stat: string; value: number; source?: string }[];
 }
 
 export interface BattleLogEntry {
