@@ -99,7 +99,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: NPC (npc867)
-- Kết quả: thua
+- Kết quả: lose
 - Tỉ số: 0-3
 - note: Đánh hộ 0reki (0rekihoutarou), bú Hunter's Mark
 ```

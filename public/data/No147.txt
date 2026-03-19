@@ -94,7 +94,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Anh Thầy Bói
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-3
 ```
 ======

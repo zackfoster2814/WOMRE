@@ -87,7 +87,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Lov4
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 6-0
 ```
 ======

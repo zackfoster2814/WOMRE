@@ -90,7 +90,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: trthesloth (_trthesloth)
-- Kết quả: thắng
+- Kết quả: Win
 - Tỉ số: 3-4
 - note: học Ice Hammer, +1 str, +3 base speed
 ```

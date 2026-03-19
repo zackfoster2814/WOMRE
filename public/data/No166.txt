@@ -87,7 +87,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Huy Le 
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 1-5
 ```
 ======

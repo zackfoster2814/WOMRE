@@ -102,7 +102,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Zackie
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-2
 ```
 

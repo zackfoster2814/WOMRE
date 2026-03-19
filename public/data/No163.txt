@@ -100,7 +100,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Hà (huanghe11)
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-2
 - Note: Vl không kích Bash budai luôn
 ```

@@ -96,7 +96,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Vollerei (thanhcraft)
-- Kết quả: thắng 
+- Kết quả: Win 
 - Tỉ số: 3-3
 - Note: Nhận +2 vào stats cao nhất 
 ```

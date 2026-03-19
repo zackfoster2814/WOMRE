@@ -88,7 +88,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Narita Taigoat
-- Kết quả: thua 
+- Kết quả: lose 
 - Tỉ số: 2-3
 ```
 ======

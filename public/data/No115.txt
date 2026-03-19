@@ -90,7 +90,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: kinbum
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-4
 ```
 ======

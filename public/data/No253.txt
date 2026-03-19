@@ -98,7 +98,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: KuSenpai (kusenpai)
-- Kết quả: thua
+- Kết quả: lose
 - Tỉ số: 5-2
 ```
 ======

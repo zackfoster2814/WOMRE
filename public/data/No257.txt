@@ -89,7 +89,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: bachtuotkun
-- Kết quả: thắng 
+- Kết quả: Win 
 - Tỉ số: 3-3
 - Reward:
   - +1 BIQ

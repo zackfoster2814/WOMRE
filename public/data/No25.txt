@@ -92,7 +92,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Nega (thxwngs)
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-3
 - Reward: +2 vào chỉ số cao nhất (+2 BIQ)
 ```

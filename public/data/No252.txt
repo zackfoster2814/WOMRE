@@ -93,7 +93,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: Yami
-- Kết quả: thắng 
+- Kết quả: Win 
 - Tỉ số: 5-2
 ```
 ======

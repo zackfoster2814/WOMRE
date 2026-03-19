@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Julianus (khoi7435)
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-2
 - Note: +2 IQ từ Independent
 - Reward: +2 stats ngẫu nhiên x6 

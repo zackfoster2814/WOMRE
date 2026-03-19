@@ -85,7 +85,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Hayato (hayatoo_o)
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số:0-5
 ```
 ======

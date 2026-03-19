@@ -106,7 +106,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Son WuKong
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-4
 ```
 ======

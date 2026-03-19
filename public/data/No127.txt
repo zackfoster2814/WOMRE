@@ -99,7 +99,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: zun (zuniee)
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-2
 ```
 ======

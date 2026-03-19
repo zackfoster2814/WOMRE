@@ -87,7 +87,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: thợ lặn (normieyah)
-- Kết quả: thua
+- Kết quả: lose
 - Tỉ số: 4-2
 - note: thành lover
 ```

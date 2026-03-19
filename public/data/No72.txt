@@ -104,7 +104,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: NPC (npc867)
-- Kết quả: thua
+- Kết quả: lose
 - Tỉ số: 1-4
 ```
 ======

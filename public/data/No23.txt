@@ -108,7 +108,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: I'm Here W U
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-2
 ```
 ======

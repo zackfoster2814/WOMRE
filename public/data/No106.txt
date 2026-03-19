@@ -90,7 +90,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Duckie2369
-- Kết quả: thua
+- Kết quả: lose
 - Tỉ số: 3-4
 ```
 ======

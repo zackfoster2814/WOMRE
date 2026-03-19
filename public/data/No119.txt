@@ -78,7 +78,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: Manhattan Cafe chơi TFT
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 5-1
 ```
 ======

@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: baonine
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-2
 ```
 

@@ -99,7 +99,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Lonely boy 
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 6-0
 ```
 ======

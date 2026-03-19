@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Khogadetem
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-1
 ```
 ======

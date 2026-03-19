@@ -99,7 +99,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: King Zalo
-- Kết quả: thắng
+- Kết quả: Win
 - Tỉ số: 3-2
 ```
 ======

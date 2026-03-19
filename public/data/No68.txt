@@ -86,7 +86,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: h2c (h2cch2)
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 5-2
 ```
 ======

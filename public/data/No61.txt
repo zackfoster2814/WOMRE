@@ -96,7 +96,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: trantrinhtri
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-1
 ```
 ======

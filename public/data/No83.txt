@@ -88,7 +88,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: Sami (saminoceda)
-- Kết quả: Thắng 
+- Kết quả: Win 
 - Tỉ số: 5-2
 - Reward:
   + Nhận 1 power: Sonic Scream

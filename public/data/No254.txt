@@ -91,7 +91,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: CatShark
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-3
 ```
 ======

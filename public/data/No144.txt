@@ -94,7 +94,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Creeper (creeper717)
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 0-5
 ```
 ======

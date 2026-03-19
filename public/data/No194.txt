@@ -89,7 +89,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Lệch rate Jingliu 2 lần
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-5
 ```
 ======

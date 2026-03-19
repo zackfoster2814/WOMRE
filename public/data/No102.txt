@@ -107,7 +107,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: AsuK
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-4
 ```
 ======

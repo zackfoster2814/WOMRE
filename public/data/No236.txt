@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: PYBB113
-- Kết quả: Thắng 
+- Kết quả: Win 
 - Tỉ số: 3-3
 ```
 ======

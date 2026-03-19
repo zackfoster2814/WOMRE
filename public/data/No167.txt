@@ -100,7 +100,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Shiro (kuriyamashiro)
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-2
 - Reward: 
   -> Nhận Char dev: Old age

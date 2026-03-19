@@ -96,7 +96,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: BLèBLè (amebear)
-- Kết quả: thua 
+- Kết quả: lose 
 - Tỉ số: 3-3
 ```
 ======

@@ -91,7 +91,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Roku da Poet (roku2807)
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-3
 ```
 ======

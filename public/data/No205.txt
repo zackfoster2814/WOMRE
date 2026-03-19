@@ -102,7 +102,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: LazyMan (cuongcao)
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-0
 ```
 ======

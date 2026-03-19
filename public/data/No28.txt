@@ -108,7 +108,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Ethan
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 5-1
 ```
 ======

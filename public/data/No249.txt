@@ -89,7 +89,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: luchii
-- Kết quả: thắng 
+- Kết quả: Win 
 - Tỉ số: 3-0
 ```
 ======

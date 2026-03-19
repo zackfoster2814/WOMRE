@@ -91,7 +91,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: sarah
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 1-5
 - Reward: + 1MA
 ```

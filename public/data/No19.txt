@@ -95,7 +95,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Karu (karu_87369)
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-2
 ```
 ======

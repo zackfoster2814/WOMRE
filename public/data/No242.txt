@@ -90,7 +90,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: Fen (fentf)
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-3
 ```
 ======

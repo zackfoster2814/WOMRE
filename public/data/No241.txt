@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Moonice (muroku_18)
-- Kết quả: Thắng 
+- Kết quả: Win 
 - Tỉ số: 4-2
 ```
 ======

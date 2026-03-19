@@ -96,7 +96,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: wibuslayer786 (wibuslayer786)
-- Kết quả: thắng
+- Kết quả: Win
 - Tỉ số: 5-2
 ```
 ======

@@ -105,14 +105,14 @@ PvE:
 ```
 PvP:
 - Đối thủ: NPC (npc867)
-- Kết quả: thắng
+- Kết quả: Win
 - Tỉ số: 0-3
 - note: 0reki (0rekihoutarou) gọi mPui lên đánh hộ nhưng vẫn thua
 ```
 ```
 PvP:
 - Đối thủ: 0reki (0rekihoutarou)
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 1-4
 ```
 ======

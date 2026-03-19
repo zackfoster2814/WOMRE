@@ -91,7 +91,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Yoh Hai Kiếm
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 5-1
 ```
 ======

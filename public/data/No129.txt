@@ -95,7 +95,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Mr. C.B.
-- Kết quả: thắng
+- Kết quả: Win
 - Tỉ số: 2-3
 ```
 ======

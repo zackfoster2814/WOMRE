@@ -95,7 +95,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Hy
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 5-0
 ```
 ======

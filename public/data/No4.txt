@@ -99,7 +99,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Ngủyên (ender2910)
-- Kết quả: 5-1
-- Tỉ số: thắng
+- Kết quả: Win
+- Tỉ số: 5-1
 ```
 ======

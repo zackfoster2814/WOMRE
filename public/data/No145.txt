@@ -96,7 +96,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: catfish
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-3
 ```
 ======

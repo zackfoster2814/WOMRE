@@ -114,7 +114,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Adrian Fahrenheit Țepeș
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-2
 ```
 ======

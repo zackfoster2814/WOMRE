@@ -85,7 +85,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Tekachi
-- Kết quả: thua
+- Kết quả: lose
 - Tỉ số: 3-0
 ```
 ======

@@ -97,7 +97,7 @@ PvP Reward:
 ```
 PvP:
 - Đối thủ: KK
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-2
 ```
 ======
