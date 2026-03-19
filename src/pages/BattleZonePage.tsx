@@ -1074,8 +1074,9 @@ function calcStatsWithDisabled(
   char: Character,
   playerNo: number,
   disabledItems: Set<string>,
+  allCharacters?: Character[],
 ): CharacterStats {
-  const sources = EffectResolver.gatherEffectSources(char);
+  const sources = EffectResolver.gatherEffectSources(char, allCharacters);
   // Mark disabled
   for (const src of sources) {
     const key = `${playerNo}-${src.type}-${src.name}`;
@@ -1893,6 +1894,40 @@ export const StatsComparisonMode = ({
     }
   };
 
+  // Re-resolve stats với allCharacters để cross-character effects (Cheater, v.v.) hoạt động đúng
+  const reResolveWithAllChars = (
+    player: PvPPlayerData,
+    allChars: Character[],
+  ): PvPPlayerData => {
+    try {
+      const char = player.character;
+      const effects = EffectResolver.calculateCharacterEffects(
+        char,
+        { isPvE: false },
+        allChars,
+      );
+      const pvpStats: CharacterStats = {
+        str: effects.totalStats.strength,
+        spd: effects.totalStats.speed,
+        dur: effects.totalStats.durability,
+        iq: effects.totalStats.iq,
+        biq: effects.totalStats.biq,
+        ma: effects.totalStats.ma,
+      };
+      return {
+        ...player,
+        stats: pvpStats,
+        breakdown: EffectResolver.getCharacterEffectBreakdown(
+          char,
+          undefined,
+          allChars,
+        ),
+      };
+    } catch {
+      return player;
+    }
+  };
+
   // Load all players từ Drive (gọi lại được khi cần refresh)
   const loadPlayers = useCallback(
     async (silent = false) => {
@@ -1902,20 +1937,26 @@ export const StatsComparisonMode = ({
         const playerList: PvPPlayerData[] = [];
 
         if (tournamentMatch) {
-          // Chỉ load 2 player cần thiết khi vào từ bracket
-          const nos = [tournamentMatch.player1No, tournamentMatch.player2No];
-          const texts = await fetchPlayerTexts(nos);
+          // Load toàn bộ players để cross-character effects (Cheater, v.v.) hoạt động đúng
+          const index = await getPlayerIndex();
+          const allNos = Object.keys(index)
+            .filter((k) => /^No\d+$/.test(k))
+            .map((k) => parseInt(k.replace(/\D/g, "")));
+          const texts = await fetchPlayerTexts(allNos);
           for (const [no, content] of texts) {
             const player = parsePlayerFromText(content, no);
             if (player) playerList.push(player);
           }
           playerList.sort((a, b) => a.no - b.no);
-          setAllPlayers(playerList);
+          // Re-resolve với allCharacters để cross-character effects hoạt động
+          const allChars = playerList.map((p) => p.character);
+          const resolved = playerList.map((p) => reResolveWithAllChars(p, allChars));
+          setAllPlayers(resolved);
           setPlayer1(
-            playerList.find((p) => p.no === tournamentMatch.player1No) ?? null,
+            resolved.find((p) => p.no === tournamentMatch.player1No) ?? null,
           );
           setPlayer2(
-            playerList.find((p) => p.no === tournamentMatch.player2No) ?? null,
+            resolved.find((p) => p.no === tournamentMatch.player2No) ?? null,
           );
         } else {
           // Không có tournament context: load hết để cho phép chọn tay
@@ -1929,7 +1970,10 @@ export const StatsComparisonMode = ({
             if (player) playerList.push(player);
           }
           playerList.sort((a, b) => a.no - b.no);
-          setAllPlayers(playerList);
+          // Re-resolve với allCharacters để cross-character effects hoạt động
+          const allChars = playerList.map((p) => p.character);
+          const resolved = playerList.map((p) => reResolveWithAllChars(p, allChars));
+          setAllPlayers(resolved);
         }
       } catch (error) {
         console.error("Error loading players:", error);
