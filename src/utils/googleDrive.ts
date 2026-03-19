@@ -14,12 +14,12 @@ const _playerTextCache = new Map<number, string>();
  * Lấy player index map {No1: fileId, No2: fileId, ...}
  * Cache lại sau lần đầu để không fetch lại nhiều lần
  */
-// Web production (GitHub Pages) thì dùng local files, Tauri native vẫn dùng Drive
-const IS_WEB_PROD = import.meta.env.PROD && !import.meta.env.TAURI_ENV_TARGET_TRIPLE;
+// Web (không phải Tauri) thì dùng local files, Tauri native dùng Drive
+const IS_WEB = !import.meta.env.TAURI_ENV_TARGET_TRIPLE;
 
 export async function getPlayerIndex(): Promise<Record<string, string>> {
   if (_playerIndexCache) return _playerIndexCache;
-  if (IS_WEB_PROD) return getPlayerIndexLocal();
+  if (IS_WEB) return getPlayerIndexLocal();
   _playerIndexCache = await readDriveFile<Record<string, string>>(PLAYER_INDEX_FILE_ID);
   return _playerIndexCache;
 }
@@ -35,7 +35,7 @@ export function clearPlayerIndexCache(): void {
  */
 export async function fetchPlayerText(no: number): Promise<string> {
   if (_playerTextCache.has(no)) return _playerTextCache.get(no)!;
-  if (IS_WEB_PROD) {
+  if (IS_WEB) {
     const res = await fetch(`${BASE_URL}data/No${no}.txt`);
     if (!res.ok) throw new Error(`Player No${no} not found`);
     const text = await res.text();
@@ -102,7 +102,7 @@ async function getPlayerIndexLocal(): Promise<Record<string, string>> {
 export async function fetchPlayerTexts(
   nos: number[],
 ): Promise<Map<number, string>> {
-  if (IS_WEB_PROD) return fetchPlayerTextsLocal(nos);
+  if (IS_WEB) return fetchPlayerTextsLocal(nos);
   const index = await getPlayerIndex();
   const result = new Map<number, string>();
   const toFetch = nos.filter((no) => !_playerTextCache.has(no));
