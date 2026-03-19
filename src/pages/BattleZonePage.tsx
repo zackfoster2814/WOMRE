@@ -52,6 +52,7 @@ import {
   fetchPlayerTexts,
   // fetchPlayerText,
   getPlayerIndex,
+  invalidatePlayerCache,
 } from "../utils/googleDrive";
 // import { PLAYER_INDEX_FILE_ID } from "../config/googleDrive";
 
@@ -1938,6 +1939,9 @@ export const StatsComparisonMode = ({
         const playerList: PvPPlayerData[] = [];
 
         if (tournamentMatch) {
+          // Invalidate cache 2 player chính để luôn fetch data mới nhất từ Drive
+          invalidatePlayerCache(tournamentMatch.player1No);
+          invalidatePlayerCache(tournamentMatch.player2No);
           // Load toàn bộ players để cross-character effects (Cheater, v.v.) hoạt động đúng
           const index = await getPlayerIndex();
           const allNos = Object.keys(index)
