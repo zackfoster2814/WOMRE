@@ -73,12 +73,19 @@ async function fetchPlayerTextsLocal(nos: number[]): Promise<Map<number, string>
 
 /**
  * Lấy player index local từ public/data/player-index.json
+ * Local format: {"players": [1, 2, 3, ...]} → convert sang {"No1": "local", "No2": "local", ...}
  */
 async function getPlayerIndexLocal(): Promise<Record<string, string>> {
   if (_playerIndexCache) return _playerIndexCache;
   const res = await fetch(`${BASE_URL}data/player-index.json`);
-  _playerIndexCache = await res.json();
-  return _playerIndexCache!;
+  const data = await res.json();
+  const nos: number[] = Array.isArray(data) ? data : (data.players ?? []);
+  const index: Record<string, string> = {};
+  for (const no of nos) {
+    index[`No${no}`] = `local:${no}`;
+  }
+  _playerIndexCache = index;
+  return _playerIndexCache;
 }
 
 /**
