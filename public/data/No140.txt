@@ -97,10 +97,8 @@ PvE:
 - Note: GOAT Karu lên tiếng
 ```
 PvP:
-- Đối thủ: 
-Elai
+- Đối thủ: Elai
 - Kết quả: Lose
-- Tỉ số:
- 3-2
+- Tỉ số: 3-2
 ```
 ======

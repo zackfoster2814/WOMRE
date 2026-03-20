@@ -87,10 +87,8 @@ PvE:
 - Punishment: Nhận Quirk "Impatient" nhưng không được nhận 2 PvP Reward mặc định của nó
 ```
 PvP:
-- Đối thủ: 
-Pui (pui19)
+- Đối thủ: Pui (pui19)
 - Kết quả: Lose
-- Tỉ số:
- 4-3
+- Tỉ số: 4-3
 ```
 ======
