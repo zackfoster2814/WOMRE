@@ -105,8 +105,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Bamialoai2 (lmaooo1308)
-- Kết quả: 
-thắng 
+- Kết quả: Win
 - Tỉ số:
  4-3
 - note: bú 

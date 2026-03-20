@@ -89,8 +89,7 @@ PvE:
 PvP:
 - Đối thủ: 
 Pui (pui19)
-- Kết quả: 
-Thua
+- Kết quả: Lose
 - Tỉ số:
  4-3
 ```
