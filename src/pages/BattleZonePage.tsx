@@ -145,6 +145,23 @@ interface BattleView {
 }
 
 // ============================================================================
+// End Combat Sound
+// ============================================================================
+const END_COMBAT_SOUNDS = [
+  "/assets/combatSFX/endcombat/end (1).mp3",
+  "/assets/combatSFX/endcombat/end (2).MP3",
+  "/assets/combatSFX/endcombat/end (3).mp3",
+  "/assets/combatSFX/endcombat/end (4).mp3",
+];
+
+function playEndCombatSound() {
+  const src = END_COMBAT_SOUNDS[Math.floor(Math.random() * END_COMBAT_SOUNDS.length)];
+  const audio = new Audio(getAssetPath(src));
+  audio.volume = 0.5;
+  audio.play().catch(() => {});
+}
+
+// ============================================================================
 // Dev Mode: Floating Wheel Weight Panel
 // ============================================================================
 interface DevWheelPanelProps {
@@ -8337,6 +8354,62 @@ export const StatsComparisonMode = ({
           });
         }
 
+        // ── Follower of the Two Fingers: sau combat → -1 IQ, -1 BIQ, cướp 1 Power từ 1 player còn sống ──
+        for (const side of ["player1", "player2"] as const) {
+          const player = side === "player1" ? player1 : player2;
+          const char = player.character;
+          if (!char) continue;
+          const archetypes: string[] = ((char as any).archetypes || []).map(
+            (a: any) =>
+              (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase(),
+          );
+          if (!archetypes.includes("follower of the two fingers")) continue;
+
+          const alivePlayers = allPlayers.filter(
+            (p) =>
+              p.no !== player.no &&
+              p.character?.tournament?.status !== "eliminated",
+          );
+
+          if (alivePlayers.length === 0) {
+            acEntries.push({
+              player: side,
+              quirkName: "Follower of the Two Fingers",
+              description:
+                "[GM Action] Follower of the Two Fingers: -1 IQ, -1 BIQ — Không còn player nào đang sống để cướp Power.",
+              gmAction: true,
+            });
+            continue;
+          }
+
+          const fotfColors = [
+            "#f59e0b", "#10b981", "#3b82f6", "#a855f7",
+            "#ef4444", "#06b6d4", "#84cc16", "#ec4899",
+          ];
+          const wkFOTF = `after-FollowerTwoFingers-${side}`;
+          acEntries.push({
+            player: side,
+            quirkName: "Follower of the Two Fingers",
+            description:
+              "Sau combat: -1 IQ, -1 BIQ — Quay chọn 1 player còn sống để cướp Power:",
+            wheelKey: wkFOTF,
+            wheelItems: alivePlayers.map((p, i) => {
+              const powers = (p.character?.powers || [])
+                .filter((pw: any) => !pw?.isLost)
+                .map((pw: any) => (typeof pw === "string" ? pw : (pw?.name ?? "")))
+                .filter(Boolean);
+              return {
+                label: `${p.name} (#${p.no})${powers.length === 0 ? " — không có Power" : ""}`,
+                weight: 1,
+                isSuccess: powers.length > 0,
+                color: fotfColors[i % fotfColors.length],
+                meta: { playerNo: p.no, playerName: p.name, powers },
+              };
+            }),
+            gmAction: true,
+          });
+        }
+
         // ── Dryad: khi bị loại → quay Dryad còn sống nhận +2 stat ngẫu nhiên; nếu còn 1 → tiến hóa Yggdrasil ──
         for (const side of ["player1", "player2"] as const) {
           if (actualWinner === side) continue; // chỉ khi bị loại
@@ -9335,6 +9408,7 @@ export const StatsComparisonMode = ({
   // Confirm combat + append after-combat spin results to Drive log
   const handleConfirmCombat = () => {
     setShowOutro(true);
+    playEndCombatSound();
   };
 
   const doConfirmCombat = () => {
@@ -13841,6 +13915,56 @@ export const StatsComparisonMode = ({
                                     }, 100);
                                   }
                                 }
+                                // Follower of the Two Fingers bước 2: sau khi chọn player còn sống, spin chọn Power
+                                if (spinKey.startsWith("after-FollowerTwoFingers-")) {
+                                  const chosenItem = entry.wheelItems?.find(
+                                    (it) => it.label === result.label,
+                                  );
+                                  const powers =
+                                    (chosenItem?.meta?.powers as string[]) || [];
+                                  const chosenName =
+                                    (chosenItem?.meta?.playerName as string) ||
+                                    result.label;
+                                  if (powers.length === 0) {
+                                    spawnStatBubbles([
+                                      {
+                                        player: entry.player,
+                                        text: `Follower of the Two Fingers: -1 IQ, -1 BIQ — ${chosenName} không có Power nào để cướp. [GM apply]`,
+                                        isPositive: false,
+                                      },
+                                    ]);
+                                  } else {
+                                    const powerColors = [
+                                      "#f59e0b", "#10b981", "#3b82f6", "#a855f7",
+                                      "#ef4444", "#06b6d4", "#84cc16", "#ec4899",
+                                    ];
+                                    setTimeout(() => {
+                                      setPreCombatModal({
+                                        isOpen: true,
+                                        title: `Follower of the Two Fingers — Cướp Power từ ${chosenName}`,
+                                        description: `Quay chọn 1 Power để cướp từ ${chosenName}`,
+                                        items: powers.map((pw: string, i: number) => ({
+                                          label: pw,
+                                          weight: 1,
+                                          isSuccess: true,
+                                          color: powerColors[i % powerColors.length],
+                                        })),
+                                        side: entry.player,
+                                        effectKey: `fotf-power-${spinKey}`,
+                                        onResult: (powerResult) => {
+                                          spawnStatBubbles([
+                                            {
+                                              player: entry.player,
+                                              text: `Follower of the Two Fingers: -1 IQ, -1 BIQ — Cướp Power "${powerResult.label}" từ ${chosenName} [GM apply]`,
+                                              isPositive: true,
+                                            },
+                                          ]);
+                                        },
+                                      });
+                                    }, 100);
+                                  }
+                                }
+
                                 // Coven Council bước 2: sau khi chọn player, spin stat theo race
                                 if (spinKey.startsWith("after-CovenCouncil-")) {
                                   const chosenItem = entry.wheelItems?.find(

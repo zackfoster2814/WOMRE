@@ -1,0 +1,256 @@
+
+────────────────────────────────────────────────────────────
+SANDBOX SESSION: 21:57:48 22/2/2026
+────────────────────────────────────────────────────────────
+Sandbox Battle Report
+Thời gian: 21:57:48 22/2/2026
+Chế độ: Stats Comparison
+════════════════════════════════════════════════════════════
+Random #9843 (Demi-God) vs Random #1849 (Orc)
+════════════════════════════════════════════════════════════
+
+Items & hiệu ứng — Random #9843:
+  [race] Demi-God (không kích hoạt): Quay God's Gifts.
++1 all stats vs Human, -1 all stats vs God.
+  [sub_race] Moon: Nhận Archetype "Pacifist" từ đầu (sẽ nhận thêm một Archetype nữa).
+  [archetype] Paladin: Nhận Power "Divine Smite", +2 Base MA.
+  [quirk] Athletic: +1 Strength và +1 MA.
+  [power] Misty Step Ahead (không kích hoạt): [PVE ONLY] Trong combat: Tổ đội khởi đầu với 1 điểm.
+  [gear] Spirit of the Wheel (không kích hoạt): Trận đầu tiên của bạn khi biết kết quả sẽ khiến 3 người ngẫu nhiên "Isekai".
+  [gear] Kryptonite (không kích hoạt): Là một thứ dùng phục vụ cho Combat với Superman. Đối đầu Superman bị 2 điểm khởi đầu.
+
+Items & hiệu ứng — Random #1849:
+  [race] Orc: +2 stat thấp nhất khi thắng, -3 stat cao nhất khi thua.
+  [archetype] Follower of the Two Fingers: Sau combat: -1 IQ, -1 BIQ, cướp 1 Power từ player ngẫu nhiên.
+  [quirk] Under the Weather (không kích hoạt): -1 all stats. Sau combat thắng: đổi thành Shining Brightly.
+  [quirk] Herbalist: Sau Combat: Nhận 1 thảo dược.
+  [power] Baldening: Bạn đang hói 💀
+  [gear] Knight's Armor: Nhận -2 Speed, +3 Dura và +2 Strength.
+  [gear] Cursed Charm: Nhận -2 Speed.
+  [house] Roundtable Hold (không kích hoạt): Không có Mason Effect. Khi bạn thua và đứng trước ngưỡng cửa bị loại, đánh lại 1 round. Kích hoạt 1 lần.
+
+Stats cơ bản (base):
+  Random #9843: STR:1 SPD:1 DUR:5 IQ:4 BIQ:3 MA:5
+  Random #1849: STR:5 SPD:5 DUR:6 IQ:5 BIQ:8 MA:1
+
+Immediate effects đã áp dụng:
+  [Random #9843] Paladin → +2 Base MA
+  [Random #9843] Athletic → +1 STR
+  [Random #9843] Athletic → +1 MA
+  [Random #1849] Under the Weather → -1 STR
+  [Random #1849] Under the Weather → -1 SPD
+  [Random #1849] Under the Weather → -1 DUR
+  [Random #1849] Under the Weather → -1 IQ
+  [Random #1849] Under the Weather → -1 BIQ
+  [Random #1849] Under the Weather → -1 MA
+  [Random #1849] Knight's Armor → -2 SPD
+  [Random #1849] Knight's Armor → +3 DUR
+  [Random #1849] Knight's Armor → +2 STR
+  [Random #1849] Cursed Charm → -2 SPD
+
+Stats sau immediate effects:
+  Random #9843: STR:2 SPD:1 DUR:5 IQ:4 BIQ:3 MA:6
+  Random #1849: STR:6 SPD:0 DUR:8 IQ:4 BIQ:7 MA:0
+
+Kết quả từng round:
+  STR: Random #1849 WIN (6 vs 2)
+  SPD: Random #9843 WIN (1 vs 0)
+  DUR: Random #1849 WIN (8 vs 5)
+  IQ: TIE (4 vs 4)
+  BIQ: Random #1849 WIN (7 vs 3)
+  MA: Random #9843 WIN (6 vs 0)
+
+Kết quả: Random #1849 WIN 3-2
+  Random #9843 thua
+
+════════════════════════════════════════════════════════════
+Race Tier: Random #9843 = Demi-God (T4) | Random #1849 = Orc (T16)
+════════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────────
+SANDBOX SESSION: 21:58:24 22/2/2026
+────────────────────────────────────────────────────────────
+Sandbox Battle Report
+Thời gian: 21:58:24 22/2/2026
+Chế độ: Stats Comparison
+════════════════════════════════════════════════════════════
+Random #5010 (Dwarf) vs Random #3361 (Skeleton)
+════════════════════════════════════════════════════════════
+
+Items & hiệu ứng — Random #5010:
+  [race] Dwarf: Quay Dwarf's Type.
+Không có trait đặc biệt.
+  [sub_race] Lùn thường: Bạn là 1 người lùn...
+  [archetype] Icebloods (không kích hoạt): Trong Combat: +1 điểm nếu thắng round, -1 điểm nếu thua round.
+  [quirk] Raumanian (không kích hoạt): 36% nhận 1 điểm khởi đầu.
+  [power] Gaze of the Abyss (không kích hoạt): Trong Combat: Thua 5 Round, round tiếp theo thắng +5 Điểm.
+  [power] Seismic: Debuff: Đối thủ -2 MA.
+  [power] Mewing: Bye bye 🤫🧏‍♂.
+  [gear] Leather Jacket: Nhận +3 Durability.
+  [gear] The Tamer Straight Sword: Nhận 1 Summon. Sau Combat: Đánh cắp 1 Power ngẫu nhiên của đối thủ sau khi chiến thắng.
+  [weapon] Cursed Pennywort (không kích hoạt): Trước Combat: 36% vô hiệu hóa 3 power ngẫu nhiên của đối thủ.
+  [house] Tracen Academy: Học Viện chỉ nhận Uma. Nhận ngẫu nhiên từ 1-3 Strength, 1-3 Speed và 1-3 Durability.
+
+Items & hiệu ứng — Random #3361:
+  [race] Skeleton (không kích hoạt): Quay Bone Lineage.
+IQ luôn = 1 (không thể thay đổi).
+Sau 2 PvP thắng: tiến hóa Lich (IQ=8). Sau 4 PvP thắng: Lich King (+1 all). Miễn nhiễm AIDS.
+  [archetype] Lords: Base BIQ +1, BIQ +1. Sau Combat: BIQ +1.
+  [weapon] Andúril: Sau Combat: Nhận Summon Wheel. Trước Combat vs evil races: +1 điểm/3 Summon.
+
+Stats cơ bản (base):
+  Random #5010: STR:3 SPD:4 DUR:9 IQ:3 BIQ:9 MA:2
+  Random #3361: STR:6 SPD:5 DUR:5 IQ:1 BIQ:2 MA:6
+
+Immediate effects đã áp dụng:
+  [Random #5010] Leather Jacket → +3 DUR
+  [Random #5010] Tracen Academy → +2 STR
+  [Random #5010] Tracen Academy → +2 SPD
+  [Random #5010] Tracen Academy → +3 DUR
+  [Random #3361] Lords → +1 Base BIQ
+  [Random #3361] Lords → +1 BIQ
+
+Stats sau immediate effects:
+  Random #5010: STR:5 SPD:6 DUR:15 IQ:3 BIQ:9 MA:2
+  Random #3361: STR:6 SPD:5 DUR:5 IQ:1 BIQ:3 MA:6
+
+Kết quả từng round:
+  STR: Random #3361 WIN (6 vs 5)
+  SPD: Random #5010 WIN (6 vs 5)
+  DUR: Random #5010 WIN (15 vs 5)
+  IQ: Random #5010 WIN (3 vs 1)
+  BIQ: Random #5010 WIN (9 vs 3)
+  MA: Random #3361 WIN (6 vs 2)
+
+Kết quả: Random #5010 WIN 4-2
+  Random #3361 thua
+
+════════════════════════════════════════════════════════════
+Race Tier: Random #5010 = Dwarf (T19) | Random #3361 = Skeleton (T18)
+════════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────────
+SANDBOX SESSION: 22:44:00 22/2/2026
+────────────────────────────────────────────────────────────
+Sandbox Battle Report
+Thời gian: 22:44:00 22/2/2026
+Chế độ: Stats Comparison
+════════════════════════════════════════════════════════════
+Kazuha (Gnome) vs Trapcon (Merfolk)
+════════════════════════════════════════════════════════════
+
+Items & hiệu ứng — Kazuha:
+  [race] Gnome: Không có trait đặc biệt.
+  [archetype] Promised Consort (không kích hoạt): Trong Combat: Thêm Base Stat cao nhất của Lover vào stat đánh nhau. Ưu tiên Lover có Archetype "Femboy".
+  [quirk] Generous (không kích hoạt): Sau combat thắng: Tặng đối thủ PvP Reward. Sau combat thua: +1 Power và +1 lowest stat với mỗi PvP Reward đã tặng.
+  [power] Age Manipulation: Debuff: Đối thủ +1 IQ, -1 mọi stat còn lại.
+  [power] Weapon Enhancing: +1 vào mỗi buff từ vũ khí, -1 vào mỗi debuff từ vũ khí.
+  [power] Let's Pump Some Iron (không kích hoạt): Trong combat: Nếu thắng đúng 1/3 round đầu, Buff: +2 IQ, +2 BIQ, +2 MA.
+  [power] Cleaning Sins (không kích hoạt): Buff: vs Demon/Vampire/Spirit/Orc/Skeleton/Goblin, +1 BIQ và +1 Dura.
+  [power] Bloody Strike (không kích hoạt): -1 all stats. Sau combat: +1 vào mỗi stat thắng round.
+  [gear] Honored Goblin's Scroll: Debuff: Đối thủ -1 all stats. Bạn sẽ đánh hộ cho người đầu tiên thua trận ở 3 vòng đầu.
+  [house] Shurima: Nhận 1 Legacy Gear và 2 Power. Archetype Mason: Nhận 1 Legacy Gear và 1 Unique Weapon.
+
+Items & hiệu ứng — Trapcon:
+  [race] Merfolk: Thuộc House "Naga", không có vòng quay House.
+  [archetype] Conquerer (không kích hoạt): +3 Base Speed. Thắng round Speed: +1 all stats trong combat.
+  [quirk] Lazy: Sau combat: -1 Str, -1 Speed, +2 IQ.
+  [gear] Healing Flasks: Nhận +3 vào Stat thấp nhất khi ở nhánh thua.
+  [gear] Golden Coin (không kích hoạt): Trong Combat: Với mỗi đồng tiền Vàng trong người, có 10% mua được 1 điểm khởi đầu. Nếu có hơn 100%, quay lại từ 10%.
+  [weapon] Long Sword (dùng được): Nhận +2 Strength.
+  [house] Naga: Gia tộc của nữ hoàng Azshara chỉ nhận Merfolk. Không có Mason Effect. Nhận 1 Blessing of the Deep.
+
+Stats cơ bản (base):
+  Kazuha: STR:-4 SPD:2 DUR:2 IQ:3 BIQ:5 MA:7
+  Trapcon: STR:5 SPD:11 DUR:2 IQ:4 BIQ:4 MA:5
+
+Immediate effects đã áp dụng:
+  [Kazuha] Bloody Strike → -1 STR
+  [Kazuha] Bloody Strike → -1 SPD
+  [Kazuha] Bloody Strike → -1 DUR
+  [Kazuha] Bloody Strike → -1 IQ
+  [Kazuha] Bloody Strike → -1 BIQ
+  [Kazuha] Bloody Strike → -1 MA
+  [Trapcon] Conquerer → +3 Base SPD
+  [Trapcon] Long Sword (dùng được) → +2 STR
+
+Stats sau immediate effects:
+  Kazuha: STR:-5 SPD:1 DUR:1 IQ:2 BIQ:4 MA:6
+  Trapcon: STR:7 SPD:11 DUR:2 IQ:4 BIQ:4 MA:5
+
+Kết quả từng round:
+  STR: Trapcon WIN (7 vs -5)
+  SPD: Trapcon WIN (11 vs 1)
+  DUR: Trapcon WIN (2 vs 1)
+  IQ: Trapcon WIN (4 vs 2)
+  BIQ: TIE (4 vs 4)
+  MA: Kazuha WIN (6 vs 5)
+
+Kết quả: Trapcon WIN 4-1
+  Kazuha thua
+
+════════════════════════════════════════════════════════════
+Race Tier: Kazuha = Gnome (T21) | Trapcon = Merfolk (T15)
+════════════════════════════════════════════════════════════
+
+────────────────────────────────────────────────────────────
+SANDBOX SESSION: 07:43:46 23/2/2026
+────────────────────────────────────────────────────────────
+Sandbox Battle Report
+Thời gian: 07:43:46 23/2/2026
+Chế độ: Stats Comparison
+════════════════════════════════════════════════════════════
+Random #4520 (Dragon) vs Random #2017 (Orc)
+════════════════════════════════════════════════════════════
+
+Items & hiệu ứng — Random #4520:
+  [race] Dragon: Quay Dragon's Type.
+Không có trait đặc biệt.
+  [sub_race] Stone Dragon: +2 Base Durability.
+  [archetype] Sentinel of Purity (không kích hoạt): Lần đầu tiên bị dính power "AIDS": Nhận Char dev "Isekai".
+  [quirk] Pure: +1 all stats, 25% nhận "Đai Trinh Tiết". Khi mất trinh (có Lover): -1 all stats.
+  [power] Writer: Khi xuống nhánh thua: Stat chẵn của bạn nhận +1. (Dựa theo Base Stats)
+  [weapon] Desolator: +3 STR. Debuff: Đối thủ -3 Durability.
+  [house] Ban Nhạc Ngọt Đoàn Kết: Nhận 1 trong 5 Gear: Kẹo, Ớt, Mì Tôm, Bò Khô, Radio. Mason Effect: Nhận 2 trong 5 Gear.
+
+Items & hiệu ứng — Random #2017:
+  [race] Orc: +2 stat thấp nhất khi thắng, -3 stat cao nhất khi thua.
+  [archetype] Slayer (không kích hoạt): Chọn 1 tộc để Slay. Vs tộc đó: +2 Str, +3 BIQ, +2 MA.
+  [quirk] Artisan: Nhận +2 Gear.
+  [power] The Sand of Time (không kích hoạt): Trong Combat: Lần đầu thua round, 40% +1 điểm bạn và -1 điểm đối thủ.
+  [gear] Kryptonite (không kích hoạt): Là một thứ dùng phục vụ cho Combat với Superman. Đối đầu Superman bị 2 điểm khởi đầu.
+  [gear] Cursed Gnome's Doll: Bạn miễn nhiễm với tất cả hiệu ứng quay lại chỉ số.
+  [house] Kazuya Kinoshita's House: Sau Combat: Nhận 1 Gear "Golden Coin". Archetype Mason: Sau Combat: Nhận 1 Gear "Golden Coin" và +1 vào Stat thấp nhất.
+
+Stats cơ bản (base):
+  Random #4520: STR:10 SPD:10 DUR:7 IQ:1 BIQ:10 MA:9
+  Random #2017: STR:5 SPD:9 DUR:5 IQ:5 BIQ:9 MA:3
+
+Immediate effects đã áp dụng:
+  [Random #4520] Stone Dragon → +2 Base DUR
+  [Random #4520] Pure → +1 STR
+  [Random #4520] Pure → +1 SPD
+  [Random #4520] Pure → +1 DUR
+  [Random #4520] Pure → +1 IQ
+  [Random #4520] Pure → +1 BIQ
+  [Random #4520] Pure → +1 MA
+  [Random #4520] Desolator → +3 STR
+
+Stats sau immediate effects:
+  Random #4520: STR:14 SPD:11 DUR:8 IQ:2 BIQ:11 MA:10
+  Random #2017: STR:5 SPD:9 DUR:5 IQ:5 BIQ:9 MA:3
+
+Kết quả từng round:
+  STR: Random #4520 WIN (14 vs 5)
+  SPD: Random #4520 WIN (11 vs 9)
+  DUR: Random #4520 WIN (8 vs 5)
+  IQ: Random #2017 WIN (5 vs 2)
+  BIQ: Random #4520 WIN (11 vs 9)
+  MA: Random #4520 WIN (10 vs 3)
+
+Kết quả: Random #4520 WIN 5-1
+  Random #2017 thua
+
+════════════════════════════════════════════════════════════
+Race Tier: Random #4520 = Dragon (T7) | Random #2017 = Orc (T16)
+════════════════════════════════════════════════════════════
