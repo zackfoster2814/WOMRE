@@ -19,7 +19,7 @@ export function getAvatarUrl(no: number, extIndex = 0): string {
   return getAssetPath(`/data/avatars/no${no}.${ext}`);
 }
 
-export const RANDOM_AVATAR_COUNT = 20;
+export const RANDOM_AVATAR_COUNT = 30;
 
 export function getRandomAvatarUrl(no: number, extIndex = 0): string {
   const index = (no % RANDOM_AVATAR_COUNT) + 1;
