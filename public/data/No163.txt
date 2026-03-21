@@ -86,6 +86,7 @@ Lover:
 ```
 Other Source:
 - +2 Speed (Cuồng đao)
+- +1 all stats
 ```
 
 

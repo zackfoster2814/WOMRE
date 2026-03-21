@@ -1,7 +1,7 @@
 No.1
 Name: Đừng Nhờn với Two Fingers (dabotnhondc1nam)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -22,7 +22,7 @@ Archetype:
 ```
 ```
 Str: 6
-Spd: 10
+Spd: 5 (từ 10 do cursed)
 Dur: 3
 IQ: 5
 BIQ: 6
@@ -40,7 +40,7 @@ Houses:
 ```
 0 Gear: 
  + 0 Normal gear:
-  - 
+  - Khung hình thờ
  + 0 Legacy gear:
   - 
 ```
@@ -63,6 +63,7 @@ Runeword: Không
 + Memory Freeze
 + Metamagic
 + 4 Hit combo (từ PvE Punishment)
++ Cursed
 ```
 
 ```
@@ -79,6 +80,14 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 Str
+```
+```
+Other Source:
+- +3 Dura (Batttlefury)
+```
 ======
 Battle Log:
 ```
@@ -91,6 +100,13 @@ PvE:
   + Nhận +3 BIQ
   + Nhận Power 4 Hit combo
 - Note: Win BO3 round MA 2-0
+```
+
+```
+PvP:
+- Đối thủ: vietbuon
+- Kết quả: Win
+- Tỉ số: 6-0
 ```
 
 ======

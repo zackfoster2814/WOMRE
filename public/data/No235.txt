@@ -1,7 +1,7 @@
 No.235
 Name: Devourer Of Gays (devourerofgays_75679)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -32,7 +32,7 @@ MA:7
 ```
 Houses: 
 + House Stark
- -> Lady (+2)
+ -> Lady 
 ```
 
 ```
@@ -76,7 +76,17 @@ Team: 27
 Lover:
 + 
 ```
+```
+Other Source:
+- +1 BIQ (Halberd)
+- +1 MA (Halberd)
+```
 
+```
+PvP Reward:
+- +1 MA 
+- +1 IQ
+```
 ======
 Battle Log:
 ```
@@ -91,6 +101,13 @@ PvE:
   + Nhận +2 IQ
   + Nhận +1 BIQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: boomaiweed
+- Kết quả: Win
+- Tỉ số: 0-4
 ```
 
 ======

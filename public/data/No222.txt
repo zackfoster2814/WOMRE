@@ -1,7 +1,7 @@
 No.222
 Name: Haijin (haijin2)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -81,11 +81,24 @@ Lover:
 ```
 Other Source:
 - +1 str
+- +1 dura
+- +1 str
 ```
 
 ======
 Battle Log:
 ```
+```
+
+```
+PvP:
+- Đối thủ: Dương Quá Quá
+- Kết quả: Thắng
+- Tỉ số: 1-4
+```
+```
+Other Source:
+- +1 Str (Power Ranger Team)
 ```
 
 ======

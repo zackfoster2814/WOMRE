@@ -62,6 +62,7 @@ Runeword:
 + Ice Hammer (từ PvE Reward)
 + Misty Step Ahead (từ PvE Reward)
 + Spear of Fire (từ PvE Reward)
++ Power Negation (từ King's Landing)
 ```
 
 ```

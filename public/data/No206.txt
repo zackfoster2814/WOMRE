@@ -1,7 +1,7 @@
 No.206
 Name: bo (bo3212)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -76,6 +76,14 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 MA
+```
+```
+Other Source:
+- Moonroot (+1)
+```
 ======
 Battle Log:
 ```
@@ -85,6 +93,13 @@ PvE:
 - Tỉ số: 5-1
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Yun
+- Kết quả: Thắng
+- Tỉ số: 6-1
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.237
 Name: Trezork (tukhang4140)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -42,6 +42,7 @@ Houses:
   - Gold Pine Resin (Từ PvE)
   - Wine (Từ PvE)
   - Ớt (Từ PvE)
+  - Khung hình thờ 
  + 0 Legacy gear:
   -
 ```
@@ -67,6 +68,7 @@ Runeword:
 + Arcana Blast (Từ PvE)
 + Encroaching Shadow (Từ PvE)
 + Bash (Từ PvE)
++ Power Negation (từ King's Landing)
 ```
 
 ```
@@ -90,7 +92,11 @@ PvP Reward:
 - +1 BIQ
 ```
 
-
+```
+Other Source:
+- Khung hình thờ 
+- +3 str (Mason Tyrell)
+```
 ======
 Battle Log:
 ```
@@ -99,6 +105,13 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Reward: nhận 5 Gear và 5 Power
+```
+
+```
+PvP:
+- Đối thủ: Hung Nguyen
+- Kết quả: Thắng
+- Tỉ số: 6-0
 ```
 
 ======

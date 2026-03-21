@@ -58,7 +58,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Anti-Magic Barrier
++ Anti-Magic Barrier (đã mất)
 ```
 
 ```

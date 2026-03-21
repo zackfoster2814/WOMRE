@@ -1,6 +1,6 @@
 No.75
 Name: Wakamo Lunatic (nguyuyen)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -75,6 +75,12 @@ Lover:
 + Swem (.swem)
 ```
 
+```
+Other Source:
+- -2 Dura
+```
+
+
 ======
 Battle Log:
 ```
@@ -84,6 +90,14 @@ PvE:
 - Tỉ số: 4-2
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: nguoisai
+- Kết quả: Lose
+- Tỉ số: 6-0
+- Reward: +1 MA
 ```
 
 ======

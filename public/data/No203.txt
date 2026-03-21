@@ -1,6 +1,6 @@
 No.203
 Name: nhatdog (nhatdog)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -75,7 +75,6 @@ Team: 20
 Lover:
 + 
 ```
-
 ======
 Battle Log:
 ```
@@ -85,6 +84,13 @@ PvE:
 - Tỉ số: 5-1
 - Reward: Không được nhận 3 power Ice Hammer, Misty Step Ahead, Spear of Fire (player được nhận: trantrinhtri)
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: maximumwell
+- Kết quả: Thua
+- Tỉ số: 4-1
 ```
 
 ======

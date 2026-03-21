@@ -1,7 +1,7 @@
 No.3
 Name: Nagi (nagi_2208)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -56,7 +56,8 @@ Runeword: Không
 
 ```
 0 Power: 
-+ 
++ Blood Manipulation
++ Night Vision
 ```
 
 ```
@@ -73,6 +74,16 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- 1 Power: Blood Manipulation
+```
+
+```
+Other Source:
+- Night Vision (Wand)
+```
+
 ======
 Battle Log: 
 ```
@@ -84,4 +95,10 @@ PvE:
  + -2 vào stat thấp nhất (MA)
 ```
 
+```
+PvP:
+- Đối thủ: Koroo
+- Kết quả: Thắng
+- Tỉ số: 1-2
+```
 ======

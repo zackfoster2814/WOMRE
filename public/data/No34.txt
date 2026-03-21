@@ -74,7 +74,10 @@ Team: 18
 Lover:
 + 
 ```
-
+```
+Other Source:
+- +1 all stats
+```
 ======
 Battle Log:
 ```

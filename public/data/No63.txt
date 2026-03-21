@@ -1,6 +1,6 @@
 No.63
 Name: V1ncc (vinhbang)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -91,6 +91,13 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất Power Sybaurafarming và Red Shift/LP
+```
+
+```
+PvP:
+- Đối thủ: mGilzuha
+- Kết quả: Lose
+- Tỉ số: 2-4
 ```
 
 ======

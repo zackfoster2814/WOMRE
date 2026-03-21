@@ -1,7 +1,7 @@
 No.103
 Name: Kẹo Con (su167)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -28,7 +28,7 @@ Spd: 8
 Dur: 6
 IQ: 1
 BIQ: 5
-MA: 10
+MA: 3 (từ 10 do cursed)
 ```
 
 ```
@@ -58,10 +58,13 @@ Houses:
 + Sol
 Runeword: The Twin
 ```
-
+```
+Summon: 
++ Igris
+```
 ```
 0 Power: 
-+ 
++ Cursed
 ```
 
 ```
@@ -78,9 +81,24 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +2 IQ (+2 Stat thấp nhất)
+```
+```
+Other Source:
+- Nhận Igris (The Johnnies)
+```
+
 ======
 Battle Log:
 ```
 ```
 
+```
+PvP:
+- Đối thủ: 2FaceCat
+- Kết quả: Thắng
+- Tỉ số: 5-3
+```
 ======

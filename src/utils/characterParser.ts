@@ -26,8 +26,8 @@ import type {
  */
 function stripSourceAnnotation(text: string): string {
   return text
-    .replace(/\s*\([Tt]ừ [^)]+\)/g, '')
-    .replace(/\s*\([Nn]hận [Tt]ừ [^)]+\)/g, '')
+    .replace(/\s*\([Tt]ừ [^)]+\)/g, "")
+    .replace(/\s*\([Nn]hận [Tt]ừ [^)]+\)/g, "")
     .trim();
 }
 
@@ -375,9 +375,9 @@ export class CharacterParser {
 
     // Parse Other Source Mods từ "Nguồn khác:" block
     character.otherSourceMods = this.parseOtherSourceMods(lines);
-    if (character.otherSourceMods && character.otherSourceMods.length > 0) {
-      console.log(`[Parser] ${character.name} otherSourceMods:`, character.otherSourceMods);
-    }
+    // if (character.otherSourceMods && character.otherSourceMods.length > 0) {
+    //   console.log(`[Parser] ${character.name} otherSourceMods:`, character.otherSourceMods);
+    // }
 
     // Parse Battle Log
     character.battleLog = this.parseBattleLog(lines);
@@ -459,12 +459,18 @@ export class CharacterParser {
   private static parseSpiritSouls(lines: string[]): number | undefined {
     const addInfoIdx = lines.findIndex((l) => l.includes("Add info:"));
     if (addInfoIdx < 0) return undefined;
-    for (let i = addInfoIdx + 1; i < Math.min(addInfoIdx + 20, lines.length); i++) {
+    for (
+      let i = addInfoIdx + 1;
+      i < Math.min(addInfoIdx + 20, lines.length);
+      i++
+    ) {
       // Format cũ: "Spirit souls: X"
       const oldMatch = lines[i].match(/Spirit\s+souls?\s*:\s*(\d+)/i);
       if (oldMatch) return parseInt(oldMatch[1]);
       // Format mới: "Spirit (Soul Stack: X)"
-      const newMatch = lines[i].match(/Spirit\s*\(\s*Soul\s+Stack\s*:\s*(\d+)\s*\)/i);
+      const newMatch = lines[i].match(
+        /Spirit\s*\(\s*Soul\s+Stack\s*:\s*(\d+)\s*\)/i,
+      );
       if (newMatch) return parseInt(newMatch[1]);
       // Stop at next section delimiter
       if (lines[i].startsWith("======")) break;
@@ -497,9 +503,13 @@ export class CharacterParser {
     if (nguonKhacIdx < 0) return undefined;
 
     const statMap: Record<string, string> = {
-      str: "str", strength: "str",
-      spd: "spd", speed: "spd",
-      dur: "dur", dura: "dur", durability: "dur",
+      str: "str",
+      strength: "str",
+      spd: "spd",
+      speed: "spd",
+      dur: "dur",
+      dura: "dur",
+      durability: "dur",
       iq: "iq",
       biq: "biq",
       ma: "ma",
@@ -508,7 +518,11 @@ export class CharacterParser {
 
     const result: { stat: string; value: number; source?: string }[] = [];
 
-    for (let i = nguonKhacIdx + 1; i < Math.min(nguonKhacIdx + 30, lines.length); i++) {
+    for (
+      let i = nguonKhacIdx + 1;
+      i < Math.min(nguonKhacIdx + 30, lines.length);
+      i++
+    ) {
       const line = lines[i].trim();
       // Dừng ở block delimiter hoặc dòng trống tiếp theo sau backtick
       if (!line || line.startsWith("======") || line.startsWith("```")) break;
@@ -518,7 +532,9 @@ export class CharacterParser {
       // Bóc tách phần source trong ngoặc: "- -1 Dura (từ X)"
       const sourceMatch = line.match(/\(([^)]+)\)\s*$/);
       const source = sourceMatch ? sourceMatch[1].trim() : undefined;
-      const cleanLine = sourceMatch ? line.slice(0, sourceMatch.index).trim() : line;
+      const cleanLine = sourceMatch
+        ? line.slice(0, sourceMatch.index).trim()
+        : line;
 
       // Bóc dấu - đầu dòng list: "- -1 Dura" → "-1 Dura"
       const item = cleanLine.replace(/^-\s*/, "").trim();
@@ -1046,7 +1062,9 @@ export class CharacterParser {
         const subValue = subMatch[1].trim();
         if (subValue) {
           // Check if this is a sub-type with bonus notation (e.g., "Lady (+2)")
-          const subTypeBonusMatch = subValue.match(/^([A-Za-z][^(]*?)\s*\(([+-]?\d+)\)\s*$/);
+          const subTypeBonusMatch = subValue.match(
+            /^([A-Za-z][^(]*?)\s*\(([+-]?\d+)\)\s*$/,
+          );
           if (subTypeBonusMatch) {
             const subTypeName = subTypeBonusMatch[1].trim();
             const bonusVal = parseInt(subTypeBonusMatch[2], 10);

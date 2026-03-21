@@ -1,6 +1,6 @@
 No.27
 Name: Etsu (relkya)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -71,7 +71,10 @@ Team: 15
 Lover:
 + 
 ```
-
+```
+Other Source:
+- +1 all stats
+```
 ======
 Battle Log:
 ```
@@ -83,6 +86,13 @@ PvE:
 - Punishment: 
   + Nhận -1 All stats
 - Note: Ca Cao né ở round SPD, crit ở round MA
+```
+
+```
+PvP:
+- Đối thủ: Mwa
+- Kết quả: Lose
+- Tỉ số: 3-0
 ```
 
 ======

@@ -1043,6 +1043,9 @@ function buildInventoryList(char: Character): InventoryItem[] {
   for (const p of Array.isArray(char.powers) ? char.powers : []) {
     if (!p.isLost) add("power", typeof p === "string" ? p : p.name);
   }
+  for (const s of Array.isArray(char.summons) ? char.summons : []) {
+    if (!s.isLost) add("summon", typeof s === "string" ? s : s.name);
+  }
   for (const w of Array.isArray(char.weapons) ? char.weapons : []) {
     const name = typeof w === "string" ? w : w?.name;
     if (name) add("weapon", name);
@@ -1449,6 +1452,19 @@ function calcStatsWithBeforeCombat(
       applyStatDelta(base, "str", 2);
       applyStatDelta(base, "biq", 3);
       applyStatDelta(base, "ma", 2);
+    }
+  }
+
+  // Eir (God sub-race): override +1 Dura cố định từ registry → +2^N Dura theo stack
+  const eirSubRaceFull: string = (char as any).race?.subRace || "";
+  if (eirSubRaceFull.toLowerCase().startsWith("eir")) {
+    const eirDisabled = disabledItems.has(`${playerNo}-sub_race-${eirSubRaceFull}`);
+    if (!eirDisabled) {
+      const eirStackMatch = eirSubRaceFull.match(/\((\d+)\)/);
+      const eirStackN = eirStackMatch ? parseInt(eirStackMatch[1], 10) : 0;
+      const eirBonus = Math.pow(2, eirStackN);
+      // Registry đã cộng +1, cần cộng thêm (eirBonus - 1) phần còn lại
+      applyStatDelta(base, "dur", eirBonus - 1);
     }
   }
 
@@ -2349,7 +2365,8 @@ export const StatsComparisonMode = ({
 
     // Determine winner
     let winner: "player1" | "player2" | "tie";
-    if (p1Val > p2Val) winner = "player1";
+    if (p1Val < 0 && p2Val < 0) winner = "tie";
+    else if (p1Val > p2Val) winner = "player1";
     else if (p2Val > p1Val) winner = "player2";
     else winner = "tie";
 
@@ -3064,6 +3081,9 @@ export const StatsComparisonMode = ({
           (playerSide === "player1" ? newP1ConquerorFired : newP2ConquerorFired)
         )
           continue;
+        // King Gnome's Banana: đã được apply trong startCombat → skip round đầu tiên
+        if (handlerName === "king_gnome_banana_iq_compare" && roundIndex === 0)
+          continue;
         // during_combat handlers tự guard bằng currentRoundStat trong handler
         // FiredHandlers vẫn giữ để phòng các handler không có guard (fallback)
         // Handlers có nhiều effect dùng cùng handlerName (e.g. angling_scheming_str_win) không dùng firedSet
@@ -3654,12 +3674,21 @@ export const StatsComparisonMode = ({
         "Bagpipe",
         "Harmonica",
       ];
+      const oppNo = opponent.no;
       const oppHasInstrument = (oppChar?.weapons || []).some(
-        (w: any) => !w.isLost && instruments.some((i) => w.name?.includes(i)),
+        (w: any) =>
+          !w.isLost &&
+          !effectiveDisabledItems.has(`${oppNo}-weapon-${w?.name ?? ""}`) &&
+          !(w?.name ?? "").toLowerCase().includes("không dùng được") &&
+          instruments.some((i) => w.name?.includes(i)),
       );
-      const oppPowers = (oppChar?.powers || []).map((p: any) =>
-        typeof p === "string" ? p : p.name,
-      );
+      const oppPowers = (oppChar?.powers || [])
+        .filter((p: any) => !p?.isLost)
+        .filter((p: any) => {
+          const pname = typeof p === "string" ? p : (p?.name ?? "");
+          return !effectiveDisabledItems.has(`${oppNo}-power-${pname}`);
+        })
+        .map((p: any) => (typeof p === "string" ? p : p.name));
 
       const fx = EffectResolver.calculateCharacterEffects(self.character, {
         isPvE: false,
@@ -3690,15 +3719,9 @@ export const StatsComparisonMode = ({
               "goblin",
             ];
             if (ANDURIL_EVIL.includes(oppRace.toLowerCase())) {
-              const selfPowerList = (self.character?.powers || []).filter(
-                (p: any) => !p?.isLost,
-              );
-              const summonCount = selfPowerList.filter((p: any) => {
-                const n = (
-                  typeof p === "string" ? p : (p?.name ?? "")
-                ).toLowerCase();
-                return n.startsWith("summon:");
-              }).length;
+              const summonCount = (self.character?.summons || []).filter(
+                (s: any) => !s?.isLost,
+              ).length;
               pts += Math.floor(summonCount / 3);
             }
           }
@@ -3762,6 +3785,25 @@ export const StatsComparisonMode = ({
       p1StartScore += goldenCoinPoints["player1"];
     if (goldenCoinPoints["player2"])
       p2StartScore += goldenCoinPoints["player2"];
+    // Moonroot (Herbalist) (+N): apply điểm khởi đầu tích lũy từ combat trước
+    const applyMoonrootBonus = (p: PvPPlayerData, side: "player1" | "player2") => {
+      if (!p.character) return;
+      const nas: any[] = (p.character as any).nestedArchetypes || [];
+      for (const na of nas) {
+        const subType: string = na.subType || "";
+        if (!subType.toLowerCase().startsWith("moonroot")) continue;
+        if (na.subTypeIsLost) continue;
+        const disabled = effectiveDisabledItems.has(`${p.no}-archetype_sub-${subType}`);
+        if (disabled) continue;
+        const bonusMatch = subType.match(/\(\+(\d+)\)/);
+        if (!bonusMatch) continue;
+        const bonus = parseInt(bonusMatch[1], 10);
+        if (side === "player1") p1StartScore += bonus;
+        else p2StartScore += bonus;
+      }
+    };
+    applyMoonrootBonus(player1, "player1");
+    applyMoonrootBonus(player2, "player2");
 
     const p1BaseStats: CharacterStats = player1.character
       ? calcStatsWithBeforeCombat(
@@ -4121,12 +4163,15 @@ export const StatsComparisonMode = ({
             .trim()
             .toLowerCase();
           if (subRaceRaw === "eir") {
-            const currentBonus: number = (c as any).eirDuraBonus ?? 1;
-            const nextBonus = currentBonus * 2;
+            const subRaceFull: string = (c as any).race?.subRace || "Eir";
+            const stackMatch = subRaceFull.match(/\((\d+)\)/);
+            const stackN = stackMatch ? parseInt(stackMatch[1], 10) : 0;
+            const currentBonus = Math.pow(2, stackN);
+            const nextStack = stackN + 1;
             earlyAcEntries.push({
               player: side,
               quirkName: "Eir",
-              description: `+${currentBonus} Durability (Eir — stack hiện tại: ${currentBonus}). [GM Action] Cập nhật stack Eir lên ${nextBonus} cho lần sau.`,
+              description: `+${currentBonus} Durability (Eir — stack ${stackN}). [GM Action] Đổi Sub-race thành "Eir (${nextStack})".`,
               statMods: [
                 { stat: "dur" as keyof CharacterStats, delta: currentBonus },
               ],
@@ -4717,16 +4762,28 @@ export const StatsComparisonMode = ({
               "bard",
               "singer",
             ];
+            const oppPlayer = playerSide === "player1" ? player2 : player1;
+            const oppNo = oppPlayer.no;
             const oppWeapons: any[] = (oppChar as any)?.weapons || [];
-            const oppPowerNames: string[] = (oppChar?.powers || []).map(
-              (p: any) =>
-                (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
-            );
+            const oppPowerNames: string[] = (oppChar?.powers || [])
+              .filter((p: any) => !p?.isLost)
+              .filter((p: any) => {
+                const pname = typeof p === "string" ? p : (p?.name ?? "");
+                return !effectiveDisabledItems.has(`${oppNo}-power-${pname}`);
+              })
+              .map(
+                (p: any) =>
+                  (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
+              );
             const hasInstrument = oppWeapons.some((w: any) => {
-              const wn = (
-                typeof w === "string" ? w : (w?.name ?? "")
-              ).toLowerCase();
-              return INSTRUMENT_NAMES.some((inst) => wn.includes(inst));
+              if (w?.isLost) return false;
+              const wname = typeof w === "string" ? w : (w?.name ?? "");
+              if (effectiveDisabledItems.has(`${oppNo}-weapon-${wname}`))
+                return false;
+              if (wname.toLowerCase().includes("không dùng được")) return false;
+              return INSTRUMENT_NAMES.some((inst) =>
+                wname.toLowerCase().includes(inst),
+              );
             });
             const hasSoundPower = oppPowerNames.some((p) =>
               SOUND_POWERS_LIST.some((sp) => p.includes(sp)),
@@ -4790,15 +4847,9 @@ export const StatsComparisonMode = ({
                 type: "info",
               });
             } else {
-              const selfPowerList = (player.character?.powers || []).filter(
-                (p: any) => !p?.isLost,
-              );
-              const summonCount = selfPowerList.filter((p: any) => {
-                const n = (
-                  typeof p === "string" ? p : (p?.name ?? "")
-                ).toLowerCase();
-                return n.startsWith("summon:");
-              }).length;
+              const summonCount = (player.character?.summons || []).filter(
+                (s: any) => !s?.isLost,
+              ).length;
               const bonusPoints = Math.floor(summonCount / 3);
               if (bonusPoints <= 0) {
                 preCombatEvents.push({
@@ -5798,8 +5849,8 @@ export const StatsComparisonMode = ({
                   lose: "Mất toàn bộ Power, sau đó nhận 4 Power",
                 },
                 Moonroot: {
-                  win: "+1 điểm khởi đầu combat kế tiếp",
-                  lose: "+3 điểm khởi đầu combat kế tiếp",
+                  win: "+1 điểm KĐ combat kế [GM: đổi sub-type thành \"Moonroot (Herbalist) (+1)\"]",
+                  lose: "+3 điểm KĐ combat kế [GM: đổi sub-type thành \"Moonroot (Herbalist) (+3)\"]",
                 },
                 Mistpetal: {
                   win: "Nhận thêm 1 Quirk",
@@ -6303,18 +6354,11 @@ export const StatsComparisonMode = ({
                 color: "#ec4899",
               },
             ];
-            // Lấy tên summons đã sở hữu (powers dạng "Summon: X")
-            const ownedSummons = (char.powers || [])
-              .filter((p: any) => !p.isLost)
-              .map((p: any) =>
-                (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
-              )
-              .filter((n: string) => n.startsWith("summon:"))
-              .map((n: string) =>
-                n
-                  .replace(/^summon:\s*/, "")
-                  .split("(")[0]
-                  .trim(),
+            // Lấy tên summons đã sở hữu (từ block Summon: riêng)
+            const ownedSummons = (char.summons || [])
+              .filter((s: any) => !s.isLost)
+              .map((s: any) =>
+                (typeof s === "string" ? s : (s?.name ?? "")).toLowerCase(),
               );
             const availableSummons = ALL_SUMMONS.filter(
               (s) =>
@@ -6929,17 +6973,10 @@ export const StatsComparisonMode = ({
                   color: "#ec4899",
                 },
               ];
-              const ownedSummons = (char.powers || [])
-                .filter((p: any) => !p.isLost)
-                .map((p: any) =>
-                  (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
-                )
-                .filter((n: string) => n.startsWith("summon:"))
-                .map((n: string) =>
-                  n
-                    .replace(/^summon:\s*/, "")
-                    .split("(")[0]
-                    .trim(),
+              const ownedSummons = (char.summons || [])
+                .filter((s: any) => !s.isLost)
+                .map((s: any) =>
+                  (typeof s === "string" ? s : (s?.name ?? "")).toLowerCase(),
                 );
               const availableSummons = ALL_SUMMONS.filter(
                 (s) =>
@@ -7837,6 +7874,37 @@ export const StatsComparisonMode = ({
             }
           }
 
+          // ── Summon after_combat effects ─────────────────────────────────────
+          const summons = (char.summons || []).filter((s: any) => !s.isLost);
+          for (const sm of summons) {
+            const sname: string =
+              typeof sm === "string" ? sm : (sm?.name ?? "");
+            const slname = sname.toLowerCase();
+            const sDisabled = disabledItems.has(`${player.no}-summon-${sname}`);
+            if (sDisabled) continue;
+
+            // Creator's Cat: sau combat → quay Char Dev "Creator's Favor"
+            if (slname === "creator's cat") {
+              acEntries.push({
+                player: side,
+                quirkName: sname,
+                description:
+                  "Creator's Cat: Quay Char Dev Wheel để nhận \"Creator's Favor\"",
+                wheelKey: `after-CreatorsCat-${side}`,
+                wheelItems: [
+                  {
+                    label: "Creator's Favor (100%)",
+                    weight: 100,
+                    isSuccess: true,
+                    color: "#ec4899",
+                    meta: { isCreatorsCat: true },
+                  },
+                ],
+                gmAction: true,
+              });
+            }
+          }
+
           // ── Race after_combat effects ───────────────────────────────────────
           const charRaceAC = ((char as any).race?.race || "").toLowerCase();
 
@@ -7911,13 +7979,15 @@ export const StatsComparisonMode = ({
 
           // Eir (God sub-race): Nhận +1 Dura. Sau combat: Gấp đôi con số cộng thêm này (stack vô hạn)
           if (charSubRaceRaw === "eir") {
-            // currentBonus = stack hiện tại (mặc định 1 lần đầu). Sau combat cộng currentBonus, stack tiếp theo = currentBonus * 2
-            const currentBonus: number = (char as any).eirDuraBonus ?? 1;
-            const nextBonus = currentBonus * 2;
+            const subRaceFull: string = (char as any).race?.subRace || "Eir";
+            const stackMatch = subRaceFull.match(/\((\d+)\)/);
+            const stackN = stackMatch ? parseInt(stackMatch[1], 10) : 0;
+            const currentBonus = Math.pow(2, stackN);
+            const nextStack = stackN + 1;
             acEntries.push({
               player: side,
               quirkName: "Eir",
-              description: `+${currentBonus} Durability (Eir — stack hiện tại: ${currentBonus}). [GM Action] Cập nhật stack Eir lên ${nextBonus} cho lần sau.`,
+              description: `+${currentBonus} Durability (Eir — stack ${stackN}). [GM Action] Đổi Sub-race thành "Eir (${nextStack})".`,
               statMods: [
                 { stat: "dur" as keyof CharacterStats, delta: currentBonus },
               ],
@@ -8822,6 +8892,16 @@ export const StatsComparisonMode = ({
                 player: side,
                 quirkName: "Impatient",
                 description: "Impatient: Không nhận PvP Reward vòng này.",
+              });
+              continue;
+            }
+
+            // Brainrot quirk → không nhận PvP Reward
+            if (quirks.some((q) => q === "brainrot")) {
+              acEntries.push({
+                player: side,
+                quirkName: "Brainrot",
+                description: "Brainrot: Không nhận PvP Reward.",
               });
               continue;
             }
@@ -11217,14 +11297,15 @@ export const StatsComparisonMode = ({
             ? "text-amber-300"
             : "text-blue-400";
       // autoApplied: true chỉ khi computeRoundStep đã xử lý effect trong engine
-      // (Bloodthirsty, Divine Smite, Hunter's Mark, OTP, Yamato...) — KHÔNG dùng cho spin effects
+      // Bloodthirsty và Divine Smite dùng patch mechanism (extra_point_on_win bị skip trong engine)
       const isSpinDriven =
         hasSpinEffect ||
         hasCrit ||
         hasRangerRed ||
         hasPennyworthyWin ||
         oppHasGoldenParry;
-      const autoApplied = base !== 1 && !isSpinDriven;
+      const isPatchDriven = hasBloodthirsty || hasDivineSmite;
+      const autoApplied = base !== 1 && !isSpinDriven && !isPatchDriven;
       return { pts: base, pending: false, color, autoApplied };
     }
 
@@ -11922,12 +12003,21 @@ export const StatsComparisonMode = ({
         "Bagpipe",
         "Harmonica",
       ];
+      const oppNo = opponent.no;
       const oppHasInstrument = (oppChar?.weapons || []).some(
-        (w: any) => !w.isLost && instruments.some((i) => w.name?.includes(i)),
+        (w: any) =>
+          !w.isLost &&
+          !disabledItems.has(`${oppNo}-weapon-${w?.name ?? ""}`) &&
+          !(w?.name ?? "").toLowerCase().includes("không dùng được") &&
+          instruments.some((i) => w.name?.includes(i)),
       );
-      const oppPowers = (oppChar?.powers || []).map((p: any) =>
-        typeof p === "string" ? p : p.name,
-      );
+      const oppPowers = (oppChar?.powers || [])
+        .filter((p: any) => !p?.isLost)
+        .filter((p: any) => {
+          const pname = typeof p === "string" ? p : (p?.name ?? "");
+          return !disabledItems.has(`${oppNo}-power-${pname}`);
+        })
+        .map((p: any) => (typeof p === "string" ? p : p.name));
       const fx = EffectResolver.calculateCharacterEffects(self.character, {
         isPvE: false,
       });
@@ -12462,7 +12552,7 @@ export const StatsComparisonMode = ({
                     ) : (
                       <div className="space-y-0.5">
                         {p1Items.length === 0 ? (
-                          <div className="text-gray-600 text-xs text-center py-8">
+                          <div className="text-gray-600 text-sm text-center py-8">
                             Không có item
                           </div>
                         ) : (
@@ -12483,7 +12573,7 @@ export const StatsComparisonMode = ({
                                     item.name,
                                   )
                                 }
-                                className={`w-full text-left text-[11px] px-2 py-1.5 rounded transition-all ${disabled ? "opacity-35 bg-gray-800/20" : "hover:bg-gray-700/40 bg-gray-800/10"}`}
+                                className={`w-full text-left text-sm px-2 py-1.5 rounded transition-all ${disabled ? "opacity-35 bg-gray-800/20" : "hover:bg-gray-700/40 bg-gray-800/10"}`}
                               >
                                 <div className="flex items-center gap-1.5">
                                   <span
@@ -12491,17 +12581,17 @@ export const StatsComparisonMode = ({
                                   >
                                     {item.name}
                                   </span>
-                                  <span className="text-gray-700 text-[9px]">
+                                  <span className="text-gray-700 text-xs">
                                     [{item.sourceType}]
                                   </span>
                                   {disabled && (
-                                    <span className="text-red-500 text-[9px] ml-auto">
+                                    <span className="text-red-500 text-xs ml-auto">
                                       OFF
                                     </span>
                                   )}
                                 </div>
                                 {item.description && !disabled && (
-                                  <div className="text-gray-500 text-[10px] mt-0.5 leading-snug">
+                                  <div className="text-gray-500 text-xs mt-0.5 leading-snug">
                                     {item.description}
                                   </div>
                                 )}
@@ -13487,6 +13577,7 @@ export const StatsComparisonMode = ({
                         )}
                       </div>
                       {spinKey && !spunResult && (
+                        <div className="flex flex-col gap-1 shrink-0">
                         <button
                           onClick={() => {
                             setPreCombatModal({
@@ -13831,6 +13922,26 @@ export const StatsComparisonMode = ({
                                     });
                                   }, 100);
                                 }
+                                // Creator's Cat: mở Creator's Favor modal
+                                if (
+                                  spinKey.startsWith("after-CreatorsCat-") &&
+                                  result.isSuccess
+                                ) {
+                                  setTimeout(() => {
+                                    setCreatorsCatModal({
+                                      isOpen: true,
+                                      playerLabel: entry.player,
+                                      step: "choose_effect",
+                                      selectedEffect: "",
+                                      chosenStats: [],
+                                      chosenArchetypesToRemove: [],
+                                      rollQueue: [],
+                                      rollAccumulated: [],
+                                      rollRaceName: "",
+                                      rollTotal: 0,
+                                    });
+                                  }, 100);
+                                }
                               },
                             });
                           }}
@@ -13842,6 +13953,25 @@ export const StatsComparisonMode = ({
                         >
                           Quay
                         </button>
+                        <button
+                          onClick={() => {
+                            setAfterCombatSpinResults((prev) => ({
+                              ...prev,
+                              [spinKey]: {
+                                label: "Bỏ qua",
+                                isSuccess: false,
+                              },
+                            }));
+                          }}
+                          className={`shrink-0 font-medium rounded-lg border transition-colors ${
+                            big
+                              ? "px-3 py-2 text-sm bg-gray-700/60 hover:bg-gray-600/70 text-gray-300 border-gray-500/40"
+                              : "px-2 py-1 text-[10px] bg-gray-800/60 hover:bg-gray-700/70 text-gray-400 border-gray-600/40"
+                          }`}
+                        >
+                          Bỏ qua
+                        </button>
+                        </div>
                       )}
                       {!spinKey && !entry.wheelKey && entry.gmAction && (
                         <span
@@ -15267,7 +15397,7 @@ export const StatsComparisonMode = ({
                     ) : (
                       <div className="space-y-0.5">
                         {p2Items.length === 0 ? (
-                          <div className="text-gray-600 text-xs text-center py-8">
+                          <div className="text-gray-600 text-sm text-center py-8">
                             Không có item
                           </div>
                         ) : (
@@ -15288,7 +15418,7 @@ export const StatsComparisonMode = ({
                                     item.name,
                                   )
                                 }
-                                className={`w-full text-left text-[11px] px-2 py-1.5 rounded transition-all ${disabled ? "opacity-35 bg-gray-800/20" : "hover:bg-gray-700/40 bg-gray-800/10"}`}
+                                className={`w-full text-left text-sm px-2 py-1.5 rounded transition-all ${disabled ? "opacity-35 bg-gray-800/20" : "hover:bg-gray-700/40 bg-gray-800/10"}`}
                               >
                                 <div className="flex items-center gap-1.5">
                                   <span
@@ -15296,17 +15426,17 @@ export const StatsComparisonMode = ({
                                   >
                                     {item.name}
                                   </span>
-                                  <span className="text-gray-700 text-[9px]">
+                                  <span className="text-gray-700 text-xs">
                                     [{item.sourceType}]
                                   </span>
                                   {disabled && (
-                                    <span className="text-red-500 text-[9px] ml-auto">
+                                    <span className="text-red-500 text-xs ml-auto">
                                       OFF
                                     </span>
                                   )}
                                 </div>
                                 {item.description && !disabled && (
-                                  <div className="text-gray-500 text-[10px] mt-0.5 leading-snug">
+                                  <div className="text-gray-500 text-xs mt-0.5 leading-snug">
                                     {item.description}
                                   </div>
                                 )}

@@ -1,7 +1,7 @@
 No.232
 Name: Kingly Majesty (.kinglymajesty)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -48,7 +48,7 @@ Houses:
 
 ```
 1 Normal Weapon
-+ Glass Bottle (Dùng được)
++ Glass Bottle (đã mất)
 ```
 
 ``` 
@@ -76,6 +76,15 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 BIQ
+```
+```
+Other Source:
+- -1 Durability (Glass Bottle — sau combat)
+```
+
 ======
 Battle Log:
 ```
@@ -85,6 +94,13 @@ PvE:
 - Tỉ số: 3-3
 - Reward: Nhận Empty Stein và Wine
 - Punishment:
+```
+
+```
+PvP:
+- Đối thủ: Cornmann
+- Kết quả: Thắng
+- Tỉ số: 4-2
 ```
 
 ======

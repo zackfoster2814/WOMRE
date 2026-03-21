@@ -1,6 +1,6 @@
 No.100
 Name: CkTrangNhung (baophan)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -22,7 +22,7 @@ Archetype:
 ```
 ```
 Str: 6
-Spd: 7
+Spd: 1 (7 do Cursed)
 Dur: 4
 IQ: 5
 BIQ: 6
@@ -59,6 +59,7 @@ Runeword: Không
 ```
 1 Power: 
 + Red Shift/LP1211-M (Từ Sub-race)
++ Cursed
 ```
 
 ```
@@ -86,6 +87,13 @@ PvE:
 - Punishment: 
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
+```
+
+```
+PvP:
+- Đối thủ: ar2di
+- Kết quả: Lose
+- Tỉ số: 2-3
 ```
 
 ======

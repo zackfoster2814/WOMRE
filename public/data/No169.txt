@@ -1,6 +1,6 @@
 No.169
 Name: Chigga (bunbunbunbill)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -79,11 +79,21 @@ Lover:
 ```
 Other Source:
 - +1 str
+- +1 dura
+- +1 str
 ```
 
 ======
 Battle Log:
 ```
 ```
+
+```
+PvP:
+- Đối thủ: Anh Bác Sĩ
+- Kết quả: Thua
+- Tỉ số: 2-2
+```
+
 
 ======

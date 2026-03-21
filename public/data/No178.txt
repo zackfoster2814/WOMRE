@@ -82,6 +82,8 @@ Lover:
 ```
 Other Source:
 - +1 str
+- +1 dura
+- +1 str
 ```
 
 ======

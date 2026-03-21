@@ -62,6 +62,7 @@ Runeword: Không
 + Hydrate
 + Tick-tock
 + Bucking Bronco
++ Power Negation (từ King's Landing)
 ```
 
 ```

@@ -1,7 +1,7 @@
 No.244
 Name: .hor1zon
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -66,6 +66,11 @@ Runeword:
 ```
 
 ```
+Summon: 
++ Earth Golem
+```
+
+```
 Char dev: 
 + Old Age
 ```
@@ -79,6 +84,10 @@ Lover:
 + kinbum
 ```
 
+```
+PvP Reward:
+- +1 Str
+```
 ======
 Battle Log:
 ```
@@ -89,6 +98,13 @@ PvE:
 - Reward: 
 - Punishment: Mất toàn bộ Archetype và Quirk (Cursed 36 hồi lại 1 All Base Stats)
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Gowther
+- Kết quả: Thắng
+- Tỉ số: 2-3
 ```
 
 ======

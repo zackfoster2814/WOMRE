@@ -1,6 +1,6 @@
 No.180
 Name: vuvip (.vuvip)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -91,6 +91,13 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Tuấn Anh
+- Kết quả: Thua
+- Tỉ số: 2-2
 ```
 
 ======

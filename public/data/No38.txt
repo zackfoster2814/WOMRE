@@ -1,7 +1,7 @@
 No.38
 Name: Lười (lazbu2501)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -43,6 +43,7 @@ Houses:
   - Gold Pine Resin (Từ PvE)
   - Wine (Từ PvE)
   - Ớt (Từ PvE)
+  - Magical Scroll
  + 0 Legacy gear:
   -
 ```
@@ -67,6 +68,7 @@ Runeword: Không
 + U=ma2 (Từ PvE)
 + Arcana Blast (Từ PvE)
 + Bash (Từ PvE)
++ Misty Step Ahead
 ```
 
 ```
@@ -83,7 +85,16 @@ Lover:
 +
 ```
 
-
+```
+PvP Reward:
+- +1 BIQ
+```
+```
+Other Source:
+- Power: Misty Step Ahead (Fast Learner)
+- Gear: Magical Scroll (Hero Grave Keeper)
+- +2 SPD (Orc)
+```
 ======
 Battle Log:
 ```
@@ -92,6 +103,13 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Reward: nhận 5 Gear và 5 Power (trùng Encroaching Shadow nên không nhận thêm)
+```
+
+```
+PvP:
+- Đối thủ: ...??
+- Kết quả: Win
+- Tỉ số: 2-4
 ```
 
 ======

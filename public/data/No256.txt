@@ -1,7 +1,7 @@
 No.256
 Name: Nime
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -34,8 +34,8 @@ MA: 3 (Cursed of 36k)
 
 ```
 Houses: 
-+ Golden Order
-  -> Godrick
++ Golden Order (đã bị đuổi)
+  -> Godrick (đã mất)
 ```
 
 ```
@@ -70,6 +70,7 @@ Runeword: Không
 ```
 Char dev: 
 + Armed to the Teeth
++ No more Home
 ```
 
 ```
@@ -80,10 +81,26 @@ Team:
 Lover:
 + Nicre (.jan_01)
 ```
+```
+Other Source:
+- +1 DUR (Resilient)
+```
+```
+PvP Reward:
+- Nhận 1 Char Dev: No more Home
+```
 
 ======
 Battle Log:
 ```
+```
+
+```
+PvP:
+- Đối thủ: KaTsumi - ChillWithCafe
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: +1 Char Dev: No more Home
 ```
 
 ======

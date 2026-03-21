@@ -1,6 +1,6 @@
 No.15
 Name: Hung Nguyen (hung_nguyen98)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -21,7 +21,7 @@ Archetype:
 + Blind
 ```
 ```
-Str: 6
+Str: 1 (trước đó là 6 do cursed)
 Spd: 6
 Dur: 4
 IQ: 6
@@ -59,6 +59,7 @@ Runeword: Không
 ```
 1 Power: 
 + Dominator
++ Cursed
 ```
 
 ```
@@ -84,6 +85,13 @@ PvE:
 - Tỉ số: 1-6
 - Reward: 
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
+```
+
+```
+PvP:
+- Đối thủ: Trezork
+- Kết quả: Thua
+- Tỉ số: 6-0
 ```
 
 ======

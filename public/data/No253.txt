@@ -40,7 +40,7 @@ Houses:
 ```
 1 Gear: 
  + 1 Normal gear:
-  - Healing Flasks
+  - Healing Flasks (đã mất)
  + 0 Legacy gear:
   - 
 ```

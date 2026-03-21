@@ -204,6 +204,9 @@ interface TournamentPlayer {
 export const PvPTournamentPage = () => {
   const [players, setPlayers] = useState<TournamentPlayer[]>([]);
   const [loading, setLoading] = useState(true);
+  // showIntro: chỉ bật nếu load data mất hơn 200ms (không có cache)
+  const [showIntro, setShowIntro] = useState(false);
+  const loadDoneRef = useRef(false);
   const [activeTab, setActiveTab] = useState<"create" | "bracket">("create");
   // Sub-tab trong Create: r256 | r128 | r64 | r32w | r32l | r16w | r16l | r8w | r8l | r4w | r4l
   const [createSubTab, setCreateSubTab] = useState<string>("r256");
@@ -217,7 +220,12 @@ export const PvPTournamentPage = () => {
 
   useEffect(() => {
     const loadPlayers = async () => {
+      loadDoneRef.current = false;
       setLoading(true);
+      // Nếu sau 200ms vẫn chưa load xong → bật intro
+      const introTimer = setTimeout(() => {
+        if (!loadDoneRef.current) setShowIntro(true);
+      }, 200);
       try {
         ensureEffectsInitialized();
         const allPlayers: TournamentPlayer[] = [];
@@ -241,6 +249,8 @@ export const PvPTournamentPage = () => {
       } catch (error) {
         console.error("Error loading players:", error);
       } finally {
+        loadDoneRef.current = true;
+        clearTimeout(introTimer);
         setLoading(false);
       }
     };
@@ -448,10 +458,31 @@ export const PvPTournamentPage = () => {
     input.click();
   }, []);
 
-  if (loading) {
+  // Hiển thị màn hình intro video chỉ khi data cần load (showIntro=true) và chưa bỏ qua
+  if (showIntro) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
-        <div className="text-white text-2xl">Loading players...</div>
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center relative">
+        {/* YouTube iframe full screen */}
+        <iframe
+          src="https://www.youtube.com/embed/8FrhYIFDTTc?autoplay=1&controls=0&modestbranding=1&rel=0"
+          className="w-full h-full absolute inset-0"
+          style={{ border: "none" }}
+          allow="autoplay; encrypted-media"
+          allowFullScreen
+        />
+        {/* Overlay */}
+        <div className="absolute bottom-10 right-10 z-10">
+          {loading ? (
+            <div className="text-white/50 text-sm">Đang tải dữ liệu...</div>
+          ) : (
+            <button
+              onClick={() => setShowIntro(false)}
+              className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white text-lg rounded-lg backdrop-blur border border-white/30 transition"
+            >
+              Bỏ qua
+            </button>
+          )}
+        </div>
       </div>
     );
   }

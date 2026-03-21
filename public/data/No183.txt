@@ -1,6 +1,6 @@
 No.183
 Name: Bộ PC (conchocaobangbopc)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -79,12 +79,21 @@ Lover:
 ======
 Battle Log:
 ```
+- Devotee gặp God
+```
 PvE:
 - Đối thủ: Caligo Miasma Of Night
 - Kết quả: Lose
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: Dura về 0
+```
+
+```
+PvP:
+- Đối thủ: Lovepcdolls
+- Kết quả: Lose
+- Tỉ số: 0-0
 ```
 
 ======

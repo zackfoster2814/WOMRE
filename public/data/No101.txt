@@ -1,7 +1,7 @@
 No.101
 Name: Anh Bác Sĩ (shigurekt1sha)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: Primordial Being
-Sub-race: Fire
+Sub-race: Earth
 ```
 
 ```
@@ -21,6 +21,7 @@ Archetype:
 + Brainrot
 + Pure (không đai trinh tiết)
 + Blind
++ Let me solo her
 ```
 ```
 Str: 8
@@ -40,6 +41,7 @@ Houses:
 1 Gear: 
  + 0 Normal gear:
   - Khung hình thờ (từ PvE Punishment)
+  - Gold Pine Resin
  + 1 Legacy gear:
   - Spirit of the Wheel (đã mất do PVE Punishment)
 ```
@@ -61,6 +63,8 @@ Runeword: Không
 + Bloody Strike
 + Fire Control (Primordial Being - Fire)
 + Quas (Primordial Being - Fire)
++ Earth-Shaking
++ Power Negation (từ King's Landing)
 ```
 
 ```
@@ -77,6 +81,13 @@ Lover:
 + 
 ```
 
+Other Source:
+- Earth-Shaking (Primordial Being)
+- +1 Str (Primordial Being)
+- Let me solo her (Primordial Being)
+- Gold Pine Resin (Hero Grave Keeper)
+```
+
 ======
 Battle Log:
 ```
@@ -88,4 +99,10 @@ PvE:
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
 ```
 
+```
+PvP:
+- Đối thủ: Chigga
+- Kết quả: Thắng
+- Tỉ số: 2-2
+```
 ======

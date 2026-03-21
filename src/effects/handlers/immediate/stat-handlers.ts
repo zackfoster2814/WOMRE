@@ -187,7 +187,7 @@ registerImmediateHandler(
     let highestValue = -1;
     for (const [key, statName] of Object.entries(statMapping)) {
       const val = loverChar.stats[key] ?? 0;
-      console.log(loverChar.stats);
+      // console.log(loverChar.stats);
 
       if (val > highestValue) {
         highestValue = val;

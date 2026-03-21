@@ -1,7 +1,7 @@
 No.156
 Name: mHamster (d.d.alfonce)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -72,10 +72,25 @@ Team:
 Lover:
 + 
 ```
+```
+Other Source:
+- +1 all stats
+```
+
+```
+PvP Reward:
+- +1 MA
+```
 
 ======
 Battle Log:
 ```
 ```
 
+```
+PvP:
+- Đối thủ: An Hoàng
+- Kết quả: Win
+- Tỉ số: 4-2
+```
 ======

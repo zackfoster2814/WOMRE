@@ -25,7 +25,7 @@ Str: 6
 Spd: 5
 Dur: 7
 IQ: 5
-BIQ: 5
+BIQ: 10 (trước là 5 bị nguyền lên)
 MA: 2
 ```
 

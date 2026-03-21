@@ -1,6 +1,6 @@
 No.202
 Name: NhờnNnNn (nhonnnnn)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -86,6 +86,13 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: Dura về 0
+```
+
+```
+PvP:
+- Đối thủ: Myue
+- Kết quả: Thua
+- Tỉ số: 6-0
 ```
 
 ======

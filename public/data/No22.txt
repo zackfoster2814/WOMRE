@@ -1,7 +1,7 @@
 No.22
 Name: mGilzuha (gilgamesh_2202)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -75,6 +75,10 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +2 IQ (Stat cao nhất)
+```
 
 ======
 Battle Log:
@@ -84,6 +88,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: -5 base Str
+```
+
+```
+PvP:
+- Đối thủ: V1ncc
+- Kết quả: Win
+- Tỉ số: 2-4
 ```
 
 ======

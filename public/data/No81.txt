@@ -1,6 +1,6 @@
 No.81
 Name: KayWai (kaywai81)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -101,6 +101,13 @@ PvE:
   + Nhận +2 IQ
   + Nhận +2 MA
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Inglorious
+- Kết quả: Lose
+- Tỉ số: 1-3
 ```
 
 ======

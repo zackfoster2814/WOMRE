@@ -1,6 +1,6 @@
 No.177
 Name: HuyRhythm (huyrhythm)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -19,7 +19,8 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Shining Brightly
++ Shining Brightly (đã bị mât
++ Under the Weather
 + Resilent
 ```
 ```
@@ -86,6 +87,12 @@ Team: 21
 Lover:
 + 
 ```
+```
+Other Source:
+- +1 SPD (Bloody Strike)
+- +1 MA (Bloody Strike)
+- -2 Dura (AIDS)
+```
 
 ======
 Battle Log:
@@ -97,5 +104,13 @@ PvE:
 - Reward: 
 - Punishment: Dura về 0
 ```
+
+```
+PvP:
+- Đối thủ: Ngũ hổ vồ xôi
+- Kết quả: Lose
+- Tỉ số: 4-3
+```
+
 
 ======

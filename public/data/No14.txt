@@ -84,15 +84,17 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 MA
+- +2 IQ
+```
+
 ======
 Battle Log:
 ```
 ```
 
-```
-PvP Reward:
-- +1 MA
-```
 
 ```
 PvP:
@@ -100,4 +102,12 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 4-2
 ```
+
+```
+PvP:
+- Đối thủ: Vạn vật thua Gwen
+- Kết quả: Win 
+- Tỉ số: 6-0
+```
+
 ======

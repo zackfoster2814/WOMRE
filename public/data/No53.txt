@@ -1,6 +1,6 @@
 No.53
 Name: Rentarou (viet3657)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -87,6 +87,13 @@ PvE:
 - Punishment:
   + Nhận -6 BIQ
 - Note: Đánh caro 2 lần (-2 vào stat thấp nhất (x3))
+```
+
+```
+PvP:
+- Đối thủ: nahhhh_hecker
+- Kết quả: Lose
+- Tỉ số: 2-5
 ```
 
 ======

@@ -1,6 +1,6 @@
 No.179
 Name: Vạn vật thua Gwen (milkman6936)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -86,6 +86,22 @@ PvE:
 - Punishment: 
   + Nhận -6 spd
 - Note: Đánh caro 2 lần (-2 vào stat thấp nhất (x3))
+```
+
+```
+PvP:
+- Đối thủ: Syren
+- Kết quả: Lose
+- Tỉ số: 6-0
+- Note: He says "Cái l máaaaa. Lối đánh mất dạy vl. Lối đánh vãi l thật. Dái tôi đã nổ"
+```
+
+```
+PvP:
+- Đối thủ: Tyrunny
+- Kết quả: Lose
+- Tỉ số: 3-3
+- Note: He says "Cái l máaaaa. Lối đánh mất dạy vl. Lối đánh vãi l thật. Dái tôi đã nổ"
 ```
 
 ======

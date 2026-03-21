@@ -1,6 +1,6 @@
 No.133
 Name: boomaiweed (boomaiweed)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -92,6 +92,13 @@ PvE:
 - Reward: 
 - Punishment: 
 - Note: Lmao thua cả Mambo
+```
+
+```
+PvP:
+- Đối thủ: Devourer Of Gays
+- Kết quả: Lose
+- Tỉ số: 0-4
 ```
 
 ======

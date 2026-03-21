@@ -1,6 +1,6 @@
 No.188
 Name: 4k_iIl (kh4ser1ll)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -87,13 +87,6 @@ PvP Reward:
 - Nhận 1 chardev
 ```
 
-
-```
-Other Source:
-- 
-- 
-````
-
 ======
 Battle Log:
 ```
@@ -103,6 +96,12 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: bị đuổi khỏi house
+```
+```
+PvP:
+- Đối thủ: Sparxie đã bán nước chưa
+- Kết quả: Lose
+- Tỉ số: 1-5
 ```
 
 ======

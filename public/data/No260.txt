@@ -25,7 +25,7 @@ Archetype:
 Str: 5
 Spd: 6
 Dur: 5
-IQ: 9
+IQ: 2 (trước là 9 do Cursed)
 BIQ: 8
 MA: 6
 ```
@@ -63,6 +63,7 @@ Runeword: Không
 + The Goat
 + Gourmand (từ Special Weak)
 + Railroad Realm 🍀(Từ Archetype)
++ Cursed
 ```
 
 ```

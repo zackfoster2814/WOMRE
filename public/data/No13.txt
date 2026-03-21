@@ -1,7 +1,7 @@
 No.13
 Name: zed (zed9179)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -88,6 +88,11 @@ Add info:
 Spirit souls: 0
 ```
 
+```
+PvP Reward:
+- +1 IQ
+```
+
 ======
 Battle Log:
 ```
@@ -99,6 +104,14 @@ PvE:
   + +4 Str
   + +4 IQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: mystery pham
+- Kết quả: Win
+- Tỉ số: 0-3
+- Reward: +1 IQ
 ```
 
 ======

@@ -104,7 +104,7 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: x-x (thua do luật thi đấu)
 - Punishment: 
- + -2 vào stat thấp nhất (str)
+ 2 vào stat thấp nhất (str)
 ```
 
 ======

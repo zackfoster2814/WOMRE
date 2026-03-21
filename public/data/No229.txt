@@ -65,6 +65,7 @@ Runeword:
 + Misty Step Ahead (Từ Sub-race)
 + Petrification (Từ Char Dev)
 + Encroaching Shadow (Từ Char Dev)
++ Power Negation (từ King's Landing)
 ```
 
 ```

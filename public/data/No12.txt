@@ -1,7 +1,7 @@
 No.12
 Name: ar2di
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -82,6 +82,11 @@ PvP Reward:
 - +1 Dur
 ```
 
+```
+Other Source:
+- cướp của Nygg (không có gì cả)
+```
+
 ======
 Battle Log:
 ```
@@ -93,4 +98,10 @@ PvE:
 - Punishment: 
 ```
 
+```
+PvP:
+- Đối thủ: CkTrangNhung
+- Kết quả: Win
+- Tỉ số: 2-3
+```
 ======

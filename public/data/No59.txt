@@ -1,7 +1,7 @@
 No.59
 Name: Johnny Walkaways (johnnywalkaways)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -74,6 +74,10 @@ Lover:
 +
 ```
 
+```
+PvP Reward:
+- +1 Spd
+```
 
 ======
 Battle Log:
@@ -83,6 +87,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: Không bị phạt
+```
+
+```
+PvP:
+- Đối thủ: Shirin
+- Kết quả: Thắng
+- Tỉ số: 6-1
 ```
 
 ======

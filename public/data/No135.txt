@@ -84,7 +84,10 @@ Team: 11
 Lover:
 + Mặc Quyên (hodrick_.)
 ```
-
+```
+Other Source:
+- +1 all stats
+```
 ======
 Battle Log:
 ```

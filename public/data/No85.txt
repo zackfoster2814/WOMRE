@@ -1,7 +1,7 @@
 No.85
 Name: Tyrunny (anomaly.exe)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -73,10 +73,26 @@ Team:
 Lover:
 + 
 ```
+```
+Other Source:
+- +1 IQ (Stat Absorption)
+```
+```
+PvP Reward:
+- 1 IQ
+```
 
 ======
 Battle Log:
 ```
+```
+
+```
+PvP:
+- Đối thủ: Vạn vật thua Gwen
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: Gọi anh Syren ra đánh lmao
 ```
 
 ======

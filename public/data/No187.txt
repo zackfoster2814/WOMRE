@@ -1,7 +1,7 @@
 No.187
 Name: Tuấn Anh (tuananh260601)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -39,7 +39,7 @@ Houses:
 2 Gear: 
  + 0 Normal gear:
   - Soap
-  - Thuốc tráng dương
+  - Thuốc tráng dương (đã mất)
   - Văn tế (Winterhome)
   - Cuộn khăn giấy(Winterhome)
  + 0 Legacy gear:
@@ -77,7 +77,17 @@ Team: 1
 Lover:
 + 
 ```
+```
+Other Source:
+- -1 Dur (Slow Healer)
+- -1 STR (thước tráng dương)
+- -1 DUR (thuốc tráng dương)
+```
 
+```
+PvP Reward:
+- +1 IQ
+```
 
 ======
 Battle Log:
@@ -87,6 +97,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: -5 base Str
+```
+
+```
+PvP:
+- Đối thủ: vuvip
+- Kết quả: Thắng
+- Tỉ số: 2-2
 ```
 
 ======

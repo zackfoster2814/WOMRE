@@ -1,6 +1,6 @@
 No.226
 Name: 2FaceCat (2facecat.)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -85,6 +85,13 @@ PvE:
 - Reward: 
 - Punishment: 
 - Note: (4) Không bị phạt
+```
+
+```
+PvP:
+- Đối thủ: Kẹo Con
+- Kết quả: Thua
+- Tỉ số: 5-3
 ```
 
 ======

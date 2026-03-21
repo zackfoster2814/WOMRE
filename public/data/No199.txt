@@ -38,7 +38,7 @@ Houses:
 ```
 1 Gear: 
  + 1 Normal gear:
-  - Gold Pine Resin
+  - Gold Pine Resin (đã mất)
  + 0 Legacy gear:
   - 
 ```
@@ -73,6 +73,10 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- +1 all stats
+```
 
 ======
 Battle Log:

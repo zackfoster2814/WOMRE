@@ -1,6 +1,6 @@
 No.258
 Name: Gowther (yunashigemura4303)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -63,6 +63,7 @@ Runeword: Không
 + Zoltraak
 + Thunder Orb
 + Earth-Shaking (Primordial Being - Earth)
++ Power Negation (từ King's Landing)
 ```
 
 ```
@@ -88,6 +89,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: Không bị phạt
+```
+
+```
+PvP:
+- Đối thủ: .hor1zon
+- Kết quả: Thua
+- Tỉ số: 2-3
 ```
 
 ======

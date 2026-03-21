@@ -1,7 +1,7 @@
 No.66
 Name: SoloWingPixy (s0l0wingpixy)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -46,6 +46,7 @@ Houses:
   - Gold Pine Resin (Từ PvE)
   - Wine (Từ PvE)
   - Ớt (Từ PvE)
+  - Healing Flask
  + 0 Legacy gear:
   -
 ```
@@ -86,7 +87,10 @@ Lover:
 +
 ```
 
-
+```
+PvP Reward:
+- Nhận 1 Gear: Healing Flask
+```
 ======
 Battle Log:
 ```
@@ -95,6 +99,14 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Reward: nhận 5 Gear và 5 Power
+```
+
+```
+PvP:
+- Đối thủ: Silver Chariot
+- Kết quả: Win
+- Tỉ số: 5-1
+- Reward: Nhận 1 Gear: Healing Flask
 ```
 
 ======

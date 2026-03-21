@@ -1,6 +1,6 @@
 No.224
 Name: Dân chơi Đức (danchoiduc)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -84,6 +84,13 @@ PvE:
   + Nhận +3 BIQ
   + Nhận Power 4 Hit combo
 - Note: Win BO3 round MA 2-0
+```
+
+```
+PvP:
+- Đối thủ: Sizaky
+- Kết quả: Thua
+- Tỉ số: 2-2
 ```
 
 ======

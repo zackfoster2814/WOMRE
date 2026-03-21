@@ -1,7 +1,7 @@
 No.29
 Name: Cloudian (_dragluon_)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -75,9 +75,25 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- +1 MA
+- +1 Spd 
+```
+```
+Other Source:
+- Mirage Flower (Nhận Spd)
+```
+
 ======
 Battle Log:
 ```
 ```
 
+```
+PvP:
+- Đối thủ: Sett
+- Kết quả: Thắng
+- Tỉ số: 5-4
+```
 ======

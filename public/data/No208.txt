@@ -1,6 +1,6 @@
 No.208
 Name: cuongboi (cuongboi)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -87,6 +87,13 @@ PvE:
 - Tỉ số: 4-2
 - Reward: Nhận Văn Tế
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Mặc Quyên
+- Kết quả: Lose
+- Tỉ số: 0-3
 ```
 
 ======

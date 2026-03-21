@@ -1,6 +1,6 @@
 No.200
 Name: Sett (buimanh4645)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -89,6 +89,13 @@ PvE:
   + Nhận +1 stat cao nhất (str)
   + Nhận +1 stat thấp nhất (ma)
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Cloudian
+- Kết quả: Thua
+- Tỉ số: 5-4
 ```
 
 ======

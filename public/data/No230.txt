@@ -1,6 +1,6 @@
 No.230
 Name: Billz (zabillz)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -62,6 +62,7 @@ Runeword:
 + Powerful Strike (Từ Sub-race)
 + Ballet Dancing
 + Rickrolling
++ Power Negation (từ King's Landing)
 ```
 
 ```
@@ -98,6 +99,13 @@ PvE:
   + Nhận +2 IQ
   + Nhận +1 BIQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: CobyKei
+- Kết quả: Thua
+- Tỉ số: 1-5
 ```
 
 ======

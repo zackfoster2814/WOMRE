@@ -1,6 +1,6 @@
 No.139
 Name: Yun (yun_mori)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -63,6 +63,7 @@ Runeword: Không
 + Gaze of the Abyss
 + Magma Strike
 + 67 (từ PvE Reward)
++ Blood Frenzy
 ```
 
 ```
@@ -90,6 +91,13 @@ PvE:
   + Nhận power 67
   + +1 vào stat thấp nhất (BIQ)
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: bo
+- Kết quả: Thua
+- Tỉ số: 6-1
 ```
 
 ======

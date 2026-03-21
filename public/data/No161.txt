@@ -1,7 +1,7 @@
 No.161
 Name: nahhhh_hecker (nahhhh_hecker)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -85,6 +85,21 @@ PvE:
 - Tỉ số: 1-4
 - Reward: 
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
+```
+
+```
+PvP:
+- Đối thủ: Rentarou
+- Kết quả: Win
+- Tỉ số: 2-5
+```
+
+```
+PvP:
+- Đối thủ: Rentarou
+- Kết quả: Win
+- Tỉ số: 2-5
+- Reward: không quan trọng
 ```
 
 ======

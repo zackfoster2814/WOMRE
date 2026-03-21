@@ -1,7 +1,7 @@
 No.191
 Name: Solus (solus_2108)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -90,4 +90,10 @@ Battle Log:
 ```
 ```
 
+```
+PvP:
+- Đối thủ: Mork
+- Kết quả: Thắng
+- Tỉ số: 0-2
+```
 ======

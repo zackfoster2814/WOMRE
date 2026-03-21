@@ -1,6 +1,6 @@
 No.99
 Name: vietbuon (kotorukondou)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -39,7 +39,7 @@ Houses:
 1 Gear: 
  + 1 Normal gear:
   - Kẹo (Từ House) (Đã mất do PvE Punishment)
-  - Khung hình thờ (từ PvE Punishment)
+  - Khung hình thờ (từ PvE Punishment) (đã mất)
  + 0 Legacy gear:
   - 
 ```
@@ -86,6 +86,13 @@ PvE:
 - Tỉ số: 1-6
 - Reward: 
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
+```
+
+```
+PvP:
+- Đối thủ: Đừng Nhờn với Two Fingers
+- Kết quả: Lose
+- Tỉ số: 6-0
 ```
 
 ======

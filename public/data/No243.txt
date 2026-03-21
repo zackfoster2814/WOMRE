@@ -84,6 +84,7 @@ Lover:
 ```
 Other Source:
 - +2 IQ
+- +2 Str
 ```
 
 

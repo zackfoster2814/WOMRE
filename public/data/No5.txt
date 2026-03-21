@@ -81,6 +81,8 @@ Other Source:
 - +1 str
 - +3 base spd
 - +2 STR
+- +1 dura
+- +1 str
 ```
 
 

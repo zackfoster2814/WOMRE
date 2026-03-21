@@ -1,7 +1,7 @@
 No.150
 Name: Myue (_fallen_myue)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -78,6 +78,14 @@ Team: 12
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 Spd
+```
+```
+Other Source:
+- Moonroot (Herbalist) (+1)
+```
 
 ======
 Battle Log:
@@ -91,6 +99,13 @@ PvE:
   + Nhận +1 stat cao nhất (dura)
   + Nhận +1 stat thấp nhất (spd)
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: NhờnNnNn
+- Kết quả: Thắng
+- Tỉ số: 6-0
 ```
 
 ======

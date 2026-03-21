@@ -31,7 +31,7 @@ MA:3
 
 ```
 Houses: 
-+ Tyrell
++ House Tyrell
 ```
 
 ```
@@ -58,6 +58,7 @@ Runeword:
 2 Power:  
 + Poison Breath
 + Swinging Maestro
++ Power Negation (từ King's Landing)
 ```
 
 ```

@@ -39,7 +39,7 @@ Houses:
 0 Gear: 
  + 0 Normal gear:
   - Magical Scroll (Từ Quirk Artisan)
-  - Thuốc Tráng Dương(Từ Quirk Artisan)
+  - Thuốc Tráng Dương (Từ Quirk Artisan)
  + 0 Legacy gear:
   - The Dice of the Dead (Từ House)
 ```

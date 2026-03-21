@@ -1,6 +1,6 @@
 No.87
 Name: KaTsumi - ChillWithCafe (katsumi3000)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -78,6 +78,10 @@ Lover:
 + Zackie (zackfoster___)
 ```
 
+```
+Other Source:
+- +1 Dura (Resilient)
+```
 
 ======
 Battle Log:
@@ -87,6 +91,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: -5 base Str
+```
+
+```
+PvP:
+- Đối thủ: Nime
+- Kết quả: Lose
+- Tỉ số: 5-1
 ```
 
 ======

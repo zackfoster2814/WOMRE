@@ -1,6 +1,6 @@
 No.86
 Name: Kain ヅ (greed101101)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -95,6 +95,13 @@ PvE:
 - Punishment: 
   + Nhận -1 All stats
 - Note: Ca Cao né ở round SPD, crit ở round MA
+```
+
+```
+PvP:
+- Đối thủ: ngọn cỏ ven sông
+- Kết quả: Thua
+- Tỉ số: 3-3
 ```
 
 ======

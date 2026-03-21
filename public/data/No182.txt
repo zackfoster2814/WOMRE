@@ -60,7 +60,8 @@ Runeword: Không
 
 ```
 0 Power: 
-+ 
+
++ Power Negation (từ King's Landing)
 ```
 
 ```

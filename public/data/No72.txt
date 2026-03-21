@@ -40,7 +40,7 @@ Houses:
   - Beer (Từ Quirk)
   - Buckler
   - Knight's Armor
-  - Thuốc Tráng Dương.
+  - Thuốc Tráng Dương
  + 0 Legacy gear:
   - 
 ```

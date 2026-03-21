@@ -1,6 +1,6 @@
 No.198
 Name: Silver Chariot (galangal)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -87,6 +87,13 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất Power AID và Frost Armor
+```
+
+```
+PvP:
+- Đối thủ: SoloWingPixy
+- Kết quả: Lose
+- Tỉ số: 5-1
 ```
 
 ======

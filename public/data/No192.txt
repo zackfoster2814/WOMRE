@@ -1,7 +1,7 @@
 No.192
 Name: Mwa (tamwamo_cross)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -88,6 +88,14 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+```
+
+```
+PvP:
+- Đối thủ: Etsu
+- Kết quả: Win
+- Tỉ số: 3-0
+- Reward: ko nhận do Brainrot
 ```
 
 ======

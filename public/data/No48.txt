@@ -1,6 +1,6 @@
 No.48
 Name: llaW (llaw3344)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -31,13 +31,16 @@ MA: 4
 
 ```
 Houses: 
-+ 
++ The Shire
+ -> +4 Str
 ```
 
 ```
 1 Gear: 
  + 1 Normal gear:
-  - Giấy nợ gia truyền
+  - Giấy nợ gia truyền (đã mất)
+  - Golden coin
+  - Golden coin
  + 0 Legacy gear:
   - 
 ```
@@ -75,9 +78,13 @@ Team: 22
 
 ```
 Lover:
-+ 
++ NewbieLady
 ```
 
+```
+PvP Reward:
+- +1 MA
+```
 ======
 Battle Log:
 ```
@@ -89,6 +96,14 @@ PvE:
 - Punishment: 
   + Nhận -6 IQ
 - Note: Đánh caro 2 lần (-2 vào stat thấp nhất (x3))
+```
+
+```
+PvP:
+- Đối thủ: NewbieLady
+- Kết quả: Lose
+- Tỉ số: 2-3
+- Note: đụ luôn đối thủ
 ```
 
 ======

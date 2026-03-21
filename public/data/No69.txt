@@ -1,7 +1,7 @@
 No.69
 Name: Nốt Ruồi Lệch Pha (cooku_35645)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -14,7 +14,7 @@ Sub-race:
 
 ```
 Archetype: 
-+ 2 ngón
++ Follower of the Two Fingers
 ```
 ``` 
 3 Quirk:  
@@ -64,6 +64,8 @@ Runeword: Không
 + Frost Armor
 + Mewing (Từ Char dev)
 + Evasion (Từ Char dev)
++ Angling and Scheming
++ Anti-Magic Barrier
 ```
 
 ```
@@ -81,6 +83,16 @@ Lover:
 ```
 
 
+```
+PvP Reward:
+- +1 Str
+```
+```
+Other Source:
+- Angling and Scheming (Naga House)
+- Anti-Magic Barrier (2 ngón)
+```
+
 ======
 Battle Log: 
 ```
@@ -90,6 +102,13 @@ PvE:
 - Tỉ số: 6-4 
 - Punishment: 
  + Chỉ số thấp nhất của team bị kéo xuống 0
+```
+
+```
+PvP:
+- Đối thủ: Yuna
+- Kết quả: Thắng
+- Tỉ số: 1-4
 ```
 
 ======

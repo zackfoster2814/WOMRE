@@ -1,7 +1,7 @@
 No.137
 Name: Sizaky (sizaky)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -80,6 +80,7 @@ Lover:
 ```
 Other Source:
 - +1 str
+- +1 str
 ```
 
 ======
@@ -87,4 +88,10 @@ Battle Log:
 ```
 ```
 
+```
+PvP:
+- Đối thủ: Dân chơi Đức
+- Kết quả: Thắng
+- Tỉ số: 2-2
+```
 ======

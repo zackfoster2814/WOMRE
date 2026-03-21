@@ -1,7 +1,7 @@
 No.217
 Name: Mặc Quyên (hodrick_.)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -63,6 +63,7 @@ Runeword: Không
 + Mewing
 + Luck Manipulation
 + Accelerating Sorcery
++ Power Negation (từ King's Landing)
 ```
 
 ```
@@ -95,6 +96,13 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: cuongboi
+- Kết quả: Win
+- Tỉ số: 0-3
 ```
 
 ======

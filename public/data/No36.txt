@@ -1,7 +1,7 @@
 No.36
 Name: Lovepcdolls (lovepcdolls)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: God
-Sub-race: Eir
+Sub-race: Eir (1)
 ```
 
 ```
@@ -39,6 +39,7 @@ Houses:
 2 Gear: 
  + 1 Normal gear:
   - Văn tế
+  - Silver Steed
  + 1 Legacy gear:
   - The Tamer Straight Sword
 ```
@@ -56,7 +57,19 @@ Runeword: Không
 
 ```
 1 Power: 
-+ Summon: Imp (từ Legacy Gear)
++ Fair Duel (Wand)
++ Bloodlust
++ Petrification
++ Swinging Maestro
++ AIDS
++ Force Field
+```
+
+
+```
+Summon: 
++ Imp (từ Legacy Gear)
++ Earth Golem
 ```
 
 ```
@@ -73,9 +86,29 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- 1 Gear: Silver Steed
+```
+```
+Other Source:
+- PvP Reward: Power Fair Duel (Wand)
+- Bloodlust (Patient)
+- Petrification (Patient)
+- Swinging Maestro (Patient)
+- AIDS (Patient)
+```
 ======
 Battle Log:
 ```
+- God gặp Devotee
+```
+
+```
+PvP:
+- Đối thủ: Bộ PC
+- Kết quả: Win
+- Tỉ số: 0-0
 ```
 
 ======

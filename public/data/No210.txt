@@ -1,7 +1,7 @@
 No.210
 Name: NewbieLady (newbielady)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -83,6 +83,13 @@ Lover:
 ======
 Battle Log:
 ```
+```
+
+```
+PvP:
+- Đối thủ: llaW
+- Kết quả: Win
+- Tỉ số: 2-3
 ```
 
 ======

@@ -25,7 +25,7 @@ Archetype:
 Str: 5
 Spd: 4
 Dur: 7
-IQ: 9
+IQ: 3 (trước là 9 do cursed)
 BIQ: 6
 MA: 5
 ```
@@ -61,6 +61,7 @@ Runeword: Không
 1 Power: 
 + Powerful Strike
 + Sonic Scream
++ Cursed
 ```
 
 ```

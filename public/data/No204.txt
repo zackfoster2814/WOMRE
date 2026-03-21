@@ -1,6 +1,6 @@
 No.204
 Name: Yuna (yuna6460)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -89,6 +89,13 @@ PvE:
   + Nhận +2 IQ
   + Nhận +2 BIQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Nốt Ruồi Lệch Pha
+- Kết quả: Thua
+- Tỉ số: 1-4
 ```
 
 ======

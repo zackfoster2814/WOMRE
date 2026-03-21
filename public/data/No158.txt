@@ -1,7 +1,7 @@
 No.158
 Name: Gambling (da_ork_)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -82,6 +82,18 @@ PvP Reward:
 - +1 Str
 ```
 
+```
+Other Source:
+- -1 STR (từ Lazy)
+- -1 SPD (từ Lazy)
+- +2 IQ (từ Lazy)
+```
+
+```
+PvP Reward:
+- +1 Str
+```
+
 
 ======
 Battle Log:
@@ -94,6 +106,14 @@ PvE:
 - Punishment: 
   + Nhận -6 IQ
 - Note: Đánh caro 2 lần (-2 vào stat thấp nhất (x3))
+```
+
+```
+PvP:
+- Đối thủ: Illya
+- Kết quả: Win
+- Tỉ số: 2-4
+- Reward: +1 Str
 ```
 
 ======

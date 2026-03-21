@@ -1,6 +1,6 @@
 No.122
 Name: Dương Quá Quá (duongquaqua)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -84,6 +84,13 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Haijin
+- Kết quả: Thua
+- Tỉ số: 1-4
 ```
 
 ======

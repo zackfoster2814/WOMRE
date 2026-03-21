@@ -1,6 +1,6 @@
 No.151
 Name: Mork (mork2104)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -84,6 +84,13 @@ PvE:
 - Tỉ số: 4-2
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Solus
+- Kết quả: Thua
+- Tỉ số: 0-2
 ```
 
 ======

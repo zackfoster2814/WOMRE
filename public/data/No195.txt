@@ -41,6 +41,7 @@ Houses:
  + 1 Normal gear:
   - Holy Symbol
   - Magical Scroll
+  - Giấy nợ gia truyền
  + 0 Legacy gear:
   - 
 ```

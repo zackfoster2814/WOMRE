@@ -1,7 +1,7 @@
 No.215
 Name: nguoisai (nguoidasai)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -77,6 +77,14 @@ Lover:
 + 
 ```
 
+```
+Other Source:
+- -1 STR
+- -1 SPD
+- +2 IQ
+```
+
+
 ======
 Battle Log:
 ```
@@ -90,6 +98,13 @@ PvE:
   + Nhận +2 Dur
   + Nhận +2 BIQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Wakamo Lunatic
+- Kết quả: Win
+- Tỉ số: 6-0
 ```
 
 ======

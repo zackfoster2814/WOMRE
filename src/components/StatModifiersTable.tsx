@@ -57,7 +57,7 @@ const sourceTypeColors: Record<EffectSourceType, string> = {
   house_sub: "text-cyan-300",
   quirk: "text-purple-400",
   power: "text-red-400",
-  summon: "text-red-300",
+  summon: "text-emerald-400",
   gear: "text-blue-400",
   weapon: "text-yellow-400",
   rune: "text-orange-400",

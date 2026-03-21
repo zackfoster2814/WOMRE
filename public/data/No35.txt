@@ -1,6 +1,6 @@
 No.35
 Name: ...?? (_1469)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -94,5 +94,14 @@ PvE:
 - Punishment: 
 - Note: Lmao thua cả Mambo
 ```
+
+```
+PvP:
+- Đối thủ: Lười
+- Kết quả: Lose
+- Tỉ số: 2-4
+```
+
+
 
 ======

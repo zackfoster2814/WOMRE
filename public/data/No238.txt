@@ -1,7 +1,7 @@
 No.238
 Name: CobyKei (reiniskhoa)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -43,6 +43,7 @@ Houses:
   - Wine (Từ House)
   - Đá
   - Beer
+  - Healing Flasks
  + 0 Legacy gear:
   - 
 ```
@@ -79,9 +80,14 @@ Lover:
 ```
 
 ```
+PvP Reward:
+- +1 BIQ
+```
+```
 Other Source:
 - +2 Spd (từ Yami Dryad)
 - +2 MA (từ Bamialoai2)
+- Healing Flask (Hero Grave Keeper)
 ```
 
 ======
@@ -95,6 +101,13 @@ PvE:
 - Punishment: 
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
+```
+
+```
+PvP:
+- Đối thủ: Billz
+- Kết quả: Thắng
+- Tỉ số: 1-5
 ```
 
 ======

@@ -14,7 +14,7 @@ Sub-race:
 
 ```
 Archetype: 
-+ 2 Ngón (Đã mất do PvE Punishment)
++ Follower of the Two Fingers (Đã mất do PvE Punishment)
 ```
 ``` 
 2 Quirk:  

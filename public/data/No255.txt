@@ -1,6 +1,6 @@
 No.255
 Name: Cornmann(cornmann_69401_87403)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -84,6 +84,13 @@ PvE:
 - Reward: 
 - Punishment: Mất toàn bộ Archetype và Quirk (Cursed 36 hồi lại 1 All Base Stats)
 - Note: (3)
+```
+
+```
+PvP:
+- Đối thủ: Kingly Majesty
+- Kết quả: Thua
+- Tỉ số: 4-2
 ```
 
 ======

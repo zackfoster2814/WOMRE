@@ -1,6 +1,6 @@
 No.98
 Name: An Hoàng (leetch1311)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -78,6 +78,13 @@ Lover:
 ======
 Battle Log:
 ```
+```
+
+```
+PvP:
+- Đối thủ: mHamster
+- Kết quả: Lose
+- Tỉ số: 4-2
 ```
 
 ======
