@@ -1,7 +1,7 @@
 No.48
 Name: llaW (llaw3344)
-Status: Đã bị loại
-Vòng thi đấu: 256
+Status: Còn sống
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
