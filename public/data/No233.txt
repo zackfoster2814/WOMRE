@@ -1,7 +1,7 @@
 No.233
 Name: sodium_nickel_89 (sodium_nickel_89)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -76,6 +76,15 @@ Team: 29
 Lover:
 +
 ```
+```
+Other Source:
+- +2 str
+- +1 str
+```
+```
+PvP Reward:
+- +1 spsd
+```
 
 
 ======
@@ -86,6 +95,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: Không bị phạt
+```
+
+```
+PvP:
+- Đối thủ: MasMerterserker
+- Kết quả: Thắng
+- Tỉ số: 2-4
 ```
 
 ======

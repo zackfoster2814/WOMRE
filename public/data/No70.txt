@@ -1,6 +1,6 @@
 No.70
 Name: Con dê (doibacnhusilver)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -83,6 +83,13 @@ PvE:
 - Tỉ số: 1-4
 - Reward: 
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
+```
+
+```
+PvP:
+- Đối thủ: Tarus13
+- Kết quả: Thua
+- Tỉ số: 3-6
 ```
 
 ======

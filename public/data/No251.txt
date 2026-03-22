@@ -1,6 +1,6 @@
 No.251
 Name: Del1ght (del1ghtviet)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -81,6 +81,13 @@ PvE:
 - Punishment: 
   + Nhận -6 str
 - Note: Đánh caro 2 lần (-2 vào stat thấp nhất (x3)) 
+```
+
+```
+PvP:
+- Đối thủ: Ca Cao
+- Kết quả: Thua
+- Tỉ số: 6-0
 ```
 
 ======

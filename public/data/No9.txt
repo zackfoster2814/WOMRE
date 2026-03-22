@@ -1,7 +1,7 @@
 No.9
 Name: caubetuky._. (haruhanasaki)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -41,6 +41,7 @@ Houses:
   - Xương sống lưỡi (Từ Char dev)
   - Radio (Từ Chardev)
   - Wooden Shield (Từ Char dev)
+  - Golden coin (house)
  + 0 Legacy gear:
   - 
 ```
@@ -75,6 +76,10 @@ Team: 26
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 Dura
+```
 
 ======
 Battle Log:
@@ -87,6 +92,13 @@ PvE:
 - Punishment: 
   + Nhận +2 all stats
 - Note: GOAT Karu lên tiếng
+```
+
+```
+PvP:
+- Đối thủ: Kophaiezio
+- Kết quả: Thắng
+- Tỉ số: 0-6
 ```
 
 ======

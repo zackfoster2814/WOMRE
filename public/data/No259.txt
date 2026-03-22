@@ -1,7 +1,7 @@
 No.259
 Name: Anh Bảo (baogiadinh1003)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -90,6 +90,13 @@ PvE:
   + Nhận +2 IQ
   + Nhận +1 BIQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Euoid
+- Kết quả: thua
+- Tỉ số: 3-3
 ```
 
 ======

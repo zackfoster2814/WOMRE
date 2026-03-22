@@ -1,7 +1,7 @@
 No.21
 Name: Ako Darling (mikukhang)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -62,7 +62,7 @@ Runeword: The Twin
 3 Power: 
 + Master of War
 + Metamagic
-+ Adapt
++ Adapt (aids, divine lightning, master of was, seismic, petrification)
 ```
 
 ```
@@ -80,6 +80,14 @@ Lover:
 + Son WuKong (maidinhhongson)
 + NDP (ndp1792)
 ```
+```
+PvP Reward:
+- +1 dura
+```
+```
+Other Source:
+- 
+```
 
 ======
 Battle Log:
@@ -91,6 +99,13 @@ PvE:
 - Reward: 
 - Punishment: Nhận Archetype "Cinderheart"
 - Note: Dành cho Ako Darling
+```
+
+```
+PvP:
+- Đối thủ: Johnny Joestar
+- Kết quả: Thắng
+- Tỉ số: 2-4
 ```
 
 ======

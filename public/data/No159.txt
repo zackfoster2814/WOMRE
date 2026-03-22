@@ -1,6 +1,6 @@
 No.159
 Name: DK Yuri (longgg0058)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -25,7 +25,7 @@ Archetype:
 Str: 3
 Spd: 3 (ban đầu là 6, do PvE Punishment)
 Dur: 0 (Ban đầu là 1, Demonic Pact)
-IQ: 6 (+3 từ Philosopher)
+IQ:  5 (từ 6 bị lời nguyền) (+3 từ Philosopher)
 BIQ: 3
 MA: 6
 ```
@@ -95,6 +95,13 @@ PvE:
 - Tỉ số: 1-4
 - Reward: 
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
+```
+
+```
+PvP:
+- Đối thủ: ShiDove
+- Kết quả: Thua
+- Tỉ số: 3-2
 ```
 
 ======

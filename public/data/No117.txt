@@ -82,6 +82,11 @@ Lover:
 + 
 ```
 
+```
+Other source:
+- +2 Dura
+```
+
 ======
 Battle Log:
 ```

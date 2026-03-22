@@ -1,6 +1,6 @@
 No.58
 Name: Boy lắc đầu (huntervu)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -90,5 +90,13 @@ PvE:
   + Nhận +1 stat thấp nhất (str)
 - Punishment: 
 ```
+
+```
+PvP:
+- Đối thủ: Lunar
+- Kết quả: Thua
+- Tỉ số: 4-1
+```
+
 
 ======

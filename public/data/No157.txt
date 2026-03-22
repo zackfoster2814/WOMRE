@@ -1,6 +1,6 @@
 No.157
 Name: HuyMei (huymei)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -87,6 +87,13 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất hết Power
+```
+
+```
+PvP:
+- Đối thủ: Trung Kiên
+- Kết quả: Thua
+- Tỉ số: 4-2
 ```
 
 ======

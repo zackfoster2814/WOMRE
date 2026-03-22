@@ -24,7 +24,7 @@ Archetype:
 Str: 1
 Spd: 6
 Dur: 6
-IQ: 8
+IQ: 7 (nguyền từ 6) (nguyền từ 8)
 BIQ: 1
 MA: 5
 ```

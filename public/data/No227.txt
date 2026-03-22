@@ -1,7 +1,7 @@
 No.227
 Name: dung7877 (dung7877)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -19,6 +19,7 @@ Archetype: Infirmarian
 ``` 
 1 Quirk:  
 + Shining Brightly
++ Athletic (Fingerthing)
 ```
 ```
 Str:4
@@ -59,6 +60,7 @@ Runeword:
 + Blood Manipulation
 + U=ma2
 + Arcana Blast
++ Fingerthing (Machinists)
 ```
 
 ```
@@ -74,6 +76,14 @@ Team: 12
 Lover:
 + 
 ```
+```
+Other Source:
+- Machinists Power: Fingerthing
+```
+```
+PvP Reward:
+- +1 Dura
+```
 
 ======
 Battle Log:
@@ -87,6 +97,13 @@ PvE:
   + Nhận +1 stat cao nhất (IQ)
   + Nhận +1 stat thấp nhất (dura)
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Kazuha
+- Kết quả: Thắng
+- Tỉ số: 5-1
 ```
 
 ======

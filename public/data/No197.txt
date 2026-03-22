@@ -80,6 +80,7 @@ PvP Reward:
 ```
 Other Source:
 - -1 Dura
++ +1 All Stats
 ```
 
 

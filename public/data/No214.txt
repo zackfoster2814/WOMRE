@@ -1,7 +1,7 @@
 No.214
 Name: Cô Fulun` (cofulun)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -23,7 +23,7 @@ Archetype:
 + Artistic
 ```
 ```
-Str:6 (+2 Từ Atreides)
+Str: 5 (bị nguyền từ 6) (+2 Từ Atreides)
 Spd:5
 Dur:0
 IQ:6
@@ -79,6 +79,10 @@ PvP Reward:
 - +1 Dura
 - +1 IQ
 ```
+```
+Other Source:
+- +2 Iq (Artistic)
+```
 
 ======
 Battle Log:
@@ -89,6 +93,13 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: Dura về 0
+```
+
+```
+PvP:
+- Đối thủ: LTL
+- Kết quả: Thắng
+- Tỉ số: 4-2
 ```
 
 ======

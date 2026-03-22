@@ -85,6 +85,8 @@ Lover:
 Other Source:
 - -1 STR
 - -1 DUR
+- +1 BIQ
+- +2 all stats
 ```
 
 ======

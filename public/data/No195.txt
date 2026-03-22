@@ -1,7 +1,7 @@
 No.195
 Name: Cảo (foxnamecaor)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Under The Weather
++ Shining Brightly (từ Under The Weather)
 + Deaf
 ```
 ```
@@ -39,9 +39,9 @@ Houses:
 ```
 2 Gear: 
  + 1 Normal gear:
-  - Holy Symbol
-  - Magical Scroll
-  - Giấy nợ gia truyền
+  - Holy Symbol (đã mất)
+  - Magical Scroll (đã mất)
+  - Giấy nợ gia truyền (đã mất)
  + 0 Legacy gear:
   - 
 ```
@@ -79,6 +79,14 @@ Team: 7
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 IQ
+```
+```
+Other Source:
+- +1 Dura (Healing Factor)
+```
 
 ======
 Battle Log:
@@ -89,6 +97,13 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: handoivodoi
+- Kết quả: Thắng
+- Tỉ số: 3-3
 ```
 
 ======

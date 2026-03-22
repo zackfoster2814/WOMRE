@@ -1,6 +1,6 @@
 No.135
 Name: ltq (tcltq)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -99,6 +99,20 @@ PvE:
   + Nhận power 67
   + +1 vào stat thấp nhất (spd)
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: E4zyyyy
+- Kết quả: Thua
+- Tỉ số: 4-2
+```
+
+```
+PvP:
+- Đối thủ: E4zyyyy
+- Kết quả: Thua
+- Tỉ số: 4-2
 ```
 
 ======

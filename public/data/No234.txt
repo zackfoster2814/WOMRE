@@ -1,7 +1,7 @@
 No.234
 Name: Kraken (kraken235)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -40,8 +40,8 @@ Houses:
  + 3 Normal gear:
   - Radio (Từ House)
   - Dark Lanthorn
-  - Kuro's Charm
-  - Holy Symbol
+  - Kuro's Charm (đã mất)
+  - Holy Symbol 
  + 0 Legacy gear:
   - 
 ```
@@ -89,6 +89,13 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: bị đuổi khỏi house
+```
+
+```
+PvP:
+- Đối thủ: Đào viên họa gia
+- Kết quả: Thắng
+- Tỉ số: 6-0
 ```
 
 ======

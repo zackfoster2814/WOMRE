@@ -1,6 +1,6 @@
 No.18
 Name: Lunacy (lunacy6545)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -88,6 +88,13 @@ PvE:
 - Tỉ số: 1-6
 - Reward: 
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
+```
+
+```
+PvP:
+- Đối thủ: TheViet
+- Kết quả: Thua
+- Tỉ số: 5-0
 ```
 
 ======

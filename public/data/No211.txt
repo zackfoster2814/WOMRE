@@ -1,7 +1,7 @@
 No.211
 Name: radb1t_fr (radb1t_fr)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -63,6 +63,9 @@ Runeword:
 + Rising Tide
 + Odin Blessing
 + Borrowed Time
++ 4 Hit combo
++ Encroaching Shadow
++ Frost Armor
 ```
 
 ```
@@ -81,7 +84,12 @@ Lover:
 
 ```
 PvP Reward:
+- Nhận 2 power Encroaching Shadow, Frost Armor
+```
+```
+Other Source:
 - +2 Str
+- Học 4 hit combo
 ```
 
 
@@ -94,6 +102,13 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Fami
+- Kết quả: Thắng
+- Tỉ số: 5-2
 ```
 
 ======

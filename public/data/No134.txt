@@ -1,7 +1,7 @@
 No.134
 Name: Chovy Golden Roader (moimoi6820)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -75,6 +75,14 @@ Team: 28
 Lover:
 + Yamakun (yamakunson)
 ```
+```
+Other Source:
+- -2 dura (AIDS)
+```
+```
+PvP Reward:
+- 2 char dev: Prime time, seeking wisdom
+```
 
 ======
 Battle Log:
@@ -85,6 +93,14 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+```
+
+```
+PvP:
+- Đối thủ: ⭐⭐⭐⭐⭐⭐ karthus2705
+- Kết quả: Thắng
+- Tỉ số: 3-3
+- Note: không nhận 2 char dev: Prime time, seeking wisdom do NPC lmao
 ```
 
 ======

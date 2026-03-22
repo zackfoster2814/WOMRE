@@ -1,7 +1,7 @@
 No.46
 Name: Yui (duyanh_57789)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -38,7 +38,8 @@ Houses:
 ```
 2 Gear: 
  + 2 Normal gear:
-  - Thuốc tráng dương
+  - Thuốc tráng dương (đã mất)
+  - Golden coin
   - Golden coin
  + 0 Legacy gear:
   - 
@@ -74,7 +75,11 @@ Team: 4
 
 ```
 Lover:
-+ 
++ Yui
+```
+```
+PvP Reward:
+- +1 MA
 ```
 
 
@@ -87,6 +92,13 @@ PvE:
 - Tỉ số: 6-4 
 - Punishment: 
  + Chỉ số thấp nhất của team bị kéo xuống 0
+```
+
+```
+PvP:
+- Đối thủ: tuancon
+- Kết quả: Thắng
+- Tỉ số: 3-2
 ```
 
 ======

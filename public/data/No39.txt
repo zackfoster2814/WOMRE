@@ -1,6 +1,6 @@
 No.39
 Name: Euoid (euoid)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -62,6 +62,7 @@ Runeword: Không
 + Mewing (Lockalock Skill Book)
 + Gotta go Fast (Lockalock Skill Book)
 + The Coast is Clear! (Lockalock Skill Book)
++ Scrying
 ```
 
 ```
@@ -77,6 +78,10 @@ Team: 19
 Lover:
 + Quý Trần Tường (wyug1234)
 ```
+```
+PvP Reward:
+- +2 MA (stats thấp nhất)
+```
 
 ======
 Battle Log:
@@ -91,6 +96,13 @@ PvE:
   + Nhận +2 Dur
   + Nhận +2 MA
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Anh Bảo
+- Kết quả: thắng
+- Tỉ số: 3-3
 ```
 
 ======

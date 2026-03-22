@@ -1,7 +1,7 @@
 No.219
 Name: Tarus13 (13tarus)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -61,6 +61,7 @@ Runeword:
 + The Coast is Clear (Từ House)
 + Lone Wolf(Từ House)
 + Magma Strike
++ Scrying
 ```
 
 ```
@@ -76,6 +77,15 @@ Team: 5
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 BIQ
+```
+```
+Other Source:
+- -1 dura
+- -1 BIQ
+```
 
 ======
 Battle Log:
@@ -86,6 +96,13 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Con dê
+- Kết quả: Thắng
+- Tỉ số: 3-6
 ```
 
 ======

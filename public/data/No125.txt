@@ -1,7 +1,7 @@
 No.125
 Name: Em Minh (minhloptruong)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -40,7 +40,8 @@ Houses:
 2 Gear: 
  + 2 Normal gear:
   - Kẹo (Từ House)
-  - Thuốc Tráng Dương
+  - Thuốc Tráng Dương (đã dùng)
+  - Beer
  + 0 Legacy gear:
   - 
 ```
@@ -74,6 +75,13 @@ Team: 30
 Lover:
 + 
 ```
+```
+Other Source:
+- -1 dura
+- đào mồ Oreki: Beer
+- -1 dura
+- -1 BIQ
+```
 
 ======
 Battle Log:
@@ -84,6 +92,13 @@ PvE:
 - Tỉ số: 0-12
 - Reward: 
 - Punishment: Nhận Quirk "Impatient" nhưng không được nhận 2 PvP Reward mặc định của nó
+```
+
+```
+PvP:
+- Đối thủ: LamBeii
+- Kết quả: Thắng
+- Tỉ số: 0-4
 ```
 
 ======

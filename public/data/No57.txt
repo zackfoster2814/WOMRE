@@ -25,7 +25,7 @@ Str: 4
 Spd: 6
 Dur: 5
 IQ: 7
-BIQ: 10
+BIQ: 9 (bị văn tế từ 10)
 MA: 7
 ```
 

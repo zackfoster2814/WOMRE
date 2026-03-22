@@ -81,7 +81,10 @@ Team: 20
 Lover:
 + King Zalo (chi404)
 ```
-
+```
+Other source:
+- +1 All Stats
+```
 ======
 Battle Log:
 ```

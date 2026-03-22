@@ -1,7 +1,7 @@
 No.109
 Name: We are Charlie Kirk (_yeetusmymeatus)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: Primordial Being
-Sub-race: Water
+Sub-race: Air
 ```
 
 ```
@@ -23,7 +23,7 @@ Archetype:
 ```
 ```
 Str: 7
-Spd: 10
+Spd: 5 (lời nguyền xuống từ 10)
 Dur: 6
 IQ: 2
 BIQ: 1
@@ -65,6 +65,7 @@ Runeword: Không
 + Divine Lightning (Demonic Pact) (Đã mất do PvE Punishment)
 + Detect Thoughts 
 + Spell Flux 
++ Blowing Leaves
 ```
 
 ```
@@ -80,6 +81,15 @@ Team: 17
 Lover:
 + 
 ```
+```
+Other Source:
+- Air
+```
+
+```
+PvP Reward:
+- Lời nguyền địa ngục 
+```
 
 ======
 Battle Log:
@@ -92,6 +102,13 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất Power Divine Lightning và Water Breathing
+```
+
+```
+PvP:
+- Đối thủ: Anh Mèo
+- Kết quả: Thắng
+- Tỉ số: 0-6
 ```
 
 ======

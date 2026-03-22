@@ -1,6 +1,6 @@
 No.88
 Name: Lowns (.lowns)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -82,6 +82,13 @@ PvE:
 - Tỉ số: 6-4 
 - Punishment: 
  + Chỉ số thấp nhất của team bị kéo xuống 0
+```
+
+```
+PvP:
+- Đối thủ: Amos
+- Kết quả: Thua
+- Tỉ số: 4-2
 ```
 
 ======

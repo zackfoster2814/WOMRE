@@ -1,7 +1,7 @@
 No.128
 Name: 0chjnchjn (tine2417)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -63,6 +63,7 @@ Runeword: Không
 2 Power: 
 + Metamagic
 + Fancy Feet
++ Quas
 ```
 
 ```
@@ -82,6 +83,11 @@ Lover:
 ```
 PvP Reward:
 - +1 all stats
+- +1 MA
+```
+```
+Other Source:
+- học power: Quas
 ```
 
 ======
@@ -93,6 +99,13 @@ PvE:
 - Tỉ số: 3-3
 - Reward: Nhận Empty Stein và Wine
 - Punishment:
+```
+
+```
+PvP:
+- Đối thủ: Quý Trần Tường
+- Kết quả: Thắng
+- Tỉ số: 6-1
 ```
 
 ======

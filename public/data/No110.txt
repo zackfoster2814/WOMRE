@@ -1,6 +1,6 @@
 No.110
 Name: Memento Duelist (memento_duelist)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -87,6 +87,13 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: Mất 3 Power, giữ lại Power "Void Walking"
+```
+
+```
+PvP:
+- Đối thủ: 1037
+- Kết quả: Thua
+- Tỉ số: 2-5
 ```
 
 ======

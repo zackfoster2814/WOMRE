@@ -1,6 +1,6 @@
 No.37
 Name: LamBeii (lambeii)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -75,6 +75,13 @@ Lover:
 ======
 Battle Log:
 ```
+```
+
+```
+PvP:
+- Đối thủ: Em Minh
+- Kết quả: Thua
+- Tỉ số: 0-4
 ```
 
 ======

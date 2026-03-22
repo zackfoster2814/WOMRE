@@ -1,7 +1,7 @@
 No.260
 Name: Heir of Raumania (trunghieu6775)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -26,7 +26,7 @@ Str: 5
 Spd: 6
 Dur: 5
 IQ: 2 (trước là 9 do Cursed)
-BIQ: 8
+BIQ: 6 (nguyền xuống từ 8)
 MA: 6
 ```
 
@@ -80,6 +80,11 @@ Lover:
 +
 ```
 
+```
+PvP Reward:
+- Lời nguyền địa ngục 
+- +1 str
+```
 
 ======
 Battle Log:
@@ -89,6 +94,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: Không bị phạt
+```
+
+```
+PvP:
+- Đối thủ: Toast
+- Kết quả: Thắng
+- Tỉ số: 6-0
 ```
 
 ======

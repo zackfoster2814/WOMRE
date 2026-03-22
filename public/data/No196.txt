@@ -1,6 +1,6 @@
 No.196
 Name: Blaster (blaster007)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -82,6 +82,13 @@ PvE:
 - Kết quả: Win (Team)
 - Tỉ số: 5-1
 - Bị Isekai trong trận (đã Isekai)
+```
+
+```
+PvP:
+- Đối thủ: Thanh Tước bé cưng
+- Kết quả: Thua
+- Tỉ số: 7-1
 ```
 
 ======

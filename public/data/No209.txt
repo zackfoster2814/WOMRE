@@ -1,7 +1,7 @@
 No.209
 Name: ShiDove (shidove)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -42,6 +42,7 @@ Houses:
   - Holy Symbol
   - Spatula 
   - Ớt
+  - Giấy nợ gia truyền (từ cảo)
  + 0 Legacy gear:
   - 
 ```
@@ -75,6 +76,14 @@ Team: 31
 Lover:
 + 
 ```
+```
+Other Source:
+- +2 spd
+```
+```
+PvP Reward:
+- +1 Iq
+```
 
 ======
 Battle Log:
@@ -85,6 +94,13 @@ PvE:
 - Tỉ số: 4-2
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: DK Yuri
+- Kết quả: Thắng
+- Tỉ số: 3-2
 ```
 
 ======

@@ -1,6 +1,6 @@
 No.114
 Name: tuancon (.tuancon)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -77,7 +77,7 @@ Team: 19
 
 ```
 Lover:
-+ 
++ tuancon
 ```
 
 ======
@@ -93,6 +93,13 @@ PvE:
   + Nhận +2 Dur
   + Nhận +2 BIQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Yui
+- Kết quả: Thua
+- Tỉ số: 3-2
 ```
 
 ======

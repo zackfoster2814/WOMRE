@@ -71,6 +71,10 @@ Team: 29 (Được quay)
 Lover:
 +
 ```
+```
+Other source:
+- +1 BIQ
+```
 
 
 ======

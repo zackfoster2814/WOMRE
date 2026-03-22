@@ -52,7 +52,7 @@ Houses:
 2 Rune: 
 + Thul
 + Sol
-Runeword: Không
+Runeword: BlackJack
 ```
 
 ```

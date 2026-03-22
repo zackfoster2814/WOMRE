@@ -1,6 +1,6 @@
 No.132
 Name: Nygg (nyggystorm)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -81,6 +81,13 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Muon liem chan Seed qua
+- Kết quả: Thua
+- Tỉ số: 1-5
 ```
 
 ======

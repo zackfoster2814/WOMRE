@@ -101,7 +101,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: NewbieLady
-- Kết quả: Lose
+- Kết quả: Win
 - Tỉ số: 2-3
 - Note: đụ luôn đối thủ
 ```

@@ -1,7 +1,7 @@
 No.24
 Name: OddMan (thaioturan)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -71,6 +71,14 @@ Team: 8
 Lover:
 + Swem (.swem)
 ```
+```
+PvP Reward:
+- +1 dura 
+```
+```
+Other Source:
+--2 Dura (aids)
+```
 
 ======
 Battle Log:
@@ -83,6 +91,13 @@ PvE:
   + +4 Str
   + +4 IQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: act engage draw engage
+- Kết quả: Thắng
+- Tỉ số: 2-3
 ```
 
 ======

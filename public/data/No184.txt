@@ -1,7 +1,7 @@
 No.184
 Name: Thanh Tước bé cưng (cleade1stmay)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -83,6 +83,16 @@ Lover:
 +
 ```
 
+```
+Other source:
+- +1 All Stats
+- -1 Dura
+- -1 BIQ
+```
+```
+PvP Reward:
+- +1 spd
+```
 
 ======
 Battle Log:
@@ -92,6 +102,13 @@ PvE:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Reward: nhận 5 Power và 4 Gear (trùng Gold Pine Resin nên không nhận thêm)
+```
+
+```
+PvP:
+- Đối thủ: Blaster
+- Kết quả: Thắng
+- Tỉ số: 7-1
 ```
 
 ======

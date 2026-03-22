@@ -1,7 +1,7 @@
 No.231
 Name: E4zyyyy (Hinaso1)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -61,6 +61,7 @@ Runeword:
 2 Power: 
 + Invulnerability (Đã mất do PvE Punishment)
 + Mewing (Đã mất do PvE Punishment)
++ Exort 
 ```
 
 ```
@@ -76,6 +77,14 @@ Team: 17
 Lover:
 + 
 ```
+```
+Other Source:
+- Học Exort 
+```
+```
+PvP Reward:
+- +1 Dura
+```
 
 ======
 Battle Log:
@@ -88,6 +97,20 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất hết Power
+```
+
+```
+PvP:
+- Đối thủ: ltq
+- Kết quả: Thắng
+- Tỉ số: 4-2
+```
+
+```
+PvP:
+- Đối thủ: ltq
+- Kết quả: Thắng
+- Tỉ số: 4-2
 ```
 
 ======

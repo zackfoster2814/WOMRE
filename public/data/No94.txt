@@ -1,6 +1,6 @@
 No.94
 Name: act engage draw engage(gnasuwu)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -88,6 +88,13 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: Dura về 0
+```
+
+```
+PvP:
+- Đối thủ: OddMan
+- Kết quả: Thua
+- Tỉ số: 2-3
 ```
 
 ======

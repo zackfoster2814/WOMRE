@@ -1,7 +1,7 @@
 No.176
 Name: Lunar (huyvp1412)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -67,6 +67,7 @@ Runeword: Affection (Đã mất)
 + Rampage
 + Continental Super Storm
 + Blood Frenzy
++ AIDS
 ```
 
 ```
@@ -82,6 +83,14 @@ Team: 16
 Lover:
 + Roku da Poet (roku2807)
 ```
+```
+Other Source:
+- +1 all stats
+```
+```
+PvP Reward:
+- Nhận 1 power: AIDS
+```
 
 ======
 Battle Log:
@@ -92,6 +101,13 @@ PvE:
 - Tỉ số: 3-3
 - Reward: Nhận Empty Stein và Wine
 - Punishment:
+```
+
+```
+PvP:
+- Đối thủ: Boy lắc đầu
+- Kết quả: Thắng
+- Tỉ số: 4-1
 ```
 
 ======

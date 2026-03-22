@@ -80,6 +80,7 @@ Lover:
 Other Source:
 - +1 BIQ (Halberd)
 - +1 MA (Halberd)
++ +1 All Stats
 ```
 
 ```

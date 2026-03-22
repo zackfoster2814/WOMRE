@@ -1,6 +1,6 @@
 No.118
 Name: Warmbunny (warmbunny)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -57,6 +57,7 @@ Runeword: Không
 ```
 1 Power: 
 + Wex (Đã mất do PvE Punishment)
++ Stat Absorption
 ```
 
 ```
@@ -72,6 +73,16 @@ Team: 17
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 BIQ
+```
+```
+Other Source:
+- -1 Dura
+- -1 BIQ
+- Nhận Stat Absorption
+```
 
 ======
 Battle Log:
@@ -84,6 +95,13 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất hết Power
+```
+
+```
+PvP:
+- Đối thủ: AtKo
+- Kết quả: Thua
+- Tỉ số: 3-4
 ```
 
 ======

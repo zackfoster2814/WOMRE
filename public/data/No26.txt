@@ -1,6 +1,6 @@
 No.26
 Name: Đóm con (pinz2223)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -95,6 +95,13 @@ PvE:
 - Reward: 
 - Punishment: Mất toàn bộ Power
 - Note: (1)
+```
+
+```
+PvP:
+- Đối thủ: Hero X
+- Kết quả: Thua
+- Tỉ số: 5-3
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.7
 Name: Hero X (enatc0)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -39,7 +39,7 @@ Houses:
 ```
 1 Gear: 
  + 1 Normal gear:
-  - Kuro's Charm
+  - Kuro's Charm (đã mất)
  + 0 Legacy gear:
   - 
 ```
@@ -76,6 +76,10 @@ Team: 14
 Lover:
 + Con dê (doibacnhusilver)
 ```
+```
+PvP Reward:
+- +1 dura
+```
 
 ======
 Battle Log:
@@ -88,6 +92,13 @@ PvE:
 - Punishment: Nhận Creator's Limitation 
   + Nhận -1 All Stats
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Đóm con
+- Kết quả: Thắng
+- Tỉ số: 5-3
 ```
 
 ======

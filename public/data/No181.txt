@@ -1,7 +1,7 @@
 No.181
 Name: мιтιᴘнᴀι︵²ᵏ⁷ (mitiphai)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -78,6 +78,10 @@ Team: 31
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 str
+```
 
 ======
 Battle Log:
@@ -88,6 +92,13 @@ PvE:
 - Tỉ số: 4-2
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Trapcon
+- Kết quả: Thắng
+- Tỉ số: 5-1
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.52
 Name: Sâm bổ lượng Châu Đốc (ginkka)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -42,6 +42,7 @@ Houses:
  + 2 Normal gear:
   - Ớt
   - Soap
+  - Khung hình thờ
  + 0 Legacy gear:
   - 
 ```
@@ -98,6 +99,13 @@ PvE:
   + Nhận +3 BIQ
   + Nhận Power 4 Hit combo
 - Note: Win BO3 round MA 2-0
+```
+
+```
+PvP:
+- Đối thủ: NDP
+- Kết quả: Thắng
+- Tỉ số: 3-4
 ```
 
 ======

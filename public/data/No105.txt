@@ -60,6 +60,7 @@ Runeword: Không
 1 Power: 
 + Cold Breeze
 + 67
++ Wex 
 ```
 
 ```
@@ -74,6 +75,10 @@ Team: 11
 ```
 Lover:
 + 
+```
+```
+PvP Reward:
+- 1 power (Wex)
 ```
 
 ======

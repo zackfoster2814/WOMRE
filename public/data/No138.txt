@@ -39,7 +39,7 @@ Houses:
  + 5 Normal gear:
   - Fishing Rod (Từ Fisher)
   - Frying Pan(Từ Artisan)
-  - Đá (Từ Artisan)
+  - Đá (Từ Artisan) (0)
   - Knight's Armor
   - Shot Glass
  + 0 Legacy gear:
@@ -80,6 +80,10 @@ Lover:
 ```
 PvP Reward:
 - +1 IQ
+```
+```
+Other Source:
+- -3 all stats (đá)
 ```
 
 

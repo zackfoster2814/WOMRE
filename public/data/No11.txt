@@ -1,6 +1,6 @@
 No.11
 Name: Pine (pinemon)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -83,6 +83,13 @@ PvE:
 - Tỉ số: 1-4
 - Reward: 
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
+```
+
+```
+PvP:
+- Đối thủ: Hoàng Tuyền Không Trấn
+- Kết quả: Thua
+- Tỉ số: 2-3
 ```
 
 ======

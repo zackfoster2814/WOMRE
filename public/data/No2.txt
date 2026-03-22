@@ -1,6 +1,6 @@
 No.2
 Name: Quý Trần Tường (wyug1234)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -93,6 +93,13 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: Mất 3 Power, giữ lại Power "Quas"
+```
+
+```
+PvP:
+- Đối thủ: 0chjnchjn
+- Kết quả: Thua
+- Tỉ số: 6-1
 ```
 
 ======

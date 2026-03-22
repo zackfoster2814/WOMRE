@@ -1,6 +1,6 @@
 No.168
 Name: HunggViEn (hunggvn)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -89,6 +89,13 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+```
+
+```
+PvP:
+- Đối thủ: LocK
+- Kết quả: Thua
+- Tỉ số: 1-6
 ```
 
 ======

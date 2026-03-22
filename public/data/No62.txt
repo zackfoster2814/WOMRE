@@ -1,7 +1,7 @@
 No.62
 Name: _paower (baoissleepy)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -42,6 +42,7 @@ Houses:
  + 2 Normal gear:
   - Empty Stein
   - Silver Steed
+  - Buckler
  + 0 Legacy gear:
   - 
 ```
@@ -76,6 +77,17 @@ Team: 8
 Lover:
 + 
 ```
+```
+PvP Reward:
+- Nhận 1 gear: Buckler
+```
+```
+Other Source:
+- +2 Dura
+- Adapt (2 ngón Ako Darling)
+- -1 IQ 
+- -1 BIQ
+```
 
 ======
 Battle Log:
@@ -88,6 +100,13 @@ PvE:
   + +4 Str
   + +4 IQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: uchihahahaha5296
+- Kết quả: Thắng
+- Tỉ số: 1-1
 ```
 
 ======

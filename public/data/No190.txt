@@ -1,6 +1,6 @@
 No.190
 Name: Caliđu Côlýbàlý (ongtonganhmuo)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -86,6 +86,13 @@ PvE:
 - Tỉ số: 0-12
 - Reward: 
 - Punishment: Nhận Quirk "Impatient" nhưng không được nhận 2 PvP Reward mặc định của nó
+```
+
+```
+PvP:
+- Đối thủ: tophate
+- Kết quả: Thua
+- Tỉ số: 3-2
 ```
 
 ======

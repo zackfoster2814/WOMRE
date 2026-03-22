@@ -1,7 +1,7 @@
 No.50
 Name: LocK (lock485)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -87,6 +87,12 @@ PvP Reward:
 - +1 Spd
 - +1 Dura
 ```
+```
+Other Source:
+- -1 str
+- -1 dur
+- -2 dur
+```
 
 ======
 Battle Log:
@@ -97,6 +103,13 @@ PvE:
 - Tỉ số: 3-3
 - Reward: Nhận Empty Stein và Wine
 - Punishment:
+```
+
+```
+PvP:
+- Đối thủ: HunggViEn
+- Kết quả: Thắng
+- Tỉ số: 1-6
 ```
 
 ======

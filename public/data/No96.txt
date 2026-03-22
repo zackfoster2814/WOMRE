@@ -1,7 +1,7 @@
 No.96
 Name: tophate (d233tvu)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -79,6 +79,15 @@ Team: 10
 Lover:
 + 
 ```
+```
+PvP Reward;
+- +1 Str
+```
+```
+Other Source:
+- -1 Dura
+- -2 Dura
+```
 
 ======
 Battle Log:
@@ -91,6 +100,13 @@ PvE:
   + Nhận Power Ballet Dancing
   + +1 All stats
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Caliđu Côlýbàlý
+- Kết quả: Thắng
+- Tỉ số: 3-2
 ```
 
 ======

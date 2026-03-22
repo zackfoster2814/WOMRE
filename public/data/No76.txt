@@ -1,6 +1,6 @@
 No.76
 Name: NDP (ndp1792)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -39,7 +39,7 @@ Houses:
  + 2 Normal gear:
   - Fishing Rod (đã mất do PvE Punishment)
   - Magical Scroll (đã mất do PvE Punishment)
-  - Khung hình thờ (từ PvE Punishment)
+  - Khung hình thờ (từ PvE Punishment) (đã mất)
  + 0 Legacy gear:
   - 
 ```
@@ -84,6 +84,13 @@ PvE:
 - Tỉ số: 1-6
 - Reward: 
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
+```
+
+```
+PvP:
+- Đối thủ: Sâm bổ lượng Châu Đốc
+- Kết quả: Thua
+- Tỉ số: 3-4
 ```
 
 ======

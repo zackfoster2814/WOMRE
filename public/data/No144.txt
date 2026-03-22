@@ -79,6 +79,10 @@ Lover:
 PvP Reward:
 - +1 BIQ
 ```
+```
+Other source:
+- +1 BIQ
+```
 
 ======
 Battle Log:

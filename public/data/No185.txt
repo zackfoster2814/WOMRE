@@ -1,6 +1,6 @@
 No.185
 Name: Novaz (novaz1234)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -74,6 +74,11 @@ Lover:
 + 
 ```
 
+```
+Other source:
+- +1 BIQ
+```
+
 ======
 Battle Log:
 ```
@@ -83,6 +88,13 @@ PvE:
 - Tỉ số: 1-6
 - Reward: 
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
+```
+
+```
+PvP:
+- Đối thủ: Shin
+- Kết quả: Thua
+- Tỉ số: 0-6
 ```
 
 ======

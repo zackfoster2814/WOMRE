@@ -1,7 +1,7 @@
 No.78
 Name: HolyOne (holyone78)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -81,6 +81,14 @@ Team: 15
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +2 str (stats thấp nhất)
+```
+```
+Other Source:
+- +1 Dura (healing factor)
+```
 
 ======
 Battle Log:
@@ -93,6 +101,13 @@ PvE:
 - Punishment: 
   + Mất vũ khí
 - Note: Ca Cao né ở round SPD, crit ở round MA
+```
+
+```
+PvP:
+- Đối thủ: Chocopie
+- Kết quả: Thắng
+- Tỉ số: 4-1
 ```
 
 ======

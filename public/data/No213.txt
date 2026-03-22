@@ -1,7 +1,7 @@
 No.213
 Name: Yousei (yousei_7831)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -27,7 +27,7 @@ Str: 7 (+1 Từ Labourers)
 Spd: 8
 Dur: 7
 IQ: 7
-BIQ: 6
+BIQ: 6 
 MA: 7
 ```
 
@@ -76,6 +76,15 @@ Team: 23
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 All stats
+```
+
+```
+Other Source:
+- -5 BIQ
+```
 
 ======
 Battle Log:
@@ -89,6 +98,13 @@ PvE:
   + Nhận +3 BIQ
   + Nhận Power 4 Hit combo
 - Note: Win BO3 round MA 2-0
+```
+
+```
+PvP:
+- Đối thủ: cá hồi chấm mắm tôm
+- Kết quả: Thắng
+- Tỉ số: 5-2
 ```
 
 ======

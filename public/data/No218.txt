@@ -1,6 +1,6 @@
 No.218
 Name: Kazuha (kazooha)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -60,6 +60,7 @@ Runeword:
 + Let's Pump Some Iron
 + Cleaning Sins
 + Bloody Strike
++ Scrying
 ```
 
 ```
@@ -85,6 +86,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: -5 base Str
+```
+
+```
+PvP:
+- Đối thủ: dung7877
+- Kết quả: Thua
+- Tỉ số: 5-1
 ```
 
 ======

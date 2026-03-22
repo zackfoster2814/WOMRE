@@ -1,6 +1,6 @@
 No.64
 Name: Milann (milanneeee)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -88,6 +88,13 @@ PvE:
 - Punishment: 
   + Nhận -1 All stats
 - Note: Ca Cao né ở round SPD, crit ở round MA
+```
+
+```
+PvP:
+- Đối thủ: Smolder
+- Kết quả: Thua
+- Tỉ số: 2-3
 ```
 
 ======

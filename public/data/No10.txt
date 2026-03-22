@@ -1,6 +1,6 @@
 No.10
 Name: Trapcon (trapcon)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -84,6 +84,13 @@ PvE:
 - Punishment: 
   + Nhận -1 All stats
 - Note: Ca Cao né ở round SPD, crit ở round MA
+```
+
+```
+PvP:
+- Đối thủ: мιтιᴘнᴀι︵²ᵏ⁷
+- Kết quả: Thua
+- Tỉ số: 5-1
 ```
 
 ======

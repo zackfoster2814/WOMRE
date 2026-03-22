@@ -1,6 +1,6 @@
 No.90
 Name: uchihahahaha5296 (uchihahahaha5296)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -79,6 +79,10 @@ Team: 4
 Lover:
 + Em Phốc Trắng (dick8704)
 ```
+```
+Other Source:
+- Dragon's Weed: nhận power Memory Alter
+```
 
 
 ======
@@ -90,6 +94,13 @@ PvE:
 - Tỉ số: 6-4 
 - Punishment: 
  + Chỉ số thấp nhất của team bị kéo xuống 0
+```
+
+```
+PvP:
+- Đối thủ: _paower
+- Kết quả: Thua
+- Tỉ số: 1-1
 ```
 
 ======

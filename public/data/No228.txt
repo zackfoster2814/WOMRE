@@ -1,6 +1,6 @@
 No.228
 Name: ⭐⭐⭐⭐⭐⭐ karthus2705
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -85,6 +85,13 @@ PvE:
 - Reward: 
 - Punishment: 
 - Note: Lmao thua cả Mambo
+```
+
+```
+PvP:
+- Đối thủ: Chovy Golden Roader
+- Kết quả: Thua
+- Tỉ số: 3-3
 ```
 
 ======

@@ -1,6 +1,6 @@
 No.229
 Name: Duck03 (duck098039_65870)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -91,6 +91,13 @@ PvE:
 - Tỉ số: 7--1
 - Reward: 
 - Punishment: Mất toàn bộ chardev
+```
+
+```
+PvP:
+- Đối thủ: Em Phốc Trắng
+- Kết quả: Thua
+- Tỉ số: 5-1
 ```
 
 ======

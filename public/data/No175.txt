@@ -1,6 +1,6 @@
 No.175
 Name: Kophaiezio (doanngocthang)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -59,6 +59,7 @@ Runeword:
 + Ice Hammer(Từ House)
 + Blood Manipulation
 + Shooting for Victory
++ Scrying
 ```
 
 ```
@@ -84,6 +85,13 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: caubetuky._.
+- Kết quả: Thua
+- Tỉ số: 0-6
 ```
 
 ======

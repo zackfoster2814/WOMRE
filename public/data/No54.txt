@@ -1,6 +1,6 @@
 No.54
 Name: Anh Mèo (meowtea)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -82,6 +82,13 @@ PvE:
 - Tỉ số: x-x (thua do luật thi đấu)
 - Punishment: 
  + -2 vào stat thấp nhất (BIQ)
+```
+
+```
+PvP:
+- Đối thủ: We are Charlie Kirk
+- Kết quả: Thua
+- Tỉ số: 0-6
 ```
 
 ======

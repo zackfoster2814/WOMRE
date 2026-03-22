@@ -89,11 +89,21 @@ PvP Reward:
 Battle Log:
 ```
 ```
-
-```
 PvP:
 - Đối thủ: Mork
 - Kết quả: Thắng
 - Tỉ số: 0-2
+```
+```
+PvP:
+- Đối thủ: dung sv
+- Kết quả: lose
+- Tỉ số: 0-6
+```
+```
+PvP:
+- Đối thủ: Smolder
+- Kết quả: lose
+- Tỉ số: 0-4
 ```
 ======

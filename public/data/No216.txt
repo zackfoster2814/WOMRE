@@ -1,6 +1,6 @@
 No.216
 Name: Chocopie (chubedan5923)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -85,6 +85,13 @@ PvE:
 - Tỉ số: 4-2
 - Reward: Nhận Văn Tế
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: HolyOne
+- Kết quả: Thua
+- Tỉ số: 4-1
 ```
 
 ======

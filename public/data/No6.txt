@@ -1,6 +1,6 @@
 No.6
 Name: Yamakun (yamakunson)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -93,6 +93,13 @@ PvE:
   + Nhận +2 IQ
   + Nhận +1 BIQ
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Dung
+- Kết quả: Thua
+- Tỉ số: 1-5
 ```
 
 ======

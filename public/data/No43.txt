@@ -1,7 +1,7 @@
 No.43
 Name: Swem (.swem)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -66,7 +66,7 @@ Runeword: Không
 + Uno Reverse Card
 + Mind control
 + Master of war
-+ Quas (Moon Elf)
++ Quas (Moon Elf) (đã mất)
 ```
 
 ```
@@ -83,6 +83,11 @@ Lover:
 + Wakamo Lunatic (nguyuyen)
 + OddMan (thaioturan)
 ```
+```
+Other Source:
+- +1 MA
+- +1 str
+```
 
 ======
 Battle Log: 
@@ -93,6 +98,13 @@ PvE:
 - Tỉ số: x-x (thua do luật thi đấu)
 - Punishment: 
  + -2 vào stat thấp nhất (Dura)
+```
+
+```
+PvP:
+- Đối thủ: banhtiuuu
+- Kết quả: Thắng
+- Tỉ số: 3-2
 ```
 
 ======

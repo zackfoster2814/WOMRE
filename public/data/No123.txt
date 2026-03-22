@@ -1,7 +1,7 @@
 No.123
 Name: Hoàng Tuyền Không Trấn (franx9816)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -76,6 +76,10 @@ Team: 7
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 Dura
+```
 
 ======
 Battle Log:
@@ -86,6 +90,13 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Pine
+- Kết quả: Thắng
+- Tỉ số: 2-3
 ```
 
 ======

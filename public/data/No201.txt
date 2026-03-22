@@ -62,6 +62,7 @@ Runeword:
 + The Coast is Clear!(Từ House)
 + Quirkless (Từ House)
 + Fair Duel
++ Scrying
 ```
 
 ```

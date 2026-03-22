@@ -1,7 +1,7 @@
 No.73
 Name: Em Phốc Trắng (dick8704)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -79,6 +79,18 @@ Lover:
 PvP Reward:
 - +1 Dur
 ```
+```
+Other Source:
+- -1 Str
+- -1 Dur
+- +1 BIQ
+- +1 MA
+- +2 Dur
+```
+```
+PvP Reward:
+- +2 BIQ (stats cao nhất)
+```
 
 
 ======
@@ -92,6 +104,13 @@ PvE:
   + Nhận power 67
   + +1 vào stat thấp nhất (Dura)
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Duck03
+- Kết quả: Thắng
+- Tỉ số: 5-1
 ```
 
 ======

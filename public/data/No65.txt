@@ -1,6 +1,6 @@
 No.65
 Name: Seefish (seefish._80347)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -87,6 +87,13 @@ PvE:
 - Reward: 
 - Punishment: Mất toàn bộ Archetype và Quirk
 - Note: (3)
+```
+
+```
+PvP:
+- Đối thủ: Nasume
+- Kết quả: Thua
+- Tỉ số: 4-2
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.84
 Name: Muon liem chan Seed qua (tandepzai3282101)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -78,6 +78,11 @@ Lover:
 + 
 ```
 
+```
+PvP Reward:
+- 2 char dev: Lost an arm, Become Perfectionist (đéo dc nhận lmao)
+```
+
 ======
 Battle Log:
 ```
@@ -87,6 +92,14 @@ PvE:
 - Tỉ số: 1-4
 - Reward: 
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
+```
+
+```
+PvP:
+- Đối thủ: Nygg
+- Kết quả: Thắng
+- Tỉ số: 1-5
+- Note: PvPreward 2 char dev Lost an arm, Become Perfectionist (đéo dc nhận lmao)
 ```
 
 ======

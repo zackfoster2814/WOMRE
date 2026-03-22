@@ -1,7 +1,7 @@
 No.160
 Name: Dung (haruharu9127)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -20,11 +20,11 @@ Archetype:
 4 Quirk:  
 + Training Restricted
 + Brainrot
-+ Under the Weather
++ Shining Brightly (từ Under the Weather)
 + Brave (Từ Baguette)
 ```
 ```
-Str: 5
+Str: 1 (bị nguyền xuống từ 5)
 Spd: 5
 Dur: 5
 IQ: 5
@@ -43,6 +43,8 @@ Houses:
   - Golden Coin (Từ House)
   - Golden Coin (Từ House)
   - Golden Coin (Từ House)
+  - Golden Coin 
+  - Golden Coin 
   - Baguette (Từ House)
   - Cuộn khăn giấy (Từ House)
   - Buckler
@@ -55,7 +57,7 @@ Houses:
 ```
 1 Normal Weapon
 + Magical Staff (Dùng được) (đã mất)
-+ Glass Bottle (Được tặng)
++ Glass Bottle (Được tặng) (đã mất)
 ```
 
 ``` 
@@ -89,6 +91,19 @@ Lover:
 ======
 Battle Log:
 ```
+```
+
+```
+PvP:
+- Đối thủ: Solus
+- Kết quả: Win
+- Tỉ số: 1-5
+```
+```
+PvP:
+- Đối thủ: Yamakun
+- Kết quả: Thắng
+- Tỉ số: 1-5
 ```
 
 ======

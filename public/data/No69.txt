@@ -27,7 +27,7 @@ Str: 5
 Spd: 10
 Dur: 4 (Ban đầu là 4, về 0 do PvE Punishment)
 IQ: 6 
-BIQ: 6
+BIQ: 1 (từ 6 bị nguyền còn)
 MA: 10
 ```
 
@@ -91,6 +91,8 @@ PvP Reward:
 Other Source:
 - Angling and Scheming (Naga House)
 - Anti-Magic Barrier (2 ngón)
+- -1 IQ (Follower of 2 ngón)
+- -1 BIQ (Follower of 2 ngón)
 ```
 
 ======

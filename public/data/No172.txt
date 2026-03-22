@@ -1,6 +1,6 @@
 No.172
 Name: Toast (toast_4274)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -84,6 +84,13 @@ PvE:
 - Tỉ số: 4-4
 - Reward: Đã Isekai theo luật boss
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Heir of Raumania
+- Kết quả: Thua
+- Tỉ số: 6-0
 ```
 
 ======

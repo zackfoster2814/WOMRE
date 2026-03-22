@@ -86,10 +86,6 @@ Lover:
 ```
 
 ```
-PvP Reward:
-- +1 BIQ
-```
-```
 Other Source:
 - Power: Misty Step Ahead (Fast Learner)
 - Gear: Magical Scroll (Hero Grave Keeper)
