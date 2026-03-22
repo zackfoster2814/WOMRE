@@ -1,6 +1,6 @@
 No.173
 Name: Asumi Kurenai (weaboololi)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -94,6 +94,13 @@ PvE:
 - Tỉ số: 5-1
 - Reward: 
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: LDL
+- Kết quả: Lose
+- Tỉ số: 3-3
 ```
 
 ======

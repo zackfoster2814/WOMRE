@@ -106,7 +106,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Billz
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 1-5
 ```
 

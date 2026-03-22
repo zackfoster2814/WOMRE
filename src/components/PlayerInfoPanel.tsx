@@ -1138,6 +1138,9 @@ const PlayerContent = ({
                 />
                 <span className="flex-1">
                   {reward.description}
+                  {reward.note && (
+                    <span className="text-gray-400 text-xs ml-1">({reward.note})</span>
+                  )}
                   {reward.isLost && (
                     <span className="text-red-400 text-xs ml-1">(đã mất)</span>
                   )}

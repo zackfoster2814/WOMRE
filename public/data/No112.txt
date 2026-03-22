@@ -113,7 +113,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Yousei
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 5-2
 ```
 

@@ -63,8 +63,8 @@ Runeword:
 2 Power:  
 + Master of War 
 + Drunken Boxing
-+ Sacred Fire(Từ No more Family)
-+ Rising Tide(Từ No more Family)
++ Sacred Fire (Từ No more Family)
++ Rising Tide (Từ No more Family)
 ```
 
 ```
@@ -83,10 +83,13 @@ Lover:
 
 ```
 Other Source:
-- +2 IQ
-- +2 Str
+- +2 IQ (dryad)
+- +2 Str (dryad)
 ```
-
+```
+PvP Reward:
+- +1 Gear: Fishing Rod
+```
 
 ======
 Battle Log:

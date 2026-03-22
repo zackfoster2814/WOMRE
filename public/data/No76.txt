@@ -89,7 +89,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Sâm bổ lượng Châu Đốc
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 3-4
 ```
 

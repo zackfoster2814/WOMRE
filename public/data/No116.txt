@@ -1,7 +1,7 @@
 No.116
 Name: Huy Le (.ilovepony)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -59,10 +59,10 @@ Runeword: Không
 
 ```
 0 Power: 
-+ Lone Wolf
-+ Gate to Heaven
-+ Red Shift/LP1211-M
-+ Ice Spike
++ Lone Wolf (từ Patient)
++ Gate to Heaven (từ Patient)
++ Red Shift/LP1211-M (từ Patient)
++ Ice Spike (từ Patient)
 ```
 
 ```
@@ -71,18 +71,21 @@ Char dev:
 ```
 
 ```
-PvP Reward:
-- +1 MA
-```
-
-
-```
 Team: 
 ```
 
 ```
 Lover:
 + 
+```
+
+```
+PvP Reward:
+- +1 MA
+```
+```
+Other Source:
+- Nhận 4 power Lone Wolf, Gate to Heaven, Red Shift/LP1211-M, Ice Spike
 ```
 
 ======
@@ -94,5 +97,6 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 1-5
 - Reward: + 1MA
+- Note: Nhận 4 power Lone Wolf, Gate to Heaven, Red Shift/LP1211-M, Ice Spike từ Patient
 ```
 ======

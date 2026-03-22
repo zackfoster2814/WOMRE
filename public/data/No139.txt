@@ -96,7 +96,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: bo
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 6-1
 ```
 

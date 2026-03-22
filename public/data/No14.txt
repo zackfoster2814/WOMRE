@@ -92,9 +92,6 @@ PvP Reward:
 
 ======
 Battle Log:
-```
-```
-
 
 ```
 PvP:

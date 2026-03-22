@@ -106,7 +106,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Boy lắc đầu
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-1
 ```
 

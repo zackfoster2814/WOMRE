@@ -89,7 +89,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Kingly Majesty
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 4-2
 ```
 

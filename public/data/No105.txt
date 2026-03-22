@@ -1,7 +1,7 @@
 No.105
 Name: LDL (longle_59366)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -80,6 +80,12 @@ Lover:
 PvP Reward:
 - 1 power (Wex)
 ```
+```
+Other Source:
+- +1 BIQ (Lords)
+- -1 STR (Thuốc Tráng Dương)
+- -1 DUR (Thuốc Tráng Dương)
+```
 
 ======
 Battle Log:
@@ -91,6 +97,13 @@ PvE:
 - Reward: 
   + Nhận power 67
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Asumi Kurenai
+- Kết quả: Win
+- Tỉ số: 3-3
 ```
 
 ======

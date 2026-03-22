@@ -98,7 +98,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Koroo
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 1-2
 ```
 ======

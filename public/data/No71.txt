@@ -109,7 +109,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Lee
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-5
 ```
 

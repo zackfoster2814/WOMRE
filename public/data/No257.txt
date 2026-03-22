@@ -37,7 +37,7 @@ Houses:
 ```
 3 Gear: 
  + 3 Normal gear:
-
+  - 
  + 0 Legacy gear:
   - 
 ```
@@ -87,11 +87,12 @@ PvE:
  + Mất hết Vũ khí, Power và Gear
  + -1 All Stats
 ```
-PvP:
-- Đối thủ: bachtuotkun
-- Kết quả: Win 
-- Tỉ số: 3-3
-- Reward:
-  - +1 BIQ
+
 ```
+PvP:
+- Đối thủ: cá trê vượt thác nhé hehe
+- Kết quả: Win
+- Tỉ số: 3-3
+```
+
 ======

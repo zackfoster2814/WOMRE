@@ -1,7 +1,7 @@
 No.5
 Name: Duckie2369
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -80,7 +80,7 @@ Lover:
 Other Source:
 - +1 str
 - +3 base spd
-- +2 STR
+- +2 STR (Orc)
 - +1 dura
 - +1 str
 - +1 spd

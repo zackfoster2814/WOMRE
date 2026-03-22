@@ -104,7 +104,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Quý Trần Tường
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 6-1
 ```
 

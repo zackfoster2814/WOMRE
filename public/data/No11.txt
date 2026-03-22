@@ -88,7 +88,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Hoàng Tuyền Không Trấn
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 2-3
 ```
 

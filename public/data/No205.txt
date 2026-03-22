@@ -1,7 +1,7 @@
 No.205
 Name: Azet (ayetvnh78)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -104,5 +104,6 @@ PvP:
 - Đối thủ: LazyMan (cuongcao)
 - Kết quả: Win
 - Tỉ số: 3-0
+- Note: Giấy nợ kích hoạt, mất hết tất cả gear và Weapon, báo nhà, giấy nợ chuyển cho: Dung (sv)
 ```
 ======

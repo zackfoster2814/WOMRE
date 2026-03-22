@@ -93,7 +93,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: TheViet
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 5-0
 ```
 

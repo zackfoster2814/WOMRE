@@ -91,7 +91,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: Mork
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 0-2
 ```
 ```

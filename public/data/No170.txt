@@ -95,7 +95,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: GiCi
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 3-5
 ```
 

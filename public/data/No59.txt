@@ -92,8 +92,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Shirin
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 6-1
 ```
-
 ======

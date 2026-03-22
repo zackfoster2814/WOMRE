@@ -89,7 +89,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Sizaky
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 2-2
 ```
 

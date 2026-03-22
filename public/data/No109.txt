@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: Primordial Being
-Sub-race: Air
+Sub-race: Water
 ```
 
 ```
@@ -83,7 +83,7 @@ Lover:
 ```
 ```
 Other Source:
-- Air
+- +1 Speed
 ```
 
 ```
@@ -107,8 +107,9 @@ PvE:
 ```
 PvP:
 - Đối thủ: Anh Mèo
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 0-6
+- Note: nhận thêm Air
 ```
 
 ======

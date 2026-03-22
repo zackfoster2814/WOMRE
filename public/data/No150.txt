@@ -104,7 +104,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: NhờnNnNn
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 6-0
 ```
 

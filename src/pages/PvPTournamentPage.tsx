@@ -19,15 +19,24 @@ import {
 import {
   ROUND_256_FILE_ID,
   ROUND_128_FILE_ID,
-  ROUND_64_FILE_ID,
+  ROUND_64W_FILE_ID,
   ROUND_32W_FILE_ID,
-  ROUND_32L_FILE_ID,
+  ROUND_32L1_FILE_ID,
+  ROUND_32L2_FILE_ID,
   ROUND_16W_FILE_ID,
-  ROUND_16L_FILE_ID,
-  ROUND_8W_FILE_ID,
-  ROUND_8L_FILE_ID,
-  ROUND_4W_FILE_ID,
-  ROUND_4L_FILE_ID,
+  ROUND_16L1_FILE_ID,
+  ROUND_16L2_FILE_ID,
+  ROUND_QFW_FILE_ID,
+  ROUND_QFL1_FILE_ID,
+  ROUND_QFL2_FILE_ID,
+  ROUND_SFW_FILE_ID,
+  ROUND_SFL1_FILE_ID,
+  ROUND_SFL2_FILE_ID,
+  ROUND_GFW_FILE_ID,
+  ROUND_GFL1_FILE_ID,
+  ROUND_GFL2_FILE_ID,
+  ROUND_GF_FILE_ID,
+  ROUND_BRONZE_FILE_ID,
 } from "../config/googleDrive";
 
 // Initialize effects
@@ -55,6 +64,7 @@ interface MatchData {
   score: string | null;
   specialEvent: string | null;
   note: string | null;
+  displayLabel?: string;
 }
 
 interface Round256Data {
@@ -73,18 +83,10 @@ interface RoundData {
 }
 
 // Nguồn players: lấy winners hoặc losers từ vòng nào
-type PlayerSource =
-  | { from: "r256"; side: "winners" }
-  | { from: "r128"; side: "winners" | "losers" }
-  | { from: "r64"; side: "winners" | "losers" }
-  | { from: "r32w"; side: "winners" | "losers" }
-  | { from: "r32l"; side: "winners" }
-  | { from: "r16w"; side: "winners" | "losers" }
-  | { from: "r16l"; side: "winners" }
-  | { from: "r8w"; side: "winners" | "losers" }
-  | { from: "r8l"; side: "winners" }
-  | { from: "r4w"; side: "winners" | "losers" }
-  | { from: "r4l"; side: "winners" };
+type PlayerSource = {
+  from: string;
+  side: "winners" | "losers";
+};
 
 interface RoundConfig {
   key: string;
@@ -94,101 +96,160 @@ interface RoundConfig {
   sources: PlayerSource[];
   // Số matches tối đa của vòng này
   matchCount: number;
+  // Match number tuyệt đối đầu tiên trong bracket (để offset khi merge)
+  matchStart: number;
 }
 
+// matchStart: số thứ tự tuyệt đối trong bracket (để BracketTreeView đặt đúng vị trí)
+// R256: 1-128, R128: 129-192
+// WB: r64w=193, r32w=225, r16w=241, qfw=249, sfw=253, gfw=255
+// LB: r32l1=256, r32l2=288, r16l1=304, r16l2=312, qfl1=316, qfl2=320, sfl1=322, sfl2=324, gfl1=325, gfl2=326
+// GF: gf=327, bronze=328
 const ROUND_CONFIGS: RoundConfig[] = [
+  // ── Single Elimination ──────────────────────────────────────────
   {
-    key: "r256",
-    label: "R256",
+    key: "r256", label: "R256",
     fileId: ROUND_256_FILE_ID,
-    sources: [], // R256 dùng tất cả players gốc
-    matchCount: 128,
+    sources: [],
+    matchCount: 128, matchStart: 1,
   },
   {
-    key: "r128",
-    label: "R128",
+    key: "r128", label: "R128",
     fileId: ROUND_128_FILE_ID,
     sources: [{ from: "r256", side: "winners" }],
-    matchCount: 64,
+    matchCount: 64, matchStart: 129,
   },
+  // ── Winners Bracket ─────────────────────────────────────────────
   {
-    key: "r64",
-    label: "R64",
-    fileId: ROUND_64_FILE_ID,
+    key: "r64w", label: "R64 WB",
+    fileId: ROUND_64W_FILE_ID,
     sources: [{ from: "r128", side: "winners" }],
-    matchCount: 64,
+    matchCount: 32, matchStart: 193,   // 193-224
   },
   {
-    key: "r32w",
-    label: "R32 Nhánh Thắng",
+    key: "r32w", label: "R32 Nhánh Thắng",
     fileId: ROUND_32W_FILE_ID,
-    sources: [{ from: "r64", side: "winners" }],
-    matchCount: 16,
+    sources: [{ from: "r64w", side: "winners" }],
+    matchCount: 16, matchStart: 225,   // 225-240
   },
   {
-    key: "r32l",
-    label: "R32 Nhánh Thua",
-    fileId: ROUND_32L_FILE_ID,
-    // (4) losers R32W + (5) winners R32L-round1 → nhưng R32L là vòng đầu tiên của LB
-    // LB-R1: losers R64 (32) + losers R128 (64) = 96 → sai
-    // Theo flow: R64 cho 32W + 32L; R32L là: 32 losers R64 + 32 losers R128 đánh nhau
-    sources: [
-      { from: "r64", side: "losers" },
-      { from: "r128", side: "losers" },
-    ],
-    matchCount: 32,
-  },
-  {
-    key: "r16w",
-    label: "R16 Nhánh Thắng",
+    key: "r16w", label: "R16 Nhánh Thắng",
     fileId: ROUND_16W_FILE_ID,
     sources: [{ from: "r32w", side: "winners" }],
-    matchCount: 8,
+    matchCount: 8, matchStart: 241,    // 241-248
   },
   {
-    key: "r16l",
-    label: "R16 Nhánh Thua",
-    fileId: ROUND_16L_FILE_ID,
-    // (4) losers R32W + (5) winners R32L
+    key: "qfw", label: "Tứ Kết Nhánh Thắng",
+    fileId: ROUND_QFW_FILE_ID,
+    sources: [{ from: "r16w", side: "winners" }],
+    matchCount: 4, matchStart: 249,    // 249-252
+  },
+  {
+    key: "sfw", label: "Bán Kết Nhánh Thắng",
+    fileId: ROUND_SFW_FILE_ID,
+    sources: [{ from: "qfw", side: "winners" }],
+    matchCount: 2, matchStart: 253,    // 253-254
+  },
+  {
+    key: "gfw", label: "Chung Kết Nhánh Thắng",
+    fileId: ROUND_GFW_FILE_ID,
+    sources: [{ from: "sfw", side: "winners" }],
+    matchCount: 1, matchStart: 255,    // 255
+  },
+  // ── Losers Bracket ──────────────────────────────────────────────
+  {
+    key: "r32l1", label: "R32 Nhánh Thua 1",
+    fileId: ROUND_32L1_FILE_ID,
+    sources: [{ from: "r64w", side: "losers" }],
+    matchCount: 16, matchStart: 256,   // 256-271
+  },
+  {
+    key: "r32l2", label: "R32 Nhánh Thua 2",
+    fileId: ROUND_32L2_FILE_ID,
     sources: [
       { from: "r32w", side: "losers" },
-      { from: "r32l", side: "winners" },
+      { from: "r32l1", side: "winners" },
     ],
-    matchCount: 16,
+    matchCount: 16, matchStart: 272,   // 272-287
   },
   {
-    key: "r8w",
-    label: "R8 Nhánh Thắng",
-    fileId: ROUND_8W_FILE_ID,
-    sources: [{ from: "r16w", side: "winners" }],
-    matchCount: 4,
+    key: "r16l1", label: "R16 Nhánh Thua 1",
+    fileId: ROUND_16L1_FILE_ID,
+    sources: [{ from: "r32l2", side: "winners" }],
+    matchCount: 8, matchStart: 288,    // 288-295
   },
   {
-    key: "r8l",
-    label: "R8 Nhánh Thua",
-    fileId: ROUND_8L_FILE_ID,
+    key: "r16l2", label: "R16 Nhánh Thua 2",
+    fileId: ROUND_16L2_FILE_ID,
     sources: [
       { from: "r16w", side: "losers" },
-      { from: "r16l", side: "winners" },
+      { from: "r16l1", side: "winners" },
     ],
-    matchCount: 8,
+    matchCount: 8, matchStart: 296,    // 296-303
   },
   {
-    key: "r4w",
-    label: "R4 Nhánh Thắng",
-    fileId: ROUND_4W_FILE_ID,
-    sources: [{ from: "r8w", side: "winners" }],
-    matchCount: 2,
+    key: "qfl1", label: "Tứ Kết Nhánh Thua 1",
+    fileId: ROUND_QFL1_FILE_ID,
+    sources: [{ from: "r16l2", side: "winners" }],
+    matchCount: 4, matchStart: 304,    // 304-307
   },
   {
-    key: "r4l",
-    label: "R4 Nhánh Thua",
-    fileId: ROUND_4L_FILE_ID,
+    key: "qfl2", label: "Tứ Kết Nhánh Thua 2",
+    fileId: ROUND_QFL2_FILE_ID,
     sources: [
-      { from: "r8w", side: "losers" },
-      { from: "r8l", side: "winners" },
+      { from: "qfw", side: "losers" },
+      { from: "qfl1", side: "winners" },
     ],
-    matchCount: 4,
+    matchCount: 4, matchStart: 308,    // 308-311
+  },
+  {
+    key: "sfl1", label: "Bán Kết Nhánh Thua 1",
+    fileId: ROUND_SFL1_FILE_ID,
+    sources: [{ from: "qfl2", side: "winners" }],
+    matchCount: 2, matchStart: 312,    // 312-313
+  },
+  {
+    key: "sfl2", label: "Bán Kết Nhánh Thua 2",
+    fileId: ROUND_SFL2_FILE_ID,
+    sources: [
+      { from: "sfw", side: "losers" },
+      { from: "sfl1", side: "winners" },
+    ],
+    matchCount: 2, matchStart: 314,    // 314-315
+  },
+  {
+    key: "gfl1", label: "Chung Kết Nhánh Thua 1",
+    fileId: ROUND_GFL1_FILE_ID,
+    sources: [{ from: "sfl2", side: "winners" }],
+    matchCount: 1, matchStart: 316,    // 316
+  },
+  {
+    key: "gfl2", label: "Chung Kết Tổng Nhánh Thua",
+    fileId: ROUND_GFL2_FILE_ID,
+    sources: [
+      { from: "gfw", side: "losers" },
+      { from: "gfl1", side: "winners" },
+    ],
+    matchCount: 1, matchStart: 317,    // 317
+  },
+  // ── Grand Final & Bronze ─────────────────────────────────────────
+  {
+    key: "gf", label: "Chung Kết Tổng (BO3)",
+    fileId: ROUND_GF_FILE_ID,
+    sources: [
+      { from: "gfw", side: "winners" },
+      { from: "gfl2", side: "winners" },
+    ],
+    matchCount: 2, matchStart: 318,    // 318-319 (tối đa 2 trận BO3)
+  },
+  {
+    key: "bronze", label: "Tranh Hạng 3",
+    fileId: ROUND_BRONZE_FILE_ID,
+    sources: [
+      { from: "gfw", side: "losers" },
+      { from: "gfl1", side: "losers" },
+    ],
+    matchCount: 1, matchStart: 320,    // 320
   },
 ];
 
@@ -217,6 +278,26 @@ export const PvPTournamentPage = () => {
   const [saving, setSaving] = useState(false);
   const [tournamentBattle, setTournamentBattle] =
     useState<TournamentMatchContext | null>(null);
+  const [devMode, setDevMode] = useState(() => localStorage.getItem("pvp_devmode") === "1");
+  const devKeySeqRef = useRef<string[]>([]);
+  const DEV_SEQUENCE = ["d", "e", "v", "m", "o", "d", "e"];
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const key = e.key.toLowerCase();
+      devKeySeqRef.current = [...devKeySeqRef.current, key].slice(-DEV_SEQUENCE.length);
+      if (devKeySeqRef.current.join("") === DEV_SEQUENCE.join("")) {
+        setDevMode((prev) => {
+          const next = !prev;
+          localStorage.setItem("pvp_devmode", next ? "1" : "0");
+          return next;
+        });
+        devKeySeqRef.current = [];
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   useEffect(() => {
     const loadPlayers = async () => {
@@ -385,18 +466,24 @@ export const PvPTournamentPage = () => {
         return;
       }
 
-      // Tìm trong allRoundData
-      for (const [key, rd] of Object.entries(allRoundData)) {
-        const match = rd.matches.find((m) => m.matchNumber === matchNo);
+      // Tìm trong allRoundData — matchNo là số tuyệt đối, cần convert về local
+      for (const cfg of ROUND_CONFIGS) {
+        if (cfg.key === "r256") continue;
+        const rd = allRoundData[cfg.key];
+        if (!rd) continue;
+        // Convert matchNo tuyệt đối → local: localNo = matchNo - matchStart + 1
+        const localNo = matchNo - cfg.matchStart + 1;
+        if (localNo < 1 || localNo > cfg.matchCount) continue;
+        const match = rd.matches.find((m) => m.matchNumber === localNo);
         if (match) {
           const winnerRef = match.player1?.no === result.winnerNo ? match.player1 : match.player2;
           const newMatches = rd.matches.map((m) =>
-            m.matchNumber === matchNo ? { ...m, winner: winnerRef ?? null, score: result.score, specialEvent: result.specialEvent, note: result.note } : m,
+            m.matchNumber === localNo ? { ...m, winner: winnerRef ?? null, score: result.score, specialEvent: result.specialEvent, note: result.note } : m,
           );
           const newRd: RoundData = { ...rd, matches: newMatches, lastUpdated: new Date().toISOString() };
-          setAllRoundData((prev) => ({ ...prev, [key]: newRd }));
+          setAllRoundData((prev) => ({ ...prev, [cfg.key]: newRd }));
           setTournamentBattle(null);
-          await saveRoundToDrive(key, newRd);
+          await saveRoundToDrive(cfg.key, newRd);
           return;
         }
       }
@@ -405,16 +492,62 @@ export const PvPTournamentPage = () => {
     [roundData, allRoundData, tournamentBattle, saveToDrive, saveRoundToDrive],
   );
 
+  const handleDevSaveResult = useCallback(
+    async (matchNumberAbsolute: number, result: TournamentSaveResult) => {
+      const matchNo = matchNumberAbsolute;
+      // R256
+      if (roundData?.matches.find((m) => m.matchNumber === matchNo)) {
+        const m = roundData.matches.find((m) => m.matchNumber === matchNo)!;
+        const winnerRef = result.winnerNo === 0 ? null : (m.player1?.no === result.winnerNo ? m.player1 : m.player2);
+        const newMatches = roundData.matches.map((x) =>
+          x.matchNumber === matchNo ? { ...x, winner: winnerRef ?? null, score: result.score, specialEvent: result.specialEvent, note: result.note } : x,
+        );
+        const newData: Round256Data = { ...roundData, matches: newMatches, lastUpdated: new Date().toISOString() };
+        setRoundData(newData);
+        await saveToDrive(newData);
+        return;
+      }
+      // Các round sau
+      for (const cfg of ROUND_CONFIGS) {
+        if (cfg.key === "r256") continue;
+        const rd = allRoundData[cfg.key];
+        if (!rd) continue;
+        const localNo = matchNo - cfg.matchStart + 1;
+        if (localNo < 1 || localNo > cfg.matchCount) continue;
+        const match = rd.matches.find((m) => m.matchNumber === localNo);
+        if (match) {
+          const winnerRef = result.winnerNo === 0 ? null : (match.player1?.no === result.winnerNo ? match.player1 : match.player2);
+          const newMatches = rd.matches.map((m) =>
+            m.matchNumber === localNo ? { ...m, winner: winnerRef ?? null, score: result.score, specialEvent: result.specialEvent, note: result.note } : m,
+          );
+          const newRd: RoundData = { ...rd, matches: newMatches, lastUpdated: new Date().toISOString() };
+          setAllRoundData((prev) => ({ ...prev, [cfg.key]: newRd }));
+          await saveRoundToDrive(cfg.key, newRd);
+          return;
+        }
+      }
+    },
+    [roundData, allRoundData, saveToDrive, saveRoundToDrive],
+  );
+
   const handleNextMatch = useCallback(
     async (result: TournamentSaveResult) => {
       if (!tournamentBattle) return;
       await handleSaveTournamentResult(result);
-      const allMatches = [
-        ...(roundData?.matches ?? []),
-        ...Object.values(allRoundData).flatMap((rd) => rd.matches),
+      // Build allMatches với matchNumber tuyệt đối để tìm next
+      const allMatchesAbsolute: (MatchData & { _cfg?: RoundConfig })[] = [
+        ...(roundData?.matches ?? []).map((m) => ({ ...m })),
+        ...ROUND_CONFIGS.filter((c) => c.key !== "r256").flatMap((cfg) =>
+          (allRoundData[cfg.key]?.matches ?? []).map((m) => ({
+            ...m,
+            matchNumber: (m.matchNumber - 1) + cfg.matchStart,
+            displayLabel: `${cfg.label} #${m.matchNumber}`,
+            _cfg: cfg,
+          })),
+        ),
       ];
       const currentMatchNo = tournamentBattle.matchNumber;
-      const nextMatch = allMatches.find(
+      const nextMatch = allMatchesAbsolute.find(
         (m) => m.matchNumber > currentMatchNo && m.player1 && m.player2 && !m.winner,
       );
       if (nextMatch) {
@@ -422,6 +555,7 @@ export const PvPTournamentPage = () => {
           matchNumber: nextMatch.matchNumber,
           player1No: nextMatch.player1!.no,
           player2No: nextMatch.player2!.no,
+          displayLabel: nextMatch.displayLabel,
         });
       }
     },
@@ -460,11 +594,14 @@ export const PvPTournamentPage = () => {
 
   // Hiển thị màn hình intro video chỉ khi data cần load (showIntro=true) và chưa bỏ qua
   if (showIntro) {
+    const introSrc = Math.random() < 0.001
+      ? "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&modestbranding=1&rel=0"
+      : "https://www.youtube.com/embed/8FrhYIFDTTc?autoplay=1&controls=0&modestbranding=1&rel=0";
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center relative">
         {/* YouTube iframe full screen */}
         <iframe
-          src="https://www.youtube.com/embed/8FrhYIFDTTc?autoplay=1&controls=0&modestbranding=1&rel=0"
+          src={introSrc}
           className="w-full h-full absolute inset-0"
           style={{ border: "none" }}
           allow="autoplay; encrypted-media"
@@ -505,6 +642,11 @@ export const PvPTournamentPage = () => {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-white mb-2">
           PvP Tournament
+          {devMode && (
+            <span className="ml-3 text-sm font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/40 align-middle">
+              DEV
+            </span>
+          )}
         </h1>
         <p className="text-center text-gray-300 mb-2">
           {players.length} players (excluding Symbiosis)
@@ -558,31 +700,61 @@ export const PvPTournamentPage = () => {
 
         {activeTab === "create" && (
           <>
-            {/* Round sub-tabs */}
-            <div className="flex gap-1 mb-6 justify-center flex-wrap">
-              {ROUND_CONFIGS.map((cfg) => {
-                const isActive = createSubTab === cfg.key;
-                const rd = cfg.key === "r256" ? roundData : allRoundData[cfg.key];
-                const done = rd?.matches.filter((m) => m.winner).length ?? 0;
-                const total = rd?.matches.length ?? 0;
-                return (
-                  <button
-                    key={cfg.key}
-                    onClick={() => setCreateSubTab(cfg.key)}
-                    className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-                      isActive ? "bg-purple-600 text-white shadow-md" : "bg-gray-800/80 text-gray-400 hover:text-white hover:bg-gray-700"
-                    }`}
+            {/* Round selector — dropdown có nhóm */}
+            {(() => {
+              const groups = [
+                { label: "Vòng loại", keys: ["r256", "r128"] },
+                { label: "R64 / R32", keys: ["r64w", "r32l1", "r32w", "r32l2"] },
+                { label: "R16", keys: ["r16w", "r16l1", "r16l2"] },
+                { label: "Tứ Kết", keys: ["qfw", "qfl1", "qfl2"] },
+                { label: "Bán Kết", keys: ["sfw", "sfl1", "sfl2"] },
+                { label: "Chung Kết Nhánh", keys: ["gfw", "gfl1", "gfl2"] },
+                { label: "Finals", keys: ["bronze", "gf"] },
+              ];
+              const activeRd = createSubTab === "r256" ? roundData : allRoundData[createSubTab];
+              const activeDone = activeRd?.matches.filter((m) => m.winner).length ?? 0;
+              const activeTotal = activeRd?.matches.length ?? 0;
+              const activeCfg = ROUND_CONFIGS.find((c) => c.key === createSubTab);
+              return (
+                <div className="flex items-center gap-3 mb-6">
+                  <select
+                    value={createSubTab}
+                    onChange={(e) => setCreateSubTab(e.target.value)}
+                    className="flex-1 max-w-xs px-3 py-2 rounded-lg bg-gray-800 border border-purple-600/40 text-white text-sm font-medium focus:outline-none focus:border-purple-500 cursor-pointer"
                   >
-                    {cfg.label}
-                    {total > 0 && (
-                      <span className={`ml-1.5 text-xs px-1 py-0.5 rounded ${isActive ? "bg-purple-400/30 text-purple-200" : "bg-gray-700 text-gray-400"}`}>
-                        {done}/{total}
+                    {groups.map((g) => (
+                      <optgroup key={g.label} label={g.label}>
+                        {g.keys.map((key) => {
+                          const cfg = ROUND_CONFIGS.find((c) => c.key === key);
+                          if (!cfg) return null;
+                          const rd = key === "r256" ? roundData : allRoundData[key];
+                          const done = rd?.matches.filter((m) => m.winner).length ?? 0;
+                          const total = rd?.matches.length ?? 0;
+                          const badge = total > 0 ? ` (${done}/${total})` : "";
+                          return (
+                            <option key={key} value={key}>
+                              {cfg.label}{badge}
+                            </option>
+                          );
+                        })}
+                      </optgroup>
+                    ))}
+                  </select>
+                  {/* Progress badge của round đang chọn */}
+                  {activeTotal > 0 && (
+                    <span className="text-sm text-gray-400">
+                      <span className={`font-semibold ${activeDone === activeTotal ? "text-green-400" : "text-purple-300"}`}>
+                        {activeDone}
                       </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+                      <span className="text-gray-600">/{activeTotal}</span>
+                      <span className="ml-1 text-xs text-gray-500">
+                        {activeCfg?.label}
+                      </span>
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* R256: dùng CreateTab cũ */}
             {createSubTab === "r256" && (
@@ -591,24 +763,56 @@ export const PvPTournamentPage = () => {
                 roundData={roundData}
                 setRoundData={setRoundData}
                 saveToDrive={saveToDrive}
+                devMode={devMode}
+              />
+            )}
+
+            {/* GF: dùng GrandFinalTab riêng */}
+            {createSubTab === "gf" && (
+              <GrandFinalTab
+                wbWinner={getPlayersFromRound("gfw", "winners")[0] ?? null}
+                lbWinner={getPlayersFromRound("gfl2", "winners")[0] ?? null}
+                roundData={allRoundData["gf"] ?? null}
+                setRoundData={(data: RoundData) => setAllRoundData((prev) => ({ ...prev, gf: data }))}
+                saveRoundToDrive={saveRoundToDrive}
+                onOpenMatch={setTournamentBattle}
+              />
+            )}
+
+            {/* Bronze: dùng BronzeFinalTab riêng */}
+            {createSubTab === "bronze" && (
+              <BronzeFinalTab
+                player1={getPlayersFromRound("gfw", "losers")[0] ?? null}
+                player2={getPlayersFromRound("gfl1", "losers")[0] ?? null}
+                roundData={allRoundData["bronze"] ?? null}
+                setRoundData={(data: RoundData) => setAllRoundData((prev) => ({ ...prev, bronze: data }))}
+                saveRoundToDrive={saveRoundToDrive}
+                onOpenMatch={setTournamentBattle}
               />
             )}
 
             {/* Các round sau: dùng GenericRoundCreateTab */}
-            {createSubTab !== "r256" && activeRoundCfg && (
+            {createSubTab !== "r256" && createSubTab !== "gf" && createSubTab !== "bronze" && activeRoundCfg && (
               <GenericRoundCreateTab
                 config={activeRoundCfg}
                 eligiblePlayers={getEligiblePlayers(activeRoundCfg)}
                 roundData={allRoundData[activeRoundCfg.key] ?? null}
                 setRoundData={(data) => setAllRoundData((prev) => ({ ...prev, [activeRoundCfg.key]: data }))}
                 saveRoundToDrive={saveRoundToDrive}
+                devMode={devMode}
               />
             )}
           </>
         )}
 
         {activeTab === "bracket" && (
-          <BracketTab roundData={roundData} onOpenMatch={setTournamentBattle} />
+          <BracketTab
+            roundData={roundData}
+            allRoundData={allRoundData}
+            onOpenMatch={setTournamentBattle}
+            devMode={devMode}
+            onDevSaveResult={handleDevSaveResult}
+          />
         )}
       </div>
     </div>
@@ -622,6 +826,7 @@ interface CreateTabProps {
   roundData: Round256Data | null;
   setRoundData: (data: Round256Data) => void;
   saveToDrive: (data: Round256Data) => Promise<boolean>;
+  devMode?: boolean;
 }
 
 const CreateTab = ({
@@ -629,6 +834,7 @@ const CreateTab = ({
   roundData,
   setRoundData,
   saveToDrive,
+  devMode,
 }: CreateTabProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [wheelItems, setWheelItems] = useState<WheelItem[]>([]);
@@ -773,6 +979,34 @@ const CreateTab = ({
     setIsSpinning(true);
   }, [roundData, remainingPlayers, isSpinning]);
 
+  // DevMode: draw tất cả instant, không animation
+  const devDrawAll = useCallback(async () => {
+    if (!roundData || remainingPlayers.length === 0) return;
+    const shuffled = [...remainingPlayers].sort(() => Math.random() - 0.5);
+    let currentDrawOrder = [...roundData.drawOrder];
+    let currentMatches = [...roundData.matches];
+    for (const p of shuffled) {
+      currentDrawOrder = [...currentDrawOrder, p.id];
+      const matchIdx = Math.floor((currentDrawOrder.length - 1) / 2);
+      const isP1 = (currentDrawOrder.length - 1) % 2 === 0;
+      if (isP1) {
+        currentMatches = [...currentMatches, {
+          matchNumber: matchIdx + 1,
+          player1: { no: p.id, name: p.name, username: p.username },
+          player2: null, winner: null, score: null, specialEvent: null, note: null,
+        }];
+      } else if (currentMatches[matchIdx]) {
+        currentMatches = currentMatches.map((m, i) =>
+          i === matchIdx ? { ...m, player2: { no: p.id, name: p.name, username: p.username } } : m
+        );
+      }
+    }
+    const newData: Round256Data = { ...roundData, matches: currentMatches, drawOrder: currentDrawOrder, lastUpdated: new Date().toISOString() };
+    setRoundData(newData);
+    setLastDrawnPlayer(shuffled[shuffled.length - 1]);
+    await saveToDrive(newData);
+  }, [roundData, remainingPlayers, setRoundData, saveToDrive]);
+
   const stopAutoDraw = useCallback(() => {
     autoDrawQueueRef.current = [];
     setAutoDrawing(false);
@@ -844,15 +1078,34 @@ const CreateTab = ({
           </div>
         )}
 
-        <div className="mt-4 flex justify-center gap-2">
+        <div className="mt-4 flex justify-center gap-2 flex-wrap">
           {remainingPlayers.length > 0 && !autoDrawing && (
             <button
-              onClick={startAutoDraw}
+              onClick={() => { if (!isSpinning) setIsSpinning(true); }}
               disabled={isSpinning}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Auto Draw All ({remainingPlayers.length})
+              Draw 1
             </button>
+          )}
+          {remainingPlayers.length > 0 && !autoDrawing && (
+            devMode ? (
+              <button
+                onClick={devDrawAll}
+                disabled={isSpinning}
+                className="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-lg text-sm font-mono disabled:opacity-50 border border-red-500/50"
+              >
+                [DEV] Draw All Instant ({remainingPlayers.length})
+              </button>
+            ) : (
+              <button
+                onClick={startAutoDraw}
+                disabled={isSpinning}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Auto Draw All ({remainingPlayers.length})
+              </button>
+            )
           )}
           {autoDrawing && (
             <button
@@ -935,6 +1188,307 @@ const CreateTab = ({
   );
 };
 
+// ===================== Bronze Final Tab =====================
+
+interface BronzeFinalTabProps {
+  player1: PlayerRef | null;
+  player2: PlayerRef | null;
+  roundData: RoundData | null;
+  setRoundData: (data: RoundData) => void;
+  saveRoundToDrive: (key: string, data: RoundData) => Promise<boolean>;
+  onOpenMatch: (match: TournamentMatchContext) => void;
+}
+
+const BronzeFinalTab = ({
+  player1,
+  player2,
+  roundData,
+  setRoundData,
+  saveRoundToDrive,
+  onOpenMatch,
+}: BronzeFinalTabProps) => {
+  const cfg = ROUND_CONFIGS.find((c) => c.key === "bronze")!;
+  const match = roundData?.matches.find((m) => m.matchNumber === 1) ?? null;
+  const canCreate = !!player1 && !!player2;
+
+  const handleCreate = async () => {
+    if (!player1 || !player2) return;
+    const newMatch: MatchData = { matchNumber: 1, player1, player2, winner: null, score: null, specialEvent: null, note: null };
+    const newData: RoundData = { roundKey: "bronze", matches: [newMatch], drawOrder: [], lastUpdated: new Date().toISOString() };
+    setRoundData(newData);
+    await saveRoundToDrive("bronze", newData);
+  };
+
+  const handleReset = async () => {
+    if (!confirm("Reset kết quả Tranh Hạng 3?")) return;
+    const newData: RoundData = { roundKey: "bronze", matches: [], drawOrder: [], lastUpdated: new Date().toISOString() };
+    setRoundData(newData);
+    await saveRoundToDrive("bronze", newData);
+  };
+
+  const openMatch = () => {
+    if (!match) return;
+    onOpenMatch({
+      matchNumber: cfg.matchStart,
+      player1No: match.player1?.no ?? 0,
+      player2No: match.player2?.no ?? 0,
+      existingWinnerNo: match.winner?.no,
+      existingScore: match.score,
+      existingSpecialEvent: match.specialEvent,
+      existingNote: match.note,
+      displayLabel: `${cfg.label} #1`,
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Players */}
+      <div className="grid grid-cols-2 gap-3 text-center">
+        {[player1, player2].map((p, i) => (
+          <div key={i} className={`rounded-lg p-3 border ${p ? "bg-gray-800/60 border-gray-700/50" : "bg-gray-800/30 border-gray-700/30"}`}>
+            <div className="text-xs text-amber-600 font-bold mb-1">Hạng {i === 0 ? "3" : "4"} ứng viên</div>
+            <div className="text-white font-semibold">{p?.name ?? "Chưa có"}</div>
+            {p && <div className="text-gray-400 text-xs">#{p.no}</div>}
+          </div>
+        ))}
+      </div>
+
+      {/* Winner banner */}
+      {match?.winner && (
+        <div className="text-center py-3 rounded-xl bg-amber-900/30 border border-amber-700/40">
+          <div className="text-amber-400 text-xs font-bold tracking-widest mb-1">HẠNG 3</div>
+          <div className="text-white text-xl font-bold">{match.winner.name}</div>
+          <div className="text-amber-400 text-sm">#{match.winner.no}</div>
+        </div>
+      )}
+
+      {/* Create / Reset */}
+      {!match ? (
+        <button
+          onClick={handleCreate}
+          disabled={!canCreate}
+          className="w-full py-3 bg-amber-700 hover:bg-amber-600 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold rounded-lg transition-colors"
+        >
+          {canCreate ? "Tạo trận Tranh Hạng 3" : "Chờ kết quả Chung Kết Nhánh Thắng + Nhánh Thua"}
+        </button>
+      ) : (
+        <div className="space-y-3">
+          <div className="bg-gray-800/60 rounded-lg p-4 border border-amber-700/30">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs text-amber-500 font-bold">Tranh Hạng 3</span>
+              {match.winner
+                ? <span className="text-xs bg-green-700/30 text-green-400 px-2 py-0.5 rounded">Done</span>
+                : <span className="text-xs bg-yellow-700/30 text-yellow-400 px-2 py-0.5 rounded">Pending</span>}
+            </div>
+            <div className="space-y-2 mb-3">
+              {[match.player1, match.player2].map((p) => p && (
+                <div key={p.no} className={`flex items-center justify-between px-3 py-2 rounded ${match.winner?.no === p.no ? "bg-green-700/30 ring-1 ring-green-500" : "bg-gray-700/50"}`}>
+                  <span className="text-white text-sm">{p.name}</span>
+                  <div className="flex items-center gap-2">
+                    {match.winner?.no === p.no && <span className="text-green-400 text-xs font-bold">HẠNG 3</span>}
+                    <span className="text-gray-400 text-xs">#{p.no}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {!match.winner && (
+              <button onClick={openMatch} className="w-full py-2 bg-amber-700/80 hover:bg-amber-600 text-white text-sm rounded-lg transition-colors">
+                Nhập kết quả
+              </button>
+            )}
+            {match.score && <div className="text-center text-xs text-gray-400 mt-1">Score: {match.score}</div>}
+          </div>
+          <button onClick={handleReset} className="text-xs text-red-400 hover:text-red-300 underline">
+            Reset Tranh Hạng 3
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ===================== Grand Final Tab =====================
+
+interface GrandFinalTabProps {
+  wbWinner: PlayerRef | null;
+  lbWinner: PlayerRef | null;
+  roundData: RoundData | null;
+  setRoundData: (data: RoundData) => void;
+  saveRoundToDrive: (key: string, data: RoundData) => Promise<boolean>;
+  onOpenMatch: (match: TournamentMatchContext) => void;
+}
+
+const GrandFinalTab = ({
+  wbWinner,
+  lbWinner,
+  roundData,
+  setRoundData,
+  saveRoundToDrive,
+  onOpenMatch,
+}: GrandFinalTabProps) => {
+  const gfCfg = ROUND_CONFIGS.find((c) => c.key === "gf")!;
+  const matches = roundData?.matches ?? [];
+  const game1 = matches.find((m) => m.matchNumber === 1) ?? null;
+  const game2 = matches.find((m) => m.matchNumber === 2) ?? null;
+
+  // WB winner thắng GF #1 → vô địch luôn
+  const wbWonGame1 = game1?.winner && wbWinner && game1.winner.no === wbWinner.no;
+  // LB winner thắng GF #1 → cần game 2
+  const lbWonGame1 = game1?.winner && lbWinner && game1.winner.no === lbWinner.no;
+  // Champion
+  const champion = wbWonGame1 ? wbWinner : game2?.winner ?? null;
+
+  const canCreate = !!wbWinner && !!lbWinner;
+
+  const handleCreateMatches = async () => {
+    if (!wbWinner || !lbWinner) return;
+    const newMatches: MatchData[] = [
+      { matchNumber: 1, player1: wbWinner, player2: lbWinner, winner: null, score: null, specialEvent: null, note: null },
+      { matchNumber: 2, player1: wbWinner, player2: lbWinner, winner: null, score: null, specialEvent: null, note: null },
+    ];
+    const newData: RoundData = { roundKey: "gf", matches: newMatches, drawOrder: [], lastUpdated: new Date().toISOString() };
+    setRoundData(newData);
+    await saveRoundToDrive("gf", newData);
+  };
+
+  const handleResetMatches = async () => {
+    if (!confirm("Reset kết quả Grand Final?")) return;
+    const newData: RoundData = { roundKey: "gf", matches: [], drawOrder: [], lastUpdated: new Date().toISOString() };
+    setRoundData(newData);
+    await saveRoundToDrive("gf", newData);
+  };
+
+  const openMatch = (match: MatchData) => {
+    onOpenMatch({
+      matchNumber: (match.matchNumber - 1) + gfCfg.matchStart,
+      player1No: match.player1?.no ?? 0,
+      player2No: match.player2?.no ?? 0,
+      existingWinnerNo: match.winner?.no,
+      existingScore: match.score,
+      existingSpecialEvent: match.specialEvent,
+      existingNote: match.note,
+      displayLabel: `${gfCfg.label} #${match.matchNumber}`,
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Players */}
+      <div className="grid grid-cols-2 gap-3 text-center">
+        <div className={`rounded-lg p-3 border ${wbWinner ? "bg-green-900/20 border-green-700/40" : "bg-gray-800/50 border-gray-700/40"}`}>
+          <div className="text-xs text-green-400 font-bold mb-1">Nhánh Thắng</div>
+          <div className="text-white font-semibold">{wbWinner?.name ?? "Chưa có"}</div>
+          {wbWinner && <div className="text-gray-400 text-xs">#{wbWinner.no}</div>}
+        </div>
+        <div className={`rounded-lg p-3 border ${lbWinner ? "bg-orange-900/20 border-orange-700/40" : "bg-gray-800/50 border-gray-700/40"}`}>
+          <div className="text-xs text-orange-400 font-bold mb-1">Nhánh Thua</div>
+          <div className="text-white font-semibold">{lbWinner?.name ?? "Chưa có"}</div>
+          {lbWinner && <div className="text-gray-400 text-xs">#{lbWinner.no}</div>}
+        </div>
+      </div>
+
+      {/* Champion banner */}
+      {champion && (
+        <div className="text-center py-4 rounded-xl bg-gradient-to-r from-yellow-900/40 via-yellow-700/30 to-yellow-900/40 border border-yellow-500/50">
+          <div className="text-yellow-300 text-xs font-bold tracking-widest mb-1">VÔ ĐỊCH</div>
+          <div className="text-white text-2xl font-bold">{champion.name}</div>
+          <div className="text-yellow-400 text-sm">#{champion.no}</div>
+        </div>
+      )}
+
+      {/* Create / Reset */}
+      {matches.length === 0 ? (
+        <button
+          onClick={handleCreateMatches}
+          disabled={!canCreate}
+          className="w-full py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold rounded-lg transition-colors"
+        >
+          {canCreate ? "Tạo 2 trận Grand Final" : "Chờ kết quả nhánh thắng + nhánh thua"}
+        </button>
+      ) : (
+        <button onClick={handleResetMatches} className="text-xs text-red-400 hover:text-red-300 underline">
+          Reset Grand Final
+        </button>
+      )}
+
+      {/* Match cards */}
+      {game1 && (
+        <div className="space-y-3">
+          {/* GF #1 */}
+          <div className="bg-gray-800/60 rounded-lg p-4 border border-gray-700/50">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs text-purple-400 font-bold">GF #1</span>
+              {game1.winner
+                ? <span className="text-xs bg-green-700/30 text-green-400 px-2 py-0.5 rounded">Done</span>
+                : <span className="text-xs bg-yellow-700/30 text-yellow-400 px-2 py-0.5 rounded">Pending</span>}
+            </div>
+            <div className="space-y-2 mb-3">
+              {[game1.player1, game1.player2].map((p) => p && (
+                <div key={p.no} className={`flex items-center justify-between px-3 py-2 rounded ${game1.winner?.no === p.no ? "bg-green-700/30 ring-1 ring-green-500" : "bg-gray-700/50"}`}>
+                  <span className="text-white text-sm">{p.name}</span>
+                  <div className="flex items-center gap-2">
+                    {game1.winner?.no === p.no && <span className="text-green-400 text-xs font-bold">WIN</span>}
+                    <span className="text-gray-400 text-xs">#{p.no}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {!game1.winner && (
+              <button onClick={() => openMatch(game1)} className="w-full py-2 bg-purple-600/80 hover:bg-purple-500 text-white text-sm rounded-lg transition-colors">
+                Nhập kết quả GF #1
+              </button>
+            )}
+            {game1.score && <div className="text-center text-xs text-gray-400 mt-1">Score: {game1.score}</div>}
+          </div>
+
+          {/* GF #2 */}
+          {lbWonGame1 && game2 && (
+            <div className="bg-gray-800/60 rounded-lg p-4 border border-orange-700/30">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-orange-400 font-bold">GF #2 (Reset Bracket)</span>
+                {game2.winner
+                  ? <span className="text-xs bg-green-700/30 text-green-400 px-2 py-0.5 rounded">Done</span>
+                  : <span className="text-xs bg-orange-700/30 text-orange-400 px-2 py-0.5 rounded">Cần đánh</span>}
+              </div>
+              <div className="space-y-2 mb-3">
+                {[game2.player1, game2.player2].map((p) => p && (
+                  <div key={p.no} className={`flex items-center justify-between px-3 py-2 rounded ${game2.winner?.no === p.no ? "bg-green-700/30 ring-1 ring-green-500" : "bg-gray-700/50"}`}>
+                    <span className="text-white text-sm">{p.name}</span>
+                    <div className="flex items-center gap-2">
+                      {game2.winner?.no === p.no && <span className="text-green-400 text-xs font-bold">WIN</span>}
+                      <span className="text-gray-400 text-xs">#{p.no}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {!game2.winner && (
+                <button onClick={() => openMatch(game2)} className="w-full py-2 bg-orange-600/80 hover:bg-orange-500 text-white text-sm rounded-lg transition-colors">
+                  Nhập kết quả GF #2
+                </button>
+              )}
+              {game2.score && <div className="text-center text-xs text-gray-400 mt-1">Score: {game2.score}</div>}
+            </div>
+          )}
+
+          {/* GF #1 chưa có kết quả: ẩn GF #2 */}
+          {!game1.winner && (
+            <div className="bg-gray-800/30 rounded-lg p-4 border border-dashed border-gray-700/40 text-center text-gray-600 text-sm">
+              GF #2 — chờ kết quả GF #1
+            </div>
+          )}
+
+          {/* WB winner thắng GF #1: không cần GF #2 */}
+          {wbWonGame1 && (
+            <div className="bg-gray-800/30 rounded-lg p-4 border border-dashed border-gray-700/40 text-center text-gray-500 text-sm">
+              GF #2 — không cần (Nhánh Thắng vô địch)
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
 // ===================== Generic Round Create Tab =====================
 
 interface GenericRoundCreateTabProps {
@@ -943,6 +1497,7 @@ interface GenericRoundCreateTabProps {
   roundData: RoundData | null;
   setRoundData: (data: RoundData) => void;
   saveRoundToDrive: (key: string, data: RoundData) => Promise<boolean>;
+  devMode?: boolean;
 }
 
 const GenericRoundCreateTab = ({
@@ -951,6 +1506,7 @@ const GenericRoundCreateTab = ({
   roundData,
   setRoundData,
   saveRoundToDrive,
+  devMode,
 }: GenericRoundCreateTabProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [lastDrawnPlayer, setLastDrawnPlayer] = useState<PlayerRef | null>(null);
@@ -1079,6 +1635,34 @@ const GenericRoundCreateTab = ({
     flushSave();
   }, [flushSave]);
 
+  // DevMode: draw tất cả instant
+  const devDrawAll = useCallback(async () => {
+    if (remainingPlayers.length === 0) return;
+    const shuffled = [...remainingPlayers].sort(() => Math.random() - 0.5);
+    let currentDrawOrder = [...(roundData?.drawOrder ?? [])];
+    let currentMatches = [...(roundData?.matches ?? [])];
+    for (const p of shuffled) {
+      currentDrawOrder = [...currentDrawOrder, p.no];
+      const matchIdx = Math.floor((currentDrawOrder.length - 1) / 2);
+      const isP1 = (currentDrawOrder.length - 1) % 2 === 0;
+      if (isP1) {
+        currentMatches = [...currentMatches, {
+          matchNumber: matchIdx + 1,
+          player1: { no: p.no, name: p.name, username: p.username },
+          player2: null, winner: null, score: null, specialEvent: null, note: null,
+        }];
+      } else if (currentMatches[matchIdx]) {
+        currentMatches = currentMatches.map((m, i) =>
+          i === matchIdx ? { ...m, player2: { no: p.no, name: p.name, username: p.username } } : m
+        );
+      }
+    }
+    const newData: RoundData = { roundKey: config.key, matches: currentMatches, drawOrder: currentDrawOrder, lastUpdated: new Date().toISOString() };
+    setRoundData(newData);
+    setLastDrawnPlayer(shuffled[shuffled.length - 1]);
+    await saveRoundToDrive(config.key, newData);
+  }, [remainingPlayers, roundData, config.key, setRoundData, saveRoundToDrive]);
+
   const resetDraw = useCallback(async () => {
     if (!confirm(`Reset toàn bộ dữ liệu vòng ${config.label}? Không thể hoàn tác.`)) return;
     const newData: RoundData = { roundKey: config.key, matches: [], drawOrder: [], lastUpdated: new Date().toISOString() };
@@ -1148,15 +1732,34 @@ const GenericRoundCreateTab = ({
             </div>
           )}
 
-          <div className="mt-4 flex justify-center gap-2">
+          <div className="mt-4 flex justify-center gap-2 flex-wrap">
             {remainingPlayers.length > 0 && !autoDrawing && eligiblePlayers.length > 0 && (
               <button
-                onClick={startAutoDraw}
+                onClick={() => { if (!isSpinning) setIsSpinning(true); }}
                 disabled={isSpinning}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Auto Draw All ({remainingPlayers.length})
+                Draw 1
               </button>
+            )}
+            {remainingPlayers.length > 0 && !autoDrawing && eligiblePlayers.length > 0 && (
+              devMode ? (
+                <button
+                  onClick={devDrawAll}
+                  disabled={isSpinning}
+                  className="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-lg text-sm font-mono disabled:opacity-50 border border-red-500/50"
+                >
+                  [DEV] Draw All Instant ({remainingPlayers.length})
+                </button>
+              ) : (
+                <button
+                  onClick={startAutoDraw}
+                  disabled={isSpinning}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Auto Draw All ({remainingPlayers.length})
+                </button>
+              )
             )}
             {autoDrawing && (
               <button
@@ -1237,17 +1840,51 @@ const GenericRoundCreateTab = ({
 
 interface BracketTabProps {
   roundData: Round256Data | null;
+  allRoundData: Record<string, RoundData>;
   onOpenMatch: (ctx: TournamentMatchContext) => void;
+  devMode?: boolean;
+  onDevSaveResult?: (matchNumberAbsolute: number, result: TournamentSaveResult) => Promise<void>;
 }
 
-const BracketTab = ({ roundData, onOpenMatch }: BracketTabProps) => {
-  const [filterMode, setFilterMode] = useState<"all" | "pending" | "completed">(
-    "all",
-  );
+const BRACKET_SECTIONS = [
+  { key: "qualifying" as const, label: "Vòng Loại",    desc: "R256 · R128 · R64" },
+  { key: "winners" as const,    label: "Double Elim",  desc: "WB + LB + Finals" },
+] as const;
+
+const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveResult }: BracketTabProps) => {
+  const [filterMode, setFilterMode] = useState<"all" | "pending" | "completed">("all");
+  const [bracketSection, setBracketSection] = useState<"qualifying" | "winners">("qualifying");
+  // DevMode: quick result panel
+  const [devPanel, setDevPanel] = useState<{ match: MatchData & { displayLabel?: string }; matchNumberAbsolute: number } | null>(null);
+  const [devScore, setDevScore] = useState("");
+
+  // Merge tất cả matches từ R256 + allRoundData, offset matchNumber theo matchStart của từng round
+  const allMergedMatches = useMemo(() => {
+    const result: MatchData[] = [];
+    // R256: matchNumber đã đúng (1-128), hiển thị "R256 #1"
+    if (roundData) {
+      for (const m of roundData.matches)
+        result.push({ ...m, displayLabel: `R256 #${m.matchNumber}` });
+    }
+    // Các round sau: offset matchNumber để BracketTreeView đặt đúng vị trí
+    // displayLabel hiển thị local number + tên round
+    for (const cfg of ROUND_CONFIGS) {
+      if (cfg.key === "r256") continue;
+      const rd = allRoundData[cfg.key];
+      if (!rd) continue;
+      for (const m of rd.matches) {
+        result.push({
+          ...m,
+          matchNumber: (m.matchNumber - 1) + cfg.matchStart,
+          displayLabel: `${cfg.label} #${m.matchNumber}`,
+        });
+      }
+    }
+    return result;
+  }, [roundData, allRoundData]);
 
   const filteredMatches = useMemo(() => {
-    if (!roundData) return [];
-    const matches = roundData.matches.filter((m) => m.player1 && m.player2);
+    const matches = allMergedMatches.filter((m) => m.player1 && m.player2);
     switch (filterMode) {
       case "pending":
         return matches.filter((m) => !m.winner);
@@ -1256,17 +1893,16 @@ const BracketTab = ({ roundData, onOpenMatch }: BracketTabProps) => {
       default:
         return matches;
     }
-  }, [roundData, filterMode]);
+  }, [allMergedMatches, filterMode]);
 
   const stats = useMemo(() => {
-    if (!roundData) return { total: 0, completed: 0, pending: 0 };
-    const complete = roundData.matches.filter((m) => m.player1 && m.player2);
+    const complete = allMergedMatches.filter((m) => m.player1 && m.player2);
     return {
       total: complete.length,
       completed: complete.filter((m) => m.winner).length,
       pending: complete.filter((m) => !m.winner).length,
     };
-  }, [roundData]);
+  }, [allMergedMatches]);
 
   if (!roundData || roundData.matches.length === 0) {
     return (
@@ -1343,26 +1979,34 @@ const BracketTab = ({ roundData, onOpenMatch }: BracketTabProps) => {
             return (
               <button
                 key={match.matchNumber}
-                onClick={() =>
-                  onOpenMatch({
-                    matchNumber: match.matchNumber,
-                    player1No: match.player1?.no ?? 0,
-                    player2No: match.player2?.no ?? 0,
-                    existingWinnerNo: match.winner?.no,
-                    existingScore: match.score,
-                    existingSpecialEvent: match.specialEvent,
-                    existingNote: match.note,
-                  })
-                }
+                onClick={() => {
+                  if (devMode && match.player1 && match.player2) {
+                    setDevPanel({ match, matchNumberAbsolute: match.matchNumber });
+                    setDevScore("");
+                  } else {
+                    onOpenMatch({
+                      matchNumber: match.matchNumber,
+                      player1No: match.player1?.no ?? 0,
+                      player2No: match.player2?.no ?? 0,
+                      existingWinnerNo: match.winner?.no,
+                      existingScore: match.score,
+                      existingSpecialEvent: match.specialEvent,
+                      existingNote: match.note,
+                      displayLabel: match.displayLabel,
+                    });
+                  }
+                }}
                 className={`text-left p-3 rounded-xl border-2 transition-all hover:scale-[1.02] hover:shadow-lg ${
                   match.winner
                     ? "bg-gradient-to-br from-gray-800/80 to-gray-900/80 border-green-600/40 hover:border-green-400"
-                    : "bg-gradient-to-br from-gray-800 to-gray-850 border-gray-600/50 hover:border-purple-400"
+                    : devMode
+                      ? "bg-gradient-to-br from-gray-800 to-gray-850 border-red-700/50 hover:border-red-400"
+                      : "bg-gradient-to-br from-gray-800 to-gray-850 border-gray-600/50 hover:border-purple-400"
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-mono text-gray-500">
-                    #{match.matchNumber}
+                    {match.displayLabel ?? `#${match.matchNumber}`}
                   </span>
                   <div className="flex gap-1">
                     {match.specialEvent && (
@@ -1445,13 +2089,107 @@ const BracketTab = ({ roundData, onOpenMatch }: BracketTabProps) => {
 
       {/* Desktop: bracket tree view (hidden trên mobile) */}
       <div className="hidden lg:block">
+        {/* Section tabs */}
+        <div className="flex gap-1 mb-3">
+          {BRACKET_SECTIONS.map((s) => (
+            <button
+              key={s.key}
+              onClick={() => setBracketSection(s.key)}
+              className={`flex flex-col items-start px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+                bracketSection === s.key
+                  ? "bg-purple-600/30 border-purple-500/60 text-purple-200 shadow"
+                  : "bg-gray-800/60 border-gray-700/40 text-gray-400 hover:text-white hover:bg-gray-700/60"
+              }`}
+            >
+              <span>{s.label}</span>
+              <span className="text-[10px] font-normal opacity-60">{s.desc}</span>
+            </button>
+          ))}
+        </div>
         <BracketTreeView
-          matches={roundData.matches}
+          matches={allMergedMatches}
           filterMode={filterMode}
-          onOpenMatch={onOpenMatch}
+          section={bracketSection}
+          onOpenMatch={devMode ? (ctx) => {
+            const match = allMergedMatches.find((m) => m.matchNumber === ctx.matchNumber);
+            if (match?.player1 && match?.player2) {
+              setDevPanel({ match, matchNumberAbsolute: ctx.matchNumber });
+              setDevScore("");
+            } else {
+              onOpenMatch(ctx);
+            }
+          } : onOpenMatch}
           readOnly={false}
         />
       </div>
+
+      {/* DevMode quick-result panel */}
+      {devMode && devPanel && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          style={{ background: "rgba(0,0,0,0.7)" }}
+          onClick={() => setDevPanel(null)}
+        >
+          <div
+            className="bg-gray-900 border border-red-500/50 rounded-2xl p-6 w-full max-w-sm shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-xs font-mono text-red-400 bg-red-500/15 px-2 py-0.5 rounded">DEV</span>
+                <span className="ml-2 text-sm text-gray-400 font-mono">{devPanel.match.displayLabel ?? `#${devPanel.matchNumberAbsolute}`}</span>
+              </div>
+              <button onClick={() => setDevPanel(null)} className="text-gray-500 hover:text-white text-lg">✕</button>
+            </div>
+            <p className="text-xs text-gray-500 mb-3 text-center">Chọn người thắng</p>
+            <div className="flex flex-col gap-2 mb-4">
+              {[devPanel.match.player1, devPanel.match.player2].map((p) => {
+                if (!p) return null;
+                const isWinner = devPanel.match.winner?.no === p.no;
+                return (
+                  <button
+                    key={p.no}
+                    onClick={async () => {
+                      if (!onDevSaveResult) return;
+                      await onDevSaveResult(devPanel.matchNumberAbsolute, { winnerNo: p.no, score: devScore || null, specialEvent: null, note: null });
+                      setDevPanel(null);
+                    }}
+                    className={`w-full px-4 py-3 rounded-xl text-left font-semibold transition-all border-2 ${
+                      isWinner
+                        ? "bg-green-600/30 border-green-500 text-green-300"
+                        : "bg-gray-800 border-gray-600 text-white hover:border-red-400 hover:bg-red-900/20"
+                    }`}
+                  >
+                    {isWinner && <span className="text-green-400 mr-2">W</span>}
+                    {p.name} <span className="text-gray-500 text-xs font-mono ml-1">#{p.no}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="Score (vd: 4-2)"
+                value={devScore}
+                onChange={(e) => setDevScore(e.target.value)}
+                className="flex-1 bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-400"
+              />
+              {devPanel.match.winner && (
+                <button
+                  onClick={async () => {
+                    if (!onDevSaveResult) return;
+                    await onDevSaveResult(devPanel.matchNumberAbsolute, { winnerNo: 0, score: null, specialEvent: null, note: null });
+                    setDevPanel(null);
+                  }}
+                  className="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg text-xs"
+                >
+                  Xoá KQ
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

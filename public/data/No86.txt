@@ -100,7 +100,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: ngọn cỏ ven sông
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 3-3
 ```
 

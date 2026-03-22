@@ -90,7 +90,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Vinh Vander Bek
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 3-3
 ```
 

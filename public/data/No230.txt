@@ -104,7 +104,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: CobyKei
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 1-5
 ```
 

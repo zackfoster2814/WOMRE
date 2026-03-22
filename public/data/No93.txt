@@ -1,6 +1,6 @@
 No.93
 Name: Wohlhabend (wohlhabend_)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -94,6 +94,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: Không bị phạt
+```
+
+```
+PvP:
+- Đối thủ: bachtuotkun
+- Kết quả: Lose
+- Tỉ số: 0-4
 ```
 
 ======

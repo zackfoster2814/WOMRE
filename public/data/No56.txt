@@ -40,7 +40,7 @@ Houses:
 3 Gear: 
  + 3 Normal gear:
   - Holy Symbol (đã mất)
-  - Thuốc Tráng Dương (đã mất)
+  - Thuốc Tráng Dương
   - Đai Trinh Tiết
  + 0 Legacy gear:
   - 
@@ -83,8 +83,8 @@ Lover:
 
 ```
 Other Source:
-- -1 STR
-- -1 DUR
+- -1 STR (Thuốc Tráng Dương)
+- -1 DUR (Thuốc Tráng Dương)
 - +1 BIQ
 - +2 all stats
 ```

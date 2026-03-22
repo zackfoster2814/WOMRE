@@ -87,7 +87,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Cảo
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 3-3
 ```
 

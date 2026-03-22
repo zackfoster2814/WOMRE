@@ -105,7 +105,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Caliđu Côlýbàlý
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-2
 ```
 

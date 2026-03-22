@@ -1,6 +1,6 @@
 No.250
 Name: Bow (hungehehehe)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -72,7 +72,7 @@ Lover:
 +
 ```
 ```
-Other source:
+PvP Reward:
 - +1 BIQ
 ```
 
@@ -85,6 +85,13 @@ PvE:
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: Không bị phạt
+```
+
+```
+PvP:
+- Đối thủ: Kami Tsuna
+- Kết quả: Lose
+- Tỉ số: 4-0
 ```
 
 ======

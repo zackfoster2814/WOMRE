@@ -89,7 +89,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Solus
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 0-2
 ```
 

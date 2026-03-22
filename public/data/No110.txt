@@ -92,7 +92,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: 1037
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 2-5
 ```
 

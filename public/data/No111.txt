@@ -82,7 +82,7 @@ Lover:
 Other Source:
 - -1 Strength
 - -1 Speed 
-- +2 IQ.
+- +2 IQ
 ```
 ```
 PvP Reward:
@@ -103,7 +103,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Lunacy
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 5-0
 ```
 

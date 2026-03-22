@@ -108,7 +108,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: HunggViEn
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 1-6
 ```
 

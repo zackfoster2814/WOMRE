@@ -79,14 +79,14 @@ Lover:
 
 ```
 PvP Reward:
-- +2 chỉ số ngẫu nhiên x3
+- +2 str (+2 chỉ số ngẫu nhiên x3)
+- +2 spd (+2 chỉ số ngẫu nhiên x3)
+- +2 IQ (+2 chỉ số ngẫu nhiên x3)
 ```
 
 ```
 Other Source:
-- +2 str 
-- +2 spd
-- +2 IQ
+- -2 Dura (AIDS)
 ```
 
 

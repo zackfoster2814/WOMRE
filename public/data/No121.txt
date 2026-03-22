@@ -38,7 +38,7 @@ Houses:
 ```
 1 Gear: 
  + 1 Normal gear:
-  - Đá (Từ Machinists) (đã mất)
+  - Đá (Từ Machinists)
   - Fishing Rod
  + 0 Legacy gear:
   - 
@@ -77,7 +77,6 @@ Lover:
 
 ```
 Other Source:
-- -3 All Stats (đá)
 - -2 Dura
 ```
 
@@ -93,9 +92,12 @@ PvE:
   + Nhận -1 All stats
 - Note: Ca Cao né ở round SPD, crit ở round MA
 ```
+
+```
 PvP:
 - Đối thủ: Hy
-- Kết quả: lose
+- Kết quả: Lose
 - Tỉ số: 5-0
 ```
+
 ======

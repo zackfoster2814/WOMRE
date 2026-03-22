@@ -78,11 +78,6 @@ Lover:
 ```
 
 ```
-Other Source:
-- -1 Dura (Magma Strike)
-```
-
-```
 PvP Reward:
 - +1 MA
 ```

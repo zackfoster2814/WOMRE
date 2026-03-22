@@ -94,7 +94,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Nốt Ruồi Lệch Pha
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 1-4
 ```
 

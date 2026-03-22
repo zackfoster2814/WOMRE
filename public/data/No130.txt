@@ -100,7 +100,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: naughtyboy1
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 6-0
 - note: chjt
 ```

@@ -79,7 +79,7 @@ Lover:
 
 ```
 PvP Reward:
-- +1 IQ
+- +1 BIQ
 ```
 
 

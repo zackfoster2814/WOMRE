@@ -1,6 +1,6 @@
 No.117
 Name: AsuK (asuk214)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -100,4 +100,11 @@ PvE:
 - Note: GOAT Karu lên tiếng
 ```
 
+
+```
+PvP:
+- Đối thủ: Korokiri
+- Kết quả: Lose
+- Tỉ số: 4-4
+```
 ======

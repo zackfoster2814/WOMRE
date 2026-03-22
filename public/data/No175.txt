@@ -90,7 +90,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: caubetuky._.
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 0-6
 ```
 

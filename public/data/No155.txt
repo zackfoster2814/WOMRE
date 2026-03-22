@@ -101,7 +101,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: HuyMei
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-2
 ```
 

@@ -95,5 +95,6 @@ PvP:
 - Đối thủ: Yami
 - Kết quả: Win 
 - Tỉ số: 5-2
+- Reward: Nhận 1 char dev: Armed to the Teeth
 ```
 ======

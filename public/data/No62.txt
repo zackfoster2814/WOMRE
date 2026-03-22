@@ -105,7 +105,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: uchihahahaha5296
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 1-1
 ```
 

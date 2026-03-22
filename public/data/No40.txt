@@ -92,7 +92,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: radb1t_fr
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 5-2
 ```
 

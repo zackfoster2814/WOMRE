@@ -1,7 +1,7 @@
 No.154
 Name: Bưởi (ngbxxx)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -92,6 +92,13 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: bị đuổi khỏi house
+```
+
+```
+PvP:
+- Đối thủ: Farm Mạnh Quỳnh
+- Kết quả: Win
+- Tỉ số: 4-2
 ```
 
 ======

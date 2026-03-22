@@ -93,7 +93,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: Dân chơi Đức
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 2-2
 ```
 ======

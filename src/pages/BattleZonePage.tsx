@@ -582,6 +582,7 @@ export interface TournamentMatchContext {
   existingScore?: string | null;
   existingSpecialEvent?: string | null;
   existingNote?: string | null;
+  displayLabel?: string;
 }
 
 export interface TournamentSaveResult {
@@ -6285,6 +6286,7 @@ export const StatsComparisonMode = ({
                 });
               }
             }
+
           }
 
           // ── Archetype after_combat effects ─────────────────────────────────
@@ -8046,22 +8048,21 @@ export const StatsComparisonMode = ({
             if (disabledItems.has(`${player.no}-char_dev-${cdname}`)) continue;
 
             // Don't say it: -2 all stats; thắng (chỉ 1 lần) → xóa -2, +2 all stats, nhận Power "Encroaching Shadow"
+            // Nếu có suffix (+2 all stats) → đã upgrade, thay -2 thành +2
             if (cdlname.includes("don't say it")) {
               const allStats: (keyof CharacterStats)[] = [
-                "str",
-                "spd",
-                "dur",
-                "iq",
-                "biq",
-                "ma",
+                "str", "spd", "dur", "iq", "biq", "ma",
               ];
+              const suffix = cdname.slice("don't say it".length).toLowerCase();
+              const isUpgraded = suffix.includes("+2 all stats") || suffix.includes("+2 all");
+              const delta = isUpgraded ? 2 : -2;
               acEntries.push({
                 player: side,
                 quirkName: cdname,
-                description: "-2 all stats (Don't say it)",
-                statMods: allStats.map((s) => ({ stat: s, delta: -2 })),
+                description: `${isUpgraded ? "+2" : "-2"} all stats (Don't say it)`,
+                statMods: allStats.map((s) => ({ stat: s, delta })),
               });
-              if (didWin) {
+              if (!isUpgraded && didWin) {
                 acEntries.push({
                   player: side,
                   quirkName: cdname,
@@ -12484,7 +12485,7 @@ export const StatsComparisonMode = ({
           <div className="flex-1 px-5 py-3 rounded-2xl border border-gray-600/50 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-red-900/20">
             <h1 className="text-xl font-bold text-white">
               {isTournamentMode
-                ? `Match #${tournamentMatch!.matchNumber}`
+                ? (tournamentMatch!.displayLabel ?? `Match #${tournamentMatch!.matchNumber}`)
                 : "PvP Stats Comparison"}
             </h1>
             {isTournamentMode && player1 && player2 && (
@@ -14407,7 +14408,7 @@ export const StatsComparisonMode = ({
                       }}
                       className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold rounded-lg text-sm transition-all"
                     >
-                      💾 Lưu kết quả Match #{tournamentMatch!.matchNumber}
+                      💾 Lưu kết quả {tournamentMatch!.displayLabel ?? `Match #${tournamentMatch!.matchNumber}`}
                     </button>
                   )}
               </div>

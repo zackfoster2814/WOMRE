@@ -99,7 +99,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: iodern
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-3
 ```
 

@@ -103,7 +103,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: banhtiuuu
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-2
 ```
 

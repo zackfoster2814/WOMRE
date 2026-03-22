@@ -91,7 +91,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Thang
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 6-0
 - note: chjt
 ```

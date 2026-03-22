@@ -104,14 +104,14 @@ PvE:
 ```
 PvP:
 - Đối thủ: E4zyyyy
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 4-2
 ```
 
 ```
 PvP:
 - Đối thủ: E4zyyyy
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 4-2
 ```
 

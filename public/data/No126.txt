@@ -57,7 +57,7 @@ Runeword: Không
 
 ```
 0 Power: 
-+ 
++ Thunder orb
 ```
 
 ```
@@ -76,6 +76,7 @@ Lover:
 ```
 Other Source:
 - Fire: nhận thunder orb
+- +1 MA
 ```
 ```
 PvP Reward:
@@ -101,8 +102,9 @@ PvE:
 ```
 PvP:
 - Đối thủ: Novaz
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 0-6
+- Note: Nhận thêm Fire
 ```
 
 ======

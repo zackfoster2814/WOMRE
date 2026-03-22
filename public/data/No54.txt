@@ -87,7 +87,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: We are Charlie Kirk
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 0-6
 ```
 

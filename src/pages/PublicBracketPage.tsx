@@ -253,6 +253,7 @@ export const PublicBracketPage = () => {
             <BracketTreeView
               matches={roundData.matches}
               filterMode={filterMode}
+              section="qualifying"
               onSelectMatch={setSelectedMatch}
               readOnly={true}
             />

@@ -81,7 +81,7 @@ Lover:
 
 ```
 Other Source:
-- +2 Dura
+- +2 Dura (Orc)
 ```
 
 ```
@@ -98,6 +98,14 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+```
+
+```
+PvP:
+- Đối thủ: Dopamine
+- Kết quả: Win
+- Tỉ số: 5-0
+- Reward: Nhận 1 gear: Thuốc Tráng Dương
 ```
 
 ======

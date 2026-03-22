@@ -352,7 +352,12 @@ export class EffectResolver {
         .filter((s) => s);
 
       for (const subRace of subRaces) {
-        const subRaceEntry = EffectRegistry.get("sub_race", subRace);
+        // Handle stack notation: "Eir (2)" → baseName="Eir", stackCount=2
+        const stackMatch = subRace.match(/^(.+?)\s*\((\d+)\)$/);
+        const baseName = stackMatch ? stackMatch[1].trim() : subRace;
+        const stackCount = stackMatch ? parseInt(stackMatch[2]) : 1;
+
+        const subRaceEntry = EffectRegistry.get("sub_race", baseName);
         if (subRaceEntry) {
           // For Goblin sub-races that are just numbers, display as "X goblins"
           let displayName = subRace;
@@ -364,10 +369,18 @@ export class EffectResolver {
           ) {
             displayName = `${subRace} goblins`;
           }
+          // Scale stat_modifier effects by Eir stack: Eir=+1, Eir(1)=+2, Eir(2)=+4, Eir(3)=+8 (2^N)
+          const stackMultiplier = stackMatch ? Math.pow(2, stackCount) : 1;
+          const scaledEffects = stackMultiplier === 1 ? subRaceEntry.effects : subRaceEntry.effects.map((e) => {
+            if (e.type === "stat_modifier" && e.value !== undefined) {
+              return { ...e, value: e.value * stackMultiplier };
+            }
+            return e;
+          });
           sources.push({
             type: "sub_race",
             name: displayName,
-            effects: subRaceEntry.effects,
+            effects: scaledEffects,
             rawDescription: subRaceEntry.description,
             isActive: true,
           });
@@ -456,6 +469,37 @@ export class EffectResolver {
           rawDescription: entry.description,
           isActive: true,
         });
+      } else {
+        // Fallback: parse "+N Stat" directly for rewards not in registry (e.g. "+9 IQ", "+2 BIQ")
+        const statAbbreviations: Record<string, DynamicStatTarget> = {
+          str: "strength", strength: "strength",
+          spd: "speed", speed: "speed",
+          dur: "durability", dura: "durability", durability: "durability",
+          iq: "iq", biq: "biq",
+          ma: "ma", "martial arts": "ma",
+          all: "all", "all stats": "all", "all stat": "all",
+        };
+        const match = normalizedName.match(/^([+-]?\d+)\s+(.+)$/i);
+        if (match) {
+          const value = parseInt(match[1]);
+          const statKey = match[2].toLowerCase().trim();
+          const statTarget = statAbbreviations[statKey];
+          if (statTarget) {
+            sources.push({
+              type: "pvp_reward",
+              name: pvpReward.description,
+              effects: [{
+                type: "stat_modifier",
+                stat: statTarget,
+                value,
+                timing: "immediate",
+                target: "self",
+              }],
+              rawDescription: pvpReward.description,
+              isActive: true,
+            });
+          }
+        }
       }
     }
 
@@ -1109,39 +1153,33 @@ export class EffectResolver {
 
     // Other Source Modifiers (từ "Nguồn khác:" block trong Add info)
     if (character.otherSourceMods && character.otherSourceMods.length > 0) {
-      const abbrevToStat: Record<string, StatName> = {
+      const abbrevToStat: Record<string, DynamicStatTarget> = {
         str: "strength",
         spd: "speed",
         dur: "durability",
         iq: "iq",
         biq: "biq",
         ma: "ma",
+        all: "all",
       };
-      const allEffects: Effect[] = [];
-      const allDescs: string[] = [];
       for (const m of character.otherSourceMods) {
-        const statName = abbrevToStat[m.stat];
-        if (statName) {
-          allEffects.push({
-            type: "stat_modifier",
-            stat: statName,
-            value: m.value,
-            timing: "immediate",
-            target: "self",
+        const statTarget = abbrevToStat[m.stat];
+        if (statTarget) {
+          const desc = `${m.value > 0 ? "+" : ""}${m.value} ${m.stat.toUpperCase()}${m.source ? ` (${m.source})` : ""}`;
+          sources.push({
+            type: "other_source",
+            name: desc,
+            effects: [{
+              type: "stat_modifier",
+              stat: statTarget,
+              value: m.value,
+              timing: "immediate",
+              target: "self",
+            }],
+            rawDescription: `Nguồn khác: ${desc}`,
+            isActive: true,
           });
-          allDescs.push(
-            `${m.value > 0 ? "+" : ""}${m.value} ${m.stat.toUpperCase()}${m.source ? ` (${m.source})` : ""}`,
-          );
         }
-      }
-      if (allEffects.length > 0) {
-        sources.push({
-          type: "other_source",
-          name: `${allDescs.join(", ")}`,
-          effects: allEffects,
-          rawDescription: `Nguồn khác: ${allDescs.join(", ")}`,
-          isActive: true,
-        });
       }
     }
 

@@ -101,7 +101,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Anh Bảo
-- Kết quả: thắng
+- Kết quả: Win
 - Tỉ số: 3-3
 ```
 

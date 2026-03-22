@@ -94,7 +94,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Del1ght
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 6-0
 ```
 

@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Seefish
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-2
 ```
 

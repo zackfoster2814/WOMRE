@@ -38,7 +38,7 @@ Houses:
 ```
 2 Gear: 
  + 2 Normal gear:
-  - Thuốc tráng dương (đã mất)
+  - Thuốc tráng dương 
   - Golden coin
   - Golden coin
  + 0 Legacy gear:
@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: tuancon
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-2
 ```
 

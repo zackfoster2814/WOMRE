@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Trapcon
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 5-1
 ```
 

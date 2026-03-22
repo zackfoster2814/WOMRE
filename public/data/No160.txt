@@ -102,7 +102,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Yamakun
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 1-5
 ```
 

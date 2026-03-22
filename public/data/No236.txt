@@ -60,10 +60,10 @@ Runeword:
 2 Power:  
 + Uno Reverse Card (Từ House)
 + Baldening (Từ House)
-+ Quas
-+ Dream Manipulation
-+ Invulnerability
-+ Tsunami Control
++ Quas (Patient)
++ Dream Manipulation (Patient)
++ Invulnerability (Patient)
++ Tsunami Control (Patient)
 ```
 
 ```
@@ -99,5 +99,7 @@ PvP:
 - Đối thủ: PYBB113
 - Kết quả: Win 
 - Tỉ số: 3-3
+- Reward: +1 Dura
+- Note: Nhận 4 power từ Patient
 ```
 ======

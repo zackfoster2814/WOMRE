@@ -94,7 +94,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Cloudian
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 5-4
 ```
 

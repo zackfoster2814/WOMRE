@@ -1,7 +1,7 @@
 No.138
 Name: Kami Tsuna (kamitsuna)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -97,6 +97,13 @@ PvE:
 - Reward: 
 - Punishment: 
 - Note: Lmao thua cả Mambo
+```
+
+```
+PvP:
+- Đối thủ: Bow
+- Kết quả: Win
+- Tỉ số: 4-0
 ```
 
 ======

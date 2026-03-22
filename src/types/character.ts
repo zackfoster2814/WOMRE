@@ -78,6 +78,7 @@ export interface PvPReward {
   description: string;
   applied: boolean;
   isLost?: boolean; // PvP rewards marked as "đã mất" won't affect stats
+  note?: string; // Optional note in parentheses, e.g. "(stats cao nhất)"
 }
 
 // Tournament status types

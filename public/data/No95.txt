@@ -90,7 +90,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Warmbunny
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-4
 ```
 

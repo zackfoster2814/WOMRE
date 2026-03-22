@@ -91,7 +91,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: dung7877
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 5-1
 ```
 

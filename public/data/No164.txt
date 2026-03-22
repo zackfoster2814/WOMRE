@@ -90,4 +90,11 @@ PvE:
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
 ```
 
+```
+PvP:
+- Đối thủ: CúNga
+- Kết quả: Lose
+- Tỉ số: x-x
+```
+
 ======

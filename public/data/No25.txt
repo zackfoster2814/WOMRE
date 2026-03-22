@@ -73,14 +73,14 @@ Team: 1
 Lover:
 + Lunar (huyvp1412)
 ```
-
 ```
 Other Source:
-- -1 Dura
-- +2 BIQ
+- -1 Dura (War Axe)
 ```
-
-
+```
+PvP Reward:
+- +2 BIQ (stats cao nhất)
+```
 ======
 Battle Log:
 ```

@@ -103,7 +103,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: cá hồi chấm mắm tôm
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 5-2
 ```
 

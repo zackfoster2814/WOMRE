@@ -77,10 +77,17 @@ Team:
 Lover:
 + 
 ```
+```
+Other Source:
+- -1 STR (Lazy)
+- -1 SPD (Lazy)
+- +2 IQ (Lazy)
+- +1 MA (Ceastus)
+```
 
 ```
 PvP Reward:
-- 1 Power: Sonic Scream
+- +1 Power: Sonic Scream
 ```
 
 ======

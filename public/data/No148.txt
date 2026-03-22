@@ -92,7 +92,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Kraken
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 6-0
 ```
 

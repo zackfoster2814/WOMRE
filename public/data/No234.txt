@@ -94,7 +94,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Đào viên họa gia
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 6-0
 ```
 

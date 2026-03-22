@@ -98,7 +98,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: ⭐⭐⭐⭐⭐⭐ karthus2705
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 3-3
 - Note: không nhận 2 char dev: Prime time, seeking wisdom do NPC lmao
 ```

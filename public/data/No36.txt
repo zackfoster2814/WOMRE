@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: God
-Sub-race: Eir (1)
+Sub-race: Eir (2)
 ```
 
 ```
@@ -58,18 +58,17 @@ Runeword: Không
 ```
 1 Power: 
 + Fair Duel (Wand)
-+ Bloodlust
-+ Petrification
-+ Swinging Maestro
-+ AIDS
-+ Force Field
++ Bloodlust (Patient)
++ Petrification (Patient)
++ Swinging Maestro (Patient)
++ AIDS (Patient)
++ Force Field (The Tamer Straight Sword)
 ```
 
 
 ```
 Summon: 
 + Imp (từ Legacy Gear)
-+ Earth Golem
 ```
 
 ```
@@ -89,14 +88,12 @@ Lover:
 ```
 PvP Reward:
 - 1 Gear: Silver Steed
+- 1 Power: Fair Duel (Wand)
 ```
 ```
 Other Source:
-- PvP Reward: Power Fair Duel (Wand)
-- Bloodlust (Patient)
-- Petrification (Patient)
-- Swinging Maestro (Patient)
-- AIDS (Patient)
+
+- -2 dura
 ```
 ======
 Battle Log:
@@ -109,6 +106,7 @@ PvP:
 - Đối thủ: Bộ PC
 - Kết quả: Win
 - Tỉ số: 0-0
+- note: nhận 4 power từ Patient
 ```
 
 ======

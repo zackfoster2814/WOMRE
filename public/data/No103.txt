@@ -98,7 +98,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: 2FaceCat
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 5-3
 ```
 ======

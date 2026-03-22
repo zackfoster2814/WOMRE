@@ -1,7 +1,7 @@
 No.57
 Name: NPC (npc867)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -39,8 +39,7 @@ Houses:
  + 4 Normal gear:
   - Radio
   - Văn Tế
-  - Storage Room Key (Tặng Đai Trinh Tiết)
- (đã mất)
+  - Storage Room Key (Tặng Đai Trinh Tiết) (đã mất)
   - Đai Trinh Tiết
   - Wizard Hat
  + 0 Legacy gear:
@@ -88,7 +87,7 @@ PvP Reward:
 ```
 
 Other Source:
-- +2 IQ
+- +2 IQ (Independent)
 
 ```
 

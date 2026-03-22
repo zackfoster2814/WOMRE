@@ -1,6 +1,6 @@
 No.49
 Name: KK (harry.hm)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -88,4 +88,10 @@ PvE:
 - Punishment: Dura về 0
 ```
 
+```
+PvP:
+- Đối thủ: Syren
+- Kết quả: Lose
+- Tỉ số: 2-4
+```
 ======

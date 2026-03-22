@@ -93,7 +93,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Shin
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 0-6
 ```
 

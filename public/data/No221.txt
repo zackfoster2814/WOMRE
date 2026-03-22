@@ -1,6 +1,6 @@
 No.221
 Name: Shirin (shirin2105)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -96,6 +96,13 @@ PvE:
   + Nhận +2 BIQ
   + Nhận +2 MA
 - Punishment: 
+```
+
+```
+PvP:
+- Đối thủ: Johnny Walkaways
+- Kết quả: Lose
+- Tỉ số: 6-1
 ```
 
 ======

@@ -1634,11 +1634,17 @@ export class CharacterParser {
           // Check if reward is lost
           const lost = isLostItem(reward);
 
-          // Clean up the description: remove trailing commas, parentheses, etc.
-          reward = reward
-            .replace(/[,)]+$/, "") // Remove trailing comma or closing parenthesis
-            .replace(/\s*\(đã mất\)\s*/gi, "") // Remove "đã mất" marker
-            .trim();
+          // Remove "đã mất" marker
+          reward = reward.replace(/\s*\(đã mất\)\s*/gi, "").trim();
+
+          // Extract trailing note in parentheses (after the main value/stat part)
+          // e.g. "+2 BIQ (stats cao nhất)" → description="+2 BIQ", note="stats cao nhất"
+          let note: string | undefined;
+          const noteMatch = reward.match(/^(.+?)\s*\(([^)]+)\)\s*$/);
+          if (noteMatch) {
+            reward = noteMatch[1].trim();
+            note = noteMatch[2].trim();
+          }
 
           // Normalize format: "+ 1 Power" -> "+1 Power", "1 Power" -> "+1 Power"
           reward = reward
@@ -1650,6 +1656,7 @@ export class CharacterParser {
               description: reward,
               applied: !lost,
               isLost: lost || undefined,
+              note: note || undefined,
             });
           }
         }

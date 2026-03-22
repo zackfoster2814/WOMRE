@@ -89,4 +89,11 @@ PvE:
  + -2 vào stat thấp nhất (Str)
 ```
 
+```
+PvP:
+- Đối thủ: Note
+- Kết quả: Win
+- Tỉ số: x-x
+```
+
 ======

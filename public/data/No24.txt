@@ -96,7 +96,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: act engage draw engage
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 2-3
 ```
 

@@ -92,7 +92,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: Anh Bác Sĩ
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 2-2
 ```
 

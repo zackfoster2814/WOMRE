@@ -6,7 +6,7 @@ Nhánh thi đấu: -
 ```
 Ký Sinh:
 + Loại: Diablo
-  -> Stack Wrath: 2
+  -> Stack Wrath: 3
 + Parasite: Munchlax (mitxitieu005)
 ```
 ```
@@ -80,6 +80,11 @@ Lover:
 PvP Reward:
 - +1 dura
 ```
+```
+Other Source:
+- -1 All stats
+```
+
 
 ======
 Battle Log:
@@ -97,7 +102,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Đóm con
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 5-3
 ```
 

@@ -1,7 +1,7 @@
 No.136
 Name: CatShark (catshark0903)
 Status: Còn sống
-Vòng thi đấu: 256
+Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -74,8 +74,9 @@ Lover:
 
 ```
 Other Source:
-- -1 STR
-- -1 DUR
+- -1 STR (Thuốc Tráng Dương)
+- -1 DUR (Thuốc Tráng Dương)
+- -1 IQ (Mute)
 ```
 
 ```

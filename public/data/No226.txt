@@ -90,7 +90,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Kẹo Con
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 5-3
 ```
 

@@ -87,7 +87,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Thanh Tước bé cưng
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 7-1
 ```
 

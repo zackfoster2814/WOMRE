@@ -89,7 +89,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Haijin
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 1-4
 ```
 

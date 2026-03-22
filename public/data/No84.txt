@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Nygg
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 1-5
 - Note: PvPreward 2 char dev Lost an arm, Become Perfectionist (đéo dc nhận lmao)
 ```

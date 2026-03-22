@@ -249,25 +249,6 @@ registerImmediateHandler(
   "+1 lowest base stat per quirk",
 );
 
-/**
- * Quirkful Grant - +1 per quirk to a stat
- */
-registerImmediateHandler(
-  "quirkful_grant_per_quirk",
-  (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const quirkCount = countItemsOfType(ctx.character, "quirk");
-    if (quirkCount === 0) return { skipDefault: true };
-
-    // Grant to lowest stat
-    const lowestStat = findLowestStat(ctx.currentStats);
-    return {
-      statModifiers: [{ stat: lowestStat, value: quirkCount }],
-      skipDefault: true,
-      description: `+${quirkCount} ${lowestStat} từ ${quirkCount} quirk(s)`,
-    };
-  },
-  "+1 per quirk to lowest stat",
-);
 
 /**
  * Frost Fingers - +1 per gear

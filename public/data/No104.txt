@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Memento Duelist
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 2-5
 ```
 

@@ -80,7 +80,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: Em Minh
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 0-4
 ```
 

@@ -89,7 +89,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: мιтιᴘнᴀι︵²ᵏ⁷
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 5-1
 ```
 

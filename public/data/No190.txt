@@ -91,7 +91,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: tophate
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 3-2
 ```
 

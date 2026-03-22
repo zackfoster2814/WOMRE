@@ -67,7 +67,7 @@ Runeword: Không
 ```
 Char dev: 
 + MrBeast
-+ Obtain a Cultivation Technique
++ Obtain a Cultivation Technique (PvP Reward)
 ```
 
 ```
@@ -98,5 +98,6 @@ PvP:
 - Đối thủ: Mr. C.B.
 - Kết quả: Win
 - Tỉ số: 2-3
+- Note: MrBeast tặng bánh mì
 ```
 ======

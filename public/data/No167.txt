@@ -69,6 +69,7 @@ Runeword:
 Char dev: 
 + Lost an Arm
 + Old age
++ 
 ```
 
 ```
@@ -83,6 +84,11 @@ Lover:
 ```
 Other Source:
 - +1 All stats (từ Rampage)
+```
+```
+PvP Reward:
+- Nhận char dev Old age
+- Nợ 1 char dev
 ```
 
 ======

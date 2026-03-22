@@ -87,6 +87,12 @@ PvE:
 - Note: Ca Cao né ở round SPD, crit ở round MA
 ```
 
-======
 ```
+PvP:
+- Đối thủ: Fen
+- Kết quả: Lose
+- Tỉ số: 3-3
+- note: baonine và Lambeii nhận +1 All Stats
+```
+
 ======

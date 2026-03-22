@@ -73,6 +73,10 @@ Team: 24
 Lover:
 + 
 ```
+```
+Other Source:
+- +2 IQ (Independent)
+```
 
 ```
 PvP Reward:

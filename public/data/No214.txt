@@ -98,7 +98,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: LTL
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 4-2
 ```
 

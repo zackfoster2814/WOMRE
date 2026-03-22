@@ -99,7 +99,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: _paower
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 1-1
 ```
 

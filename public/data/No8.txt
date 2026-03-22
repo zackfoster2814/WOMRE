@@ -92,7 +92,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Ako Darling
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 2-4
 ```
 

@@ -91,7 +91,7 @@ Battle Log:
 ```
 PvP:
 - Đối thủ: dlwlrma
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 4-3
 ```
 

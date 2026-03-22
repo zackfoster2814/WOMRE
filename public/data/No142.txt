@@ -1,6 +1,6 @@
 No.142
 Name: litelonglon (littotalk)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
@@ -89,6 +89,13 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất Power Magma Strike và Dominator
+```
+
+```
+PvP:
+- Đối thủ: U36hetvi
+- Kết quả: Lose
+- Tỉ số: 3-4
 ```
 
 ======

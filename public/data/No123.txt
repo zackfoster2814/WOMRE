@@ -95,7 +95,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Pine
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 2-3
 ```
 

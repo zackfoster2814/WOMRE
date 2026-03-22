@@ -96,7 +96,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Em Phốc Trắng
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 5-1
 ```
 

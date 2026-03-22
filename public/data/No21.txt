@@ -104,7 +104,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Johnny Joestar
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 2-4
 ```
 

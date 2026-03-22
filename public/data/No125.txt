@@ -40,7 +40,7 @@ Houses:
 2 Gear: 
  + 2 Normal gear:
   - Kẹo (Từ House)
-  - Thuốc Tráng Dương (đã dùng)
+  - Thuốc Tráng Dương
   - Beer
  + 0 Legacy gear:
   - 
@@ -97,7 +97,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: LamBeii
-- Kết quả: Thắng
+- Kết quả: Win
 - Tỉ số: 0-4
 ```
 

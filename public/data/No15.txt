@@ -90,7 +90,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Trezork
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 6-0
 ```
 

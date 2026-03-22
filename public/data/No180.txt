@@ -96,7 +96,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Tuấn Anh
-- Kết quả: Thua
+- Kết quả: Lose
 - Tỉ số: 2-2
 ```
 
