@@ -1,46 +1,39 @@
 /**
- * Script to auto-generate player-index.json from No*.txt files
- * Run with: node scripts/generate-player-index.js
+ * Generate player_index.json từ Google Drive folder
+ * Chạy: node scripts/generate-player-index.js
+ * Kết quả ghi vào Drive file player_index.json (PLAYER_INDEX_FILE_ID)
  */
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbwwwSDyX85TLGt0bJHVWdSbbOuiXDB8fcP-hz6-ZYZBBJyzv5VGBGlB8NzsK2dGWYD_/exec";
+const PLAYER_DATA_FOLDER_ID = "1C-YoYFTQgb0OEdHQb8E8IY3nmhOFJOAK";
+const PLAYER_INDEX_FILE_ID = "1afL5qTXnCMitweWDUmTq3rECoIBAnbQl";
+// Local mirror path (Google Drive desktop sync)
+const LOCAL_OUTPUT = "g:/My Drive/WOM/WON/PvPData/playerdata/player_index.json";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+async function main() {
+  console.log("Fetching file list from Drive folder...");
+  const url = `${APPS_SCRIPT_URL}?action=listFolder&folderId=${PLAYER_DATA_FOLDER_ID}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Request failed: ${res.status} ${res.statusText}`);
 
-const DATA_DIR = path.join(__dirname, '..', 'public', 'data');
-const OUTPUT_FILE = path.join(DATA_DIR, 'player-index.json');
+  const raw = await res.json();
 
-function generatePlayerIndex() {
-  console.log('Scanning for player files in:', DATA_DIR);
+  // Filter chỉ lấy file No*.txt, sort theo số
+  const index = Object.fromEntries(
+    Object.entries(raw)
+      .filter(([name]) => /^No\d+$/i.test(name))
+      .sort(([a], [b]) => parseInt(a.replace(/\D/g, "")) - parseInt(b.replace(/\D/g, "")))
+  );
 
-  // Read all files in data directory
-  const files = fs.readdirSync(DATA_DIR);
+  const count = Object.keys(index).length;
+  console.log(`Found ${count} player files`);
 
-  // Filter and extract player numbers from No*.txt files
-  const playerNumbers = files
-    .filter(file => /^No\d+\.txt$/i.test(file))
-    .map(file => {
-      const match = file.match(/^No(\d+)\.txt$/i);
-      return match ? parseInt(match[1], 10) : null;
-    })
-    .filter(num => num !== null)
-    .sort((a, b) => a - b);
-
-  console.log(`Found ${playerNumbers.length} player files`);
-
-  // Generate JSON
-  const indexData = {
-    players: playerNumbers
-  };
-
-  // Write to file
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(indexData, null, 2) + '\n');
-
-  console.log(`Generated ${OUTPUT_FILE}`);
-  console.log(`Player range: ${playerNumbers[0]} - ${playerNumbers[playerNumbers.length - 1]}`);
+  const { writeFileSync } = await import("fs");
+  writeFileSync(LOCAL_OUTPUT, JSON.stringify(index, null, 2), "utf8");
+  console.log(`Written to ${LOCAL_OUTPUT}`);
+  console.log("Google Drive desktop will sync automatically.");
+  console.log("Sample:", Object.entries(index).slice(0, 3).map(([k, v]) => `${k}: ${v}`).join(", "));
 }
 
-generatePlayerIndex();
+main().catch(console.error);
