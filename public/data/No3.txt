@@ -82,7 +82,7 @@ PvP Reward:
 ```
 Other Source:
 - Night Vision (Wand)
-- 2 Dura (Wand)
+- -2 Dura (Wand)
 ```
 
 ======

@@ -85,10 +85,11 @@ Lover:
 ```
 PvP Reward:
 - Nhận 1 gear: Leather Jacket
+```
+```
+Other Source
 - -1 All stats (Chokevy)
 ```
-
-
 ======
 Battle Log:
 ```

@@ -92,7 +92,7 @@ PvP Reward:
 ```
 Other Source:
 - 1 Power: Fair Duel (Wand)
-- 2 Dura (Wand)
+- -2 Dura (Wand)
 ```
 ======
 Battle Log:
