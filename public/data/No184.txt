@@ -87,7 +87,7 @@ Lover:
 Other source:
 - +1 All Stats
 - -1 Dura
-- -1 BIQ
+- -1 str
 ```
 ```
 PvP Reward:
