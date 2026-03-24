@@ -40,6 +40,7 @@ Houses:
   - Đai trinh tiết
   - Ancient Protector
   - Holy symbol
+  - Khung hình thờ
  + 0 Legacy gear:
   - 
 ```
@@ -104,7 +105,7 @@ PvP:
 - Đối thủ: Novaz
 - Kết quả: Win
 - Tỉ số: 0-6
-- Note: Nhận thêm Fire
+- Note: Nhận thêm Fire, nhận Khung hình thờ từ Novaz
 ```
 
 ======

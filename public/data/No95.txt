@@ -1,7 +1,7 @@
 No.95
 Name: AtKo (ame_tako)
-Status: Còn sống
-Vòng thi đấu: 128
+Status: Đã bị loại
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -90,8 +90,9 @@ PvE:
 ```
 PvP:
 - Đối thủ: Warmbunny
-- Kết quả: Win
+- Kết quả: Thua
 - Tỉ số: 3-4
 ```
+
 
 ======

@@ -18,8 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Under the Weather (đã mất)
-+ Shining Brightly
++ Shining Brightly (từ Under the Weather)
 + Generous
 ```
 ```

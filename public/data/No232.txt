@@ -82,7 +82,7 @@ PvP Reward:
 ```
 ```
 Other Source:
-- -1 Durability (Glass Bottle — sau combat)
+- 
 ```
 
 ======

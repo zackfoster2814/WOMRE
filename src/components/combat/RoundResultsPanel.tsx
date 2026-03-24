@@ -1,12 +1,24 @@
+import { useState } from "react";
 import { Character, CharacterStats } from "../../types/character";
 import { PvPPlayerData, RoundResult } from "../../types/battleZone";
 import { WheelSpinItem } from "../../components/ProbabilityWheelModal";
 import { STAT_ORDER } from "../../constants/battleZone";
 import {
-  CRIT_ITEMS, EVASION_ITEMS, CRUELTY_ITEMS, BLIND_ITEMS, MUTE_ITEMS,
-  BASH_ITEMS, RANGER_RED_ITEMS, RANGER_BLUE_ITEMS, RANGER_BLACK_ITEMS,
-  RANGER_YELLOW_ITEMS, RANGER_PINK_ITEMS, RANGER_SILVER_ITEMS,
-  SAND_OF_TIME_ITEMS, MISERICORDE_ITEMS, GAMBLER_ITEMS,
+  CRIT_ITEMS,
+  EVASION_ITEMS,
+  CRUELTY_ITEMS,
+  BLIND_ITEMS,
+  MUTE_ITEMS,
+  BASH_ITEMS,
+  RANGER_RED_ITEMS,
+  RANGER_BLUE_ITEMS,
+  RANGER_BLACK_ITEMS,
+  RANGER_YELLOW_ITEMS,
+  RANGER_PINK_ITEMS,
+  RANGER_SILVER_ITEMS,
+  SAND_OF_TIME_ITEMS,
+  MISERICORDE_ITEMS,
+  GAMBLER_ITEMS,
 } from "../../constants/wheelConfigs";
 
 const GOLDEN_PARRY_ITEMS: WheelSpinItem[] = [
@@ -14,13 +26,42 @@ const GOLDEN_PARRY_ITEMS: WheelSpinItem[] = [
   { label: "Không", weight: 65, isSuccess: false, color: "#6b7280" },
 ];
 const PENNYWORTHY_WIN_ITEMS: WheelSpinItem[] = [
-  { label: "+1 điểm bonus (36%)", weight: 36, isSuccess: true, color: "#a3e635" },
-  { label: "Không kích hoạt (64%)", weight: 64, isSuccess: false, color: "#6b7280" },
+  {
+    label: "+1 điểm bonus (36%)",
+    weight: 36,
+    isSuccess: true,
+    color: "#a3e635",
+  },
+  {
+    label: "Không kích hoạt (64%)",
+    weight: 64,
+    isSuccess: false,
+    color: "#6b7280",
+  },
 ];
 const PENNYWORTHY_LOSE_ITEMS: WheelSpinItem[] = [
-  { label: "+2 vào chỉ số thua (36%)", weight: 36, isSuccess: true, color: "#34d399" },
-  { label: "Không kích hoạt (64%)", weight: 64, isSuccess: false, color: "#6b7280" },
+  {
+    label: "+2 vào chỉ số thua (36%)",
+    weight: 36,
+    isSuccess: true,
+    color: "#34d399",
+  },
+  {
+    label: "Không kích hoạt (64%)",
+    weight: 64,
+    isSuccess: false,
+    color: "#6b7280",
+  },
 ];
+
+export interface DebugRoundPatch {
+  roundArrayIndex: number;
+  statKey: keyof CharacterStats;
+  p1Value?: number;
+  p2Value?: number;
+  p1StatDelta?: number; // thay đổi p1Stats[statKey] trước khi tính
+  p2StatDelta?: number;
+}
 
 interface RoundResultsPanelProps {
   rounds: RoundResult[];
@@ -43,8 +84,17 @@ interface RoundResultsPanelProps {
     effects: { onWin: string[]; onLose: string[]; onTie: string[] },
     statKey?: string,
     roundsWonBefore?: number,
-  ) => { pts: number; pending: boolean; color: string; autoApplied?: boolean; engineBase?: number };
-  applyDevWeights: (effectName: string, items: WheelSpinItem[]) => WheelSpinItem[];
+  ) => {
+    pts: number;
+    pending: boolean;
+    color: string;
+    autoApplied?: boolean;
+    engineBase?: number;
+  };
+  applyDevWeights: (
+    effectName: string,
+    items: WheelSpinItem[],
+  ) => WheelSpinItem[];
   setRoundSpinModal: (v: {
     isOpen: boolean;
     title: string;
@@ -52,6 +102,8 @@ interface RoundResultsPanelProps {
     roundIndex: number;
     side: "player1" | "player2";
   }) => void;
+  /** Debug: callback khi user patch 1 round */
+  onDebugRound?: (patch: DebugRoundPatch) => void;
 }
 
 export function RoundResultsPanel({
@@ -68,7 +120,34 @@ export function RoundResultsPanel({
   computeRoundPoints,
   applyDevWeights,
   setRoundSpinModal,
+  onDebugRound,
 }: RoundResultsPanelProps) {
+  const [openDebugRow, setOpenDebugRow] = useState<number | null>(null);
+  const [debugDraft, setDebugDraft] = useState<{
+    p1Val: string;
+    p2Val: string;
+    p1StatDelta: string;
+    p2StatDelta: string;
+  }>({ p1Val: "", p2Val: "", p1StatDelta: "", p2StatDelta: "" });
+  const [debugDirty, setDebugDirty] = useState(false);
+  const [showUnsavedDialog, setShowUnsavedDialog] = useState<number | null>(
+    null,
+  ); // target row để mở sau khi confirm
+  const openDebug = (rowIdx: number, round: RoundResult | undefined) => {
+    if (debugDirty && openDebugRow !== null && openDebugRow !== rowIdx) {
+      setShowUnsavedDialog(rowIdx);
+      return;
+    }
+    setOpenDebugRow(openDebugRow === rowIdx ? null : rowIdx);
+    setDebugDraft({
+      p1Val: round?.player1Value?.toString() ?? "",
+      p2Val: round?.player2Value?.toString() ?? "",
+      p1StatDelta: "0",
+      p2StatDelta: "0",
+    });
+    setDebugDirty(false);
+  };
+
   const p1Effects = getPerRoundEffects(p1char, player1?.no);
   const p2Effects = getPerRoundEffects(p2char, player2?.no);
   const showSpins = !!p1char || !!p2char;
@@ -155,7 +234,13 @@ export function RoundResultsPanel({
         <button
           key={effectName}
           onClick={() =>
-            setRoundSpinModal({ isOpen: true, title: effectName, items, roundIndex: roundIdx, side })
+            setRoundSpinModal({
+              isOpen: true,
+              title: effectName,
+              items,
+              roundIndex: roundIdx,
+              side,
+            })
           }
           className={`inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded font-bold border transition-colors ${
             result.isSuccess
@@ -172,7 +257,13 @@ export function RoundResultsPanel({
       <button
         key={effectName}
         onClick={() =>
-          setRoundSpinModal({ isOpen: true, title: effectName, items, roundIndex: roundIdx, side })
+          setRoundSpinModal({
+            isOpen: true,
+            title: effectName,
+            items,
+            roundIndex: roundIdx,
+            side,
+          })
         }
         className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded bg-purple-700/50 hover:bg-purple-600/60 text-purple-200 font-bold transition-colors border border-purple-600/30"
         title={`Quay ${titleText}`}
@@ -183,8 +274,7 @@ export function RoundResultsPanel({
   };
 
   // Build display rows — insert BIQ×2 row after BIQ if rounds has extra entry or flag set
-  const hasZoltraakExtra =
-    rounds.length > STAT_ORDER.length || !!extraBiqRound;
+  const hasZoltraakExtra = rounds.length > STAT_ORDER.length || !!extraBiqRound;
   const displayRows: {
     key: keyof CharacterStats;
     label: string;
@@ -220,13 +310,56 @@ export function RoundResultsPanel({
       : null;
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1 relative">
+      {/* Unsaved changes dialog */}
+      {showUnsavedDialog !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="bg-gray-900 border border-yellow-600/50 rounded-xl p-5 max-w-xs w-full shadow-2xl">
+            <div className="text-yellow-400 font-bold mb-2">Chưa lưu</div>
+            <div className="text-gray-300 text-sm mb-4">
+              Round này có thay đổi chưa lưu. Bạn có muốn lưu trước không?
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={() => {
+                  setShowUnsavedDialog(null);
+                  setOpenDebugRow(null);
+                  setDebugDirty(false);
+                }}
+                className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded text-sm"
+              >
+                Bỏ qua
+              </button>
+              <button
+                onClick={() => {
+                  const target = showUnsavedDialog;
+                  setShowUnsavedDialog(null);
+                  setOpenDebugRow(null);
+                  setDebugDirty(false);
+                  // Mở row mới
+                  const targetRound = rounds[target];
+                  setTimeout(() => {
+                    setOpenDebugRow(target);
+                    setDebugDraft({
+                      p1Val: targetRound?.player1Value?.toString() ?? "",
+                      p2Val: targetRound?.player2Value?.toString() ?? "",
+                      p1StatDelta: "0",
+                      p2StatDelta: "0",
+                    });
+                  }, 0);
+                }}
+                className="px-3 py-1.5 bg-yellow-700/60 hover:bg-yellow-600/60 text-yellow-200 rounded text-sm border border-yellow-600/40"
+              >
+                Không lưu, chuyển sang
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {displayRows.map(({ key, label, roundArrayIndex }) => {
         const round = rounds[roundArrayIndex];
         const revealed =
-          revealedUpToArr !== null
-            ? roundArrayIndex <= revealedUpToArr
-            : true;
+          revealedUpToArr !== null ? roundArrayIndex <= revealedUpToArr : true;
         const p1Win = revealed && round?.winner === "player1";
         const p2Win = revealed && round?.winner === "player2";
         const tie = revealed && round?.winner === "tie";
@@ -245,8 +378,7 @@ export function RoundResultsPanel({
         const isSandFirstLoss = (loserSide: "player1" | "player2") => {
           for (let ri = 0; ri < roundArrayIndex; ri++) {
             const r = rounds[ri];
-            if (r && r.winner !== "tie" && r.winner !== loserSide)
-              return false;
+            if (r && r.winner !== "tie" && r.winner !== loserSide) return false;
           }
           return true;
         };
@@ -427,9 +559,7 @@ export function RoundResultsPanel({
               {/* P2 value + pts */}
               <div className="flex items-center justify-start gap-1.5">
                 {p2Win && (
-                  <span className="text-red-400 text-[10px] font-black">
-                    ◀
-                  </span>
+                  <span className="text-red-400 text-[10px] font-black">◀</span>
                 )}
                 <span
                   className={`text-sm font-black tabular-nums ${
@@ -470,6 +600,148 @@ export function RoundResultsPanel({
                   </div>
                 </div>
               )}
+
+            {/* Debug gear icon */}
+            {onDebugRound && (
+              <div className="flex justify-center pb-0.5">
+                <button
+                  onClick={() => openDebug(roundArrayIndex, round)}
+                  className={`text-[10px] px-1.5 py-0.5 rounded transition-colors ${
+                    openDebugRow === roundArrayIndex
+                      ? "bg-yellow-600/40 text-yellow-300 border border-yellow-500/50"
+                      : "bg-gray-800/60 text-gray-600 hover:text-gray-400 border border-gray-700/30"
+                  }`}
+                  title="Debug round này"
+                >
+                  ⚙
+                </button>
+              </div>
+            )}
+
+            {/* Debug panel inline */}
+            {onDebugRound && openDebugRow === roundArrayIndex && (
+              <div className="border-t border-yellow-700/30 bg-yellow-950/20 px-2 py-2 text-xs space-y-2">
+                <div className="text-yellow-400 font-bold text-[10px] uppercase tracking-wider">
+                  Debug — R{roundArrayIndex + 1} ({label})
+                </div>
+                {/* Điểm round */}
+                <div>
+                  <div className="text-gray-400 text-[10px] mb-1">chỉ số</div>
+                  <div className="flex gap-2 items-center">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-blue-400 text-[10px]">
+                        {player1?.name ?? "P1"}
+                      </span>
+                      <input
+                        type="number"
+                        value={debugDraft.p1Val}
+                        onChange={(e) => {
+                          setDebugDraft((d) => ({
+                            ...d,
+                            p1Val: e.target.value,
+                          }));
+                          setDebugDirty(true);
+                        }}
+                        className="w-16 px-1.5 py-0.5 bg-gray-900 border border-blue-700/50 rounded text-blue-200 text-xs text-center"
+                      />
+                    </div>
+                    <span className="text-gray-600 mt-3">vs</span>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-red-400 text-[10px]">
+                        {player2?.name ?? "P2"}
+                      </span>
+                      <input
+                        type="number"
+                        value={debugDraft.p2Val}
+                        onChange={(e) => {
+                          setDebugDraft((d) => ({
+                            ...d,
+                            p2Val: e.target.value,
+                          }));
+                          setDebugDirty(true);
+                        }}
+                        className="w-16 px-1.5 py-0.5 bg-gray-900 border border-red-700/50 rounded text-red-200 text-xs text-center"
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/* Điều chỉnh chỉ số stat */}
+                <div>
+                  <div className="text-gray-400 text-[10px] mb-1">
+                    Điểm {label} (±)
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-blue-400 text-[10px]">
+                        {player1?.name ?? "P1"}
+                      </span>
+                      <input
+                        type="number"
+                        value={debugDraft.p1StatDelta}
+                        onChange={(e) => {
+                          setDebugDraft((d) => ({
+                            ...d,
+                            p1StatDelta: e.target.value,
+                          }));
+                          setDebugDirty(true);
+                        }}
+                        className="w-16 px-1.5 py-0.5 bg-gray-900 border border-blue-700/50 rounded text-blue-200 text-xs text-center"
+                      />
+                    </div>
+                    <span className="text-gray-600 mt-3">vs</span>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-red-400 text-[10px]">
+                        {player2?.name ?? "P2"}
+                      </span>
+                      <input
+                        type="number"
+                        value={debugDraft.p2StatDelta}
+                        onChange={(e) => {
+                          setDebugDraft((d) => ({
+                            ...d,
+                            p2StatDelta: e.target.value,
+                          }));
+                          setDebugDirty(true);
+                        }}
+                        className="w-16 px-1.5 py-0.5 bg-gray-900 border border-red-700/50 rounded text-red-200 text-xs text-center"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-2 pt-1">
+                  <button
+                    onClick={() => {
+                      const p1v = parseFloat(debugDraft.p1Val);
+                      const p2v = parseFloat(debugDraft.p2Val);
+                      const p1d = parseFloat(debugDraft.p1StatDelta);
+                      const p2d = parseFloat(debugDraft.p2StatDelta);
+                      onDebugRound({
+                        roundArrayIndex,
+                        statKey: key,
+                        p1Value: isNaN(p1v) ? undefined : p1v,
+                        p2Value: isNaN(p2v) ? undefined : p2v,
+                        p1StatDelta: isNaN(p1d) || p1d === 0 ? undefined : p1d,
+                        p2StatDelta: isNaN(p2d) || p2d === 0 ? undefined : p2d,
+                      });
+                      setDebugDirty(false);
+                      setOpenDebugRow(null);
+                    }}
+                    className="px-3 py-1 bg-green-700/60 hover:bg-green-600/60 text-green-200 rounded text-[10px] font-bold border border-green-600/40"
+                  >
+                    Luu
+                  </button>
+                  <button
+                    onClick={() => {
+                      setOpenDebugRow(null);
+                      setDebugDirty(false);
+                    }}
+                    className="px-3 py-1 bg-gray-700/60 hover:bg-gray-600/60 text-gray-300 rounded text-[10px] border border-gray-600/40"
+                  >
+                    Huy
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         );
       })}

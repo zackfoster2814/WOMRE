@@ -39,7 +39,7 @@ Houses:
 ```
 3 Gear: 
  + 3 Normal gear:
-  - Kuro's Charm
+  - Kuro's Charm (đã mất)
   - Golden Coin
   - Wine
  + 0 Legacy gear:

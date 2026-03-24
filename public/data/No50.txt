@@ -89,8 +89,8 @@ PvP Reward:
 ```
 ```
 Other Source:
-- -1 str
-- -1 dur
+- -1 str (thuốc tráng dương)
+- -1 dur (thuốc tráng dương)
 - -2 dur
 ```
 

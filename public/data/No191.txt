@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Under the Weather
++ Shining Brightly (nhận từ Under the Weather)
 + Bloodthirsty
 + Training Restricted(Từ Bánh Mì)
 ```

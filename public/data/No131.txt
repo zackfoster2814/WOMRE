@@ -85,7 +85,13 @@ Lover:
 PvP Reward:
 - Nhận 2 power
 ```
-
+```
+Other Source:
+- -1 dura (Thuốc tráng dương)
+- -1 Str (Thuốc tráng dương)
+- -1 dura (Thuốc tráng dương)
+- -1 Str (Thuốc tráng dương)
+```
 
 ======
 Battle Log:

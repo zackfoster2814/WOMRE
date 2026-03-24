@@ -25,11 +25,11 @@ Archetype:
 + Bloodthirsty
 ```
 ```
-Str: 1
+Str: 10
 Spd: 3
-Dur: 1
+Dur: 10
 IQ: 5
-BIQ: 5
+BIQ: 50
 MA: 9
 ```
 

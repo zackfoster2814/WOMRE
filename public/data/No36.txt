@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: God
-Sub-race: Eir (2)
+Sub-race: Eir (1)
 ```
 
 ```
@@ -88,12 +88,11 @@ Lover:
 ```
 PvP Reward:
 - 1 Gear: Silver Steed
-- 1 Power: Fair Duel (Wand)
 ```
 ```
 Other Source:
-
-- -2 dura
+- 1 Power: Fair Duel (Wand)
+- 2 Dura (Wand)
 ```
 ======
 Battle Log:

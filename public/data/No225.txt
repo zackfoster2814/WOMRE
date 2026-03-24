@@ -80,6 +80,11 @@ Lover:
 PvP Reward:
 - +1 dura
 ```
+```
+Other Source:
+- -1 dura (Thuốc tráng dương)
+- -1 Str (Thuốc tráng dương)
+```
 
 ======
 Battle Log:

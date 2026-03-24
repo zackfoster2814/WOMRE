@@ -80,7 +80,6 @@ Lover:
 PvP Reward:
 - +1 dura
 ```
-
 ======
 Battle Log:
 ```

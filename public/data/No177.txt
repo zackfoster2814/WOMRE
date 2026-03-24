@@ -19,7 +19,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Shining Brightly (đã bị mât
++ Shining Brightly (đã bị mât)
 + Under the Weather
 + Resilent
 ```

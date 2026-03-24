@@ -17,6 +17,7 @@ Archetype:
 + Wibu
  -> Jojo
   -> The World
++ Thinkers
 ```
 ``` 
 3 Quirk:  
@@ -36,7 +37,6 @@ MA: 1
 ```
 Houses: 
 + New London
-+ Thinkers
 ```
 
 ```

@@ -789,6 +789,74 @@ export interface CombatAudioControllerProps {
   volumeScale?: number; // 0–1, nhân với volume của từng track
 }
 
+// ============================================================
+// FALLBACK BGM — phát khi cả 2 bên không có track riêng
+// ============================================================
+
+const BGM_FILES = ["1.mp3", "2.mp3", "3.mp3", "4.mp3", "5.mp3"];
+
+export interface FallbackBgmControllerProps {
+  stopped?: boolean;
+  volumeScale?: number;
+}
+
+export const FallbackBgmController = ({
+  stopped,
+  volumeScale = 1,
+}: FallbackBgmControllerProps) => {
+  const [open, setOpen] = useState(false);
+
+  const [track] = useState<CombatAudioTrack>(() => {
+    const file = BGM_FILES[Math.floor(Math.random() * BGM_FILES.length)];
+    return {
+      id: "bgm-fallback",
+      itemName: "BGM",
+      type: "local",
+      src: `/assets/bgm/${file}`,
+      label: file.replace(/\.mp3$/, ""),
+      loop: false,
+      localPlaylist: BGM_FILES,
+      localPlaylistFolder: "/assets/bgm/",
+    };
+  });
+
+  return (
+    <div className="relative flex justify-center">
+      <div
+        className="absolute z-[200] bottom-full mb-1 w-72 bg-gray-900 border border-purple-500/40 rounded-xl shadow-2xl p-2 space-y-2"
+        style={{ display: open ? undefined : "none" }}
+      >
+        <div className="flex items-center justify-between pb-1 border-b border-gray-700/50">
+          <span className="text-gray-300 text-[10px] font-semibold uppercase tracking-wide">
+            🎵 Nhạc nền
+          </span>
+          <button
+            onClick={() => setOpen(false)}
+            className="text-gray-500 hover:text-white text-xs leading-none"
+          >
+            ✕
+          </button>
+        </div>
+        <LocalTrackCard
+          track={track}
+          pan={0}
+          accent="blue"
+          visible
+          stopped={stopped}
+          volumeScale={volumeScale}
+        />
+      </div>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold transition-colors bg-purple-700 hover:bg-purple-600 text-white"
+        title="Nhạc nền"
+      >
+        🎵
+      </button>
+    </div>
+  );
+};
+
 export const CombatAudioController = ({
   tracks,
   otherSideHasAudio,

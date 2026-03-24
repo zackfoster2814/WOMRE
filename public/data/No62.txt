@@ -62,6 +62,7 @@ Runeword: Không
 2 Power: 
 + Luck Manipulation(Từ House)
 + Hydrate(Từ House)
++ Adapt (từ 2 ngón)
 ```
 
 ```

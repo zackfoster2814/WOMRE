@@ -75,7 +75,10 @@ Team: 27
 Lover:
 + 
 ```
-
+```
+Other source: 
+- +1 IQ (Compassionate)
+```
 ======
 Battle Log:
 ```

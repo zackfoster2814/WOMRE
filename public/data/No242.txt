@@ -87,7 +87,7 @@ Other Source:
 ```
 PvP:
 - Đối thủ: Wohlhabend
-- Kết quả: Win
+- Kết quả: Thắng
 - Tỉ số: 0-4
 ```
 

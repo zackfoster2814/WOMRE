@@ -88,6 +88,7 @@ PvP Reward:
 ```
 Other Source:
 - học power: Quas
+- -1 All stats (Chokevy)
 ```
 
 ======

@@ -40,8 +40,7 @@ Houses:
  + 5 Normal gear:
   - Đá (Từ Quirk)
   - Frying Pan(Từ Quirk)
-  - Giấy Nợ Gia Truyền
- (đã mât
+  - Giấy Nợ Gia Truyền (đã mất)
   - Golden coin
   - Golden coin
   - Radio
@@ -86,6 +85,7 @@ Lover:
 ```
 PvP Reward:
 - Nhận 1 gear: Leather Jacket
+- -1 All stats (Chokevy)
 ```
 
 

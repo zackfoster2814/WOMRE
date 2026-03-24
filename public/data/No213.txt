@@ -84,6 +84,7 @@ PvP Reward:
 ```
 Other Source:
 - -5 BIQ
+- +1 Str
 ```
 
 ======

@@ -40,7 +40,7 @@ Houses:
 1 Gear: 
  + 1 Normal gear:
   - Wine
-  - Kuro's Charm
+  - Kuro's Charm (đã mất)
   - Soap
   - Dark Lanthorn
  + 0 Legacy gear:

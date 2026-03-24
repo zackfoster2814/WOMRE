@@ -735,6 +735,7 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
       actualWinner: "player1" | "player2",
       p1ScoreOverride?: number,
       p2ScoreOverride?: number,
+      forceIsSubCombat?: boolean,
     ) => {
       const _p1Score = p1ScoreOverride ?? p1Score;
       const _p2Score = p2ScoreOverride ?? p2Score;
@@ -3956,7 +3957,10 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
       );
 
       // ── PvP Reward wheels ── (bỏ qua nếu là Roundtable Hold sub-combat) ──
-      if (!roundtableSubMode) {
+      // forceIsSubCombat: khi buildAfterCombat bị defer qua roundtable hold, roundtableSubMode
+      // trong closure vẫn là true → phải dùng forceIsSubCombat=false để không bỏ qua PvP Reward
+      const _isSubCombat = forceIsSubCombat !== undefined ? forceIsSubCombat : roundtableSubMode;
+      if (!_isSubCombat) {
         const PVP_REWARD_ITEMS: WheelSpinItem[] = [
           {
             label: "+1 Strength",
@@ -4349,7 +4353,10 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
       return; // Chờ roundSpinResults useEffect gọi lại
     }
     if (isRoundtablePending) {
-      pendingAfterCombatBuildRef.current = buildAfterCombat;
+      // Wrap với forceIsSubCombat=false vì khi defer gọi lại, roundtableSubMode trong closure
+      // vẫn là true (sub-combat context) → sẽ bỏ qua PvP Reward nếu không override
+      pendingAfterCombatBuildRef.current = (w: "player1" | "player2", s1?: number, s2?: number) =>
+        buildAfterCombat(w, s1, s2, false);
     } else {
       pendingAfterCombatBuildRef.current = null;
       buildAfterCombat(overallWinner);

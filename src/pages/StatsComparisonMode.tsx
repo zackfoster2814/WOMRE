@@ -8,7 +8,10 @@ import { HandlerRegistry } from "../effects/handlers";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 // getAssetPath used via useWheelHandlers
 import { CombatEffectsPanel } from "../components/CombatEffectsPanel";
-import { ProbabilityWheelModal, type WheelSpinItem } from "../components/ProbabilityWheelModal";
+import {
+  ProbabilityWheelModal,
+  type WheelSpinItem,
+} from "../components/ProbabilityWheelModal";
 import { PvPBackground3D } from "../components/three/PvPBackground3D";
 import { CombatIntroScreen } from "../components/three/CombatIntroScreen";
 import { ArenaLoadingScreen } from "../components/three/ArenaLoadingScreen";
@@ -17,42 +20,79 @@ import { PlayerCard3DFrame } from "../components/three/PlayerCard3D";
 import { ScoreDisplay3D } from "../components/three/ScoreDisplay3D";
 import { CombatEffects3D } from "../components/three/CombatEffects3D";
 import { Canvas } from "@react-three/fiber";
-import { fetchPlayerTexts, getPlayerIndex, invalidatePlayerCache } from "../utils/googleDrive";
 import {
-  PvPPlayerData, RoundResult, CombatResult, CarryOverEffect, RoundEvent,
-  PointChange, RoundLog, DothrakiRule, StepCombatState, StatBubble,
+  fetchPlayerTexts,
+  getPlayerIndex,
+  invalidatePlayerCache,
+} from "../utils/googleDrive";
+import {
+  PvPPlayerData,
+  RoundResult,
+  CombatResult,
+  CarryOverEffect,
+  RoundEvent,
+  PointChange,
+  RoundLog,
+  DothrakiRule,
+  StepCombatState,
+  StatBubble,
   BattleModeProps,
 } from "../types/battleZone";
-import { STAT_ORDER, _ALL_STAT_KEYS, playEndCombatSound } from "../constants/battleZone";
-import { normalizeStatKey, applyStatDelta, resolveStatTargets, calcStatsWithDisabled, getPerRoundEffects as getPerRoundEffectsFn } from "../utils/combatStats";
+import {
+  STAT_ORDER,
+  _ALL_STAT_KEYS,
+  playEndCombatSound,
+} from "../constants/battleZone";
+import {
+  normalizeStatKey,
+  applyStatDelta,
+  resolveStatTargets,
+  calcStatsWithDisabled,
+  getPerRoundEffects as getPerRoundEffectsFn,
+} from "../utils/combatStats";
 import { FloatingStatBubblesOverlay } from "../components/combat/FloatingStatBubblesOverlay";
 import { SCPlayerCard } from "../components/combat/SCPlayerCard";
 import { DevWheelPanel } from "../components/combat/DevWheelPanel";
-import { RoundResultsPanel } from "../components/combat/RoundResultsPanel";
+import { RoundResultsPanel, type DebugRoundPatch } from "../components/combat/RoundResultsPanel";
 import { CreatorsCatModal } from "../components/combat/CreatorsCatModal";
 import { PlayerSidebar } from "../components/combat/PlayerSidebar";
+import {
+  FallbackBgmController,
+  detectCombatAudioTracks,
+} from "../components/CombatAudioController";
 import { AfterCombatPanel } from "../components/combat/AfterCombatPanel";
-import { BattleWheelSpinner } from "../components/combat/BattleWheelSpinner";
 import { usePvPScores } from "../hooks/usePvPScores";
 import { useWheelSpins } from "../hooks/useWheelSpins";
-import { computeRoundPoints as computeRoundPointsFn, type ComputeRoundPointsContext } from "../utils/pointCalculation";
-import { parsePlayerFromText, reResolveWithAllChars } from "../utils/playerParsing";
+import {
+  computeRoundPoints as computeRoundPointsFn,
+  type ComputeRoundPointsContext,
+} from "../utils/pointCalculation";
+import {
+  parsePlayerFromText,
+  reResolveWithAllChars,
+} from "../utils/playerParsing";
 import { useWheelHandlers } from "../hooks/useWheelHandlers";
 import { useStartCombat } from "../hooks/useStartCombat";
 import { useResolveNextRound } from "../hooks/useResolveNextRound";
 import {
-  CRIT_ITEMS, EVASION_ITEMS, MISERICORDE_ITEMS,
-  GAMBLER_ITEMS, CRUELTY_ITEMS, BLIND_ITEMS, MUTE_ITEMS,
+  CRIT_ITEMS,
+  EVASION_ITEMS,
+  MISERICORDE_ITEMS,
+  GAMBLER_ITEMS,
+  CRUELTY_ITEMS,
+  BLIND_ITEMS,
+  MUTE_ITEMS,
 } from "../constants/wheelConfigs";
-
 
 let _scmEffectsInitialized = false;
 function ensureEffectsInitialized() {
-  if (!_scmEffectsInitialized) { initializeEffectData(); _scmEffectsInitialized = true; }
+  if (!_scmEffectsInitialized) {
+    initializeEffectData();
+    _scmEffectsInitialized = true;
+  }
 }
 
 let _bubbleIdCounter = 0;
-
 
 export const StatsComparisonMode = ({
   onBack,
@@ -1943,6 +1983,7 @@ export const StatsComparisonMode = ({
     setTricksterResult(snap.tricksterResult);
     setBlackMagicStat(snap.blackMagicStat);
     setDothrakiSpinResult(snap.dothrakiSpinResult);
+    setAfterCombatEntries(snap.afterCombatEntries ?? []);
     setAfterCombatSpinResults(snap.afterCombatSpinResults);
     setTarnishedList(snap.tarnishedList);
     setSelectedTarnished(snap.selectedTarnished);
@@ -2050,6 +2091,50 @@ export const StatsComparisonMode = ({
     });
   };
 
+  // Debug: patch 1 round (điểm hiển thị và/hoặc chỉ số stat)
+  const handleDebugRound = (patch: DebugRoundPatch) => {
+    const { roundArrayIndex, statKey, p1Value, p2Value, p1StatDelta, p2StatDelta } = patch;
+    // Patch combatResult.rounds (điểm hiển thị)
+    if (p1Value !== undefined || p2Value !== undefined) {
+      setCombatResult((prev) => {
+        if (!prev) return prev;
+        const newRounds = prev.rounds.map((r, i) => {
+          if (i !== roundArrayIndex) return r;
+          const nP1 = p1Value !== undefined ? p1Value : r.player1Value;
+          const nP2 = p2Value !== undefined ? p2Value : r.player2Value;
+          const winner: "player1" | "player2" | "tie" =
+            nP1 > nP2 ? "player1" : nP2 > nP1 ? "player2" : "tie";
+          return { ...r, player1Value: nP1, player2Value: nP2, winner };
+        });
+        return { ...prev, rounds: newRounds };
+      });
+      // Patch stepState.resolvedRounds cùng lúc
+      setStepState((prev) => {
+        if (!prev) return prev;
+        const newResolved = prev.resolvedRounds.map((r, i) => {
+          if (i !== roundArrayIndex) return r;
+          const nP1 = p1Value !== undefined ? p1Value : r.player1Value;
+          const nP2 = p2Value !== undefined ? p2Value : r.player2Value;
+          const winner: "player1" | "player2" | "tie" =
+            nP1 > nP2 ? "player1" : nP2 > nP1 ? "player2" : "tie";
+          return { ...r, player1Value: nP1, player2Value: nP2, winner };
+        });
+        return { ...prev, resolvedRounds: newResolved };
+      });
+    }
+    // Patch stepState.p1Stats / p2Stats (chỉ số stat trước khi tính round này)
+    if (p1StatDelta !== undefined || p2StatDelta !== undefined) {
+      setStepState((prev) => {
+        if (!prev) return prev;
+        const newP1Stats = { ...prev.p1Stats };
+        const newP2Stats = { ...prev.p2Stats };
+        if (p1StatDelta !== undefined) newP1Stats[statKey] = (newP1Stats[statKey] ?? 0) + p1StatDelta;
+        if (p2StatDelta !== undefined) newP2Stats[statKey] = (newP2Stats[statKey] ?? 0) + p2StatDelta;
+        return { ...prev, p1Stats: newP1Stats, p2Stats: newP2Stats };
+      });
+    }
+  };
+
   // Reset all combat state
   const resetCombat = () => {
     setCombatResult(null);
@@ -2105,60 +2190,107 @@ export const StatsComparisonMode = ({
 
   // Per-round spin effects: detect which effects trigger per round win/lose
   // Wrapper để dùng disabledItems từ state
-  const getPerRoundEffects = (
-    char: Character | undefined,
-    playerNo?: number,
-  ) => getPerRoundEffectsFn(char, playerNo, disabledItems);
+  const getPerRoundEffects = (char: Character | undefined, playerNo?: number) =>
+    getPerRoundEffectsFn(char, playerNo, disabledItems);
 
   // State for per-round spin modal in round display
 
   const {
-    roundSpinModal, setRoundSpinModal,
-    roundSpinResults, setRoundSpinResults,
-    preCombatModal, setPreCombatModal,
-    oneTrickPonyStat, setOneTrickPonyStat,
-    huntersMarkStat, setHuntersMarkStat,
+    roundSpinModal,
+    setRoundSpinModal,
+    roundSpinResults,
+    setRoundSpinResults,
+    preCombatModal,
+    setPreCombatModal,
+    oneTrickPonyStat,
+    setOneTrickPonyStat,
+    huntersMarkStat,
+    setHuntersMarkStat,
     setHuntersMarkStat2,
-    guidanceStats, setGuidanceStats,
-    raumanianSuccess, setRaumanianSuccess,
-    goldenCoinPoints, setGoldenCoinPoints,
-    cursedCoinTarget, setCursedCoinTarget,
-    scryingSuccess, setScryingSuccess,
-    encroachingShadowSuccess, setEncroachingShadowSuccess,
-    goldShipResult, setGoldShipResult,
-    rhittaResult, setRhittaResult,
-    madScientistResult, setMadScientistResult,
-    summoningScrollResult, setSummoningScrollResult,
-    tricksterResult, setTricksterResult,
-    blackMagicStat, setBlackMagicStat,
-    creatorsCatModal, setCreatorsCatModal,
-    afterCombatEntries, setAfterCombatEntries,
-    afterCombatSpinResults, setAfterCombatSpinResults,
-    dothrakiSpinResult, setDothrakiSpinResult,
+    guidanceStats,
+    setGuidanceStats,
+    raumanianSuccess,
+    setRaumanianSuccess,
+    goldenCoinPoints,
+    setGoldenCoinPoints,
+    cursedCoinTarget,
+    setCursedCoinTarget,
+    scryingSuccess,
+    setScryingSuccess,
+    encroachingShadowSuccess,
+    setEncroachingShadowSuccess,
+    goldShipResult,
+    setGoldShipResult,
+    rhittaResult,
+    setRhittaResult,
+    madScientistResult,
+    setMadScientistResult,
+    summoningScrollResult,
+    setSummoningScrollResult,
+    tricksterResult,
+    setTricksterResult,
+    blackMagicStat,
+    setBlackMagicStat,
+    creatorsCatModal,
+    setCreatorsCatModal,
+    afterCombatEntries,
+    setAfterCombatEntries,
+    afterCombatSpinResults,
+    setAfterCombatSpinResults,
+    dothrakiSpinResult,
+    setDothrakiSpinResult,
   } = useWheelSpins();
-
-
 
   // User must explicitly confirm result after spins are done
   const [combatConfirmed, setCombatConfirmed] = useState(false);
 
   // Start combat (init step state)
   const { startCombat } = useStartCombat({
-    player1, player2, disabledItems, allPlayers, isTournamentMode,
-    summoningScrollResult, goldenCoinPoints, oneTrickPonyStat, huntersMarkStat,
-    tricksterResult, raumanianSuccess, scryingSuccess, encroachingShadowSuccess,
-    goldShipResult, madScientistResult, dothrakiSpinResult, cursedCoinTarget,
-    guidanceStats, blackMagicStat, rhittaResult,
-    setAfterCombatEntries, setCombatConfirmed, setCombatResult, setCurrentRound,
-    setDisabledItems, setIsAnimating, setIsPendingRoundtable, setPendingLoser,
-    setRoundSpinResults, setSelectedTarnished, setStepRoundIndex, setStepState,
-    setSubCombatResult, setSummoningScrollResult, setZoltraakBiq2Pending,
-    getPerRoundEffects, EffectResolver, EffectRegistry,
-    pendingAfterCombatBuildRef, pendingCrueltyAfterCombatRef, pendingFinalizeStateRef, preBiqFiredHandlersRef,
+    player1,
+    player2,
+    disabledItems,
+    allPlayers,
+    isTournamentMode,
+    summoningScrollResult,
+    goldenCoinPoints,
+    oneTrickPonyStat,
+    huntersMarkStat,
+    tricksterResult,
+    raumanianSuccess,
+    scryingSuccess,
+    encroachingShadowSuccess,
+    goldShipResult,
+    madScientistResult,
+    dothrakiSpinResult,
+    cursedCoinTarget,
+    guidanceStats,
+    blackMagicStat,
+    rhittaResult,
+    setAfterCombatEntries,
+    setCombatConfirmed,
+    setCombatResult,
+    setCurrentRound,
+    setDisabledItems,
+    setIsAnimating,
+    setIsPendingRoundtable,
+    setPendingLoser,
+    setRoundSpinResults,
+    setSelectedTarnished,
+    setStepRoundIndex,
+    setStepState,
+    setSubCombatResult,
+    setSummoningScrollResult,
+    setZoltraakBiq2Pending,
+    getPerRoundEffects,
+    EffectResolver,
+    EffectRegistry,
+    pendingAfterCombatBuildRef,
+    pendingCrueltyAfterCombatRef,
+    pendingFinalizeStateRef,
+    preBiqFiredHandlersRef,
   });
 
   startCombatRef.current = startCombat;
-
 
   // Stats hiển thị trên card, đã trừ disabled items
   // Khi có Dothraki spin result (trước combat) → preview stats đã swap/boost
@@ -2513,7 +2645,13 @@ export const StatsComparisonMode = ({
     effects: { onWin: string[]; onLose: string[]; onTie: string[] },
     statKey?: string,
     roundsWonBefore?: number,
-  ): { pts: number; pending: boolean; color: string; autoApplied?: boolean; engineBase?: number } => {
+  ): {
+    pts: number;
+    pending: boolean;
+    color: string;
+    autoApplied?: boolean;
+    engineBase?: number;
+  } => {
     const ctx: ComputeRoundPointsContext = {
       roundSpinResults,
       disabledItems,
@@ -2525,7 +2663,15 @@ export const StatsComparisonMode = ({
       stepState,
       getPerRoundEffects,
     };
-    return computeRoundPointsFn(side, winner, roundIdx, effects, statKey, roundsWonBefore, ctx);
+    return computeRoundPointsFn(
+      side,
+      winner,
+      roundIdx,
+      effects,
+      statKey,
+      roundsWonBefore,
+      ctx,
+    );
   };
 
   const battleDone = !!combatResult;
@@ -2619,19 +2765,43 @@ export const StatsComparisonMode = ({
   );
 
   // Wheel mode: winner từ vòng quay, cleared sau khi resolveNextRound consume
-  const [wheelForcedWinner, setWheelForcedWinner] = useState<"player1" | "player2" | null>(null);
+  const [wheelForcedWinner, setWheelForcedWinner] = useState<
+    "player1" | "player2" | null
+  >(null);
 
   const { resolveNextRound } = useResolveNextRound({
-    player1, player2, stepState, stepRoundIndex, disabledItems, allPlayers,
-    isTournamentMode, roundtableSubMode, zoltraakBiq2Pending,
-    oneTrickPonyStat, huntersMarkStat, tricksterResult,
-    roundSpinResults, afterCombatSpinResults,
-    setAfterCombatEntries, setAfterCombatSpinResults, setCombatResult,
-    setCurrentRound, setStepRoundIndex, setStepState, setZoltraakBiq2Pending,
-    pendingAfterCombatBuildRef, pendingCrueltyAfterCombatRef, pendingFinalizeStateRef, preBiqFiredHandlersRef,
-    spawnStatBubbles, getPerRoundEffects, computeRoundPoints,
-    EffectRegistry, EffectResolver,
-    computeRoundStep, checkAndSetRoundtableHold,
+    player1,
+    player2,
+    stepState,
+    stepRoundIndex,
+    disabledItems,
+    allPlayers,
+    isTournamentMode,
+    roundtableSubMode,
+    zoltraakBiq2Pending,
+    oneTrickPonyStat,
+    huntersMarkStat,
+    tricksterResult,
+    roundSpinResults,
+    afterCombatSpinResults,
+    setAfterCombatEntries,
+    setAfterCombatSpinResults,
+    setCombatResult,
+    setCurrentRound,
+    setStepRoundIndex,
+    setStepState,
+    setZoltraakBiq2Pending,
+    pendingAfterCombatBuildRef,
+    pendingCrueltyAfterCombatRef,
+    pendingFinalizeStateRef,
+    preBiqFiredHandlersRef,
+    spawnStatBubbles,
+    getPerRoundEffects,
+    computeRoundPoints,
+    EffectRegistry,
+    EffectResolver,
+    computeRoundStep,
+    checkAndSetRoundtableHold,
     wheelForcedWinner,
   });
   resolveNextRoundRef.current = resolveNextRound;
@@ -2645,14 +2815,30 @@ export const StatsComparisonMode = ({
   }, [wheelForcedWinner]);
 
   const { handleWheelResolved } = useWheelHandlers({
-    player1, player2, disabledItems,
-    setPlayer1, setPlayer2, setDisabledItems,
-    setOneTrickPonyStat, setGuidanceStats, setPreCombatModal,
-    setCursedCoinTarget, setHuntersMarkStat, setGoldenCoinPoints,
-    setRaumanianSuccess, setScryingSuccess, setEncroachingShadowSuccess,
-    setGoldShipResult, setMadScientistResult, setDothrakiSpinResult,
-    setBlackMagicStat, setSummoningScrollResult, setTricksterResult,
-    setRhittaResult, setCreatorsCatModal, spawnStatBubbles,
+    player1,
+    player2,
+    disabledItems,
+    setPlayer1,
+    setPlayer2,
+    setDisabledItems,
+    setOneTrickPonyStat,
+    setGuidanceStats,
+    setPreCombatModal,
+    setCursedCoinTarget,
+    setHuntersMarkStat,
+    setGoldenCoinPoints,
+    setRaumanianSuccess,
+    setScryingSuccess,
+    setEncroachingShadowSuccess,
+    setGoldShipResult,
+    setMadScientistResult,
+    setDothrakiSpinResult,
+    setBlackMagicStat,
+    setSummoningScrollResult,
+    setTricksterResult,
+    setRhittaResult,
+    setCreatorsCatModal,
+    spawnStatBubbles,
   });
 
   // Which round log is currently shown (null = always follow latest)
@@ -2864,13 +3050,20 @@ export const StatsComparisonMode = ({
             masterVolume={masterVolume}
             bgmVolume={bgmVolume}
             isTournamentMode={isTournamentMode}
-            onClear={() => { setPlayer1(null); setSearchTerm1(""); resetCombat(); }}
+            onClear={() => {
+              setPlayer1(null);
+              setSearchTerm1("");
+              resetCombat();
+            }}
             searchTerm={searchTerm1}
             setSearchTerm={setSearchTerm1}
             focused={focus1}
             setFocused={setFocus1}
             filteredPlayers={filteredPlayers1}
-            onSelectPlayer={(p) => { setPlayer1(p); resetCombat(); }}
+            onSelectPlayer={(p) => {
+              setPlayer1(p);
+              resetCombat();
+            }}
             tab={leftTab}
             setTab={setLeftTab}
             disabledItems={disabledItems}
@@ -3068,12 +3261,10 @@ export const StatsComparisonMode = ({
                   )}
                 </div>
 
-                {/* Swap button */}
-                {player1 &&
-                  player2 &&
-                  !isTournamentMode &&
-                  !roundtableSubMode && (
-                    <div className="mt-2 flex justify-center">
+                {/* Swap + BGM button row */}
+                {player1 && player2 && (
+                  <div className="mt-2 flex justify-center items-center gap-2">
+                    {!isTournamentMode && !roundtableSubMode && (
                       <button
                         onClick={swapPlayers}
                         disabled={stepInProgress}
@@ -3081,8 +3272,19 @@ export const StatsComparisonMode = ({
                       >
                         ⇄ Swap
                       </button>
-                    </div>
-                  )}
+                    )}
+                    {detectCombatAudioTracks(player1.character).length === 0 &&
+                      detectCombatAudioTracks(player2.character).length === 0 && (
+                        <div className="relative z-10">
+                          <FallbackBgmController
+                            key={audioResetKey}
+                            stopped={!!combatResult}
+                            volumeScale={masterVolume * bgmVolume}
+                          />
+                        </div>
+                      )}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -3125,13 +3327,31 @@ export const StatsComparisonMode = ({
               >
                 {combatResult || stepState ? (
                   <RoundResultsPanel
-                    rounds={combatResult ? combatResult.rounds : stepState!.resolvedRounds}
-                    revealedUpTo={combatResult ? null : stepState!.resolvedRounds.length > 0 ? stepState!.resolvedRounds.length - 1 : -1}
+                    rounds={
+                      combatResult
+                        ? combatResult.rounds
+                        : stepState!.resolvedRounds
+                    }
+                    revealedUpTo={
+                      combatResult
+                        ? null
+                        : stepState!.resolvedRounds.length > 0
+                          ? stepState!.resolvedRounds.length - 1
+                          : -1
+                    }
                     p1char={player1.character}
                     p2char={player2.character}
                     extraBiqRound={(() => {
-                      const rr = combatResult ? combatResult.rounds : (stepState?.resolvedRounds ?? []);
-                      return (rr.length >= 5 && rr[4]?.stat === 'biq' && rr[5]?.stat === 'biq') || rr.length > STAT_ORDER.length || zoltraakBiq2Pending;
+                      const rr = combatResult
+                        ? combatResult.rounds
+                        : (stepState?.resolvedRounds ?? []);
+                      return (
+                        (rr.length >= 5 &&
+                          rr[4]?.stat === "biq" &&
+                          rr[5]?.stat === "biq") ||
+                        rr.length > STAT_ORDER.length ||
+                        zoltraakBiq2Pending
+                      );
                     })()}
                     player1={player1}
                     player2={player2}
@@ -3141,6 +3361,7 @@ export const StatsComparisonMode = ({
                     computeRoundPoints={computeRoundPoints}
                     applyDevWeights={applyDevWeights}
                     setRoundSpinModal={setRoundSpinModal}
+                    onDebugRound={handleDebugRound}
                   />
                 ) : (
                   /* Pre-battle: JRPG stat comparison bars */
@@ -3661,13 +3882,13 @@ export const StatsComparisonMode = ({
                                 p1char={selectedTarnished.character}
                                 p2char={mainWinner?.character}
                                 player1={player1}
-                    player2={player2}
-                    disabledItems={disabledItems}
-                    roundSpinResults={roundSpinResults}
-                    getPerRoundEffects={getPerRoundEffects}
-                    computeRoundPoints={computeRoundPoints}
-                    applyDevWeights={applyDevWeights}
-                    setRoundSpinModal={setRoundSpinModal}
+                                player2={player2}
+                                disabledItems={disabledItems}
+                                roundSpinResults={roundSpinResults}
+                                getPerRoundEffects={getPerRoundEffects}
+                                computeRoundPoints={computeRoundPoints}
+                                applyDevWeights={applyDevWeights}
+                                setRoundSpinModal={setRoundSpinModal}
                               />
                               <div className="mt-3 text-center">
                                 <div className="text-lg font-bold">
@@ -3988,74 +4209,73 @@ export const StatsComparisonMode = ({
                   </div>
                 </div>
               )}
-              {/* Tournament: manual winner override (before battle) */}
+              {/* Tournament: manual winner select + trigger after-combat */}
               {isTournamentMode &&
-                !stepState &&
-                !combatResult &&
+                !combatConfirmed &&
                 player1 &&
                 player2 && (
-                  <div className="flex gap-1.5">
-                    <button
-                      onClick={() => {
-                        const winnerNo = player1.no;
-                        onSaveTournamentResult?.({
-                          winnerNo,
-                          score: null,
-                          specialEvent: tournamentSpecialEvent || null,
-                          note: tournamentNote || null,
-                        });
-                      }}
-                      className="px-3 py-2 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 rounded-lg text-xs border border-blue-500/30 transition-colors"
-                    >
-                      {player1.name} Win
-                    </button>
-                    <button
-                      onClick={() => {
-                        const winnerNo = player2.no;
-                        onSaveTournamentResult?.({
-                          winnerNo,
-                          score: null,
-                          specialEvent: tournamentSpecialEvent || null,
-                          note: tournamentNote || null,
-                        });
-                      }}
-                      className="px-3 py-2 bg-red-600/30 hover:bg-red-600/50 text-red-300 rounded-lg text-xs border border-red-500/30 transition-colors"
-                    >
-                      {player2.name} Win
-                    </button>
+                  <div className="flex flex-col gap-1.5 items-center">
+                    <div className="text-[10px] text-gray-500 font-mono">Chọn thắng thủ công</div>
+                    <div className="flex gap-1.5">
+                      <button
+                        onClick={() => {
+                          const fakeCombat: CombatResult = {
+                            rounds: [],
+                            player1Score: 0,
+                            player2Score: 0,
+                            startPlayer1Score: 0,
+                            startPlayer2Score: 0,
+                            winner: "player1",
+                          };
+                          setCombatResult(fakeCombat);
+                          handleConfirmCombat();
+                        }}
+                        className="px-3 py-2 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 rounded-lg text-xs border border-blue-500/30 transition-colors"
+                      >
+                        {player1.name} Win
+                      </button>
+                      <button
+                        onClick={() => {
+                          const fakeCombat: CombatResult = {
+                            rounds: [],
+                            player1Score: 0,
+                            player2Score: 0,
+                            startPlayer1Score: 0,
+                            startPlayer2Score: 0,
+                            winner: "player2",
+                          };
+                          setCombatResult(fakeCombat);
+                          handleConfirmCombat();
+                        }}
+                        className="px-3 py-2 bg-red-600/30 hover:bg-red-600/50 text-red-300 rounded-lg text-xs border border-red-500/30 transition-colors"
+                      >
+                        {player2.name} Win
+                      </button>
+                    </div>
                   </div>
                 )}
-              {/* Step through rounds — wheel spin */}
-              {stepInProgress && player1 && player2 && (() => {
-                const statInfo = STAT_ORDER[stepRoundIndex];
-                if (!statInfo || !stepState) return null;
-                const p1Val = stepState.p1Stats[statInfo.key] ?? 0;
-                const p2Val = stepState.p2Stats[statInfo.key] ?? 0;
-                const p1W = p1Val > p2Val ? p1Val * 2 : p1Val;
-                const p2W = p2Val > p1Val ? p2Val * 2 : p2Val;
-                return (
-                  <div className="flex flex-col items-center gap-1">
-                    {pendingSpinsForLastRound && (
-                      <div className="text-[10px] text-amber-400 animate-pulse font-bold">
-                        ● Xử lý spin round trước đã
-                      </div>
-                    )}
-                    <BattleWheelSpinner
-                      p1Name={player1.name}
-                      p2Name={player2.name}
-                      p1Weight={p1W}
-                      p2Weight={p2W}
-                      statLabel={statInfo.label}
-                      p1Val={p1Val}
-                      p2Val={p2Val}
-                      disabled={pendingSpinsForLastRound}
-                      onSpinComplete={(winner) => {
-                        setWheelForcedWinner(winner);
-                      }}
-                    />
-                  </div>
-                );
-              })()}
+              {/* Step through rounds — Next Round button */}
+              {stepInProgress && player1 && player2 && (
+                <div className="flex flex-col items-center gap-1">
+                  {pendingSpinsForLastRound && (
+                    <div className="text-[10px] text-amber-400 animate-pulse font-bold">
+                      ● Xử lý spin round trước đã
+                    </div>
+                  )}
+                  <button
+                    onClick={() => resolveNextRoundRef.current?.()}
+                    disabled={pendingSpinsForLastRound}
+                    className={`px-6 py-2.5 font-bold rounded-xl text-sm transition-all shadow-lg ${
+                      pendingSpinsForLastRound
+                        ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
+                        : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white shadow-yellow-500/20"
+                    }`}
+                  >
+                    {pendingSpinsForLastRound ? "⏳ Đang xử lý..." : `Next Round (${STAT_ORDER[stepRoundIndex]?.label ?? ""})`}
+                  </button>
+                </div>
+              )}
+              {/* BattleWheelSpinner đã chuyển sang WheelOfTruthMode */}
               {/* All rounds done — confirm result (after optional spins) */}
               {battleDone && !combatConfirmed && (
                 <button
@@ -4220,7 +4440,6 @@ export const StatsComparisonMode = ({
             }}
           />
 
-
           {/* Creator's Cat modal */}
           <CreatorsCatModal
             player1={player1}
@@ -4244,13 +4463,20 @@ export const StatsComparisonMode = ({
             masterVolume={masterVolume}
             bgmVolume={bgmVolume}
             isTournamentMode={isTournamentMode}
-            onClear={() => { setPlayer2(null); setSearchTerm2(""); resetCombat(); }}
+            onClear={() => {
+              setPlayer2(null);
+              setSearchTerm2("");
+              resetCombat();
+            }}
             searchTerm={searchTerm2}
             setSearchTerm={setSearchTerm2}
             focused={focus2}
             setFocused={setFocus2}
             filteredPlayers={filteredPlayers2}
-            onSelectPlayer={(p) => { setPlayer2(p); resetCombat(); }}
+            onSelectPlayer={(p) => {
+              setPlayer2(p);
+              resetCombat();
+            }}
             tab={rightTab}
             setTab={setRightTab}
             disabledItems={disabledItems}

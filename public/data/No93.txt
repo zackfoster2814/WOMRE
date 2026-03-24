@@ -83,6 +83,7 @@ Lover:
 Other Source:
 - +4 Dura (Zealot)
 - -1 Dura (Fancy Feet)
+- +1 Dura (Frostlanders)
 ```
 
 
@@ -99,7 +100,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: bachtuotkun
-- Kết quả: Lose
+- Kết quả: Thua
 - Tỉ số: 0-4
 ```
 

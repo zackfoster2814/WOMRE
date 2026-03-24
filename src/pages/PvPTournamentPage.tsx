@@ -10,6 +10,7 @@ import {
   type TournamentMatchContext,
   type TournamentSaveResult,
 } from "./BattleZonePage";
+import { WheelOfTruthMode } from "./WheelOfTruthMode";
 import { BracketTreeView } from "../components/bracket/BracketTreeView";
 import {
   readDriveFile,
@@ -625,8 +626,10 @@ export const PvPTournamentPage = () => {
   }
 
   if (tournamentBattle) {
+    const useWheelOfTruth = tournamentBattle.matchNumber >= 193;
+    const BattleMode = useWheelOfTruth ? WheelOfTruthMode : StatsComparisonMode;
     return (
-      <StatsComparisonMode
+      <BattleMode
         onBack={() => setTournamentBattle(null)}
         tournamentMatch={tournamentBattle}
         onSaveTournamentResult={handleSaveTournamentResult}

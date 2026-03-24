@@ -84,6 +84,7 @@ Lover:
 ```
 Other Source:
 - +1 Speed
+- -1 All stats (Chokevy)
 ```
 
 ```
