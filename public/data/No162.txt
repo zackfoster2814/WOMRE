@@ -53,7 +53,7 @@ Houses:
 
 ```
 1 Normal Weapon
-+ Glass Bottle (Dùng được)
++ Glass Bottle (Dùng được) 
 ```
 
 ``` 

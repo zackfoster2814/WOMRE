@@ -84,6 +84,11 @@ PvP Reward:
 - Nhận 1 char dev: Obtain a Cultivation Technique
 ```
 
+```
+Other source:
+- +2 Spd (House Tyrell)
+```
+
 ======
 Battle Log:
 ```

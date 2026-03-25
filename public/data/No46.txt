@@ -75,7 +75,7 @@ Team: 4
 
 ```
 Lover:
-+ Yui
++ tuancon
 ```
 ```
 PvP Reward:

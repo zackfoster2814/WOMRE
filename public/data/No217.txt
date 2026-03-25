@@ -85,6 +85,7 @@ Lover:
 PvP Reward: 
 - +1 IQ
 - +1 Power
+- +2 MA (House Tyrell)
 ```
 
 ======

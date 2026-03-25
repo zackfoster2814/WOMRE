@@ -22,9 +22,9 @@ Archetype:
 + Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
-Str: 5
+Str: 1 (ban đầu là 5, vì Bless of Chaos)
 Spd: 2
-Dur: 5
+Dur: 0 (Demonic Pact)
 IQ: 3
 BIQ: 1 (Ban đầu là 1, quay lại vì House)
 MA: 2
@@ -65,11 +65,17 @@ Runeword: Không
 + The Coast is Clear!
 + Chaos Enchantment
 + Weapon Enhancing
++ Luck Manipulation
++ Scrying
++ Voidwalking
 ```
 
 ```
 Char dev: 
 + MrBeast
++ Bless of Chaos
++ Demonic Pact (kéo Dura) (Bless of Chaos)
++ W speed (Bless of Chaos)
 ```
 
 ```
@@ -87,6 +93,7 @@ Other Source:
 - -1 DUR (Thuốc Tráng Dương)
 - +1 BIQ
 - +2 all stats
+- Nhận chardev Bless of Chaos (Royal)
 ```
 
 ======

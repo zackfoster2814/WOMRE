@@ -84,7 +84,6 @@ Lover:
 ```
 Other Source:
 - +2 all stats
-- +2 BIQ
 - Dragon's Weed nhận Arcana Blast
 ```
 

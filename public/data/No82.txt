@@ -5,18 +5,18 @@ Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
-+ 
++
 ```
 ```
 Race: Gnome
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Infirmarian
++ Edgelord (từ too edgy)
 ```
-``` 
+```
 2 Quirk:  
 + Impatient
 + Lucky (Max: không có)
@@ -29,12 +29,10 @@ IQ: 10
 BIQ: 2
 MA: 2
 ```
-
 ```
 Houses: 
 + House Baratheon
 ```
-
 ```
 3 Gear: 
  + 3 Normal gear:
@@ -42,45 +40,43 @@ Houses:
   - Empty Stein(Từ Armed to the Teeth)
   - Cursed Charm(Từ Armed to the Teeth)
  + 0 Legacy gear:
-  - 
+  -
 ```
-
 ```
 1 Normal Weapon
 + Magical Staff (Dùng được)
 ```
-
-``` 
+```
 1 Rune: 
 + Tir
 Runeword: Không
 ```
-
 ```
-0 Power: 
-+ 
+1 Power: 
++
 ```
-
 ```
 Char dev: 
 + Armed to the Teeth
 + Lost an Arm (PvP Reward)
++ Too Edgy
 ```
-
 ```
 Team: 21
 ```
-
 ```
 Lover:
 + KaTsumi - ChillWithCafe (katsumi3000)
 + Bưởi (ngbxxx)
 ```
-
 ```
 PvP Reward:
 - +1 IQ
 - +1 Char Dev
+```
+```
+PvP Reward:
+- 
 ```
 
 ======

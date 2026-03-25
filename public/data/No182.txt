@@ -82,6 +82,7 @@ Lover:
 Other Source:
 - +2 str (stats cao nhất)
 - +3 DUR (Zealot)
+- +2 Dura (House Tyrell)
 ```
 
 

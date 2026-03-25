@@ -11,69 +11,59 @@ Ký Sinh:
 Race: Dwarf
 Sub-race: Cổ Lùn
 ```
-
 ```
 Archetype: 
 + Gigachad
 ```
-``` 
+```
 3 Quirk:  
 + Impatient 
 + Clumsy
 + Artistic
 ```
 ```
-Str: 5 (bị nguyền từ 6) (+2 Từ Atreides)
-Spd:5
-Dur:0
-IQ:6
-BIQ:4
-MA:3
+Str: 5
+Spd: 5
+Dur: 0
+IQ: 6
+BIQ: 4
+MA: 3
 ```
-
 ```
 Houses: 
 + Atreides
 ```
-
 ```
-1 Gear: 
+2 Gear: 
  + 1 Normal gear:
-  - Soap
- + 0 Legacy gear:
-  - 
+  - - Soap
+ + 1 Legacy gear:
+  - -
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
-0 Power: 
+1 Power: 
 +
 ```
-
 ```
 Char dev: 
 + True Heir of the Emirate🍀
 ```
-
 ```
 Team: 21
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +1 Dura
@@ -85,7 +75,7 @@ Other Source:
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Caligo Miasma Of Night
@@ -93,6 +83,7 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: Dura về 0
+- Note: 
 ```
 
 ```
@@ -100,6 +91,7 @@ PvP:
 - Đối thủ: LTL
 - Kết quả: Win
 - Tỉ số: 4-2
+- Note: 
 ```
 
 ======

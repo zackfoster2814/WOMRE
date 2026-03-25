@@ -83,7 +83,7 @@ Other Source:
 ```
 ```
 PvP Reward:
-- +1 spsd
+- +1 spd
 ```
 
 

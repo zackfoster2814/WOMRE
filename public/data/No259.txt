@@ -1,7 +1,8 @@
 No.259
 Name: Anh Bảo (baogiadinh1003)
-Status: Còn sống
-Vòng thi đấu: 128
+
+Status: Đã bị loại
+Vòng thi đấu: 256
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -40,7 +41,7 @@ Houses:
 2 Gear: 
  + 2 Normal gear:
   - Xương sống lưỡi
-  - Soap
+  - Soap (đã mất)
  + 0 Legacy gear:
   - 
 ```
@@ -100,6 +101,7 @@ PvP:
 - Đối thủ: Euoid
 - Kết quả: Lose
 - Tỉ số: 3-3
+- Note: tặng Soap
 ```
 
 ======

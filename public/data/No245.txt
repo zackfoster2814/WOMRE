@@ -84,6 +84,11 @@ PvP Reward:
 - +1 spd
 ```
 
+```
+Other source:
+- +2 MA (House Tyrell)
+```
+
 ======
 Battle Log:
 ```

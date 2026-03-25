@@ -8,72 +8,68 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Goblin
-Sub-race: 100
+Race: Uma
+Sub-race: Haru Urara + Biwa Hayahide
 ```
 
 ```
 Archetype: 
-+ Invoker
++ Cinderheart
 ```
 ``` 
 1 Quirk:  
 + Cheater
++ Bloodthirty (từ Baguette)
 ```
 ```
-Str:5
-Spd:10
-Dur:6
-IQ:4
-BIQ:5
-MA:7
+Str: 6
+Spd: 6
+Dur: 4
+IQ: 3
+BIQ: 3
+MA: 1
 ```
 
 ```
 Houses: 
-+ Hallownest
++ Tracen Academy
+ -> +2 str
+ -> +2 spd
+ -> +2 Dur
 ```
 
 ```
 2 Gear: 
- + 1 Normal gear:
-  - Cuộn khăn giấy 
-  - Sổ tay
+ + 2 Normal gear:
+  - Đai trinh tiết
+  - Baguette
  + 0 Legacy gear:
   - 
 ```
 
 ```
-1 Unique Weapon
-+ Labrys Axe (Dùng được)
+1 Normal Weapon
++ Bass (dùng được)
 ```
 
 ``` 
-0 Rune: 
-+ 
+1 Rune: 
++ Ral
 Runeword: 
 ```
 
 ```
-3 Power: 
-+ Quas
-+ Wex
-+ Exort
-+ Rampage
-+ Voidwalking
-+ Clear mind
-+ 4 Hit combo (từ PvE Punishment)
+1 Power: 
++ Force Field
 ```
 
 ```
 Char dev: 
-+ Lost an Arm
-+ Old age
-+ 
++ Cơ cấu
 ```
 
 ```
-Team: 23
+Team: 
 ```
 
 ```
@@ -83,12 +79,11 @@ Lover:
 
 ```
 Other Source:
-- +1 All stats (từ Rampage)
+- 
 ```
 ```
 PvP Reward:
-- Nhận char dev Old age
-- Nợ 1 char dev
+- 
 ```
 
 ======
@@ -109,6 +104,6 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 4-2
 - Reward: 
-  -> Nhận Char dev: Old age
+  -> Nhận Char dev: Old age, nhận thêm isekai
 ```
 ======

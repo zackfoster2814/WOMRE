@@ -48,7 +48,7 @@ Houses:
 
 ```
 1 Normal Weapon
-+ Glass Bottle
++ Glass Bottle (đã mất)
 ```
 
 ``` 

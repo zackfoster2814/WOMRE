@@ -87,7 +87,7 @@ PvP Reward:
 - Nhận 1 gear: Leather Jacket
 ```
 ```
-Other Source
+Other Source:
 - -1 All stats (Chokevy)
 ```
 ======
