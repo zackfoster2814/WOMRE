@@ -1,6 +1,51 @@
 ﻿import { useState, useEffect, useRef } from "react";
-import { getAssetPath } from "../../utils/basePath";
+import { readDriveFile } from "../../utils/googleDrive";
+import {
+  ROUND_256_FILE_ID,
+  ROUND_128_FILE_ID,
+  ROUND_64W_FILE_ID,
+  ROUND_32W_FILE_ID,
+  ROUND_16W_FILE_ID,
+  ROUND_QFW_FILE_ID,
+  ROUND_SFW_FILE_ID,
+  ROUND_GFW_FILE_ID,
+  ROUND_32L1_FILE_ID,
+  ROUND_32L2_FILE_ID,
+  ROUND_16L1_FILE_ID,
+  ROUND_16L2_FILE_ID,
+  ROUND_QFL1_FILE_ID,
+  ROUND_QFL2_FILE_ID,
+  ROUND_SFL1_FILE_ID,
+  ROUND_SFL2_FILE_ID,
+  ROUND_GFL1_FILE_ID,
+  ROUND_GFL2_FILE_ID,
+  ROUND_GF_FILE_ID,
+  ROUND_BRONZE_FILE_ID,
+} from "../../config/googleDrive";
 import { PvPPlayerData } from "../../types/battleZone";
+
+const ROUND_OPTIONS = [
+  { label: "R256", fileId: ROUND_256_FILE_ID },
+  { label: "R128", fileId: ROUND_128_FILE_ID },
+  { label: "WB-R64", fileId: ROUND_64W_FILE_ID },
+  { label: "WB-R32", fileId: ROUND_32W_FILE_ID },
+  { label: "WB-R16", fileId: ROUND_16W_FILE_ID },
+  { label: "WB-QF", fileId: ROUND_QFW_FILE_ID },
+  { label: "WB-SF", fileId: ROUND_SFW_FILE_ID },
+  { label: "WB-Final", fileId: ROUND_GFW_FILE_ID },
+  { label: "LB-R32-1", fileId: ROUND_32L1_FILE_ID },
+  { label: "LB-R32-2", fileId: ROUND_32L2_FILE_ID },
+  { label: "LB-R16-1", fileId: ROUND_16L1_FILE_ID },
+  { label: "LB-R16-2", fileId: ROUND_16L2_FILE_ID },
+  { label: "LB-QF-1", fileId: ROUND_QFL1_FILE_ID },
+  { label: "LB-QF-2", fileId: ROUND_QFL2_FILE_ID },
+  { label: "LB-SF-1", fileId: ROUND_SFL1_FILE_ID },
+  { label: "LB-SF-2", fileId: ROUND_SFL2_FILE_ID },
+  { label: "LB-GF-1", fileId: ROUND_GFL1_FILE_ID },
+  { label: "LB-GF-2", fileId: ROUND_GFL2_FILE_ID },
+  { label: "Grand Final", fileId: ROUND_GF_FILE_ID },
+  { label: "Hạng 3", fileId: ROUND_BRONZE_FILE_ID },
+];
 
 // ============================================================================
 // Dev Mode: Floating Wheel Weight Panel
@@ -40,13 +85,21 @@ export const DevWheelPanel = ({
   >([]);
   const [mpFilter, setMpFilter] = useState<"all" | "pending">("pending");
   const [mpSearch, setMpSearch] = useState("");
+  const [selectedRound, setSelectedRound] = useState(ROUND_OPTIONS[0].fileId);
+  const [mpLoading, setMpLoading] = useState(false);
 
   useEffect(() => {
-    fetch(getAssetPath("/data/Round256.json"))
-      .then((r) => r.json())
-      .then((d) => setMpMatches(d.matches || []))
-      .catch(() => {});
-  }, []);
+    setMpLoading(true);
+    setMpMatches([]);
+    readDriveFile<{ matches?: typeof mpMatches }>(selectedRound)
+      .then((d) => {
+        console.log("[DevPanel] raw data:", d);
+        console.log("[DevPanel] first match:", (d.matches || [])[0]);
+        setMpMatches(d.matches || []);
+      })
+      .catch((e) => console.error("[DevPanel] load error:", e))
+      .finally(() => setMpLoading(false));
+  }, [selectedRound]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     isDragging.current = true;
@@ -73,14 +126,19 @@ export const DevWheelPanel = ({
     };
   }, [onPosChange]);
 
-  const filteredMatches = mpMatches.filter((m) => {
-    if (!m.player1 || !m.player2) return false;
-    if (mpFilter === "pending" && m.winner) return false;
+  type AnyMatch = Record<string, any>;
+  const filteredMatches = (mpMatches as unknown as AnyMatch[]).filter((m) => {
+    const p1 = m.player1 ?? m.player1No;
+    const p2 = m.player2 ?? m.player2No;
+    if (!p1 || !p2) return false;
+    if (mpFilter === "pending" && (m.winner ?? m.winnerNo)) return false;
     if (mpSearch.trim()) {
       const q = mpSearch.toLowerCase();
+      const p1name = (typeof p1 === "object" ? p1.name : String(p1)) ?? "";
+      const p2name = (typeof p2 === "object" ? p2.name : String(p2)) ?? "";
       return (
-        m.player1.name.toLowerCase().includes(q) ||
-        m.player2.name.toLowerCase().includes(q) ||
+        p1name.toLowerCase().includes(q) ||
+        p2name.toLowerCase().includes(q) ||
         String(m.matchNumber).includes(q)
       );
     }
@@ -119,6 +177,33 @@ export const DevWheelPanel = ({
 
       {devTab === "matchup" && (
         <div className="flex flex-col" style={{ maxHeight: "70vh" }}>
+          {/* Round selector */}
+          <div className="px-2 pt-2 pb-1.5 border-b border-gray-800 flex gap-1.5">
+            <select
+              value={selectedRound}
+              onChange={(e) => setSelectedRound(e.target.value)}
+              className="flex-1 text-xs px-2 py-1.5 rounded bg-gray-800 border border-gray-700 text-yellow-200 focus:outline-none focus:border-yellow-500"
+            >
+              {ROUND_OPTIONS.map((r) => (
+                <option key={r.fileId} value={r.fileId}>{r.label}</option>
+              ))}
+            </select>
+            <button
+              onClick={() => {
+                setMpLoading(true);
+                setMpMatches([]);
+                readDriveFile<{ matches?: typeof mpMatches }>(selectedRound)
+                  .then((d) => setMpMatches(d.matches || []))
+                  .catch(() => {})
+                  .finally(() => setMpLoading(false));
+              }}
+              disabled={mpLoading}
+              className="px-2 py-1 text-xs rounded bg-gray-700 hover:bg-gray-600 border border-gray-600 text-gray-300 disabled:opacity-40 transition-colors"
+              title="Tải lại"
+            >
+              ↻
+            </button>
+          </div>
           {/* Filter + Search */}
           <div className="p-2 space-y-1.5 border-b border-gray-800">
             <div className="flex gap-1">
@@ -126,19 +211,13 @@ export const DevWheelPanel = ({
                 onClick={() => setMpFilter("pending")}
                 className={`flex-1 py-1 text-xs rounded font-medium transition-colors ${mpFilter === "pending" ? "bg-orange-700/60 text-orange-200" : "bg-gray-800 text-gray-500 hover:text-gray-300"}`}
               >
-                Chưa đấu (
-                {
-                  mpMatches.filter((m) => m.player1 && m.player2 && !m.winner)
-                    .length
-                }
-                )
+                Chưa đấu ({(mpMatches as any[]).filter((m) => (m.player1 ?? m.player1No) && (m.player2 ?? m.player2No) && !(m.winner ?? m.winnerNo)).length})
               </button>
               <button
                 onClick={() => setMpFilter("all")}
                 className={`flex-1 py-1 text-xs rounded font-medium transition-colors ${mpFilter === "all" ? "bg-gray-600 text-white" : "bg-gray-800 text-gray-500 hover:text-gray-300"}`}
               >
-                Tất cả ({mpMatches.filter((m) => m.player1 && m.player2).length}
-                )
+                Tất cả ({(mpMatches as any[]).filter((m) => (m.player1 ?? m.player1No) && (m.player2 ?? m.player2No)).length})
               </button>
             </div>
             <input
@@ -152,8 +231,8 @@ export const DevWheelPanel = ({
 
           {/* Match list */}
           <div className="overflow-y-auto flex-1 p-1.5 space-y-1">
-            {mpMatches.length === 0 ? (
-              <div className="text-gray-500 text-xs text-center py-6">
+            {mpLoading ? (
+              <div className="text-gray-500 text-xs text-center py-6 animate-pulse">
                 Đang tải...
               </div>
             ) : filteredMatches.length === 0 ? (
@@ -162,10 +241,14 @@ export const DevWheelPanel = ({
               </div>
             ) : (
               filteredMatches.map((m) => {
-                const p1Data = allPlayers.find((p) => p.no === m.player1!.no);
-                const p2Data = allPlayers.find((p) => p.no === m.player2!.no);
+                const p1no = typeof m.player1 === "object" ? m.player1?.no : m.player1;
+                const p2no = typeof m.player2 === "object" ? m.player2?.no : m.player2;
+                const p1name = typeof m.player1 === "object" ? m.player1?.name : undefined;
+                const p2name = typeof m.player2 === "object" ? m.player2?.name : undefined;
+                const p1Data = allPlayers.find((p) => p.no === p1no);
+                const p2Data = allPlayers.find((p) => p.no === p2no);
                 const hasBoth = !!p1Data && !!p2Data;
-                const isDone = !!m.winner;
+                const isDone = !!(m.winner ?? m.winnerNo);
                 return (
                   <button
                     key={m.matchNumber}
@@ -188,23 +271,19 @@ export const DevWheelPanel = ({
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1">
                           <span className="text-blue-300 text-[11px] font-medium truncate">
-                            {m.player1!.name}
+                            {p1name ?? p1Data?.name ?? `#${p1no}`}
                           </span>
                           <span className="text-gray-600 text-[10px]">vs</span>
                           <span className="text-red-300 text-[11px] font-medium truncate">
-                            {m.player2!.name}
+                            {p2name ?? p2Data?.name ?? `#${p2no}`}
                           </span>
                         </div>
                       </div>
                       {isDone && (
-                        <span className="text-green-600 text-[10px] shrink-0">
-                          ✓
-                        </span>
+                        <span className="text-green-600 text-[10px] shrink-0">✓</span>
                       )}
                       {!hasBoth && (
-                        <span className="text-gray-600 text-[10px] shrink-0">
-                          N/A
-                        </span>
+                        <span className="text-gray-600 text-[10px] shrink-0">N/A</span>
                       )}
                     </div>
                   </button>
