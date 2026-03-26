@@ -89,6 +89,8 @@ interface CombatEffectsPanelProps {
   combatResult?: CombatResultInfo;
   /** Nếu true: chỉ hiển thị before_combat effects (pre-combat warning mode) */
   preCombatOnly?: boolean;
+  /** Nếu true: chỉ hiển thị after_combat / after_win / after_lose effects */
+  afterCombatOnly?: boolean;
   /**
    * Callback generic khi bất kỳ wheel effect nào được resolve.
    * BattleZonePage tự xử lý logic dựa vào sourceName.
@@ -2287,6 +2289,7 @@ function buildPendingEffects(
   combatResult: CombatResultInfo | undefined,
   preCombatOnly: boolean,
   opponentComputedStats?: Character["stats"],
+  afterCombatOnly?: boolean,
 ): CombatPendingEffect[] {
   const result = combatResult ?? EMPTY_COMBAT_RESULT;
   const isWinner = result.winner === playerLabel;
@@ -2394,6 +2397,8 @@ function buildPendingEffects(
 
     // In pre-combat mode: only show before_combat effects
     if (preCombatOnly && def.timing !== "before_combat") return;
+    // In after-combat mode: only show after_combat / after_win / after_lose effects
+    if (afterCombatOnly && !["after_combat", "after_win", "after_lose"].includes(def.timing)) return;
 
     // Check timing relevance
     const timingOk =
@@ -2721,6 +2726,7 @@ export const CombatEffectsPanel = ({
   player2ComputedStats,
   combatResult,
   preCombatOnly = false,
+  afterCombatOnly = false,
   onWheelResolved,
   onPendingPreCombatChange,
   resetKey,
@@ -2737,6 +2743,7 @@ export const CombatEffectsPanel = ({
           combatResult,
           preCombatOnly,
           player2ComputedStats,
+          afterCombatOnly,
         ),
       );
     }
@@ -2750,6 +2757,7 @@ export const CombatEffectsPanel = ({
           combatResult,
           preCombatOnly,
           player1ComputedStats,
+          afterCombatOnly,
         ),
       );
     }
@@ -2892,7 +2900,9 @@ export const CombatEffectsPanel = ({
           <h3 className="text-base font-bold text-purple-300">
             {preCombatOnly
               ? "⚠️ Luật Đặc Biệt Trước Combat"
-              : "⚡ Combat Effects"}
+              : afterCombatOnly
+                ? "⚡ Effects Sau Combat"
+                : "⚡ Combat Effects"}
           </h3>
           <div className="flex items-center gap-2 text-xs">
             {activatedTotal > 0 && (
@@ -2914,7 +2924,7 @@ export const CombatEffectsPanel = ({
               colorClass={phase.color}
               items={phase.items}
               defaultOpen={
-                preCombatOnly || phase.timings.includes("before_combat")
+                preCombatOnly || afterCombatOnly || phase.timings.includes("before_combat")
               }
               forceOpen={
                 !preCombatOnly &&

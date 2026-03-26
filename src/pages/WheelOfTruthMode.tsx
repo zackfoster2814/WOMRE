@@ -35,6 +35,7 @@ import {
   type ComputeRoundPointsContext,
 } from "../utils/pointCalculation";
 import { RoundResultsPanel } from "../components/combat/RoundResultsPanel";
+import { DevWheelPanel } from "../components/combat/DevWheelPanel";
 import { PlayerSidebar } from "../components/combat/PlayerSidebar";
 import { AfterCombatPanel } from "../components/combat/AfterCombatPanel";
 // import { BattleWheelSpinner } from "../components/combat/BattleWheelSpinner"; // WoT-specific — giữ lại, tạm comment
@@ -159,6 +160,9 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
 
   // Round log view
   const [viewLogIndex, setViewLogIndex] = useState<number | null>(null);
+
+  // Center tab: pre | wheel | after
+  const [centerTab, setCenterTab] = useState<"pre" | "wheel" | "after">("pre");
 
   // Stubs for hooks that need roundtable state (not used in WheelOfTruth)
   const [isPendingRoundtable, setIsPendingRoundtable] = useState(false);
@@ -1139,6 +1143,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     pendingFinalizeStateRef.current = null;
     preBiqFiredHandlersRef.current = null;
     setAudioResetKey((k) => k + 1);
+    setCenterTab("pre");
   };
 
   // ── useStartCombat ────────────────────────────────────────────────────────
@@ -1265,8 +1270,19 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
       : (player2?.stats ?? null);
   }, [player2, disabledItems, stepState, dothrakiPreviewStats]);
 
+  // ── Dev weight overrides ──────────────────────────────────────────────────
+  const [devWeightOverrides, setDevWeightOverrides] = useState<Record<string, Record<number, number>>>({});
+  const [devPanelPos, setDevPanelPos] = useState({ x: 20, y: 200 });
+
   // ── applyDevWeights ───────────────────────────────────────────────────────
-  const applyDevWeights = (_effectName: string, items: WheelSpinItem[]): WheelSpinItem[] => items;
+  const applyDevWeights = (effectName: string, items: WheelSpinItem[]): WheelSpinItem[] => {
+    if (!devMode) return items;
+    const overrides = devWeightOverrides[effectName];
+    if (!overrides) return items;
+    return items.map((item, i) =>
+      overrides[i] !== undefined ? { ...item, weight: overrides[i] } : item,
+    );
+  };
 
   // ── 3D effect triggers ────────────────────────────────────────────────────
   useEffect(() => {
@@ -1298,6 +1314,16 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
       setViewLogIndex(stepState.roundLogs.length - 1);
     }
   }, [lastRoundLog]);
+
+  // Auto-switch to "wheel" tab when combat starts
+  useEffect(() => {
+    if (stepState) setCenterTab("wheel");
+  }, [!!stepState]);
+
+  // Auto-switch to "after" tab when combat ends
+  useEffect(() => {
+    if (battleDone) setCenterTab("after");
+  }, [battleDone]);
 
   // ── Wheel weights for BattleWheelSpinner (WoT-specific — giữ lại) ──────────
   // const currentStatInfo = stepInProgress && stepRoundIndex < 6 ? STAT_ORDER[stepRoundIndex] : null;
@@ -1565,242 +1591,289 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
               <FloatingStatBubblesOverlay p1Bubbles={p1Bubbles} p2Bubbles={p2Bubbles} />
             </div>
 
-            {/* Combat Effects Panel */}
+            {/* ── 3-Tab Center Layout ─────────────────────────────────────── */}
             {player1 && player2 && (
-              <div className="mb-3">
-                <CombatEffectsPanel
-                  player1={{ name: player1.name, character: player1.character }}
-                  player2={{ name: player2.name, character: player2.character }}
-                  player1ComputedStats={p1DisplayStats ?? undefined}
-                  player2ComputedStats={p2DisplayStats ?? undefined}
-                  resetKey="main"
-                  combatResult={
-                    battleDone && combatConfirmed && effectiveWinner
-                      ? {
-                          winner: effectiveWinner,
-                          player1Score: effectiveScores.s1,
-                          player2Score: effectiveScores.s2,
-                          rounds: combatResult!.rounds.map((r) => ({ stat: r.stat, winner: r.winner })),
-                        }
-                      : undefined
-                  }
-                  onWheelResolved={handleWheelResolved}
-                  onPendingPreCombatChange={setPendingPreCombatCount}
-                />
-              </div>
-            )}
+              <div className="rounded-2xl border border-gray-700/40 overflow-hidden mb-3" style={{ background: "linear-gradient(160deg, #0c1220 0%, #0f172a 100%)" }}>
+                {/* Tab bar */}
+                <div className="flex border-b border-gray-700/50">
+                  <button
+                    onClick={() => setCenterTab("pre")}
+                    className={`flex-1 py-2 text-xs font-bold tracking-wide transition-colors relative ${centerTab === "pre" ? "bg-yellow-900/30 text-yellow-300 border-b-2 border-yellow-500" : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/40"}`}
+                  >
+                    Trước Combat
+                    {pendingPreCombatCount > 0 && centerTab !== "pre" && (
+                      <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setCenterTab("wheel")}
+                    className={`flex-1 py-2 text-xs font-bold tracking-wide transition-colors ${centerTab === "wheel" ? "bg-purple-900/30 text-purple-300 border-b-2 border-purple-500" : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/40"}`}
+                  >
+                    Wheel of Truth
+                  </button>
+                  <button
+                    onClick={() => setCenterTab("after")}
+                    className={`flex-1 py-2 text-xs font-bold tracking-wide transition-colors relative ${centerTab === "after" ? "bg-green-900/30 text-green-300 border-b-2 border-green-500" : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/40"}`}
+                  >
+                    Sau Combat
+                    {battleDone && !combatConfirmed && centerTab !== "after" && (
+                      <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                    )}
+                  </button>
+                </div>
 
-            {/* Round results / pre-battle stat comparison */}
-            {player1 && player2 && (
-              <div
-                className="rounded-2xl border border-gray-700/40 p-3 mb-3 overflow-hidden"
-                style={{ background: "linear-gradient(160deg, #0c1220 0%, #0f172a 100%)" }}
-              >
-                {combatResult || stepState ? (
-                  <RoundResultsPanel
-                    rounds={combatResult ? combatResult.rounds : stepState!.resolvedRounds}
-                    revealedUpTo={
-                      combatResult
-                        ? null
-                        : stepState!.resolvedRounds.length > 0
-                          ? stepState!.resolvedRounds.length - 1
-                          : -1
-                    }
-                    p1char={player1.character}
-                    p2char={player2.character}
-                    extraBiqRound={(() => {
-                      const rr = combatResult ? combatResult.rounds : (stepState?.resolvedRounds ?? []);
-                      return (rr.length >= 5 && rr[4]?.stat === "biq" && rr[5]?.stat === "biq") || rr.length > STAT_ORDER.length || zoltraakBiq2Pending;
-                    })()}
-                    player1={player1}
-                    player2={player2}
-                    disabledItems={disabledItems}
-                    roundSpinResults={roundSpinResults}
-                    getPerRoundEffects={getPerRoundEffects}
-                    computeRoundPoints={computeRoundPoints}
-                    applyDevWeights={applyDevWeights}
-                    setRoundSpinModal={setRoundSpinModal}
-                  />
-                ) : (
-                  /* Pre-battle: JRPG stat comparison bars */
-                  <div className="space-y-1">
-                    <div className="grid grid-cols-[1fr_56px_1fr] gap-1 mb-2 items-center">
-                      <div className="text-right text-[11px] font-black text-blue-400 tracking-wide truncate pr-1">
-                        {player1.name}
+                {/* Tab 1: Trước Combat */}
+                {centerTab === "pre" && (
+                  <div className="p-3 space-y-3">
+                    {/* Stat comparison bars */}
+                    <div className="space-y-1">
+                      <div className="grid grid-cols-[1fr_56px_1fr] gap-1 mb-2 items-center">
+                        <div className="text-right text-[11px] font-black text-blue-400 tracking-wide truncate pr-1">{player1.name}</div>
+                        <div className="text-center" />
+                        <div className="text-left text-[11px] font-black text-red-400 tracking-wide truncate pl-1">{player2.name}</div>
                       </div>
-                      <div className="text-center" />
-                      <div className="text-left text-[11px] font-black text-red-400 tracking-wide truncate pl-1">
-                        {player2.name}
-                      </div>
+                      {STAT_ORDER.map(({ key, label }) => {
+                        const v1 = (p1DisplayStats ?? player1.stats)[key];
+                        const v2 = (p2DisplayStats ?? player2.stats)[key];
+                        const p1Higher = v1 > v2;
+                        const p2Higher = v2 > v1;
+                        const maxVal = Math.max(v1, v2, 1);
+                        return (
+                          <div key={key} className="grid grid-cols-[1fr_56px_1fr] gap-1 items-center">
+                            <div className="flex items-center gap-1.5 justify-end">
+                              <span className={`text-sm font-black w-6 text-right ${p1Higher ? "text-blue-300" : "text-gray-500"}`}>{v1}</span>
+                              <div className="flex-1 max-w-[80px] bg-gray-800/60 rounded-full h-2 overflow-hidden flex justify-end">
+                                <div className={`h-full rounded-full transition-all duration-700 ${p1Higher ? "bg-gradient-to-l from-blue-500 to-blue-400" : "bg-gray-600/60"}`} style={{ width: `${(v1 / maxVal) * 100}%` }} />
+                              </div>
+                            </div>
+                            <div className={`text-center text-[10px] font-black tracking-wider py-0.5 rounded ${p1Higher === p2Higher ? "text-gray-500" : p1Higher ? "text-blue-500/60" : "text-red-500/60"}`}>{label}</div>
+                            <div className="flex items-center gap-1.5 justify-start">
+                              <div className="flex-1 max-w-[80px] bg-gray-800/60 rounded-full h-2 overflow-hidden">
+                                <div className={`h-full rounded-full transition-all duration-700 ${p2Higher ? "bg-gradient-to-r from-red-500 to-red-400" : "bg-gray-600/60"}`} style={{ width: `${(v2 / maxVal) * 100}%` }} />
+                              </div>
+                              <span className={`text-sm font-black w-6 ${p2Higher ? "text-red-300" : "text-gray-500"}`}>{v2}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                    {STAT_ORDER.map(({ key, label }) => {
-                      const v1 = (p1DisplayStats ?? player1.stats)[key];
-                      const v2 = (p2DisplayStats ?? player2.stats)[key];
-                      const p1Higher = v1 > v2;
-                      const p2Higher = v2 > v1;
-                      const maxVal = Math.max(v1, v2, 1);
-                      return (
-                        <div key={key} className="grid grid-cols-[1fr_56px_1fr] gap-1 items-center">
-                          <div className="flex items-center gap-1.5 justify-end">
-                            <span className={`text-sm font-black w-6 text-right ${p1Higher ? "text-blue-300" : "text-gray-500"}`}>{v1}</span>
-                            <div className="flex-1 max-w-[80px] bg-gray-800/60 rounded-full h-2 overflow-hidden flex justify-end">
-                              <div
-                                className={`h-full rounded-full transition-all duration-700 ${p1Higher ? "bg-gradient-to-l from-blue-500 to-blue-400" : "bg-gray-600/60"}`}
-                                style={{ width: `${(v1 / maxVal) * 100}%` }}
-                              />
-                            </div>
-                          </div>
-                          <div className={`text-center text-[10px] font-black tracking-wider py-0.5 rounded ${p1Higher === p2Higher ? "text-gray-500" : p1Higher ? "text-blue-500/60" : "text-red-500/60"}`}>
-                            {label}
-                          </div>
-                          <div className="flex items-center gap-1.5 justify-start">
-                            <div className="flex-1 max-w-[80px] bg-gray-800/60 rounded-full h-2 overflow-hidden">
-                              <div
-                                className={`h-full rounded-full transition-all duration-700 ${p2Higher ? "bg-gradient-to-r from-red-500 to-red-400" : "bg-gray-600/60"}`}
-                                style={{ width: `${(v2 / maxVal) * 100}%` }}
-                              />
-                            </div>
-                            <span className={`text-sm font-black w-6 ${p2Higher ? "text-red-300" : "text-gray-500"}`}>{v2}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
+
+                    <CombatEffectsPanel
+                      player1={{ name: player1.name, character: player1.character }}
+                      player2={{ name: player2.name, character: player2.character }}
+                      player1ComputedStats={p1DisplayStats ?? undefined}
+                      player2ComputedStats={p2DisplayStats ?? undefined}
+                      resetKey="pre-main"
+                      preCombatOnly
+                      onWheelResolved={handleWheelResolved}
+                      onPendingPreCombatChange={setPendingPreCombatCount}
+                    />
+                    {!stepState && !battleDone && (
+                      <div className="flex justify-center pt-1">
+                        <button
+                          onClick={() => { startCombat(); }}
+                          disabled={pendingPreCombatCount > 0}
+                          className={`px-8 py-3 rounded-xl font-bold text-lg transition-all transform shadow-lg ${
+                            pendingPreCombatCount > 0
+                              ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
+                              : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105"
+                          }`}
+                        >
+                          {pendingPreCombatCount > 0 ? `Còn ${pendingPreCombatCount} hiệu ứng chờ...` : "Bắt đầu"}
+                        </button>
+                      </div>
+                    )}
+                    {(stepState || battleDone) && (
+                      <div className="text-center text-xs text-gray-600 py-2 italic">Combat đang diễn ra — xem tab Wheel of Truth</div>
+                    )}
                   </div>
                 )}
 
-                {/* Round Log Box */}
-                {(() => {
-                  const logs = stepState?.roundLogs ?? [];
-                  if (logs.length === 0) return null;
-                  const viewIdx = Math.min(viewLogIndex ?? logs.length - 1, logs.length - 1);
-                  const log = logs[viewIdx];
-                  const borderColor = log.winner === "player1" ? "rgba(59,130,246,0.3)" : log.winner === "player2" ? "rgba(239,68,68,0.3)" : "rgba(234,179,8,0.3)";
-                  return (
-                    <div className="mt-2 rounded-xl border overflow-hidden text-xs" style={{ background: "rgba(0,0,0,0.4)", borderColor }}>
-                      <div className="flex items-center gap-1 px-2 py-1.5 border-b border-gray-800/60">
-                        <button onClick={() => setViewLogIndex(0)} disabled={viewIdx === 0} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">«</button>
-                        <button onClick={() => setViewLogIndex(Math.max(0, viewIdx - 1))} disabled={viewIdx === 0} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">‹</button>
-                        <div className="flex gap-0.5 flex-1 justify-center">
-                          {logs.map((lg, i) => (
-                            <button
-                              key={i}
-                              onClick={() => setViewLogIndex(i)}
-                              className={`w-5 h-5 rounded text-[9px] font-black transition-colors ${i === viewIdx ? (lg.roundIndex === -1 ? "bg-yellow-700/70 text-white" : "bg-purple-600/70 text-white") : "bg-gray-800/60 text-gray-500 hover:bg-gray-700/60 hover:text-gray-300"}`}
-                            >
-                              {lg.roundIndex === -1 ? "P" : i + (logs[0]?.roundIndex === -1 ? 0 : 1)}
-                            </button>
-                          ))}
-                        </div>
-                        <button onClick={() => setViewLogIndex(Math.min(logs.length - 1, viewIdx + 1))} disabled={viewIdx === logs.length - 1} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">›</button>
-                        <button onClick={() => setViewLogIndex(logs.length - 1)} disabled={viewIdx === logs.length - 1} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">»</button>
+                {/* Tab 2: Wheel of Truth (rounds) */}
+                {centerTab === "wheel" && (
+                  <div className="p-3">
+                    {combatResult || stepState ? (
+                      <RoundResultsPanel
+                        rounds={combatResult ? combatResult.rounds : stepState!.resolvedRounds}
+                        revealedUpTo={
+                          combatResult
+                            ? null
+                            : stepState!.resolvedRounds.length > 0
+                              ? stepState!.resolvedRounds.length - 1
+                              : -1
+                        }
+                        p1char={player1.character}
+                        p2char={player2.character}
+                        extraBiqRound={(() => {
+                          const rr = combatResult ? combatResult.rounds : (stepState?.resolvedRounds ?? []);
+                          return (rr.length >= 5 && rr[4]?.stat === "biq" && rr[5]?.stat === "biq") || rr.length > STAT_ORDER.length || zoltraakBiq2Pending;
+                        })()}
+                        player1={player1}
+                        player2={player2}
+                        disabledItems={disabledItems}
+                        roundSpinResults={roundSpinResults}
+                        getPerRoundEffects={getPerRoundEffects}
+                        computeRoundPoints={computeRoundPoints}
+                        applyDevWeights={applyDevWeights}
+                        setRoundSpinModal={setRoundSpinModal}
+                      />
+                    ) : (
+                      <div className="text-center text-xs text-gray-600 py-6 italic">Chưa bắt đầu combat — chuyển sang tab Trước Combat</div>
+                    )}
+                  </div>
+                )}
+
+                {/* Tab 3: Sau Combat */}
+                {centerTab === "after" && (
+                  <div className="p-3 space-y-3">
+                    {/* After-combat CombatEffectsPanel */}
+                    <CombatEffectsPanel
+                      player1={{ name: player1.name, character: player1.character }}
+                      player2={{ name: player2.name, character: player2.character }}
+                      player1ComputedStats={p1DisplayStats ?? undefined}
+                      player2ComputedStats={p2DisplayStats ?? undefined}
+                      resetKey="after-main"
+                      afterCombatOnly
+                      combatResult={
+                        battleDone && effectiveWinner
+                          ? {
+                              winner: effectiveWinner,
+                              player1Score: effectiveScores.s1,
+                              player2Score: effectiveScores.s2,
+                              rounds: combatResult!.rounds.map((r) => ({ stat: r.stat, winner: r.winner })),
+                            }
+                          : undefined
+                      }
+                      onWheelResolved={handleWheelResolved}
+                    />
+
+                    {/* After-combat quirk effects (PvP Reward etc.) */}
+                    <AfterCombatPanel
+                      battleDone={battleDone}
+                      afterCombatEntries={afterCombatEntries}
+                      player1={player1}
+                      player2={player2}
+                      afterCombatSpinResults={afterCombatSpinResults}
+                      setAfterCombatSpinResults={setAfterCombatSpinResults}
+                      setPreCombatModal={setPreCombatModal}
+                      spawnStatBubbles={spawnStatBubbles}
+                      setCreatorsCatModal={setCreatorsCatModal}
+                    />
+
+                    {/* Roundtable Hold banner */}
+                    {isPendingRoundtable && (
+                      <div className="rounded-xl border border-orange-500/40 bg-orange-900/20 px-4 py-3 text-center text-sm text-orange-300 font-bold animate-pulse">
+                        ⚔ Roundtable Hold — Trận phụ đang chờ xử lý
                       </div>
-                      <div className="px-2.5 py-1.5 space-y-0.5" style={{ borderLeft: `3px solid ${borderColor}` }}>
-                        <div className="flex items-center gap-1.5 font-bold">
-                          <span className="text-[10px] px-1.5 py-0.5 rounded font-black tracking-widest" style={{ background: log.roundIndex === -1 ? "rgba(234,179,8,0.2)" : "rgba(168,85,247,0.2)", color: log.roundIndex === -1 ? "#fbbf24" : "#c084fc", border: `1px solid ${log.roundIndex === -1 ? "rgba(234,179,8,0.3)" : "rgba(168,85,247,0.3)"}` }}>
-                            {log.roundIndex === -1 ? "PRE" : `R${log.roundIndex + 1}`}
-                          </span>
-                          <span className="text-gray-400 text-[11px] font-bold">{log.statLabel}</span>
-                          {log.roundIndex !== -1 && (
-                            <>
-                              <span className="text-blue-300 font-black">{log.p1ValueUsed}</span>
-                              <span className="text-gray-600 text-[9px]">vs</span>
-                              <span className="text-red-300 font-black">{log.p2ValueUsed}</span>
-                            </>
-                          )}
-                          <span className="ml-auto text-[11px] font-black">
-                            {log.roundIndex === -1 ? (
-                              <span className="text-yellow-400/70 text-[10px] font-normal italic">Hiệu ứng trước combat</span>
-                            ) : log.winner === "tie" ? (
-                              <span className="text-yellow-400">═ HÒA</span>
-                            ) : log.winner === "player1" ? (
-                              <span className="text-blue-300">▶ {player1.name}</span>
-                            ) : (
-                              <span className="text-red-300">◀ {player2.name}</span>
-                            )}
-                          </span>
-                        </div>
-                        {log.events.map((ev, i) => (
-                          <div key={i} className={`pl-2 border-l-2 text-[11px] ${ev.type === "stat_boost" ? "border-green-500/50 text-green-400" : ev.type === "stat_debuff" ? "border-red-500/50 text-red-400" : ev.type === "carry_over" ? "border-amber-500/50 text-amber-400" : ev.type === "point_change" ? "border-blue-500/50 text-blue-300" : "border-gray-600/50 text-gray-400"}`}>
-                            <span className="text-gray-600">[{ev.player === "player1" ? player1.name : player2.name}]</span>{" "}
-                            <span className="text-gray-500">{ev.source}:</span>{" "}
-                            {ev.description}
-                          </div>
-                        ))}
-                        {(log.carryOverToNext?.length ?? 0) > 0 && (
-                          <div className="pl-2 text-amber-400/70 italic text-[11px]">
-                            → Carry: {log.carryOverToNext.map((co) => `${co.source} ${co.value > 0 ? "+" : ""}${co.value} ${co.stat.toUpperCase()}`).join(", ")}
-                          </div>
-                        )}
-                        <div className="flex justify-between text-[10px] text-gray-600 border-t border-gray-700/30 pt-1 mt-0.5">
-                          <span>Score <span className="text-blue-400 font-bold">{log.p1Score}</span> : <span className="text-red-400 font-bold">{log.p2Score}</span></span>
-                          {stepInProgress && viewIdx === logs.length - 1 && (
-                            <span className="text-gray-600 animate-pulse">R{stepRoundIndex + 1}/6 →</span>
-                          )}
-                        </div>
+                    )}
+
+                    {/* Kết thúc / Fight Again buttons */}
+                    {battleDone && !combatConfirmed && (
+                      <div className="flex justify-center pt-1">
+                        <button
+                          onClick={() => setCombatConfirmed(true)}
+                          disabled={pendingSpins}
+                          className={`px-6 py-2.5 font-bold rounded-xl text-sm transition-all shadow-lg ${
+                            pendingSpins
+                              ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
+                              : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-green-500/20"
+                          }`}
+                        >
+                          {pendingSpins ? "Còn hiệu ứng chờ quay..." : "Kết thúc"}
+                        </button>
                       </div>
+                    )}
+                    {combatConfirmed && (
+                      <div className="flex justify-center pt-1">
+                        <button
+                          onClick={resetCombat}
+                          className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
+                        >
+                          Fight Again
+                        </button>
+                      </div>
+                    )}
+                    {!battleDone && (
+                      <div className="text-center text-xs text-gray-600 py-4 italic">Chưa kết thúc combat</div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Persistent Round Log Bar */}
+            {player1 && player2 && (() => {
+              const logs = stepState?.roundLogs ?? [];
+              if (logs.length === 0) return null;
+              const viewIdx = Math.min(viewLogIndex ?? logs.length - 1, logs.length - 1);
+              const log = logs[viewIdx];
+              const borderColor = log.winner === "player1" ? "rgba(59,130,246,0.3)" : log.winner === "player2" ? "rgba(239,68,68,0.3)" : "rgba(234,179,8,0.3)";
+              return (
+                <div className="rounded-xl border overflow-hidden text-xs mb-3" style={{ background: "rgba(0,0,0,0.4)", borderColor }}>
+                  <div className="flex items-center gap-1 px-2 py-1.5 border-b border-gray-800/60">
+                    <button onClick={() => setViewLogIndex(0)} disabled={viewIdx === 0} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">«</button>
+                    <button onClick={() => setViewLogIndex(Math.max(0, viewIdx - 1))} disabled={viewIdx === 0} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">‹</button>
+                    <div className="flex gap-0.5 flex-1 justify-center">
+                      {logs.map((lg, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setViewLogIndex(i)}
+                          className={`w-5 h-5 rounded text-[9px] font-black transition-colors ${i === viewIdx ? (lg.roundIndex === -1 ? "bg-yellow-700/70 text-white" : "bg-purple-600/70 text-white") : "bg-gray-800/60 text-gray-500 hover:bg-gray-700/60 hover:text-gray-300"}`}
+                        >
+                          {lg.roundIndex === -1 ? "P" : i + (logs[0]?.roundIndex === -1 ? 0 : 1)}
+                        </button>
+                      ))}
                     </div>
-                  );
-                })()}
-              </div>
-            )}
-
-            {/* After-combat quirk effects */}
-            <AfterCombatPanel
-              battleDone={battleDone}
-              afterCombatEntries={afterCombatEntries}
-              player1={player1}
-              player2={player2}
-              afterCombatSpinResults={afterCombatSpinResults}
-              setAfterCombatSpinResults={setAfterCombatSpinResults}
-              setPreCombatModal={setPreCombatModal}
-              spawnStatBubbles={spawnStatBubbles}
-              setCreatorsCatModal={setCreatorsCatModal}
-            />
-
-            {/* Bắt đầu button row */}
-            {player1 && player2 && !stepState && !battleDone && (
-              <div className="flex justify-center items-center gap-3 mt-3 mb-3">
-                <button
-                  onClick={startCombat}
-                  disabled={pendingPreCombatCount > 0}
-                  className={`px-8 py-3 rounded-xl font-bold text-lg transition-all transform shadow-lg ${
-                    pendingPreCombatCount > 0
-                      ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
-                      : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105"
-                  }`}
-                >
-                  {pendingPreCombatCount > 0 ? `Còn ${pendingPreCombatCount} hiệu ứng chờ...` : "Bắt đầu"}
-                </button>
-              </div>
-            )}
-
-            {/* Confirm / Fight Again after combat */}
-            {battleDone && !combatConfirmed && (
-              <div className="flex justify-center mt-3 mb-3">
-                <button
-                  onClick={() => setCombatConfirmed(true)}
-                  disabled={pendingSpins}
-                  className={`px-6 py-2.5 font-bold rounded-xl text-sm transition-all shadow-lg ${
-                    pendingSpins
-                      ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
-                      : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-green-500/20"
-                  }`}
-                >
-                  {pendingSpins ? "Còn hiệu ứng chờ quay..." : "Kết thúc"}
-                </button>
-              </div>
-            )}
-
-            {combatConfirmed && (
-              <div className="flex justify-center mt-3 mb-3">
-                <button
-                  onClick={resetCombat}
-                  className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
-                >
-                  Fight Again
-                </button>
-              </div>
-            )}
+                    <button onClick={() => setViewLogIndex(Math.min(logs.length - 1, viewIdx + 1))} disabled={viewIdx === logs.length - 1} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">›</button>
+                    <button onClick={() => setViewLogIndex(logs.length - 1)} disabled={viewIdx === logs.length - 1} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">»</button>
+                  </div>
+                  <div className="px-2.5 py-1.5 space-y-0.5" style={{ borderLeft: `3px solid ${borderColor}` }}>
+                    <div className="flex items-center gap-1.5 font-bold">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded font-black tracking-widest" style={{ background: log.roundIndex === -1 ? "rgba(234,179,8,0.2)" : "rgba(168,85,247,0.2)", color: log.roundIndex === -1 ? "#fbbf24" : "#c084fc", border: `1px solid ${log.roundIndex === -1 ? "rgba(234,179,8,0.3)" : "rgba(168,85,247,0.3)"}` }}>
+                        {log.roundIndex === -1 ? "PRE" : `R${log.roundIndex + 1}`}
+                      </span>
+                      <span className="text-gray-400 text-[11px] font-bold">{log.statLabel}</span>
+                      {log.roundIndex !== -1 && (
+                        <>
+                          <span className="text-blue-300 font-black">{log.p1ValueUsed}</span>
+                          <span className="text-gray-600 text-[9px]">vs</span>
+                          <span className="text-red-300 font-black">{log.p2ValueUsed}</span>
+                        </>
+                      )}
+                      <span className="ml-auto text-[11px] font-black">
+                        {log.roundIndex === -1 ? (
+                          <span className="text-yellow-400/70 text-[10px] font-normal italic">Hiệu ứng trước combat</span>
+                        ) : log.winner === "tie" ? (
+                          <span className="text-yellow-400">═ HÒA</span>
+                        ) : log.winner === "player1" ? (
+                          <span className="text-blue-300">▶ {player1.name}</span>
+                        ) : (
+                          <span className="text-red-300">◀ {player2.name}</span>
+                        )}
+                      </span>
+                    </div>
+                    {log.events.map((ev, i) => (
+                      <div key={i} className={`pl-2 border-l-2 text-[11px] ${ev.type === "stat_boost" ? "border-green-500/50 text-green-400" : ev.type === "stat_debuff" ? "border-red-500/50 text-red-400" : ev.type === "carry_over" ? "border-amber-500/50 text-amber-400" : ev.type === "point_change" ? "border-blue-500/50 text-blue-300" : "border-gray-600/50 text-gray-400"}`}>
+                        <span className="text-gray-600">[{ev.player === "player1" ? player1.name : player2.name}]</span>{" "}
+                        <span className="text-gray-500">{ev.source}:</span>{" "}
+                        {ev.description}
+                      </div>
+                    ))}
+                    {(log.carryOverToNext?.length ?? 0) > 0 && (
+                      <div className="pl-2 text-amber-400/70 italic text-[11px]">
+                        → Carry: {log.carryOverToNext.map((co) => `${co.source} ${co.value > 0 ? "+" : ""}${co.value} ${co.stat.toUpperCase()}`).join(", ")}
+                      </div>
+                    )}
+                    <div className="flex justify-between text-[10px] text-gray-600 border-t border-gray-700/30 pt-1 mt-0.5">
+                      <span>Score <span className="text-blue-400 font-bold">{log.p1Score}</span> : <span className="text-red-400 font-bold">{log.p2Score}</span></span>
+                      {stepInProgress && viewIdx === logs.length - 1 && (
+                        <span className="text-gray-600 animate-pulse">R{stepRoundIndex + 1}/6 →</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Rules Info */}
             <div className="mt-2 bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-lg p-3 text-center">
@@ -1856,6 +1929,37 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
           setPreCombatModal((prev) => ({ ...prev, isOpen: false }));
         }}
       />
+
+      {/* Dev Mode: Panel */}
+      {devMode && (
+        <DevWheelPanel
+          pos={devPanelPos}
+          onPosChange={setDevPanelPos}
+          overrides={devWeightOverrides}
+          onOverrideChange={(effect, idx, val) =>
+            setDevWeightOverrides((prev) => ({
+              ...prev,
+              [effect]: { ...(prev[effect] || {}), [idx]: val },
+            }))
+          }
+          onReset={() => setDevWeightOverrides({})}
+          defaultItems={{
+            "Critical Strike": CRIT_ITEMS,
+            Evasion: EVASION_ITEMS,
+            Gambler: GAMBLER_ITEMS,
+            Cruelty: CRUELTY_ITEMS,
+            Blind: BLIND_ITEMS,
+            Mute: MUTE_ITEMS,
+            Misericorde: MISERICORDE_ITEMS,
+          }}
+          allPlayers={allPlayers}
+          onLoadMatchup={(p1, p2) => {
+            setPlayer1(p1);
+            setPlayer2(p2);
+            resetCombat();
+          }}
+        />
+      )}
 
       {/* Creator's Cat modal */}
       <CreatorsCatModal

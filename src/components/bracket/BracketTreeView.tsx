@@ -77,6 +77,10 @@ export interface BracketTreeViewProps {
   onOpenMatch?: (ctx: OpenMatchCtx) => void;
   onSelectMatch?: (match: MatchData) => void;
   readOnly?: boolean;
+  /** Tập matchNumber cần highlight (amber ring) */
+  highlightMatchNumbers?: Set<number>;
+  /** matchNumber cần pan đến giữa khung */
+  focusMatchNumber?: number | null;
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -177,10 +181,11 @@ interface MatchCardProps {
   topPx: number;
   leftPx: number;
   dimmed: boolean;
+  highlighted?: boolean;
   onOpen: (match: MatchData) => void;
 }
 
-function MatchCard({ match, topPx, leftPx, dimmed, onOpen }: MatchCardProps) {
+function MatchCard({ match, topPx, leftPx, dimmed, highlighted, onOpen }: MatchCardProps) {
   const p1Won = match.winner?.no === match.player1?.no;
   const p2Won = match.winner?.no === match.player2?.no;
   const hasWinner = !!match.winner;
@@ -197,16 +202,16 @@ function MatchCard({ match, topPx, leftPx, dimmed, onOpen }: MatchCardProps) {
         left: leftPx,
         width: CARD_W,
         height: CARD_H,
-        zIndex: 2,
+        zIndex: highlighted ? 6 : 2,
         opacity: dimmed ? 0.15 : 1,
         transition: "opacity 0.2s, transform 0.15s, box-shadow 0.15s",
         cursor: canClick ? "pointer" : "default",
+        boxShadow: highlighted ? "0 0 0 2px #f59e0b, 0 0 18px 4px rgba(245,158,11,0.45)" : undefined,
       }}
       className={`
         text-left rounded-lg border
-        ${hasWinner ? "bg-gray-800/95 border-green-600/60" : "bg-gray-800/95 border-gray-600/50"}
-        ${
-          canClick && !dimmed
+        ${highlighted ? "border-amber-400" : hasWinner ? "bg-gray-800/95 border-green-600/60" : "bg-gray-800/95 border-gray-600/50"}
+        ${!highlighted && canClick && !dimmed
             ? hasWinner
               ? "hover:border-green-400 hover:shadow-[0_0_12px_2px_rgba(74,222,128,0.25)] hover:scale-[1.03]"
               : "hover:border-purple-400 hover:shadow-[0_0_12px_2px_rgba(139,92,246,0.25)] hover:scale-[1.03]"
@@ -335,6 +340,72 @@ function RoundDivider({ leftX, height }: { leftX: number; height: number }) {
 
 // ── Main BracketTreeView ──────────────────────────────────────────────────────
 
+// ── Tính tọa độ (leftPx, topPx) của một matchNumber trong canvas ─────────────
+// Trả về null nếu matchNumber không thuộc section hiện tại
+function getMatchCoords(
+  matchNumber: number,
+  section: BracketSection,
+): { x: number; y: number } | null {
+  // Qualifying: SINGLE_ROUNDS = [R256, R128] + WB_ROUNDS[0] = R64
+  const QUALIFYING_ROUNDS = [SINGLE_ROUNDS[0], SINGLE_ROUNDS[1], WB_ROUNDS[0]];
+
+  if (section === "qualifying") {
+    let curLeft = PAD;
+    for (let ri = 0; ri < QUALIFYING_ROUNDS.length; ri++) {
+      const r = QUALIFYING_ROUNDS[ri];
+      const colW = CARD_W;
+      if (matchNumber >= r.matchStart && matchNumber < r.matchStart + r.count) {
+        const i = matchNumber - r.matchStart;
+        return { x: curLeft, y: PAD + i * SLOT_H };
+      }
+      curLeft += colW + COL_GAP_SINGLE;
+    }
+    return null;
+  }
+
+  // Winners section: WB + LB + GF
+  const STEP_W = CARD_W * 2 + COL_GAP_TREE * 3;
+  const wbColLefts = WB_ROUNDS.map((_, s) => PAD + s * STEP_W);
+  const lbColLefts = LB_ROUNDS.map((_, li) => {
+    const s = Math.floor(li / 2);
+    const isL2 = li % 2 === 1;
+    return wbColLefts[s] + (isL2 ? CARD_W + COL_GAP_TREE : 0);
+  });
+  const WB_GAP = 40;
+  const wbOffsetY = PAD;
+  const lbOffsetY = PAD + WB_GRID_H + WB_GAP;
+
+  for (let ci = 0; ci < WB_ROUNDS.length; ci++) {
+    const r = WB_ROUNDS[ci];
+    if (matchNumber >= r.matchStart && matchNumber < r.matchStart + r.count) {
+      const i = matchNumber - r.matchStart;
+      return { x: wbColLefts[ci], y: wbOffsetY + getWBTopY(ci, i) };
+    }
+  }
+  for (let ci = 0; ci < LB_ROUNDS.length; ci++) {
+    const r = LB_ROUNDS[ci];
+    if (matchNumber >= r.matchStart && matchNumber < r.matchStart + r.count) {
+      const i = matchNumber - r.matchStart;
+      return { x: lbColLefts[ci], y: lbOffsetY + getLBTopY(ci, i) };
+    }
+  }
+  // GF + Bronze
+  const gfLeft = PAD + WB_ROUNDS.length * STEP_W + SECTION_GAP;
+  const totalDEH = WB_GRID_H + WB_GAP + LB_GRID_H;
+  const gfCenterY = PAD + totalDEH / 2;
+  const gfRound = GF_ROUNDS[0];
+  if (matchNumber >= gfRound.matchStart && matchNumber < gfRound.matchStart + gfRound.count) {
+    const i = matchNumber - gfRound.matchStart;
+    return { x: gfLeft, y: gfCenterY - (gfRound.count * (CARD_H + 12)) / 2 + i * (CARD_H + 12) };
+  }
+  const bronzeRound = GF_ROUNDS[1];
+  if (matchNumber === bronzeRound.matchStart) {
+    const bronzeLeft = gfLeft + CARD_W + SECTION_GAP;
+    return { x: bronzeLeft, y: gfCenterY - CARD_H / 2 };
+  }
+  return null;
+}
+
 export function BracketTreeView({
   matches,
   filterMode,
@@ -342,6 +413,8 @@ export function BracketTreeView({
   onOpenMatch,
   onSelectMatch,
   readOnly = false,
+  highlightMatchNumbers,
+  focusMatchNumber,
 }: BracketTreeViewProps) {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const headerScrollRef = useRef<HTMLDivElement>(null);
@@ -413,6 +486,25 @@ export function BracketTreeView({
     setZoom(1);
     setPan({ x: 0, y: 0 });
   }, []);
+
+  // Pan đến focusMatchNumber khi thay đổi
+  useEffect(() => {
+    if (focusMatchNumber == null) return;
+    const coords = getMatchCoords(focusMatchNumber, section);
+    if (!coords) return;
+    const container = canvasContainerRef.current;
+    if (!container) return;
+    const vw = container.clientWidth;
+    const vh = container.clientHeight;
+    // Pan sao cho card center xuất hiện giữa khung
+    const cardCenterX = coords.x + CARD_W / 2;
+    const cardCenterY = coords.y + CARD_H / 2;
+    setPan({
+      x: vw / 2 - cardCenterX * zoom,
+      y: vh / 2 - cardCenterY * zoom,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusMatchNumber, section]);
 
   // R256 mặc định collapsed vì đã xong
   const [collapsedRounds, setCollapsedRounds] = useState<Set<string>>(
@@ -565,6 +657,7 @@ export function BracketTreeView({
               topPx={topY}
               leftPx={leftX}
               dimmed={dimmed}
+              highlighted={highlightMatchNumbers?.has(matchNumber)}
               onOpen={handleOpen}
             />,
           );
@@ -639,7 +732,7 @@ export function BracketTreeView({
         const topY = wbOffsetY + getWBTopY(ci, i);
         const dimmed = match ? isDimmed(match) : false;
         if (match && (match.player1 || match.player2)) {
-          nodes.push(<MatchCard key={`wbm-${matchNumber}`} match={match} topPx={topY} leftPx={leftX} dimmed={dimmed} onOpen={handleOpen} />);
+          nodes.push(<MatchCard key={`wbm-${matchNumber}`} match={match} topPx={topY} leftPx={leftX} dimmed={dimmed} highlighted={highlightMatchNumbers?.has(matchNumber)} onOpen={handleOpen} />);
         } else {
           nodes.push(<TBDSlot key={`wbtbd-${matchNumber}`} topPx={topY} leftPx={leftX} matchNumber={matchNumber} />);
         }
@@ -656,7 +749,7 @@ export function BracketTreeView({
         const topY = lbOffsetY + getLBTopY(ci, i);
         const dimmed = match ? isDimmed(match) : false;
         if (match && (match.player1 || match.player2)) {
-          nodes.push(<MatchCard key={`lbm-${matchNumber}`} match={match} topPx={topY} leftPx={leftX} dimmed={dimmed} onOpen={handleOpen} />);
+          nodes.push(<MatchCard key={`lbm-${matchNumber}`} match={match} topPx={topY} leftPx={leftX} dimmed={dimmed} highlighted={highlightMatchNumbers?.has(matchNumber)} onOpen={handleOpen} />);
         } else {
           nodes.push(<TBDSlot key={`lbtbd-${matchNumber}`} topPx={topY} leftPx={leftX} matchNumber={matchNumber} />);
         }
@@ -686,7 +779,7 @@ export function BracketTreeView({
       const topY = gfCenterY - (gfRound.count * (CARD_H + 12)) / 2 + i * (CARD_H + 12);
       const dimmed = match ? isDimmed(match) : false;
       if (match && (match.player1 || match.player2)) {
-        nodes.push(<MatchCard key={`gf-${i}`} match={match} topPx={topY} leftPx={gfLeft} dimmed={dimmed} onOpen={handleOpen} />);
+        nodes.push(<MatchCard key={`gf-${i}`} match={match} topPx={topY} leftPx={gfLeft} dimmed={dimmed} highlighted={highlightMatchNumbers?.has(matchNumber)} onOpen={handleOpen} />);
       } else {
         nodes.push(<TBDSlot key={`gf-tbd-${i}`} topPx={topY} leftPx={gfLeft} matchNumber={matchNumber} />);
       }
@@ -698,7 +791,7 @@ export function BracketTreeView({
     const bronzeDimmed = bronzeMatch ? isDimmed(bronzeMatch) : false;
     nodes.push(<div key="sep-bronze" style={{ position: "absolute", left: bronzeLeft - SECTION_GAP / 2, top: 0, width: 1, height: PAD + totalDEH + PAD, background: "linear-gradient(to bottom, transparent, rgba(180,83,9,0.3) 20%, rgba(180,83,9,0.3) 80%, transparent)", zIndex: 1, pointerEvents: "none" }} />);
     if (bronzeMatch && (bronzeMatch.player1 || bronzeMatch.player2)) {
-      nodes.push(<MatchCard key="bronze" match={bronzeMatch} topPx={bronzeTopY} leftPx={bronzeLeft} dimmed={bronzeDimmed} onOpen={handleOpen} />);
+      nodes.push(<MatchCard key="bronze" match={bronzeMatch} topPx={bronzeTopY} leftPx={bronzeLeft} dimmed={bronzeDimmed} highlighted={highlightMatchNumbers?.has(bronzeRound.matchStart)} onOpen={handleOpen} />);
     } else {
       nodes.push(<TBDSlot key="bronze-tbd" topPx={bronzeTopY} leftPx={bronzeLeft} matchNumber={bronzeRound.matchStart} />);
     }

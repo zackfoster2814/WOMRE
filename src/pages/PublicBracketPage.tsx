@@ -1,47 +1,39 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { readDriveFile } from "../utils/googleDrive";
-import { ROUND_256_FILE_ID } from "../config/googleDrive";
+import {
+  loadAllBracketMatches,
+  type MatchData,
+  ROUND_SECTION,
+  ROUND_SEARCH_OPTIONS,
+  BRANCH_OPTIONS,
+  getRoundKeyByMatchNumber,
+  searchMatches,
+  type SearchType,
+} from "../config/tournamentConfig";
 import { BracketTreeView } from "../components/bracket/BracketTreeView";
-
-// ===================== Types =====================
-
-interface PlayerRef {
-  no: number;
-  name: string;
-  username: string;
-}
-
-interface MatchData {
-  matchNumber: number;
-  player1: PlayerRef | null;
-  player2: PlayerRef | null;
-  winner: PlayerRef | null;
-  score: string | null;
-  specialEvent: string | null;
-  note: string | null;
-}
-
-interface Round256Data {
-  totalPlayers: number;
-  matches: MatchData[];
-  drawOrder: number[];
-  lastUpdated: string;
-}
 
 // ===================== Main Page =====================
 
 export const PublicBracketPage = () => {
-  const [roundData, setRoundData] = useState<Round256Data | null>(null);
+  const [matches, setMatches] = useState<MatchData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
   const [selectedMatch, setSelectedMatch] = useState<MatchData | null>(null);
   const [filterMode, setFilterMode] = useState<"all" | "pending" | "completed">("all");
+  const [bracketSection, setBracketSection] = useState<"qualifying" | "winners">("qualifying");
+
+  // Search state
+  const [searchRound, setSearchRound] = useState("all");
+  const [searchBranch, setSearchBranch] = useState("all");
+  const [searchText, setSearchText] = useState("");
+  const [searchType, setSearchType] = useState<SearchType>("playerName");
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
-      const data = await readDriveFile<Round256Data>(ROUND_256_FILE_ID);
-      setRoundData(data);
+      const allMatches = await loadAllBracketMatches(readDriveFile);
+      setMatches(allMatches);
       setError(null);
       setLastRefresh(new Date());
     } catch (e) {
@@ -63,28 +55,52 @@ export const PublicBracketPage = () => {
     return () => clearInterval(interval);
   }, [loadData]);
 
+  // Tính kết quả search
+  const searchResults = useMemo(() => {
+    const results = searchMatches(matches, { round: searchRound, branch: searchBranch, text: searchText, type: searchType });
+    return results.length === 0 && !searchText.trim() && searchRound === "all" && searchBranch === "all" ? null : results;
+  }, [matches, searchText, searchRound, searchBranch, searchType]);
+
+  const highlightMatchNumbers = useMemo(
+    () => searchResults ? new Set(searchResults.map((m) => m.matchNumber)) : undefined,
+    [searchResults],
+  );
+
+  const focusMatchNumber = useMemo(() => {
+    if (!searchResults || searchResults.length === 0) return null;
+    return searchResults[0].matchNumber;
+  }, [searchResults]);
+
+  // Auto-switch tab khi focus match thuộc section khác
+  useEffect(() => {
+    if (focusMatchNumber == null) return;
+    const rk = getRoundKeyByMatchNumber(focusMatchNumber);
+    if (!rk) return;
+    const targetSection = ROUND_SECTION[rk] ?? "qualifying";
+    if (targetSection !== bracketSection) setBracketSection(targetSection);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusMatchNumber]);
+
   const filteredMatches = useMemo(() => {
-    if (!roundData) return [];
-    const matches = roundData.matches.filter((m) => m.player1 && m.player2);
+    const valid = matches.filter((m) => m.player1 && m.player2);
     switch (filterMode) {
       case "pending":
-        return matches.filter((m) => !m.winner);
+        return valid.filter((m) => !m.winner);
       case "completed":
-        return matches.filter((m) => m.winner);
+        return valid.filter((m) => m.winner);
       default:
-        return matches;
+        return valid;
     }
-  }, [roundData, filterMode]);
+  }, [matches, filterMode]);
 
   const stats = useMemo(() => {
-    if (!roundData) return { total: 0, completed: 0, pending: 0 };
-    const complete = roundData.matches.filter((m) => m.player1 && m.player2);
+    const complete = matches.filter((m) => m.player1 && m.player2);
     return {
       total: complete.length,
       completed: complete.filter((m) => m.winner).length,
       pending: complete.filter((m) => !m.winner).length,
     };
-  }, [roundData]);
+  }, [matches]);
 
   if (loading) {
     return (
@@ -97,7 +113,7 @@ export const PublicBracketPage = () => {
     );
   }
 
-  if (error && !roundData) {
+  if (error && matches.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
         <div className="text-center">
@@ -128,11 +144,6 @@ export const PublicBracketPage = () => {
             PvP Tournament - Round 256
           </h1>
           <div className="flex items-center justify-center gap-4 mt-2 text-sm text-gray-400">
-            {roundData?.lastUpdated && (
-              <span>
-                Updated: {new Date(roundData.lastUpdated).toLocaleString()}
-              </span>
-            )}
             {lastRefresh && (
               <span>
                 Refreshed: {lastRefresh.toLocaleTimeString()}
@@ -176,7 +187,7 @@ export const PublicBracketPage = () => {
           {filteredMatches.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-400 text-xl">
-                {roundData && roundData.matches.length > 0
+                {matches.length > 0
                   ? "No matches found for this filter."
                   : "No matches yet. Tournament draw has not started."}
               </p>
@@ -249,13 +260,135 @@ export const PublicBracketPage = () => {
 
         {/* Desktop: bracket tree view (hidden trên mobile) */}
         <div className="hidden lg:block">
-          {roundData && roundData.matches.length > 0 ? (
+          {/* Search bar */}
+          <div className="mb-3">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setSearchOpen((o) => !o)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border transition-all ${
+                  searchOpen || searchResults
+                    ? "bg-amber-600/20 border-amber-500/50 text-amber-300"
+                    : "bg-gray-800/60 border-gray-700/40 text-gray-400 hover:text-white hover:bg-gray-700/60"
+                }`}
+              >
+                <span>🔍</span>
+                <span>Tìm kiếm</span>
+                {searchResults && (
+                  <span className="ml-1 bg-amber-500/30 text-amber-300 px-1.5 rounded-full text-[10px] font-bold">
+                    {searchResults.length}
+                  </span>
+                )}
+              </button>
+              {searchResults && (
+                <button
+                  onClick={() => { setSearchText(""); setSearchRound("all"); setSearchBranch("all"); }}
+                  className="text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
+                >
+                  Xoá tìm kiếm
+                </button>
+              )}
+              {searchResults && searchResults.length > 0 && (
+                <span className="text-[10px] text-amber-400/70">
+                  Trận đầu tiên: #{searchResults[0].matchNumber}
+                  {searchResults[0].player1 && searchResults[0].player2
+                    ? ` · ${searchResults[0].player1.name} vs ${searchResults[0].player2.name}`
+                    : ""}
+                </span>
+              )}
+            </div>
+
+            {searchOpen && (
+              <div className="mt-2 p-3 bg-gray-900/80 border border-gray-700/50 rounded-xl flex flex-wrap gap-2 items-end">
+                {/* Dropdown: Round */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-gray-500 font-medium">Vòng đấu</label>
+                  <select
+                    value={searchRound}
+                    onChange={(e) => setSearchRound(e.target.value)}
+                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                  >
+                    {ROUND_SEARCH_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Dropdown: Nhánh */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-gray-500 font-medium">Nhánh</label>
+                  <select
+                    value={searchBranch}
+                    onChange={(e) => setSearchBranch(e.target.value)}
+                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                  >
+                    {BRANCH_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Dropdown: Loại tìm kiếm */}
+                <div className="flex flex-col gap-1">
+                  <label className="text-[10px] text-gray-500 font-medium">Tìm theo</label>
+                  <select
+                    value={searchType}
+                    onChange={(e) => setSearchType(e.target.value as typeof searchType)}
+                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                  >
+                    <option value="playerName">Tên player</option>
+                    <option value="playerNo">STT player</option>
+                    <option value="matchNo">STT trận</option>
+                  </select>
+                </div>
+
+                {/* Input */}
+                <div className="flex flex-col gap-1 flex-1 min-w-[160px]">
+                  <label className="text-[10px] text-gray-500 font-medium">Từ khoá</label>
+                  <input
+                    type="text"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    placeholder={
+                      searchType === "playerName" ? "Nhập tên player..."
+                      : searchType === "playerNo" ? "Nhập số thứ tự player..."
+                      : "Nhập số trận..."
+                    }
+                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 placeholder-gray-600"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Section tabs */}
+          <div className="flex gap-1 mb-3">
+            {([
+              { key: "qualifying" as const, label: "Vòng Loại",   desc: "R256 · R128 · R64" },
+              { key: "winners"   as const, label: "Double Elim", desc: "WB + LB + Finals" },
+            ]).map((s) => (
+              <button
+                key={s.key}
+                onClick={() => setBracketSection(s.key)}
+                className={`flex flex-col items-start px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+                  bracketSection === s.key
+                    ? "bg-purple-600/30 border-purple-500/60 text-purple-200 shadow"
+                    : "bg-gray-800/60 border-gray-700/40 text-gray-400 hover:text-white hover:bg-gray-700/60"
+                }`}
+              >
+                <span>{s.label}</span>
+                <span className="text-[10px] font-normal opacity-60">{s.desc}</span>
+              </button>
+            ))}
+          </div>
+          {matches.length > 0 ? (
             <BracketTreeView
-              matches={roundData.matches}
+              matches={matches}
               filterMode={filterMode}
-              section="qualifying"
+              section={bracketSection}
               onSelectMatch={setSelectedMatch}
               readOnly={true}
+              highlightMatchNumbers={highlightMatchNumbers}
+              focusMatchNumber={focusMatchNumber}
             />
           ) : (
             <div className="text-center py-12">

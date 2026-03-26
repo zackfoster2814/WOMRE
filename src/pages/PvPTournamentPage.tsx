@@ -17,28 +17,21 @@ import {
   writeDriveFile,
   isDriveConfigured,
 } from "../utils/googleDrive";
+import { ROUND_256_FILE_ID } from "../config/googleDrive";
 import {
-  ROUND_256_FILE_ID,
-  ROUND_128_FILE_ID,
-  ROUND_64W_FILE_ID,
-  ROUND_32W_FILE_ID,
-  ROUND_32L1_FILE_ID,
-  ROUND_32L2_FILE_ID,
-  ROUND_16W_FILE_ID,
-  ROUND_16L1_FILE_ID,
-  ROUND_16L2_FILE_ID,
-  ROUND_QFW_FILE_ID,
-  ROUND_QFL1_FILE_ID,
-  ROUND_QFL2_FILE_ID,
-  ROUND_SFW_FILE_ID,
-  ROUND_SFL1_FILE_ID,
-  ROUND_SFL2_FILE_ID,
-  ROUND_GFW_FILE_ID,
-  ROUND_GFL1_FILE_ID,
-  ROUND_GFL2_FILE_ID,
-  ROUND_GF_FILE_ID,
-  ROUND_BRONZE_FILE_ID,
-} from "../config/googleDrive";
+  ROUND_CONFIGS,
+  type RoundConfig,
+  type RoundData,
+  type MatchData as SharedMatchData,
+  type Round256Data,
+  type PlayerRef,
+  ROUND_SECTION,
+  ROUND_SEARCH_OPTIONS,
+  BRANCH_OPTIONS,
+  getRoundKeyByMatchNumber,
+  searchMatches,
+  type SearchType,
+} from "../config/tournamentConfig";
 
 // Initialize effects
 let effectsInitialized = false;
@@ -51,208 +44,9 @@ function ensureEffectsInitialized() {
 
 // ===================== Types =====================
 
-interface PlayerRef {
-  no: number;
-  name: string;
-  username: string;
-}
+// MatchData local: extends SharedMatchData với displayLabel cho UI
+type MatchData = SharedMatchData & { displayLabel?: string };
 
-interface MatchData {
-  matchNumber: number;
-  player1: PlayerRef | null;
-  player2: PlayerRef | null;
-  winner: PlayerRef | null;
-  score: string | null;
-  specialEvent: string | null;
-  note: string | null;
-  displayLabel?: string;
-}
-
-interface Round256Data {
-  totalPlayers: number;
-  matches: MatchData[];
-  drawOrder: number[];
-  lastUpdated: string;
-}
-
-// Generic round data — dùng chung cho tất cả các vòng sau R256
-interface RoundData {
-  roundKey: string;
-  matches: MatchData[];
-  drawOrder: number[];
-  lastUpdated: string;
-}
-
-// Nguồn players: lấy winners hoặc losers từ vòng nào
-type PlayerSource = {
-  from: string;
-  side: "winners" | "losers";
-};
-
-interface RoundConfig {
-  key: string;
-  label: string;
-  fileId: string;
-  // Danh sách nguồn players (có thể mix nhiều nguồn)
-  sources: PlayerSource[];
-  // Số matches tối đa của vòng này
-  matchCount: number;
-  // Match number tuyệt đối đầu tiên trong bracket (để offset khi merge)
-  matchStart: number;
-}
-
-// matchStart: số thứ tự tuyệt đối trong bracket (để BracketTreeView đặt đúng vị trí)
-// R256: 1-128, R128: 129-192
-// WB: r64w=193, r32w=225, r16w=241, qfw=249, sfw=253, gfw=255
-// LB: r32l1=256, r32l2=288, r16l1=304, r16l2=312, qfl1=316, qfl2=320, sfl1=322, sfl2=324, gfl1=325, gfl2=326
-// GF: gf=327, bronze=328
-const ROUND_CONFIGS: RoundConfig[] = [
-  // ── Single Elimination ──────────────────────────────────────────
-  {
-    key: "r256", label: "R256",
-    fileId: ROUND_256_FILE_ID,
-    sources: [],
-    matchCount: 128, matchStart: 1,
-  },
-  {
-    key: "r128", label: "R128",
-    fileId: ROUND_128_FILE_ID,
-    sources: [{ from: "r256", side: "winners" }],
-    matchCount: 64, matchStart: 129,
-  },
-  // ── Winners Bracket ─────────────────────────────────────────────
-  {
-    key: "r64w", label: "R64 WB",
-    fileId: ROUND_64W_FILE_ID,
-    sources: [{ from: "r128", side: "winners" }],
-    matchCount: 32, matchStart: 193,   // 193-224
-  },
-  {
-    key: "r32w", label: "R32 Nhánh Thắng",
-    fileId: ROUND_32W_FILE_ID,
-    sources: [{ from: "r64w", side: "winners" }],
-    matchCount: 16, matchStart: 225,   // 225-240
-  },
-  {
-    key: "r16w", label: "R16 Nhánh Thắng",
-    fileId: ROUND_16W_FILE_ID,
-    sources: [{ from: "r32w", side: "winners" }],
-    matchCount: 8, matchStart: 241,    // 241-248
-  },
-  {
-    key: "qfw", label: "Tứ Kết Nhánh Thắng",
-    fileId: ROUND_QFW_FILE_ID,
-    sources: [{ from: "r16w", side: "winners" }],
-    matchCount: 4, matchStart: 249,    // 249-252
-  },
-  {
-    key: "sfw", label: "Bán Kết Nhánh Thắng",
-    fileId: ROUND_SFW_FILE_ID,
-    sources: [{ from: "qfw", side: "winners" }],
-    matchCount: 2, matchStart: 253,    // 253-254
-  },
-  {
-    key: "gfw", label: "Chung Kết Nhánh Thắng",
-    fileId: ROUND_GFW_FILE_ID,
-    sources: [{ from: "sfw", side: "winners" }],
-    matchCount: 1, matchStart: 255,    // 255
-  },
-  // ── Losers Bracket ──────────────────────────────────────────────
-  {
-    key: "r32l1", label: "R32 Nhánh Thua 1",
-    fileId: ROUND_32L1_FILE_ID,
-    sources: [{ from: "r64w", side: "losers" }],
-    matchCount: 16, matchStart: 256,   // 256-271
-  },
-  {
-    key: "r32l2", label: "R32 Nhánh Thua 2",
-    fileId: ROUND_32L2_FILE_ID,
-    sources: [
-      { from: "r32w", side: "losers" },
-      { from: "r32l1", side: "winners" },
-    ],
-    matchCount: 16, matchStart: 272,   // 272-287
-  },
-  {
-    key: "r16l1", label: "R16 Nhánh Thua 1",
-    fileId: ROUND_16L1_FILE_ID,
-    sources: [{ from: "r32l2", side: "winners" }],
-    matchCount: 8, matchStart: 288,    // 288-295
-  },
-  {
-    key: "r16l2", label: "R16 Nhánh Thua 2",
-    fileId: ROUND_16L2_FILE_ID,
-    sources: [
-      { from: "r16w", side: "losers" },
-      { from: "r16l1", side: "winners" },
-    ],
-    matchCount: 8, matchStart: 296,    // 296-303
-  },
-  {
-    key: "qfl1", label: "Tứ Kết Nhánh Thua 1",
-    fileId: ROUND_QFL1_FILE_ID,
-    sources: [{ from: "r16l2", side: "winners" }],
-    matchCount: 4, matchStart: 304,    // 304-307
-  },
-  {
-    key: "qfl2", label: "Tứ Kết Nhánh Thua 2",
-    fileId: ROUND_QFL2_FILE_ID,
-    sources: [
-      { from: "qfw", side: "losers" },
-      { from: "qfl1", side: "winners" },
-    ],
-    matchCount: 4, matchStart: 308,    // 308-311
-  },
-  {
-    key: "sfl1", label: "Bán Kết Nhánh Thua 1",
-    fileId: ROUND_SFL1_FILE_ID,
-    sources: [{ from: "qfl2", side: "winners" }],
-    matchCount: 2, matchStart: 312,    // 312-313
-  },
-  {
-    key: "sfl2", label: "Bán Kết Nhánh Thua 2",
-    fileId: ROUND_SFL2_FILE_ID,
-    sources: [
-      { from: "sfw", side: "losers" },
-      { from: "sfl1", side: "winners" },
-    ],
-    matchCount: 2, matchStart: 314,    // 314-315
-  },
-  {
-    key: "gfl1", label: "Chung Kết Nhánh Thua 1",
-    fileId: ROUND_GFL1_FILE_ID,
-    sources: [{ from: "sfl2", side: "winners" }],
-    matchCount: 1, matchStart: 316,    // 316
-  },
-  {
-    key: "gfl2", label: "Chung Kết Tổng Nhánh Thua",
-    fileId: ROUND_GFL2_FILE_ID,
-    sources: [
-      { from: "gfw", side: "losers" },
-      { from: "gfl1", side: "winners" },
-    ],
-    matchCount: 1, matchStart: 317,    // 317
-  },
-  // ── Grand Final & Bronze ─────────────────────────────────────────
-  {
-    key: "gf", label: "Chung Kết Tổng (BO3)",
-    fileId: ROUND_GF_FILE_ID,
-    sources: [
-      { from: "gfw", side: "winners" },
-      { from: "gfl2", side: "winners" },
-    ],
-    matchCount: 2, matchStart: 318,    // 318-319 (tối đa 2 trận BO3)
-  },
-  {
-    key: "bronze", label: "Tranh Hạng 3",
-    fileId: ROUND_BRONZE_FILE_ID,
-    sources: [
-      { from: "gfw", side: "losers" },
-      { from: "gfl1", side: "losers" },
-    ],
-    matchCount: 1, matchStart: 320,    // 320
-  },
-];
 
 interface TournamentPlayer {
   id: number;
@@ -1857,6 +1651,12 @@ const BRACKET_SECTIONS = [
 const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveResult }: BracketTabProps) => {
   const [filterMode, setFilterMode] = useState<"all" | "pending" | "completed">("all");
   const [bracketSection, setBracketSection] = useState<"qualifying" | "winners">("qualifying");
+  // Search
+  const [searchRound, setSearchRound] = useState("all");
+  const [searchBranch, setSearchBranch] = useState("all");
+  const [searchText, setSearchText] = useState("");
+  const [searchType, setSearchType] = useState<SearchType>("playerName");
+  const [searchOpen, setSearchOpen] = useState(false);
   // DevMode: quick result panel
   const [devPanel, setDevPanel] = useState<{ match: MatchData & { displayLabel?: string }; matchNumberAbsolute: number } | null>(null);
   const [devScore, setDevScore] = useState("");
@@ -1906,6 +1706,30 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
       pending: complete.filter((m) => !m.winner).length,
     };
   }, [allMergedMatches]);
+
+  const searchResults = useMemo(() => {
+    const results = searchMatches(allMergedMatches, { round: searchRound, branch: searchBranch, text: searchText, type: searchType });
+    return results.length === 0 && !searchText.trim() && searchRound === "all" && searchBranch === "all" ? null : results;
+  }, [allMergedMatches, searchText, searchRound, searchBranch, searchType]);
+
+  const highlightMatchNumbers = useMemo(
+    () => searchResults ? new Set(searchResults.map((m) => m.matchNumber)) : undefined,
+    [searchResults],
+  );
+
+  const focusMatchNumber = useMemo(
+    () => searchResults && searchResults.length > 0 ? searchResults[0].matchNumber : null,
+    [searchResults],
+  );
+
+  useEffect(() => {
+    if (focusMatchNumber == null) return;
+    const rk = getRoundKeyByMatchNumber(focusMatchNumber);
+    if (!rk) return;
+    const targetSection = ROUND_SECTION[rk] ?? "qualifying";
+    if (targetSection !== bracketSection) setBracketSection(targetSection);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusMatchNumber]);
 
   if (!roundData || roundData.matches.length === 0) {
     return (
@@ -2092,6 +1916,98 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
 
       {/* Desktop: bracket tree view (hidden trên mobile) */}
       <div className="hidden lg:block">
+        {/* Search bar */}
+        <div className="mb-3">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSearchOpen((o) => !o)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border transition-all ${
+                searchOpen || searchResults
+                  ? "bg-amber-600/20 border-amber-500/50 text-amber-300"
+                  : "bg-gray-800/60 border-gray-700/40 text-gray-400 hover:text-white hover:bg-gray-700/60"
+              }`}
+            >
+              <span>🔍</span>
+              <span>Tìm kiếm</span>
+              {searchResults && (
+                <span className="ml-1 bg-amber-500/30 text-amber-300 px-1.5 rounded-full text-[10px] font-bold">
+                  {searchResults.length}
+                </span>
+              )}
+            </button>
+            {searchResults && (
+              <button
+                onClick={() => { setSearchText(""); setSearchRound("all"); setSearchBranch("all"); }}
+                className="text-[10px] text-gray-500 hover:text-gray-300 transition-colors"
+              >
+                Xoá tìm kiếm
+              </button>
+            )}
+            {searchResults && searchResults.length > 0 && (
+              <span className="text-[10px] text-amber-400/70">
+                Trận đầu: #{searchResults[0].matchNumber}
+                {searchResults[0].player1 && searchResults[0].player2
+                  ? ` · ${searchResults[0].player1.name} vs ${searchResults[0].player2.name}`
+                  : ""}
+              </span>
+            )}
+          </div>
+          {searchOpen && (
+            <div className="mt-2 p-3 bg-gray-900/80 border border-gray-700/50 rounded-xl flex flex-wrap gap-2 items-end">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] text-gray-500 font-medium">Vòng đấu</label>
+                <select
+                  value={searchRound}
+                  onChange={(e) => setSearchRound(e.target.value)}
+                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                >
+                  {ROUND_SEARCH_OPTIONS.map((o) => (
+                    <option key={o.value} value={o.value}>{o.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] text-gray-500 font-medium">Nhánh</label>
+                <select
+                  value={searchBranch}
+                  onChange={(e) => setSearchBranch(e.target.value)}
+                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                >
+                  {BRANCH_OPTIONS.map((o) => (
+                    <option key={o.value} value={o.value}>{o.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] text-gray-500 font-medium">Tìm theo</label>
+                <select
+                  value={searchType}
+                  onChange={(e) => setSearchType(e.target.value as SearchType)}
+                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                >
+                  <option value="playerName">Tên player</option>
+                  <option value="playerNo">STT player</option>
+                  <option value="matchNo">STT trận</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-1 flex-1 min-w-[160px]">
+                <label className="text-[10px] text-gray-500 font-medium">Từ khoá</label>
+                <input
+                  type="text"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  placeholder={
+                    searchType === "playerName" ? "Nhập tên player..."
+                    : searchType === "playerNo" ? "Nhập STT player..."
+                    : "Nhập số trận..."
+                  }
+                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 placeholder-gray-600"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Section tabs */}
         <div className="flex gap-1 mb-3">
           {BRACKET_SECTIONS.map((s) => (
@@ -2113,6 +2029,8 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
           matches={allMergedMatches}
           filterMode={filterMode}
           section={bracketSection}
+          highlightMatchNumbers={highlightMatchNumbers}
+          focusMatchNumber={focusMatchNumber}
           onOpenMatch={devMode ? (ctx) => {
             const match = allMergedMatches.find((m) => m.matchNumber === ctx.matchNumber);
             if (match?.player1 && match?.player2) {
