@@ -60,6 +60,9 @@ interface DevWheelPanelProps {
   // Matchup tab
   allPlayers: PvPPlayerData[];
   onLoadMatchup: (p1: PvPPlayerData, p2: PvPPlayerData) => void;
+  // Skip round spins (optional — only used in StatsComparisonMode)
+  skipRoundSpins?: boolean;
+  onSkipRoundSpinsChange?: (val: boolean) => void;
 }
 
 export const DevWheelPanel = ({
@@ -71,6 +74,8 @@ export const DevWheelPanel = ({
   defaultItems,
   allPlayers,
   onLoadMatchup,
+  skipRoundSpins,
+  onSkipRoundSpinsChange,
 }: DevWheelPanelProps) => {
   const isDragging = useRef(false);
   const dragOffset = useRef({ x: 0, y: 0 });
@@ -158,6 +163,21 @@ export const DevWheelPanel = ({
         <span className="text-yellow-300 font-bold text-sm">⚙ DEV MODE</span>
         <span className="text-yellow-500/60 text-xs">Ctrl+Shift+D</span>
       </div>
+
+      {/* Skip round spins toggle */}
+      {onSkipRoundSpinsChange && <div className="px-3 py-1.5 border-b border-yellow-500/30 flex items-center justify-between">
+        <span className="text-xs text-gray-300">Skip Round Spins</span>
+        <button
+          onClick={() => onSkipRoundSpinsChange(!skipRoundSpins)}
+          className={`px-2 py-0.5 text-xs rounded font-bold transition-colors ${
+            skipRoundSpins
+              ? "bg-green-600/60 text-green-200 border border-green-500/60"
+              : "bg-gray-700 text-gray-500 border border-gray-600"
+          }`}
+        >
+          {skipRoundSpins ? "ON" : "OFF"}
+        </button>
+      </div>}
 
       {/* Tabs */}
       <div className="flex border-b border-yellow-500/30">

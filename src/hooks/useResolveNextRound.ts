@@ -1054,49 +1054,53 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               });
             }
           }
-          // Patient: sau thắng → quay 4 power wheel kết quả tối đa
+          // Patient: sau thắng → quay 4 power wheel kết quả tối đa (chỉ vòng 256)
           else if (lname === "patient" && didWin) {
-            const playerPowers = new Set(
-              (char.powers || [])
-                .filter((p: any) => !p.isLost)
-                .map((p: any) =>
-                  (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
-                ),
-            );
-            const allPowers = EffectRegistry.getAllByType("power").map(
-              (e) => e.name,
-            );
-            const availablePowers = allPowers.filter(
-              (p) => !playerPowers.has(p.toLowerCase()),
-            );
-            if (availablePowers.length > 0) {
-              const wheelItems: WheelSpinItem[] = availablePowers.map(
-                (p) => ({
-                  label: p,
-                  weight: 1,
-                  isSuccess: true,
-                  color: "#818cf8",
-                }),
+            const patientRound = char.tournament?.round ?? "";
+            if (patientRound === "256") {
+              const playerPowers = new Set(
+                (char.powers || [])
+                  .filter((p: any) => !p.isLost)
+                  .map((p: any) =>
+                    (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase(),
+                  ),
               );
-              for (let spin = 1; spin <= 4; spin++) {
-                const wk = `after-Patient-${side}-${spin}`;
+              const allPowers = EffectRegistry.getAllByType("power").map(
+                (e) => e.name,
+              );
+              const availablePowers = allPowers.filter(
+                (p) => !playerPowers.has(p.toLowerCase()),
+              );
+              if (availablePowers.length > 0) {
+                const wheelItems: WheelSpinItem[] = availablePowers.map(
+                  (p) => ({
+                    label: p,
+                    weight: 1,
+                    isSuccess: true,
+                    color: "#818cf8",
+                  }),
+                );
+                for (let spin = 1; spin <= 4; spin++) {
+                  const wk = `after-Patient-${side}-${spin}`;
+                  acEntries.push({
+                    player: side,
+                    quirkName: `${name} (${spin}/4)`,
+                    description: `Quay Power #${spin} — kết quả tối đa (Patient)`,
+                    wheelKey: wk,
+                    wheelItems,
+                    gmAction: true,
+                  });
+                }
+              } else {
                 acEntries.push({
                   player: side,
-                  quirkName: `${name} (${spin}/4)`,
-                  description: `Quay Power #${spin} — kết quả tối đa (Patient)`,
-                  wheelKey: wk,
-                  wheelItems,
+                  quirkName: name,
+                  description: "(Không còn Power nào để nhận — Patient)",
                   gmAction: true,
                 });
               }
-            } else {
-              acEntries.push({
-                player: side,
-                quirkName: name,
-                description: "(Không còn Power nào để nhận — Patient)",
-                gmAction: true,
-              });
             }
+            // Không phải vòng 256 → bỏ qua, không quay
           }
           // Cheater: chỉ thông báo khi player bị loại (thua combat)
           else if (lname === "cheater" && !didWin) {
@@ -2254,10 +2258,97 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
           }
         }
 
-        // ── House sub-type after_combat effects (e.g. Mohg) ───────────────
+        // ── House base after_combat effects (e.g. Atreides) ───────────────
         const nestedHouses: any[] = Array.isArray((char as any).nestedHouses)
           ? (char as any).nestedHouses
           : [];
+        for (const nh of nestedHouses) {
+          if (nh.isLost) continue;
+          const houseEntry = EffectRegistry.get("house", nh.name);
+          if (!houseEntry) continue;
+          for (const eff of houseEntry.effects) {
+            const timingOk =
+              eff.timing === "after_combat" ||
+              (eff.timing === "after_combat_lose" && !didWin) ||
+              (eff.timing === "after_combat_win" && didWin);
+            if (!timingOk) continue;
+            if (eff.type !== "stat_modifier") continue;
+            const delta = eff.value ?? 0;
+            if (delta === 0) continue;
+
+            const isOpponent = eff.target === "opponent";
+            const targetSide: "player1" | "player2" = isOpponent
+              ? side === "player1"
+                ? "player2"
+                : "player1"
+              : side;
+            const targetPlayer =
+              targetSide === "player1" ? player1 : player2;
+            const st = targetPlayer?.stats ?? player.stats;
+
+            if (eff.stat === "highest") {
+              const highestStat = (
+                ["str", "spd", "dur", "iq", "biq", "ma"] as const
+              ).reduce(
+                (high, s) =>
+                  st[s] > st[high as keyof CharacterStats] ? s : high,
+                "str" as string,
+              );
+              const sign = delta > 0 ? "+" : "";
+              acEntries.push({
+                player: targetSide,
+                quirkName: nh.name,
+                description: `${nh.name}: Sau combat → ${sign}${delta} ${highestStat.toUpperCase()} (Base Stat cao nhất${isOpponent ? " đối thủ" : ""})`,
+                statMods: [
+                  { stat: highestStat as keyof CharacterStats, delta },
+                ],
+              });
+            } else if (eff.stat === "lowest") {
+              const lowestStat = (
+                ["str", "spd", "dur", "iq", "biq", "ma"] as const
+              ).reduce(
+                (low, s) =>
+                  st[s] < st[low as keyof CharacterStats] ? s : low,
+                "str" as string,
+              );
+              const sign = delta > 0 ? "+" : "";
+              acEntries.push({
+                player: targetSide,
+                quirkName: nh.name,
+                description: `${nh.name}: Sau combat → ${sign}${delta} ${lowestStat.toUpperCase()} (stat thấp nhất${isOpponent ? " đối thủ" : ""})`,
+                statMods: [
+                  { stat: lowestStat as keyof CharacterStats, delta },
+                ],
+              });
+            } else if (eff.stat === "all") {
+              const sign = delta > 0 ? "+" : "";
+              const timingLabel =
+                eff.timing === "after_combat_lose"
+                  ? "Thua combat"
+                  : eff.timing === "after_combat_win"
+                    ? "Thắng combat"
+                    : "Sau combat";
+              acEntries.push({
+                player: targetSide,
+                quirkName: nh.name,
+                description: `[GM Action] ${nh.name}: ${timingLabel} → ${sign}${delta} all stats trong combat kế tiếp (GM cộng trước combat sau, hoàn lại sau đó)`,
+                gmAction: true,
+              });
+            } else {
+              const sign = delta > 0 ? "+" : "";
+              acEntries.push({
+                player: targetSide,
+                quirkName: nh.name,
+                description: `${nh.name}: Sau combat → ${sign}${delta} ${(eff.stat as string).toUpperCase()}${isOpponent ? " (đối thủ)" : ""}`,
+                statMods: [
+                  { stat: eff.stat as keyof CharacterStats, delta },
+                ],
+              });
+            }
+          }
+        }
+
+        // ── House sub-type after_combat effects (e.g. Mohg) ───────────────
         for (const nh of nestedHouses) {
           if (nh.isLost || !nh.subType || nh.subTypeIsLost) continue;
           if (disabledItems.has(`${player.no}-house_sub-${nh.subType}`))
@@ -2281,7 +2372,27 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                 : "player1"
               : side;
 
-            if (eff.stat === "lowest") {
+            if (eff.stat === "highest") {
+              const targetPlayer =
+                targetSide === "player1" ? player1 : player2;
+              const st = targetPlayer?.stats ?? player.stats;
+              const highestStat = (
+                ["str", "spd", "dur", "iq", "biq", "ma"] as const
+              ).reduce(
+                (high, s) =>
+                  st[s] > st[high as keyof CharacterStats] ? s : high,
+                "str" as string,
+              );
+              const sign = delta > 0 ? "+" : "";
+              acEntries.push({
+                player: targetSide,
+                quirkName: nh.subType,
+                description: `${nh.subType}: Sau combat → ${sign}${delta} ${highestStat.toUpperCase()} (Base Stat cao nhất${isOpponent ? " đối thủ" : ""})`,
+                statMods: [
+                  { stat: highestStat as keyof CharacterStats, delta },
+                ],
+              });
+            } else if (eff.stat === "lowest") {
               const targetPlayer =
                 targetSide === "player1" ? player1 : player2;
               const st = targetPlayer?.stats ?? player.stats;
@@ -2397,7 +2508,24 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               if (eff.type !== "stat_modifier") continue;
               const delta = eff.value ?? 0;
               if (delta === 0) continue;
-              if (eff.stat === "lowest") {
+              if (eff.stat === "highest") {
+                const st = player.stats;
+                const highestStat = (
+                  ["str", "spd", "dur", "iq", "biq", "ma"] as const
+                ).reduce(
+                  (high, s) =>
+                    st[s] > st[high as keyof CharacterStats] ? s : high,
+                  "str" as string,
+                );
+                acEntries.push({
+                  player: side,
+                  quirkName: masonSubKey,
+                  description: `${masonSubKey}: Sau combat → +${delta} ${highestStat.toUpperCase()} (Base Stat cao nhất)`,
+                  statMods: [
+                    { stat: highestStat as keyof CharacterStats, delta },
+                  ],
+                });
+              } else if (eff.stat === "lowest") {
                 const st = player.stats;
                 const lowestStat = (
                   ["str", "spd", "dur", "iq", "biq", "ma"] as const
@@ -3120,15 +3248,16 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
           });
         }
 
-        // Naga (sub-race): Sau combat — check số round thắng vs thua
+        // Naga (house): Sau combat — check số round thắng vs thua
         // (1) Thắng nhiều round hơn → Nhận 1 Power (mở vòng quay power)
         // (2) Thua nhiều round hơn → Nhận 1 Char Dev (GM action)
         // (3) Hòa round → +1 all stats
-        if (charSubRaceRaw === "naga") {
-          const nagaSubRaceFull: string =
-            (char as any).race?.subRace || "Naga";
+        const hasNagaHouse = nestedHouses.some(
+          (nh: any) => !nh.isLost && nh.name.toLowerCase() === "naga",
+        );
+        if (hasNagaHouse) {
           const nagaDisabled = disabledItems.has(
-            `${player.no}-sub_race-${nagaSubRaceFull}`,
+            `${player.no}-house-Naga`,
           );
           if (!nagaDisabled) {
             const allRoundVals = Object.values(roundResults);

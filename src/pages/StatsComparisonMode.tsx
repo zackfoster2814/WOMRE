@@ -82,6 +82,14 @@ import {
   CRUELTY_ITEMS,
   BLIND_ITEMS,
   MUTE_ITEMS,
+  BASH_ITEMS,
+  SAND_OF_TIME_ITEMS,
+  RANGER_RED_ITEMS,
+  RANGER_BLUE_ITEMS,
+  RANGER_BLACK_ITEMS,
+  RANGER_YELLOW_ITEMS,
+  RANGER_PINK_ITEMS,
+  RANGER_SILVER_ITEMS,
 } from "../constants/wheelConfigs";
 
 let _scmEffectsInitialized = false;
@@ -2599,6 +2607,7 @@ export const StatsComparisonMode = ({
     Record<string, Record<number, number>>
   >({});
   const [devPanelPos, setDevPanelPos] = useState({ x: 20, y: 200 });
+  const [skipRoundSpins, setSkipRoundSpins] = useState(false);
 
   // Dev mode toggle (z → v → m sequence)
   useEffect(() => {
@@ -2704,6 +2713,92 @@ export const StatsComparisonMode = ({
     roundtableWinnerOverride,
     computeRoundPoints,
   });
+
+  // ── Dev: auto-skip round spins ────────────────────────────────────
+  useEffect(() => {
+    if (!skipRoundSpins || !player1 || !player2) return;
+
+    // Determine which round(s) need auto-fill
+    const roundsToFill: number[] = [];
+    // During combat: pending spins for last resolved round
+    if (pendingSpinsForLastRound && stepState && stepRoundIndex > 0) {
+      roundsToFill.push(stepRoundIndex - 1);
+    }
+    // After all 6 rounds: MA round (5) may have pending spins during finalize
+    if (pendingFinalizeStateRef.current) {
+      roundsToFill.push(5);
+    }
+    if (roundsToFill.length === 0) return;
+
+    const p1Effs = getPerRoundEffects(player1.character, player1.no);
+    const p2Effs = getPerRoundEffects(player2.character, player2.no);
+
+    // Weighted random pick from wheel items
+    const pickResult = (items: WheelSpinItem[]) => {
+      const total = items.reduce((s, it) => s + it.weight, 0);
+      let r = Math.random() * total;
+      for (const it of items) {
+        r -= it.weight;
+        if (r <= 0) return { label: it.label, isSuccess: !!it.isSuccess };
+      }
+      const last = items[items.length - 1];
+      return { label: last.label, isSuccess: !!last.isSuccess };
+    };
+
+    const EFFECT_ITEMS: Record<string, WheelSpinItem[]> = {
+      "Gambler": GAMBLER_ITEMS,
+      "Critical Strike": CRIT_ITEMS,
+      "Evasion": EVASION_ITEMS,
+      "Cruelty": CRUELTY_ITEMS,
+      "Blind": BLIND_ITEMS,
+      "Mute": MUTE_ITEMS,
+      "Bash": BASH_ITEMS,
+      "Luminescence": BASH_ITEMS,
+      "Misericorde": MISERICORDE_ITEMS,
+      "Golden Parry": [
+        { label: "Parry! Block điểm (35%)", weight: 35, isSuccess: true },
+        { label: "Không (65%)", weight: 65, isSuccess: false },
+      ],
+      "Pennyworthy-Win": [
+        { label: "+1 bonus (36%)", weight: 36, isSuccess: true },
+        { label: "Không (64%)", weight: 64, isSuccess: false },
+      ],
+      "Pennyworthy-Lose": [
+        { label: "+2 stat (36%)", weight: 36, isSuccess: true },
+        { label: "Không (64%)", weight: 64, isSuccess: false },
+      ],
+      "The Sand of Time": SAND_OF_TIME_ITEMS,
+      "The Sand of Time-2": SAND_OF_TIME_ITEMS,
+      "Ranger-Red": RANGER_RED_ITEMS,
+      "Ranger-Blue": RANGER_BLUE_ITEMS,
+      "Ranger-Black": RANGER_BLACK_ITEMS,
+      "Ranger-Yellow": RANGER_YELLOW_ITEMS,
+      "Ranger-Pink": RANGER_PINK_ITEMS,
+      "Ranger-Silver": RANGER_SILVER_ITEMS,
+    };
+
+    const newResults: Record<string, { label: string; isSuccess: boolean }> = {};
+
+    const allEffectNames = new Set([
+      ...p1Effs.onWin, ...p1Effs.onLose, ...p1Effs.onTie,
+      ...p2Effs.onWin, ...p2Effs.onLose, ...p2Effs.onTie,
+    ]);
+
+    for (const roundIdx of roundsToFill) {
+      for (const effName of allEffectNames) {
+        for (const side of ["player1", "player2"] as const) {
+          const key = `${roundIdx}-${effName}-${side}`;
+          if (!roundSpinResults[key] && EFFECT_ITEMS[effName]) {
+            newResults[key] = pickResult(EFFECT_ITEMS[effName]);
+          }
+        }
+      }
+    }
+
+    if (Object.keys(newResults).length > 0) {
+      setRoundSpinResults((prev) => ({ ...prev, ...newResults }));
+    }
+  }, [skipRoundSpins, pendingSpinsForLastRound, stepRoundIndex, stepState, player1, player2, disabledItems, roundSpinResults, setRoundSpinResults]);
 
   const mainWinner =
     combatConfirmed && effectiveWinner
@@ -4520,6 +4615,8 @@ export const StatsComparisonMode = ({
             setSearchTerm2(p2.name);
             resetCombat();
           }}
+          skipRoundSpins={skipRoundSpins}
+          onSkipRoundSpinsChange={setSkipRoundSpins}
         />
       )}
 

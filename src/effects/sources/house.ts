@@ -90,6 +90,14 @@ export function registerAllHouseEffects() {
       timing: "immediate",
       target: "self",
     })
+    .effect({
+      type: "stat_modifier",
+      stat: "highest",
+      value: 2,
+      isBase: true,
+      timing: "after_combat",
+      target: "self",
+    })
     .register();
 
   // 5. House Lannister

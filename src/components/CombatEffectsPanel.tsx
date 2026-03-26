@@ -2857,19 +2857,28 @@ export const CombatEffectsPanel = ({
     const spinsLeft = spinModal.spinsLeft - 1;
     if (spinsLeft > 0) {
       // Còn lần quay nữa — close modal trước để trigger re-open
+      // Loại bỏ item vừa chọn khỏi wheelItems cho lần quay tiếp theo
+      const selectedPowerName = (item.meta as any)?.powerName;
+      const filteredItems = selectedPowerName
+        ? (effect.wheelItems || []).filter(
+            (wi) => (wi.meta as any)?.powerName !== selectedPowerName,
+          )
+        : effect.wheelItems;
+      const updatedEffect = { ...effect, wheelItems: filteredItems };
       setEffects((prev) =>
         prev.map((e) =>
           e.id === id
             ? {
                 ...e,
+                wheelItems: filteredItems,
                 resolvedNote: `Lần ${currentSpin}/${totalSpins}: ${item.label} (còn ${spinsLeft} lần)`,
               }
             : e,
         ),
       );
-      setSpinModal({ isOpen: false, effect, spinsLeft });
+      setSpinModal({ isOpen: false, effect: updatedEffect, spinsLeft });
       setTimeout(() => {
-        setSpinModal({ isOpen: true, effect, spinsLeft });
+        setSpinModal({ isOpen: true, effect: updatedEffect, spinsLeft });
       }, 150);
     } else {
       setEffects((prev) =>
