@@ -1,6 +1,6 @@
 No.137
 Name: Sizaky (sizaky)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,13 +11,12 @@ Ký Sinh:
 Race: Angel
 Sub-race: Archangels
 ```
-
 ```
 Archetype: 
 + Pacifist
 + Trickster
 ```
-``` 
+```
 1 Quirk:  
 + Blind
 ```
@@ -29,71 +28,70 @@ IQ: 8
 BIQ: 3
 MA: 10
 ```
-
 ```
 Houses: 
 + The Shire 
-  -> +4 Speed
+   -> +4 Speed
 ```
-
 ```
-1 Gear: 
+2 Gear: 
  + 1 Normal gear:
   - Radio
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Drums (Không dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-4 Power: 
+1 Power: 
 + Body Enhancing
 + Accelerating Sorcery
 + Swinging Maestro
 + EscAPADe
 ```
-
 ```
 Char dev: 
 + Become a Power Ranger (Yellow)
 ```
-
 ```
 Team: 24
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 Other Source:
 - +1 str
 - +1 dur
 - +1 str
 - +1 spd
+- +1 MA
 ```
 
 ======
-Battle Log:
-```
-```
-
+Battle Log: 
 ```
 PvP:
 - Đối thủ: Dân chơi Đức
 - Kết quả: Win
 - Tỉ số: 2-2
+- Note: Trước combat: Sizaky Trickster: -1 All Stats  Trong combat: Sizaky Blind: Không 
 ```
+
+```
+PvP:
+- Đối thủ: Amos
+- Kết quả: Thua
+- Tỉ số: 3-2
+- Note: 
+```
+
 ======

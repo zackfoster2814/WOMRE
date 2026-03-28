@@ -1,23 +1,22 @@
 No.252
 Name: Hachi (hachi2378)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
 ```
 ```
-Race: Dwarf 
+Race: Dwarf
 Sub-race: Lùn núi (Mountain)
 ```
-
 ```
 Archetype: 
 + Cursed of 36k
 + Hero of the Emirate🍀
 ```
-``` 
+```
 1 Quirk:  
 + Raumanian🍀(Từ Hero of the Emirate🍀)
 + Training Restricted
@@ -30,41 +29,35 @@ IQ:3 Cursed of 36k
 BIQ:5 Cursed of 36k
 MA:3 Cursed of 36k
 ```
-
 ```
 Houses: 
 + Uchiha (Bị đuổi vì Kinda Homeless)
 ```
-
 ```
-1 Gear: 
- + 1 Normal gear:
+5 Gear: 
+ + 4 Normal gear:
   - Wine
   - Kuro's Charm (đã mất)
   - Soap
   - Dark Lanthorn
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-1 Unique Weapon
-+ Divine Rapier (Dùng được)
+1 Normal Weapon
++ Divine Rapier (Dùng được) (Unique)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
-2 Power:  
+1 Power: 
 + Railroad Realm 🍀(Từ Hero of the Emirate🍀)
 + Invulnerability
 + Golden Vow
 ```
-
 ```
 Char dev: 
 + Transmute: Chaos 
@@ -72,24 +65,21 @@ Char dev:
 + Kinda Homeless
 + Armed to the Teeth
 ```
-
 ```
-Team:
+Team: 
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - Nhận 1 char dev: Armed to the Teeth
+- +1 BIQ
 ```
 
 ======
-Battle Log:
-```
+Battle Log: 
 ```
 PvP:
 - Đối thủ: Yami
@@ -97,4 +87,20 @@ PvP:
 - Tỉ số: 5-2
 - Reward: Nhận 1 char dev: Armed to the Teeth
 ```
+```
+PvP:
+- Đối thủ: Syren
+- Kết quả: Thắng
+- Tỉ số: 2-4
+- Note: Trước combat: Hachi rauma: không
+```
+
+```
+PvP:
+- Đối thủ: Ingay
+- Kết quả: Thắng
+- Tỉ số: 2-5
+- Note: Trước combat 2: Hachi rauma: không Ingay Cursed Coin: Bóp mình Ingay Invoker: Enlarging
+```
+
 ======

@@ -60,6 +60,7 @@ Runeword:
 2 Power:  
 + Dream Manipulation
 + Bloody Strike
++ Megamagic (từ King's Landing)
 ```
 
 ```

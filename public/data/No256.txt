@@ -1,7 +1,7 @@
 No.256
 Name: Nime
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,17 +11,17 @@ Ký Sinh:
 Race: Dwarf
 Sub-race: Lùn thường
 ```
-
 ```
 Archetype: 
 + Cursed of 36k
 + Glass Cannon
 ```
-``` 
+```
 2 Quirk:  
 + Artistic
 + Resilient
 + Training Restricted
++ 
 ```
 ```
 Str: 5 (Cursed of 36k)
@@ -31,76 +31,74 @@ IQ: 2 (Cursed of 36k)
 BIQ: 6 (Cursed of 36k)
 MA: 3 (Cursed of 36k)
 ```
-
 ```
 Houses: 
 + Golden Order (đã bị đuổi)
-  -> Godrick (đã mất)
++   -> Godrick (đã mất)
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
+4 Gear: 
+ + 3 Normal gear:
   - Baguette
   - Radio
   - Gold Pine Resin
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Claymore (dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-2 Power: 
+1 Power: 
 + Cold Breeze
 + Scrying
 + Wex (Golden Order)
 + Block Manipulation (Golden Order)
 ```
-
 ```
 Char dev: 
 + Armed to the Teeth
 + No more Home
 ```
-
 ```
 Team: 
 ```
-
 ```
 Lover:
 + Nicre (.jan_01)
 ```
 ```
-Other Source:
-- +1 DUR (Resilient)
-```
-```
 PvP Reward:
 - Nhận 1 Char Dev: No more Home
 ```
+```
+Other Source:
+- +1 DUR (Resilient)
+```
 
 ======
-Battle Log:
-```
-```
-
+Battle Log: 
 ```
 PvP:
 - Đối thủ: KaTsumi - ChillWithCafe
 - Kết quả: Win
 - Tỉ số: 5-1
 - Reward: +1 Char Dev: No more Home
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Đừng Nhờn với Two Fingers
+- Kết quả: Thắng
+- Tỉ số: 2-2
+- Note:  Nime nhận:  PvP Reward: (Bị nhét Brainrot) Resilient: (Không)
 ```
 
 ======

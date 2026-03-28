@@ -1,6 +1,6 @@
 No.245
 Name: trantrinhtri
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,13 +11,12 @@ Ký Sinh:
 Race: Dragon
 Sub-race: Thunder Dragon
 ```
-
 ```
 Archetype: 
 + Cursed of 36k
 + Herald
 ```
-``` 
+```
 2 Quirk:  
 + Athletic
 ```
@@ -29,34 +28,29 @@ IQ:7 Cursed of 36k
 BIQ:2 Cursed of 36k
 MA:0 Cursed of 36k
 ```
-
 ```
 Houses: 
 + House Tyrell
 ```
-
 ```
-1 Gear: 
- + 1 Normal gear:
+3 Gear: 
+ + 2 Normal gear:
   - Healing Flasks
   - Golden Coin
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - 
 ```
-
 ```
-0 Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
-2 Power:  
+1 Power: 
 + Bash
 + Lightning Enchant
 + Ice Hammer (từ PvE Reward)
@@ -64,33 +58,24 @@ Runeword:
 + Spear of Fire (từ PvE Reward)
 + Power Negation (từ King's Landing)
 ```
-
 ```
 Char dev: 
 + Pessimistic
 ```
-
 ```
 Team: 20
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +1 spd
 ```
 
-```
-Other source:
-- +2 MA (House Tyrell)
-```
-
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: The Elder Brain
@@ -98,6 +83,7 @@ PvE:
 - Tỉ số: 5-1
 - Reward: Nhận 3 power Ice Hammer, Misty Step Ahead, Spear of Fire (player được nhận: trantrinhtri)
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -105,5 +91,15 @@ PvP:
 - Đối thủ: Khogadetem
 - Kết quả: Win
 - Tỉ số: 4-1
+- Note: 
 ```
+
+```
+PvP:
+- Đối thủ: _paower
+- Kết quả: Thua
+- Tỉ số: 1-3
+- Note: Trước combat: Golden Coin: Power Negation: Adapt
+```
+
 ======

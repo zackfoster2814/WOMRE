@@ -1,7 +1,7 @@
 No.116
 Name: Huy Le (.ilovepony)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,77 +11,68 @@ Ký Sinh:
 Race: Demi-God
 Sub-race: Creation (Favor: Quay lại 3 chỉ số Str - Spd - MA)
 ```
-
 ```
 Archetype: 
 + Edgelord
 ```
-``` 
+```
 3 Quirk:  
 + Training Restricted
 + Patient
 + Athletic
 ```
 ```
-Str: 10 (ban đầu là 3 (Re-spin từ Favor))
-Spd: 3 (ban đầu là 5 (Re-spin từ Favor))
+Str: 10
+Spd: 3
 Dur: 10
 IQ: 7
 BIQ: 10
-MA: 6 (ban đầu là 1 (Re-spin từ Favor))
+MA: 6
 ```
-
 ```
 Houses: 
 + Roundtable Hold
 ```
-
 ```
-2 Gear: 
+3 Gear: 
  + 2 Normal gear:
   - Sổ tay
   - Academie Ring
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - 
 ```
-
 ```
 2 Normal Weapon
 + Long Bow (Không dùng được)
 + Rapier (Dùng được) (Từ Favor, được tặng)
 ```
-
-``` 
+```
 1 Rune: 
 + Sol
 Runeword: Không
 ```
-
 ```
-0 Power: 
+1 Power: 
 + Lone Wolf (từ Patient)
 + Gate to Heaven (từ Patient)
 + Red Shift/LP1211-M (từ Patient)
 + Ice Spike (từ Patient)
 ```
-
 ```
 Char dev: 
 + Creator's Favor (Favor: Tặng Rapier)
 ```
-
 ```
 Team: 
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +1 MA
+- +1 All Stats
 ```
 ```
 Other Source:
@@ -89,8 +80,7 @@ Other Source:
 ```
 
 ======
-Battle Log:
-```
+Battle Log: 
 ```
 PvP:
 - Đối thủ: sarah
@@ -99,4 +89,12 @@ PvP:
 - Reward: + 1MA
 - Note: Nhận 4 power Lone Wolf, Gate to Heaven, Red Shift/LP1211-M, Ice Spike từ Patient
 ```
+```
+PvP:
+- Đối thủ: Ako Darling
+- Kết quả: Thắng
+- Tỉ số: 2-4
+- Note: 
+```
+
 ======

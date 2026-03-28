@@ -58,6 +58,7 @@ Runeword: Không
 0 Power: 
 + Blood Manipulation
 + Night Vision
++ Fist Fighting (từ mNicre)
 ```
 
 ```
@@ -83,6 +84,8 @@ PvP Reward:
 Other Source:
 - Night Vision (Wand)
 - -2 Dura (Wand)
+- +1 all stats
+- Nhận Fist Fighting
 ```
 
 ======

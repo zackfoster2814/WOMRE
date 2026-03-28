@@ -87,6 +87,8 @@ Other Source:
 - +1 str
 - +1 spd
 - nhận Chaos Enchantment
+- +1 MA
+- +1 Dura
 ```
 
 ======

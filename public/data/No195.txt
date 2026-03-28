@@ -42,13 +42,14 @@ Houses:
   - Holy Symbol (đã mất)
   - Magical Scroll (đã mất)
   - Giấy nợ gia truyền (đã mất)
+  - Giấy nợ gia truyền 
  + 0 Legacy gear:
   - 
 ```
 
 ```
 1 Normal Weapon
-+ B.F Sword (Dùng được)
++ B.F Sword (Dùng được) (đã mất)
 ```
 
 ``` 

@@ -63,6 +63,7 @@ Runeword:
 2 Power:  
 + Misty Step Ahead
 + Cleaning Sins
++ Megamagic (từ King's Landing)
 ```
 
 ```

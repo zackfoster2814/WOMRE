@@ -25,6 +25,23 @@ import type { ImmediateHandlerContext } from "./handlers/types";
 export type { Condition, CharacterEffects } from "./types";
 
 // ============================================================================
+// RACE UTILITIES
+// ============================================================================
+
+/**
+ * Lấy race hiệu lực để check condition.
+ * Nếu race là Reincarnator thì dùng actualRace (phần sau "->") thay thế.
+ */
+export function getEffectiveRace(char: any, fallbackRace?: string): string {
+  const race: string = (char?.race?.race || fallbackRace || "").toLowerCase().trim();
+  if (race === "reincarnator") {
+    const actual = (char?.race?.actualRace || "").trim().toLowerCase();
+    if (actual) return actual;
+  }
+  return race;
+}
+
+// ============================================================================
 // STAT UTILITIES
 // ============================================================================
 
@@ -1241,18 +1258,21 @@ export class EffectResolver {
         }
         break;
 
-      case "race_match":
-        if (condition.races && context.opponent) {
-          result = condition.races.some(
-            (r) => r.toLowerCase() === context.opponent!.race.toLowerCase(),
-          );
-        }
-        if (condition.excludeRaces && context.opponent) {
-          result = !condition.excludeRaces.some(
-            (r) => r.toLowerCase() === context.opponent!.race.toLowerCase(),
-          );
+      case "race_match": {
+        if (context.opponent) {
+          const baseRace = context.opponent.race.toLowerCase();
+          const oppEffRace = baseRace === "reincarnator" && context.opponent.subRace
+            ? context.opponent.subRace.toLowerCase()
+            : baseRace;
+          if (condition.races) {
+            result = condition.races.some((r) => r.toLowerCase() === oppEffRace);
+          }
+          if (condition.excludeRaces) {
+            result = !condition.excludeRaces.some((r) => r.toLowerCase() === oppEffRace);
+          }
         }
         break;
+      }
 
       case "race_tier_compare":
         if (condition.tierOperator && context.opponent) {

@@ -1,7 +1,7 @@
 No.45
 Name: CúNga (minh1mui)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,15 +11,13 @@ Ký Sinh:
 Race: Dwarf
 Sub-race: Lùn Xám (Gray)
 ```
-
 ```
 Archetype: 
 + Bookworm
 + Paladin
 ```
-``` 
+```
 0 Quirk:  
-+ 
 ```
 ```
 Str: 5
@@ -29,55 +27,53 @@ IQ: 5
 BIQ: 6
 MA: 8
 ```
-
 ```
 Houses: 
 + Uchiha
 ```
-
 ```
-2 Gear: 
- + 1 Normal gear:
+5 Gear: 
+ + 4 Normal gear:
   - Fingerthing
   - Storage room key (Nhận Spatula)
   - Spatula
+  - Wine
  + 1 Legacy gear:
   - Ragnarok's Cobra
 ```
-
 ```
 1 Normal Weapon
 + Long bow
 ```
-
-``` 
+```
 1 Rune: 
 + Tal
 Runeword: Không
 ```
-
 ```
 1 Power: 
 + Quirkless
 ```
-
 ```
 Char dev: 
 + A Big Gift!
 ```
-
 ```
 Team: 2
 ```
-
 ```
 Lover:
-+ 
++
+```
+```
+PvP Reward:
+- Nhận Gear: Wine
 ```
 ```
 Other Source:
 - +1 all stats
 ```
+
 ======
 Battle Log: 
 ```
@@ -87,6 +83,7 @@ PvE:
 - Tỉ số: x-x (thua do luật thi đấu)
 - Punishment: 
  + -2 vào stat thấp nhất (Str)
+- Note: 
 ```
 
 ```
@@ -94,6 +91,15 @@ PvP:
 - Đối thủ: Note
 - Kết quả: Win
 - Tỉ số: x-x
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Yousei
+- Kết quả: Thắng
+- Tỉ số: 2-4
+- Note: CúNga nhận:  PvP Reward: Nhận Gear: Wine
 ```
 
 ======

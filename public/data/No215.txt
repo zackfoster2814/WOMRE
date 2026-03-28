@@ -1,7 +1,7 @@
 No.215
 Name: nguoisai (nguoidasai)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,82 +11,79 @@ Ký Sinh:
 Race: Dragon
 Sub-race: Undead Dragon (Summon: Imp)
 ```
-
 ```
 Archetype: 
 + Farmer
   -> Aura Farmer
 ```
-``` 
+```
 1 Quirk:  
 + Lazy
 + Athletic (Từ Fingerthing)
 ```
 ```
-Str:10
-Spd:3
-Dur:7
-IQ:10
-BIQ:6
-MA:10
+Str: 10
+Spd: 3
+Dur: 7
+IQ: 10
+BIQ: 6
+MA: 10
 ```
-
 ```
 Houses: 
 + Coven Council
 ```
-
 ```
-1 Gear: 
+2 Gear: 
  + 1 Normal gear:
-  - Fingerthing 
- + 0 Legacy gear:
-  - 
+  - Fingerthing
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-1 Unique Weapon
-+ Galeforce (Dùng được) (Đã mất)
+1 Normal Weapon
++ Galeforce (Dùng được) (Đã mất) (Unique)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
-3 Power: 
+1 Power: 
 + Summon: Imp (Từ Sub-race)
 + Hóa Lỏng Băng
 + Let's Pump Some Iron!
 + Fist Fighting
 ```
-
 ```
 Char dev: 
 + Old Age
 ```
-
 ```
 Team: 19
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 Other Source:
 - -1 STR
 - -1 SPD
 - +2 IQ
+- -1 STR
+- -1 SPD
+- +2 IQ
+```
+```
+PvP Reward:
+- +1 MA
+- +1 MA
 ```
 
-
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Laerys the Unknown
@@ -98,6 +95,7 @@ PvE:
   + Nhận +2 Dur
   + Nhận +2 BIQ
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -105,6 +103,15 @@ PvP:
 - Đối thủ: Wakamo Lunatic
 - Kết quả: Win
 - Tỉ số: 6-0
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Bưởi
+- Kết quả: Thắng
+- Tỉ số: 1-4
+- Note: 
 ```
 
 ======

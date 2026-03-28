@@ -1,7 +1,7 @@
 No.79
 Name: Elai (elai2924)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,17 +11,16 @@ Ký Sinh:
 Race: Primordial Being
 Sub-race: Water
 ```
-
 ```
 Archetype: 
 + Paladin
 ```
-``` 
+```
 3 Quirk:  
 + Clumsy
 + Independent
 + Impatient (Từ Bánh mì)
-- Lucky
++ Lucky
 ```
 ```
 Str: 7
@@ -31,34 +30,28 @@ IQ: 4
 BIQ: 9
 MA: 10 (Ban đầu là 8, +2 từ Paladin)
 ```
-
 ```
 Houses: 
-+ 
 ```
-
 ```
-1 Gear: 
- + 1 Normal gear:
+3 Gear: 
+ + 2 Normal gear:
   - Baguette (Thêm 1 Quirk) (đã mất do PvE Punishment)
   - Khung hình thờ (từ PvE Punishment)
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Unique Weapon
 + Lusat's Glintstone Staff (Không dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-5 Power: 
+1 Power: 
 + Earth-Shaking (Từ sub-race)
 + Water Breathing (Từ Sub-race)
 + Divine Smite (Từ Archetype)
@@ -66,21 +59,17 @@ Runeword: Không
 + Mewing
 + Invulnerability
 ```
-
 ```
 Char dev: 
 + Become Vegetarian
 ```
-
 ```
 Team: 18
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +1 Dura
@@ -89,10 +78,15 @@ PvP Reward:
 ```
 Other Source:
 - +1 Str (Earth Being)
+- + Water Breathing( Elemental wheel) 
+- +1 BIQ ( Primodial Being)
+- +1 Stat cao nhất (+1 MA)
+- +2 MA (Independent)
+- +1 MA (Bucking Bronco)
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Raphael
@@ -100,6 +94,8 @@ PvE:
 - Tỉ số: 1-6
 - Reward: 
 - Punishment: mất hết gear, nhận lại gear "Khung hình thờ"
+- Note: 
+```
 ```
 PvP:
 - Đối thủ: King Zalo
@@ -107,4 +103,12 @@ PvP:
 - Tỉ số: 3-2
 - Note: Nhận thêm Earth being
 ```
+```
+PvP:
+- Đối thủ: Hayato
+- Kết quả: Thắng
+- Tỉ số: 3-3
+- Note: PvP Reward: (Vội) Elemental Wheel: Water: Nhận Power "Water Breathing", Nhận +1 BIQ, Nhận thêm +1 Stat cao nhất Indepentdend: +2 MA
+```
+
 ======

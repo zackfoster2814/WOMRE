@@ -1,6 +1,6 @@
 No.239
 Name: maximumwell
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -100,6 +100,13 @@ PvP:
 - Đối thủ: nhatdog
 - Kết quả: Win
 - Tỉ số: 4-1
+```
+
+```
+PvP:
+- Đối thủ: nahhhh_hecker
+- Kết quả: Thua
+- Tỉ số: 4-3
 ```
 
 ======

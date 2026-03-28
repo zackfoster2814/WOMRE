@@ -1,101 +1,90 @@
 No.244
 Name: .hor1zon
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton
+Race: Skeleton (Lich)
 Sub-race: God
 ```
-
 ```
 Archetype: 
 + Cursed of 36k (Đã mất do PvE Punishment)
 + Summoner (Đã mất do PvE Punishment)
 ```
-``` 
+```
 3 Quirk:  
 + Cautious (Đã mất do PvE Punishment)
 + Herbalist (Đã mất do PvE Punishment)
 + Cheater (Đã mất do PvE Punishment)
 ```
 ```
-Str:9 
-Spd:10 
-Dur:7 
-IQ:1 (Cố định)
-BIQ:4 
-MA:5 
+Str: 9
+Spd: 10
+Dur: 7
+IQ: 8
+BIQ: 4
+MA: 5
 ```
-
 ```
 Houses: 
 + Winterhome
 ```
-
 ```
-2 Gear: 
- + 2 Normal gear:
+5 Gear: 
+ + 4 Normal gear:
   - Thuốc Tráng Dương (Từ House)
   - Bò Khô (Từ House)
   - Đai Trinh Tiết
   - Lover's Glover (kinbum)
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Ukulele (Dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
-2 Power:  
+1 Power: 
 + Power Negation
 + Mind Control
++ Megamagic (từ King's Landing)
 ```
-
-```
-Summon: 
-+ Earth Golem
-```
-
 ```
 Char dev: 
 + Old Age
 ```
-
 ```
 Team: 14
 ```
-
 ```
 Lover:
 + kinbum
 ```
-
 ```
 PvP Reward:
 - +1 Str
+- +1 Str
+```
+```
+Other Source:
+- -1 STR
+- -1 DUR
+- -1 STR
+- -1 DUR
 ```
 
-```
-Other source:
-- -1 dura (Thuốc tráng dương)
-- -1 Str (Thuốc tráng dương)
-```
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Kafka
@@ -111,6 +100,15 @@ PvP:
 - Đối thủ: Gowther
 - Kết quả: Win
 - Tỉ số: 2-3
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Roku da Poet
+- Kết quả: Thắng
+- Tỉ số: 3-4
+- Note: 
 ```
 
 ======

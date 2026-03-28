@@ -1,6 +1,6 @@
 No.25
 Name: Roku da Poet (roku2807)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Spirit (Soul Stack: 3)
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Edgelord
 ```
-``` 
+```
 1 Quirk:  
 + Cheater
 ```
@@ -28,67 +27,62 @@ IQ: 5
 BIQ: 8
 MA: 3
 ```
-
 ```
 Houses: 
 + House Targaryen
 ```
-
 ```
 1 Gear: 
  + 1 Normal gear:
   - Baguette
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + War Axe (Dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
 1 Power: 
 + Ice Hammer
 ```
-
 ```
 Char dev: 
 + Transmute: Chaos
 + Lost an Arm (từ Transmute: Chaos)
 + Finality (từ Transmute: Chaos)
 ```
-
 ```
 Team: 1
 ```
-
 ```
 Lover:
 + Lunar (huyvp1412)
 ```
 ```
-Other Source:
-- -1 Dura (War Axe)
-```
-```
 PvP Reward:
 - +2 BIQ (stats cao nhất)
 ```
+```
+Other Source:
+- -1 Dura (War Axe)
+```
+
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Dreglord
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: -5 base Str
+- Note: 
+```
 ```
 PvP:
 - Đối thủ: Nega (thxwngs)
@@ -96,4 +90,12 @@ PvP:
 - Tỉ số: 3-3
 - Reward: +2 vào chỉ số cao nhất (+2 BIQ)
 ```
+```
+PvP:
+- Đối thủ: .hor1zon
+- Kết quả: Thua
+- Tỉ số: 3-4
+- Note: 
+```
+
 ======

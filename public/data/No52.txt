@@ -1,6 +1,6 @@
 No.52
 Name: Sâm bổ lượng Châu Đốc (ginkka)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -106,6 +106,13 @@ PvP:
 - Đối thủ: NDP
 - Kết quả: Win
 - Tỉ số: 3-4
+```
+
+```
+PvP:
+- Đối thủ: radb1t_fr
+- Kết quả: Thua
+- Tỉ số: 4-2
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.161
 Name: nahhhh_hecker (nahhhh_hecker)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,13 +11,12 @@ Ký Sinh:
 Race: Angel
 Sub-race: Cherubim
 ```
-
 ```
 Archetype: 
 + Pacifist
 + Atheist
 ```
-``` 
+```
 2 Quirk:  
 + Mute
 + Generous
@@ -30,54 +29,46 @@ IQ: 5
 BIQ: 6
 MA: 6
 ```
-
 ```
 Houses: 
 + The Shire
-  -> +4 Str
++   -> +4 Str
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
- + 0 Legacy gear:
-  - 
+2 Gear: 
+ + 1 Normal gear:
+  -
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Unique Weapon
 + Chastiefol (Dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-2 Power: 
+1 Power: 
 + Zoltraak
 + Writer
 ```
-
 ```
 Char dev: 
 + Overcome the Habits
 ```
-
 ```
 Team: 25
 ```
-
 ```
 Lover:
-+ 
++
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Radagon of The Golden Order
@@ -85,6 +76,7 @@ PvE:
 - Tỉ số: 1-4
 - Reward: 
 - Punishment: Stat cao nhất giảm nửa (làm tròn lên), Stat thấp nhất biến thành 0
+- Note: 
 ```
 
 ```
@@ -92,6 +84,7 @@ PvP:
 - Đối thủ: Rentarou
 - Kết quả: Win
 - Tỉ số: 2-5
+- Note: 
 ```
 
 ```
@@ -100,6 +93,15 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 2-5
 - Reward: không quan trọng
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: maximumwell
+- Kết quả: Thắng
+- Tỉ số: 4-3
+- Note: PvP Reward: (Tặng đối thủ: +1 Speed)
 ```
 
 ======

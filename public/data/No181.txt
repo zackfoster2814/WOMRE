@@ -1,7 +1,7 @@
 No.181
 Name: мιтιᴘнᴀι︵²ᵏ⁷ (mitiphai)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,14 +11,13 @@ Ký Sinh:
 Race: Dwarf
 Sub-race: Lùn Xám
 ```
-
 ```
 Archetype: 
 + Farmer
  -> Aura Farmer
 + Gigachad
 ```
-``` 
+```
 2 Quirk:  
 + Deaf
 + Let me solo her
@@ -31,37 +30,31 @@ IQ: 2
 BIQ: 7
 MA: 8
 ```
-
 ```
 Houses: 
 + Roundtable Hold
 ```
-
 ```
-2 Gear: 
+3 Gear: 
  + 2 Normal gear:
   - Đai trinh tiết
   - Wizard Hat
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Drums (không dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-0 Power: 
-+ 
+1 Power: 
++
 ```
-
 ```
 Char dev: 
 + Final Reserves
@@ -69,22 +62,21 @@ Char dev:
 + Kungfu Training
 + Mad Scientist
 ```
-
 ```
 Team: 31
 ```
-
 ```
 Lover:
-+ 
++
 ```
 ```
 PvP Reward:
 - +1 str
+- +1 Str
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: The Unblinking Gaze
@@ -92,6 +84,7 @@ PvE:
 - Tỉ số: 4-2
 - Reward: 
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -99,6 +92,15 @@ PvP:
 - Đối thủ: Trapcon
 - Kết quả: Win
 - Tỉ số: 5-1
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Tekachi
+- Kết quả: Thắng
+- Tỉ số: 4-2
+- Note: 
 ```
 
 ======

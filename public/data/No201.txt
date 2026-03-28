@@ -1,7 +1,7 @@
 No.201
 Name: Hy (hy3269)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,51 +11,46 @@ Ký Sinh:
 Race: Orc
 Sub-race: 
 ```
-
 ```
-Archetype:
+Archetype: 
 + Paladin
 + NPC
 ```
-``` 
+```
 1 Quirk:  
 + Shining Brightly (Đã mất)
 ```
 ```
-Str:7
-Spd:6
-Dur:5
-IQ:5
-BIQ:8
-MA:7 (+2 từ Paladin)
+Str: 7
+Spd: 6
+Dur: 5
+IQ: 5
+BIQ: 8
+MA: 7
 ```
-
 ```
 Houses: 
 + Shurima
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
+5 Gear: 
+ + 2 Normal gear:
   - Thuốc Tráng Dương
- + 0 Legacy gear:
+  - Đá
+ + 3 Legacy gear:
   - Creator's Cat Ring(Từ House)
-    -> +1 all stats
-    -> +1 all stats
+  -> +1 all stats
+  -> +1 all stats
 ```
-
 ```
 1 Normal Weapon
 + Guitar (Không dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
 1 Power: 
 + Divine Smite
@@ -64,33 +59,32 @@ Runeword:
 + Fair Duel
 + Scrying
 ```
-
 ```
 Char dev: 
 + Training Arc
 ```
-
 ```
 Team: 28
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
-```
-Other Source:
-- +2 Dura (Orc)
-```
-
 ```
 PvP Reward:
 - Nhận 1 gear: Thuốc Tráng Dương
+- Nhận 1 Gear: Đá
+```
+```
+Other Source:
+- +2 Dura (Orc)
+- +2 Dura (Orc)
+- -1 STR (thuốc Tráng Dương)
+- -1 DUR (thuốc Tráng Dương)
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Night King
@@ -98,6 +92,7 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+- Note: 
 ```
 
 ```
@@ -106,6 +101,15 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 5-0
 - Reward: Nhận 1 gear: Thuốc Tráng Dương
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: ngọn cỏ ven sông
+- Kết quả: Thắng
+- Tỉ số: 5-1
+- Note: Orc kích hoạt
 ```
 
 ======

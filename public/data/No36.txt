@@ -58,10 +58,10 @@ Runeword: Không
 ```
 1 Power: 
 + Fair Duel (Wand)
-+ Bloodlust (Patient)
-+ Petrification (Patient)
-+ Swinging Maestro (Patient)
-+ AIDS (Patient)
++ Bloodlust 
++ Petrification
++ Swinging Maestro
++ AIDS 
 + Force Field (The Tamer Straight Sword)
 ```
 
@@ -93,6 +93,11 @@ PvP Reward:
 Other Source:
 - 1 Power: Fair Duel (Wand)
 - -2 Dura (Wand)
+- -1 IQ
+- -1 MA 
+- +1 Str
+- +1 Spd
+- +2 Dura
 ```
 ======
 Battle Log:

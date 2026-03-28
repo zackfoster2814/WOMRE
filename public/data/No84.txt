@@ -44,6 +44,8 @@ Houses:
   - Storage room key (Nhận Spatula)
   - Spatula
   - Holy Symbol
+  - Golden Coin
+  - Golden Coin
  + 0 Legacy gear:
   - 
 ```

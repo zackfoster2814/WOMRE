@@ -1,7 +1,7 @@
 No.176
 Name: Lunar (huyvp1412)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,89 +11,82 @@ Ký Sinh:
 Race: Giant
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Blacksmith
 + Herald (Từ Spatula)
 ```
-``` 
+```
 3 Quirk:  
 + Dextrous
 + Lucky (Max: 0)
 + Bloodthirsty
 ```
 ```
-Str: 10 (+5)
-Spd: 4 (+3 từ Herald)
+Str: 10
+Spd: 4
 Dur: 6
 IQ: 4(-5)
 BIQ: 8
 MA: 1
 ```
-
 ```
 Houses: 
 + House Baratheon
 ```
-
 ```
-2 Gear:
- + 2 Normal gear:
+6 Gear: 
+ + 5 Normal gear:
   - Beer (Từ Char Dev)
   - Spatula (Từ Char Dev)
   - Lover's Glover (Roku da Poet (roku2807))(Từ Char Dev)
   - Empty Stein
   - Wine
- + 0 Legacy gear:
+ + 1 Legacy gear:
   -
 ```
-
 ```
-1 Normal Weapon (Từ Blacksmith)
+1 Normal Weapon
 + Claymore(Dùng được) (Đã mất)
 ```
-
-``` 
-2 Rune: (Từ Blacksmith) (Đã mất)
-+ Ort (Đã mất)
+```
+1 Rune: 
 + Sol (Đã mất)
 Runeword: Affection (Đã mất)
 ```
-
 ```
-4 Power: 
+1 Power: 
 + Fist Fighting 
 + Rampage
 + Continental Super Storm
 + Blood Frenzy
 + AIDS
 ```
-
 ```
 Char dev: 
 + Armed to the Teeth
 ```
-
 ```
 Team: 16
 ```
-
 ```
 Lover:
 + Roku da Poet (roku2807)
 ```
 ```
-Other Source:
-- +1 all stats
-```
-```
 PvP Reward:
 - Nhận 1 power: AIDS
+- +1 IQ
+```
+```
+Other Source:
+- +1 all stats
+- +1 All stats
+- -2 Dura (AIDS)
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Polish cow
@@ -101,6 +94,7 @@ PvE:
 - Tỉ số: 3-3
 - Reward: Nhận Empty Stein và Wine
 - Punishment:
+- Note: 
 ```
 
 ```
@@ -108,6 +102,15 @@ PvP:
 - Đối thủ: Boy lắc đầu
 - Kết quả: Win
 - Tỉ số: 4-1
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: HolyOne
+- Kết quả: Thắng
+- Tỉ số: 1-2
+- Note: Lunar Rampage: +1 All Stats
 ```
 
 ======

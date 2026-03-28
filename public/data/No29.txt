@@ -1,6 +1,6 @@
 No.29
 Name: Cloudian (_dragluon_)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Demi-God
 Sub-race: Cursed Sword
 ```
-
 ```
 Archetype: 
 + Conquerer
 ```
-``` 
+```
 3 Quirk:  
 + Herbalist
 + Training Restricted
@@ -30,51 +29,42 @@ IQ: 4
 BIQ: 6
 MA: 10
 ```
-
 ```
 Houses: 
 + Dothraki
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
- + 0 Legacy gear:
-  - 
+2 Gear: 
+ + 1 Normal gear:
+  -
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-0 Power: 
-+ 
+1 Power: 
++
 ```
-
 ```
 Char dev: 
 + Nghe Bài Thú Tội
 + Seeking Wisdom (Từ Nghe Bài Thú Tội)
 ```
-
 ```
 Team: 
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +1 MA
@@ -86,14 +76,21 @@ Other Source:
 ```
 
 ======
-Battle Log:
-```
-```
-
+Battle Log: 
 ```
 PvP:
 - Đối thủ: Sett
 - Kết quả: Win
 - Tỉ số: 5-4
+- Note: 
 ```
+
+```
+PvP:
+- Đối thủ: caubetuky._.
+- Kết quả: Thua
+- Tỉ số: 4-2
+- Note: Dothraki: Luật 2
+```
+
 ======

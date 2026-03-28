@@ -40,11 +40,11 @@ Houses:
  + 7 Normal gear:
   - Ancient Protector
   - Knight's Armor
-  - Ba hoa trắng (House Lannister)
-  - Magical Scroll (House Lannister)
-  - Golden coin (House Lannister)
-  - Golden coin (House Lannister)
-  - Golden coin (House Lannister)
+  - Ba hoa trắng 
+  - Magical Scroll 
+  - Golden Coin 
+  - Golden Coin 
+  - Golden Coin 
  + 0 Legacy gear:
   - 
 ```

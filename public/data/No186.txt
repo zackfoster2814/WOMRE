@@ -1,7 +1,7 @@
 No.186
 Name: Amos (amos0603)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,14 +11,13 @@ Ký Sinh:
 Race: Human
 Sub-race: Đen
 ```
-
 ```
 Archetype: 
 + Wibu
  -> One Piece
   -> Observation
 ```
-``` 
+```
 1 Quirk:  
 + Artistic (Mất do Quirkless)
 ```
@@ -30,59 +29,52 @@ IQ: 1
 BIQ: 5
 MA: 1
 ```
-
 ```
 Houses: 
 + Coven Council
 ```
-
 ```
-2 Gear: 
- + 2 Normal gear:
+4 Gear: 
+ + 3 Normal gear:
   - Academie Ring
   - Storage Room Key
   - Wizard hat (từ Storage Room Key)
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Magical Staff (dùng được) (Mất do It is What it is)
 ```
-
-``` 
+```
 1 Rune: 
 + Tir
 Runeword: Không
 ```
-
 ```
-2 Power: 
+1 Power: 
 + Quirkless
 + Invulnerability
 ```
-
 ```
 Char dev: 
 + It is What it is
 ```
-
 ```
 Team: 5
 ```
-
 ```
 Lover:
-+ 
++
 ```
 ```
 PvP Reward:
 - +1 Spd
+- +1 IQ
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Violet Vessel
@@ -90,6 +82,7 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -97,6 +90,15 @@ PvP:
 - Đối thủ: Lowns
 - Kết quả: Win
 - Tỉ số: 4-2
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Sizaky
+- Kết quả: Thắng
+- Tỉ số: 3-2
+- Note: 
 ```
 
 ======

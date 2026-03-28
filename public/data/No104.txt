@@ -65,6 +65,7 @@ Runeword: Không
 + Voidwalking
 + Seismic
 + 67 (từ PvE Reward)
++ Megamagic (từ King's Landing)
 ```
 
 ```

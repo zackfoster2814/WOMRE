@@ -1,6 +1,6 @@
 No.71
 Name: GiCi (gic.)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,13 +11,12 @@ Ký Sinh:
 Race: Orc
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Infirmarian
 + Paladin (Từ Spatula)
 ```
-``` 
+```
 3 Quirk:  
 + Impatient
 + Deaf
@@ -31,65 +30,55 @@ IQ: 0 (Ban đầu là 3, về 0 do PvE Punishment)
 BIQ: 8
 MA: 5 (nhận +2 từ Paladin)
 ```
-
 ```
 Houses: 
 + House Lannister
 ```
-
 ```
-5 Gear: 
- + 5 Normal gear:
+8 Gear: 
+ + 7 Normal gear:
   - Cursed Charm (Từ House)
   - Ancient Protector(Từ House)
-  - Golden Coin 
-  - Golden Coin 
-  - Golden Coin 
+  - Golden Coin
+  - Golden Coin
+  - Golden Coin
   - Spatula
   - Beer
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  - -
 ```
-
 ```
 1 Unique Weapon
 + Yamato Blade (Dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-4 Power: 
+1 Power: 
 + Divine Smite (Từ Sub-race)
 + Black Magic
 + Borrowed Time
 + Magma Strike
 ```
-
 ```
 Char dev: 
 + Make Love (Nicre (.jan_01))
 ```
-
 ```
 Team: 4
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +1 Dura
 - +1 Spd
 ```
-
 ```
 Other Source:
 - +2 Iq
@@ -101,9 +90,10 @@ Battle Log:
 PvE:
 - Đối thủ: Divine Dragon
 - Kết quả: Lose
-- Tỉ số: 6-4 
+- Tỉ số: 6-4
 - Punishment: 
  + Chỉ số thấp nhất của team bị kéo xuống 0
+- Note: 
 ```
 
 ```
@@ -111,6 +101,15 @@ PvP:
 - Đối thủ: Lee
 - Kết quả: Win
 - Tỉ số: 3-5
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: kinbum
+- Kết quả: Thua
+- Tỉ số: 0-4
+- Note: Trước combat: Gici Golden Coin: Không Gici Black Magic: -2 MA
 ```
 
 ======

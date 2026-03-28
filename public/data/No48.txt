@@ -21,7 +21,7 @@ Archetype:
 + Open-minded
 ```
 ```
-Str: 6
+Str: 4 (nguyền địa ngục từ 6)
 Spd: 4
 Dur: 5
 IQ: 1
@@ -39,8 +39,8 @@ Houses:
 1 Gear: 
  + 1 Normal gear:
   - Giấy nợ gia truyền (đã mất)
-  - Golden coin
-  - Golden coin
+  - Golden Coin
+  - Golden Coin
  + 0 Legacy gear:
   - 
 ```

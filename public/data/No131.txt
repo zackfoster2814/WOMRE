@@ -1,6 +1,6 @@
 No.131
 Name: Pui (pui19)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,51 +11,45 @@ Ký Sinh:
 Race: Troll
 Sub-race: Ice Troll
 ```
-
 ```
-Archetype:
+Archetype: 
 + Hero Grave Keeper
 + NPC
 ```
-``` 
+```
 1 Quirk:  
 + Fast Learner
 ```
 ```
-Str: 1 (ban đầu là 8, do Blessed of Chaos)
+Str: 1
 Spd: 5
 Dur: 6
 IQ: 5
 BIQ: 4
 MA: 7
 ```
-
 ```
 Houses: 
 + Roundtable Hold
 ```
-
 ```
-2 Gear: 
- + 2 Normal gear:
+4 Gear: 
+ + 3 Normal gear:
   - Thuốc tráng dương
   - Văn tế (đã mất)
   - Magical Scroll
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - 
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
 1 Power: 
 + Quirkless
@@ -64,23 +58,19 @@ Runeword: Không
 + The Great storm
 + Thunder Orb
 ```
-
 ```
 Char dev: 
 + Blessed by Chaos
 + MrBeast
 + Seeking Wisdom
 ```
-
 ```
 Team: 28
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - Nhận 2 power
@@ -94,7 +84,7 @@ Other Source:
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Night King
@@ -102,6 +92,8 @@ PvE:
 - Tỉ số: 1-5
 - Reward:
 - Punishment: Nhận Archetype NPC
+- Note: 
+```
 ```
 PvP:
 - Đối thủ: NPC (npc867)
@@ -109,12 +101,22 @@ PvP:
 - Tỉ số: 0-3
 - note: Đánh hộ 0reki (0rekihoutarou), bú Hunter's Mark
 ```
+```
 PvP:
 - Đối thủ: Bamialoai2 (lmaooo1308)
 - Kết quả: Win
-- Tỉ số:
- 4-3
+- Tỉ số: 4-3
 - note: bú 
 crit, đào mộ Pilèy Magical Scroll
+- Note: 
 ```
+
+```
+PvP:
+- Đối thủ: Duckie2369
+- Kết quả: Thua
+- Tỉ số: 4-3
+- Note: Gọi Solus ra đánh hộ
+```
+
 ======

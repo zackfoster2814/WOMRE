@@ -1,7 +1,7 @@
 No.109
 Name: We are Charlie Kirk (_yeetusmymeatus)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Primordial Being
 Sub-race: Water
 ```
-
 ```
 Archetype: 
 + Chokevy
 ```
-``` 
+```
 2 Quirk:  
 + Artstic
 + Let me solo her
@@ -29,35 +28,30 @@ IQ: 2
 BIQ: 1
 MA: 0 (ban đầu là 5, Demonic Pact)
 ```
-
 ```
 Houses: 
 + House Baratheon
 ```
-
 ```
-3 Gear: 
+4 Gear: 
  + 3 Normal gear:
   - Shot Glass
   - Leather Jacket
   - Đá
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-7 Power: 
+1 Power: 
 + Water Breathing (Từ Sub-race) (Đã mất do PvE Punishment)
 + Luck Manipulation
 + The Sand of Time
@@ -67,33 +61,33 @@ Runeword: Không
 + Spell Flux 
 + Blowing Leaves
 ```
-
 ```
 Char dev: 
 + Demonic Pact (kéo MA xuống 0)
 ```
-
 ```
 Team: 17
 ```
-
 ```
 Lover:
-+ 
++
+```
+```
+PvP Reward:
+- Lời nguyền địa ngục 
+- +2 str (Stat cao nhất)
 ```
 ```
 Other Source:
 - +1 Speed
-- -1 All stats (Chokevy)
-```
-
-```
-PvP Reward:
-- Lời nguyền địa ngục 
+- -2 All stats (Chokevy)
+- Nhận: Blowing Leaves
+- +1 Spd
+- +1 Stat thấp nhất (MA)
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Sigrun
@@ -103,6 +97,7 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất Power Divine Lightning và Water Breathing
+- Note: 
 ```
 
 ```
@@ -111,6 +106,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 0-6
 - Note: nhận thêm Air
+```
+
+```
+PvP:
+- Đối thủ: Lệch rate Jingliu 2 lần
+- Kết quả: Thắng
+- Tỉ số: 3-3
+- Note: Trước combat: We are Charlie Kirk Golden Coin: Không kích   Trong combat: Sand of Time x2: Kích 1
 ```
 
 ======

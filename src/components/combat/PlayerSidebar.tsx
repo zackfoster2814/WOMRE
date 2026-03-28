@@ -53,8 +53,8 @@ export function PlayerSidebar({
   selectTabOnPick = "effects" as "effects" | "inventory",
 }: PlayerSidebarProps) {
   const items = player?.character ? buildInventoryList(player.character) : [];
-  const audioTracks = detectCombatAudioTracks(player?.character);
-  const otherAudioTracks = detectCombatAudioTracks(otherPlayer?.character);
+  const audioTracks = detectCombatAudioTracks(player?.character, disabledItems, player?.no);
+  const otherAudioTracks = detectCombatAudioTracks(otherPlayer?.character, undefined, otherPlayer?.no);
 
   const quirks = (player?.character?.quirks || [])
     .filter((q: any) => !q.isLost)

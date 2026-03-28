@@ -1,6 +1,6 @@
 No.249
 Name: Tekachi (tekachi_kyun)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -91,5 +91,12 @@ PvP:
 - Đối thủ: luchii
 - Kết quả: Win 
 - Tỉ số: 3-0
+```
+
+```
+PvP:
+- Đối thủ: мιтιᴘнᴀι︵²ᵏ⁷
+- Kết quả: Thua
+- Tỉ số: 4-2
 ```
 ======

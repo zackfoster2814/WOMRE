@@ -38,7 +38,7 @@ Houses:
 2 Gear: 
  + 2 Normal gear:
   - Buckler (đã mất do PvE Punishment)
-  - Golden coin (đã mất do PvE Punishment)
+  - Golden Coin (đã mất do PvE Punishment)
   - Khung hình thờ (từ PvE Punishment)
  + 0 Legacy gear:
   - 

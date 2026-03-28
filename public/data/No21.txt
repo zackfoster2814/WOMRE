@@ -1,6 +1,6 @@
 No.21
 Name: Ako Darling (mikukhang)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,14 +11,13 @@ Ký Sinh:
 Race: Werebeast
 Sub-race: Werebat
 ```
-
 ```
 Archetype: 
 + Farmer
   -> Normal
 + Cinderheart
 ```
-``` 
+```
 1 Quirk:  
 + Weak-Knee
 ```
@@ -30,22 +29,19 @@ IQ: 5
 BIQ: 5
 MA: 7
 ```
-
 ```
 Houses: 
 + House Baratheon
 ```
-
 ```
-3 Gear: 
+4 Gear: 
  + 3 Normal gear:
   - Đá
   - Ba hoa trắng
   - Golden Coin
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Long Sword (Dùng được)
@@ -57,23 +53,19 @@ Houses:
 + Tir
 Runeword: The Twin
 ```
-
 ```
-3 Power: 
+1 Power: 
 + Master of War
 + Metamagic
 + Adapt (aids, divine lightning, master of was, seismic, petrification)
 ```
-
 ```
 Char dev: 
 + Mahoraga!
 ```
-
 ```
 Team: 24
 ```
-
 ```
 Lover:
 + ngọn cỏ ven sông (ngon_co_ven_duong)
@@ -90,7 +82,7 @@ Other Source:
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Soul of Cinder
@@ -106,6 +98,15 @@ PvP:
 - Đối thủ: Johnny Joestar
 - Kết quả: Win
 - Tỉ số: 2-4
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Huy Le
+- Kết quả: Thua
+- Tỉ số: 2-4
+- Note: Trước combat: Ako Darling Golden Coin
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.105
 Name: LDL (longle_59366)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,13 +11,12 @@ Ký Sinh:
 Race: Werebeast
 Sub-race: Werebat
 ```
-
 ```
 Archetype: 
 + Trickster
 + Lords
 ```
-``` 
+```
 1 Quirk:  
 + Cluttered Mind
 ```
@@ -26,59 +25,52 @@ Str: 8
 Spd: 5
 Dur: 8
 IQ: 5
-BIQ: 10 (+1 từ Lords)
+BIQ: 10
 MA: 1
 ```
-
 ```
 Houses: 
 + New London
 ```
-
 ```
-3 Gear: 
+4 Gear: 
  + 3 Normal gear:
   - Wooden Shield
   - Thuốc tráng dương
   - Wine
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Unique Weapon
 + Death's Scythe (Dùng Được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
 1 Power: 
 + Cold Breeze
 + 67
-+ Wex 
++ Wex
 ```
-
 ```
 Char dev: 
 + Old Age
 ```
-
 ```
 Team: 11
 ```
-
 ```
 Lover:
-+ 
++
 ```
 ```
 PvP Reward:
 - 1 power (Wex)
+- +1 IQ
 ```
 ```
 Other Source:
@@ -88,7 +80,7 @@ Other Source:
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: 67 Final Boss
@@ -97,6 +89,7 @@ PvE:
 - Reward: 
   + Nhận power 67
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -104,6 +97,15 @@ PvP:
 - Đối thủ: Asumi Kurenai
 - Kết quả: Win
 - Tỉ số: 3-3
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Trung Kiên
+- Kết quả: Thắng
+- Tỉ số: 3-3
+- Note: LDL Trickster: KHông có gì
 ```
 
 ======

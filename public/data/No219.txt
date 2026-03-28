@@ -1,7 +1,7 @@
 No.219
 Name: Tarus13 (13tarus)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,51 +11,45 @@ Ký Sinh:
 Race: Giant
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Slayer - Elf
 + Gambler (Từ The Dice of the Dead)
 ```
-``` 
+```
 1 Quirk:  
 + Artisan
 ```
 ```
-Str:10 (+5)
-Spd:6
-Dur:3
-IQ:8 (-5)
-BIQ:4
-MA:3
+Str: 10
+Spd: 6
+Dur: 3
+IQ: 8
+BIQ: 4
+MA: 3
 ```
-
 ```
 Houses: 
 + Shurima  
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
+3 Gear: 
+ + 2 Normal gear:
   - Magical Scroll (Từ Quirk Artisan)
   - Thuốc Tráng Dương (Từ Quirk Artisan)
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - The Dice of the Dead (Từ House)
 ```
-
 ```
-1 Unique Weapon
-+ Necronomicon (Dùng Được) (Đã mất)
-+ Backhand Blade (Không dùng được)
+2 Normal Weapon
++ Necronomicon (Dùng Được) (Đã mất) (Unique)
++ Backhand Blade (Không dùng được) (Unique)
 ```
-
-``` 
+```
 1 Rune: 
 + Shael (Chưa dùng được)
 Runeword: 
 ```
-
 ```
 1 Power: 
 + The Coast is Clear (Từ House)
@@ -63,32 +57,33 @@ Runeword:
 + Magma Strike
 + Scrying
 ```
-
 ```
 Char dev: 
 + Creator's Reforge
 ```
-
 ```
 Team: 5
 ```
-
 ```
 Lover:
-+ 
++
 ```
 ```
 PvP Reward:
 - +1 BIQ
+- +1 IQ
 ```
 ```
 Other Source:
 - -1 dura
 - -1 Str
+- -1 dura
+- -1 Str
+- -1 Dura
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Violet Vessel
@@ -96,6 +91,7 @@ PvE:
 - Tỉ số: 1-5
 - Reward: 
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -103,6 +99,15 @@ PvP:
 - Đối thủ: Con dê
 - Kết quả: Win
 - Tỉ số: 3-6
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Nicre
+- Kết quả: Thắng
+- Tỉ số: 0- (-1)
+- Note: Trước combat: Tarus13 Scrying: thành công Trong combat: Gam hụt 5
 ```
 
 ======

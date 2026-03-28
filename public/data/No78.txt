@@ -1,6 +1,6 @@
 No.78
 Name: HolyOne (holyone78)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -108,6 +108,13 @@ PvP:
 - Đối thủ: Chocopie
 - Kết quả: Win
 - Tỉ số: 4-1
+```
+
+```
+PvP:
+- Đối thủ: Lunar
+- Kết quả: Thua
+- Tỉ số: 1-2
 ```
 
 ======

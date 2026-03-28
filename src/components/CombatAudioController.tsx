@@ -30,6 +30,10 @@ export interface CombatAudioTrack {
   videoId?: string;
   label: string;
   loop?: boolean;
+  /** Nếu true → luôn pan = 0 (stereo) dù bên kia có audio */
+  forceStereo?: boolean;
+  /** Đánh dấu là PersonalBGM để ưu tiên hiển thị */
+  isPersonalBgm?: boolean;
 }
 
 interface TrackState {
@@ -121,6 +125,16 @@ const OT_LOCAL_FILES = [
   "11 - Ngọt - Hết Thời (Tokai Teio Cover).ogg",
 ];
 
+// ─── PersonalBGM manifest ────────────────────────────────────────────────────
+// Key: playerNo, Value: mảng tên file trong /assets/bgm/PersonalBGM/
+// • 1 file  → phát stereo (pan = 0) dù bên kia có audio
+// • >1 file → mỗi file phát single channel riêng (pan theo side, giống power âm thanh)
+export const PERSONAL_BGM_FOLDER = "/assets/bgm/PersonalBGM/";
+export const PERSONAL_BGM_MANIFEST: Record<number, string[]> = {
+  82: ["no82.mp3"],
+};
+// ─────────────────────────────────────────────────────────────────────────────
+
 // YouTube fallback seeds
 const KEO_PLAYLIST_ID = "PLnUioGkqqn5XwWaMlwhftWusPPK_KHz3T";
 const OT_PLAYLIST_ID = "PLI8ooDRiresrLRA0no6IA7KFZl0dvVp6E";
@@ -193,9 +207,31 @@ function randomFrom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-export function detectCombatAudioTracks(character: any): CombatAudioTrack[] {
+export function detectCombatAudioTracks(character: any, disabledItems?: Set<string>, playerNo?: number): CombatAudioTrack[] {
   if (!character) return [];
   const tracks: CombatAudioTrack[] = [];
+
+  // ── PersonalBGM — thêm trước mọi track khác (ưu tiên cao nhất) ──────────
+  if (playerNo !== undefined && PERSONAL_BGM_MANIFEST[playerNo]) {
+    const files = PERSONAL_BGM_MANIFEST[playerNo];
+    const isStereo = files.length === 1;
+    files.forEach((file, i) => {
+      tracks.push({
+        id: `personal-bgm-${playerNo}-${i}`,
+        itemName: "PersonalBGM",
+        type: "local",
+        src: `${PERSONAL_BGM_FOLDER}${file}`,
+        label: `BGM – ${file.replace(/\.\w+$/, "")}`,
+        loop: true,
+        isPersonalBgm: true,
+        forceStereo: isStereo,
+      });
+    });
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const isDisabled = (sourceType: string, name: string) =>
+    playerNo !== undefined && disabledItems?.has(`${playerNo}-${sourceType}-${name}`);
 
   const quirks: string[] = (character.quirks || [])
     .filter((q: any) => !q.isLost)
@@ -215,6 +251,10 @@ export function detectCombatAudioTracks(character: any): CombatAudioTrack[] {
 
   const powers: string[] = (character.powers || [])
     .filter((p: any) => !p.isLost)
+    .filter((p: any) => {
+      const name = typeof p === "string" ? p : (p?.name ?? "");
+      return !isDisabled("power", name);
+    })
     .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")));
 
   if (powers.includes("67"))
@@ -874,7 +914,8 @@ export const CombatAudioController = ({
 
   if (stableTracks.length === 0) return null;
 
-  const pan = otherSideHasAudio ? (side === "left" ? -1 : 1) : 0;
+  // Pan mặc định cho cả controller (dùng cho track không có forceStereo)
+  const defaultPan = otherSideHasAudio ? (side === "left" ? -1 : 1) : 0;
   const panLabel = otherSideHasAudio
     ? side === "left"
       ? "📢 Kênh trái"
@@ -912,12 +953,14 @@ export const CombatAudioController = ({
           </button>
         </div>
 
-        {stableTracks.map((track) =>
-          track.type === "local" ? (
+        {stableTracks.map((track) => {
+          // forceStereo = true → pan 0, ngược lại dùng defaultPan
+          const trackPan = track.forceStereo ? 0 : defaultPan;
+          return track.type === "local" ? (
             <LocalTrackCard
               key={track.id}
               track={track}
-              pan={pan}
+              pan={trackPan}
               accent={accent}
               visible
               stopped={stopped}
@@ -934,8 +977,8 @@ export const CombatAudioController = ({
               silenced={silenced}
               volumeScale={volumeScale}
             />
-          ),
-        )}
+          );
+        })}
       </div>
 
       {/* Toggle button */}

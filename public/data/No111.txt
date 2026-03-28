@@ -1,6 +1,6 @@
 No.111
 Name: TheViet (c9ru5)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Reincarnator (Ar2di) -> Goblin
 Sub-race: 100000
 ```
-
 ```
 Archetype: 
 + Anti-Social
 ```
-``` 
+```
 1 Quirk:  
 + Lazy (Đã mất)
 ```
@@ -28,55 +27,51 @@ IQ: 5
 BIQ: 1
 MA: 9
 ```
-
 ```
 Houses: 
 + Shurima
 ```
-
 ```
-4 Gear: 
- + 3 Normal gear:
+5 Gear: 
+ + 4 Normal gear:
   - Đá (Từ Sub-race)
   - Beer
   - Swift Boots
-  - Khung hình thờ 
+  - Khung hình thờ (đã mất)
  + 1 Legacy gear:
   - Staff of the Fallen One (Từ House)
 ```
-
 ```
-1 Unique Weapon
-+ Instruments of the Sirens (Dùng được) (đã mất)
+1 Normal Weapon
++ Instruments of the Sirens (Dùng được) (đã mất) (Unique)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-3 Power: 
+1 Power: 
 + Master of War(Từ House)
 + Luck Manipulation(Từ House)
 + Cold Breeze
 + Scrying
 + Accelerating Sorcery
 ```
-
 ```
 Char dev: 
 + Put the fries in the bag
 ```
-
 ```
 Team: 7
 ```
-
 ```
 Lover:
 + Hayato (hayatoo_o)
+```
+```
+PvP Reward:
+- +1 IQ
 ```
 ```
 Other Source:
@@ -84,13 +79,9 @@ Other Source:
 - -1 Speed 
 - +2 IQ
 ```
-```
-PvP Reward:
-- +1 IQ
-```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Pontiff Sulyvahn
@@ -98,6 +89,7 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -105,6 +97,15 @@ PvP:
 - Đối thủ: Lunacy
 - Kết quả: Win
 - Tỉ số: 5-0
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Shin
+- Kết quả: Thua
+- Tỉ số: 0-5
+- Note: Trước combat: The Viet Scrying: Không kích
 ```
 
 ======

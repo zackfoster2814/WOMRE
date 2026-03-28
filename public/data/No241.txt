@@ -1,6 +1,6 @@
 No.241
 Name: thợ lặn (normieyah)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -8,17 +8,16 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Angel 
+Race: Angel
 Sub-race: Angels
 ```
-
 ```
 Archetype: 
 + Cursed of 36k
 + Pacifist
 + Edgelord
 ```
-``` 
+```
 1 Quirk:  
 + Open-minded 
 ```
@@ -30,61 +29,51 @@ IQ:9 (Ban đầu là 0, Favor Respin) Cursed of 36k
 BIQ:1 Cursed of 36k
 MA:8 (Ban đầu là 0, Favor Respin) Cursed of 36k
 ```
-
 ```
 Houses: 
 + Ban Nhạc Ngọt Đoàn Kết
 ```
-
 ```
-1 Gear: 
- + 1 Normal gear:
+5 Gear: 
+ + 4 Normal gear:
   - Ớt (Từ House)
   - Holy Symbol
   - Văn tế
-  - Khung hình thờ 
- + 0 Legacy gear:
-  - 
+  - Khung hình thờ
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Unique Weapon
 + Diffusal Blade (Dùng Được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
-1 Power:  
+1 Power: 
 + Fair Duel (Đã mất do PvE Punishment)
 ```
-
 ```
 Char dev: 
 + Creator's Favor (Roll lại 3 chỉ số Dura IQ MA)
 ```
-
 ```
 Team: 17
 ```
-
 ```
 Lover:
 + Moonice (muroku_18)
 ```
-
 ```
 PvP Reward:
 - +1 Dura
 ```
 
-
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Sigrun
@@ -94,10 +83,20 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất hết Power
+- Note: 
+```
 ```
 PvP:
 - Đối thủ: Moonice (muroku_18)
 - Kết quả: Win 
 - Tỉ số: 4-2
 ```
+```
+PvP:
+- Đối thủ: mHamster
+- Kết quả: Thua
+- Tỉ số: 5-2
+- Note: Thợ lặn có Văn tế: Narita Taigoat quay lại Str từ 8 thành 6
+```
+
 ======

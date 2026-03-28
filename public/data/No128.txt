@@ -1,7 +1,7 @@
 No.128
 Name: 0chjnchjn (tine2417)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,14 +11,13 @@ Ký Sinh:
 Race: Angel
 Sub-race: Archangles
 ```
-
 ```
 Archetype: 
 + Pacifist
 + Chokevy
 + Thinkers
 ```
-``` 
+```
 3 Quirk:  
 + Cruelty
 + Fast Learner
@@ -32,67 +31,63 @@ IQ: 5
 BIQ: 6
 MA: 5
 ```
-
 ```
 Houses: 
 + New London
 ```
-
 ```
-3 Gear:
+4 Gear: 
  + 3 Normal gear:
   - Fishing Rod
   - Empty Stein
   - Wine
- + 0 Legacy gear:
+ + 1 Legacy gear:
   -
 ```
-
 ```
 1 Normal Weapon
 + Backhand Blade
 ```
-
-``` 
+```
 1 Rune: 
 + Shael
 Runeword: Không
 ```
-
 ```
-2 Power: 
+1 Power: 
 + Metamagic
 + Fancy Feet
 + Quas
++ Chaos Enchantment 
 ```
-
 ```
 Char dev: 
 + Mad Scientist
 ```
-
 ```
 Team: 16
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +1 all stats
 - +1 MA
+- Lời Nguyền Địa Ngục, str bản thân từ 9 thành 9, llaW spin lại Str từ 6 thành 4
 ```
 ```
 Other Source:
 - học power: Quas
-- -1 All stats (Chokevy)
+- -2 All stats (Chokevy)
+- 1 Power: Chaos Enchantment (Fast Learn)
+- -1 All Stats (Night Owl)
+- -1 Dura
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Polish cow
@@ -100,6 +95,7 @@ PvE:
 - Tỉ số: 3-3
 - Reward: Nhận Empty Stein và Wine
 - Punishment:
+- Note: 
 ```
 
 ```
@@ -107,6 +103,15 @@ PvP:
 - Đối thủ: Quý Trần Tường
 - Kết quả: Win
 - Tỉ số: 6-1
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: baonine
+- Kết quả: Thắng
+- Tỉ số: 2-4
+- Note: Trước combat: 0chjnchjn: Enlarging
 ```
 
 ======

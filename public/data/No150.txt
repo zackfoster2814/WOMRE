@@ -1,7 +1,7 @@
 No.150
 Name: Myue (_fallen_myue)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Dwarf
 Sub-race: Lùn Xám
 ```
-
 ```
 Archetype: 
 + Conquerer
 ```
-``` 
+```
 6 Quirk:  
 + Shining Brightly
 + Fast Learner
@@ -27,68 +26,63 @@ Archetype:
 ```
 ```
 Str: 6
-Spd: 4 (+3 từ Conquerer)
+Spd: 4
 Dur: 10
 IQ: 7
 BIQ: 8
 MA: 7
 ```
-
 ```
 Houses: 
 + Golden Order (Đã bị đuổi + Rykard Vẫn giữ)
- -> Rykard
+   -> Rykard
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
- + 0 Legacy gear:
-  - 
+2 Gear: 
+ + 1 Normal gear:
+  -
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Backhand Blade (Không dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-0 Power: 
-+ 
+1 Power: 
++
 ```
-
 ```
 Char dev: 
 + SVKS (Quay lại)
 + Lost a Leg
 ```
-
 ```
 Team: 12
 ```
-
 ```
 Lover:
-+ 
++
 ```
 ```
 PvP Reward:
 - +1 Spd
+- Generous (Tặng 2 pvp: +1 Str, +1 Spd)
 ```
 ```
 Other Source:
 - Moonroot (Herbalist) (+1)
+- +2 Dura (Indipedent)
+- Herbalist: thêm 1 pvp
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Slave Knight Gael
@@ -99,6 +93,7 @@ PvE:
   + Nhận +1 stat cao nhất (dura)
   + Nhận +1 stat thấp nhất (spd)
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -106,6 +101,15 @@ PvP:
 - Đối thủ: NhờnNnNn
 - Kết quả: Win
 - Tỉ số: 6-0
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: mrcandy1612
+- Kết quả: Thắng
+- Tỉ số: 2-2
+- Note: Fast Learner: không
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.206
 Name: bo (bo3212)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,81 +11,78 @@ Ký Sinh:
 Race: Troll
 Sub-race: Ice Troll
 ```
-
 ```
 Archetype: 
 + Conquerer
 + Edgelord (Từ Spatula)
 ```
-``` 
+```
 2 Quirk:  
 + Herbalist
 + Training Restricted
 ```
 ```
 Str: 3
-Spd: 9 (+3 từ Conquerer)
+Spd: 9
 Dur: 10
 IQ: 3
 BIQ: 1
 MA: 7
 ```
-
 ```
 Houses: 
 + Roundtable Hold
 ```
-
 ```
-3 Gear: 
+4 Gear: 
  + 3 Normal gear:
-  - Spatula 
+  - Spatula
   - Kẹo
   - Magical Scroll
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - 
 ```
-
 ```
 1 Unique Weapon
 + Green Dragon Crescent Blade (Dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
-0 Power: 
-+ 
+1 Power: 
++
 ```
-
 ```
 Char dev: 
 + Lost a Leg
 ```
-
 ```
 Team: 20
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +1 MA
+- +1 Dura
+- +1 Str
 ```
 ```
 Other Source:
 - Moonroot (+1)
+- Herbalist: Nhận thêm 1 phần thưởng PvP.
+- +1 Dura 
+- +1 Str 
+- Herbalist: Mirage Flower: Nhận thêm 1 phần thưởng PvP
 ```
+
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: The Elder Brain
@@ -93,6 +90,7 @@ PvE:
 - Tỉ số: 5-1
 - Reward: 
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -100,6 +98,15 @@ PvP:
 - Đối thủ: Yun
 - Kết quả: Win
 - Tỉ số: 6-1
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: E4zyyyy
+- Kết quả: Thắng
+- Tỉ số: 4-5
+- Note: bo nhận:  PvP Reward: +1 Dura và +1 Str Herbalist: Nhận thêm 1 phần thưởng PvP.
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.211
 Name: radb1t_fr (radb1t_fr)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,54 +11,49 @@ Ký Sinh:
 Race: Angel
 Sub-race: Archangels
 ```
-
 ```
 Archetype: 
 + Pacifist
 + Fisher
 ```
-``` 
+```
 2 Quirk:  
 + Pure (Không có Đai)
 + Artistic
 + Fast Learner (Từ Char Dev)
 ```
 ```
-Str:10
-Spd:10
-Dur:9
-IQ:1
-BIQ:5
-MA:1
+Str: 10
+Spd: 10
+Dur: 9
+IQ: 1
+BIQ: 5
+MA: 1
 ```
-
 ```
 Houses: 
 + Ban Nhạc Ngọt Đoàn Kết
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
+3 Gear: 
+ + 2 Normal gear:
   - Fishing Rod (Từ Archetype)
   - Radio (Từ House)
- + 0 Legacy gear:
-  - 
+  - Khung Hình Thờ
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
-4 Power: 
+1 Power: 
 + Black Magic
 + Rising Tide
 + Odin Blessing
@@ -67,24 +62,21 @@ Runeword:
 + Encroaching Shadow
 + Frost Armor
 ```
-
 ```
 Char dev: 
 + Seeking Wisdom
 ```
-
 ```
 Team: 7
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - Nhận 2 power Encroaching Shadow, Frost Armor
+- + 1 MA
 ```
 ```
 Other Source:
@@ -92,9 +84,8 @@ Other Source:
 - Học 4 hit combo
 ```
 
-
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Pontiff Sulyvahn
@@ -102,6 +93,7 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -109,6 +101,15 @@ PvP:
 - Đối thủ: Fami
 - Kết quả: Win
 - Tỉ số: 5-2
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Sâm bổ lượng Châu Đốc
+- Kết quả: Thắng
+- Tỉ số: 4-2
+- Note:  Không Fast Learner
 ```
 
 ======

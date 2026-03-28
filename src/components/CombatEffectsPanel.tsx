@@ -79,10 +79,12 @@ interface CombatResultInfo {
 }
 
 interface CombatEffectsPanelProps {
-  player1: { name: string; character?: Character };
-  player2: { name: string; character?: Character };
+  player1: { name: string; character?: Character; no?: number };
+  player2: { name: string; character?: Character; no?: number };
   /** Key thay đổi khi combat mới bắt đầu (e.g. sub-combat) → reset toàn bộ resolved state */
   resetKey?: string | number;
+  /** Disabled items từ inventory click — dùng để ẩn effects của power bị vô hiệu */
+  disabledItems?: Set<string>;
   /** Stats cuối cùng (sau tất cả bonuses) để resolver tính đúng */
   player1ComputedStats?: Character["stats"];
   player2ComputedStats?: Character["stats"];
@@ -1640,6 +1642,27 @@ const EFFECT_DEFS: EffectDef[] = [
       "[GM Action] Quay wheel lần đầu. Nếu thành công → cướp 1 Power ngẫu nhiên của đối thủ. Quay lại ngay. Tiếp tục đến khi thất bại.",
   },
 
+  // Blackjack (Sol + Thul): Trong combat - Gọi Summon Wheel
+  {
+    source: "blackjack",
+    timing: "during_combat",
+    category: "wheel",
+    description: "Blackjack: Trong combat — Gọi ngẫu nhiên 1 Summon từ Summon Wheel.",
+    wheelItems: [
+      { label: "Chihuahua: -1 All Stats", weight: 10, isSuccess: false, color: "#6b7280" },
+      { label: "Mufasa: +3 STR", weight: 12, isSuccess: true, color: "#ef4444" },
+      { label: "Pack of Wolves: +3 SPD", weight: 12, isSuccess: true, color: "#3b82f6" },
+      { label: "Earth Golem: +3 DUR", weight: 12, isSuccess: true, color: "#84cc16" },
+      { label: "Water Elemental: +3 IQ", weight: 12, isSuccess: true, color: "#06b6d4" },
+      { label: "Imp: +3 BIQ", weight: 12, isSuccess: true, color: "#a855f7" },
+      { label: "Igris: +3 MA", weight: 12, isSuccess: true, color: "#f97316" },
+      { label: "Numby: +4 vào 1 chỉ số ngẫu nhiên (Trong Combat)", weight: 12, isSuccess: true, color: "#eab308", meta: { needsStatRoll: true } },
+      { label: "Wyvern's Egg: +2 điểm khởi đầu (Chung kết tổng)", weight: 3, isSuccess: true, color: "#14b8a6", meta: { isWyvernsEgg: true } },
+      { label: "Creator's Cat: Nhận Char Dev 'Creator's Favor'", weight: 3, isSuccess: true, color: "#ec4899", meta: { isCreatorsCat: true } },
+    ],
+    gmNote: "Kết quả summon sẽ áp dụng vào combat này. Sau combat sẽ quay tiếp wheel 97%/3% xem có giữ lại không.",
+  },
+
   // Blackjack (Sol + Thul): Gọi Summon ngẫu nhiên, 97% bỏ / 3% giữ sau combat
   {
     source: "blackjack",
@@ -2290,6 +2313,8 @@ function buildPendingEffects(
   preCombatOnly: boolean,
   opponentComputedStats?: Character["stats"],
   afterCombatOnly?: boolean,
+  disabledItems?: Set<string>,
+  playerNo?: number,
 ): CombatPendingEffect[] {
   const result = combatResult ?? EMPTY_COMBAT_RESULT;
   const isWinner = result.winner === playerLabel;
@@ -2345,9 +2370,14 @@ function buildPendingEffects(
     ...(character.race?.subRace
       ? character.race.subRace.split("+").map((s) => s.trim().toLowerCase())
       : []),
-    // Powers (e.g. "Encroaching Shadow")
+    // Powers (e.g. "Encroaching Shadow") — skip disabled powers
     ...(character.powers || [])
       .filter((p: any) => !p.isLost)
+      .filter((p: any) => {
+        if (!disabledItems || playerNo === undefined) return true;
+        const name = typeof p === "string" ? p : (p?.name ?? "");
+        return !disabledItems.has(`${playerNo}-power-${name}`);
+      })
       .map((p: any) => (typeof p === "string" ? p : p.name).toLowerCase()),
     // Gears (for gear effects with wheel probability, e.g. Cursed Coin, Staff of the Fallen One)
     ...[
@@ -2366,12 +2396,11 @@ function buildPendingEffects(
           .replace(/\s*\([^)]*\)\s*$/g, "")
           .toLowerCase(),
       ),
-    // Runewords (for runeword effects with wheel probability, e.g. Double Claws, Blackjack, Pennyworthy, Affection)
-    ...((character as any).runes?.runewords || [])
-      .filter((r: any) => !r.isLost)
-      .map((r: any) =>
-        (typeof r === "string" ? r : (r?.name ?? "")).toLowerCase(),
-      ),
+    // Runeword (single string field: character.runes.runeword)
+    ...(() => {
+      const rw = (character as any).runes?.runeword;
+      return rw ? [rw.toLowerCase()] : [];
+    })(),
     // Char Dev entries (e.g. Mad Scientist)
     ...((character as any).charDevs || [])
       .filter((c: any) => !c.isLost)
@@ -2730,6 +2759,7 @@ export const CombatEffectsPanel = ({
   onWheelResolved,
   onPendingPreCombatChange,
   resetKey,
+  disabledItems,
 }: CombatEffectsPanelProps) => {
   const buildEffects = () => {
     const list: CombatPendingEffect[] = [];
@@ -2744,6 +2774,8 @@ export const CombatEffectsPanel = ({
           preCombatOnly,
           player2ComputedStats,
           afterCombatOnly,
+          disabledItems,
+          player1.no,
         ),
       );
     }
@@ -2758,6 +2790,8 @@ export const CombatEffectsPanel = ({
           preCombatOnly,
           player1ComputedStats,
           afterCombatOnly,
+          disabledItems,
+          player2.no,
         ),
       );
     }
@@ -2784,7 +2818,7 @@ export const CombatEffectsPanel = ({
       }));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [player1.character, player2.character, combatResult]);
+  }, [player1.character, player2.character, combatResult, disabledItems]);
 
   // Báo cho parent biết số before_combat wheel effects chưa resolved
   useEffect(() => {

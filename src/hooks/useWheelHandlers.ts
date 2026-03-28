@@ -417,7 +417,7 @@ export function useWheelHandlers({
           { player: actualTarget, text: bubbleText, isPositive: false },
         ]);
       }
-    } else if (sourceName === "summoning scroll") {
+    } else if (sourceName === "summoning scroll" || sourceName === "blackjack") {
       const label = item.label;
       const statDeltas: Partial<Record<keyof CharacterStats, number>> = {};
       let startScoreDelta = 0;

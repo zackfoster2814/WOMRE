@@ -1,7 +1,7 @@
 No.67
 Name: KuSenpai (kusenpai)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Dwarf
 Sub-race: Lùn xám
 ```
-
 ```
 Archetype: 
 + Edgelord
 ```
-``` 
+```
 3 Quirk:  
 + Training Restricted
 + Brave
@@ -30,73 +29,73 @@ IQ: 5
 BIQ: 6
 MA: 10
 ```
-
 ```
 Houses: 
 + Hallownest
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
- + 0 Legacy gear:
-  - 
+2 Gear: 
+ + 1 Normal gear:
+  -
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Unique Weapon
 + River of Blood (Dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-3 Power: 
+1 Power: 
 + Black Magic
 + Uno Reverse Card
 + AIDS
++ Age Manipulation
++ Mind Control
 ```
-
 ```
 Char dev: 
 + Metamorphosis 
   -> +7 Spd
 ```
-
 ```
 Team: 
 ```
-
 ```
 Lover:
 + Silver Chariot (galangal)
 ```
-
 ```
 PvP Reward:
 - +2 str (+2 chỉ số ngẫu nhiên x3)
 - +2 spd (+2 chỉ số ngẫu nhiên x3)
 - +2 IQ (+2 chỉ số ngẫu nhiên x3)
+- +2 Power: Mind Control, Age Manipulation
 ```
-
 ```
 Other Source:
 - -2 Dura (AIDS)
+- -2 Dura (AIDS)
 ```
-
 
 ======
-Battle Log:
-```
+Battle Log: 
 ```
 PvP:
 - Đối thủ: wibuslayer786 (wibuslayer786)
 - Kết quả: Win
 - Tỉ số: 5-2
 ```
+```
+PvP:
+- Đối thủ: Warmbunny
+- Kết quả: Thắng
+- Tỉ số: 4-3
+- Note: KuSenpai Black Magic: -2 IQ
+```
+
 ======

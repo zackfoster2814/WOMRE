@@ -1,7 +1,7 @@
 No.240
 Name: kinbum
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,74 +11,63 @@ Ký Sinh:
 Race: Merfolk
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Cursed of 36k
 + Farmer
  - Normal Farmer
 ```
-``` 
+```
 2 Quirk:  
 + Herbalist
 + Brainrot
 + Blind
 ```
 ```
-Str:4 Cursed of 36k
-Spd:7 Cursed of 36k
-Dur:3 Cursed of 36k
-IQ:5 Cursed of 36k
-BIQ:4 Cursed of 36k
-MA:8 Cursed of 36k
+Str: 4
+Spd: 7
+Dur: 3
+IQ: 5
+BIQ: 4
+MA: 8
 ```
-
 ```
 Houses: 
 + Naga
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
-  - 
-  - 
- + 0 Legacy gear:
-  - 
+3 Gear: 
+ + 2 Normal gear:
+  -
+  -
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Whip (Dùng được)
 ```
-
-``` 
-2 Rune: 
-+ Ith
+```
+1 Rune: 
 + Ort
 Runeword: Pennyworthy
 ```
-
 ```
-0 Power:  
+1 Power: 
 + Ballet Dancing (từ PvE reward)
 ```
-
 ```
 Char dev: 
 + Metamorphosis (Pennyworthy Deny AIDS) 
   -> Nhận +7 Dura
 ```
-
 ```
 Team: 10
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 Other Source:
 - +2 str (Pennyworthy-Win)
@@ -86,12 +75,12 @@ Other Source:
 - +2 biq (Pennyworthy-Win)
 - Herbalist - Mistpetal
 - +1 all stats (Naga)
+- Sunberry(Thắng: Nhận +2 vào chỉ số cao nhất.)
+- +2 MA
 ```
 
-
-
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Sky Dancer
@@ -101,6 +90,7 @@ PvE:
   + Nhận Power Ballet Dancing
   + +1 All stats
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -108,5 +98,15 @@ PvP:
 - Đối thủ: Son WuKong
 - Kết quả: Win
 - Tỉ số: 3-4
+- Note: 
 ```
+
+```
+PvP:
+- Đối thủ: GiCi
+- Kết quả: Thắng
+- Tỉ số: 0-4
+- Note: Trong combat: Kinbum Rau má nguyền: str Kinbum Blind: IQ, MA PvP Reward: (Brainrot) Naga: +1 power: Artist (không nhận)
+```
+
 ======

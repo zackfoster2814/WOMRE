@@ -1,6 +1,6 @@
 No.213
 Name: Yousei (yousei_7831)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -106,6 +106,13 @@ PvP:
 - Đối thủ: cá hồi chấm mắm tôm
 - Kết quả: Win
 - Tỉ số: 5-2
+```
+
+```
+PvP:
+- Đối thủ: CúNga
+- Kết quả: Thua
+- Tỉ số: 2-4
 ```
 
 ======

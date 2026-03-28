@@ -1,6 +1,6 @@
 No.187
 Name: Tuấn Anh (tuananh260601)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,71 +11,67 @@ Ký Sinh:
 Race: Demi-god
 Sub-race: Moon
 ```
-
 ```
-Archetype:
+Archetype: 
 + Pacifist (từ Moon)
 + Mid
 ```
-``` 
+```
 1 Quirk:  
 + Slow Healer 
 ```
 ```
-Str: 0 (ban đầu là 5, trừ do PvE Punishment) 
+Str: 0
 Spd: 5
 Dur: 5
 IQ: 5
 BIQ: 5
 MA: 5
 ```
-
 ```
 Houses: 
 + Winterhome
 ```
-
 ```
-2 Gear: 
- + 0 Normal gear:
+5 Gear: 
+ + 4 Normal gear:
   - Soap
   - Thuốc tráng dương (đã mất)
-  - Văn tế (Winterhome)
-  - Cuộn khăn giấy(Winterhome)
- + 0 Legacy gear:
-  - 
+  - Văn tế
+  - Cuộn khăn giấy
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-1 Unique Weapon
-+ Dawnbreaker (không dùng được)
+1 Normal Weapon
++ Dawnbreaker (không dùng được) (Unique)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-3 Power: 
+1 Power: 
 + Body Enhancing
 + Blood Frenzy
 + No stopping me
++ Megamagic (từ King's Landing)
 ```
-
 ```
 Char dev: 
 + King's Landing
 ```
-
 ```
 Team: 1
 ```
-
 ```
 Lover:
-+ 
++
+```
+```
+PvP Reward:
+- +1 IQ
 ```
 ```
 Other Source:
@@ -84,19 +80,15 @@ Other Source:
 - -1 DUR (thuốc tráng dương)
 ```
 
-```
-PvP Reward:
-- +1 IQ
-```
-
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Dreglord
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: -5 base Str
+- Note: 
 ```
 
 ```
@@ -104,6 +96,15 @@ PvP:
 - Đối thủ: vuvip
 - Kết quả: Win
 - Tỉ số: 2-2
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Nốt Ruồi Lệch Pha
+- Kết quả: Thua
+- Tỉ số: 1-5
+- Note: Tuấn Anh King's Landing: Cả Gia Tộc nhận Metamagic Tuấn Anh Văn tế: Tyrunny BIQ từ 7 thành 6
 ```
 
 ======

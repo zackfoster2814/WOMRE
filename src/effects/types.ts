@@ -378,6 +378,7 @@ export interface CombatContext {
     stats: CharacterStats;
     baseStats?: CharacterStats;  // Base stats (từ vòng quay) cho condition check
     race: string;
+    subRace?: string;  // Effective race cho Reincarnator: actualRace (phần sau "->"), dùng để check race_match
     raceTier: number;
     hasLover: boolean;
     powers: string[];

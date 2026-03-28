@@ -58,6 +58,7 @@ Runeword: Không
 ```
 0 Power: 
 + 67 (từ PvE Reward)
++ Fist Fighting (từ mNicre)
 ```
 
 ```

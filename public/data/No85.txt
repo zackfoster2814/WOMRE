@@ -25,7 +25,7 @@ Str: 6 (Được quay)
 Spd: 1 (Không được quay)
 Dur: 3 (Được quay)
 IQ: 1 (Không được quay)
-BIQ: 7 (Được quay)
+BIQ: 6 (từ 7 giảm lại do văn tế) (Được quay)
 MA: 7 (Được quay)
 ```
 

@@ -8,8 +8,8 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Reincarnator 
-Sub-race: Skeleton (Skibidi -> Rồng)
+Race: Reincarnator (Skibidi -> Rồng)
+Sub-race: Skeleton 
 ```
 
 ```

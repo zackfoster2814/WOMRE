@@ -25,6 +25,7 @@ import {
   getAvatarUrl,
   AVATAR_EXTENSIONS,
 } from "../utils/basePath";
+import { PERSONAL_BGM_MANIFEST, PERSONAL_BGM_FOLDER } from "../components/CombatAudioController";
 import {
   fetchAllPlayerTexts,
   fetchPlayerText,
@@ -2039,6 +2040,25 @@ const PlayerDetailModal = ({
   onClose,
   allPlayers,
 }: PlayerDetailModalProps) => {
+  // ── PersonalBGM khi mở dialog ──────────────────────────────────────────
+  useEffect(() => {
+    const files = PERSONAL_BGM_MANIFEST[character.no];
+    if (!files || files.length === 0) return;
+
+    const audios: HTMLAudioElement[] = files.map((file) => {
+      const audio = new Audio(getAssetPath(`${PERSONAL_BGM_FOLDER}${file}`));
+      audio.loop = true;
+      audio.volume = 0.6;
+      audio.play().catch(() => {});
+      return audio;
+    });
+
+    return () => {
+      audios.forEach((a) => { a.pause(); a.src = ""; });
+    };
+  }, [character.no]);
+  // ────────────────────────────────────────────────────────────────────────
+
   const [showBreakdown, setShowBreakdown] = useState(false);
   const [openArchetypeTooltip, setOpenArchetypeTooltip] = useState<
     string | null

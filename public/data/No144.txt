@@ -1,6 +1,6 @@
 No.144
 Name: Hayato (hayatoo_o)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Dwarf
 Sub-race: Lùn Xám
 ```
-
 ```
 Archetype: 
 + Loyal
 ```
-``` 
+```
 3 Quirk:  
 + Deaf
 + Brainrot
@@ -30,62 +29,49 @@ IQ: 5
 BIQ: 5
 MA: 1
 ```
-
 ```
 Houses: 
 + Ban Nhạc Ngọt Đoàn Kết
 ```
-
 ```
-2 Gear: 
+3 Gear: 
  + 2 Normal gear:
   - Bò khô (Từ House)
   - Sổ tay
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
 1 Power: 
 + Anti-Magic Barrier (đã mất)
 ```
-
 ```
 Char dev: 
 + Seeking Wisdom
 ```
-
 ```
 Team: 8
 ```
-
 ```
 Lover:
 + TheViet (c9ru5)
 ```
-
 ```
 PvP Reward:
 - +1 BIQ
 ```
-```
-Other source:
-- +1 BIQ
-```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Allfather
@@ -95,10 +81,15 @@ PvE:
   + +4 Str
   + +4 IQ
 - Punishment: 
+- Note: 
+```
+
 ```
 PvP:
-- Đối thủ: Creeper (creeper717)
-- Kết quả: Win
-- Tỉ số: 0-5
+- Đối thủ: Elai
+- Kết quả: Thua
+- Tỉ số: 3-3
+- Note: 
 ```
+
 ======

@@ -1,6 +1,6 @@
 No.59
 Name: Johnny Walkaways (johnnywalkaways)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Human
 Sub-race: Da Trắng
 ```
-
 ```
 Archetype: 
 + Mid
 ```
-``` 
+```
 2 Quirk:  
 + Shining Brightly
 + Cruelty
@@ -29,64 +28,56 @@ IQ: 5
 BIQ: 5
 MA: 5
 ```
-
 ```
 Houses: 
 + Kazuya Kinoshita's House (Bay khỏi nhà vì No more Home)
 ```
-
 ```
-1 Gear: 
+2 Gear: 
  + 1 Normal gear:
   - Sổ tay
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Claymore (Dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-2 Power: 
+1 Power: 
 + The Coast is Clear
 + Golden Vow
 ```
-
 ```
 Char dev: 
 + No more Home
 ```
-
 ```
 Team: 29
 ```
-
 ```
 Lover:
 +
 ```
-
 ```
 PvP Reward:
 - +1 Spd
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Brock
 - Kết quả: Lose
 - Tỉ số: 0-6
 - Punishment: Không bị phạt
+- Note: 
 ```
 
 ```
@@ -94,5 +85,15 @@ PvP:
 - Đối thủ: Shirin
 - Kết quả: Win
 - Tỉ số: 6-1
+- Note: 
 ```
+
+```
+PvP:
+- Đối thủ: Kẹo Con
+- Kết quả: Thua
+- Tỉ số: 2-5
+- Note: Trong combat: Johnny Walkaways Cruelty: Str
+```
+
 ======

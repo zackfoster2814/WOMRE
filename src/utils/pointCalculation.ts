@@ -378,13 +378,9 @@ export function computeRoundPoints(
       void breakdown;
     }
     // engineBase: điểm mà engine (computeRoundStep) đã tính — dùng để tính diff patch đúng
-    // Engine tính: base 1 + Divine Smite (nếu có) = 1 + divineSmiteBonus
-    // Gambler thay thế base nên không phải "engine added on top of 1"
-    const engineBase = hasGambler
-      ? gamblerSpun?.isSuccess
-        ? 2
-        : 0
-      : 1 + divineSmiteBonus;
+    // Engine luôn tính +1 khi thắng (+ Divine Smite nếu có)
+    // Gambler: pts=2 hoặc 0, engineBase=1 → diff=+1 hoặc -1
+    const engineBase = 1 + divineSmiteBonus;
     return { pts: base, pending: false, color, autoApplied, engineBase };
   }
 

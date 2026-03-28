@@ -1,6 +1,6 @@
 ﻿import { useState, useMemo } from "react";
 import { PvPPlayerData, CombatResult, StepCombatState } from "../types/battleZone";
-import { EffectResolver } from "../effects/resolver";
+import { EffectResolver, getEffectiveRace } from "../effects/resolver";
 import { getPerRoundEffects } from "../utils/combatStats";
 
 type AfterCombatEntry = {
@@ -183,7 +183,7 @@ const liveScore = useMemo(() => {
     if (!self.character) return 0;
     const selfNo = self.no;
     const oppChar = opponent.character;
-    const oppRace = oppChar?.race?.race || opponent.race || "";
+    const oppRace = getEffectiveRace(oppChar, opponent.race);
     const oppHasLover = !!(
       oppChar?.lover &&
       (Array.isArray(oppChar.lover)
@@ -346,18 +346,7 @@ const effectiveWinner = useMemo((): "player1" | "player2" | null => {
       (a: any) => (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase(),
     );
     if (!archetypes.some((a) => a.includes("devotee"))) return false;
-    // Lấy race thực của đối thủ (Reincarnator → subrace, bỏ phần bổ sung trong ngoặc)
-    const oppMainRace = ((opp.character as any)?.race?.race || "")
-      .toLowerCase()
-      .trim();
-    let oppEffectiveRace = oppMainRace;
-    if (oppMainRace === "reincarnator") {
-      const subRaceRaw = ((opp.character as any)?.race?.subRace || "")
-        .split("(")[0]
-        .trim()
-        .toLowerCase();
-      if (subRaceRaw) oppEffectiveRace = subRaceRaw;
-    }
+    const oppEffectiveRace = getEffectiveRace(opp.character as any);
     return (
       oppEffectiveRace === "god" ||
       oppEffectiveRace === "demi-god" ||
@@ -371,6 +360,8 @@ const effectiveWinner = useMemo((): "player1" | "player2" | null => {
   const { s1, s2 } = effectiveScores;
   if (s1 > s2) return "player1";
   if (s2 > s1) return "player2";
+  // Score bằng nhau: nếu combatResult.winner đã được set bởi Egoist/autoLose override → dùng luôn
+  if (combatResult.winner) return combatResult.winner;
   // Tie: check if same race → require tiebreaker wheel
   const p1Race = (player1.character as any)?.race?.race || "";
   const p2Race = (player2.character as any)?.race?.race || "";

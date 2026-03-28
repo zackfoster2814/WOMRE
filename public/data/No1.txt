@@ -1,6 +1,6 @@
 No.1
 Name: Đừng Nhờn với Two Fingers (dabotnhondc1nam)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Uma
 Sub-race: Rice Shower + Agnes Tachyon
 ```
-
 ```
 Archetype: 
 + Egoist
 ```
-``` 
+```
 1 Quirk:  
 + Resilient
 ```
@@ -28,7 +27,6 @@ IQ: 5
 BIQ: 6
 MA: 5
 ```
-
 ```
 Houses: 
 + Tracen Academy
@@ -36,7 +34,6 @@ Houses:
  -> +3 Spd
  -> +2 Dura
 ```
-
 ```
 0 Gear: 
  + 0 Normal gear:
@@ -44,7 +41,6 @@ Houses:
  + 0 Legacy gear:
   - 
 ```
-
 ```
 1 Unique Weapon
 + Battlefury
@@ -55,7 +51,6 @@ Houses:
 + 
 Runeword: Không
 ```
-
 ```
 4 Power: 
 + U=ma2 (Từ Sub-Race) (đã mất do lover thó mất)
@@ -107,6 +102,15 @@ PvP:
 - Đối thủ: vietbuon
 - Kết quả: Win
 - Tỉ số: 6-0
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Nime
+- Kết quả: Thua
+- Tỉ số: 2-2
+- Note: 
 ```
 
 ======

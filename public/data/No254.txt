@@ -62,6 +62,7 @@ Runeword: Không
 + Sonic Scream
 + Memory Alter
 + Spell Flux (từ Stargazer)
++ Megamagic (từ King's Landing)
 ```
 
 ```

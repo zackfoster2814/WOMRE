@@ -2,7 +2,7 @@
 // BattleZone pure combat utility functions (no React)
 // ============================================================================
 import { Character, CharacterStats } from "../types/character";
-import { EffectResolver } from "../effects/resolver";
+import { EffectResolver, getEffectiveRace } from "../effects/resolver";
 import { EffectRegistry } from "../effects/registry";
 import { RACE_TIERS, STAT_NAME_MAP, _ALL_STAT_KEYS } from "../constants/battleZone";
 import { InventoryItem } from "../types/battleZone";
@@ -202,6 +202,7 @@ export function applyBeforeCombatStatMods(
   opponentRaceTier?: number,
   opponentChar?: Character | null,
 ): void {
+  const effOpponentRace = getEffectiveRace(opponentChar, opponentRace);
   const fx = EffectResolver.calculateCharacterEffects(char, { isPvE: false });
   for (const ce of fx.combatEffects) {
     if (ce.isActive === false) continue;
@@ -301,12 +302,12 @@ export function applyBeforeCombatStatMods(
     const conditionMet = conditions.every((cond: any) => {
       if (cond.type === "race_match" && cond.races) {
         return cond.races.some(
-          (r: string) => r.toLowerCase() === opponentRace.toLowerCase(),
+          (r: string) => r.toLowerCase() === effOpponentRace,
         );
       }
       if (cond.type === "race_match" && cond.excludeRaces) {
         return !cond.excludeRaces.some(
-          (r: string) => r.toLowerCase() === opponentRace.toLowerCase(),
+          (r: string) => r.toLowerCase() === effOpponentRace,
         );
       }
       if (cond.type === "race_tier_compare") {
@@ -404,17 +405,19 @@ export function calcStatsWithBeforeCombat(
       .filter((pw: any) => !pw.isLost)
       .some(
         (pw: any) =>
-          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
-          "fair duel",
-      ) && !disabledItems.has(`${playerNo}-power-Fair Duel`);
+          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith(
+            "fair duel",
+          ),
+      ) && !([...disabledItems].some(k => k.startsWith(`${playerNo}-power-Fair Duel`)));
   const oppHasFairDuelBC = opponentChar
     ? ((opponentChar as any).powers || [])
         .filter((pw: any) => !pw.isLost)
         .some(
           (pw: any) =>
-            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
-            "fair duel",
-        ) && !opponentDisabledItems.has(`${opponentNo}-power-Fair Duel`)
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith(
+              "fair duel",
+            ),
+        ) && !([...opponentDisabledItems].some(k => k.startsWith(`${opponentNo}-power-Fair Duel`)))
     : false;
   const fairDuelActiveBC = selfHasFairDuel || oppHasFairDuelBC;
 

@@ -1,7 +1,7 @@
 No.62
 Name: _paower (baoissleepy)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -12,12 +12,11 @@ Race: Giant
 Sub-race:
 GiantBonusApplied: Yes
 ```
-
 ```
 Archetype: 
 + Follower of the Two Fingers
 ```
-``` 
+```
 2 Quirk:  
 + Slow Metabolism
 + Cautious
@@ -30,57 +29,52 @@ IQ: 7 ban đầu là 9 (inversion -> 2, Giant +5)
 BIQ: 8 ban đầu là 3 (inversion -> 8)
 MA: 5 ban đầu là 6 (inversion -> 5)
 ```
-
 ```
 Houses: 
 + Golden Order
  -> Malenia
 ```
-
 ```
-2 Gear: 
- + 2 Normal gear:
+5 Gear: 
+ + 4 Normal gear:
   - Empty Stein
   - Silver Steed
   - Buckler
- + 0 Legacy gear:
+  - Swift Boots
+ + 1 Legacy gear:
   - 
 ```
-
 ```
 1 Normal Weapon
 + Grimoire (Dùng được)
 ```
-
-``` 
+```
 1 Rune: 
 + Tir
 Runeword: Không
 ```
-
 ```
-2 Power: 
+1 Power: 
 + Luck Manipulation(Từ House)
 + Hydrate(Từ House)
 + Adapt (từ 2 ngón)
++ Arcana Blast (từ 2 ngón)
 ```
-
 ```
 Char dev: 
 + Inversion
 ```
-
 ```
 Team: 8
 ```
-
 ```
 Lover:
-+ 
++
 ```
 ```
 PvP Reward:
 - Nhận 1 gear: Buckler
+- Nhận 1 Gear: Swift Boots
 ```
 ```
 Other Source:
@@ -88,10 +82,12 @@ Other Source:
 - Adapt (2 ngón Ako Darling)
 - -1 IQ 
 - -1 BIQ
+- Arcana Blast (2 ngón Trung Kiên)
+- +2 Dura
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Allfather
@@ -101,6 +97,7 @@ PvE:
   + +4 Str
   + +4 IQ
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -108,6 +105,15 @@ PvP:
 - Đối thủ: uchihahahaha5296
 - Kết quả: Win
 - Tỉ số: 1-1
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: trantrinhtri
+- Kết quả: Thắng
+- Tỉ số: 1-3
+- Note: Trước combat: Golden Coin: Power Negation: Adapt
 ```
 
 ======

@@ -1,6 +1,6 @@
 No.154
 Name: Bưởi (ngbxxx)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -99,6 +99,13 @@ PvP:
 - Đối thủ: Farm Mạnh Quỳnh
 - Kết quả: Win
 - Tỉ số: 4-2
+```
+
+```
+PvP:
+- Đối thủ: nguoisai
+- Kết quả: Thua
+- Tỉ số: 1-4
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.103
 Name: Kẹo Con (su167)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,13 +11,12 @@ Ký Sinh:
 Race: Uma
 Sub-race: Silence Suzuka + Haru Urara
 ```
-
 ```
 Archetype: 
 + X
  -> The Johnnies
 ```
-``` 
+```
 2 Quirk:  
 + Shining Brightly
 + Training Restricted
@@ -30,75 +29,74 @@ IQ: 1
 BIQ: 5
 MA: 3 (từ 10 do cursed)
 ```
-
 ```
 Houses: 
 + Tracen Academy
- -> +1 Str
- -> +1 Spd
- -> +1 Dura
+  -> +1 Str
+  -> +1 Spd
+  -> +1 Dura
 ```
-
 ```
-0 Gear: 
- + 0 Normal gear:
+2 Gear: 
+ + 1 Normal gear:
   - 
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - 
 ```
-
 ```
 1 Normal Weapon
 + Uchigatana (Dùng được)
 ```
-
-``` 
-2 Rune: 
+```
+1 Rune: 
 + Sol
 + Sol
 Runeword: The Twin
 ```
 ```
-Summon: 
-+ Igris
-```
-```
-0 Power: 
+1 Power: 
 + Cursed
 ```
-
 ```
 Char dev: 
 + True Heir of the Emirate🍀
 ```
-
 ```
 Team: 
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +2 IQ (+2 Stat thấp nhất)
+- +1 Spd
 ```
 ```
 Other Source:
 - Nhận Igris (The Johnnies)
+- +2 Str (The Twin kích hoạt)
+- +2 Dura (The Twin kích hoạt)
+- Nhận Numby (The Johnnies)
 ```
 
 ======
-Battle Log:
-```
-```
-
+Battle Log: 
 ```
 PvP:
 - Đối thủ: 2FaceCat
 - Kết quả: Win
 - Tỉ số: 5-3
+- Note: 
 ```
+
+```
+PvP:
+- Đối thủ: Johnny Walkaways
+- Kết quả: Thắng
+- Tỉ số: 2-5
+- Note: 
+```
+
 ======

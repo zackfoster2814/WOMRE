@@ -8,7 +8,7 @@ import {
   RoundEvent,
   DothrakiRule,
 } from "../types/battleZone";
-import { EffectResolver } from "../effects/resolver";
+import { EffectResolver, getEffectiveRace } from "../effects/resolver";
 import { EffectRegistry } from "../effects/registry";
 import { _ALL_STAT_KEYS } from "../constants/battleZone";
 import {
@@ -124,6 +124,7 @@ export function useStartCombat(params: UseStartCombatParams): {
       preBiqFiredHandlersRef,
       EffectResolver,
       EffectRegistry,
+      allPlayers,
     } = params;
 
     if (!player1 || !player2) return;
@@ -190,8 +191,8 @@ export function useStartCombat(params: UseStartCombatParams): {
     // Chúng được reset khi đổi matchup (setPlayer1/setPlayer2).
     setSummoningScrollResult({});
     setCombatConfirmed(false);
-    const p2Race = player2.character?.race?.race || player2.race || "";
-    const p1Race = player1.character?.race?.race || player1.race || "";
+    const p2Race = getEffectiveRace(player2.character, player2.race);
+    const p1Race = getEffectiveRace(player1.character, player1.race);
 
     // Compute starting points from combat_points effects (conditional ones like Freyja, Bragi, Asmodeus, Thor, Belphegor)
     const calcStartingPoints = (
@@ -201,7 +202,7 @@ export function useStartCombat(params: UseStartCombatParams): {
       if (!self.character) return 0;
       const selfNo = self.no;
       const oppChar = opponent.character;
-      const oppRace = oppChar?.race?.race || opponent.race || "";
+      const oppRace = getEffectiveRace(oppChar, opponent.race);
       const oppHasLover = !!(
         oppChar?.lover &&
         (Array.isArray(oppChar.lover)
@@ -691,14 +692,7 @@ export function useStartCombat(params: UseStartCombatParams): {
         const oppMainRace = ((opp.character as any)?.race?.race || "")
           .toLowerCase()
           .trim();
-        let oppEffRace = oppMainRace;
-        if (oppMainRace === "reincarnator") {
-          const sub = ((opp.character as any)?.race?.subRace || "")
-            .split("(")[0]
-            .trim()
-            .toLowerCase();
-          if (sub) oppEffRace = sub;
-        }
+        const oppEffRace = getEffectiveRace((opp.character as any)) || oppMainRace;
         return ["god", "demi-god", "demi god", "demigod"].includes(oppEffRace);
       };
       const p1Auto = checkDevotee(player1, player2);
@@ -905,6 +899,17 @@ export function useStartCombat(params: UseStartCombatParams): {
           (oppChar?.powers || []).filter((p: any) => !p?.isLost) || [];
         const oppPowerCount = oppPowers.length;
 
+        // Fair Duel: nếu bất kỳ ai có Fair Duel active → miễn nhiễm debuff từ đối thủ
+        const selfHasFairDuel = selfPowers.some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith("fair duel"),
+        ) && !([...effectiveDisabledItems].some(k => k.startsWith(`${player.no}-power-Fair Duel`)));
+        const oppHasFairDuel = oppPowers.some(
+          (pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith("fair duel"),
+        ) && oppChar && !([...effectiveDisabledItems].some(k => k.startsWith(`${(oppChar as any).no ?? ""}-power-Fair Duel`)));
+        const fairDuelActive = selfHasFairDuel || oppHasFairDuel;
+
         for (const ce of fx.combatEffects) {
           if (ce.isActive === false) continue;
           if (ce.effect?.timing !== "before_combat") continue;
@@ -999,6 +1004,15 @@ export function useStartCombat(params: UseStartCombatParams): {
 
           // Sarastro's Flute: -1 all stats đối thủ với mỗi 3 power họ có (không tính isLost)
           if (handler === "sarastro_flute_debuff") {
+            if (fairDuelActive) {
+              preCombatEvents.push({
+                player: playerSide,
+                source: srcName,
+                description: `Fair Duel: Sarastro's Flute bị chặn — đối thủ miễn nhiễm debuff`,
+                type: "info",
+              });
+              continue;
+            }
             const debuff = Math.floor(oppPowerCount / 3);
             if (debuff > 0) {
               const STAT_KEYS_SHORT: (keyof CharacterStats)[] = [
@@ -1095,6 +1109,61 @@ export function useStartCombat(params: UseStartCombatParams): {
             continue;
           }
 
+          // Death's Scythe: debuff đối thủ, +1 per 51 người chết (đếm số trận R256+R128 đã đánh)
+          if (handler === "deaths_scythe_scaling_debuff") {
+            // Đếm số player bị loại ở R256 và R128 từ allPlayers
+            const deadCount = allPlayers.filter(
+              (p) => p.character?.tournament?.status === "eliminated",
+            ).length;
+            const debuff = Math.floor(deadCount / 51);
+            if (debuff > 0) {
+              const STAT_KEYS_DS: (keyof CharacterStats)[] = [
+                "str", "spd", "dur", "iq", "biq", "ma",
+              ];
+              for (const stat of STAT_KEYS_DS)
+                applyStatDelta(oppBaseStats, stat, -debuff);
+              preCombatEvents.push({
+                player: oppSide,
+                source: srcName,
+                description: `Death's Scythe: ${deadCount} người chết → -${debuff} tất cả chỉ số đối thủ`,
+                type: "stat_debuff",
+              });
+            } else {
+              preCombatEvents.push({
+                player: playerSide,
+                source: srcName,
+                description: `Death's Scythe: ${deadCount} người chết, chưa đủ 51 → không kích hoạt`,
+                type: "info",
+              });
+            }
+            continue;
+          }
+
+          // Giant Slayer: +1 điểm per 4 Base Dura của đối thủ (tối đa 2)
+          if (handler === "giant_slayer_dura_bonus") {
+            const oppDur = (oppBaseStats as any).dur ?? 0;
+            const points = Math.min(2, Math.floor(oppDur / 4));
+            if (points > 0) {
+              // Cộng trực tiếp vào điểm khởi đầu
+              if (playerSide === "player1") init.p1Score += points;
+              else init.p2Score += points;
+              preCombatEvents.push({
+                player: playerSide,
+                source: srcName,
+                description: `Giant Slayer: đối thủ có ${oppDur} Base Dura → +${points} điểm`,
+                type: "point_change",
+              });
+            } else {
+              preCombatEvents.push({
+                player: playerSide,
+                source: srcName,
+                description: `Giant Slayer: đối thủ có ${oppDur} Base Dura, chưa đủ 4 → không cộng điểm`,
+                type: "info",
+              });
+            }
+            continue;
+          }
+
           // Adapt: log GM action
           if (handler === "adapt_disable_known_powers") {
             const knownPowers: string[] =
@@ -1127,8 +1196,7 @@ export function useStartCombat(params: UseStartCombatParams): {
               const selfTier = player.raceTier ?? 0;
               const oppPlayer = playerSide === "player1" ? player2 : player1;
               const oppTier = oppPlayer?.raceTier ?? 0;
-              const oppRaceStr =
-                (oppChar as any)?.race?.race?.toLowerCase() ?? "";
+              const oppRaceStr = getEffectiveRace(oppChar);
               const condMet = effectConditions.every((cond: any) => {
                 if (cond.type === "race_tier_compare") {
                   if (!cond.tierOperator) return false;
@@ -1186,11 +1254,21 @@ export function useStartCombat(params: UseStartCombatParams): {
             const val = ce.effect?.value ?? 0;
             const stat = ce.effect?.stat ?? "";
             if (val && stat) {
+              // Fair Duel: block debuff lên đối thủ
+              if (val < 0 && fairDuelActive) {
+                const statLabel = STAT_LABEL[stat] ?? stat.toUpperCase();
+                preCombatEvents.push({
+                  player: oppSide,
+                  source: srcName,
+                  description: `Fair Duel: ${val} ${statLabel} từ ${srcName} bị chặn`,
+                  type: "info",
+                });
+                continue;
+              }
               // Check conditions (e.g. Holy Symbol race_match)
               const effectConditionsOpp: any[] =
                 (ce.effect as any).conditions || [];
-              const oppRaceStrOpp =
-                (oppChar as any)?.race?.race?.toLowerCase() ?? "";
+              const oppRaceStrOpp = getEffectiveRace(oppChar);
               const condMetOpp = effectConditionsOpp.every((cond: any) => {
                 if (cond.type === "race_match" && cond.races) {
                   return cond.races.some(
@@ -1399,7 +1477,7 @@ export function useStartCombat(params: UseStartCombatParams): {
               "skeleton",
               "goblin",
             ];
-            const oppRace = (oppChar?.race?.race || "").toLowerCase();
+            const oppRace = getEffectiveRace(oppChar);
             if (!ANDURIL_EVIL.includes(oppRace)) {
               preCombatEvents.push({
                 player: playerSide,

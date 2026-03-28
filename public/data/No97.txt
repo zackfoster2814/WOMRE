@@ -1,6 +1,6 @@
 No.97
 Name: Nasume (nasume04590)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -34,10 +34,10 @@ Houses:
 ```
 3 Gear: 
  + 2 Normal gear:
-  - - - Fishing Rod (Từ House)
-  - - - Holy Symbol (Từ House)
+  - Fishing Rod (Từ House)
+  - Holy Symbol (Từ House)
  + 1 Legacy gear:
-  - - -
+  - 
 ```
 ```
 1 Normal Weapon
@@ -51,6 +51,7 @@ Runeword: Không
 ```
 1 Power: 
 + Gaze of the Abyss
++ Megamagic (từ King's Landing)
 ```
 ```
 Char dev: 
@@ -86,6 +87,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 4-2
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Cô Fulun`
+- Kết quả: Thua
+- Tỉ số: 4-1
 ```
 
 ======

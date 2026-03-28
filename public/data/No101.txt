@@ -86,7 +86,11 @@ Other Source:
 - +1 Str (Primordial Being)
 - Let me solo her (Primordial Being)
 - Gold Pine Resin (Hero Grave Keeper)
-- +2 BIQ (House Tyrell)
+- +2 Dura (House Tyrell)
+- +1 Str
+- +1 Spd
+- +1 IQ
+- +1 BIQ
 ```
 
 ======

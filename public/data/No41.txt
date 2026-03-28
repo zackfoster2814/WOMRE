@@ -1,6 +1,6 @@
 No.41
 Name: Nicre (.jan_01)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,15 +11,13 @@ Ký Sinh:
 Race: Troll
 Sub-race: Mountain Troll
 ```
-
 ```
 Archetype: 
 + Loyal
 ```
-``` 
+```
 2 Quirk:  
-+ 
-Mute
++ Mute
 + Impatient
 ```
 ```
@@ -28,24 +26,19 @@ Spd: 6
 Dur: 1
 IQ: 1
 BIQ: 
-6
 MA: 2
 ```
-
 ```
 Houses: 
 + Dothraki
 ```
-
 ```
-1 Gear: 
- + 0 Normal gear:
-  - 
-Ba hoa trắng
+3 Gear: 
+ + 2 Normal gear:
+  - Ba hoa trắng
  + 1 Legacy gear:
-  - 
+  -
 ```
-
 ```
 1 unique Weapon
 + Moonlight Greatsword
@@ -56,28 +49,23 @@ Ba hoa trắng
 +
 Runeword: Không
 ```
-
 ```
-2 Power: 
+1 Power: 
 + Misty Step Ahead
 + Evasion
 ```
-
 ```
 Char dev: 
 + King's Landing
 ```
-
 ```
 Team: 19
 ```
-
 ```
 Lover:
 + 
 Nime
 ```
-
 ```
 PvP Reward:
 - +1 Spd
@@ -85,7 +73,7 @@ PvP Reward:
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Laerys the Unknown
@@ -93,6 +81,7 @@ PvE:
 - Tỉ số: 4-2
 - Reward: 
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -101,5 +90,15 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 6-0
 - note: isekai
+- Note: 
 ```
+
+```
+PvP:
+- Đối thủ: Tarus13
+- Kết quả: Thua
+- Tỉ số: 0- (-1)
+- Note: Trước combat: Nicre Dothraki: Luật 1, Trong combat: Evade hụt 5 Nicre King's Landing Dothraki: Cả gia tộc nhận Fist Fighting (Em Phốc Trắng, Nagi) 
+```
+
 ======

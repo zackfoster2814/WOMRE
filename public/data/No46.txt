@@ -1,7 +1,7 @@
 No.46
 Name: Yui (duyanh_57789)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,68 +11,60 @@ Ký Sinh:
 Race: Demon
 Sub-race: Asmodeus
 ```
-
 ```
 Archetype: 
 + Edgelord
 + Merchants
 ```
-``` 
+```
 1 Quirk:  
 + Open-minded
 ```
 ```
-Str: 0 (Ban đầu là 1, về 0 do PvE Punishment)
+Str: 0
 Spd: 9
 Dur: 1
-IQ: 10 
+IQ: 10
 BIQ: 10
 MA: 5
 ```
-
 ```
 Houses: 
 + New London
 ```
-
 ```
-2 Gear: 
- + 2 Normal gear:
+5 Gear: 
+ + 4 Normal gear:
   - Thuốc tráng dương (Đã mất do bán)
-  - Golden coin
-  - Golden coin
- + 0 Legacy gear:
-  - 
+  - Golden Coin
+  - Golden Coin
+  - Cursed Charm
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
+```
 1 Rune: 
 + Ith
 Runeword: Không
 ```
-
 ```
-4 Power: 
+1 Power: 
 + AIDS (Asmodeus)
 + Groundwork
 + Fist Fighting
 + Night Vision
 ```
-
 ```
 Char dev: 
 + Finality
 ```
-
 ```
 Team: 4
 ```
-
 ```
 Lover:
 + tuancon
@@ -80,12 +72,7 @@ Lover:
 ```
 PvP Reward:
 - +1 MA
-```
-
-```
-Other source:
-- -1 dura (Thuốc tráng dương)
-- -1 Str (Thuốc tráng dương)
+- +1 Gear: Cursed Charm
 ```
 
 ======
@@ -94,9 +81,10 @@ Battle Log:
 PvE:
 - Đối thủ: Divine Dragon
 - Kết quả: Lose
-- Tỉ số: 6-4 
+- Tỉ số: 6-4
 - Punishment: 
  + Chỉ số thấp nhất của team bị kéo xuống 0
+- Note: 
 ```
 
 ```
@@ -104,6 +92,15 @@ PvP:
 - Đối thủ: tuancon
 - Kết quả: Win
 - Tỉ số: 3-2
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Thang
+- Kết quả: Thắng
+- Tỉ số: 3-3
+- Note: 
 ```
 
 ======

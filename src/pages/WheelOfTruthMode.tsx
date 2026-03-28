@@ -609,6 +609,9 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
         stats: isSelf ? state.p2Stats : state.p1Stats,
         baseStats: isSelf ? p2.baseStats : p1.baseStats,
         race: isSelf ? p2.character?.race?.race || p2.race : p1.character?.race?.race || p1.race,
+        subRace: isSelf
+          ? ((p2.character?.race?.race || "").toLowerCase() === "reincarnator" ? (p2.character?.race?.actualRace || "").toLowerCase() || undefined : undefined)
+          : ((p1.character?.race?.race || "").toLowerCase() === "reincarnator" ? (p1.character?.race?.actualRace || "").toLowerCase() || undefined : undefined),
         raceTier: isSelf ? p2.raceTier : p1.raceTier,
         hasLover: isSelf
           ? (p2.character?.lover || []).filter((l: any) => !l.isLost).length > 0
@@ -680,12 +683,12 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
       const oppPlayer = isSelf ? p2 : p1;
       const selfHasFairDuel =
         (player.character?.powers || []).filter((pw: any) => !pw.isLost).some(
-          (pw: any) => (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() === "fair duel",
-        ) && !disabledItems.has(`${player.no}-power-Fair Duel`);
+          (pw: any) => (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith("fair duel"),
+        ) && !([...disabledItems].some(k => k.startsWith(`${player.no}-power-Fair Duel`)));
       const oppHasFairDuel =
         (oppPlayer.character?.powers || []).filter((pw: any) => !pw.isLost).some(
-          (pw: any) => (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() === "fair duel",
-        ) && !disabledItems.has(`${oppPlayer.no}-power-Fair Duel`);
+          (pw: any) => (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith("fair duel"),
+        ) && !([...disabledItems].some(k => k.startsWith(`${oppPlayer.no}-power-Fair Duel`)));
       const fairDuelActive = selfHasFairDuel || oppHasFairDuel;
 
       const hasSpellFluxPlayer = (player.character?.powers || []).some(
@@ -741,13 +744,17 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
 
             const selfRaceTier = isSelf ? p1.raceTier : p2.raceTier;
             const oppRaceTier = isSelf ? p2.raceTier : p1.raceTier;
-            const oppRace = (isSelf ? p2.character?.race?.race : p1.character?.race?.race) || "";
+            const oppChar = isSelf ? p2.character : p1.character;
+            const oppRaceRaw = (oppChar?.race?.race || "").toLowerCase();
+            const oppRace = oppRaceRaw === "reincarnator"
+              ? (oppChar?.race?.actualRace || "").toLowerCase() || oppRaceRaw
+              : oppRaceRaw;
             const selfBracket = player.character?.tournament?.bracket || "";
 
             const conditionMet = conditions.every((cond: any) => {
               if (cond.type === "probability") return true;
-              if (cond.type === "race_match" && cond.races) return cond.races.some((r: string) => r.toLowerCase() === oppRace.toLowerCase());
-              if (cond.type === "race_match" && cond.excludeRaces) return !cond.excludeRaces.some((r: string) => r.toLowerCase() === oppRace.toLowerCase());
+              if (cond.type === "race_match" && cond.races) return cond.races.some((r: string) => r.toLowerCase() === oppRace);
+              if (cond.type === "race_match" && cond.excludeRaces) return !cond.excludeRaces.some((r: string) => r.toLowerCase() === oppRace);
               if (cond.type === "race_tier_compare") {
                 if (!cond.tierOperator || selfRaceTier === undefined || oppRaceTier === undefined) return false;
                 if (cond.tierOperator === "<") return selfRaceTier < oppRaceTier;
@@ -1574,8 +1581,8 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                     </button>
                   )}
                   {player1 && player2 &&
-                    detectCombatAudioTracks(player1.character).length === 0 &&
-                    detectCombatAudioTracks(player2.character).length === 0 && (
+                    detectCombatAudioTracks(player1.character, undefined, player1.no).length === 0 &&
+                    detectCombatAudioTracks(player2.character, undefined, player2.no).length === 0 && (
                       <div className="relative z-10">
                         <FallbackBgmController
                           key={audioResetKey}

@@ -1,6 +1,6 @@
 No.231
 Name: E4zyyyy (Hinaso1)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,83 +11,76 @@ Ký Sinh:
 Race: Dwarf
 Sub-race: Thường
 ```
-
 ```
 Archetype: 
 + Edgelord
 ```
-``` 
+```
 2 Quirk:  
 + Raumanian🍀
 + Slow Healer
 + Fast Learner (Từ Char Dev)
 ```
 ```
-Str:3
-Spd:2
-Dur:7
-IQ:1
-BIQ:10
-MA:6
+Str: 3
+Spd: 2
+Dur: 7
+IQ: 1
+BIQ: 10
+MA: 6
 ```
-
 ```
 Houses: 
 + Coven Council
 ```
-
 ```
-3 Gear: 
+4 Gear: 
  + 3 Normal gear:
   - Kuro's Charm (đã mất)
   - Golden Coin
   - Wine
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - 
 ```
-
 ```
 1 Normal Weapon
 + Summoning Scroll (Không dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
-2 Power: 
+1 Power: 
 + Invulnerability (Đã mất do PvE Punishment)
 + Mewing (Đã mất do PvE Punishment)
-+ Exort 
++ Exort
 ```
-
 ```
 Char dev: 
 + Seeking Wisdom
 ```
-
 ```
 Team: 17
 ```
-
 ```
 Lover:
-+ 
-```
-```
-Other Source:
-- Học Exort 
++
 ```
 ```
 PvP Reward:
 - +1 Dura
 ```
+```
+Other Source:
+- Học Exort 
+- -1 Dura
+- -1 Dura
+```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Sigrun
@@ -97,6 +90,7 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất hết Power
+- Note: 
 ```
 
 ```
@@ -104,6 +98,7 @@ PvP:
 - Đối thủ: ltq
 - Kết quả: Win
 - Tỉ số: 4-2
+- Note: 
 ```
 
 ```
@@ -111,6 +106,15 @@ PvP:
 - Đối thủ: ltq
 - Kết quả: Win
 - Tỉ số: 4-2
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: bo
+- Kết quả: Thua
+- Tỉ số: 4-5
+- Note: Trước combat: E4zyyyy rauma: không E4zyyyy Goldencoin: không,  E4zyyyy Coven Council quay lại MA cho caubetuky._. từ 9 thành 7
 ```
 
 ======

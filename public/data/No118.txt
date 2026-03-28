@@ -1,6 +1,6 @@
 No.118
 Name: Warmbunny (warmbunny)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Merfolk
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Chokevy
 ```
-``` 
+```
 2 Quirk:  
 + Raumanian🍀
 + Progressive
@@ -29,49 +28,41 @@ IQ: 10
 BIQ: 1
 MA: 3
 ```
-
 ```
 Houses: 
 + Naga
 ```
-
 ```
-1 Gear: 
+2 Gear: 
  + 1 Normal gear:
   - Thuốc Tráng Dương
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
 1 Power: 
 + Wex (Đã mất do PvE Punishment)
 + Stat Absorption
 ```
-
 ```
 Char dev: 
 + Kungfu Training
 ```
-
 ```
 Team: 17
 ```
-
 ```
 Lover:
-+ 
++
 ```
 ```
 PvP Reward:
@@ -86,7 +77,7 @@ Other Source:
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Sigrun
@@ -96,6 +87,7 @@ PvE:
 - Punishment: 
   + Nhận -2 spd
   + Mất hết Power
+- Note: 
 ```
 
 ```
@@ -103,6 +95,15 @@ PvP:
 - Đối thủ: AtKo
 - Kết quả: Thắng
 - Tỉ số: 3-4
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: KuSenpai
+- Kết quả: Thua
+- Tỉ số: 4-3
+- Note: Trước combat: Warm Bunny rauma: Không
 ```
 
 ======

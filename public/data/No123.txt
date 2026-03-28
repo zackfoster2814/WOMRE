@@ -1,7 +1,7 @@
 No.123
 Name: Hoàng Tuyền Không Trấn (franx9816)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Dragon
 Sub-race: Thunder Dragon
 ```
-
 ```
 Archetype: 
 + Infirmarian
 ```
-``` 
+```
 1 Quirk:  
 + Shining Brightly
 ```
@@ -28,61 +27,55 @@ IQ: 9
 BIQ: 9
 MA: 5
 ```
-
 ```
 Houses: 
 + Winterhome
 ```
-
 ```
-5 Gear: 
+6 Gear: 
  + 5 Normal gear:
   - Holy Symbol(Từ House)
   - Buckler (Từ House)
   - Ancient Protector
   - Shot Glass
   - Magical Scroll
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - 
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-2 Power: 
+1 Power: 
 + Frost Fingers
 + Ballet Dancing
++ Megamagic (từ King's Landing)
 ```
-
 ```
 Char dev: 
 + Make Love (Ar2di)
 ```
-
 ```
 Team: 7
 ```
-
 ```
 Lover:
-+ 
++
 ```
 ```
 PvP Reward:
 - +1 Dura
+- Lời Nguyền Địa Ngục: Re Spin BIQ của bản thân từ 9 lại thành 6. Mwa bị spin lại MA từ 10 thành 4
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Pontiff Sulyvahn
@@ -90,6 +83,7 @@ PvE:
 - Tỉ số: 2-4
 - Reward: 
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -97,6 +91,15 @@ PvP:
 - Đối thủ: Pine
 - Kết quả: Win
 - Tỉ số: 2-3
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: ShiDove
+- Kết quả: Thắng
+- Tỉ số: 1-4
+- Note: 
 ```
 
 ======

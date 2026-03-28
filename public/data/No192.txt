@@ -29,7 +29,7 @@ Spd:7
 Dur:6
 IQ:3
 BIQ:4
-MA:10
+MA:4 (dính lời nguyền địa ngục từ 10)
 ```
 
 ```

@@ -1,6 +1,6 @@
 No.155
 Name: Trung Kiên (trungkien1412)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Skeleton
 Sub-race: Dragon
 ```
-
 ```
 Archetype: 
 + Pacifist
 ```
-``` 
+```
 2 Quirk:  
 + Cautious
 + Athletic
@@ -25,57 +24,48 @@ Archetype:
 Str: 6
 Spd: 8
 Dur: 6
-IQ: 1 (Cố Định)
+IQ: 1
 BIQ: 8
 MA: 9
 ```
-
 ```
 Houses: 
 + House Lannister
 ```
-
 ```
-3 Gear: 
- + 3 Normal gear:
-  - Golden Coin 
+6 Gear: 
+ + 5 Normal gear:
+  - Golden Coin
   - Golden Coin (Từ House)
   - Golden Coin (Từ House)
   - Golden Coin (Từ House)
   - Đá (Từ House)
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Kunai (Dùng được)
 ```
-
-``` 
-2 Rune: 
-+ Ral
+```
+1 Rune: 
 + Thul
 Runeword: Không
 ```
-
 ```
-3 Power: 
+1 Power: 
 + Night Vision
 + Arcana Blast
 + Gate to Heaven
 + Ballet Dancing (từ PvE reward)
 ```
-
 ```
 Char dev: 
 + Become Hand of The King
 ```
-
 ```
 Team: 10
 ```
-
 ```
 Lover:
 + Bộ PC (conchocaobangbopc)
@@ -86,7 +76,7 @@ PvP Reward:
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Sky Dancer
@@ -96,6 +86,7 @@ PvE:
   + Nhận Power Ballet Dancing
   + +1 All stats
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -103,6 +94,15 @@ PvP:
 - Đối thủ: HuyMei
 - Kết quả: Win
 - Tỉ số: 4-2
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: LDL
+- Kết quả: Thua
+- Tỉ số: 3-3
+- Note: Trung Kiên Golden Coin: +1 điểm khởi đầu
 ```
 
 ======

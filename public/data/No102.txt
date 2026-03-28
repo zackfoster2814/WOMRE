@@ -62,6 +62,7 @@ Runeword: Không
 + Wex
 + Dominator
 + 67 (từ PvE Reward)
++ Megamagic (từ King's Landing)
 ```
 
 ```

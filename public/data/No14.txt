@@ -1,6 +1,6 @@
 No.14
 Name: Syren (syren1412)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,14 +11,13 @@ Ký Sinh:
 Race: Demi-God
 Sub-race: War
 ```
-
 ```
 Archetype: 
 + Wibu
   -> Bleach
     -> Katen Kyokotsu: Karamatsu Shinju (Bankai)
 ```
-``` 
+```
 3 Quirk:  
 + Training Restricted
 + Resilient
@@ -32,58 +31,49 @@ IQ: 4
 BIQ: 6
 MA: 6
 ```
-
 ```
 Houses: 
 + Roundtable Hold
 ```
-
 ```
-5 Gear: 
+6 Gear: 
  + 5 Normal gear:
   - Beer
   - Đá
   - Love Letter(Từ Char Dev Armed to the Teeth)
   - Magical Scroll
   - Ba Hoa Trắng
- + 0 Legacy gear:
+ + 1 Legacy gear:
   - Reality Stone
 ```
-
 ```
 1 Normal Weapon
 + Cursed Pennywort (dùng được)
 ```
-
-``` 
+```
 1 Rune: 
 + Tal
 Runeword: Không
 ```
-
 ```
 3 Power: 
 + Guidance
 + Invulnerability
 + Dream Manipulation
 ```
-
 ```
 Char dev: 
 + Transmute: Chaos
 + True Heir of the Emirate(Từ Transmute: Chaos)
 + Armed to the Teeth(Từ Transmute: Chaos)
 ```
-
 ```
 Team: 
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 PvP Reward:
 - +1 MA
@@ -91,20 +81,29 @@ PvP Reward:
 ```
 
 ======
-Battle Log:
-
+Battle Log: 
 ```
 PvP:
 - Đối thủ: KK
 - Kết quả: Win
 - Tỉ số: 4-2
+- Note: 
 ```
 
 ```
 PvP:
 - Đối thủ: Vạn vật thua Gwen
-- Kết quả: Win 
+- Kết quả: Win
 - Tỉ số: 6-0
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Hachi
+- Kết quả: Thua
+- Tỉ số: 2-4
+- Note: Trước combat: Syren rau má nguyền: Không, Gọi Ingay ra đánh hộ
 ```
 
 ======

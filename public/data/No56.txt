@@ -1,6 +1,6 @@
 No.56
 Name: baonine (baonine)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,54 +11,48 @@ Ký Sinh:
 Race: Gnome
 Sub-race: 
 ```
-
 ```
 Archetype: 
-+ Loyal 
++ Loyal
 ```
-``` 
-2 Quirk:
+```
+2 Quirk:  
 + Patient
 + Impatient (không được nhận phần thưởng PvP từ nó)
 ```
 ```
-Str: 1 (ban đầu là 5, vì Bless of Chaos)
+Str: 1
 Spd: 2
-Dur: 0 (Demonic Pact)
+Dur: 0
 IQ: 3
-BIQ: 1 (Ban đầu là 1, quay lại vì House)
+BIQ: 1
 MA: 2
 ```
-
 ```
 Houses: 
 + Golden Order
  -> Unborn
 ```
-
 ```
-3 Gear: 
+4 Gear: 
  + 3 Normal gear:
   - Holy Symbol (đã mất)
   - Thuốc Tráng Dương
   - Đai Trinh Tiết
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
 1 Normal Weapon
 + Guitar (Không dùng được)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-2 Power: 
+1 Power: 
 + Hand Washing
 + Let's Pump Some Iron!
 + Spirit Link
@@ -69,7 +63,6 @@ Runeword: Không
 + Scrying
 + Voidwalking
 ```
-
 ```
 Char dev: 
 + MrBeast
@@ -77,16 +70,13 @@ Char dev:
 + Demonic Pact (kéo Dura) (Bless of Chaos)
 + W speed (Bless of Chaos)
 ```
-
 ```
 Team: 30
 ```
-
 ```
 Lover:
 + cá trê vượt thác nhé hehe (huypui)
 ```
-
 ```
 Other Source:
 - -1 STR (Thuốc Tráng Dương)
@@ -97,7 +87,7 @@ Other Source:
 ```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Isshin the Sword Saint
@@ -105,14 +95,15 @@ PvE:
 - Tỉ số: 0-12
 - Reward: 
 - Punishment: Nhận Quirk "Impatient" nhưng không được nhận 2 PvP Reward mặc định của nó
-```
+- Note: 
 ```
 
 ```
 PvP:
-- Đối thủ: Zackie
-- Kết quả: Win
-- Tỉ số: 4-2
+- Đối thủ: 0chjnchjn
+- Kết quả: Thua
+- Tỉ số: 2-4
+- Note: Trước combat: baonine Scrying: không
 ```
 
 ======

@@ -903,6 +903,9 @@ export const StatsComparisonMode = ({
         race: isSelf
           ? p2.character?.race?.race || p2.race
           : p1.character?.race?.race || p1.race,
+        subRace: isSelf
+          ? ((p2.character?.race?.race || "").toLowerCase() === "reincarnator" ? (p2.character?.race?.actualRace || "").toLowerCase() || undefined : undefined)
+          : ((p1.character?.race?.race || "").toLowerCase() === "reincarnator" ? (p1.character?.race?.actualRace || "").toLowerCase() || undefined : undefined),
         raceTier: isSelf ? p2.raceTier : p1.raceTier,
         hasLover: isSelf
           ? (p2.character?.lover || []).filter((l: any) => !l.isLost).length > 0
@@ -1027,17 +1030,19 @@ export const StatsComparisonMode = ({
           .filter((pw: any) => !pw.isLost)
           .some(
             (pw: any) =>
-              (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
-              "fair duel",
-          ) && !disabledItems.has(`${player.no}-power-Fair Duel`);
+              (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith(
+                "fair duel",
+              ),
+          ) && !([...disabledItems].some(k => k.startsWith(`${player.no}-power-Fair Duel`)));
       const oppHasFairDuel =
         (oppPlayer.character?.powers || [])
           .filter((pw: any) => !pw.isLost)
           .some(
             (pw: any) =>
-              (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
-              "fair duel",
-          ) && !disabledItems.has(`${oppPlayer.no}-power-Fair Duel`);
+              (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith(
+                "fair duel",
+              ),
+          ) && !([...disabledItems].some(k => k.startsWith(`${oppPlayer.no}-power-Fair Duel`)));
       const fairDuelActive = selfHasFairDuel || oppHasFairDuel;
 
       // Spell Flux: power "Trong Combat" đầu tiên kích hoạt được apply 2 lần
@@ -1133,21 +1138,23 @@ export const StatsComparisonMode = ({
 
             const selfRaceTier = isSelf ? p1.raceTier : p2.raceTier;
             const oppRaceTier = isSelf ? p2.raceTier : p1.raceTier;
-            const oppRace =
-              (isSelf ? p2.character?.race?.race : p1.character?.race?.race) ||
-              "";
+            const oppCharForRace = isSelf ? p2.character : p1.character;
+            const oppRaceRaw = (oppCharForRace?.race?.race || "").toLowerCase();
+            const oppRace = oppRaceRaw === "reincarnator"
+              ? (oppCharForRace?.race?.actualRace || "").toLowerCase() || oppRaceRaw
+              : oppRaceRaw;
             const selfBracket = player.character?.tournament?.bracket || "";
 
             const conditionMet = conditions.every((cond: any) => {
               if (cond.type === "probability") return true; // Already filtered above, just in case
               if (cond.type === "race_match" && cond.races) {
                 return cond.races.some(
-                  (r: string) => r.toLowerCase() === oppRace.toLowerCase(),
+                  (r: string) => r.toLowerCase() === oppRace,
                 );
               }
               if (cond.type === "race_match" && cond.excludeRaces) {
                 return !cond.excludeRaces.some(
-                  (r: string) => r.toLowerCase() === oppRace.toLowerCase(),
+                  (r: string) => r.toLowerCase() === oppRace,
                 );
               }
               if (cond.type === "race_tier_compare") {
@@ -1377,10 +1384,8 @@ export const StatsComparisonMode = ({
           const handlerKey = `${handlerName}__${ce.source?.name ?? sourceName}`;
           if (firedSet.has(handlerKey)) continue;
         }
-        // Accelerating Sorcery: patch duringCombatActivations vào ctx trước khi execute
-        if (handlerName === "accelerating_sorcery_count") {
-          ctx.self.duringCombatActivations = duringPowerActivations;
-        }
+        // Patch duringCombatActivations vào ctx trước khi execute (dùng bởi Accelerating Sorcery, v.v.)
+        ctx.self.duringCombatActivations = duringPowerActivations;
         // Skip handlers that require spin wheel (probability condition) — they are handled via UI spin buttons
         {
           const effectConditions2 = (ce.effect as any).conditions || [];
@@ -1601,7 +1606,7 @@ export const StatsComparisonMode = ({
           else newP2ConquerorFired = true;
         }
       }
-    };
+    };     // closes processPlayer
 
     processPlayer(p1, "player1", winner, true);
     processPlayer(p2, "player2", winner, false);
@@ -2800,6 +2805,72 @@ export const StatsComparisonMode = ({
     }
   }, [skipRoundSpins, pendingSpinsForLastRound, stepRoundIndex, stepState, player1, player2, disabledItems, roundSpinResults, setRoundSpinResults]);
 
+  // Astrologer's Staff: khi spin probability power thành công lần đầu → +1 BIQ cho chủ sở hữu
+  // Chạy sau khi roundSpinResults update (sau khi user quay wheel)
+  useEffect(() => {
+    if (!stepState || !player1 || !player2) return;
+    const STAFF_KEY = "astrologer_staff_power_trigger__Astrologer's Staff";
+    const COMBAT_POWER_TIMINGS = ["during_combat", "on_round_win", "on_round_lose", "on_round_tie"];
+
+    const checkPlayer = (
+      player: typeof player1,
+      side: "player1" | "player2",
+      firedHandlers: Set<string>,
+    ) => {
+      if (!player?.character) return;
+      if (firedHandlers.has(STAFF_KEY)) return; // đã fire rồi
+
+      const hasStaff = (player.character.weapons || []).some(
+        (w: any) =>
+          !w.isLost &&
+          (typeof w === "string" ? w : (w?.name ?? ""))
+            .replace(/\s*\([^)]*\)\s*$/g, "")
+            .toLowerCase() === "astrologer's staff" &&
+          !disabledItems.has(`${player.no}-weapon-${typeof w === "string" ? w : (w?.name ?? "")}`),
+      );
+      if (!hasStaff) return;
+
+      // Check từng round đã resolved — có spin probability power nào isSuccess chưa?
+      const firedInAnyRound = (player.character.powers || []).some((pw: any) => {
+        if (pw.isLost) return false;
+        const pwName = typeof pw === "string" ? pw : (pw?.name ?? "");
+        if (disabledItems.has(`${player.no}-power-${pwName}`)) return false;
+        const pwFx = EffectRegistry.get("power", pwName);
+        if (!pwFx) return false;
+        const hasProbEffect = pwFx.effects.some((eff: any) =>
+          COMBAT_POWER_TIMINGS.includes(eff.timing) &&
+          (eff.conditions || []).some((c: any) => c.type === "probability"),
+        );
+        if (!hasProbEffect) return false;
+        // Check spin result ở bất kỳ round nào đã có
+        return Object.entries(roundSpinResults).some(([key, val]) => {
+          // key format: "${roundIndex}-${pwName}-${side}"
+          return key.endsWith(`-${pwName}-${side}`) && val.isSuccess === true;
+        });
+      });
+      if (!firedInAnyRound) return;
+
+      // Fire AS Staff: patch stepState
+      setStepState((prev) => {
+        if (!prev) return prev;
+        const newFired = new Set(side === "player1" ? prev.p1FiredHandlers : prev.p2FiredHandlers);
+        if (newFired.has(STAFF_KEY)) return prev; // double-check race condition
+        newFired.add(STAFF_KEY);
+        const statKey = side === "player1" ? "p1Stats" : "p2Stats";
+        const firedKey = side === "player1" ? "p1FiredHandlers" : "p2FiredHandlers";
+        return {
+          ...prev,
+          [statKey]: { ...prev[statKey], biq: (prev[statKey].biq || 0) + 1 },
+          [firedKey]: newFired,
+        };
+      });
+    };
+
+    checkPlayer(player1, "player1", stepState.p1FiredHandlers);
+    checkPlayer(player2, "player2", stepState.p2FiredHandlers);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roundSpinResults]);
+
   const mainWinner =
     combatConfirmed && effectiveWinner
       ? effectiveWinner === "player1"
@@ -3008,11 +3079,82 @@ export const StatsComparisonMode = ({
       : wMA === "player2"
         ? 1
         : 0;
-    const p1Score = savedState.p1Score + (p1PtsMA.pts - p1BaseMA);
-    const p2Score = savedState.p2Score + (p2PtsMA.pts - p2BaseMA);
+    let p1Score = savedState.p1Score + (p1PtsMA.pts - p1BaseMA);
+    let p2Score = savedState.p2Score + (p2PtsMA.pts - p2BaseMA);
+
+    // Apply before_combat_end effects (Edgelord, 4 Hit Combo, v.v.) — bị skip khi pendingMA=true
+    const bceNotifications: { player: "player1" | "player2"; sourceName: string; description: string }[] = [];
+    // forcedLoser: nếu set, player đó thua bất kể score (autoLose từ Egoist, v.v.)
+    let forcedLoser: "player1" | "player2" | null = null;
+    const applyBCE = (player: PvPPlayerData, playerSide: "player1" | "player2") => {
+      if (!player.character) return;
+      const fxBCE = EffectResolver.calculateCharacterEffects(player.character, { isPvE: false });
+      for (const ce of fxBCE.combatEffects) {
+        if (ce.isActive === false) continue;
+        if (ce.effect?.timing !== "before_combat_end" && ce.effect?.timing !== "after_combat") continue;
+        if (ce.effect?.type !== "custom" || !ce.effect?.customHandler) continue;
+        const srcName = ce.source?.name || "?";
+        const srcType = ce.source?.type || "?";
+        if (disabledItems.has(`${player.no}-${srcType}-${srcName}`)) continue;
+        const selfScore = playerSide === "player1" ? p1Score : p2Score;
+        const oppScore = playerSide === "player1" ? p2Score : p1Score;
+        const bceCtx: any = {
+          self: {
+            character: player.character,
+            stats: playerSide === "player1" ? savedState.p1Stats : savedState.p2Stats,
+            baseStats: player.baseStats,
+            race: player.character?.race?.race || player.race || "",
+            raceTier: player.raceTier,
+            roundsWon: savedState.resolvedRounds.filter((r) => r.winner === playerSide).length,
+            roundsLost: savedState.resolvedRounds.filter((r) => r.winner !== playerSide && r.winner !== "tie").length,
+            currentScore: selfScore,
+            roundResults: Object.fromEntries(
+              savedState.resolvedRounds.map((r) => [
+                r.stat,
+                r.winner === playerSide ? "win" : r.winner === "tie" ? "tie" : "lose",
+              ])
+            ),
+          },
+          opponent: {
+            character: (playerSide === "player1" ? player2 : player1)?.character,
+            currentScore: oppScore,
+          },
+          isFinals: false,
+          isPvE: false,
+        };
+        const bceResult = HandlerRegistry.executeCombat(ce.effect.customHandler as string, bceCtx);
+        if (!bceResult) continue;
+        if (bceResult.description) {
+          bceNotifications.push({ player: playerSide, sourceName: srcName, description: bceResult.description });
+        }
+        if (bceResult.skipDefault) continue;
+        if (bceResult.selfPoints) {
+          if (playerSide === "player1") p1Score += bceResult.selfPoints;
+          else p2Score += bceResult.selfPoints;
+        }
+        if (bceResult.opponentPoints) {
+          if (playerSide === "player1") p2Score += bceResult.opponentPoints;
+          else p1Score += bceResult.opponentPoints;
+        }
+        // autoLose: override winner trực tiếp, không đụng score
+        if (bceResult.autoLose) {
+          forcedLoser = playerSide;
+        }
+        // autoWin: override winner trực tiếp, không đụng score
+        if (bceResult.autoWin && forcedLoser !== playerSide) {
+          forcedLoser = playerSide === "player1" ? "player2" : "player1";
+        }
+      }
+    };
+    applyBCE(player1, "player1");
+    applyBCE(player2, "player2");
+
     let overallWinner: "player1" | "player2";
     let tieBreaker: "race" | null = null;
-    if (p1Score > p2Score) overallWinner = "player1";
+    if (forcedLoser !== null) {
+      // autoLose/autoWin override — winner là đối thủ của người bị thua buộc
+      overallWinner = forcedLoser === "player1" ? "player2" : "player1";
+    } else if (p1Score > p2Score) overallWinner = "player1";
     else if (p2Score > p1Score) overallWinner = "player2";
     else {
       tieBreaker = "race";
@@ -3036,6 +3178,17 @@ export const StatsComparisonMode = ({
     if (pendingCrueltyAfterCombatRef.current) {
       pendingCrueltyAfterCombatRef.current(overallWinner, p1Score, p2Score);
       pendingCrueltyAfterCombatRef.current = null;
+    }
+    // Prepend BCE notifications (Edgelord, v.v.) vào afterCombatEntries
+    if (bceNotifications.length > 0) {
+      setAfterCombatEntries((prev) => [
+        ...bceNotifications.map((n) => ({
+          player: n.player,
+          quirkName: n.sourceName,
+          description: n.description,
+        })),
+        ...(prev || []),
+      ]);
     }
   }, [roundSpinResults]);
 
@@ -3387,8 +3540,9 @@ export const StatsComparisonMode = ({
             {player1 && player2 && (
               <div className="mb-3">
                 <CombatEffectsPanel
-                  player1={{ name: player1.name, character: player1.character }}
-                  player2={{ name: player2.name, character: player2.character }}
+                  player1={{ name: player1.name, character: player1.character, no: player1.no }}
+                  player2={{ name: player2.name, character: player2.character, no: player2.no }}
+                  disabledItems={disabledItems}
                   player1ComputedStats={p1DisplayStats ?? undefined}
                   player2ComputedStats={p2DisplayStats ?? undefined}
                   resetKey={roundtableSubMode ? "sub" : "main"}

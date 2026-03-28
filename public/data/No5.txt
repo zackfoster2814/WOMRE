@@ -1,7 +1,7 @@
 No.5
 Name: Duckie2369
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,13 +11,12 @@ Ký Sinh:
 Race: Orc
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Power Ranger 
   -> Blue
 ```
-``` 
+```
 1 Quirk:  
 + Fast Learner
 ```
@@ -29,12 +28,10 @@ IQ: 5
 BIQ: 8
 MA: 6
 ```
-
 ```
 Houses: 
 + Hallownest
 ```
-
 ```
 1 Gear: 
  + 1 Normal gear:
@@ -43,7 +40,6 @@ Houses:
  + 0 Legacy gear:
   - 
 ```
-
 ```
 1 Normal Weapon
 + Astrologer's Staff (Dùng được)
@@ -55,27 +51,22 @@ Houses:
 + Shael
 Runeword: Không
 ```
-
 ```
 1 Power: 
 + Critical Strike
 + Ice Hammer
 ```
-
 ```
 Char dev: 
 + Become Hand of The King
 ```
-
 ```
 Team: 4
 ```
-
 ```
 Lover:
-+ 
++
 ```
-
 ```
 Other Source:
 - +1 str
@@ -84,12 +75,13 @@ Other Source:
 - +1 dura
 - +1 str
 - +1 spd
+- +1 MA
+- +1 Dura
+- +2 STR (ORC)
 ```
-
 
 ======
 Battle Log: 
-```
 ```
 PvP:
 - Đối thủ: trthesloth (_trthesloth)
@@ -97,4 +89,20 @@ PvP:
 - Tỉ số: 3-4
 - note: học Ice Hammer, +1 str, +3 base speed
 ```
+```
+PvP:
+- Đối thủ: Pui
+- Kết quả: Thắng
+- Tỉ số: 4-3
+- Note: Đánh RT với Solus
+```
+
+```
+PvP:
+- Đối thủ: Solus
+- Kết quả: Thắng
+- Tỉ số: 6-2
+- Note: Crit 2 lần
+```
+
 ======

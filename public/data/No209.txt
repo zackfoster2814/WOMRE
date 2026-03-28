@@ -1,6 +1,6 @@
 No.209
 Name: ShiDove (shidove)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,82 +11,73 @@ Ký Sinh:
 Race: Orc
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Herald
 + Hand Fighter (Spatula)
 ```
-``` 
+```
 1 Quirk:  
 + Fit
 ```
 ```
-Str:6
-Spd:2 (+3 từ Herald)
-Dur:5
-IQ:10
-BIQ:6
-MA:6
+Str: 6
+Spd: 2
+Dur: 5
+IQ: 10
+BIQ: 6
+MA: 6
 ```
-
 ```
 Houses: 
 + The Shire 
-  -> +4 Spd
++   -> +4 Spd
 ```
-
 ```
-3 Gear: 
- + 3 Normal gear:
+5 Gear: 
+ + 4 Normal gear:
   - Holy Symbol
-  - Spatula 
+  - Spatula
   - Ớt
   - Giấy nợ gia truyền (từ cảo)
- + 0 Legacy gear:
-  - 
+ + 1 Legacy gear:
+  -
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: 
 ```
-
 ```
 1 Power: 
 + Fragrant
 ```
-
 ```
 Char dev: 
 + Mentor (Thầy: Moonice (muroku_18) - không có Power)
 ```
-
 ```
 Team: 31
 ```
-
 ```
 Lover:
-+ 
-```
-```
-Other Source:
-- +2 spd
++
 ```
 ```
 PvP Reward:
 - +1 Iq
 ```
+```
+Other Source:
+- +2 spd
+```
 
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: The Unblinking Gaze
@@ -94,6 +85,7 @@ PvE:
 - Tỉ số: 4-2
 - Reward: 
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -101,6 +93,15 @@ PvP:
 - Đối thủ: DK Yuri
 - Kết quả: Win
 - Tỉ số: 3-2
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Hoàng Tuyền Không Trấn
+- Kết quả: Thua
+- Tỉ số: 1-4
+- Note:  ShiDove chuyển giấy nợ cho Cảo
 ```
 
 ======

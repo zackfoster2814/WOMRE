@@ -81,6 +81,8 @@ Other Source:
 - +1 dura
 - +1 str
 - +1 spd
+- +1 MA
+- +1 Dura
 ```
 
 ======

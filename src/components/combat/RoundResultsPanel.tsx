@@ -356,10 +356,12 @@ export function RoundResultsPanel({
           </div>
         </div>
       )}
-      {displayRows.map(({ key, label, roundArrayIndex }) => {
+      {displayRows.map(({ key, label, statOrderIndex, roundArrayIndex }) => {
         const round = rounds[roundArrayIndex];
         const revealed =
           revealedUpToArr !== null ? roundArrayIndex <= revealedUpToArr : true;
+        // spinRoundIdx: dùng statOrderIndex (0-5) để đồng nhất key spin với engine (roundIndex trong roundLogs)
+        const spinRoundIdx = statOrderIndex;
         const p1Win = revealed && round?.winner === "player1";
         const p2Win = revealed && round?.winner === "player2";
         const tie = revealed && round?.winner === "tie";
@@ -416,7 +418,7 @@ export function RoundResultsPanel({
             ? p1Effects.onWin
             : tie
               ? p1Effects.onTie
-              : revealed
+              : revealed && !!round
                 ? p1Effects.onLose
                 : [],
           p2Win ? "player1" : undefined,
@@ -426,7 +428,7 @@ export function RoundResultsPanel({
             ? p2Effects.onWin
             : tie
               ? p2Effects.onTie
-              : revealed
+              : revealed && !!round
                 ? p2Effects.onLose
                 : [],
           p1Win ? "player2" : undefined,
@@ -468,7 +470,7 @@ export function RoundResultsPanel({
             ? computeRoundPoints(
                 "player1",
                 round.winner,
-                roundArrayIndex,
+                spinRoundIdx,
                 p1Effects,
                 key,
                 p1WonBeforeThis,
@@ -479,7 +481,7 @@ export function RoundResultsPanel({
             ? computeRoundPoints(
                 "player2",
                 round.winner,
-                roundArrayIndex,
+                spinRoundIdx,
                 p2Effects,
                 key,
                 p2WonBeforeThis,
@@ -589,13 +591,13 @@ export function RoundResultsPanel({
                 <div className="grid grid-cols-[1fr_56px_1fr] gap-1 px-2 pb-1.5 border-t border-gray-700/20 pt-1">
                   <div className="flex justify-end gap-1 flex-wrap">
                     {p1SpinEffects.map((eff) =>
-                      makeSpinButton(eff, "player1", roundArrayIndex),
+                      makeSpinButton(eff, "player1", spinRoundIdx),
                     )}
                   </div>
                   <div />
                   <div className="flex justify-start gap-1 flex-wrap">
                     {p2SpinEffects.map((eff) =>
-                      makeSpinButton(eff, "player2", roundArrayIndex),
+                      makeSpinButton(eff, "player2", spinRoundIdx),
                     )}
                   </div>
                 </div>

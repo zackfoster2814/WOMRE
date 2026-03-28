@@ -1,6 +1,6 @@
 No.32
 Name: Lệch rate Jingliu 2 lần (nguyentk24hlk)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -41,8 +41,8 @@ Houses:
   - Đá (Từ Quirk)
   - Frying Pan(Từ Quirk)
   - Giấy Nợ Gia Truyền (đã mất)
-  - Golden coin
-  - Golden coin
+  - Golden Coin
+  - Golden Coin
   - Radio
   - Lover's Glover (idontloveyou (iloveyou1233406))
   - Leather Jacket
@@ -108,5 +108,12 @@ PvP:
 - Đối thủ: Vilhelm
 - Kết quả: Win
 - Tỉ số: 4-5
+```
+
+```
+PvP:
+- Đối thủ: We are Charlie Kirk
+- Kết quả: Thua
+- Tỉ số: 3-3
 ```
 ======
