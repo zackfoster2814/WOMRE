@@ -1248,6 +1248,33 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               }
               // Không phải vòng 256 → bỏ qua, không quay
             }
+            // Independent: sau combat quay 6-stat wheel, nhận +2 vào stat được chọn
+            else if (lname === "independent") {
+              const STAT_LABELS: { stat: keyof CharacterStats; label: string }[] = [
+                { stat: "str", label: "STR" },
+                { stat: "spd", label: "SPD" },
+                { stat: "dur", label: "DUR" },
+                { stat: "iq",  label: "IQ" },
+                { stat: "biq", label: "BIQ" },
+                { stat: "ma",  label: "MA" },
+              ];
+              const STAT_COLORS = ["#f87171","#fb923c","#fbbf24","#34d399","#60a5fa","#c084fc"];
+              const wk = `after-Independent-${side}`;
+              acEntries.push({
+                player: side,
+                quirkName: name,
+                description: "Quay 6-stat wheel → nhận +2 vào chỉ số được chọn (Independent)",
+                wheelKey: wk,
+                wheelItems: STAT_LABELS.map(({ stat, label }, i) => ({
+                  label: `+2 ${label}`,
+                  weight: 1,
+                  isSuccess: true,
+                  color: STAT_COLORS[i],
+                  meta: { stat },
+                })),
+                // statMods không dùng — AfterCombatPanel xử lý qua result.meta.stat
+              });
+            }
             // Cheater: chỉ thông báo khi player bị loại (thua combat)
             else if (lname === "cheater" && !didWin) {
               const lovers: any[] = (char.lover || []).filter(

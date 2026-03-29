@@ -175,6 +175,19 @@ export function AfterCombatPanel({
                       }
                       if (bubbles.length > 0) spawnStatBubbles(bubbles);
                     }
+                    // Independent: apply +2 vào đúng stat được chọn từ wheel
+                    if (
+                      entry.quirkName.toLowerCase() === "independent" &&
+                      result.isSuccess &&
+                      result.meta?.stat
+                    ) {
+                      const stat = result.meta.stat as string;
+                      spawnStatBubbles([{
+                        player: entry.player,
+                        text: `+2 ${stat.toUpperCase()} (Independent)`,
+                        isPositive: true,
+                      }]);
+                    }
                     // Fast Learner: nếu thành công → mở wheel chọn power từ đối thủ
                     if (
                       entry.quirkName === "Fast Learner" &&
