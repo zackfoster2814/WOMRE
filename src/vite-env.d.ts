@@ -1,6 +1,10 @@
 /// <reference types="vite/client" />
 /// <reference types="@react-three/fiber" />
 
+declare module 'virtual:personal-bgm-manifest' {
+  export const PERSONAL_BGM_MANIFEST: Record<number, string[]>;
+}
+
 declare module '*.png' {
   const value: string;
   export default value;

@@ -10,6 +10,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { getAssetPath } from "../utils/basePath";
+import { PERSONAL_BGM_MANIFEST as _PERSONAL_BGM_MANIFEST } from "virtual:personal-bgm-manifest";
 
 // ============================================================
 // TYPES
@@ -126,13 +127,12 @@ const OT_LOCAL_FILES = [
 ];
 
 // ─── PersonalBGM manifest ────────────────────────────────────────────────────
-// Key: playerNo, Value: mảng tên file trong /assets/bgm/PersonalBGM/
+// Được inject bởi Vite plugin (personalBgmManifestPlugin trong vite.config.ts)
+// Tự động scan public/assets/bgm/PersonalBGM/ lúc build — không cần sửa thủ công
 // • 1 file  → phát stereo (pan = 0) dù bên kia có audio
 // • >1 file → mỗi file phát single channel riêng (pan theo side, giống power âm thanh)
 export const PERSONAL_BGM_FOLDER = "/assets/bgm/PersonalBGM/";
-export const PERSONAL_BGM_MANIFEST: Record<number, string[]> = {
-  82: ["no82.mp3"],
-};
+export const PERSONAL_BGM_MANIFEST: Record<number, string[]> = _PERSONAL_BGM_MANIFEST;
 // ─────────────────────────────────────────────────────────────────────────────
 
 // YouTube fallback seeds
@@ -212,9 +212,11 @@ export function detectCombatAudioTracks(character: any, disabledItems?: Set<stri
   const tracks: CombatAudioTrack[] = [];
 
   // ── PersonalBGM — thêm trước mọi track khác (ưu tiên cao nhất) ──────────
+  // Pan được quyết định bởi CombatAudioController dựa trên otherSideHasAudio:
+  //   • bên kia không có audio → defaultPan = 0 (stereo) → đúng với "1 bgm → stereo"
+  //   • bên kia có audio → defaultPan = ±1 → single channel, dù chỉ có 1 file
   if (playerNo !== undefined && PERSONAL_BGM_MANIFEST[playerNo]) {
     const files = PERSONAL_BGM_MANIFEST[playerNo];
-    const isStereo = files.length === 1;
     files.forEach((file, i) => {
       tracks.push({
         id: `personal-bgm-${playerNo}-${i}`,
@@ -224,7 +226,6 @@ export function detectCombatAudioTracks(character: any, disabledItems?: Set<stri
         label: `BGM – ${file.replace(/\.\w+$/, "")}`,
         loop: true,
         isPersonalBgm: true,
-        forceStereo: isStereo,
       });
     });
   }
@@ -914,7 +915,6 @@ export const CombatAudioController = ({
 
   if (stableTracks.length === 0) return null;
 
-  // Pan mặc định cho cả controller (dùng cho track không có forceStereo)
   const defaultPan = otherSideHasAudio ? (side === "left" ? -1 : 1) : 0;
   const panLabel = otherSideHasAudio
     ? side === "left"
@@ -953,14 +953,12 @@ export const CombatAudioController = ({
           </button>
         </div>
 
-        {stableTracks.map((track) => {
-          // forceStereo = true → pan 0, ngược lại dùng defaultPan
-          const trackPan = track.forceStereo ? 0 : defaultPan;
-          return track.type === "local" ? (
+        {stableTracks.map((track) =>
+          track.type === "local" ? (
             <LocalTrackCard
               key={track.id}
               track={track}
-              pan={trackPan}
+              pan={defaultPan}
               accent={accent}
               visible
               stopped={stopped}
@@ -977,8 +975,8 @@ export const CombatAudioController = ({
               silenced={silenced}
               volumeScale={volumeScale}
             />
-          );
-        })}
+          ),
+        )}
       </div>
 
       {/* Toggle button */}

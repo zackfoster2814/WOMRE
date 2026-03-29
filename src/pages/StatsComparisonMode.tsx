@@ -3521,8 +3521,8 @@ export const StatsComparisonMode = ({
                         ⇄ Swap
                       </button>
                     )}
-                    {detectCombatAudioTracks(player1.character).length === 0 &&
-                      detectCombatAudioTracks(player2.character).length === 0 && (
+                    {detectCombatAudioTracks(player1.character, undefined, player1.no).length === 0 &&
+                      detectCombatAudioTracks(player2.character, undefined, player2.no).length === 0 && (
                         <div className="relative z-10">
                           <FallbackBgmController
                             key={audioResetKey}

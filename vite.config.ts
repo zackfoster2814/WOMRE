@@ -1,11 +1,44 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { appendFileSync, mkdirSync } from 'fs'
+import { appendFileSync, mkdirSync, readdirSync } from 'fs'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const REPORT_PATH = resolve(__dirname, 'public/assets/report/report-pvp-result.txt')
+
+// Vite virtual module: scan public/assets/bgm/PersonalBGM/ và inject manifest
+const VIRTUAL_MODULE_ID = 'virtual:personal-bgm-manifest'
+const RESOLVED_ID = '\0' + VIRTUAL_MODULE_ID
+
+function personalBgmManifestPlugin() {
+  return {
+    name: 'personal-bgm-manifest',
+    resolveId(id: string) {
+      if (id === VIRTUAL_MODULE_ID) return RESOLVED_ID
+    },
+    load(id: string) {
+      if (id !== RESOLVED_ID) return
+      const folder = resolve(__dirname, 'public/assets/bgm/PersonalBGM')
+      let files: string[] = []
+      try {
+        files = readdirSync(folder).filter(f => /^no\d+\.(mp3|ogg)$/i.test(f))
+      } catch { /* folder không tồn tại */ }
+
+      // Build manifest: { [playerNo]: string[] }
+      const manifest: Record<number, string[]> = {}
+      for (const file of files) {
+        const match = file.match(/^no(\d+)\.(mp3|ogg)$/i)
+        if (!match) continue
+        const no = parseInt(match[1], 10)
+        if (no < 1 || no > 260) continue
+        if (!manifest[no]) manifest[no] = []
+        manifest[no].push(file)
+      }
+      return `export const PERSONAL_BGM_MANIFEST = ${JSON.stringify(manifest)};`
+    },
+  }
+}
 
 // Vite plugin: expose POST /api/append-report endpoint in dev server
 function reportAppendPlugin() {
@@ -39,7 +72,7 @@ function reportAppendPlugin() {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), reportAppendPlugin()],
+  plugins: [react(), reportAppendPlugin(), personalBgmManifestPlugin()],
   // Base path cho GitHub Pages - thay đổi nếu repo name khác
   base: process.env.GITHUB_ACTIONS ? '/WOMRE/' : '/',
   clearScreen: false,
