@@ -2110,15 +2110,14 @@ const PlayerDetailModal = ({
     );
   }, [allPlayers]);
 
-  // Calculate total stats with effects
-  // const characterEffects = useMemo(() => {
-  //   ensureEffectsInitialized();
-  //   return EffectResolver.calculateCharacterEffects(
-  //     character,
-  //     undefined,
-  //     allCharacters,
-  //   );
-  // }, [character, allCharacters]);
+  // Calculate total stats with effects — single source of truth
+  const characterEffects = useMemo(() => {
+    return EffectResolver.calculateCharacterEffects(
+      character,
+      undefined,
+      allCharacters,
+    );
+  }, [character, allCharacters]);
 
   // Get tournament info for conditional effects checking
   const tournamentInfo = useMemo(() => {
@@ -2146,27 +2145,12 @@ const PlayerDetailModal = ({
     );
   }
 
-  // Tính totalValue từ effectBreakdown để đồng bộ với bảng stat
-  const calcTotal = (base: number, statKey: string) => {
-    const bonus = effectBreakdown
-      .filter((s) => !s.isDisabled)
-      .reduce((sum, s) => {
-        return (
-          sum +
-          s.statChanges
-            .filter((c) => c.stat === statKey)
-            .reduce((s2, c) => s2 + (c.value || 0), 0)
-        );
-      }, 0);
-    return base + bonus;
-  };
-
   const stats = [
     {
       key: "str",
       label: "Strength",
       baseValue: character.stats.str,
-      totalValue: calcTotal(character.stats.str, "strength"),
+      totalValue: characterEffects.totalStats.strength,
       color: "text-red-400",
       bg: "bg-red-400",
     },
@@ -2174,7 +2158,7 @@ const PlayerDetailModal = ({
       key: "spd",
       label: "Speed",
       baseValue: character.stats.spd,
-      totalValue: calcTotal(character.stats.spd, "speed"),
+      totalValue: characterEffects.totalStats.speed,
       color: "text-yellow-400",
       bg: "bg-yellow-400",
     },
@@ -2182,7 +2166,7 @@ const PlayerDetailModal = ({
       key: "dur",
       label: "Durability",
       baseValue: character.stats.dur,
-      totalValue: calcTotal(character.stats.dur, "durability"),
+      totalValue: characterEffects.totalStats.durability,
       color: "text-blue-400",
       bg: "bg-blue-400",
     },
@@ -2190,7 +2174,7 @@ const PlayerDetailModal = ({
       key: "iq",
       label: "IQ",
       baseValue: character.stats.iq,
-      totalValue: calcTotal(character.stats.iq, "iq"),
+      totalValue: characterEffects.totalStats.iq,
       color: "text-purple-400",
       bg: "bg-purple-400",
     },
@@ -2198,7 +2182,7 @@ const PlayerDetailModal = ({
       key: "biq",
       label: "Battle IQ",
       baseValue: character.stats.biq,
-      totalValue: calcTotal(character.stats.biq, "biq"),
+      totalValue: characterEffects.totalStats.biq,
       color: "text-pink-400",
       bg: "bg-pink-400",
     },
@@ -2206,7 +2190,7 @@ const PlayerDetailModal = ({
       key: "ma",
       label: "Martial Arts",
       baseValue: character.stats.ma,
-      totalValue: calcTotal(character.stats.ma, "ma"),
+      totalValue: characterEffects.totalStats.ma,
       color: "text-orange-400",
       bg: "bg-orange-400",
     },

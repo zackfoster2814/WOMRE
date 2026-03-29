@@ -2334,10 +2334,10 @@ export const StatsComparisonMode = ({
     )
       return null;
     if (!player1 || !player2) return null;
-    const s1: CharacterStats = player1.character
+    const s1: CharacterStats = player1.character && disabledItems.size > 0
       ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
       : { ...player1.stats };
-    const s2: CharacterStats = player2.character
+    const s2: CharacterStats = player2.character && disabledItems.size > 0
       ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
       : { ...player2.stats };
     const DSTAT_KEYS = [
@@ -2485,7 +2485,9 @@ export const StatsComparisonMode = ({
   const p1DisplayStats = useMemo(() => {
     if (stepState) return stepState.p1Stats;
     if (dothrakiPreviewStats) return dothrakiPreviewStats.s1;
-    const base = player1?.character
+    // Dùng player1.stats (đã tính bởi calculateCharacterEffects) làm base khi không có disabled;
+    // nếu có disabled items thì tính lại để phản ánh đúng
+    const base = player1?.character && disabledItems.size > 0
       ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
       : (player1?.stats ?? null);
     const delta =
@@ -2547,7 +2549,9 @@ export const StatsComparisonMode = ({
   const p2DisplayStats = useMemo(() => {
     if (stepState) return stepState.p2Stats;
     if (dothrakiPreviewStats) return dothrakiPreviewStats.s2;
-    const base = player2?.character
+    // Dùng player2.stats (đã tính bởi calculateCharacterEffects) làm base khi không có disabled;
+    // nếu có disabled items thì tính lại để phản ánh đúng
+    const base = player2?.character && disabledItems.size > 0
       ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
       : (player2?.stats ?? null);
     const delta =

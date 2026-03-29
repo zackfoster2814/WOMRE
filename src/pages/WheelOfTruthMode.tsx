@@ -1264,7 +1264,8 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
   const p1DisplayStats = useMemo(() => {
     if (stepState) return stepState.p1Stats;
     if (dothrakiPreviewStats) return dothrakiPreviewStats.s1;
-    return player1?.character
+    // Dùng player.stats (calculateCharacterEffects) làm base; chỉ tính lại khi có disabled
+    return player1?.character && disabledItems.size > 0
       ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
       : (player1?.stats ?? null);
   }, [player1, disabledItems, stepState, dothrakiPreviewStats]);
@@ -1272,7 +1273,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
   const p2DisplayStats = useMemo(() => {
     if (stepState) return stepState.p2Stats;
     if (dothrakiPreviewStats) return dothrakiPreviewStats.s2;
-    return player2?.character
+    return player2?.character && disabledItems.size > 0
       ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
       : (player2?.stats ?? null);
   }, [player2, disabledItems, stepState, dothrakiPreviewStats]);
