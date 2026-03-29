@@ -1,7 +1,7 @@
 No.217
 Name: Mặc Quyên (hodrick_.)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -104,6 +104,14 @@ PvP:
 - Đối thủ: cuongboi
 - Kết quả: Win
 - Tỉ số: 0-3
+```
+
+```
+PvP:
+- Đối thủ: LocK
+- Kết quả: Thắng
+- Tỉ số: 3-1
+- Note: Trước combat: Mặc Quyên Power Negation: AIDS Mặc Quyên Raumanian: Không LocK Golden Coin: Không, PvP Reward: (Vội)
 ```
 
 ======

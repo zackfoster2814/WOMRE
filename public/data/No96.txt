@@ -1,6 +1,6 @@
 No.96
 Name: tophate (d233tvu)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -87,6 +87,7 @@ PvP Reward;
 Other Source:
 - -1 Dura
 - -2 Dura
+- -1 All stats (từ Diablo)
 ```
 
 ======
@@ -107,6 +108,14 @@ PvP:
 - Đối thủ: Caliđu Côlýbàlý
 - Kết quả: Win
 - Tỉ số: 3-2
+```
+
+```
+PvP:
+- Đối thủ: Manhattan Cafe chơi TFT
+- Kết quả: Thua
+- Tỉ số: 4-1
+- Note: King's Lading: Gaze of the Abyss cho toàn bộ House Lannister
 ```
 
 ======

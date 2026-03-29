@@ -1,6 +1,6 @@
 No.134
 Name: Chovy Golden Roader (moimoi6820)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -101,6 +101,22 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-3
 - Note: không nhận 2 char dev: Prime time, seeking wisdom do NPC lmao
+```
+
+```
+PvP:
+- Đối thủ: Solus
+- Kết quả: Thắng
+- Tỉ số: 2-2
+- Note: Chovy Golden Roader Cursed coin: -1 All cho mình
+```
+PvP:
+- Đối thủ: Ingay
+- Kết quả: Thua 
+- Tỉ số: 4-2
+- Note: Ingay thắng, dẫn đến Solus thắng
+```
+
 ```
 
 ======

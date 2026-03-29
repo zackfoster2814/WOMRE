@@ -1,7 +1,7 @@
 No.153
 Name: catfish (catfish0140)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -78,8 +78,8 @@ Lover:
 ```
 Other Source:
 - +1 MA (Caestus)
+- +1 MA (Caestus)
 ```
-
 
 ======
 Battle Log:
@@ -101,5 +101,12 @@ PvP:
 - Đối thủ: Nikki
 - Kết quả: Win
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: CatShark
+- Kết quả: Thắng
+- Tỉ số: 0-7
 ```
 ======

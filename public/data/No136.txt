@@ -1,6 +1,6 @@
 No.136
 Name: CatShark (catshark0903)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -100,5 +100,12 @@ PvP:
 - Đối thủ: Pilèy
 - Kết quả: Win
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: catfish
+- Kết quả: Thua
+- Tỉ số: 0-7
 ```
 ======

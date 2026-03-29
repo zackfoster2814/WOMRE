@@ -1,6 +1,6 @@
 No.160
 Name: Dung (haruharu9127)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Gnome
 Sub-race: 
 ```
-
 ```
 Archetype: 
 + Mid
 ```
-``` 
+```
 4 Quirk:  
 + Training Restricted
 + Brainrot
@@ -31,79 +30,79 @@ IQ: 5
 BIQ: 5
 MA: 5
 ```
-
 ```
 Houses: 
 + House Lannister
 ```
-
 ```
-5 Gear: 
- + 5 Normal gear:
-  - Golden Coin (Từ House)
-  - Golden Coin (Từ House)
-  - Golden Coin (Từ House)
-  - Golden Coin 
-  - Golden Coin 
-  - Baguette (Từ House)
-  - Cuộn khăn giấy (Từ House)
-  - Buckler
-  - Love Letter
-  - Giấy Nợ Gia Truyền 
- + 0 Legacy gear:
+11 Gear: 
+ + 10 Normal gear:
+  - Golden Coin (Từ House) (đã mất)
+  - Golden Coin (Từ House) (đã mất)
+  - Golden Coin (Từ House) (đã mất)
+  - Golden Coin (đã mất)
+  - Golden Coin (đã mất)
+  - Baguette (Từ House) (đã mất)
+  - Cuộn khăn giấy (Từ House) (đã mất)
+  - Buckler (đã mất)
+  - Love Letter (đã mất)
+  - Giấy Nợ Gia Truyền (đã mất)
+ + 1 Legacy gear:
   - 
 ```
-
 ```
-1 Normal Weapon
+2 Normal Weapon
 + Magical Staff (Dùng được) (đã mất)
 + Glass Bottle (Được tặng) (đã mất)
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-4 Power: 
+1 Power: 
 + Black Magic
 + Blood Frenzy
 + Spear of Fire
 + Fire Control
 ```
-
 ```
 Char dev: 
 + Creator's Reforge (Glass Bottle)
 ```
-
 ```
 Team: 
 ```
-
 ```
 Lover:
-+ 
++
 ```
 
 ======
-Battle Log:
-```
-```
-
+Battle Log: 
 ```
 PvP:
 - Đối thủ: Solus
 - Kết quả: Win
 - Tỉ số: 1-5
+- Note: 
 ```
+
 ```
 PvP:
 - Đối thủ: Yamakun
 - Kết quả: Win
 - Tỉ số: 1-5
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Lười
+- Kết quả: Thua
+- Tỉ số: 3-3
+- Note: Trước combat: Golden Coin kích hoạt, thua tie break, nhà Lanister nhận +1 all stat 
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.243
 Name: Karu (karu_87369)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -28,8 +28,8 @@ Str:4 Cursed of 36k
 Spd:1 Cursed of 36k
 Dur:9 Cursed of 36k
 IQ:5 Cursed of 36k
-BIQ:1Cursed of 36k
-MA:2Cursed of 36k
+BIQ:1 Cursed of 36k
+MA:2 Cursed of 36k
 ```
 
 ```
@@ -89,6 +89,7 @@ Other Source:
 ```
 PvP Reward:
 - +1 Gear: Fishing Rod
+- PvP Reward: +2 Stat cao nhất (Dura)
 ```
 
 ======
@@ -109,5 +110,12 @@ PvP:
 - Tỉ số: 3-2
 - Reward:
   -> Nhận 1 Gear: Fishing Rod
+```
+
+```
+PvP:
+- Đối thủ: SoloWingPixy
+- Kết quả: Thắng
+- Tỉ số: 3-3
 ```
 ======

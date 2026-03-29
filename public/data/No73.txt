@@ -1,6 +1,6 @@
 No.73
 Name: Em Phốc Trắng (dick8704)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -112,6 +112,14 @@ PvP:
 - Đối thủ: Duck03
 - Kết quả: Win
 - Tỉ số: 5-1
+```
+
+```
+PvP:
+- Đối thủ: Kraken
+- Kết quả: Thua
+- Tỉ số: 6-1
+- Note: Dothraki luật 6(GG)
 ```
 
 ======

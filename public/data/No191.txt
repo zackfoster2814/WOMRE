@@ -1,6 +1,6 @@
 No.191
 Name: Solus (solus_2108)
-Status: Còn sống
+Status: Còn sống 
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -84,6 +84,13 @@ Lover:
 PvP Reward:
 - +1 Spd
 ```
+```
+Other Source:
+- -2 Dura 
+- -2 Dura 
+- -2 Dura 
+- -2 Dura 
+```
 
 ======
 Battle Log:
@@ -106,4 +113,11 @@ PvP:
 - Kết quả: lose
 - Tỉ số: 0-4
 ```
+
+```
+PvP:
+- Đối thủ: Chovy Golden Roader
+- Kết quả: Thua
+- Tỉ số: 2-2
+- Note: RT Gọi Ingay ra đánh hộ
 ======

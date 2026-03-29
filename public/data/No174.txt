@@ -1,7 +1,7 @@
 No.174
 Name: Ca Cao (Catos CaCao)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -78,6 +78,7 @@ Lover:
 ```
 PvP Reward:
 - +1 MA
+- +1 Dura
 ```
 
 ======
@@ -96,6 +97,13 @@ PvP:
 - Đối thủ: Del1ght
 - Kết quả: Win
 - Tỉ số: 6-0
+```
+
+```
+PvP:
+- Đối thủ: Hero X
+- Kết quả: Thắng
+- Tỉ số: 5-1
 ```
 
 ======

@@ -81,6 +81,7 @@ Other Source:
 - -1 DUR
 - -1 STR
 - -1 DUR
+- -1 All stats (từ Diablo)
 ```
 
 ======

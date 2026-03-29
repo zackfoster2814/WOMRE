@@ -21,7 +21,7 @@ Archetype:
 + Cowardly
 ```
 ```
-Str: 7 (được +3 từ Sub-race)
+Str: 1 (bị nguyền từ 7 được +3 từ Sub-race)
 Spd: 7
 Dur: 5
 IQ: 1

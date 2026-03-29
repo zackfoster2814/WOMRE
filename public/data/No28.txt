@@ -1,7 +1,7 @@
 No.28
 Name: Manhattan Cafe chơi TFT (randomguy5719)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -90,6 +90,8 @@ Other Source:
 ```
 PvP Reward:
 - +2 BIQ (chỉ số thấp nhất)
+- +1 IQ
+- +1 MA 
 ```
 
 
@@ -109,5 +111,13 @@ PvP:
 - Đối thủ: Ethan
 - Kết quả: Win
 - Tỉ số: 5-1
+```
+
+```
+PvP:
+- Đối thủ: tophate
+- Kết quả: Thắng
+- Tỉ số: 4-1
+- Note :PvP Reward: +1 IQ, +1 MA Cỏ: Thưởng thêm 1 PvP
 ```
 ======

@@ -1810,12 +1810,11 @@ export class EffectResolver {
           effect.value !== undefined &&
           (!effect.target || effect.target === "self")
         ) {
-          // For effects targeting 'lowest'/'highest' with isBase, use original baseStats to determine which stat
-          // This ensures "Base Stat thấp nhất" looks at original base stats, not modified stats
+          // For effects targeting 'lowest'/'highest', always use original baseStats to determine which stat
+          // This ensures consistent resolution regardless of source order
           const statsForResolution =
-            effect.isBase &&
-            (effect.stat === "lowest" || effect.stat === "highest")
-              ? baseStats // Use original base stats passed to this function
+            effect.stat === "lowest" || effect.stat === "highest"
+              ? baseStats // Always use original base stats for consistent lowest/highest resolution
               : result.totalStats;
           const targetStats = resolveStatTarget(
             effect.stat,

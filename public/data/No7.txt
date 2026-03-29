@@ -1,6 +1,6 @@
 No.7
 Name: Hero X (enatc0)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -104,6 +104,14 @@ PvP:
 - Đối thủ: Đóm con
 - Kết quả: Win
 - Tỉ số: 5-3
+```
+
+```
+PvP:
+- Đối thủ: Ca Cao
+- Kết quả: Thua
+- Tỉ số: 5-1
+- Note: Rau má: Không, Diablo sẽ -1 all Stat của 3 người ngẫu nhiên: .hor1zon, Korokiri, tophate
 ```
 
 ======

@@ -1,6 +1,6 @@
 No.13
 Name: zed (zed9179)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -93,8 +93,9 @@ PvP Reward:
 - +1 IQ
 ```
 
+
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: Allfather
@@ -104,6 +105,7 @@ PvE:
   + +4 Str
   + +4 IQ
 - Punishment: 
+- Note: 
 ```
 
 ```
@@ -112,6 +114,16 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 0-3
 - Reward: +1 IQ
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Thanh Tước bé cưng
+- Kết quả: Thua
+- Tỉ số: 2-5
+- Note: Zed văn tế: Gambling quay lại Durability từ 7 thành 1
+
 ```
 
 ======

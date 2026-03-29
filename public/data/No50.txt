@@ -1,6 +1,6 @@
 No.50
 Name: LocK (lock485)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -38,13 +38,14 @@ Houses:
 ```
 7 Gear:
  + 7 Normal gear:
-  - Thuốc Tráng dương 
-  - Fingerthing 
-  - Golden Coin 
-  - Golden Coin 
-  - Golden Coin 
-  - Empty Stein
-  - Wine
+  - Thuốc Tráng dương (đã mất)
+  - Fingerthing (đã mất)
+  - Golden Coin (đã mất)
+  - Golden Coin (đã mất)
+  - Golden Coin (đã mất)
+  - Empty Stein(đã mất)
+  - Wine(đã mất)
+  - Giấy nợ gia truyền (từ dung) (đã mất)
  + 0 Legacy gear:
   - Time stone
 ```
@@ -110,6 +111,14 @@ PvP:
 - Đối thủ: HunggViEn
 - Kết quả: Win
 - Tỉ số: 1-6
+```
+
+```
+PvP:
+- Đối thủ: Mặc Quyên
+- Kết quả: Thua
+- Tỉ số: 3-1
+- Note: LocK chuyển giấy nợ cho Swem
 ```
 
 ======

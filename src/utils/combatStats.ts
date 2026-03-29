@@ -140,6 +140,8 @@ export function calcStatsWithDisabled(
   disabledItems: Set<string>,
   allCharacters?: Character[],
 ): CharacterStats {
+  // Dùng cùng pipeline với calculateCharacterEffects (tab Hiệu ứng) để đảm bảo đồng bộ:
+  // gatherEffectSources → mark disabled → resolveImmediateEffects
   const sources = EffectResolver.gatherEffectSources(char, allCharacters);
   for (const src of sources) {
     const key = `${playerNo}-${src.type}-${src.name}`;
@@ -147,20 +149,23 @@ export function calcStatsWithDisabled(
       src.isDisabled = true;
     }
   }
+  const baseStats = {
+    strength: char.stats.str,
+    speed: char.stats.spd,
+    durability: char.stats.dur,
+    iq: char.stats.iq,
+    biq: char.stats.biq,
+    ma: char.stats.ma,
+  };
   const result = EffectResolver.resolveImmediateEffects(
     sources,
-    {
-      strength: char.stats.str,
-      speed: char.stats.spd,
-      durability: char.stats.dur,
-      iq: char.stats.iq,
-      biq: char.stats.biq,
-      ma: char.stats.ma,
-    },
+    baseStats,
     { isPvE: false },
     char,
+    allCharacters,
   );
-  const final = {
+
+  const final: CharacterStats = {
     str: result.totalStats.strength,
     spd: result.totalStats.speed,
     dur: result.totalStats.durability,

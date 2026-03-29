@@ -83,6 +83,7 @@ Lover:
 Other Source:
 - +1 str
 - +1 biq
+- -1 All stats (từ Diablo)
 ```
 
 ```

@@ -1,7 +1,7 @@
 No.237
 Name: Trezork (tukhang4140)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -96,6 +96,8 @@ PvP Reward:
 Other Source:
 - Khung hình thờ 
 - +3 str (Mason Tyrell)
+- -1 STR
+- -1 DUR
 ```
 ======
 Battle Log:
@@ -112,6 +114,14 @@ PvP:
 - Đối thủ: Hung Nguyen
 - Kết quả: Win
 - Tỉ số: 6-0
+```
+
+```
+PvP:
+- Đối thủ: Em Minh
+- Kết quả: Thắng
+- Tỉ số: 5-0
+- Note: Trước combat: Trezork: +7 Spd Trong combat Trezork Bash: Dura, BIQ, PvP Reward: (Vội)
 ```
 
 ======

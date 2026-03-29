@@ -1,6 +1,6 @@
 No.66
 Name: SoloWingPixy (s0l0wingpixy)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -28,7 +28,7 @@ Str: 5
 Spd: 4
 Dur: 4
 IQ: 5 ban đầu là 9
-BIQ: 5ban đầu là 6
+BIQ: 5 ban đầu là 6
 MA: 5 ban đầu là 8
 ```
 
@@ -107,6 +107,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Reward: Nhận 1 Gear: Healing Flask
+```
+
+```
+PvP:
+- Đối thủ: Karu
+- Kết quả: Thua
+- Tỉ số: 3-3
 ```
 
 ======

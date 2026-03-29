@@ -1,6 +1,6 @@
 No.57
 Name: NPC (npc867)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -113,5 +113,13 @@ PvP:
 - Đối thủ: 0reki (0rekihoutarou)
 - Kết quả: Win
 - Tỉ số: 1-4
+```
+
+```
+PvP:
+- Đối thủ: bachtuotkun
+- Kết quả: Thua
+- Tỉ số: 2-3
+- Note: Trước combat: NPC Hunter's Mark: IQ, Trong combat: NPC Golden Parry: Spd, Dura, Văn Tế trúng idontloveyou Re-spin lại Str từ 7 thành 1
 ```
 ======

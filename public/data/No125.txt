@@ -1,6 +1,6 @@
 No.125
 Name: Em Minh (minhloptruong)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -99,6 +99,13 @@ PvP:
 - Đối thủ: LamBeii
 - Kết quả: Win
 - Tỉ số: 0-4
+```
+
+```
+PvP:
+- Đối thủ: Trezork
+- Kết quả: Thua
+- Tỉ số: 5-0
 ```
 
 ======

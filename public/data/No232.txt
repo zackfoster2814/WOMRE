@@ -1,6 +1,6 @@
 No.232
 Name: Kingly Majesty (.kinglymajesty)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -101,6 +101,14 @@ PvP:
 - Đối thủ: Cornmann
 - Kết quả: Win
 - Tỉ số: 4-2
+```
+
+```
+PvP:
+- Đối thủ: Yoh Hai Kiếm
+- Kết quả: Thua
+- Tỉ số: 0-7
+- Note: Conven Council quay lại stat của Em Minh 5 thành 5
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.242
 Name: bachtuotkun
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -60,7 +60,7 @@ Runeword:
 2 Power:  
 + Dream Manipulation
 + Bloody Strike
-+ Megamagic (từ King's Landing)
++ Metamagic (từ King's Landing)
 ```
 
 ```
@@ -76,6 +76,10 @@ Team:
 Lover:
 + 
 ```
+```
+PvP Reward:
+- +1 Str
+```
 
 ```
 Other Source:
@@ -90,6 +94,14 @@ PvP:
 - Đối thủ: Wohlhabend
 - Kết quả: Thắng
 - Tỉ số: 0-4
+```
+
+```
+PvP:
+- Đối thủ: NPC
+- Kết quả: Thắng
+- Tỉ số: 2-3
+- Note: 
 ```
 
 ======

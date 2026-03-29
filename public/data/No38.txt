@@ -1,7 +1,7 @@
 No.38
 Name: Lười (lazbu2501)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -11,12 +11,11 @@ Ký Sinh:
 Race: Orc
 Sub-race: -
 ```
-
 ```
 Archetype: 
 + Hero Grave Keeper
 ```
-``` 
+```
 2 Quirk:  
 + Brainrot
 + Fast Learner
@@ -29,15 +28,12 @@ IQ: 6
 BIQ: 6
 MA: 5
 ```
-
 ```
 Houses: 
-+ 
 ```
-
 ```
-5 Gear:
- + 5 Normal gear:
+7 Gear: 
+ + 6 Normal gear:
   - Buckler (Từ PvE)
   - Radio (Từ PvE)
   - Gold Pine Resin (Từ PvE)
@@ -47,20 +43,17 @@ Houses:
  + 0 Legacy gear:
   -
 ```
-
 ```
-0 Normal Weapon
+1 Normal Weapon
 + 
 ```
-
-``` 
-0 Rune: 
+```
+1 Rune: 
 + 
 Runeword: Không
 ```
-
 ```
-7 Power:
+1 Power: 
 + Magma Strike
 + Encroaching Shadow
 + Enhanced Hearing
@@ -69,36 +62,36 @@ Runeword: Không
 + Arcana Blast (Từ PvE)
 + Bash (Từ PvE)
 + Misty Step Ahead
++ Spear of Fire
 ```
-
 ```
 Char dev: 
 + No more home
 ```
-
 ```
 Team: 13
 ```
-
 ```
 Lover:
 +
 ```
-
 ```
 Other Source:
 - Power: Misty Step Ahead (Fast Learner)
 - Gear: Magical Scroll (Hero Grave Keeper)
 - +2 SPD (Orc)
+- +2 SPD (Orc)
 ```
+
 ======
-Battle Log:
+Battle Log: 
 ```
 PvE:
 - Đối thủ: The Collector
 - Kết quả: Win
 - Tỉ số: 5-1
 - Reward: nhận 5 Gear và 5 Power (trùng Encroaching Shadow nên không nhận thêm)
+- Note: 
 ```
 
 ```
@@ -106,6 +99,15 @@ PvP:
 - Đối thủ: ...??
 - Kết quả: Win
 - Tỉ số: 2-4
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Dung
+- Kết quả: Thắng
+- Tỉ số: 3-3
+- Note: Fast Learn nhận Spear of Fire, đào mộ không được gì
 ```
 
 ======
