@@ -802,6 +802,27 @@ export class EffectResolver {
         });
       }
 
+      if (activeHouseNames.some((h) => h.toLowerCase().includes("uchiha"))) {
+        const allStatEffects: Effect[] = (
+          ["strength", "speed", "durability", "iq", "biq", "ma"] as const
+        ).map((stat) => ({
+          type: "stat_modifier" as const,
+          stat,
+          value: 1,
+          isBase: true,
+          timing: "immediate" as const,
+          target: "self" as const,
+        }));
+        sources.push({
+          type: "house",
+          name: "Chuyện bộ tộc - Nhà Uchiha",
+          effects: allStatEffects,
+          rawDescription:
+            "+1 all base stat cho toàn bộ thành viên nhà Uchiha",
+          isActive: true,
+        });
+      }
+
       const username = character.username?.toLowerCase() || "";
       if (username === "haruharu9127") {
         const allStatEffects: Effect[] = (
@@ -836,7 +857,7 @@ export class EffectResolver {
         }));
         sources.push({
           type: "house",
-          name: "Chuyện bộ tộc - Nhà Uchiha",
+          name: "Chuyện bộ tộc - Nhà Uchiha (phản bội)",
           effects: allStatEffects,
           rawDescription: "+2 all base stat (phản bội gia tộc)",
           isActive: true,

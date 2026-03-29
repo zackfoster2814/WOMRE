@@ -31,7 +31,7 @@ MA: 6
 ```
 Houses: 
 + The Shire 
-+   -> +4 Spd
+   -> +4 Spd
 ```
 ```
 5 Gear: 
