@@ -1141,7 +1141,11 @@ export function useStartCombat(params: UseStartCombatParams): {
 
           // Giant Slayer: +1 điểm per 4 Base Dura của đối thủ (tối đa 2)
           if (handler === "giant_slayer_dura_bonus") {
-            const oppDur = (oppBaseStats as any).dur ?? 0;
+            // Dùng character stats gốc, không dùng oppBaseStats vì có thể đã bị mutate bởi debuff trước đó
+            const oppDur =
+              (oppChar?.stats as any)?.dur ??
+              (oppChar?.stats as any)?.durability ??
+              0;
             const points = Math.min(2, Math.floor(oppDur / 4));
             if (points > 0) {
               // Cộng trực tiếp vào điểm khởi đầu
