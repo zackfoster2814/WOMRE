@@ -802,6 +802,29 @@ export class EffectResolver {
         });
       }
 
+      if (
+        activeHouseNames.some((h) => h.toLowerCase().includes("lannister"))
+      ) {
+        const allStatEffects: Effect[] = (
+          ["strength", "speed", "durability", "iq", "biq", "ma"] as const
+        ).map((stat) => ({
+          type: "stat_modifier" as const,
+          stat,
+          value: 1,
+          isBase: true,
+          timing: "immediate" as const,
+          target: "self" as const,
+        }));
+        sources.push({
+          type: "house",
+          name: "Chuyện bộ tộc - Nhà Lannister",
+          effects: allStatEffects,
+          rawDescription:
+            "+1 all base stat cho toàn bộ thành viên nhà Lannister",
+          isActive: true,
+        });
+      }
+
       if (activeHouseNames.some((h) => h.toLowerCase().includes("uchiha"))) {
         const allStatEffects: Effect[] = (
           ["strength", "speed", "durability", "iq", "biq", "ma"] as const
