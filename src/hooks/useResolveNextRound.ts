@@ -2445,6 +2445,18 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                 (eff.timing === "after_combat_lose" && !didWin) ||
                 (eff.timing === "after_combat_win" && didWin);
               if (!timingOk) continue;
+              // grant_gear: GM Action
+              if (eff.type === "grant_gear") {
+                const gearName = (eff as any).grantName ?? "Gear";
+                const gearCount = (eff as any).grantCount ?? 1;
+                acEntries.push({
+                  player: side,
+                  quirkName: nh.name,
+                  description: `[GM Action] ${nh.name}: Sau combat → Nhận ${gearCount} Gear "${gearName}"`,
+                  gmAction: true,
+                });
+                continue;
+              }
               if (eff.type !== "stat_modifier") continue;
               const delta = eff.value ?? 0;
               if (delta === 0) continue;
@@ -2508,12 +2520,40 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                 });
               } else {
                 const sign = delta > 0 ? "+" : "";
-                acEntries.push({
-                  player: targetSide,
-                  quirkName: nh.name,
-                  description: `${nh.name}: Sau combat → ${sign}${delta} ${(eff.stat as string).toUpperCase()}${isOpponent ? " (đối thủ)" : ""}`,
-                  statMods: [{ stat: eff.stat as keyof CharacterStats, delta }],
-                });
+                // check_enemy_is_same_house: chỉ hiển thị khi đối thủ cùng nhà
+                if (eff.customHandler === "check_enemy_is_same_house") {
+                  const oppNestedHouses: any[] = Array.isArray(
+                    (opponent?.character as any)?.nestedHouses,
+                  )
+                    ? (opponent?.character as any).nestedHouses
+                    : [];
+                  const oppHasHouse = oppNestedHouses.some(
+                    (oh: any) =>
+                      !oh.isLost &&
+                      (oh.name ?? "").toLowerCase() ===
+                        nh.name.toLowerCase(),
+                  );
+                  if (oppHasHouse) {
+                    acEntries.push({
+                      player: targetSide,
+                      quirkName: nh.name,
+                      description: `${nh.name}: Sau combat → ${sign}${delta} ${(eff.stat as string).toUpperCase()}${isOpponent ? " (đối thủ)" : ""}`,
+                      statMods: [
+                        { stat: eff.stat as keyof CharacterStats, delta },
+                      ],
+                    });
+                  }
+                  // Không push acEntries nếu đối thủ không cùng nhà, nhưng stat vẫn được cộng bình thường
+                } else {
+                  acEntries.push({
+                    player: targetSide,
+                    quirkName: nh.name,
+                    description: `${nh.name}: Sau combat → ${sign}${delta} ${(eff.stat as string).toUpperCase()}${isOpponent ? " (đối thủ)" : ""}`,
+                    statMods: [
+                      { stat: eff.stat as keyof CharacterStats, delta },
+                    ],
+                  });
+                }
               }
             }
           }
@@ -2675,6 +2715,18 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               if (!masonEntry) continue;
               for (const eff of masonEntry.effects) {
                 if (eff.timing !== "after_combat") continue;
+                // grant_gear: GM Action
+                if (eff.type === "grant_gear") {
+                  const gearName = (eff as any).grantName ?? "Gear";
+                  const gearCount = (eff as any).grantCount ?? 1;
+                  acEntries.push({
+                    player: side,
+                    quirkName: masonSubKey,
+                    description: `[GM Action] ${masonSubKey}: Sau combat → Nhận ${gearCount} Gear "${gearName}"`,
+                    gmAction: true,
+                  });
+                  continue;
+                }
                 if (eff.type !== "stat_modifier") continue;
                 const delta = eff.value ?? 0;
                 if (delta === 0) continue;
@@ -2775,15 +2827,27 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             }
           }
 
-          // ── Mason archetype: Golden Coin + Char Dev ────────────────────────
+          // ── Mason archetype: Kazuya Kinoshita's House → thêm 1 Char Dev ──
+          // (Golden Coin đã được handle trong Mason grant_gear loop ở trên)
           if (hasMasonArchetype) {
-            acEntries.push({
-              player: side,
-              quirkName: "Mason",
-              description:
-                '[GM Action] Mason: Sau combat → Nhận 1 Gear "Golden Coin" và 1 Char Dev',
-              gmAction: true,
-            });
+            const kazuyaMasonKey = "Kazuya Kinoshita's House Mason";
+            const hasKazuyaHouse = nestedHouses.some(
+              (nh: any) =>
+                !nh.isLost &&
+                !nh.subType &&
+                (nh.name ?? "") === "Kazuya Kinoshita's House",
+            );
+            if (
+              hasKazuyaHouse &&
+              !disabledItems.has(`${player.no}-house_sub-${kazuyaMasonKey}`)
+            ) {
+              acEntries.push({
+                player: side,
+                quirkName: kazuyaMasonKey,
+                description: `[GM Action] ${kazuyaMasonKey}: Sau combat → Nhận thêm 1 Char Dev`,
+                gmAction: true,
+              });
+            }
           }
 
           // ── House by name after_combat effects ─────────────────────────────
