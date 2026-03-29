@@ -82,6 +82,11 @@ Lover:
 PvP Reward:
 - +2 MA (stats thấp nhất)
 ```
+```
+Other Source:
+- +1 Ma
+- -1 Dura
+```
 
 ======
 Battle Log:
