@@ -375,9 +375,9 @@ export class CharacterParser {
 
     // Parse Other Source Mods từ "Nguồn khác:" block
     character.otherSourceMods = this.parseOtherSourceMods(lines);
-    if (character.otherSourceMods && character.otherSourceMods.length > 0) {
-      console.log(`[Parser] ${character.name} otherSourceMods:`, JSON.stringify(character.otherSourceMods));
-    }
+    // if (character.otherSourceMods && character.otherSourceMods.length > 0) {
+    //   console.log(`[Parser] ${character.name} otherSourceMods:`, JSON.stringify(character.otherSourceMods));
+    // }
 
     // Parse Battle Log
     character.battleLog = this.parseBattleLog(lines);

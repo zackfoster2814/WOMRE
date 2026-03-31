@@ -368,6 +368,23 @@ export function useStartCombat(params: UseStartCombatParams): {
     applyMoonrootBonus(player1, "player1");
     applyMoonrootBonus(player2, "player2");
 
+    const allChars = allPlayers.map((p) => p.character).filter((c): c is Character => !!c);
+
+    const hasUnoP1BC =
+      (player1.character?.powers || []).some(
+        (pw: any) =>
+          !pw.isLost &&
+          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "uno reverse card",
+      ) && !effectiveDisabledItems.has(`${player1.no}-power-Uno Reverse Card`);
+    const hasUnoP2BC =
+      (player2.character?.powers || []).some(
+        (pw: any) =>
+          !pw.isLost &&
+          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
+            "uno reverse card",
+      ) && !effectiveDisabledItems.has(`${player2.no}-power-Uno Reverse Card`);
+
     const p1BaseStats: CharacterStats = player1.character
       ? calcStatsWithBeforeCombat(
           player1.character,
@@ -380,6 +397,8 @@ export function useStartCombat(params: UseStartCombatParams): {
           p1Race,
           player1.raceTier,
           player2.raceTier,
+          allChars,
+          hasUnoP2BC,
         )
       : { ...player1.stats };
     const p2BaseStats: CharacterStats = player2.character
@@ -394,6 +413,8 @@ export function useStartCombat(params: UseStartCombatParams): {
           p2Race,
           player2.raceTier,
           player1.raceTier,
+          allChars,
+          hasUnoP1BC,
         )
       : { ...player2.stats };
 
@@ -410,21 +431,8 @@ export function useStartCombat(params: UseStartCombatParams): {
     }
 
     // Uno Reverse Card: redirect before_combat debuffs của đối thủ về đối thủ
-    // calcStatsWithBeforeCombat đã skip apply vào ta — cần apply vào đối thủ ở đây
-    const hasUnoP1BC =
-      (player1.character?.powers || []).some(
-        (pw: any) =>
-          !pw.isLost &&
-          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
-            "uno reverse card",
-      ) && !effectiveDisabledItems.has(`${player1.no}-power-Uno Reverse Card`);
-    const hasUnoP2BC =
-      (player2.character?.powers || []).some(
-        (pw: any) =>
-          !pw.isLost &&
-          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() ===
-            "uno reverse card",
-      ) && !effectiveDisabledItems.has(`${player2.no}-power-Uno Reverse Card`);
+    // calcStatsWithBeforeCombat đã skip apply debuffs opp vào ta khi opp có URC —
+    // cần apply debuffs đó vào chính opp ở đây
     if (hasUnoP1BC && player2.character) {
       // p1 có URC → debuffs của p2 nhắm vào opponent (p1) bị redirect về p2
       applyBeforeCombatStatMods(

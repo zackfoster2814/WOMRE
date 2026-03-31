@@ -2424,7 +2424,16 @@ registerCombatHandler(
 
 registerCombatHandler(
   "infirmarian_cure_aids",
-  (_ctx: CombatHandlerContext): CombatHandlerResult => {
+  (ctx: CombatHandlerContext): CombatHandlerResult => {
+    const opponentPowers = ctx.opponent?.powers ?? [];
+    const opponentHasAIDS = opponentPowers.some(
+      (p: any) => (typeof p === "string" ? p : (p?.name ?? "")) === "AIDS",
+    );
+    const selfPowers = ctx.self?.powers ?? [];
+    const selfHasAIDS = selfPowers.some(
+      (p: any) => (typeof p === "string" ? p : (p?.name ?? "")) === "AIDS",
+    );
+    if (!opponentHasAIDS && !selfHasAIDS) return { skipDefault: true };
     return {
       removePower: "AIDS",
       description: "Loại bỏ AIDS khỏi cả 2 người chơi (Infirmarian)",

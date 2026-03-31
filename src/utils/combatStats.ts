@@ -174,6 +174,7 @@ export function calcStatsWithDisabled(
     ma: result.totalStats.ma,
   };
 
+
   const charRace = (char as any).race?.race?.toLowerCase() || "";
   if (charRace === "skeleton") {
     final.iq = 1;
@@ -381,9 +382,10 @@ export function calcStatsWithBeforeCombat(
   selfRace: string,
   selfRaceTier?: number,
   opponentRaceTier?: number,
+  allCharacters?: Character[],
+  opponentHasUnoReverse?: boolean,
 ): CharacterStats {
-  const base = calcStatsWithDisabled(char, playerNo, disabledItems);
-
+  const base = calcStatsWithDisabled(char, playerNo, disabledItems, allCharacters);
   applyBeforeCombatStatMods(
     base,
     char,
@@ -426,7 +428,7 @@ export function calcStatsWithBeforeCombat(
     : false;
   const fairDuelActiveBC = selfHasFairDuel || oppHasFairDuelBC;
 
-  if (opponentChar && !hasUnoReverse && !fairDuelActiveBC) {
+  if (opponentChar && !hasUnoReverse && !opponentHasUnoReverse && !fairDuelActiveBC) {
     applyBeforeCombatStatMods(
       base,
       opponentChar,
@@ -473,18 +475,6 @@ export function calcStatsWithBeforeCombat(
     }
   }
 
-  const eirSubRaceFull: string = (char as any).race?.subRace || "";
-  if (eirSubRaceFull.toLowerCase().startsWith("eir")) {
-    const eirDisabled = disabledItems.has(
-      `${playerNo}-sub_race-${eirSubRaceFull}`,
-    );
-    if (!eirDisabled) {
-      const eirStackMatch = eirSubRaceFull.match(/\((\d+)\)/);
-      const eirStackN = eirStackMatch ? parseInt(eirStackMatch[1], 10) : 0;
-      const eirBonus = Math.pow(2, eirStackN);
-      applyStatDelta(base, "dur", eirBonus - 1);
-    }
-  }
 
   return base;
 }

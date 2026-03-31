@@ -91,12 +91,26 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
 
         const playerList: PlayerData[] = [];
         const texts = await fetchAllPlayerTexts();
+        // Parse tất cả characters trước để cross-character effects (In Love, v.v.) hoạt động đúng
+        type ParsedEntry = { no: number; char: ReturnType<typeof CharacterParser.parseCharacterFile> };
+        const parsedChars: ParsedEntry[] = [];
         for (const [i, content] of texts) {
           try {
             const char = CharacterParser.parseCharacterFile(content);
-            const effects = EffectResolver.calculateCharacterEffects(char, {
-              isPvE: true,
-            });
+            parsedChars.push({ no: char.no || i, char });
+          } catch {
+            /* bỏ qua */
+          }
+        }
+        const allChars = parsedChars.map((p) => p.char);
+
+        for (const { no, char } of parsedChars) {
+          try {
+            const effects = EffectResolver.calculateCharacterEffects(
+              char,
+              { isPvE: true },
+              allChars,
+            );
             const pveStats: CharacterStats = {
               str: effects.totalStats.strength,
               spd: effects.totalStats.speed,
@@ -106,8 +120,8 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
               ma: effects.totalStats.ma,
             };
             playerList.push({
-              no: char.no || i,
-              name: char.name || `Player ${i}`,
+              no,
+              name: char.name || `Player ${no}`,
               username: char.username || "",
               stats: pveStats,
               baseStats: {
@@ -143,7 +157,11 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                   .filter((g) => !g.isLost)
                   .map((g) => g.name),
               ],
-              effectBreakdown: EffectResolver.getCharacterEffectBreakdown(char),
+              effectBreakdown: EffectResolver.getCharacterEffectBreakdown(
+                char,
+                undefined,
+                allChars,
+              ),
             });
           } catch {
             /* bá» qua */
