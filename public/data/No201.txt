@@ -81,6 +81,8 @@ Other Source:
 - +2 Dura (Orc)
 - -1 STR (thuốc Tráng Dương)
 - -1 DUR (thuốc Tráng Dương)
+- -1 STR (thuốc Tráng Dương)
+- -1 DUR (thuốc Tráng Dương)
 ```
 
 ======
