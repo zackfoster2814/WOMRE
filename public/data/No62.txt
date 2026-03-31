@@ -84,6 +84,8 @@ Other Source:
 - -1 BIQ
 - Arcana Blast (2 ngón Trung Kiên)
 - +2 Dura
+- -1 IQ 
+- -1 BIQ
 ```
 
 ======
