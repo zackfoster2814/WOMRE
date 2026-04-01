@@ -108,7 +108,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Nime
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 2-2
 - Note: 
 ```

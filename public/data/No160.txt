@@ -100,7 +100,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Lười
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-3
 - Note: Trước combat: Golden Coin kích hoạt, thua tie break, nhà Lanister nhận +1 all stat 
 ```

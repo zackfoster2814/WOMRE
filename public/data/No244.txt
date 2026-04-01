@@ -107,7 +107,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Roku da Poet
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 3-4
 - Note: 
 ```

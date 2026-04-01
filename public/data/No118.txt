@@ -93,7 +93,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: AtKo
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 3-4
 - Note: 
 ```
@@ -101,7 +101,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: KuSenpai
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-3
 - Note: Trước combat: Warm Bunny rauma: Không
 ```

@@ -114,7 +114,7 @@ crit, đào mộ Pilèy Magical Scroll
 ```
 PvP:
 - Đối thủ: Duckie2369
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-3
 - Note: Gọi Solus ra đánh hộ
 ```

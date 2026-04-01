@@ -1,6 +1,6 @@
 No.233
 Name: sodium_nickel_89 (sodium_nickel_89)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -102,6 +102,13 @@ PvP:
 - Đối thủ: MasMerterserker
 - Kết quả: Win
 - Tỉ số: 2-4
+```
+
+```
+PvP:
+- Đối thủ: dung7877
+- Kết quả: lose
+- Tỉ số: 5-1
 ```
 
 ======

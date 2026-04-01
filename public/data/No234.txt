@@ -101,7 +101,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Em Phốc Trắng
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 6-1
 - Note: PVP reward (chết não)
 ```

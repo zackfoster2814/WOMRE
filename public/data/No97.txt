@@ -92,7 +92,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Cô Fulun`
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-1
 ```
 

@@ -1,7 +1,7 @@
 No.238
 Name: CobyKei (reiniskhoa)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -20,7 +20,7 @@ Archetype:
 2 Quirk:  
 + Night Owl
 + Clumsy
-+ Brain Rot (Từ Braindead)
++ BrainRot (Từ Braindead)
 ```
 ```
 Str:10
@@ -44,6 +44,7 @@ Houses:
   - Đá
   - Beer
   - Healing Flasks
+  - Sổ Tay
  + 0 Legacy gear:
   - 
 ```
@@ -89,6 +90,7 @@ Other Source:
 - +2 Spd (từ Yami Dryad)
 - +2 MA (từ Bamialoai2)
 - Healing Flask (Hero Grave Keeper)
+- Đào mộ GoonNaga: Sổ Tay
 ```
 
 ======
@@ -109,6 +111,15 @@ PvP:
 - Đối thủ: Billz
 - Kết quả: Win
 - Tỉ số: 1-5
+```
+
+```
+PvP:
+- Đối thủ: Azet
+- Kết quả: win
+- Tỉ số: 5-2
+- Note: PvP Reward: (Brainrot)
+
 ```
 
 ======

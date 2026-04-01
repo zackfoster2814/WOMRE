@@ -91,7 +91,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Kẹo Con
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 2-5
 - Note: Trong combat: Johnny Walkaways Cruelty: Str
 ```

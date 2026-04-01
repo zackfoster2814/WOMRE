@@ -115,7 +115,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Tuấn Anh
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 1-5
 - Note: Trước combat: Anti-Magic Barrier: Body Enhancing, No Stopping Me
 ```

@@ -112,7 +112,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: bo
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-5
 - Note: Trước combat: E4zyyyy rauma: không E4zyyyy Goldencoin: không,  E4zyyyy Coven Council quay lại MA cho caubetuky._. từ 9 thành 7
 ```

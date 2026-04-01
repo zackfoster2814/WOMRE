@@ -1,6 +1,6 @@
 No.197
 Name: Anh Thầy Bói (nongnoc0977)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -103,5 +103,12 @@ PvP:
 - Đối thủ: bưởi béo
 - Kết quả: Win
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: Euoid
+- Kết quả: lose
+- Tỉ số: 4-2
 ```
 ======

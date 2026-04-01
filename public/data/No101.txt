@@ -1,7 +1,7 @@
 No.101
 Name: Anh Bác Sĩ (shigurekt1sha)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -22,6 +22,7 @@ Archetype:
 + Pure (không đai trinh tiết)
 + Blind
 + Let me solo her
++ Patient
 ```
 ```
 Str: 8
@@ -91,6 +92,9 @@ Other Source:
 - +1 Spd
 - +1 IQ
 - +1 BIQ
+- Cursed Charmed (đào mộ)
+- +1 Str
+- +1 Quirk: Patient
 ```
 
 ======
@@ -110,5 +114,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 2-2
 - Note: nhận thêm Earth
+```
+
+```
+PvP:
+- Đối thủ: zun
+- Kết quả: win
+- Tỉ số: 4-1
+- Note: Blind: MA
 ```
 ======

@@ -1,7 +1,7 @@
 No.104
 Name: 1037 (.huy._)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -65,7 +65,7 @@ Runeword: Không
 + Voidwalking
 + Seismic
 + 67 (từ PvE Reward)
-+ Metamagic (từ King's Landing)
++ Metamagic 
 ```
 
 ```
@@ -100,6 +100,14 @@ PvP:
 - Đối thủ: Memento Duelist
 - Kết quả: Win
 - Tỉ số: 2-5
+```
+
+```
+PvP:
+- Đối thủ: thomasjoec
+- Kết quả: win
+- Tỉ số: 0-7
+- Note: PvP Reward: (vội)
 ```
 
 ======

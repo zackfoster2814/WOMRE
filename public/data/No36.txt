@@ -1,7 +1,7 @@
 No.36
 Name: Lovepcdolls (lovepcdolls)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -61,8 +61,9 @@ Runeword: Không
 + Bloodlust 
 + Petrification
 + Swinging Maestro
-+ AIDS 
 + Force Field (The Tamer Straight Sword)
++ Drunken Boxing
++ Thơm
 ```
 
 
@@ -88,6 +89,7 @@ Lover:
 ```
 PvP Reward:
 - 1 Gear: Silver Steed
+- +1 All Stats
 ```
 ```
 Other Source:
@@ -98,6 +100,14 @@ Other Source:
 - +1 Str
 - +1 Spd
 - +2 Dura
+- -1 IQ
+- -1 MA 
+- +1 Str
+- +1 Spd
+- +2 Dura
+- 2 Dura (Wand)
+- 1 power: Drunken Boxing (The Tamer Straight Sword)
+- 1 power: Thơm (Wand)
 ```
 ======
 Battle Log:
@@ -111,6 +121,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 0-0
 - note: nhận 4 power từ Patient
+```
+
+```
+PvP:
+- Đối thủ: Mwa
+- Kết quả: win
+- Tỉ số: 0-6
+- Note: Gặp bác sĩ hết bị Aids
 ```
 
 ======

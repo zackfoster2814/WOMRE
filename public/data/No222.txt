@@ -78,6 +78,7 @@ Other Source:
 - +1 Dura
 - +1 Dura
 - +2 MA
+- +1 BIQ
 ```
 
 ======
@@ -93,7 +94,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: mGilzuha
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-4
 - Note: Trong combat: Ranger Silver: Str
 ```

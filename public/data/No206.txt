@@ -104,7 +104,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: E4zyyyy
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 4-5
 - Note: bo nhận:  PvP Reward: +1 Dura và +1 Str Herbalist: Nhận thêm 1 phần thưởng PvP.
 ```

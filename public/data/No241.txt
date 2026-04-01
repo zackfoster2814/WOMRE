@@ -94,7 +94,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: mHamster
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 5-2
 - Note: Thợ lặn có Văn tế: Narita Taigoat quay lại Str từ 8 thành 6
 ```

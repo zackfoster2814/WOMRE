@@ -101,7 +101,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: 0chjnchjn
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 2-4
 - Note: Trước combat: baonine Scrying: không
 ```

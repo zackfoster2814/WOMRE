@@ -120,7 +120,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: zed
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-5
 - Note: Học hỏi: Không
 ```

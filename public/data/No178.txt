@@ -1,7 +1,7 @@
 No.178
 Name: Vinh Vander Bek (vinhvan)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -89,6 +89,7 @@ Other Source:
 - nhận Chaos Enchantment
 - +1 MA
 - +1 Dura
+- +1 BIQ
 ```
 
 ======
@@ -100,6 +101,13 @@ Battle Log:
 PvP:
 - Đối thủ: Kaori
 - Kết quả: Win
+- Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: Ngũ hổ vồ xôi
+- Kết quả: win
 - Tỉ số: 3-3
 ```
 

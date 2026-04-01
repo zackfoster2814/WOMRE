@@ -1,7 +1,7 @@
 No.227
 Name: dung7877 (dung7877)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -39,6 +39,7 @@ Houses:
 0 Gear: 
  + 0 Normal gear:
   - Silver Steed (Từ House)
+  - Ancient Protector
  + 0 Legacy gear:
   - 
 ```
@@ -79,11 +80,12 @@ Lover:
 ```
 Other Source:
 - Machinists Power: Fingerthing
+- Machinist: +1 Gear: Ancient Protector
 ```
 ```
 PvP Reward:
 - +1 Dura
-```
+- +1 Speed
 
 ======
 Battle Log:
@@ -103,6 +105,13 @@ PvE:
 PvP:
 - Đối thủ: Kazuha
 - Kết quả: Win
+- Tỉ số: 5-1
+```
+
+```
+PvP:
+- Đối thủ: sodium_nickel_89
+- Kết quả: win
 - Tỉ số: 5-1
 ```
 

@@ -1,6 +1,6 @@
 No.205
 Name: Azet (ayetvnh78)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -105,5 +105,12 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-0
 - Note: Giấy nợ kích hoạt, mất hết tất cả gear và Weapon, báo nhà, giấy nợ chuyển cho: Dung (sv)
+```
+
+```
+PvP:
+- Đối thủ: CobyKei
+- Kết quả: lose
+- Tỉ số: 5-2
 ```
 ======

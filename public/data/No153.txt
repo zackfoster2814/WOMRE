@@ -79,6 +79,7 @@ Lover:
 Other Source:
 - +1 MA (Caestus)
 - +1 MA (Caestus)
+- +2 Str
 ```
 
 ======
@@ -106,7 +107,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: CatShark
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 0-7
 ```
 ======

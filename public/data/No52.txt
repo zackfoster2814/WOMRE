@@ -111,7 +111,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: radb1t_fr
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-2
 ```
 

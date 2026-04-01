@@ -98,7 +98,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Cloudian
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 4-2
 - Note: caubetuky.. Numby: +4IQ
 ```

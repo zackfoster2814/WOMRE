@@ -22,7 +22,7 @@ Archetype:
 + Let me solo her
 ```
 ```
-Str: 10
+Str: 7 (bị nguyền từ 10 - văn tế)
 Spd: 2
 Dur: 6
 IQ: 5
@@ -93,7 +93,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Warmbunny
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 4-3
 - Note: KuSenpai Black Magic: -2 IQ
 ```

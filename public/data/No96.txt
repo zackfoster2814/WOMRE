@@ -113,7 +113,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Manhattan Cafe chơi TFT
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-1
 - Note: King's Lading: Gaze of the Abyss cho toàn bộ House Lannister
 ```

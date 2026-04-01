@@ -107,7 +107,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Sâm bổ lượng Châu Đốc
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 4-2
 - Note:  Không Fast Learner
 ```

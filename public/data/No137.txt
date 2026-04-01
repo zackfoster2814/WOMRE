@@ -74,6 +74,7 @@ Other Source:
 - +1 str
 - +1 spd
 - +1 MA
+- +1 BIQ
 ```
 
 ======
@@ -89,7 +90,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Amos
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-2
 - Note: 
 ```

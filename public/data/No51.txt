@@ -1,6 +1,6 @@
 No.51
 Name: Ngũ hổ vồ xôi (uchihahahaha_)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -102,6 +102,13 @@ PvP:
 - Đối thủ: HuyRhythm
 - Kết quả: Win
 - Tỉ số: 4-3
+```
+
+```
+PvP:
+- Đối thủ: Vinh Vander Bek
+- Kết quả: lose
+- Tỉ số: 3-3
 ```
 
 

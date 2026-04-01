@@ -84,6 +84,7 @@ Other Source:
 - +1 spd
 - +1 MA
 - +1 Dura
+- +1 BIQ
 ```
 
 ======

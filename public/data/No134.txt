@@ -106,13 +106,13 @@ PvP:
 ```
 PvP:
 - Đối thủ: Solus
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-2
 - Note: Chovy Golden Roader Cursed coin: -1 All cho mình
 ```
 PvP:
 - Đối thủ: Ingay
-- Kết quả: Thua 
+- Kết quả: lose 
 - Tỉ số: 4-2
 - Note: Ingay thắng, dẫn đến Solus thắng
 ```

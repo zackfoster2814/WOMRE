@@ -1,7 +1,7 @@
 No.107
 Name: dlwlrma (aem2804)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -77,10 +77,12 @@ Lover:
 ```
 Summon:
 + Mufasa
++ Pack of Wolves
 ```
 ```
 PvP Reward:
 - +1 BIQ
+- +1 IQ
 ```
 
 ======
@@ -101,6 +103,14 @@ PvP:
 - Đối thủ: iodern
 - Kết quả: Win
 - Tỉ số: 4-3
+```
+
+```
+PvP:
+- Đối thủ: Fen
+- Kết quả: win
+- Tỉ số: 2-4
+- Note: Crit:không
 ```
 
 ======

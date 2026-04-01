@@ -109,7 +109,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: baonine
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-4
 - Note: Trước combat: 0chjnchjn: Enlarging
 ```

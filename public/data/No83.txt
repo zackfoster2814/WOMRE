@@ -1,6 +1,6 @@
 No.83
 Name: h2c (h2cch2)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -83,6 +83,10 @@ Other Source:
 - -1 SPD (Lazy)
 - +2 IQ (Lazy)
 - +1 MA (Ceastus)
+- -1 STR (Lazy)
+- -1 SPD (Lazy)
+- +2 IQ (Lazy)
+- +1 MA (Ceastus)
 ```
 
 ```
@@ -100,5 +104,13 @@ PvP:
 - Tỉ số: 5-2
 - Reward:
   + Nhận 1 power: Sonic Scream
+```
+
+```
+PvP:
+- Đối thủ: Smolder
+- Kết quả: lose
+- Tỉ số: 4-3
+- Note: h2c Goldship: -1 all
 ```
 ======

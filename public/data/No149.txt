@@ -1,7 +1,7 @@
 No.149
 Name: Sparxie đã bán nước chưa (god19879725)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -60,7 +60,7 @@ Runeword: Không
 2 Power: 
 + Acid Breath
 + Groundwork
-+ Poison Breath
++ Poision Breath
 ```
 
 ```
@@ -105,4 +105,12 @@ PvP:
 - Tỉ số: 1-5
 - Reward: +1 BIQ
 - Note: nhận Poison Breath từ Acid Breath sau combat thắng
+```
+
+```
+PvP:
+- Đối thủ: idontloveyou
+- Kết quả: win
+- Tỉ số: 0-5
+- Note:  PvP Reward: (Brainrot), Acid Breath: Thắng
 ```

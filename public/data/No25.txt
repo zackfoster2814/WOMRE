@@ -93,7 +93,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: .hor1zon
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-4
 - Note: 
 ```

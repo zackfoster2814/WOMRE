@@ -1,6 +1,6 @@
 No.235
 Name: Devourer Of Gays (devourerofgays_75679)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -109,6 +109,13 @@ PvP:
 - Đối thủ: boomaiweed
 - Kết quả: Win
 - Tỉ số: 0-4
+```
+
+```
+PvP:
+- Đối thủ: BLèBLè
+- Kết quả: lose
+- Tỉ số: 3-3
 ```
 
 ======

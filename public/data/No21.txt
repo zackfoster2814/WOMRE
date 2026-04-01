@@ -104,7 +104,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Huy Le
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 2-4
 - Note: Trước combat: Ako Darling Golden Coin
 ```

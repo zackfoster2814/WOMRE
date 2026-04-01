@@ -117,7 +117,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Kraken
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 6-1
 - Note: Dothraki luật 6(GG)
 ```

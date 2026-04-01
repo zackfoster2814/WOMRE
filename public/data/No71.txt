@@ -107,7 +107,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: kinbum
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 0-4
 - Note: Trước combat: Gici Golden Coin: Không Gici Black Magic: -2 MA
 ```

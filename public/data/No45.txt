@@ -97,7 +97,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Yousei
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-4
 - Note: CúNga nhận:  PvP Reward: Nhận Gear: Wine
 ```

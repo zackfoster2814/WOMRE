@@ -116,7 +116,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Mặc Quyên
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-1
 - Note: LocK chuyển giấy nợ cho Swem
 ```

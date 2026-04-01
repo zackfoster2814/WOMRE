@@ -97,7 +97,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: ShiDove
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 1-4
 - Note: 
 ```

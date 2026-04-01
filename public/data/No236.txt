@@ -1,8 +1,7 @@
 No.236
 Name: Yuto (yuto2306)
-`Name: Yuto (yuto2306)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -60,10 +59,10 @@ Runeword:
 2 Power:  
 + Uno Reverse Card (Từ House)
 + Baldening (Từ House)
-+ Quas (Patient)
-+ Dream Manipulation (Patient)
-+ Invulnerability (Patient)
-+ Tsunami Control (Patient)
++ Quas
++ Dream Manipulation
++ Invulnerability
++ Tsunami Control
 ```
 
 ```
@@ -83,6 +82,7 @@ Lover:
 ```
 PvP Reward:
 - +1 Dura
+- +1 MA
 ```
 
 ======
@@ -101,5 +101,13 @@ PvP:
 - Tỉ số: 3-3
 - Reward: +1 Dura
 - Note: Nhận 4 power từ Patient
+```
+
+```
+PvP:
+- Đối thủ: OddMan
+- Kết quả: win
+- Tỉ số: 1-4
+- Note:  Trickster: Ace of Spades
 ```
 ======

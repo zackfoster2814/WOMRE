@@ -99,7 +99,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Hoàng Tuyền Không Trấn
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 1-4
 - Note:  ShiDove chuyển giấy nợ cho Cảo
 ```

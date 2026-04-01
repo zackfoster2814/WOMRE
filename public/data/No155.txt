@@ -100,7 +100,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: LDL
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-3
 - Note: Trung Kiên Golden Coin: +1 điểm khởi đầu
 ```

@@ -60,6 +60,7 @@ Runeword: Không
 + Detect Thoughts 
 + Spell Flux 
 + Blowing Leaves
++ Giấy nợ gia truyền (từ muốn liếm chân seed quá)
 ```
 ```
 Char dev: 
@@ -111,7 +112,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Lệch rate Jingliu 2 lần
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 3-3
 - Note: Trước combat: We are Charlie Kirk Golden Coin: Không kích   Trong combat: Sand of Time x2: Kích 1
 ```

@@ -120,7 +120,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Thanh Tước bé cưng
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 2-5
 - Note: Zed văn tế: Gambling quay lại Durability từ 7 thành 1
 

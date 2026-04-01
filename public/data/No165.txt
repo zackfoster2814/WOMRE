@@ -1,6 +1,6 @@
 No.165
 Name: Lov4 (huylova)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -101,5 +101,13 @@ PvP:
 - Đối thủ: Lonely boy 
 - Kết quả: Win
 - Tỉ số: 6-0
+```
+
+```
+PvP:
+- Đối thủ: Swem
+- Kết quả: lose
+- Tỉ số: 2-2
+- Note: Sand of time: no
 ```
 ======

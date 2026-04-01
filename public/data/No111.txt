@@ -103,7 +103,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Shin
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 0-5
 - Note: Trước combat: The Viet Scrying: Không kích
 ```

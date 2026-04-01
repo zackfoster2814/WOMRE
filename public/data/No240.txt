@@ -104,7 +104,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: GiCi
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 0-4
 - Note: Trong combat: Kinbum Rau má nguyền: str Kinbum Blind: IQ, MA PvP Reward: (Brainrot) Naga: +1 power: Artist (không nhận)
 ```

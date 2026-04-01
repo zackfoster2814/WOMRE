@@ -119,7 +119,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Kingly Majesty
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 0-7
 - Note: Bash 2 lần, Crit 2 lần
 ```

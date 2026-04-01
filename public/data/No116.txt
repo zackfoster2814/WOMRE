@@ -38,6 +38,7 @@ Houses:
  + 2 Normal gear:
   - Sổ tay
   - Academie Ring
+  - Ancient Protector
  + 1 Legacy gear:
   - 
 ```
@@ -92,9 +93,15 @@ PvP:
 ```
 PvP:
 - Đối thủ: Ako Darling
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-4
 - Note: 
 ```
-
+```
+PvP:
+- Đối thủ: Cảo
+- Kết quả: win
+- Tỉ số: 5-3
+- Note: gọi bố Huy Le ra đánh hộ, bị brainrot
+```
 ======

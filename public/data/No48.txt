@@ -1,7 +1,7 @@
 No.48
 Name: llaW (llaw3344)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -84,6 +84,7 @@ Lover:
 ```
 PvP Reward:
 - +1 MA
+- +1 IQ
 ```
 ======
 Battle Log:
@@ -104,6 +105,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 2-3
 - Note: đụ luôn đối thủ
+```
+
+```
+PvP:
+- Đối thủ: Muon liem chan Seed qua
+- Kết quả: win
+- Tỉ số: 0-5
 ```
 
 ======

@@ -117,7 +117,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Chovy Golden Roader
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 2-2
 - Note: RT Gọi Ingay ra đánh hộ
 ======

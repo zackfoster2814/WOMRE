@@ -88,7 +88,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: caubetuky._.
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-2
 - Note: Dothraki: Luật 2
 ```

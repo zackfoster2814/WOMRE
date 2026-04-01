@@ -113,7 +113,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Lunar
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 1-2
 ```
 

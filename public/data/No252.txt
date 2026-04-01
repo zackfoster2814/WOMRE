@@ -40,6 +40,7 @@ Houses:
   - Kuro's Charm (đã mất)
   - Soap
   - Dark Lanthorn
+  - Ancient Protector
  + 1 Legacy gear:
   -
 ```
@@ -90,7 +91,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Syren
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-4
 - Note: Trước combat: Hachi rauma: không
 ```
@@ -98,7 +99,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Ingay
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-5
 - Note: Trước combat 2: Hachi rauma: không Ingay Cursed Coin: Bóp mình Ingay Invoker: Enlarging
 ```

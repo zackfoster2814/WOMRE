@@ -105,7 +105,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Nicre
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 0- (-1)
 - Note: Trước combat: Tarus13 Scrying: thành công Trong combat: Gam hụt 5
 ```

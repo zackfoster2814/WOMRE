@@ -42,6 +42,7 @@ Houses:
   - Lover's Glover (Roku da Poet (roku2807))(Từ Char Dev)
   - Empty Stein
   - Wine
+  - Ancient Protector
  + 1 Legacy gear:
   -
 ```
@@ -108,7 +109,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: HolyOne
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 1-2
 - Note: Lunar Rampage: +1 All Stats
 ```

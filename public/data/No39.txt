@@ -1,7 +1,7 @@
 No.39
 Name: Euoid (euoid)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -63,6 +63,7 @@ Runeword: Không
 + Gotta go Fast (Lockalock Skill Book)
 + The Coast is Clear! (Lockalock Skill Book)
 + Scrying
++ Analysis Sin
 ```
 
 ```
@@ -81,9 +82,12 @@ Lover:
 ```
 PvP Reward:
 - +2 MA (stats thấp nhất)
+- nhận power Analysis Sin
 ```
 ```
 Other Source:
+- +1 Ma
+- -1 Dura
 - +1 Ma
 - -1 Dura
 ```
@@ -108,6 +112,14 @@ PvP:
 - Đối thủ: Anh Bảo
 - Kết quả: Win
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: Anh Thầy Bói
+- Kết quả: win
+- Tỉ số: 4-2
+- Note: Stat Abos: +1 MA
 ```
 
 ======

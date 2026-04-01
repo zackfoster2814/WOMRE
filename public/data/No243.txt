@@ -115,7 +115,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: SoloWingPixy
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 3-3
 ```
 ======

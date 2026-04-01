@@ -99,7 +99,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: maximumwell
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 4-3
 - Note: PvP Reward: (Tặng đối thủ: +1 Speed)
 ```

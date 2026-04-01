@@ -58,6 +58,11 @@ Runeword: The Twin
 + Cursed
 ```
 ```
+Summon: 
++ Igris
++ Numby
+```
+```
 Char dev: 
 + True Heir of the Emirate🍀
 ```
@@ -94,7 +99,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Johnny Walkaways
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-5
 - Note: 
 ```

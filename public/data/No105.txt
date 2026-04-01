@@ -103,7 +103,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Trung Kiên
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 3-3
 - Note: LDL Trickster: KHông có gì
 ```

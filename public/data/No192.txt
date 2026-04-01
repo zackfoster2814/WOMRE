@@ -1,6 +1,6 @@
 No.192
 Name: Mwa (tamwamo_cross)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -96,6 +96,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-0
 - Reward: ko nhận do Brainrot
+```
+
+```
+PvP:
+- Đối thủ: Lovepcdolls
+- Kết quả: lose
+- Tỉ số: 0-6
+- Note: Mwa Văn Tế: KuSenpai quay lại Str từ 10 thành 7
 ```
 
 ======

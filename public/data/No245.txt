@@ -97,7 +97,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: _paower
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 1-3
 - Note: Trước combat: Golden Coin: Power Negation: Adapt
 ```

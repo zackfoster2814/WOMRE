@@ -1,6 +1,6 @@
 No.260
 Name: Heir of Raumania (trunghieu6775)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -101,6 +101,13 @@ PvP:
 - Đối thủ: Toast
 - Kết quả: Win
 - Tỉ số: 6-0
+```
+
+```
+PvP:
+- Đối thủ: Hà
+- Kết quả: lose
+- Tỉ số: 2-4
 ```
 
 ======

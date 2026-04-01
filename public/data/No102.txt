@@ -1,6 +1,6 @@
 No.102
 Name: Korokiri
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -111,5 +111,12 @@ PvP:
 - Đối thủ: AsuK
 - Kết quả: Win
 - Tỉ số: 4-4
+```
+
+```
+PvP:
+- Đối thủ: Gambling
+- Kết quả: lose
+- Tỉ số: 5-1
 ```
 ======

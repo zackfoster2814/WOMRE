@@ -100,7 +100,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: bachtuotkun
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 0-4
 ```
 

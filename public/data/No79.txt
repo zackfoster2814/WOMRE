@@ -106,7 +106,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Hayato
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 3-3
 - Note: PvP Reward: (Vội) Elemental Wheel: Water: Nhận Power "Water Breathing", Nhận +1 BIQ, Nhận thêm +1 Stat cao nhất Indepentdend: +2 MA
 ```

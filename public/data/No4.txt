@@ -1,6 +1,6 @@
 No.4
 Name: idontloveyou (iloveyou1233406)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -96,5 +96,12 @@ PvP:
 - Đối thủ: Ngủyên (ender2910)
 - Kết quả: Win
 - Tỉ số: 5-1
+```
+
+```
+PvP:
+- Đối thủ: Sparxie đã bán nước chưa
+- Kết quả: lose
+- Tỉ số: 0-5
 ```
 ======

@@ -119,7 +119,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Em Minh
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 5-0
 - Note: Trước combat: Trezork: +7 Spd Trong combat Trezork Bash: Dura, BIQ, PvP Reward: (Vội)
 ```

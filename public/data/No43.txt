@@ -1,7 +1,7 @@
 No.43
 Name: Swem (.swem)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -64,7 +64,6 @@ Runeword: Không
 5 Power: 
 + Burning Hand
 + Uno Reverse Card
-+ Mind control
 + Master of war
 + Quas (Moon Elf) (đã mất)
 ```
@@ -84,9 +83,18 @@ Lover:
 + OddMan (thaioturan)
 ```
 ```
+PvP Reward:
+- +1 Str
+```
+
+```
 Other Source:
 - +1 MA
 - +1 str
+- +1 MA
+- +1 Str
+- Mất Mind Control
+- +2 IQ (Artistic)
 ```
 
 ======
@@ -105,6 +113,13 @@ PvP:
 - Đối thủ: banhtiuuu
 - Kết quả: Win
 - Tỉ số: 3-2
+```
+
+```
+PvP:
+- Đối thủ: Lov4
+- Kết quả: win
+- Tỉ số: 2-2
 ```
 
 ======

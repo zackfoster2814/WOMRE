@@ -109,7 +109,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: LocK
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 3-1
 - Note: Trước combat: Mặc Quyên Power Negation: AIDS Mặc Quyên Raumanian: Không LocK Golden Coin: Không, PvP Reward: (Vội)
 ```

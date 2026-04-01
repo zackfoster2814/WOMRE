@@ -78,11 +78,15 @@ Lover:
 ```
 ```
 PvP Reward:
-- +1 Str
+- 
 ```
 
 ```
 Other Source:
+- +1 STR (Bloody Strike)
+- +1 SPD (Bloody Strike)
+- +1 DUR (Bloody Strike)
+- +1 BIQ (Bloody Strike)
 - +1 STR (Bloody Strike)
 - +1 SPD (Bloody Strike)
 - +1 DUR (Bloody Strike)
@@ -92,14 +96,14 @@ Other Source:
 ```
 PvP:
 - Đối thủ: Wohlhabend
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 0-4
 ```
 
 ```
 PvP:
 - Đối thủ: NPC
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-3
 - Note: 
 ```

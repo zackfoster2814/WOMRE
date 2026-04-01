@@ -78,6 +78,7 @@ Other Source:
 - +1 MA
 - +1 Dura
 - +2 STR (ORC)
+- +1 BIQ
 ```
 
 ======
@@ -92,7 +93,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Pui
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 4-3
 - Note: Đánh RT với Solus
 ```
@@ -100,7 +101,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Solus
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 6-2
 - Note: Crit 2 lần
 ```

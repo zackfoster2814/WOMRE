@@ -96,7 +96,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Tarus13
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 0- (-1)
 - Note: Trước combat: Nicre Dothraki: Luật 1, Trong combat: Evade hụt 5 Nicre King's Landing Dothraki: Cả gia tộc nhận Fist Fighting (Em Phốc Trắng, Nagi) 
 ```

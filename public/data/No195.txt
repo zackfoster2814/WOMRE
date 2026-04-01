@@ -1,7 +1,7 @@
 No.195
 Name: Cảo (foxnamecaor)
-Status: Còn sống
-Vòng thi đấu: 128
+Status: Đã bị loại
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -105,6 +105,19 @@ PvP:
 - Đối thủ: handoivodoi
 - Kết quả: Win
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: Tyrunny
+- Kết quả: win
+- Tỉ số: 3-4
+```
+```
+PvP:
+- Đối thủ: Huy Le
+- Kết quả: lose
+- Tỉ số: 5-3
 ```
 
 ======

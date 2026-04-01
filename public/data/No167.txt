@@ -1,6 +1,6 @@
 No.167
 Name: zun (zuniee)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -105,5 +105,12 @@ PvP:
 - Tỉ số: 4-2
 - Reward: 
   -> Nhận Char dev: Old age, nhận thêm isekai
+```
+
+```
+PvP:
+- Đối thủ: Anh Bác Sĩ
+- Kết quả: lose
+- Tỉ số: 4-1
 ```
 ======

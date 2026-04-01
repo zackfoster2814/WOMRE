@@ -87,7 +87,7 @@ PvE:
 ```
 PvP:
 - Đối thủ: Elai
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 3-3
 - Note: 
 ```

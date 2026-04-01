@@ -109,7 +109,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: TheViet
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 0-5
 - Note: Trước combat: Shin Trickster: -1 All Stat
 ```

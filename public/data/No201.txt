@@ -107,7 +107,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: ngọn cỏ ven sông
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 5-1
 - Note: Orc kích hoạt
 ```

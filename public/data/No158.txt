@@ -1,7 +1,7 @@
 No.158
 Name: Gambling (da_ork_)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -92,6 +92,7 @@ Other Source:
 ```
 PvP Reward:
 - +1 Str
+- +1 MA
 ```
 
 
@@ -114,6 +115,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 2-4
 - Reward: +1 Str
+```
+
+```
+PvP:
+- Đối thủ: Korokiri
+- Kết quả: win
+- Tỉ số: 5-1
 ```
 
 ======

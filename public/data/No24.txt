@@ -1,6 +1,6 @@
 No.24
 Name: OddMan (thaioturan)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -98,6 +98,14 @@ PvP:
 - Đối thủ: act engage draw engage
 - Kết quả: Win
 - Tỉ số: 2-3
+```
+
+```
+PvP:
+- Đối thủ: Yuto
+- Kết quả: lose
+- Tỉ số: 1-4
+- Note: Dryad buff: +2 Str cho catfish
 ```
 
 ======

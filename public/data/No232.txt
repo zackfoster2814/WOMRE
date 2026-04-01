@@ -106,7 +106,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Yoh Hai Kiếm
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 0-7
 - Note: Conven Council quay lại stat của Em Minh 5 thành 5
 ```

@@ -1,7 +1,7 @@
 No.182
 Name: BLèBLè (amebear)
 Status: Còn sống
-Vòng thi đấu: 128
+Vòng thi đấu: 64
 Nhánh thi đấu: -
 ```
 Ký Sinh:
@@ -83,6 +83,12 @@ Other Source:
 - +2 str (stats cao nhất)
 - +3 DUR (Zealot)
 - +2 Dura (House Tyrell)
+- +2 DUR (Zealot)
+- +2 MA (Tyrell)
+```
+```
+PvP Reward:
+- +1 BIQ
 ```
 
 
@@ -101,5 +107,12 @@ PvP:
 - Kết quả: Win 
 - Tỉ số: 3-3
 - Note: Nhận +2 vào stats cao nhất 
+```
+
+```
+PvP:
+- Đối thủ: Devourer Of Gays
+- Kết quả: win
+- Tỉ số: 3-3
 ```
 ======

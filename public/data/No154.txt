@@ -104,7 +104,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: nguoisai
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 1-4
 ```
 

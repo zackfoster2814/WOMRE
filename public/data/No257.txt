@@ -1,6 +1,6 @@
 No.257
 Name: Fen (fentf)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -93,6 +93,13 @@ PvP:
 - Đối thủ: cá trê vượt thác nhé hehe
 - Kết quả: Win
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: dlwlrma
+- Kết quả: lose
+- Tỉ số: 2-4
 ```
 
 ======

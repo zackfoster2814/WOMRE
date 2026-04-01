@@ -1,6 +1,6 @@
 No.12
 Name: ar2di
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -105,5 +105,14 @@ PvP:
 - Đối thủ: CkTrangNhung
 - Kết quả: Win
 - Tỉ số: 2-3
+```
+
+```
+PvP:
+- Đối thủ: Kami Tsuna
+- Kết quả: lose
+- Tỉ số: 3-2
+- Note: ar2di Coven Council: Hà (huanghe11), không ảnh hưởng do Cursed Gnome's Doll
+
 ```
 ======

@@ -768,8 +768,8 @@ export class EffectResolver {
 
     // Chuyện Bộ Tộc - House tribal story effects
     // Baratheon: all members get +1 all base stat (collective activation)
-    // Lannister (Dung - haruharu9127): traitor gets +2 all base stat
-    // Uchiha (2FaceCat - 2facecat.): traitor gets +2 all base stat
+    // Lannister (Dung - haruharu9127): traitor gets +2 all base stat (no +1 for regular members)
+    // Uchiha (2FaceCat - 2facecat.): traitor gets +2 all base stat (no +1 for regular members)
     {
       const activeHouseNames = (character.nestedHouses || [])
         .filter((h) => !h.isLost || h.lostType === "kinda_homeless")
@@ -798,50 +798,6 @@ export class EffectResolver {
           effects: allStatEffects,
           rawDescription:
             "+1 all base stat cho toàn bộ thành viên nhà Baratheon",
-          isActive: true,
-        });
-      }
-
-      if (
-        activeHouseNames.some((h) => h.toLowerCase().includes("lannister"))
-      ) {
-        const allStatEffects: Effect[] = (
-          ["strength", "speed", "durability", "iq", "biq", "ma"] as const
-        ).map((stat) => ({
-          type: "stat_modifier" as const,
-          stat,
-          value: 1,
-          isBase: true,
-          timing: "immediate" as const,
-          target: "self" as const,
-        }));
-        sources.push({
-          type: "house",
-          name: "Chuyện bộ tộc - Nhà Lannister",
-          effects: allStatEffects,
-          rawDescription:
-            "+1 all base stat cho toàn bộ thành viên nhà Lannister",
-          isActive: true,
-        });
-      }
-
-      if (activeHouseNames.some((h) => h.toLowerCase().includes("uchiha"))) {
-        const allStatEffects: Effect[] = (
-          ["strength", "speed", "durability", "iq", "biq", "ma"] as const
-        ).map((stat) => ({
-          type: "stat_modifier" as const,
-          stat,
-          value: 1,
-          isBase: true,
-          timing: "immediate" as const,
-          target: "self" as const,
-        }));
-        sources.push({
-          type: "house",
-          name: "Chuyện bộ tộc - Nhà Uchiha",
-          effects: allStatEffects,
-          rawDescription:
-            "+1 all base stat cho toàn bộ thành viên nhà Uchiha",
           isActive: true,
         });
       }

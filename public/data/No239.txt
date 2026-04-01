@@ -105,7 +105,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: nahhhh_hecker
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 4-3
 ```
 

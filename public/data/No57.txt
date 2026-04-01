@@ -118,7 +118,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: bachtuotkun
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 2-3
 - Note: Trước combat: NPC Hunter's Mark: IQ, Trong combat: NPC Golden Parry: Spd, Dura, Văn Tế trúng idontloveyou Re-spin lại Str từ 7 thành 1
 ```

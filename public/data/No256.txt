@@ -96,7 +96,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Đừng Nhờn với Two Fingers
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 2-2
 - Note:  Nime nhận:  PvP Reward: (Bị nhét Brainrot) Resilient: (Không)
 ```

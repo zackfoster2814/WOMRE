@@ -100,7 +100,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Nasume
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 4-1
 - Note: 
 ```

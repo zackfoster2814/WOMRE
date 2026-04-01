@@ -1,6 +1,6 @@
 No.3
 Name: Nagi (nagi_2208)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 128
 Nhánh thi đấu: -
 ```
@@ -104,5 +104,13 @@ PvP:
 - Đối thủ: Koroo
 - Kết quả: Win
 - Tỉ số: 1-2
+```
+
+```
+PvP:
+- Đối thủ: Inglorious
+- Kết quả: lose
+- Tỉ số: 4-2
+- Note: Nagi Dothraki: Luật 1
 ```
 ======

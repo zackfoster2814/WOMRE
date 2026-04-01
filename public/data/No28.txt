@@ -116,7 +116,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: tophate
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 4-1
 - Note :PvP Reward: +1 IQ, +1 MA Cỏ: Thưởng thêm 1 PvP
 ```

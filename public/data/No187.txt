@@ -102,7 +102,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Nốt Ruồi Lệch Pha
-- Kết quả: Thua
+- Kết quả: lose
 - Tỉ số: 1-5
 - Note: Tuấn Anh King's Landing: Cả Gia Tộc nhận Metamagic Tuấn Anh Văn tế: Tyrunny BIQ từ 7 thành 6
 ```

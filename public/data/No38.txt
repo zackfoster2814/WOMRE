@@ -105,7 +105,7 @@ PvP:
 ```
 PvP:
 - Đối thủ: Dung
-- Kết quả: Thắng
+- Kết quả: win
 - Tỉ số: 3-3
 - Note: Fast Learn nhận Spear of Fire, đào mộ không được gì
 ```
