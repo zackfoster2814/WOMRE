@@ -4,55 +4,9 @@ import { PvPPlayerData, RoundResult } from "../../types/battleZone";
 import { WheelSpinItem } from "../../components/ProbabilityWheelModal";
 import { STAT_ORDER } from "../../constants/battleZone";
 import {
-  CRIT_ITEMS,
-  EVASION_ITEMS,
-  CRUELTY_ITEMS,
-  BLIND_ITEMS,
-  MUTE_ITEMS,
-  BASH_ITEMS,
-  RANGER_RED_ITEMS,
-  RANGER_BLUE_ITEMS,
-  RANGER_BLACK_ITEMS,
-  RANGER_YELLOW_ITEMS,
-  RANGER_PINK_ITEMS,
-  RANGER_SILVER_ITEMS,
-  SAND_OF_TIME_ITEMS,
-  MISERICORDE_ITEMS,
-  GAMBLER_ITEMS,
-} from "../../constants/wheelConfigs";
-
-const GOLDEN_PARRY_ITEMS: WheelSpinItem[] = [
-  { label: "Parry!", weight: 35, isSuccess: true, color: "#f59e0b" },
-  { label: "Không", weight: 65, isSuccess: false, color: "#6b7280" },
-];
-const PENNYWORTHY_WIN_ITEMS: WheelSpinItem[] = [
-  {
-    label: "+1 điểm bonus (36%)",
-    weight: 36,
-    isSuccess: true,
-    color: "#a3e635",
-  },
-  {
-    label: "Không kích hoạt (64%)",
-    weight: 64,
-    isSuccess: false,
-    color: "#6b7280",
-  },
-];
-const PENNYWORTHY_LOSE_ITEMS: WheelSpinItem[] = [
-  {
-    label: "+2 vào chỉ số thua (36%)",
-    weight: 36,
-    isSuccess: true,
-    color: "#34d399",
-  },
-  {
-    label: "Không kích hoạt (64%)",
-    weight: 64,
-    isSuccess: false,
-    color: "#6b7280",
-  },
-];
+  RoundSpinButton,
+  RANGER_ROUND_STAT,
+} from "../../utils/roundSpinButtons";
 
 export interface DebugRoundPatch {
   roundArrayIndex: number;
@@ -152,126 +106,17 @@ export function RoundResultsPanel({
   const p2Effects = getPerRoundEffects(p2char, player2?.no);
   const showSpins = !!p1char || !!p2char;
 
-  const makeSpinButton = (
-    effectName: string,
-    side: "player1" | "player2",
-    roundIdx: number,
-  ) => {
-    const key2 = `${roundIdx}-${effectName}-${side}`;
-    const result = roundSpinResults[key2];
-    const baseItems =
-      effectName === "Critical Strike"
-        ? CRIT_ITEMS
-        : effectName === "Evasion"
-          ? EVASION_ITEMS
-          : effectName === "Cruelty"
-            ? CRUELTY_ITEMS
-            : effectName === "Blind"
-              ? BLIND_ITEMS
-              : effectName === "Mute"
-                ? MUTE_ITEMS
-                : effectName === "Bash" || effectName === "Luminescence"
-                  ? BASH_ITEMS
-                  : effectName === "Ranger-Red"
-                    ? RANGER_RED_ITEMS
-                    : effectName === "Ranger-Blue"
-                      ? RANGER_BLUE_ITEMS
-                      : effectName === "Ranger-Black"
-                        ? RANGER_BLACK_ITEMS
-                        : effectName === "Ranger-Yellow"
-                          ? RANGER_YELLOW_ITEMS
-                          : effectName === "Ranger-Pink"
-                            ? RANGER_PINK_ITEMS
-                            : effectName === "Ranger-Silver"
-                              ? RANGER_SILVER_ITEMS
-                              : effectName === "Golden Parry"
-                                ? GOLDEN_PARRY_ITEMS
-                                : effectName === "Pennyworthy-Win"
-                                  ? PENNYWORTHY_WIN_ITEMS
-                                  : effectName === "Pennyworthy-Lose"
-                                    ? PENNYWORTHY_LOSE_ITEMS
-                                    : effectName === "Misericorde"
-                                      ? MISERICORDE_ITEMS
-                                      : effectName === "The Sand of Time" ||
-                                          effectName === "The Sand of Time-2"
-                                        ? SAND_OF_TIME_ITEMS
-                                        : GAMBLER_ITEMS;
-    const items = applyDevWeights(effectName, baseItems);
-
-    const label =
-      effectName === "Critical Strike"
-        ? "Crit"
-        : effectName === "Evasion"
-          ? "Evade"
-          : effectName === "Cruelty"
-            ? "Cruelty"
-            : effectName === "Blind"
-              ? "Blind"
-              : effectName === "Mute"
-                ? "Mute"
-                : effectName === "Bash" || effectName === "Luminescence"
-                  ? effectName
-                  : effectName === "Golden Parry"
-                    ? "Parry"
-                    : effectName === "Misericorde"
-                      ? "Miseri"
-                      : effectName === "Pennyworthy-Win"
-                        ? "PW+"
-                        : effectName === "Pennyworthy-Lose"
-                          ? "PW-"
-                          : effectName === "The Sand of Time"
-                            ? "Sand"
-                            : effectName === "The Sand of Time-2"
-                              ? "Sand×2"
-                              : effectName.startsWith("Ranger-")
-                                ? effectName.replace("Ranger-", "") + "🦸"
-                                : "Gambler";
-
-    const titleText = `${effectName === "The Sand of Time-2" ? "The Sand of Time (Spell Flux lần 2)" : effectName}`;
-
-    if (result) {
-      return (
-        <button
-          key={effectName}
-          onClick={() =>
-            setRoundSpinModal({
-              isOpen: true,
-              title: effectName,
-              items,
-              roundIndex: roundIdx,
-              side,
-            })
-          }
-          className={`inline-flex items-center gap-1 text-[9px] px-1.5 py-0.5 rounded font-bold border transition-colors ${
-            result.isSuccess
-              ? "bg-amber-600/30 text-amber-300 border-amber-500/40 hover:bg-amber-600/50"
-              : "bg-gray-700/60 text-gray-400 border-gray-600/40 hover:bg-gray-700/80"
-          }`}
-          title={`${titleText}: ${result.label} — click để quay lại`}
-        >
-          {result.isSuccess ? "✦" : "·"} {label}
-        </button>
-      );
-    }
-    return (
-      <button
-        key={effectName}
-        onClick={() =>
-          setRoundSpinModal({
-            isOpen: true,
-            title: effectName,
-            items,
-            roundIndex: roundIdx,
-            side,
-          })
-        }
-        className="inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded bg-purple-700/50 hover:bg-purple-600/60 text-purple-200 font-bold transition-colors border border-purple-600/30"
-        title={`Quay ${titleText}`}
-      >
-        🎡 {label}
-      </button>
-    );
-  };
+  const makeSpinButton = (effectName: string, side: "player1" | "player2", roundIdx: number) => (
+    <RoundSpinButton
+      key={effectName}
+      effectName={effectName}
+      side={side}
+      roundIdx={roundIdx}
+      roundSpinResults={roundSpinResults}
+      applyDevWeights={applyDevWeights}
+      setRoundSpinModal={setRoundSpinModal}
+    />
+  );
 
   // Build display rows — insert BIQ×2 row after BIQ if rounds has extra entry or flag set
   const hasZoltraakExtra = rounds.length > STAT_ORDER.length || !!extraBiqRound;
@@ -367,13 +212,6 @@ export function RoundResultsPanel({
         const tie = revealed && round?.winner === "tie";
 
         const isBiq2Row = label === "BIQ×2";
-        const RANGER_ROUND_STAT: Record<string, string | string[]> = {
-          "Ranger-Red": "str",
-          "Ranger-Blue": "spd",
-          "Ranger-Black": "dur",
-          "Ranger-Yellow": "iq",
-          "Ranger-Pink": ["biq", "ma"],
-        };
         const isLastDisplayRow =
           roundArrayIndex ===
           displayRows[displayRows.length - 1].roundArrayIndex;

@@ -23,6 +23,7 @@ import { Canvas } from "@react-three/fiber";
 import { FloatingStatBubblesOverlay } from "../components/combat/FloatingStatBubblesOverlay";
 import { SCPlayerCard } from "../components/combat/SCPlayerCard";
 import { STAT_ORDER, _ALL_STAT_KEYS } from "../constants/battleZone";
+import { RoundSpinButton, calcRoundSpinEffects } from "../utils/roundSpinButtons";
 import {
   normalizeStatKey,
   applyStatDelta,
@@ -38,7 +39,7 @@ import { RoundResultsPanel } from "../components/combat/RoundResultsPanel";
 import { DevWheelPanel } from "../components/combat/DevWheelPanel";
 import { PlayerSidebar } from "../components/combat/PlayerSidebar";
 import { AfterCombatPanel } from "../components/combat/AfterCombatPanel";
-// import { BattleWheelSpinner } from "../components/combat/BattleWheelSpinner"; // WoT-specific — giữ lại, tạm comment
+import { BattleWheelSpinner } from "../components/combat/BattleWheelSpinner";
 import {
   FallbackBgmController,
   detectCombatAudioTracks,
@@ -1150,6 +1151,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     pendingFinalizeStateRef.current = null;
     preBiqFiredHandlersRef.current = null;
     setAudioResetKey((k) => k + 1);
+    setShowRoundResults(false);
     setCenterTab("pre");
   };
 
@@ -1210,7 +1212,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
   const battleDone = !!combatResult;
   const {
     stepInProgress,
-    pendingSpinsForLastRound: _pendingSpinsForLastRound,
+    pendingSpinsForLastRound,
     effectiveScores,
     liveScore,
     pendingSpins,
@@ -1333,12 +1335,77 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     if (battleDone) setCenterTab("after");
   }, [battleDone]);
 
-  // ── Wheel weights for BattleWheelSpinner (WoT-specific — giữ lại) ──────────
-  // const currentStatInfo = stepInProgress && stepRoundIndex < 6 ? STAT_ORDER[stepRoundIndex] : null;
-  // const p1Val = currentStatInfo && stepState ? (stepState.p1Stats[currentStatInfo.key] ?? 0) : 0;
-  // const p2Val = currentStatInfo && stepState ? (stepState.p2Stats[currentStatInfo.key] ?? 0) : 0;
-  // const p1W = p1Val > p2Val ? p1Val * 2 : p1Val;
-  // const p2W = p2Val > p1Val ? p2Val * 2 : p2Val;
+  // ── Round results collapse state ───────────────────────────────────────────
+  const [showRoundResults, setShowRoundResults] = useState(false);
+  useEffect(() => {
+    if (battleDone) setShowRoundResults(true);
+  }, [battleDone]);
+
+  // ── Wheel weights for BattleWheelSpinner (WoT-specific) ──────────────────
+  const currentStatInfo = stepInProgress && stepRoundIndex < 6 ? STAT_ORDER[stepRoundIndex] : null;
+  const wotP1Val = currentStatInfo && stepState ? (stepState.p1Stats[currentStatInfo.key] ?? 0) : 0;
+  const wotP2Val = currentStatInfo && stepState ? (stepState.p2Stats[currentStatInfo.key] ?? 0) : 0;
+  const wotP1W = wotP1Val > wotP2Val ? wotP1Val * 2 : wotP1Val;
+  const wotP2W = wotP2Val > wotP1Val ? wotP2Val * 2 : wotP2Val;
+
+  // ── Spin buttons cho last resolved round (hiện dưới stats sidebars) ───────
+  const lastResolvedRound = stepState && stepRoundIndex > 0
+    ? stepState.resolvedRounds[stepRoundIndex - 1] ?? null
+    : null;
+  const lastResolvedRoundIdx = stepRoundIndex - 1;
+  const wotP1SpinNodes = lastResolvedRound && player1 ? (() => {
+    const p1Effs = getPerRoundEffects(player1.character, player1.no);
+    const p1Spin = calcRoundSpinEffects({
+      effects: p1Effs,
+      winner: lastResolvedRound.winner,
+      side: "player1",
+      statKey: lastResolvedRound.stat,
+      isLastRound: lastResolvedRoundIdx >= 5,
+      prevRounds: stepState!.resolvedRounds.slice(0, lastResolvedRoundIdx),
+      oppHasSpellFlux: (player2?.character?.powers ?? []).some(
+        (p: any) => !p?.isLost && (typeof p === "string" ? p : p?.name ?? "").toLowerCase().startsWith("spell flux")
+      ) && !disabledItems.has(`${player2?.no}-power-Spell Flux`),
+    });
+    if (p1Spin.length === 0) return null;
+    return p1Spin.map((eff) => (
+      <RoundSpinButton
+        key={eff}
+        effectName={eff}
+        side="player1"
+        roundIdx={lastResolvedRoundIdx}
+        roundSpinResults={roundSpinResults}
+        applyDevWeights={applyDevWeights}
+        setRoundSpinModal={setRoundSpinModal}
+      />
+    ));
+  })() : null;
+
+  const wotP2SpinNodes = lastResolvedRound && player2 ? (() => {
+    const p2Effs = getPerRoundEffects(player2.character, player2.no);
+    const p2Spin = calcRoundSpinEffects({
+      effects: p2Effs,
+      winner: lastResolvedRound.winner,
+      side: "player2",
+      statKey: lastResolvedRound.stat,
+      isLastRound: lastResolvedRoundIdx >= 5,
+      prevRounds: stepState!.resolvedRounds.slice(0, lastResolvedRoundIdx),
+      oppHasSpellFlux: (player1?.character?.powers ?? []).some(
+        (p: any) => !p?.isLost && (typeof p === "string" ? p : p?.name ?? "").toLowerCase().startsWith("spell flux")
+      ) && !disabledItems.has(`${player1?.no}-power-Spell Flux`),
+    });
+    if (p2Spin.length === 0) return null;
+    return p2Spin.map((eff) => (
+      <RoundSpinButton
+        key={eff}
+        effectName={eff}
+        side="player2"
+        roundIdx={lastResolvedRoundIdx}
+        roundSpinResults={roundSpinResults}
+        applyDevWeights={applyDevWeights}
+        setRoundSpinModal={setRoundSpinModal}
+      />
+    ));
+  })() : null;
 
   // ── Swap players ──────────────────────────────────────────────────────────
   const swapPlayers = () => {
@@ -1700,32 +1767,66 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                 {/* Tab 2: Wheel of Truth (rounds) */}
                 {centerTab === "wheel" && (
                   <div className="p-3">
-                    {combatResult || stepState ? (
-                      <RoundResultsPanel
-                        rounds={combatResult ? combatResult.rounds : stepState!.resolvedRounds}
-                        revealedUpTo={
-                          combatResult
-                            ? null
-                            : stepState!.resolvedRounds.length > 0
-                              ? stepState!.resolvedRounds.length - 1
-                              : -1
-                        }
-                        p1char={player1.character}
-                        p2char={player2.character}
-                        extraBiqRound={(() => {
-                          const rr = combatResult ? combatResult.rounds : (stepState?.resolvedRounds ?? []);
-                          return (rr.length >= 5 && rr[4]?.stat === "biq" && rr[5]?.stat === "biq") || rr.length > STAT_ORDER.length || zoltraakBiq2Pending;
-                        })()}
-                        player1={player1}
-                        player2={player2}
-                        disabledItems={disabledItems}
-                        roundSpinResults={roundSpinResults}
-                        getPerRoundEffects={getPerRoundEffects}
-                        computeRoundPoints={computeRoundPoints}
-                        applyDevWeights={applyDevWeights}
-                        setRoundSpinModal={setRoundSpinModal}
-                      />
-                    ) : (
+                    {stepInProgress && currentStatInfo && (
+                      <div className="mb-4">
+                        <BattleWheelSpinner
+                          p1Name={player1.name}
+                          p2Name={player2.name}
+                          p1Weight={wotP1W}
+                          p2Weight={wotP2W}
+                          statLabel={currentStatInfo.label}
+                          statKey={currentStatInfo.key}
+                          p1Val={wotP1Val}
+                          p2Val={wotP2Val}
+                          p1AllStats={stepState?.p1Stats as unknown as Record<string, number>}
+                          p2AllStats={stepState?.p2Stats as unknown as Record<string, number>}
+                          p1SpinNodes={wotP1SpinNodes}
+                          p2SpinNodes={wotP2SpinNodes}
+                          hasPendingSpins={pendingSpinsForLastRound}
+                          onSpinComplete={(winner) => setWheelForcedWinner(winner)}
+                        />
+                      </div>
+                    )}
+                    {(combatResult || stepState) && (
+                      <div>
+                        <button
+                          onClick={() => setShowRoundResults((v) => !v)}
+                          className="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-gray-700/50 bg-gray-800/40 hover:bg-gray-700/40 transition-colors text-xs text-gray-400 hover:text-gray-200"
+                        >
+                          <span className="font-bold tracking-wide">Lịch sử rounds</span>
+                          <span>{showRoundResults ? "▲" : "▼"}</span>
+                        </button>
+                        {showRoundResults && (
+                          <div className="mt-2">
+                            <RoundResultsPanel
+                              rounds={combatResult ? combatResult.rounds : stepState!.resolvedRounds}
+                              revealedUpTo={
+                                combatResult
+                                  ? null
+                                  : stepState!.resolvedRounds.length > 0
+                                    ? stepState!.resolvedRounds.length - 1
+                                    : -1
+                              }
+                              p1char={player1.character}
+                              p2char={player2.character}
+                              extraBiqRound={(() => {
+                                const rr = combatResult ? combatResult.rounds : (stepState?.resolvedRounds ?? []);
+                                return (rr.length >= 5 && rr[4]?.stat === "biq" && rr[5]?.stat === "biq") || rr.length > STAT_ORDER.length || zoltraakBiq2Pending;
+                              })()}
+                              player1={player1}
+                              player2={player2}
+                              disabledItems={disabledItems}
+                              roundSpinResults={roundSpinResults}
+                              getPerRoundEffects={getPerRoundEffects}
+                              computeRoundPoints={computeRoundPoints}
+                              applyDevWeights={applyDevWeights}
+                              setRoundSpinModal={setRoundSpinModal}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    {!combatResult && !stepState && (
                       <div className="text-center text-xs text-gray-600 py-6 italic">Chưa bắt đầu combat — chuyển sang tab Trước Combat</div>
                     )}
                   </div>
