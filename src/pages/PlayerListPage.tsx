@@ -443,6 +443,7 @@ export const PlayerListPage = () => {
     null,
   );
   const [searchTerm, setSearchTerm] = useState("");
+  const [onlyAlive, setOnlyAlive] = useState(false);
   const [sortBy, setSortBy] = useState<
     "no" | "name" | "race" | "team" | "totalBaseStats" | "totalStats"
   >("no");
@@ -770,6 +771,13 @@ export const PlayerListPage = () => {
         p.no.toString().includes(searchTerm),
     );
 
+    // Apply alive-only filter
+    if (onlyAlive) {
+      result = result.filter(
+        (p) => p.tournament?.status !== "eliminated",
+      );
+    }
+
     // Apply race filter if any races are selected
     if (selectedRaces.length > 0) {
       result = result.filter((p) => {
@@ -849,6 +857,7 @@ export const PlayerListPage = () => {
   }, [
     players,
     searchTerm,
+    onlyAlive,
     sortBy,
     selectedRaces,
     selectedTeams,
@@ -944,6 +953,17 @@ export const PlayerListPage = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white w-64 focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
+              <label className="flex items-center gap-2 cursor-pointer select-none px-3 py-2 rounded-lg border border-gray-600 bg-gray-800/80 hover:border-green-500/60 transition-colors">
+                <input
+                  type="checkbox"
+                  checked={onlyAlive}
+                  onChange={(e) => setOnlyAlive(e.target.checked)}
+                  className="w-4 h-4 accent-green-500 cursor-pointer"
+                />
+                <span className={`text-sm font-medium ${onlyAlive ? "text-green-400" : "text-gray-400"}`}>
+                  Còn sống
+                </span>
+              </label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
