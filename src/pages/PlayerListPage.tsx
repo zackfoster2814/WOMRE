@@ -773,9 +773,17 @@ export const PlayerListPage = () => {
 
     // Apply alive-only filter
     if (onlyAlive) {
-      result = result.filter(
-        (p) => p.tournament?.status !== "eliminated",
-      );
+      result = result.filter((p) => {
+        if (p.tournament?.status === "eliminated") return false;
+        // Loại Symbiosis nếu vật chủ đã bị eliminated
+        if (p.isSymbiosis && p.symbiosisHost) {
+          const host = players.find(
+            (h) => h.name === p.symbiosisHost || h.username === p.symbiosisHost,
+          );
+          if (host?.tournament?.status === "eliminated") return false;
+        }
+        return true;
+      });
     }
 
     // Apply race filter if any races are selected
