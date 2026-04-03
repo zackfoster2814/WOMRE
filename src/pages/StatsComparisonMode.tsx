@@ -3275,7 +3275,7 @@ export const StatsComparisonMode = ({
           >
             <span>←</span> Back
           </button>
-          <div className="flex-1 px-5 py-3 rounded-2xl border border-gray-600/50 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-red-900/20">
+          <div className="flex-1 px-5 py-3 rounded-none border border-gray-600/50 bg-gradient-to-r from-blue-900/20 via-purple-900/20 to-red-900/20">
             <h1 className="text-xl font-bold text-white">
               {isTournamentMode
                 ? (tournamentMatch!.displayLabel ??
@@ -3328,7 +3328,7 @@ export const StatsComparisonMode = ({
           <div className="flex-1 min-w-0">
             {/* ── JRPG Battle Scene ── */}
             <div
-              className="relative rounded-2xl border border-gray-600/40 mb-3 overflow-hidden"
+              className="relative rounded-none border border-gray-600/40 mb-3 overflow-hidden"
               style={{
                 background:
                   "linear-gradient(180deg, #0a0f1e 0%, #0d1525 50%, #0a0e1a 100%)",
@@ -3384,7 +3384,7 @@ export const StatsComparisonMode = ({
                     </PlayerCard3DFrame>
                   ) : (
                     <div
-                      className="rounded-xl border-2 border-dashed border-blue-600/20 flex items-center justify-center min-h-[140px]"
+                      className="rounded-none border-2 border-dashed border-blue-600/20 flex items-center justify-center min-h-[140px]"
                       style={{ background: "rgba(15,23,42,0.6)" }}
                     >
                       <span className="text-blue-900/60 text-sm font-bold">
@@ -3446,7 +3446,7 @@ export const StatsComparisonMode = ({
                             )}
                           {!isPendingRoundtable && mainWinner && (
                             <div
-                              className={`text-[11px] font-black mt-1 px-3 py-1 rounded-lg border tracking-wide ${
+                              className={`text-[11px] font-black mt-1 px-3 py-1 rounded-none border tracking-wide ${
                                 effectiveWinner === "player1"
                                   ? "text-blue-300 bg-blue-500/10 border-blue-500/30"
                                   : "text-red-300 bg-red-500/10 border-red-500/30"
@@ -3463,7 +3463,7 @@ export const StatsComparisonMode = ({
                             </div>
                           )}
                           {isPendingRoundtable && (
-                            <div className="text-[10px] font-bold mt-1 px-2 py-0.5 rounded-lg text-yellow-300 bg-yellow-500/10 border border-yellow-500/30">
+                            <div className="text-[10px] font-bold mt-1 px-2 py-0.5 rounded-none text-yellow-300 bg-yellow-500/10 border border-yellow-500/30">
                               ⏳ PENDING
                             </div>
                           )}
@@ -3503,7 +3503,7 @@ export const StatsComparisonMode = ({
                     </PlayerCard3DFrame>
                   ) : (
                     <div
-                      className="rounded-xl border-2 border-dashed border-red-600/20 flex items-center justify-center min-h-[140px]"
+                      className="rounded-none border-2 border-dashed border-red-600/20 flex items-center justify-center min-h-[140px]"
                       style={{ background: "rgba(15,23,42,0.6)" }}
                     >
                       <span className="text-red-900/60 text-sm font-bold">
@@ -3520,7 +3520,7 @@ export const StatsComparisonMode = ({
                       <button
                         onClick={swapPlayers}
                         disabled={stepInProgress}
-                        className="px-3 py-1 rounded-lg text-gray-500 hover:text-gray-200 hover:bg-gray-800/60 disabled:opacity-20 disabled:cursor-not-allowed transition-all text-xs border border-gray-700/40 hover:border-purple-500/40"
+                        className="px-3 py-1 rounded-none text-gray-500 hover:text-gray-200 hover:bg-gray-800/60 disabled:opacity-20 disabled:cursor-not-allowed transition-all text-xs border border-gray-700/40 hover:border-purple-500/40"
                       >
                         ⇄ Swap
                       </button>
@@ -3572,7 +3572,7 @@ export const StatsComparisonMode = ({
             {/* Round results / pre-battle stat comparison */}
             {player1 && player2 && (
               <div
-                className="rounded-2xl border border-gray-700/40 p-3 mb-3 overflow-hidden"
+                className="rounded-none border border-gray-700/40 p-3 mb-3 overflow-hidden"
                 style={{
                   background:
                     "linear-gradient(160deg, #0c1220 0%, #0f172a 100%)",
@@ -3746,7 +3746,7 @@ export const StatsComparisonMode = ({
                         : "rgba(234,179,8,0.3)";
                   return (
                     <div
-                      className="mt-2 rounded-xl border overflow-hidden text-xs"
+                      className="mt-2 rounded-none border overflow-hidden text-xs"
                       style={{ background: "rgba(0,0,0,0.4)", borderColor }}
                     >
                       {/* Navigation header */}
@@ -3918,7 +3918,7 @@ export const StatsComparisonMode = ({
 
             {/* Roundtable Hold Sub-Combat Mode Banner */}
             {roundtableSubMode && roundtableSnapshot && (
-              <div className="bg-orange-900/40 border border-orange-500/60 rounded-xl p-3 mb-3">
+              <div className="bg-orange-900/40 border border-orange-500/60 rounded-none p-3 mb-3">
                 <div className="text-orange-300 font-bold text-sm mb-1 flex items-center gap-2">
                   <span>⚔️</span> TRẬN PHỤ — Roundtable Hold
                 </div>
@@ -3939,7 +3939,7 @@ export const StatsComparisonMode = ({
                       Kết quả trận phụ:
                     </div>
                     <div
-                      className={`text-sm font-bold px-3 py-2 rounded-lg border ${
+                      className={`text-sm font-bold px-3 py-2 rounded-none border ${
                         effectiveWinner === "player1"
                           ? "text-green-300 bg-green-900/30 border-green-500/40"
                           : "text-red-300 bg-red-900/30 border-red-500/40"
@@ -3956,7 +3956,7 @@ export const StatsComparisonMode = ({
                           winner: effectiveWinner,
                         })
                       }
-                      className="w-full mt-2 px-4 py-2 bg-gradient-to-r from-green-700 to-emerald-700 hover:from-green-600 hover:to-emerald-600 text-white font-bold text-sm rounded-xl border border-green-500/50 transition-all"
+                      className="w-full mt-2 px-4 py-2 bg-gradient-to-r from-green-700 to-emerald-700 hover:from-green-600 hover:to-emerald-600 text-white font-bold text-sm rounded-none border border-green-500/50 transition-all"
                     >
                       Xác nhận & Quay về trận chính
                     </button>
@@ -3980,7 +3980,7 @@ export const StatsComparisonMode = ({
                     .map((entry, i) => (
                       <div
                         key={`edgelord-pre-${i}`}
-                        className={`text-xs px-3 py-1.5 rounded-lg border ${
+                        className={`text-xs px-3 py-1.5 rounded-none border ${
                           entry.player === "player1"
                             ? "bg-blue-900/20 border-blue-500/30 text-blue-200"
                             : "bg-red-900/20 border-red-500/30 text-red-200"
@@ -4000,7 +4000,7 @@ export const StatsComparisonMode = ({
               battleDone &&
               isPendingRoundtable &&
               pendingLoser && (
-                <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-xl p-4 mb-3">
+                <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-none p-4 mb-3">
                   <div className="text-yellow-400 font-bold text-base mb-1 flex items-center gap-2">
                     <span>⏳</span> KẾT QUẢ TẠM HOÃN — Roundtable Hold kích hoạt
                   </div>
@@ -4057,7 +4057,7 @@ export const StatsComparisonMode = ({
                               },
                             });
                           }}
-                          className="px-3 py-1 bg-yellow-700/50 hover:bg-yellow-600/60 border border-yellow-500/50 rounded-lg text-yellow-200 text-xs font-bold transition-colors"
+                          className="px-3 py-1 bg-yellow-700/50 hover:bg-yellow-600/60 border border-yellow-500/50 rounded-none text-yellow-200 text-xs font-bold transition-colors"
                         >
                           🎡 Quay ngẫu nhiên
                         </button>
@@ -4067,14 +4067,14 @@ export const StatsComparisonMode = ({
                         placeholder="Tìm Tarnished..."
                         value={tarnishedSearchTerm}
                         onChange={(e) => setTarnishedSearchTerm(e.target.value)}
-                        className="w-full px-3 py-1.5 bg-gray-800 border border-yellow-600/40 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500 mb-2"
+                        className="w-full px-3 py-1.5 bg-gray-800 border border-yellow-600/40 rounded-none text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-yellow-500 mb-2"
                       />
                       <div className="max-h-40 overflow-y-auto space-y-1">
                         {filteredTarnished.map((p) => (
                           <button
                             key={p.no}
                             onClick={() => setSelectedTarnished(p)}
-                            className="w-full px-3 py-2 text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-yellow-500/50 rounded-lg text-white text-sm flex justify-between items-center transition-all"
+                            className="w-full px-3 py-2 text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-yellow-500/50 rounded-none text-white text-sm flex justify-between items-center transition-all"
                           >
                             <span>
                               <span className="text-yellow-400">#{p.no}</span>{" "}
@@ -4154,7 +4154,7 @@ export const StatsComparisonMode = ({
                                   </span>
                                 </div>
                                 {subCombatResult.winner === "player1" ? (
-                                  <div className="mt-2 text-green-400 font-bold text-sm bg-green-900/30 border border-green-500/40 rounded-lg px-3 py-2">
+                                  <div className="mt-2 text-green-400 font-bold text-sm bg-green-900/30 border border-green-500/40 rounded-none px-3 py-2">
                                     Tarnished thắng →{" "}
                                     <strong>
                                       {pendingLoser === "player1"
@@ -4164,7 +4164,7 @@ export const StatsComparisonMode = ({
                                     được cứu!
                                   </div>
                                 ) : (
-                                  <div className="mt-2 text-red-400 font-bold text-sm bg-red-900/30 border border-red-500/40 rounded-lg px-3 py-2">
+                                  <div className="mt-2 text-red-400 font-bold text-sm bg-red-900/30 border border-red-500/40 rounded-none px-3 py-2">
                                     Tarnished thua →{" "}
                                     <strong>
                                       {pendingLoser === "player1"
@@ -4176,7 +4176,7 @@ export const StatsComparisonMode = ({
                                 )}
                                 <button
                                   onClick={() => setIsPendingRoundtable(false)}
-                                  className="mt-3 px-4 py-1.5 bg-green-700 hover:bg-green-600 text-white text-xs rounded-lg border border-green-500 font-bold transition-colors"
+                                  className="mt-3 px-4 py-1.5 bg-green-700 hover:bg-green-600 text-white text-xs rounded-none border border-green-500 font-bold transition-colors"
                                 >
                                   Xác nhận kết quả cuối
                                 </button>
@@ -4204,7 +4204,7 @@ export const StatsComparisonMode = ({
                               tarnishedList,
                             );
                           }}
-                          className="w-full px-4 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-sm rounded-xl transition-all"
+                          className="w-full px-4 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-white font-bold text-sm rounded-none transition-all"
                         >
                           ⚔️ Chạy Trận Phụ (Full PvP)
                         </button>
@@ -4219,7 +4219,7 @@ export const StatsComparisonMode = ({
               subCombatResult &&
               selectedTarnished &&
               !isPendingRoundtable && (
-                <div className="bg-gray-900/60 border border-orange-600/40 rounded-xl p-3 mb-3">
+                <div className="bg-gray-900/60 border border-orange-600/40 rounded-none p-3 mb-3">
                   <div className="text-orange-300 font-bold text-xs mb-2">
                     Kết quả trận phụ Roundtable Hold:{" "}
                     <span className="text-yellow-300">
@@ -4249,7 +4249,7 @@ export const StatsComparisonMode = ({
                     </span>
                   </div>
                   <div
-                    className={`mt-2 text-xs font-bold text-center px-3 py-1.5 rounded-lg border ${
+                    className={`mt-2 text-xs font-bold text-center px-3 py-1.5 rounded-none border ${
                       subCombatResult.winner === "player1"
                         ? "text-green-300 bg-green-900/30 border-green-500/40"
                         : "text-red-300 bg-red-900/30 border-red-500/40"
@@ -4291,7 +4291,7 @@ export const StatsComparisonMode = ({
                 )
                   return null;
                 return (
-                  <div className="mt-3 bg-yellow-900/20 rounded-xl border border-yellow-500/40 p-3">
+                  <div className="mt-3 bg-yellow-900/20 rounded-none border border-yellow-500/40 p-3">
                     <div className="text-sm font-bold text-yellow-300 mb-2">
                       ⚔ Tiebreaker — Cùng race ({p1Race}), điểm bằng nhau
                     </div>
@@ -4343,7 +4343,7 @@ export const StatsComparisonMode = ({
                             },
                           });
                         }}
-                        className="px-4 py-2 bg-yellow-600/40 hover:bg-yellow-600/60 text-yellow-200 font-bold rounded-lg text-sm border border-yellow-500/40 transition-colors"
+                        className="px-4 py-2 bg-yellow-600/40 hover:bg-yellow-600/60 text-yellow-200 font-bold rounded-none text-sm border border-yellow-500/40 transition-colors"
                       >
                         🎯 Quay Tiebreaker
                       </button>
@@ -4366,14 +4366,14 @@ export const StatsComparisonMode = ({
                     <button
                       onClick={handleStartWithIntro}
                       disabled={pendingPreCombatCount > 0}
-                      className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all"
+                      className="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-none text-sm shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all"
                     >
                       ⚔ Bắt đầu
                     </button>
                     {/* Settings toggle */}
                     <button
                       onClick={() => setShowSettings((s) => !s)}
-                      className="p-2 rounded-xl bg-gray-700/60 hover:bg-gray-600/80 text-gray-300 hover:text-white transition-colors text-sm"
+                      className="p-2 rounded-none bg-gray-700/60 hover:bg-gray-600/80 text-gray-300 hover:text-white transition-colors text-sm"
                       title="Cài đặt"
                     >
                       ⚙
@@ -4381,7 +4381,7 @@ export const StatsComparisonMode = ({
 
                     {/* Settings panel — absolute để không đẩy layout */}
                     {showSettings && (
-                      <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-900/95 border border-gray-600/50 rounded-xl p-4 w-72 space-y-3 text-sm shadow-2xl z-50">
+                      <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-900/95 border border-gray-600/50 rounded-none p-4 w-72 space-y-3 text-sm shadow-2xl z-50">
                         {/* Master volume */}
                         <div className="space-y-1">
                           <div className="flex justify-between text-xs text-gray-400">
@@ -4483,7 +4483,7 @@ export const StatsComparisonMode = ({
                           setCombatResult(fakeCombat);
                           handleConfirmCombat();
                         }}
-                        className="px-3 py-2 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 rounded-lg text-xs border border-blue-500/30 transition-colors"
+                        className="px-3 py-2 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 rounded-none text-xs border border-blue-500/30 transition-colors"
                       >
                         {player1.name} Win
                       </button>
@@ -4500,7 +4500,7 @@ export const StatsComparisonMode = ({
                           setCombatResult(fakeCombat);
                           handleConfirmCombat();
                         }}
-                        className="px-3 py-2 bg-red-600/30 hover:bg-red-600/50 text-red-300 rounded-lg text-xs border border-red-500/30 transition-colors"
+                        className="px-3 py-2 bg-red-600/30 hover:bg-red-600/50 text-red-300 rounded-none text-xs border border-red-500/30 transition-colors"
                       >
                         {player2.name} Win
                       </button>
@@ -4518,7 +4518,7 @@ export const StatsComparisonMode = ({
                   <button
                     onClick={() => resolveNextRoundRef.current?.()}
                     disabled={pendingSpinsForLastRound}
-                    className={`px-6 py-2.5 font-bold rounded-xl text-sm transition-all shadow-lg ${
+                    className={`px-6 py-2.5 font-bold rounded-none text-sm transition-all shadow-lg ${
                       pendingSpinsForLastRound
                         ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
                         : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white shadow-yellow-500/20"
@@ -4534,7 +4534,7 @@ export const StatsComparisonMode = ({
                 <button
                   onClick={handleConfirmCombat}
                   disabled={pendingSpins}
-                  className={`px-6 py-2.5 font-bold rounded-xl text-sm transition-all shadow-lg ${
+                  className={`px-6 py-2.5 font-bold rounded-none text-sm transition-all shadow-lg ${
                     pendingSpins
                       ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
                       : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-green-500/20 hover:shadow-green-500/40"
@@ -4552,7 +4552,7 @@ export const StatsComparisonMode = ({
               {combatConfirmed && !roundtableSubMode && (
                 <button
                   onClick={resetCombat}
-                  className="px-4 py-2 bg-gray-700/60 hover:bg-gray-600/60 text-gray-300 rounded-lg text-xs border border-gray-600/50 transition-colors"
+                  className="px-4 py-2 bg-gray-700/60 hover:bg-gray-600/60 text-gray-300 rounded-none text-xs border border-gray-600/50 transition-colors"
                 >
                   ↺ Re-battle
                 </button>
@@ -4576,7 +4576,7 @@ export const StatsComparisonMode = ({
                         note: tournamentNote || null,
                       });
                     }}
-                    className="px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold rounded-lg text-xs shadow-lg shadow-violet-500/20 transition-all"
+                    className="px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold rounded-none text-xs shadow-lg shadow-violet-500/20 transition-all"
                   >
                     Next Match ▶
                   </button>
@@ -4585,7 +4585,7 @@ export const StatsComparisonMode = ({
 
             {/* Tournament: Special Event / Note / Save */}
             {isTournamentMode && (
-              <div className="mt-3 bg-gray-800/60 rounded-xl border border-yellow-600/30 p-3 space-y-2">
+              <div className="mt-3 bg-gray-800/60 rounded-none border border-yellow-600/30 p-3 space-y-2">
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <label className="block text-[11px] text-gray-400 mb-1">
@@ -4633,7 +4633,7 @@ export const StatsComparisonMode = ({
                           note: tournamentNote || null,
                         });
                       }}
-                      className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold rounded-lg text-sm transition-all"
+                      className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-bold rounded-none text-sm transition-all"
                     >
                       💾 Lưu kết quả{" "}
                       {tournamentMatch!.displayLabel ??
@@ -4644,7 +4644,7 @@ export const StatsComparisonMode = ({
             )}
 
             {/* Rules Info */}
-            <div className="mt-4 bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-lg p-3 text-center">
+            <div className="mt-4 bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-none p-3 text-center">
               <p className="text-gray-400 text-xs">
                 <strong className="text-purple-400">Rules:</strong> STR → SPD →
                 DUR → IQ → BIQ → MA. Cao hơn thắng round. Bằng nhau = không

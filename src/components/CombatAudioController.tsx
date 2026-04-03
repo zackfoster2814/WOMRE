@@ -406,7 +406,7 @@ const TrackControls = ({
     : Math.round(state.volume);
 
   return (
-    <div className="bg-gray-800/90 rounded-lg p-2 space-y-1.5">
+    <div className="bg-gray-800/90 rounded-none p-2 space-y-1.5">
       <div className="flex items-center gap-2">
         <button
           onClick={onTogglePlay}
@@ -864,7 +864,7 @@ export const FallbackBgmController = ({
   return (
     <div className="relative flex justify-center">
       <div
-        className="absolute z-[200] bottom-full mb-1 w-72 bg-gray-900 border border-purple-500/40 rounded-xl shadow-2xl p-2 space-y-2"
+        className="absolute z-[200] bottom-full mb-1 w-72 bg-gray-900 border border-purple-500/40 rounded-none shadow-2xl p-2 space-y-2"
         style={{ display: open ? undefined : "none" }}
       >
         <div className="flex items-center justify-between pb-1 border-b border-gray-700/50">
@@ -889,7 +889,7 @@ export const FallbackBgmController = ({
       </div>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold transition-colors bg-purple-700 hover:bg-purple-600 text-white"
+        className="flex items-center gap-1 px-2 py-1 rounded-none text-xs font-semibold transition-colors bg-purple-700 hover:bg-purple-600 text-white"
         title="Nhạc nền"
       >
         🎵
@@ -938,7 +938,7 @@ export const CombatAudioController = ({
         This ensures exactly ONE audio instance per track at all times.
       */}
       <div
-        className={`absolute z-50 bottom-full mb-1 ${panelSide} w-72 bg-gray-900 border ${borderClass} rounded-xl shadow-2xl p-2 space-y-2`}
+        className={`absolute z-50 bottom-full mb-1 ${panelSide} w-72 bg-gray-900 border ${borderClass} rounded-none shadow-2xl p-2 space-y-2`}
         style={{ display: open ? undefined : "none" }}
       >
         <div className="flex items-center justify-between pb-1 border-b border-gray-700/50">
@@ -982,7 +982,7 @@ export const CombatAudioController = ({
       {/* Toggle button */}
       <button
         onClick={() => setOpen((o) => !o)}
-        className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold transition-colors ${accentBtn}`}
+        className={`flex items-center gap-1 px-2 py-1 rounded-none text-xs font-semibold transition-colors ${accentBtn}`}
         title={`${stableTracks.length} track đang phát`}
       >
         🎵 {stableTracks.length}

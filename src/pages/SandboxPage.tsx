@@ -308,7 +308,7 @@ export const SandboxPage = () => {
               onLoadRandom={() => loadRandomPlayer(1)}
               initialState={builder1Initial}
             />
-            <div className="bg-gray-800/80 backdrop-blur-sm border border-blue-500/30 rounded-xl p-4">
+            <div className="bg-gray-800/80 backdrop-blur-sm border border-blue-500/30 rounded-none p-4">
               <SandboxStatDisplay character={character1} />
             </div>
           </div>
@@ -327,7 +327,7 @@ export const SandboxPage = () => {
               onLoadRandom={() => loadRandomPlayer(2)}
               initialState={builder2Initial}
             />
-            <div className="bg-gray-800/80 backdrop-blur-sm border border-red-500/30 rounded-xl p-4">
+            <div className="bg-gray-800/80 backdrop-blur-sm border border-red-500/30 rounded-none p-4">
               <SandboxStatDisplay character={character2} />
             </div>
           </div>
@@ -340,13 +340,13 @@ export const SandboxPage = () => {
               <div className="flex justify-center">
                 <button
                   onClick={() => setShowBattle(true)}
-                  className="px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 rounded-2xl text-white font-bold text-2xl transition-all transform hover:scale-105 shadow-lg"
+                  className="px-10 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 rounded-none text-white font-bold text-2xl transition-all transform hover:scale-105 shadow-lg"
                 >
                   ⚔️ BATTLE ⚔️
                 </button>
               </div>
             ) : (
-              <div className="bg-gray-800/80 backdrop-blur-sm border border-amber-500/30 rounded-xl p-6">
+              <div className="bg-gray-800/80 backdrop-blur-sm border border-amber-500/30 rounded-none p-6">
                 <div className="flex justify-end mb-4">
                   <button
                     onClick={() => setShowBattle(false)}
@@ -367,7 +367,7 @@ export const SandboxPage = () => {
         {/* Load Player Modal */}
         {loadTarget !== null && (
           <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[3000]">
-            <div className="bg-gray-800 border border-gray-600 rounded-xl p-6 w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col">
+            <div className="bg-gray-800 border border-gray-600 rounded-none p-6 w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold text-white">
                   Load Player into {loadTarget === 1 ? "Player 1" : "Player 2"}
@@ -388,7 +388,7 @@ export const SandboxPage = () => {
                 value={loadSearch}
                 onChange={(e) => setLoadSearch(e.target.value)}
                 placeholder="Search by name, username, or No..."
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 mb-4"
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-none text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 mb-4"
                 autoFocus
               />
 

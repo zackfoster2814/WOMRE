@@ -245,7 +245,7 @@ const HouseLoreSection = ({
           return (
             <div
               key={house.houseName}
-              className={`bg-gradient-to-br ${house.bgGradient} border border-gray-600 rounded-xl overflow-hidden shadow-xl`}
+              className={`bg-gradient-to-br ${house.bgGradient} border border-gray-600 rounded-none overflow-hidden shadow-xl`}
             >
               {/* House Header */}
               <div
@@ -275,7 +275,7 @@ const HouseLoreSection = ({
 
                 {/* Base Effect - fixed height for alignment */}
                 <div
-                  className="bg-black/30 rounded-lg p-3 flex flex-col justify-center"
+                  className="bg-black/30 rounded-none p-3 flex flex-col justify-center"
                   style={{ minHeight: 72 }}
                 >
                   <p className="text-xs text-gray-400 mb-1">Hiệu ứng cơ bản:</p>
@@ -287,7 +287,7 @@ const HouseLoreSection = ({
                 {/* Traitor / Collective Section - fixed height for alignment */}
                 <div style={{ minHeight: 240 }}>
                   {house.traitor ? (
-                    <div className="bg-gradient-to-r from-red-900/40 to-red-800/40 border-2 border-red-500/50 rounded-lg p-4 relative overflow-hidden h-full">
+                    <div className="bg-gradient-to-r from-red-900/40 to-red-800/40 border-2 border-red-500/50 rounded-none p-4 relative overflow-hidden h-full">
                       {/* Warning stripes background */}
                       <div className="absolute inset-0 opacity-5">
                         <div
@@ -316,7 +316,7 @@ const HouseLoreSection = ({
                           )}
                         </div>
 
-                        <div className="flex items-center gap-3 bg-black/30 rounded-lg p-3">
+                        <div className="flex items-center gap-3 bg-black/30 rounded-none p-3">
                           {/* Traitor Avatar */}
                           <img
                             src={getAssetPath(
@@ -356,7 +356,7 @@ const HouseLoreSection = ({
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-gradient-to-r from-green-500/20 to-teal-500/20 border border-green-500/30 rounded-lg p-4 h-full flex flex-col justify-center">
+                    <div className="bg-gradient-to-r from-green-500/20 to-teal-500/20 border border-green-500/30 rounded-none p-4 h-full flex flex-col justify-center">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-green-400 text-xs font-medium uppercase tracking-wider">
                           Hiệu ứng toàn tộc
@@ -403,7 +403,7 @@ const HouseLoreSection = ({
           onClick={() => setEvidenceModal(null)}
         >
           <div
-            className="bg-gray-900 border border-gray-600 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6"
+            className="bg-gray-900 border border-gray-600 rounded-none max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -423,7 +423,7 @@ const HouseLoreSection = ({
                   key={idx}
                   src={img}
                   alt={`Bằng chứng ${idx + 1}`}
-                  className="w-full rounded-lg border border-gray-700"
+                  className="w-full rounded-none border border-gray-700"
                 />
               ))}
             </div>
@@ -892,10 +892,10 @@ export const PlayerListPage = () => {
         <div className="max-w-7xl mx-auto overflow-visible">
           <div className="flex items-center justify-center gap-6 mb-3">
             {/* View Mode Toggle */}
-            <div className="flex bg-gray-800 rounded-lg p-1">
+            <div className="flex bg-gray-800 rounded-none p-1">
               <button
                 onClick={() => setViewMode("players")}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                className={`px-4 py-2 rounded-none font-medium transition-colors ${
                   viewMode === "players"
                     ? "bg-teal-600 text-white"
                     : "text-gray-400 hover:text-white"
@@ -905,7 +905,7 @@ export const PlayerListPage = () => {
               </button>
               <button
                 onClick={() => setViewMode("teams")}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                className={`px-4 py-2 rounded-none font-medium transition-colors ${
                   viewMode === "teams"
                     ? "bg-orange-600 text-white"
                     : "text-gray-400 hover:text-white"
@@ -915,7 +915,7 @@ export const PlayerListPage = () => {
               </button>
               <button
                 onClick={() => setViewMode("house-lore")}
-                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                className={`px-4 py-2 rounded-none font-medium transition-colors ${
                   viewMode === "house-lore"
                     ? "bg-purple-600 text-white"
                     : "text-gray-400 hover:text-white"
@@ -951,9 +951,9 @@ export const PlayerListPage = () => {
                 placeholder="Search players..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white w-64 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-none text-white w-64 focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
-              <label className="flex items-center gap-2 cursor-pointer select-none px-3 py-2 rounded-lg border border-gray-600 bg-gray-800/80 hover:border-green-500/60 transition-colors">
+              <label className="flex items-center gap-2 cursor-pointer select-none px-3 py-2 rounded-none border border-gray-600 bg-gray-800/80 hover:border-green-500/60 transition-colors">
                 <input
                   type="checkbox"
                   checked={onlyAlive}
@@ -967,7 +967,7 @@ export const PlayerListPage = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-none text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
               >
                 <option value="no">Sort by No.</option>
                 <option value="name">Sort by Name</option>
@@ -984,7 +984,7 @@ export const PlayerListPage = () => {
                     setShowHouseFilter(false);
                     setShowTeamFilter(false);
                   }}
-                  className={`px-4 py-2 border rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                  className={`px-4 py-2 border rounded-none font-medium transition-colors flex items-center gap-2 ${
                     selectedRaces.length > 0
                       ? "bg-amber-600/80 border-amber-500 text-white"
                       : "bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80"
@@ -1000,7 +1000,7 @@ export const PlayerListPage = () => {
 
                 {/* Race Filter Dropdown */}
                 {showRaceFilter && (
-                  <div className="absolute top-full right-0 mt-2 z-[2000] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
+                  <div className="absolute top-full right-0 mt-2 z-[2000] bg-gray-800 border border-gray-600 rounded-none shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-600">
                       <span className="text-white font-medium text-sm">
                         Filter by Race
@@ -1060,7 +1060,7 @@ export const PlayerListPage = () => {
                     setShowRaceFilter(false);
                     setShowTeamFilter(false);
                   }}
-                  className={`px-4 py-2 border rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                  className={`px-4 py-2 border rounded-none font-medium transition-colors flex items-center gap-2 ${
                     selectedHouses.length > 0
                       ? "bg-cyan-600/80 border-cyan-500 text-white"
                       : "bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80"
@@ -1076,7 +1076,7 @@ export const PlayerListPage = () => {
 
                 {/* House Filter Dropdown */}
                 {showHouseFilter && (
-                  <div className="absolute top-full right-0 mt-2 z-[2000] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
+                  <div className="absolute top-full right-0 mt-2 z-[2000] bg-gray-800 border border-gray-600 rounded-none shadow-xl p-3 min-w-[250px] max-h-[400px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-600">
                       <span className="text-white font-medium text-sm">
                         Filter by House
@@ -1143,7 +1143,7 @@ export const PlayerListPage = () => {
                     setShowRaceFilter(false);
                     setShowHouseFilter(false);
                   }}
-                  className={`px-4 py-2 border rounded-lg font-medium transition-colors flex items-center gap-2 ${
+                  className={`px-4 py-2 border rounded-none font-medium transition-colors flex items-center gap-2 ${
                     selectedTeams.length > 0
                       ? "bg-purple-600/80 border-purple-500 text-white"
                       : "bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80"
@@ -1159,7 +1159,7 @@ export const PlayerListPage = () => {
 
                 {/* Team Filter Dropdown */}
                 {showTeamFilter && (
-                  <div className="absolute top-full right-0 mt-2 z-[2000] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-3 min-w-[200px] max-h-[400px] overflow-y-auto">
+                  <div className="absolute top-full right-0 mt-2 z-[2000] bg-gray-800 border border-gray-600 rounded-none shadow-xl p-3 min-w-[200px] max-h-[400px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-600">
                       <span className="text-white font-medium text-sm">
                         Filter by Team
@@ -1238,7 +1238,7 @@ export const PlayerListPage = () => {
               </div>
               <button
                 onClick={() => setShowRaceStats(true)}
-                className="px-4 py-2 bg-amber-600/80 hover:bg-amber-700/80 border border-amber-500 rounded-lg text-white font-medium transition-colors flex items-center gap-2"
+                className="px-4 py-2 bg-amber-600/80 hover:bg-amber-700/80 border border-amber-500 rounded-none text-white font-medium transition-colors flex items-center gap-2"
               >
                 <span>📊</span> Race Stats
               </button>
@@ -1320,7 +1320,7 @@ export const PlayerListPage = () => {
       {/* Ranking Panel */}
       {showRanking && viewMode === "players" && (
         <div
-          className="fixed bottom-24 right-6 w-80 max-h-[70vh] bg-gray-900 border border-gray-600 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+          className="fixed bottom-24 right-6 w-80 max-h-[70vh] bg-gray-900 border border-gray-600 rounded-none shadow-2xl overflow-hidden flex flex-col"
           style={{ zIndex: 999 }}
         >
           <div className="bg-gradient-to-r from-amber-600/80 to-orange-600/80 px-4 py-3 border-b border-gray-600">
@@ -1372,7 +1372,7 @@ export const PlayerListPage = () => {
 
       {/* Loading toast */}
       {loadingPlayerName && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-gray-800 border border-blue-500/50 text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-4">
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-gray-800 border border-blue-500/50 text-white px-8 py-4 rounded-none shadow-2xl flex items-center gap-4">
           <svg
             className="animate-spin w-6 h-6 text-blue-400 shrink-0"
             fill="none"
@@ -1470,7 +1470,7 @@ const RaceStatsDialog = ({
       onClick={onClose}
     >
       <div
-        className="bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-xl max-w-lg w-full max-h-[80vh] overflow-hidden shadow-2xl"
+        className="bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-none max-w-lg w-full max-h-[80vh] overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -1732,7 +1732,7 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
   return (
     <div
       onClick={onClick}
-      className={`bg-gray-800/80 backdrop-blur-sm border rounded-lg p-4 cursor-pointer transition-all hover:scale-[1.02] hover:shadow-xl ${
+      className={`bg-gray-800/80 backdrop-blur-sm border rounded-none p-4 cursor-pointer transition-all hover:scale-[1.02] hover:shadow-xl ${
         isSelected
           ? "border-teal-500 ring-2 ring-teal-500/50"
           : "border-gray-700 hover:border-gray-500"
@@ -1759,7 +1759,7 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
                 {player.symbiosisType} → {player.symbiosisHost}
                 {/* Tooltip */}
                 <div className="absolute left-0 top-full mt-1 z-50 hidden group-hover:block">
-                  <div className="bg-gray-900 border border-red-500/50 rounded-lg p-2 shadow-xl min-w-[150px] max-w-[250px]">
+                  <div className="bg-gray-900 border border-red-500/50 rounded-none p-2 shadow-xl min-w-[150px] max-w-[250px]">
                     <div className="text-xs text-red-300 font-semibold mb-1">
                       Ký Sinh Trùng:
                     </div>
@@ -1781,7 +1781,7 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
               >
                 ({player.parasiteType}){/* Tooltip */}
                 <div className="absolute left-0 top-full mt-1 z-50 hidden group-hover:block">
-                  <div className="bg-gray-900 border border-green-500/50 rounded-lg p-2 shadow-xl min-w-[150px] max-w-[250px]">
+                  <div className="bg-gray-900 border border-green-500/50 rounded-none p-2 shadow-xl min-w-[150px] max-w-[250px]">
                     <div className="text-xs text-green-300 font-semibold mb-1">
                       Bị Ký Sinh bởi:
                     </div>
@@ -1957,7 +1957,7 @@ const HierarchyTooltip = ({
   return (
     <div
       ref={tooltipRef}
-      className="absolute left-full top-0 ml-2 z-[100] bg-gray-800 border border-gray-600 rounded-lg shadow-xl p-2 min-w-[180px] whitespace-nowrap"
+      className="absolute left-full top-0 ml-2 z-[100] bg-gray-800 border border-gray-600 rounded-none shadow-xl p-2 min-w-[180px] whitespace-nowrap"
       onClick={(e) => e.stopPropagation()}
     >
       {type === "archetype" ? (
@@ -2087,6 +2087,13 @@ const PlayerDetailModal = ({
   const [avatarExtIndex, setAvatarExtIndex] = useState(0);
   const [avatarLoaded, setAvatarLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState<"info" | "battlelog">("info");
+  // Mobile accordion state for collapsible right-column sections
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
+  const toggleSection = (key: string) => setCollapsedSections(prev => {
+    const next = new Set(prev);
+    if (next.has(key)) next.delete(key); else next.add(key);
+    return next;
+  });
 
   // Reset avatar state when character changes
   useEffect(() => {
@@ -2159,8 +2166,10 @@ const PlayerDetailModal = ({
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-teal-500 border-t-transparent" />
+      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+        <div className="crystal-loader w-20 h-20 rounded-2xl border border-amber-500/20 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg border-2 border-primary/40 border-t-primary animate-spin" />
+        </div>
       </div>
     );
   }
@@ -2222,86 +2231,82 @@ const PlayerDetailModal = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 flex items-center justify-center z-[100] p-4"
+      className="fixed inset-0 bg-black/80 flex items-end sm:items-center justify-center z-[100] p-0 sm:p-4"
       onClick={onClose}
     >
       <div
-        className="bg-gray-800/95 backdrop-blur-sm border border-gray-600 rounded-xl max-w-4xl w-full h-[90vh] flex flex-col shadow-2xl"
+        className="w-full max-w-4xl flex flex-col shadow-2xl rounded-t-2xl sm:rounded-2xl h-[95vh] sm:h-[90vh] border border-amber-500/15"
+        style={{ background: "linear-gradient(160deg, #020509 0%, #06080f 100%)" }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-teal-600 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+        {/* Header — Astral Fantasy */}
+        <div
+          className="px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between sticky top-0 z-10 rounded-t-2xl border-b border-amber-500/10"
+          style={{ background: "linear-gradient(135deg, rgba(10,14,26,0.97) 0%, rgba(20,10,30,0.97) 100%)", boxShadow: "0 1px 0 rgba(245,158,11,0.12)" }}
+        >
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 mb-1 flex-wrap">
-              <span className="text-white/80 font-bold bg-white/20 px-3 py-1 rounded">
+            {/* Badge row */}
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span className="font-mono text-amber-500/70 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md text-xs">
                 No.{character.no}
               </span>
               {character.team && (
-                <span className="text-white/80 font-medium bg-white/20 px-3 py-1 rounded">
+                <span className="font-mono text-cyan-400/70 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-md text-xs">
                   Team {character.team}
                 </span>
               )}
-              {/* Archetype badges */}
-              {character.archetypes &&
-                character.archetypes.length > 0 &&
-                character.archetypes.map((arch, idx) => (
-                  <span
-                    key={`arch-${idx}`}
-                    className="text-white/90 font-medium bg-pink-500/40 px-2 py-0.5 rounded text-sm"
-                  >
-                    {arch}
-                  </span>
-                ))}
-              {/* House badges */}
               {character.nestedHouses &&
-                character.nestedHouses.length > 0 &&
                 character.nestedHouses
                   .filter((h) => !h.isLost)
                   .map((house, idx) => (
-                    <span
-                      key={`house-${idx}`}
-                      className="text-white/90 font-medium bg-cyan-500/40 px-2 py-0.5 rounded text-sm"
-                    >
+                    <span key={`house-${idx}`} className="text-amber-300/80 bg-amber-900/20 border border-amber-600/20 px-2 py-0.5 rounded-md text-xs">
                       {house.name}
                     </span>
                   ))}
+              {character.archetypes &&
+                character.archetypes.map((arch, idx) => (
+                  <span key={`arch-${idx}`} className="text-purple-300/80 bg-purple-900/20 border border-purple-500/20 px-2 py-0.5 rounded-md text-xs">
+                    {arch}
+                  </span>
+                ))}
             </div>
-            <h2 className="text-2xl font-bold text-white">{character.name}</h2>
+            <h2 className="font-display text-xl sm:text-2xl font-bold text-white tracking-wide leading-tight">{character.name}</h2>
             {character.username && (
-              <p className="text-white/70">{character.username}</p>
+              <p className="text-amber-500/50 text-sm font-mono mt-0.5">@{character.username}</p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="text-white/70 hover:text-white text-3xl font-light transition-colors flex-shrink-0 ml-4"
+            className="w-9 h-9 flex items-center justify-center rounded-lg bg-slate-800/60 hover:bg-slate-700/60 border border-amber-500/15 hover:border-amber-500/30 text-amber-400/60 hover:text-amber-300 text-xl transition-all flex-shrink-0 ml-3"
           >
-            &times;
+            ×
           </button>
         </div>
 
-        {/* Tab Bar */}
-        <div className="flex border-b border-gray-700 bg-gray-800/80 sticky top-[72px] z-10">
+        {/* Tab Bar — Astral Fantasy */}
+        <div className="flex border-b border-amber-500/10 sticky top-[68px] sm:top-[76px] z-10"
+          style={{ background: "rgba(2,5,9,0.95)" }}>
           <button
             onClick={() => setActiveTab("info")}
-            className={`px-6 py-3 text-sm font-medium transition-colors ${
+            className={`flex-1 py-2.5 text-xs font-display font-bold tracking-[0.1em] transition-all ${
               activeTab === "info"
-                ? "text-white border-b-2 border-purple-400"
-                : "text-gray-400 hover:text-gray-200"
+                ? "text-amber-300 border-b-2 border-amber-500 bg-amber-900/15"
+                : "text-gray-600 hover:text-amber-400/60"
             }`}
           >
             Info
           </button>
           <button
             onClick={() => setActiveTab("battlelog")}
-            className={`px-6 py-3 text-sm font-medium transition-colors flex items-center gap-2 ${
+            className={`flex-1 py-2.5 text-xs font-display font-bold tracking-[0.1em] transition-all flex items-center justify-center gap-2 ${
               activeTab === "battlelog"
-                ? "text-white border-b-2 border-orange-400"
-                : "text-gray-400 hover:text-gray-200"
+                ? "text-orange-300 border-b-2 border-orange-500 bg-orange-900/15"
+                : "text-gray-600 hover:text-orange-400/60"
             }`}
           >
             Battle Log
             {character.battleLog && character.battleLog.length > 0 && (
-              <span className="bg-orange-500/20 text-orange-300 text-xs px-1.5 py-0.5 rounded">
+              <span className="bg-orange-500/20 text-orange-300 text-[10px] px-1.5 py-0.5 rounded-md border border-orange-500/20">
                 {character.battleLog.length}
               </span>
             )}
@@ -2311,18 +2316,21 @@ const PlayerDetailModal = ({
         <div className="flex-1 overflow-y-auto">
           {/* Tab Content: Info */}
           {activeTab === "info" && (
-            <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* Left Column - Avatar, Basic Info & Stats */}
-              <div className="space-y-6">
-                {/* Character Avatar */}
-                <div className="bg-gray-700/50 rounded-lg p-4">
-                  <div className="flex justify-center">
-                    <div className="w-[250px] h-[250px] lg:w-[300px] lg:h-[300px] rounded-lg overflow-hidden border-2 border-gray-600 bg-gray-800">
+              <div className="space-y-4 sm:space-y-6">
+                {/* Character Avatar — Tarot Card style on mobile */}
+                <div className="rounded-xl border border-amber-500/15 overflow-hidden" style={{ background: "rgba(10,14,26,0.8)" }}>
+                  {/* Mobile: horizontal banner layout */}
+                  <div className="flex sm:block">
+                    {/* Avatar */}
+                    <div className="w-28 h-28 sm:w-full sm:h-auto sm:aspect-square flex-shrink-0 relative"
+                      style={{ maxHeight: "300px" }}>
                       {!avatarAllFailed ? (
                         <>
                           {!avatarLoaded && (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <div className="animate-spin rounded-full h-8 w-8 border-2 border-purple-500 border-t-transparent" />
+                            <div className="w-full h-full flex items-center justify-center crystal-loader">
+                              <div className="w-6 h-6 rounded-md border-2 border-primary/30 border-t-primary animate-spin" />
                             </div>
                           )}
                           <img
@@ -2338,22 +2346,38 @@ const PlayerDetailModal = ({
                           />
                         </>
                       ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 bg-gray-800/50">
-                          <span className="text-6xl mb-3">👤</span>
-                          <p className="text-sm text-center px-4">
-                            Chưa có avatar
-                          </p>
-                          <p className="text-xs text-gray-600 mt-1">
-                            no{character.no}.[png/jpg/gif/webp]
-                          </p>
+                        <div className="w-full h-full flex flex-col items-center justify-center text-gray-600">
+                          <span className="text-4xl sm:text-6xl mb-2">👤</span>
+                          <p className="text-xs text-center px-2 hidden sm:block">Chưa có avatar</p>
+                        </div>
+                      )}
+                      {/* Amber border overlay */}
+                      <div className="absolute inset-0 border border-amber-500/10 pointer-events-none rounded-l-xl sm:rounded-none" />
+                    </div>
+                    {/* Mobile: quick info beside avatar */}
+                    <div className="sm:hidden flex-1 p-3 flex flex-col justify-center gap-2 border-l border-amber-500/10">
+                      <div className="text-xs text-gray-500 font-mono">Race</div>
+                      <div className="text-amber-400 text-sm font-medium">{character.race?.race || "-"}</div>
+                      {character.race?.subRace && (
+                        <div className="text-amber-300/70 text-xs">{character.race.subRace}</div>
+                      )}
+                      {character.tournament && (
+                        <div className={`text-xs font-display px-2 py-0.5 rounded-md border self-start mt-1 ${
+                          character.tournament.status === "eliminated"
+                            ? "text-red-400 border-red-500/20 bg-red-900/20"
+                            : character.tournament.status === "champion"
+                              ? "text-amber-400 border-amber-500/30 bg-amber-900/20"
+                              : "text-green-400 border-green-500/20 bg-green-900/20"
+                        }`}>
+                          {character.tournament.status === "champion" ? "✦ Vô địch" : character.tournament.status === "eliminated" ? "Bị loại" : "Còn sống"}
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
 
-                {/* Basic Info - Each item on separate row */}
-                <div className="bg-gray-700/50 rounded-lg p-4 space-y-2">
+                {/* Basic Info */}
+                <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4 space-y-2">
                   {/* Race */}
                   <div className="flex items-center gap-2">
                     <span className="text-gray-400 text-sm min-w-[80px]">
@@ -2629,28 +2653,28 @@ const PlayerDetailModal = ({
                 </div>
 
                 {/* Stats */}
-                <div className="bg-gray-700/50 rounded-lg p-4">
+                <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                      <span className="text-teal-400">&#9733;</span> Stats
+                    <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
+                      <span className="text-amber-500/70 text-sm">✦</span> Stats
                     </h3>
                     <button
                       onClick={() => setShowBreakdown(!showBreakdown)}
-                      className={`text-xs px-3 py-1 rounded-full transition-colors ${
+                      className={`text-xs px-3 py-1 rounded-md border transition-all font-mono ${
                         showBreakdown
-                          ? "bg-teal-500 text-white"
-                          : "bg-gray-600 text-gray-300 hover:bg-gray-500"
+                          ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
+                          : "bg-slate-800/60 text-gray-500 border-slate-600/40 hover:text-amber-400/60 hover:border-amber-500/20"
                       }`}
                     >
-                      {showBreakdown ? "Hide Sources" : "Show Sources"}
+                      {showBreakdown ? "Ẩn nguồn" : "Xem nguồn"}
                     </button>
                   </div>
 
-                  {/* Breakdown Panel - Table View */}
+                  {/* Breakdown Panel */}
                   {showBreakdown && effectBreakdown.length > 0 && (
-                    <div className="mb-4 p-3 bg-gray-800/70 rounded-lg border border-gray-600">
-                      <p className="text-xs text-gray-400 mb-2 font-medium">
-                        Stat Modifiers Sources:
+                    <div className="mb-4 p-3 rounded-lg border border-amber-500/10 overflow-x-auto" style={{ background: "rgba(5,8,15,0.7)" }}>
+                      <p className="text-xs text-amber-500/50 mb-2 font-mono tracking-widest uppercase">
+                        Stat Modifiers Sources
                       </p>
                       <StatModifiersTable
                         breakdown={effectBreakdown}
@@ -2661,74 +2685,58 @@ const PlayerDetailModal = ({
                     </div>
                   )}
 
-                  <div className="space-y-3">
+                  {/* Mobile: 2-col compact grid; Desktop: single column bars */}
+                  <div className="grid grid-cols-2 sm:grid-cols-1 gap-2 sm:gap-3">
                     {stats.map((stat) => {
                       const diff = stat.totalValue - stat.baseValue;
                       const isNegative = stat.totalValue < 0;
                       return (
-                        <div
-                          key={stat.key}
-                          className={`flex items-center gap-3 ${isNegative ? "opacity-50" : ""}`}
-                        >
-                          <span
-                            className={`w-24 text-sm font-medium ${stat.color}`}
-                          >
-                            {stat.label}
-                          </span>
-                          <div className="flex-1 bg-gray-600 rounded-full h-3 overflow-hidden relative">
-                            {/* Base stat bar (lighter) */}
-                            <div
-                              className={`h-full ${stat.bg} opacity-30 absolute`}
-                              style={{
-                                width: `${((stat.baseValue || 0) / maxStat) * 100}%`,
-                              }}
-                            />
-                            {/* Total stat bar - hide if negative */}
-                            {!isNegative && (
-                              <div
-                                className={`h-full ${stat.bg} transition-all duration-500`}
-                                style={{
-                                  width: `${((stat.totalValue || 0) / maxStat) * 100}%`,
-                                }}
-                              />
-                            )}
+                        <div key={stat.key} className={`${isNegative ? "opacity-40" : ""}`}>
+                          {/* Mobile compact view */}
+                          <div className="sm:hidden">
+                            <div className="flex justify-between items-baseline mb-1">
+                              <span className={`text-[11px] font-mono font-bold ${stat.color}`}>{stat.label}</span>
+                              <span className={`text-sm font-black ${diff > 0 ? "text-green-400" : diff < 0 ? "text-red-400" : "text-white"}`}>
+                                {stat.totalValue}
+                              </span>
+                            </div>
+                            <div className="bg-slate-800/80 rounded-full h-1.5 overflow-hidden relative">
+                              <div className={`h-full ${stat.bg} opacity-25 absolute`} style={{ width: `${((stat.baseValue || 0) / maxStat) * 100}%` }} />
+                              {!isNegative && <div className={`h-full ${stat.bg} transition-all duration-500`} style={{ width: `${((stat.totalValue || 0) / maxStat) * 100}%` }} />}
+                            </div>
                           </div>
-                          <span className="text-white font-bold w-20 text-right text-sm">
-                            <span className="text-gray-500">
-                              {stat.baseValue}
+                          {/* Desktop full row */}
+                          <div className={`hidden sm:flex items-center gap-3`}>
+                            <span className={`w-24 text-sm font-medium ${stat.color}`}>{stat.label}</span>
+                            <div className="flex-1 bg-slate-800/80 rounded-full h-2.5 overflow-hidden relative">
+                              <div className={`h-full ${stat.bg} opacity-25 absolute`} style={{ width: `${((stat.baseValue || 0) / maxStat) * 100}%` }} />
+                              {!isNegative && <div className={`h-full ${stat.bg} transition-all duration-500`} style={{ width: `${((stat.totalValue || 0) / maxStat) * 100}%` }} />}
+                            </div>
+                            <span className="text-white font-bold w-20 text-right text-sm">
+                              <span className="text-gray-600">{stat.baseValue}</span>
+                              <span className="text-gray-700 mx-0.5">→</span>
+                              <span className={diff > 0 ? "text-green-400" : diff < 0 ? "text-red-400" : "text-white"}>{stat.totalValue}</span>
                             </span>
-                            <span className="text-gray-600 mx-0.5">→</span>
-                            <span
-                              className={
-                                diff > 0
-                                  ? "text-green-400"
-                                  : diff < 0
-                                    ? "text-red-400"
-                                    : "text-white"
-                              }
-                            >
-                              {stat.totalValue}
-                            </span>
-                          </span>
+                          </div>
                         </div>
                       );
                     })}
                   </div>
-                  <div className="mt-3 pt-3 border-t border-gray-600 flex justify-between">
-                    <span className="text-gray-400">Total Stats</span>
-                    <span className="text-white font-bold">
-                      <span className="text-gray-500">{baseTotal}</span>
-                      <span className="text-gray-600 mx-1">→</span>
-                      <span className="text-green-400">{totalStatsSum}</span>
+                  <div className="mt-3 pt-3 border-t border-amber-500/10 flex justify-between">
+                    <span className="text-gray-500 text-sm font-mono">Total</span>
+                    <span className="font-bold text-sm">
+                      <span className="text-gray-600">{baseTotal}</span>
+                      <span className="text-gray-700 mx-1">→</span>
+                      <span className="text-amber-400">{totalStatsSum}</span>
                     </span>
                   </div>
                 </div>
 
                 {/* Quirks */}
                 {character.quirks && character.quirks.length > 0 && (
-                  <div className="bg-gray-700/50 rounded-lg p-4">
-                    <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                      <span className="text-teal-400">&#9733;</span> Quirks
+                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                    <h3 className="font-display text-base font-bold text-amber-300/90 mb-3 flex items-center gap-2 tracking-wide">
+                      <span className="text-amber-500/70 text-sm">✦</span> Quirks
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {character.quirks.map((quirk, i) => (
@@ -2760,14 +2768,18 @@ const PlayerDetailModal = ({
               </div>
 
               {/* Right Column - Equipment & Abilities */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Gear */}
                 {(character.gear?.normalGear?.length > 0 ||
                   character.gear?.legacyGear?.length > 0) && (
-                  <div className="bg-gray-700/50 rounded-lg p-4">
-                    <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                      <span className="text-teal-400">&#9733;</span> Gear
-                    </h3>
+                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                    <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("gear")}>
+                      <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
+                        <span className="text-amber-500/70 text-sm">⚔</span> Gear
+                      </h3>
+                      <span className="sm:hidden text-amber-500/40 text-sm">{collapsedSections.has("gear") ? "▼" : "▲"}</span>
+                    </button>
+                    <div className={collapsedSections.has("gear") ? "hidden sm:block" : ""}>
                     {character.gear.normalGear?.length > 0 && (
                       <div className="mb-3">
                         <p className="text-sm text-gray-400 mb-2">
@@ -2832,16 +2844,21 @@ const PlayerDetailModal = ({
                         </div>
                       </div>
                     )}
+                    </div>{/* end accordion content */}
                   </div>
                 )}
 
                 {/* Weapons */}
                 {character.weapons && character.weapons.length > 0 && (
-                  <div className="bg-gray-700/50 rounded-lg p-4">
-                    <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                      <span className="text-teal-400">&#9733;</span> Weapons
-                    </h3>
-                    <div className="space-y-2">
+                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                    <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("weapons")}>
+                      <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
+                        <span className="text-amber-500/70 text-sm">🗡</span> Weapons
+                      </h3>
+                      <span className="sm:hidden text-amber-500/40 text-sm">{collapsedSections.has("weapons") ? "▼" : "▲"}</span>
+                    </button>
+                    <div className={collapsedSections.has("weapons") ? "hidden sm:block" : ""}>
+                    <div className="space-y-2 mt-3">
                       {character.weapons.map((weapon, i) => (
                         <div
                           key={i}
@@ -2866,6 +2883,7 @@ const PlayerDetailModal = ({
                         </div>
                       ))}
                     </div>
+                    </div>{/* end accordion */}
                   </div>
                 )}
 
@@ -2873,10 +2891,14 @@ const PlayerDetailModal = ({
                 {character.runes &&
                   (character.runes.runes?.length > 0 ||
                     character.runes.runeword) && (
-                    <div className="bg-gray-700/50 rounded-lg p-4">
-                      <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                        <span className="text-teal-400">&#9733;</span> Runes
-                      </h3>
+                    <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                      <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("runes")}>
+                        <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
+                          <span className="text-orange-400/70 text-sm">᚛</span> Runes
+                        </h3>
+                        <span className="sm:hidden text-amber-500/40 text-sm">{collapsedSections.has("runes") ? "▼" : "▲"}</span>
+                      </button>
+                      <div className={collapsedSections.has("runes") ? "hidden sm:block" : ""}>
                       {character.runes.runes?.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-2">
                           {character.runes.runes.map((rune, i) => (
@@ -2916,23 +2938,28 @@ const PlayerDetailModal = ({
                           </span>
                         </p>
                       )}
+                      </div>{/* end accordion */}
                     </div>
                   )}
 
                 {/* Powers */}
                 {character.powers && character.powers.length > 0 && (
-                  <div className="bg-gray-700/50 rounded-lg p-4">
-                    <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                      <span className="text-teal-400">&#9733;</span> Powers
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
+                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                    <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("powers")}>
+                      <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
+                        <span className="text-red-400/70 text-sm">✦</span> Powers
+                      </h3>
+                      <span className="sm:hidden text-amber-500/40 text-sm">{collapsedSections.has("powers") ? "▼" : "▲"}</span>
+                    </button>
+                    <div className={collapsedSections.has("powers") ? "hidden sm:block" : ""}>
+                    <div className="flex flex-wrap gap-2 mt-3">
                       {character.powers.map((power, i) => (
                         <span
                           key={i}
-                          className={`px-3 py-1 rounded-full text-sm ${
+                          className={`px-3 py-1 rounded-md text-sm ${
                             power.isLost
                               ? "bg-gray-600/20 text-gray-500 line-through"
-                              : "bg-red-500/20 text-red-300"
+                              : "bg-red-900/30 text-red-300 border border-red-500/20"
                           }`}
                         >
                           {power.name}
@@ -2950,17 +2977,22 @@ const PlayerDetailModal = ({
                         </span>
                       ))}
                     </div>
+                    </div>{/* end accordion */}
                   </div>
                 )}
 
                 {/* Character Development */}
                 {character.charDevs && character.charDevs.length > 0 && (
-                  <div className="bg-gray-700/50 rounded-lg p-4">
-                    <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                      <span className="text-teal-400">&#9733;</span> Character
-                      Development ({character.charDevs.length})
-                    </h3>
-                    <div className="space-y-2">
+                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                    <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("chardev")}>
+                      <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
+                        <span className="text-cyan-400/70 text-sm">✦</span> Char Dev
+                        <span className="font-mono text-xs text-gray-600">({character.charDevs.length})</span>
+                      </h3>
+                      <span className="sm:hidden text-amber-500/40 text-sm">{collapsedSections.has("chardev") ? "▼" : "▲"}</span>
+                    </button>
+                    <div className={collapsedSections.has("chardev") ? "hidden sm:block" : ""}>
+                    <div className="space-y-2 mt-3">
                       {character.charDevs.map((charDev, idx) => (
                         <p
                           key={idx}
@@ -2981,14 +3013,15 @@ const PlayerDetailModal = ({
                         </p>
                       ))}
                     </div>
+                    </div>{/* end accordion */}
                   </div>
                 )}
 
                 {/* Lover */}
                 {character.lover && character.lover.length > 0 && (
-                  <div className="bg-gray-700/50 rounded-lg p-4">
-                    <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                      <span className="text-pink-400">&#9829;</span> Lover
+                  <div className="bg-slate-900/60 rounded-xl border border-pink-500/15 p-4">
+                    <h3 className="font-display text-base font-bold text-pink-300/90 mb-3 flex items-center gap-2 tracking-wide">
+                      <span className="text-pink-400/70 text-sm">♡</span> Lover
                     </h3>
                     <div className="space-y-2">
                       {character.lover.map((loverItem, idx) => (
@@ -2996,8 +3029,8 @@ const PlayerDetailModal = ({
                           key={idx}
                           className={
                             loverItem.isLost
-                              ? "text-pink-400 line-through"
-                              : "text-pink-300"
+                              ? "text-pink-400/40 line-through text-sm"
+                              : "text-pink-300 text-sm"
                           }
                         >
                           ❤️ {loverItem.name}
@@ -3009,11 +3042,15 @@ const PlayerDetailModal = ({
 
                 {/* PvP Rewards */}
                 {character.pvpRewards && character.pvpRewards.length > 0 && (
-                  <div className="bg-gray-700/50 rounded-lg p-4">
-                    <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
-                      <span className="text-green-400">&#9733;</span> PvP
-                      Rewards ({character.pvpRewards.length})
-                    </h3>
+                  <div className="bg-slate-900/60 rounded-xl border border-green-500/15 p-4">
+                    <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("pvp")}>
+                      <h3 className="font-display text-base font-bold text-green-300/90 flex items-center gap-2 tracking-wide">
+                        <span className="text-green-400/70 text-sm">★</span> PvP Rewards
+                        <span className="font-mono text-xs text-gray-600">({character.pvpRewards.length})</span>
+                      </h3>
+                      <span className="sm:hidden text-amber-500/40 text-sm">{collapsedSections.has("pvp") ? "▼" : "▲"}</span>
+                    </button>
+                    <div className={collapsedSections.has("pvp") ? "hidden sm:block" : ""}>
                     <div className="space-y-2">
                       {character.pvpRewards.map((reward, idx) => (
                         <p
@@ -3046,6 +3083,7 @@ const PlayerDetailModal = ({
                         </p>
                       ))}
                     </div>
+                    </div>{/* end accordion */}
                   </div>
                 )}
               </div>
@@ -3054,8 +3092,8 @@ const PlayerDetailModal = ({
 
           {/* Tab Content: Battle Log */}
           {activeTab === "battlelog" && (
-            <div className="p-6">
-              <div className="bg-gray-700/50 rounded-lg p-4">
+            <div className="p-3 sm:p-6">
+              <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
                 {character.battleLog && character.battleLog.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">

@@ -214,7 +214,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
 
   // ── Wheel spins state (from hook) ─────────────────────────────────────────
   const {
-    roundSpinModal: _roundSpinModal,
+    roundSpinModal,
     setRoundSpinModal,
     roundSpinResults,
     setRoundSpinResults,
@@ -1173,6 +1173,11 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
   // ── Wheel forced winner state ─────────────────────────────────────────────
   const [wheelForcedWinner, setWheelForcedWinner] = useState<"player1" | "player2" | null>(null);
 
+  // ── Current round winner (set ngay khi main wheel xác định, trước Next) ───
+  const [currentRoundWinner, setCurrentRoundWinner] = useState<"player1" | "player2" | null>(null);
+  // Reset khi round mới bắt đầu
+  useEffect(() => { setCurrentRoundWinner(null); }, [stepRoundIndex]);
+
   // ── useResolveNextRound ───────────────────────────────────────────────────
   const { resolveNextRound } = useResolveNextRound({
     player1, player2, stepState, stepRoundIndex, disabledItems, allPlayers,
@@ -1212,7 +1217,6 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
   const battleDone = !!combatResult;
   const {
     stepInProgress,
-    pendingSpinsForLastRound,
     effectiveScores,
     liveScore,
     pendingSpins,
@@ -1348,20 +1352,17 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
   const wotP1W = wotP1Val > wotP2Val ? wotP1Val * 2 : wotP1Val;
   const wotP2W = wotP2Val > wotP1Val ? wotP2Val * 2 : wotP2Val;
 
-  // ── Spin buttons cho last resolved round (hiện dưới stats sidebars) ───────
-  const lastResolvedRound = stepState && stepRoundIndex > 0
-    ? stepState.resolvedRounds[stepRoundIndex - 1] ?? null
-    : null;
-  const lastResolvedRoundIdx = stepRoundIndex - 1;
-  const wotP1SpinNodes = lastResolvedRound && player1 ? (() => {
+  // ── Spin buttons cho CURRENT round (hiện sau khi main wheel xác định winner) ─
+  const currentStatKey = stepInProgress && stepRoundIndex < 6 ? STAT_ORDER[stepRoundIndex]?.key : null;
+  const wotP1SpinNodes = currentRoundWinner && player1 && stepState && currentStatKey ? (() => {
     const p1Effs = getPerRoundEffects(player1.character, player1.no);
     const p1Spin = calcRoundSpinEffects({
       effects: p1Effs,
-      winner: lastResolvedRound.winner,
+      winner: currentRoundWinner,
       side: "player1",
-      statKey: lastResolvedRound.stat,
-      isLastRound: lastResolvedRoundIdx >= 5,
-      prevRounds: stepState!.resolvedRounds.slice(0, lastResolvedRoundIdx),
+      statKey: currentStatKey,
+      isLastRound: stepRoundIndex >= 5,
+      prevRounds: stepState.resolvedRounds,
       oppHasSpellFlux: (player2?.character?.powers ?? []).some(
         (p: any) => !p?.isLost && (typeof p === "string" ? p : p?.name ?? "").toLowerCase().startsWith("spell flux")
       ) && !disabledItems.has(`${player2?.no}-power-Spell Flux`),
@@ -1372,7 +1373,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
         key={eff}
         effectName={eff}
         side="player1"
-        roundIdx={lastResolvedRoundIdx}
+        roundIdx={stepRoundIndex}
         roundSpinResults={roundSpinResults}
         applyDevWeights={applyDevWeights}
         setRoundSpinModal={setRoundSpinModal}
@@ -1380,15 +1381,15 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     ));
   })() : null;
 
-  const wotP2SpinNodes = lastResolvedRound && player2 ? (() => {
+  const wotP2SpinNodes = currentRoundWinner && player2 && stepState && currentStatKey ? (() => {
     const p2Effs = getPerRoundEffects(player2.character, player2.no);
     const p2Spin = calcRoundSpinEffects({
       effects: p2Effs,
-      winner: lastResolvedRound.winner,
+      winner: currentRoundWinner,
       side: "player2",
-      statKey: lastResolvedRound.stat,
-      isLastRound: lastResolvedRoundIdx >= 5,
-      prevRounds: stepState!.resolvedRounds.slice(0, lastResolvedRoundIdx),
+      statKey: currentStatKey,
+      isLastRound: stepRoundIndex >= 5,
+      prevRounds: stepState.resolvedRounds,
       oppHasSpellFlux: (player1?.character?.powers ?? []).some(
         (p: any) => !p?.isLost && (typeof p === "string" ? p : p?.name ?? "").toLowerCase().startsWith("spell flux")
       ) && !disabledItems.has(`${player1?.no}-power-Spell Flux`),
@@ -1399,13 +1400,33 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
         key={eff}
         effectName={eff}
         side="player2"
-        roundIdx={lastResolvedRoundIdx}
+        roundIdx={stepRoundIndex}
         roundSpinResults={roundSpinResults}
         applyDevWeights={applyDevWeights}
         setRoundSpinModal={setRoundSpinModal}
       />
     ));
   })() : null;
+
+  // ── hasCurrentPendingSpins: block Next nếu effects round này chưa spin ────
+  const hasCurrentPendingSpins = useMemo(() => {
+    if (!currentRoundWinner || !stepState || !player1 || !player2 || !currentStatKey) return false;
+    const p1Effs = getPerRoundEffects(player1.character, player1.no);
+    const p2Effs = getPerRoundEffects(player2.character, player2.no);
+    if (computeRoundPoints("player1", currentRoundWinner, stepRoundIndex, p1Effs, currentStatKey).pending) return true;
+    if (computeRoundPoints("player2", currentRoundWinner, stepRoundIndex, p2Effs, currentStatKey).pending) return true;
+    if (stepRoundIndex < 5) {
+      const AFTER_WIN_SPINS = ["Bash", "Luminescence", "Ranger-Silver"];
+      const p1WinEffs = currentRoundWinner === "player1" ? p1Effs.onWin : [];
+      const p2WinEffs = currentRoundWinner === "player2" ? p2Effs.onWin : [];
+      for (const eff of AFTER_WIN_SPINS) {
+        if (p1WinEffs.includes(eff) && !roundSpinResults[`${stepRoundIndex}-${eff}-player1`]) return true;
+        if (p2WinEffs.includes(eff) && !roundSpinResults[`${stepRoundIndex}-${eff}-player2`]) return true;
+      }
+    }
+    return false;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentRoundWinner, stepRoundIndex, roundSpinResults, player1, player2, stepState, currentStatKey]);
 
   // ── Swap players ──────────────────────────────────────────────────────────
   const swapPlayers = () => {
@@ -1459,21 +1480,28 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
         <div className="max-w-[1400px] mx-auto mb-4 flex items-center gap-4 px-2">
           <button
             onClick={onBack}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-medium transition-colors flex items-center gap-2 shrink-0"
+            className="px-4 py-2 rounded-lg bg-slate-900/70 hover:bg-slate-800/80 border border-amber-500/25 hover:border-amber-500/50 text-amber-300/80 hover:text-amber-200 font-display text-sm font-medium transition-all flex items-center gap-2 shrink-0 backdrop-blur-sm"
+            style={{ boxShadow: "inset 0.5px 0.5px 0 rgba(255,209,108,0.06)" }}
           >
             <span>←</span> Back
           </button>
-          <div className="flex-1 px-5 py-3 rounded-2xl border border-gray-600/50 bg-gradient-to-r from-yellow-900/20 via-orange-900/20 to-red-900/20">
-            <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400">
-              Wheel of Truth
-            </h1>
+          <div className="flex-1 px-5 py-3 rounded-xl border border-amber-500/20 backdrop-blur-md"
+            style={{ background: "linear-gradient(135deg, rgba(15,23,42,0.75) 0%, rgba(30,20,10,0.6) 100%)", boxShadow: "0 8px 32px rgba(0,0,0,0.7), inset 0.5px 0.5px 0 rgba(255,209,108,0.08)" }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-500/30" />
+              <h1 className="font-display text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-primary to-orange-400 tracking-widest">
+                Wheel of Truth
+              </h1>
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-500/30" />
+            </div>
           </div>
         </div>
 
         {devMode && (
           <div className="mb-2 flex justify-center">
-            <span className="px-2 py-1 bg-yellow-500/20 border border-yellow-500/40 rounded text-yellow-400 text-xs font-mono">
-              DEV MODE
+            <span className="px-3 py-1 rounded-md bg-amber-500/10 border border-amber-500/40 text-amber-400 text-xs font-mono tracking-widest">
+              ⚙ DEV MODE
             </span>
           </div>
         )}
@@ -1507,28 +1535,26 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
 
           {/* CENTER: Battle area */}
           <div className="flex-1 min-w-0">
-            {/* JRPG Battle Scene */}
+            {/* JRPG Battle Scene — Astral Fantasy Arena */}
             <div
-              className="relative rounded-2xl border border-gray-600/40 mb-3 overflow-hidden"
+              className="relative rounded-2xl mb-3 overflow-hidden border border-amber-500/20"
               style={{
-                background: "linear-gradient(180deg, #0a0f1e 0%, #0d1525 50%, #0a0e1a 100%)",
-                boxShadow: "0 0 40px rgba(59,130,246,0.06), 0 0 40px rgba(239,68,68,0.06) inset",
+                background: "linear-gradient(160deg, rgba(10,15,30,0.95) 0%, rgba(15,10,25,0.95) 50%, rgba(10,14,26,0.95) 100%)",
+                boxShadow: "0 8px 40px rgba(0,0,0,0.85), 0 0 60px rgba(139,92,246,0.04) inset, inset 0.5px 0.5px 0 rgba(255,209,108,0.06)",
               }}
             >
-              {/* Scanline overlay */}
-              <div
-                className="absolute inset-0 pointer-events-none opacity-[0.03]"
-                style={{
-                  backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.5) 2px, rgba(255,255,255,0.5) 3px)",
-                  zIndex: 0,
-                }}
-              />
+              {/* Ambient corner glows */}
+              <div className="absolute top-0 left-0 w-32 h-32 rounded-full pointer-events-none opacity-10" style={{ background: "radial-gradient(circle, rgba(59,130,246,0.6) 0%, transparent 70%)", transform: "translate(-30%,-30%)" }} />
+              <div className="absolute top-0 right-0 w-32 h-32 rounded-full pointer-events-none opacity-10" style={{ background: "radial-gradient(circle, rgba(239,68,68,0.6) 0%, transparent 70%)", transform: "translate(30%,-30%)" }} />
 
-              {/* Round indicator banner */}
+              {/* Round indicator banner — Rune Scroll style */}
               {stepState && stepRoundIndex >= 0 && (
-                <div className="relative z-10 flex justify-center pt-2 pb-1">
-                  <div className="px-4 py-0.5 rounded-full bg-yellow-900/50 border border-yellow-500/30 text-yellow-300 text-[11px] font-bold tracking-widest uppercase">
-                    Round {stepRoundIndex + 1} / 6
+                <div className="relative z-10 flex justify-center pt-3 pb-1">
+                  <div className="flex items-center gap-2 px-5 py-1 rounded-full border border-amber-500/40 backdrop-blur-sm"
+                    style={{ background: "linear-gradient(135deg, rgba(120,60,0,0.4) 0%, rgba(80,40,0,0.5) 100%)", boxShadow: "0 0 16px 2px rgba(255,209,108,0.1)" }}>
+                    <span className="text-amber-500/60 text-[10px]">✦</span>
+                    <span className="font-display text-amber-300 text-[11px] font-bold tracking-[0.2em] uppercase">Round {stepRoundIndex + 1} / 6</span>
+                    <span className="text-amber-500/60 text-[10px]">✦</span>
                   </div>
                 </div>
               )}
@@ -1542,6 +1568,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       isWinner={combatConfirmed && !isPendingRoundtable && effectiveWinner === "player1"}
                       boostTrigger={p1Boost}
                       debuffTrigger={p1Debuff}
+
                       key={`p1-frame-${p1EffectKey}`}
                     >
                       <SCPlayerCard
@@ -1553,11 +1580,13 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       />
                     </PlayerCard3DFrame>
                   ) : (
+                    /* Empty P1 slot — Rune Frame */
                     <div
-                      className="rounded-xl border-2 border-dashed border-blue-600/20 flex items-center justify-center min-h-[140px]"
-                      style={{ background: "rgba(15,23,42,0.6)" }}
+                      className="rounded-xl border border-blue-500/15 flex flex-col items-center justify-center min-h-[140px] gap-2"
+                      style={{ background: "linear-gradient(135deg, rgba(15,23,42,0.7) 0%, rgba(20,30,60,0.5) 100%)", boxShadow: "inset 0 0 20px rgba(59,130,246,0.04)" }}
                     >
-                      <span className="text-blue-900/60 text-sm font-bold">PLAYER 1</span>
+                      <div className="text-blue-500/20 text-2xl">⬡</div>
+                      <span className="font-display text-blue-900/50 text-xs tracking-[0.2em] uppercase">Player I</span>
                     </div>
                   )}
 
@@ -1569,11 +1598,11 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                   >
                     <div className="flex flex-col items-center justify-center min-w-[90px]">
                       <div className="text-center mb-1">
-                        <div className="font-black tracking-tight leading-none" style={{ fontSize: "2.4rem", textShadow: "0 0 20px currentColor" }}>
+                        <div className="font-display font-black tracking-tight leading-none" style={{ fontSize: "2.4rem", textShadow: "0 0 20px currentColor" }}>
                           <span className="text-blue-400" style={{ textShadow: "0 0 16px #3b82f6" }}>
                             {battleDone ? effectiveScores.s1 : liveScore.s1}
                           </span>
-                          <span className="text-gray-600 mx-1 text-2xl">:</span>
+                          <span className="text-amber-600/60 mx-1 text-2xl">✦</span>
                           <span className="text-red-400" style={{ textShadow: "0 0 16px #ef4444" }}>
                             {battleDone ? effectiveScores.s2 : liveScore.s2}
                           </span>
@@ -1582,31 +1611,31 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       {battleDone ? (
                         <>
                           {pendingSpins && (
-                            <div className="text-[9px] text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full animate-pulse font-bold">
+                            <div className="text-[9px] text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full animate-pulse font-bold font-mono">
                               Còn spin
                             </div>
                           )}
                           {!pendingSpins && combatResult!.tieBreaker && effectiveScores.s1 === effectiveScores.s2 && (
-                            <div className="text-[9px] text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 px-2 py-0.5 rounded-full font-bold">
+                            <div className="text-[9px] text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full font-bold font-display tracking-widest">
                               RACE TIER
                             </div>
                           )}
                           {mainWinner && (
                             <div
-                              className={`text-[11px] font-black mt-1 px-3 py-1 rounded-lg border tracking-wide ${
+                              className={`text-[11px] font-display font-black mt-1 px-3 py-1 rounded-lg border tracking-wide ${
                                 effectiveWinner === "player1"
-                                  ? "text-blue-300 bg-blue-500/10 border-blue-500/30"
-                                  : "text-red-300 bg-red-500/10 border-red-500/30"
+                                  ? "text-blue-300 bg-blue-500/10 border-blue-500/25"
+                                  : "text-red-300 bg-red-500/10 border-red-500/25"
                               }`}
                               style={{ textShadow: `0 0 10px ${effectiveWinner === "player1" ? "#3b82f6" : "#ef4444"}` }}
                             >
                               {mainWinner.name}<br />
-                              <span className="text-yellow-400 text-[10px]">WINS ★</span>
+                              <span className="text-amber-400 text-[10px]">WINS ✦</span>
                             </div>
                           )}
                         </>
                       ) : !stepState ? (
-                        <div className="text-[10px] text-gray-600 font-bold tracking-widest mt-1">VS</div>
+                        <div className="font-display text-[10px] text-amber-600/40 font-bold tracking-[0.3em] mt-1">VS</div>
                       ) : null}
                     </div>
                   </ScoreDisplay3D>
@@ -1629,11 +1658,13 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       />
                     </PlayerCard3DFrame>
                   ) : (
+                    /* Empty P2 slot — Rune Frame */
                     <div
-                      className="rounded-xl border-2 border-dashed border-red-600/20 flex items-center justify-center min-h-[140px]"
-                      style={{ background: "rgba(15,23,42,0.6)" }}
+                      className="rounded-xl border border-red-500/15 flex flex-col items-center justify-center min-h-[140px] gap-2"
+                      style={{ background: "linear-gradient(135deg, rgba(42,15,15,0.7) 0%, rgba(60,20,20,0.5) 100%)", boxShadow: "inset 0 0 20px rgba(239,68,68,0.04)" }}
                     >
-                      <span className="text-red-900/60 text-sm font-bold">PLAYER 2</span>
+                      <div className="text-red-500/20 text-2xl">⬡</div>
+                      <span className="font-display text-red-900/50 text-xs tracking-[0.2em] uppercase">Player II</span>
                     </div>
                   )}
                 </div>
@@ -1643,7 +1674,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                   {!stepState && !battleDone && player1 && player2 && (
                     <button
                       onClick={swapPlayers}
-                      className="px-3 py-1 rounded-lg text-gray-500 hover:text-gray-200 hover:bg-gray-800/60 transition-all text-xs border border-gray-700/40 hover:border-purple-500/40"
+                      className="px-3 py-1 rounded-md text-amber-500/60 hover:text-amber-300 hover:bg-amber-900/20 transition-all text-xs border border-amber-600/20 hover:border-amber-500/40 font-mono"
                     >
                       ⇄ Swap
                     </button>
@@ -1668,12 +1699,13 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
 
             {/* ── 3-Tab Center Layout ─────────────────────────────────────── */}
             {player1 && player2 && (
-              <div className="rounded-2xl border border-gray-700/40 overflow-hidden mb-3" style={{ background: "linear-gradient(160deg, #0c1220 0%, #0f172a 100%)" }}>
+              <div className="rounded-xl border border-amber-500/15 overflow-hidden mb-3 backdrop-blur-sm"
+                style={{ background: "linear-gradient(160deg, rgba(10,16,30,0.92) 0%, rgba(12,10,24,0.95) 100%)", boxShadow: "0 8px 32px rgba(0,0,0,0.7), inset 0.5px 0.5px 0 rgba(255,209,108,0.05)" }}>
                 {/* Tab bar */}
-                <div className="flex border-b border-gray-700/50">
+                <div className="flex border-b border-amber-500/10">
                   <button
                     onClick={() => setCenterTab("pre")}
-                    className={`flex-1 py-2 text-xs font-bold tracking-wide transition-colors relative ${centerTab === "pre" ? "bg-yellow-900/30 text-yellow-300 border-b-2 border-yellow-500" : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/40"}`}
+                    className={`flex-1 py-2.5 text-xs font-display font-bold tracking-[0.1em] transition-all relative ${centerTab === "pre" ? "bg-amber-900/25 text-amber-300 border-b-2 border-amber-500" : "text-gray-600 hover:text-amber-400/70 hover:bg-amber-900/10"}`}
                   >
                     Trước Combat
                     {pendingPreCombatCount > 0 && centerTab !== "pre" && (
@@ -1682,13 +1714,13 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                   </button>
                   <button
                     onClick={() => setCenterTab("wheel")}
-                    className={`flex-1 py-2 text-xs font-bold tracking-wide transition-colors ${centerTab === "wheel" ? "bg-purple-900/30 text-purple-300 border-b-2 border-purple-500" : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/40"}`}
+                    className={`flex-1 py-2.5 text-xs font-display font-bold tracking-[0.1em] transition-all ${centerTab === "wheel" ? "bg-purple-900/25 text-purple-300 border-b-2 border-purple-500" : "text-gray-600 hover:text-purple-400/70 hover:bg-purple-900/10"}`}
                   >
                     Wheel of Truth
                   </button>
                   <button
                     onClick={() => setCenterTab("after")}
-                    className={`flex-1 py-2 text-xs font-bold tracking-wide transition-colors relative ${centerTab === "after" ? "bg-green-900/30 text-green-300 border-b-2 border-green-500" : "text-gray-500 hover:text-gray-300 hover:bg-gray-800/40"}`}
+                    className={`flex-1 py-2.5 text-xs font-display font-bold tracking-[0.1em] transition-all relative ${centerTab === "after" ? "bg-emerald-900/25 text-emerald-300 border-b-2 border-emerald-500" : "text-gray-600 hover:text-emerald-400/70 hover:bg-emerald-900/10"}`}
                   >
                     Sau Combat
                     {battleDone && !combatConfirmed && centerTab !== "after" && (
@@ -1716,17 +1748,17 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                         return (
                           <div key={key} className="grid grid-cols-[1fr_56px_1fr] gap-1 items-center">
                             <div className="flex items-center gap-1.5 justify-end">
-                              <span className={`text-sm font-black w-6 text-right ${p1Higher ? "text-blue-300" : "text-gray-500"}`}>{v1}</span>
-                              <div className="flex-1 max-w-[80px] bg-gray-800/60 rounded-full h-2 overflow-hidden flex justify-end">
-                                <div className={`h-full rounded-full transition-all duration-700 ${p1Higher ? "bg-gradient-to-l from-blue-500 to-blue-400" : "bg-gray-600/60"}`} style={{ width: `${(v1 / maxVal) * 100}%` }} />
+                              <span className={`text-sm font-black w-6 text-right ${p1Higher ? "text-blue-300" : "text-gray-600"}`}>{v1}</span>
+                              <div className="flex-1 max-w-[80px] bg-slate-900/70 rounded-full h-1.5 overflow-hidden flex justify-end">
+                                <div className={`h-full rounded-full transition-all duration-700 ${p1Higher ? "bg-gradient-to-l from-blue-400 to-cyan-400" : "bg-slate-700/60"}`} style={{ width: `${(v1 / maxVal) * 100}%` }} />
                               </div>
                             </div>
-                            <div className={`text-center text-[10px] font-black tracking-wider py-0.5 rounded ${p1Higher === p2Higher ? "text-gray-500" : p1Higher ? "text-blue-500/60" : "text-red-500/60"}`}>{label}</div>
+                            <div className={`text-center text-[10px] font-mono font-bold tracking-wider py-0.5 ${p1Higher === p2Higher ? "text-gray-600" : p1Higher ? "text-blue-500/70" : "text-red-500/70"}`}>{label}</div>
                             <div className="flex items-center gap-1.5 justify-start">
-                              <div className="flex-1 max-w-[80px] bg-gray-800/60 rounded-full h-2 overflow-hidden">
-                                <div className={`h-full rounded-full transition-all duration-700 ${p2Higher ? "bg-gradient-to-r from-red-500 to-red-400" : "bg-gray-600/60"}`} style={{ width: `${(v2 / maxVal) * 100}%` }} />
+                              <div className="flex-1 max-w-[80px] bg-slate-900/70 rounded-full h-1.5 overflow-hidden">
+                                <div className={`h-full rounded-full transition-all duration-700 ${p2Higher ? "bg-gradient-to-r from-red-400 to-orange-400" : "bg-slate-700/60"}`} style={{ width: `${(v2 / maxVal) * 100}%` }} />
                               </div>
-                              <span className={`text-sm font-black w-6 ${p2Higher ? "text-red-300" : "text-gray-500"}`}>{v2}</span>
+                              <span className={`text-sm font-black w-6 ${p2Higher ? "text-red-300" : "text-gray-600"}`}>{v2}</span>
                             </div>
                           </div>
                         );
@@ -1744,22 +1776,26 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       onPendingPreCombatChange={setPendingPreCombatCount}
                     />
                     {!stepState && !battleDone && (
-                      <div className="flex justify-center pt-1">
+                      <div className="flex justify-center pt-2">
                         <button
                           onClick={() => { startCombat(); }}
                           disabled={pendingPreCombatCount > 0}
-                          className={`px-8 py-3 rounded-xl font-bold text-lg transition-all transform shadow-lg ${
+                          className={`px-10 py-3 rounded-xl font-display font-bold text-base transition-all transform tracking-widest ${
                             pendingPreCombatCount > 0
-                              ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
-                              : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105"
+                              ? "bg-slate-800/60 text-gray-600 cursor-not-allowed border border-slate-700/40"
+                              : "text-slate-950 hover:scale-105 hover:brightness-110"
                           }`}
+                          style={pendingPreCombatCount > 0 ? {} : {
+                            background: "linear-gradient(135deg, #ffd16c 0%, #fdc003 60%, #e6950a 100%)",
+                            boxShadow: "0 0 24px 4px rgba(255,209,108,0.25), inset 0.5px 0.5px 0 rgba(255,255,255,0.25)",
+                          }}
                         >
-                          {pendingPreCombatCount > 0 ? `Còn ${pendingPreCombatCount} hiệu ứng chờ...` : "Bắt đầu"}
+                          {pendingPreCombatCount > 0 ? `Còn ${pendingPreCombatCount} hiệu ứng chờ...` : "✦ Bắt Đầu ✦"}
                         </button>
                       </div>
                     )}
                     {(stepState || battleDone) && (
-                      <div className="text-center text-xs text-gray-600 py-2 italic">Combat đang diễn ra — xem tab Wheel of Truth</div>
+                      <div className="text-center text-xs text-amber-600/40 py-2 italic font-lore">Combat đang diễn ra — xem tab Wheel of Truth</div>
                     )}
                   </div>
                 )}
@@ -1770,6 +1806,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                     {stepInProgress && currentStatInfo && (
                       <div className="mb-4">
                         <BattleWheelSpinner
+                          key={stepRoundIndex}
                           p1Name={player1.name}
                           p2Name={player2.name}
                           p1Weight={wotP1W}
@@ -1782,7 +1819,8 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                           p2AllStats={stepState?.p2Stats as unknown as Record<string, number>}
                           p1SpinNodes={wotP1SpinNodes}
                           p2SpinNodes={wotP2SpinNodes}
-                          hasPendingSpins={pendingSpinsForLastRound}
+                          hasCurrentPendingSpins={hasCurrentPendingSpins}
+                          onWinnerDetermined={(w) => setCurrentRoundWinner(w)}
                           onSpinComplete={(winner) => setWheelForcedWinner(winner)}
                         />
                       </div>
@@ -1791,10 +1829,10 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       <div>
                         <button
                           onClick={() => setShowRoundResults((v) => !v)}
-                          className="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-gray-700/50 bg-gray-800/40 hover:bg-gray-700/40 transition-colors text-xs text-gray-400 hover:text-gray-200"
+                          className="w-full flex items-center justify-between px-4 py-2 rounded-lg border border-amber-500/15 hover:border-amber-500/30 bg-slate-900/50 hover:bg-slate-800/50 transition-all text-xs text-amber-500/60 hover:text-amber-300"
                         >
-                          <span className="font-bold tracking-wide">Lịch sử rounds</span>
-                          <span>{showRoundResults ? "▲" : "▼"}</span>
+                          <span className="font-display font-bold tracking-widest text-[11px]">✦ Lịch sử rounds</span>
+                          <span className="text-amber-600/40">{showRoundResults ? "▲" : "▼"}</span>
                         </button>
                         {showRoundResults && (
                           <div className="mt-2">
@@ -1827,7 +1865,10 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       </div>
                     )}
                     {!combatResult && !stepState && (
-                      <div className="text-center text-xs text-gray-600 py-6 italic">Chưa bắt đầu combat — chuyển sang tab Trước Combat</div>
+                      <div className="text-center py-8">
+                        <div className="text-amber-600/30 text-3xl mb-2">⚔</div>
+                        <div className="font-lore text-amber-600/40 text-sm italic">Chưa bắt đầu — chuyển sang tab Trước Combat</div>
+                      </div>
                     )}
                   </div>
                 )}
@@ -1871,7 +1912,8 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
 
                     {/* Roundtable Hold banner */}
                     {isPendingRoundtable && (
-                      <div className="rounded-xl border border-orange-500/40 bg-orange-900/20 px-4 py-3 text-center text-sm text-orange-300 font-bold animate-pulse">
+                      <div className="rounded-lg border border-orange-500/40 bg-orange-950/30 px-4 py-3 text-center text-sm text-orange-300 font-display font-bold animate-pulse tracking-wide"
+                        style={{ boxShadow: "0 0 16px 2px rgba(249,115,22,0.08)" }}>
                         ⚔ Roundtable Hold — Trận phụ đang chờ xử lý
                       </div>
                     )}
@@ -1882,13 +1924,17 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                         <button
                           onClick={() => setCombatConfirmed(true)}
                           disabled={pendingSpins}
-                          className={`px-6 py-2.5 font-bold rounded-xl text-sm transition-all shadow-lg ${
+                          className={`px-8 py-2.5 font-display font-bold rounded-xl text-sm tracking-widest transition-all ${
                             pendingSpins
-                              ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
-                              : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white shadow-green-500/20"
+                              ? "bg-slate-800/60 text-gray-600 cursor-not-allowed border border-slate-700/40"
+                              : "text-white hover:scale-105"
                           }`}
+                          style={pendingSpins ? {} : {
+                            background: "linear-gradient(135deg, #16a34a 0%, #059669 100%)",
+                            boxShadow: "0 0 20px 4px rgba(22,163,74,0.2)",
+                          }}
                         >
-                          {pendingSpins ? "Còn hiệu ứng chờ quay..." : "Kết thúc"}
+                          {pendingSpins ? "Còn hiệu ứng chờ quay..." : "✦ Kết Thúc ✦"}
                         </button>
                       </div>
                     )}
@@ -1896,14 +1942,14 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       <div className="flex justify-center pt-1">
                         <button
                           onClick={resetCombat}
-                          className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
+                          className="px-6 py-2 rounded-lg bg-slate-800/70 hover:bg-slate-700/70 border border-amber-500/20 hover:border-amber-500/40 text-amber-300/70 hover:text-amber-200 font-display text-sm font-medium transition-all"
                         >
-                          Fight Again
+                          ⇄ Fight Again
                         </button>
                       </div>
                     )}
                     {!battleDone && (
-                      <div className="text-center text-xs text-gray-600 py-4 italic">Chưa kết thúc combat</div>
+                      <div className="text-center font-lore text-xs text-amber-600/30 py-4 italic">Chưa kết thúc combat</div>
                     )}
                   </div>
                 )}
@@ -1918,8 +1964,10 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
               const log = logs[viewIdx];
               const borderColor = log.winner === "player1" ? "rgba(59,130,246,0.3)" : log.winner === "player2" ? "rgba(239,68,68,0.3)" : "rgba(234,179,8,0.3)";
               return (
-                <div className="rounded-xl border overflow-hidden text-xs mb-3" style={{ background: "rgba(0,0,0,0.4)", borderColor }}>
-                  <div className="flex items-center gap-1 px-2 py-1.5 border-b border-gray-800/60">
+                /* Battle Log — Crystal Parchment Scroll */
+                <div className="rounded-xl border overflow-hidden text-xs mb-3 backdrop-blur-sm"
+                  style={{ background: "linear-gradient(160deg, rgba(8,12,20,0.92) 0%, rgba(12,8,20,0.95) 100%)", borderColor, boxShadow: `0 4px 24px rgba(0,0,0,0.6), 0 0 12px 2px ${borderColor.replace("0.3","0.08")}` }}>
+                  <div className="flex items-center gap-1 px-2 py-1.5 border-b border-amber-500/10">
                     <button onClick={() => setViewLogIndex(0)} disabled={viewIdx === 0} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">«</button>
                     <button onClick={() => setViewLogIndex(Math.max(0, viewIdx - 1))} disabled={viewIdx === 0} className="px-1 py-0.5 rounded text-[10px] text-gray-500 hover:text-white disabled:opacity-20">‹</button>
                     <div className="flex gap-0.5 flex-1 justify-center">
@@ -1984,10 +2032,11 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
               );
             })()}
 
-            {/* Rules Info */}
-            <div className="mt-2 bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-lg p-3 text-center">
-              <p className="text-gray-400 text-xs">
-                <strong className="text-yellow-400">Wheel of Truth:</strong>{" "}
+            {/* Rules Info — Crystal Tooltip */}
+            <div className="mt-2 rounded-xl backdrop-blur-sm border border-amber-500/10 p-3 text-center"
+              style={{ background: "linear-gradient(135deg, rgba(15,23,42,0.7) 0%, rgba(20,10,30,0.6) 100%)" }}>
+              <p className="text-gray-500 text-xs leading-relaxed">
+                <span className="font-display text-amber-400/80 tracking-wide">Wheel of Truth:</span>{" "}
                 Quay vòng quay cho từng stat round. Stat cao hơn = ô lớn hơn = xác suất cao hơn. Thắng nhiều round nhất. Hòa: Race Tier thấp hơn thắng.
               </p>
             </div>
@@ -2019,6 +2068,23 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
           />
         </div>
       </div>
+
+      {/* Per-round spin modal */}
+      <ProbabilityWheelModal
+        isOpen={roundSpinModal.isOpen}
+        onClose={() => setRoundSpinModal((prev) => ({ ...prev, isOpen: false }))}
+        title={roundSpinModal.title}
+        description={`Round ${roundSpinModal.roundIndex + 1} — ${roundSpinModal.side === "player1" ? player1?.name : player2?.name}`}
+        items={roundSpinModal.items}
+        onResult={(item: WheelSpinItem) => {
+          const key = `${roundSpinModal.roundIndex}-${roundSpinModal.title}-${roundSpinModal.side}`;
+          setRoundSpinResults((prev) => ({
+            ...prev,
+            [key]: { label: item.label, isSuccess: !!item.isSuccess },
+          }));
+          setRoundSpinModal((prev) => ({ ...prev, isOpen: false }));
+        }}
+      />
 
       {/* Pre-combat wheel modal */}
       <ProbabilityWheelModal

@@ -35,7 +35,7 @@ export const BattleZonePage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <button
               onClick={() => setBattleType("pve")}
-              className="group relative overflow-hidden bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 rounded-2xl p-12 transition-all duration-300 hover:scale-105 hover:border-blue-500 hover:shadow-2xl"
+              className="group relative overflow-hidden bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 rounded-none p-12 transition-all duration-300 hover:scale-105 hover:border-blue-500 hover:shadow-2xl"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
               <div className="relative z-10">
@@ -46,7 +46,7 @@ export const BattleZonePage = () => {
 
             <button
               onClick={() => setBattleType("pvp")}
-              className="group relative overflow-hidden bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 rounded-2xl p-12 transition-all duration-300 hover:scale-105 hover:border-red-500 hover:shadow-2xl"
+              className="group relative overflow-hidden bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 rounded-none p-12 transition-all duration-300 hover:scale-105 hover:border-red-500 hover:shadow-2xl"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-orange-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
               <div className="relative z-10">
@@ -105,7 +105,7 @@ const PvPBattlePage = ({ onBack }: PvPBattlePageProps) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <button
               onClick={() => setSelectedMode("stats-comparison")}
-              className="group relative overflow-hidden bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 rounded-2xl p-12 transition-all duration-300 hover:scale-105 hover:border-purple-500 hover:shadow-2xl"
+              className="group relative overflow-hidden bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 rounded-none p-12 transition-all duration-300 hover:scale-105 hover:border-purple-500 hover:shadow-2xl"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-pink-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
               <div className="relative z-10">
@@ -121,7 +121,7 @@ const PvPBattlePage = ({ onBack }: PvPBattlePageProps) => {
 
             <button
               onClick={() => setSelectedMode("wheel-of-truth")}
-              className="group relative overflow-hidden bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 rounded-2xl p-12 transition-all duration-300 hover:scale-105 hover:border-yellow-500 hover:shadow-2xl"
+              className="group relative overflow-hidden bg-gray-800/50 backdrop-blur-sm border-2 border-gray-700 rounded-none p-12 transition-all duration-300 hover:scale-105 hover:border-yellow-500 hover:shadow-2xl"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-orange-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
               <div className="relative z-10">

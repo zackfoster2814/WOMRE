@@ -209,7 +209,7 @@ function MatchCard({ match, topPx, leftPx, dimmed, highlighted, onOpen }: MatchC
         boxShadow: highlighted ? "0 0 0 2px #f59e0b, 0 0 18px 4px rgba(245,158,11,0.45)" : undefined,
       }}
       className={`
-        text-left rounded-lg border
+        text-left rounded-none border
         ${highlighted ? "border-amber-400" : hasWinner ? "bg-gray-800/95 border-green-600/60" : "bg-gray-800/95 border-gray-600/50"}
         ${!highlighted && canClick && !dimmed
             ? hasWinner
@@ -309,7 +309,7 @@ function TBDSlot({
         height: CARD_H,
         zIndex: 2,
       }}
-      className="rounded-lg border border-gray-700/25 bg-gray-900/35 flex flex-col items-center justify-center gap-1"
+      className="rounded-none border border-gray-700/25 bg-gray-900/35 flex flex-col items-center justify-center gap-1"
     >
       <span className="text-[9px] font-mono text-gray-700">#{matchNumber}</span>
       <span className="text-[9px] text-gray-700">TBD</span>
@@ -815,7 +815,7 @@ export function BracketTreeView({
 
   return (
     <div
-      className="relative w-full rounded-xl border border-gray-700/40 flex flex-col overflow-hidden"
+      className="relative w-full rounded-none border border-gray-700/40 flex flex-col overflow-hidden"
       style={{ height: "calc(100vh - 460px)", minHeight: 360 }}
     >
       {/* Three.js background */}
@@ -933,21 +933,21 @@ export function BracketTreeView({
         <button
           onClick={() => setZoom((z) => Math.min(3, z * 1.25))}
           title="Zoom in"
-          className="w-8 h-8 rounded-lg bg-gray-800/90 border border-gray-600/50 text-gray-300 hover:text-white hover:bg-gray-700 flex items-center justify-center text-lg font-bold"
+          className="w-8 h-8 rounded-none bg-gray-800/90 border border-gray-600/50 text-gray-300 hover:text-white hover:bg-gray-700 flex items-center justify-center text-lg font-bold"
         >
           +
         </button>
         <button
           onClick={() => setZoom((z) => Math.max(0.2, z * 0.8))}
           title="Zoom out"
-          className="w-8 h-8 rounded-lg bg-gray-800/90 border border-gray-600/50 text-gray-300 hover:text-white hover:bg-gray-700 flex items-center justify-center text-lg font-bold"
+          className="w-8 h-8 rounded-none bg-gray-800/90 border border-gray-600/50 text-gray-300 hover:text-white hover:bg-gray-700 flex items-center justify-center text-lg font-bold"
         >
           −
         </button>
         <button
           onClick={handleResetView}
           title="Reset view"
-          className="w-8 h-8 rounded-lg bg-gray-800/90 border border-gray-600/50 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center justify-center text-xs font-bold"
+          className="w-8 h-8 rounded-none bg-gray-800/90 border border-gray-600/50 text-gray-400 hover:text-white hover:bg-gray-700 flex items-center justify-center text-xs font-bold"
         >
           ⌂
         </button>

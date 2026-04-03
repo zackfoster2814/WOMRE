@@ -578,7 +578,7 @@ export const PresetSettingsModal = ({
         {activeTab === "saved" && (
           <div>
             {/* Save New Preset */}
-            <div className="bg-gray-700 p-4 rounded-lg mb-4">
+            <div className="bg-gray-700 p-4 rounded-none mb-4">
               <h3 className="text-lg font-semibold text-white mb-3">
                 Save Current Setup
               </h3>
@@ -783,7 +783,7 @@ export const PresetSettingsModal = ({
                     applyColorPreset(name as keyof typeof colorPresets)
                   }
                   disabled={items.length === 0}
-                  className="flex flex-col items-center gap-2 px-4 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg transition-colors"
+                  className="flex flex-col items-center gap-2 px-4 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-none transition-colors"
                 >
                   <div className="flex gap-1">
                     {colors.slice(0, 6).map((color, idx) => (
@@ -812,13 +812,13 @@ export const PresetSettingsModal = ({
             </p>
 
             {/* Update Default Preset Button */}
-            <div className="mb-4 p-4 bg-yellow-900/20 border border-yellow-600 rounded-lg">
+            <div className="mb-4 p-4 bg-yellow-900/20 border border-yellow-600 rounded-none">
               <p className="text-yellow-300 text-sm mb-3">
                 💾 Save current item states (including disabled items) back to default preset file:
               </p>
               <button
                 onClick={() => setUpdateDefaultDialog(true)}
-                className="w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg text-white font-bold transition-colors"
+                className="w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-none text-white font-bold transition-colors"
               >
                 📥 Update Default Preset File
               </button>
@@ -829,7 +829,7 @@ export const PresetSettingsModal = ({
                 <button
                   key={preset.id}
                   onClick={() => applyWeightPreset(preset.id)}
-                  className="p-6 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors text-left"
+                  className="p-6 bg-gray-700 hover:bg-gray-600 rounded-none transition-colors text-left"
                 >
                   <div className="text-xl font-bold text-white mb-2">
                     {preset.name}
@@ -881,7 +881,7 @@ export const PresetSettingsModal = ({
           }
         >
           <div
-            className="bg-gray-800 rounded-lg shadow-2xl p-6 max-w-md w-full mx-4"
+            className="bg-gray-800 rounded-none shadow-2xl p-6 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-xl font-bold text-white mb-3">Rename Preset</h3>
@@ -934,7 +934,7 @@ export const PresetSettingsModal = ({
           }
         >
           <div
-            className="bg-gray-800 rounded-lg shadow-2xl p-6 max-w-md w-full mx-4"
+            className="bg-gray-800 rounded-none shadow-2xl p-6 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-xl font-bold text-white mb-3">
@@ -977,7 +977,7 @@ export const PresetSettingsModal = ({
           onClick={() => setLoadConfirm({ isOpen: false, preset: null })}
         >
           <div
-            className="bg-gray-800 rounded-lg shadow-2xl p-6 max-w-md w-full mx-4"
+            className="bg-gray-800 rounded-none shadow-2xl p-6 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-xl font-bold text-white mb-3">Load Preset?</h3>

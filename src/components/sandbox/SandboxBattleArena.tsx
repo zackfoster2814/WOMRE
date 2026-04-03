@@ -281,7 +281,7 @@ export const SandboxBattleArena = ({
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => setMode("stats-comparison")}
-            className="group relative overflow-hidden bg-gray-800/50 border-2 border-gray-700 rounded-xl p-8 transition-all duration-300 hover:scale-105 hover:border-purple-500 hover:shadow-2xl"
+            className="group relative overflow-hidden bg-gray-800/50 border-2 border-gray-700 rounded-none p-8 transition-all duration-300 hover:scale-105 hover:border-purple-500 hover:shadow-2xl"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-indigo-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
             <div className="relative z-10 text-center">
@@ -297,7 +297,7 @@ export const SandboxBattleArena = ({
 
           <button
             onClick={() => setMode("wheel-of-truth")}
-            className="group relative overflow-hidden bg-gray-800/50 border-2 border-gray-700 rounded-xl p-8 transition-all duration-300 hover:scale-105 hover:border-yellow-500 hover:shadow-2xl"
+            className="group relative overflow-hidden bg-gray-800/50 border-2 border-gray-700 rounded-none p-8 transition-all duration-300 hover:scale-105 hover:border-yellow-500 hover:shadow-2xl"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-orange-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
             <div className="relative z-10 text-center">
@@ -465,7 +465,7 @@ const StatsComparisonBattle = ({
         <button
           onClick={runCombat}
           disabled={isAnimating}
-          className="px-8 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 disabled:opacity-50 rounded-xl text-white font-bold text-xl transition-all transform hover:scale-105"
+          className="px-8 py-3 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-400 hover:to-indigo-400 disabled:opacity-50 rounded-none text-white font-bold text-xl transition-all transform hover:scale-105"
         >
           {isAnimating ? "Fighting..." : "⚔️ START BATTLE ⚔️"}
         </button>
@@ -473,7 +473,7 @@ const StatsComparisonBattle = ({
 
       {/* Combat Arena */}
       {(isAnimating || combatResult) && (
-        <div className="bg-gray-900/95 border-2 border-purple-500/50 rounded-xl p-6">
+        <div className="bg-gray-900/95 border-2 border-purple-500/50 rounded-none p-6">
           <h3 className="text-xl font-bold text-center text-purple-400 mb-4">
             Combat Arena
           </h3>
@@ -487,7 +487,7 @@ const StatsComparisonBattle = ({
               return (
                 <div
                   key={key}
-                  className={`grid grid-cols-3 gap-4 items-center p-3 rounded-lg transition-all duration-300 ${
+                  className={`grid grid-cols-3 gap-4 items-center p-3 rounded-none transition-all duration-300 ${
                     isRevealed
                       ? round?.winner === "player1"
                         ? "bg-blue-900/30 border border-blue-500/50"
@@ -572,7 +572,7 @@ const StatsComparisonBattle = ({
               <div className="flex justify-center gap-3">
                 <button
                   onClick={runCombat}
-                  className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
+                  className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-none text-white font-medium transition-all"
                 >
                   Fight Again
                 </button>
@@ -596,7 +596,7 @@ const StatsComparisonBattle = ({
                     );
                     downloadReport(text);
                   }}
-                  className="px-6 py-2 bg-green-700 hover:bg-green-600 rounded-lg text-white font-medium transition-all"
+                  className="px-6 py-2 bg-green-700 hover:bg-green-600 rounded-none text-white font-medium transition-all"
                 >
                   Export Report
                 </button>
@@ -795,7 +795,7 @@ const WheelOfTruthBattle = ({
         <div className="flex justify-center">
           <button
             onClick={startBattle}
-            className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 rounded-xl text-white font-bold text-xl transition-all transform hover:scale-105 shadow-lg"
+            className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 rounded-none text-white font-bold text-xl transition-all transform hover:scale-105 shadow-lg"
           >
             🎡 START WHEEL OF TRUTH 🎡
           </button>
@@ -803,7 +803,7 @@ const WheelOfTruthBattle = ({
       )}
 
       {(battleState === "fighting" || battleState === "finished") && (
-        <div className="bg-gray-900/95 border-2 border-yellow-500/50 rounded-xl p-6">
+        <div className="bg-gray-900/95 border-2 border-yellow-500/50 rounded-none p-6">
           {/* Score Header */}
           <div className="flex justify-between items-center mb-6">
             <div className="text-center flex-1">
@@ -883,7 +883,7 @@ const WheelOfTruthBattle = ({
               <button
                 onClick={spinWheel}
                 disabled={isSpinning}
-                className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white font-bold text-xl transition-all transform hover:scale-105"
+                className="px-8 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-none text-white font-bold text-xl transition-all transform hover:scale-105"
               >
                 {isSpinning ? "Spinning..." : "🎡 SPIN"}
               </button>
@@ -895,7 +895,7 @@ const WheelOfTruthBattle = ({
             {roundResults.map((result, index) => (
               <div
                 key={index}
-                className={`grid grid-cols-3 gap-4 items-center p-3 rounded-lg ${
+                className={`grid grid-cols-3 gap-4 items-center p-3 rounded-none ${
                   result.winner === "player1"
                     ? "bg-blue-900/30 border border-blue-500/50"
                     : "bg-red-900/30 border border-red-500/50"
@@ -952,7 +952,7 @@ const WheelOfTruthBattle = ({
               <div className="flex justify-center gap-3">
                 <button
                   onClick={resetBattle}
-                  className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-all"
+                  className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded-none text-white font-medium transition-all"
                 >
                   Fight Again
                 </button>
@@ -977,7 +977,7 @@ const WheelOfTruthBattle = ({
                     );
                     downloadReport(text);
                   }}
-                  className="px-6 py-2 bg-green-700 hover:bg-green-600 rounded-lg text-white font-medium transition-all"
+                  className="px-6 py-2 bg-green-700 hover:bg-green-600 rounded-none text-white font-medium transition-all"
                 >
                   Export Report
                 </button>
@@ -1006,7 +1006,7 @@ const PlayerStatsSummary = ({
   const borderColor = color === "blue" ? "border-blue-500/30" : "border-red-500/30";
 
   return (
-    <div className={`bg-gray-800/50 border ${borderColor} rounded-lg p-3`}>
+    <div className={`bg-gray-800/50 border ${borderColor} rounded-none p-3`}>
       <div className="flex items-center justify-between mb-2">
         <span className={`${textColor} font-bold`}>{player.name}</span>
         <span className={`px-2 py-0.5 ${bgColor} rounded text-xs ${textColor}`}>

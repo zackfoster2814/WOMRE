@@ -206,7 +206,7 @@ export const PlayerInfoPanel = ({
                   placeholder="Search player..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 mb-3"
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-none text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 mb-3"
                 />
 
                 {isLoadingList ? (
@@ -219,7 +219,7 @@ export const PlayerInfoPanel = ({
                       <button
                         key={player.no}
                         onClick={() => handleSelectPlayer(player.no)}
-                        className={`w-full text-left p-3 rounded-lg transition-all hover:scale-[1.02] ${
+                        className={`w-full text-left p-3 rounded-none transition-all hover:scale-[1.02] ${
                           character?.no === player.no
                             ? "bg-purple-600/50 border border-purple-500"
                             : "bg-gray-700/50 hover:bg-gray-600/50 border border-transparent"
@@ -249,7 +249,7 @@ export const PlayerInfoPanel = ({
                                   {player.parasiteInfo &&
                                     player.parasiteInfo.length > 0 && (
                                       <div className="absolute left-0 top-full mt-1 z-50 hidden group-hover/badge:block">
-                                        <div className="bg-gray-900 border border-gray-600 rounded-lg p-2 shadow-xl min-w-[150px]">
+                                        <div className="bg-gray-900 border border-gray-600 rounded-none p-2 shadow-xl min-w-[150px]">
                                           <p className="text-gray-400 text-[10px] mb-1">
                                             Parasites:
                                           </p>
@@ -336,7 +336,7 @@ export const PlayerInfoPanel = ({
           isOpen ? "left-80" : "left-0"
         }`}
       >
-        <div className="bg-purple-600 hover:bg-purple-700 text-white py-4 px-2 rounded-r-lg shadow-lg flex flex-col items-center gap-1 transition-colors">
+        <div className="bg-purple-600 hover:bg-purple-700 text-white py-4 px-2 rounded-none shadow-lg flex flex-col items-center gap-1 transition-colors">
           <svg
             className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
             fill="none"
@@ -379,7 +379,7 @@ const ClickableField = ({
   subValue?: string;
 }) => (
   <div
-    className={`bg-gray-700/50 rounded-lg p-3 ${onClick ? "cursor-pointer hover:bg-gray-600/50 transition-colors group" : ""}`}
+    className={`bg-gray-700/50 rounded-none p-3 ${onClick ? "cursor-pointer hover:bg-gray-600/50 transition-colors group" : ""}`}
     onClick={onClick}
   >
     <div className="flex items-center justify-between">
@@ -438,7 +438,7 @@ const HierarchyPopup = ({
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />
       {/* Popup */}
-      <div className="relative bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-4 min-w-[280px] max-w-[90vw] z-10">
+      <div className="relative bg-gray-800 border border-gray-600 rounded-none shadow-2xl p-4 min-w-[280px] max-w-[90vw] z-10">
         <div className="flex items-center justify-between mb-3">
           <h4 className="text-white font-bold text-sm">{title}</h4>
           <button
@@ -462,7 +462,7 @@ const HierarchyPopup = ({
         </div>
         <div className="space-y-3">
           {items.map((item, idx) => (
-            <div key={idx} className="bg-gray-700/50 rounded-lg p-3">
+            <div key={idx} className="bg-gray-700/50 rounded-none p-3">
               {type === "archetype" ? (
                 <div className="space-y-2">
                   {/* Level 1: Main archetype */}
@@ -612,7 +612,7 @@ const PlayerContent = ({
   return (
     <div className="p-4 space-y-4 pb-20">
       {/* Character Name Header */}
-      <div className="bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg p-3 -mx-1">
+      <div className="bg-gradient-to-r from-gray-700 to-gray-600 rounded-none p-3 -mx-1">
         <div className="flex items-center justify-between">
           <div>
             <h4 className="text-white font-bold text-lg">
@@ -639,7 +639,7 @@ const PlayerContent = ({
 
       {/* Symbiosis Info - for the parasite itself */}
       {character.isSymbiosis && (
-        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3">
+        <div className="bg-red-900/30 border border-red-700/50 rounded-none p-3">
           <p className="text-red-400 text-xs mb-2">Symbiosis Info</p>
           <div className="space-y-1">
             <p className="text-white text-sm">
@@ -656,7 +656,7 @@ const PlayerContent = ({
 
       {/* Parasite Info - for hosts who have parasites */}
       {character.isParasite && !character.isSymbiosis && (
-        <div className="bg-red-900/30 border border-red-700/50 rounded-lg p-3">
+        <div className="bg-red-900/30 border border-red-700/50 rounded-none p-3">
           <p className="text-red-400 text-xs mb-2">Ký Sinh Info</p>
           <div className="space-y-2">
             {/* Parasite Type */}
@@ -689,7 +689,7 @@ const PlayerContent = ({
 
       {/* Race & Sub-race - Clickable */}
       <div
-        className={`bg-gray-700/50 rounded-lg p-3 ${onSpinAttribute ? "cursor-pointer hover:bg-gray-600/50 transition-colors group" : ""}`}
+        className={`bg-gray-700/50 rounded-none p-3 ${onSpinAttribute ? "cursor-pointer hover:bg-gray-600/50 transition-colors group" : ""}`}
         onClick={onSpinAttribute ? () => onSpinAttribute("race") : undefined}
       >
         <div className="flex items-center justify-between">
@@ -720,7 +720,7 @@ const PlayerContent = ({
 
       {/* Archetypes - Clickable */}
       <div
-        className={`bg-gray-700/50 rounded-lg p-3 ${onSpinAttribute ? "cursor-pointer hover:bg-gray-600/50 transition-colors group" : ""}`}
+        className={`bg-gray-700/50 rounded-none p-3 ${onSpinAttribute ? "cursor-pointer hover:bg-gray-600/50 transition-colors group" : ""}`}
         onClick={
           onSpinAttribute ? () => onSpinAttribute("archetype") : undefined
         }
@@ -788,7 +788,7 @@ const PlayerContent = ({
       {/* Houses & Team - Clickable */}
       <div className="grid grid-cols-2 gap-3">
         <div
-          className={`bg-gray-700/50 rounded-lg p-3 ${onSpinAttribute ? "cursor-pointer hover:bg-gray-600/50 transition-colors group" : ""}`}
+          className={`bg-gray-700/50 rounded-none p-3 ${onSpinAttribute ? "cursor-pointer hover:bg-gray-600/50 transition-colors group" : ""}`}
           onClick={onSpinAttribute ? () => onSpinAttribute("house") : undefined}
         >
           <div className="flex items-center justify-between">
@@ -871,7 +871,7 @@ const PlayerContent = ({
       </div>
 
       {/* Stats - Hexagon Radar Chart */}
-      <div className="bg-gray-700/50 rounded-lg p-3">
+      <div className="bg-gray-700/50 rounded-none p-3">
         <div className="flex items-center justify-between mb-2">
           <p className="text-gray-400 text-xs">Stats</p>
           <p className="text-gray-400 text-xs">
@@ -883,7 +883,7 @@ const PlayerContent = ({
       </div>
 
       {/* Quirks */}
-      <div className="bg-gray-700/50 rounded-lg p-3">
+      <div className="bg-gray-700/50 rounded-none p-3">
         <p className="text-gray-400 text-xs mb-2">
           Quirks ({character.quirks?.length || 0})
         </p>
@@ -910,7 +910,7 @@ const PlayerContent = ({
       </div>
 
       {/* Powers */}
-      <div className="bg-gray-700/50 rounded-lg p-3">
+      <div className="bg-gray-700/50 rounded-none p-3">
         <p className="text-gray-400 text-xs mb-2">
           Powers ({character.powers?.length || 0})
         </p>
@@ -941,7 +941,7 @@ const PlayerContent = ({
       </div>
 
       {/* Weapons */}
-      <div className="bg-gray-700/50 rounded-lg p-3">
+      <div className="bg-gray-700/50 rounded-none p-3">
         <p className="text-gray-400 text-xs mb-2">
           Weapons ({character.weapons?.length || 0})
         </p>
@@ -973,7 +973,7 @@ const PlayerContent = ({
       </div>
 
       {/* Gear */}
-      <div className="bg-gray-700/50 rounded-lg p-3">
+      <div className="bg-gray-700/50 rounded-none p-3">
         <p className="text-gray-400 text-xs mb-2">
           Gear (
           {(character.gear?.normalGear?.length || 0) +
@@ -1053,7 +1053,7 @@ const PlayerContent = ({
       </div>
 
       {/* Runes */}
-      <div className="bg-gray-700/50 rounded-lg p-3">
+      <div className="bg-gray-700/50 rounded-none p-3">
         <p className="text-gray-400 text-xs mb-2">
           Runes ({character.runes?.runes?.length || 0})
         </p>
@@ -1094,7 +1094,7 @@ const PlayerContent = ({
       </div>
 
       {/* Character Development */}
-      <div className="bg-gray-700/50 rounded-lg p-3">
+      <div className="bg-gray-700/50 rounded-none p-3">
         <p className="text-gray-400 text-xs mb-2">
           Char Dev ({character.charDevs?.length || 0})
         </p>
@@ -1119,7 +1119,7 @@ const PlayerContent = ({
 
       {/* PvP Rewards */}
       {character.pvpRewards && character.pvpRewards.length > 0 && (
-        <div className="bg-gray-700/50 rounded-lg p-3">
+        <div className="bg-gray-700/50 rounded-none p-3">
           <p className="text-gray-400 text-xs mb-2">
             PvP Rewards ({character.pvpRewards.length})
           </p>
@@ -1158,7 +1158,7 @@ const PlayerContent = ({
       )}
 
       {/* Lover
-      <div className="bg-gray-700/50 rounded-lg p-3">
+      <div className="bg-gray-700/50 rounded-none p-3">
         <p className="text-gray-400 text-xs mb-1">Lover</p>
         <p
           className={`font-medium ${character.lover ? "text-pink-400" : "text-gray-500"}`}
@@ -1173,7 +1173,7 @@ const PlayerContent = ({
           <button
             onClick={onSave}
             disabled={isSaving}
-            className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
+            className={`w-full py-3 rounded-none font-medium transition-all flex items-center justify-center gap-2 ${
               isSaving
                 ? "bg-gray-600 text-gray-400 cursor-not-allowed"
                 : "bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl"

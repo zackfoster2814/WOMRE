@@ -409,7 +409,7 @@ export const PvPTournamentPage = () => {
           ) : (
             <button
               onClick={() => setShowIntro(false)}
-              className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white text-lg rounded-lg backdrop-blur border border-white/30 transition"
+              className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white text-lg rounded-none backdrop-blur border border-white/30 transition"
             >
               Bỏ qua
             </button>
@@ -474,7 +474,7 @@ export const PvPTournamentPage = () => {
         <div className="flex gap-2 mb-4 justify-center">
           <button
             onClick={() => setActiveTab("create")}
-            className={`px-6 py-3 rounded-lg font-bold transition-all ${
+            className={`px-6 py-3 rounded-none font-bold transition-all ${
               activeTab === "create" ? "bg-purple-600 text-white shadow-lg" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
             }`}
           >
@@ -482,7 +482,7 @@ export const PvPTournamentPage = () => {
           </button>
           <button
             onClick={() => setActiveTab("bracket")}
-            className={`px-6 py-3 rounded-lg font-bold transition-all ${
+            className={`px-6 py-3 rounded-none font-bold transition-all ${
               activeTab === "bracket" ? "bg-purple-600 text-white shadow-lg" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
             }`}
           >
@@ -517,7 +517,7 @@ export const PvPTournamentPage = () => {
                   <select
                     value={createSubTab}
                     onChange={(e) => setCreateSubTab(e.target.value)}
-                    className="flex-1 max-w-xs px-3 py-2 rounded-lg bg-gray-800 border border-purple-600/40 text-white text-sm font-medium focus:outline-none focus:border-purple-500 cursor-pointer"
+                    className="flex-1 max-w-xs px-3 py-2 rounded-none bg-gray-800 border border-purple-600/40 text-white text-sm font-medium focus:outline-none focus:border-purple-500 cursor-pointer"
                   >
                     {groups.map((g) => (
                       <optgroup key={g.label} label={g.label}>
@@ -829,7 +829,7 @@ const CreateTab = ({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div className="bg-gray-800/50 rounded-lg p-4">
+      <div className="bg-gray-800/50 rounded-none p-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold text-white">
             Drawing Slot #{currentSlot + 1}
@@ -865,7 +865,7 @@ const CreateTab = ({
         )}
 
         {lastDrawnPlayer && (
-          <div className="mt-4 p-3 bg-yellow-600/20 border border-yellow-600 rounded-lg">
+          <div className="mt-4 p-3 bg-yellow-600/20 border border-yellow-600 rounded-none">
             <p className="text-yellow-400 text-center">
               Last Drawn:{" "}
               <span className="font-bold">
@@ -880,7 +880,7 @@ const CreateTab = ({
             <button
               onClick={() => { if (!isSpinning) setIsSpinning(true); }}
               disabled={isSpinning}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-none text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Draw 1
             </button>
@@ -890,7 +890,7 @@ const CreateTab = ({
               <button
                 onClick={devDrawAll}
                 disabled={isSpinning}
-                className="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-lg text-sm font-mono disabled:opacity-50 border border-red-500/50"
+                className="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-none text-sm font-mono disabled:opacity-50 border border-red-500/50"
               >
                 [DEV] Draw All Instant ({remainingPlayers.length})
               </button>
@@ -898,7 +898,7 @@ const CreateTab = ({
               <button
                 onClick={startAutoDraw}
                 disabled={isSpinning}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-none text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Auto Draw All ({remainingPlayers.length})
               </button>
@@ -907,7 +907,7 @@ const CreateTab = ({
           {autoDrawing && (
             <button
               onClick={stopAutoDraw}
-              className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm animate-pulse"
+              className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-none text-sm animate-pulse"
             >
               Stop Auto Draw
             </button>
@@ -915,14 +915,14 @@ const CreateTab = ({
           <button
             onClick={resetDraw}
             disabled={isSpinning || autoDrawing}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-none text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Reset
           </button>
         </div>
       </div>
 
-      <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700/30">
+      <div className="bg-gray-800/50 rounded-none p-4 border border-gray-700/30">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-white">Matches</h2>
           <span className="text-sm text-gray-400 bg-gray-700/50 px-2.5 py-1 rounded-full font-mono">
@@ -936,7 +936,7 @@ const CreateTab = ({
             .map((match) => (
               <div
                 key={match.matchNumber}
-                className={`px-3 py-2.5 rounded-lg border transition-colors ${
+                className={`px-3 py-2.5 rounded-none border transition-colors ${
                   match.player2
                     ? "bg-gray-700/30 border-gray-600/30"
                     : "bg-yellow-900/15 border-yellow-600/30 animate-pulse"
@@ -1042,7 +1042,7 @@ const BronzeFinalTab = ({
       {/* Players */}
       <div className="grid grid-cols-2 gap-3 text-center">
         {[player1, player2].map((p, i) => (
-          <div key={i} className={`rounded-lg p-3 border ${p ? "bg-gray-800/60 border-gray-700/50" : "bg-gray-800/30 border-gray-700/30"}`}>
+          <div key={i} className={`rounded-none p-3 border ${p ? "bg-gray-800/60 border-gray-700/50" : "bg-gray-800/30 border-gray-700/30"}`}>
             <div className="text-xs text-amber-600 font-bold mb-1">Hạng {i === 0 ? "3" : "4"} ứng viên</div>
             <div className="text-white font-semibold">{p?.name ?? "Chưa có"}</div>
             {p && <div className="text-gray-400 text-xs">#{p.no}</div>}
@@ -1052,7 +1052,7 @@ const BronzeFinalTab = ({
 
       {/* Winner banner */}
       {match?.winner && (
-        <div className="text-center py-3 rounded-xl bg-amber-900/30 border border-amber-700/40">
+        <div className="text-center py-3 rounded-none bg-amber-900/30 border border-amber-700/40">
           <div className="text-amber-400 text-xs font-bold tracking-widest mb-1">HẠNG 3</div>
           <div className="text-white text-xl font-bold">{match.winner.name}</div>
           <div className="text-amber-400 text-sm">#{match.winner.no}</div>
@@ -1064,13 +1064,13 @@ const BronzeFinalTab = ({
         <button
           onClick={handleCreate}
           disabled={!canCreate}
-          className="w-full py-3 bg-amber-700 hover:bg-amber-600 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold rounded-lg transition-colors"
+          className="w-full py-3 bg-amber-700 hover:bg-amber-600 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold rounded-none transition-colors"
         >
           {canCreate ? "Tạo trận Tranh Hạng 3" : "Chờ kết quả Chung Kết Nhánh Thắng + Nhánh Thua"}
         </button>
       ) : (
         <div className="space-y-3">
-          <div className="bg-gray-800/60 rounded-lg p-4 border border-amber-700/30">
+          <div className="bg-gray-800/60 rounded-none p-4 border border-amber-700/30">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs text-amber-500 font-bold">Tranh Hạng 3</span>
               {match.winner
@@ -1089,7 +1089,7 @@ const BronzeFinalTab = ({
               ))}
             </div>
             {!match.winner && (
-              <button onClick={openMatch} className="w-full py-2 bg-amber-700/80 hover:bg-amber-600 text-white text-sm rounded-lg transition-colors">
+              <button onClick={openMatch} className="w-full py-2 bg-amber-700/80 hover:bg-amber-600 text-white text-sm rounded-none transition-colors">
                 Nhập kết quả
               </button>
             )}
@@ -1172,12 +1172,12 @@ const GrandFinalTab = ({
     <div className="space-y-4">
       {/* Players */}
       <div className="grid grid-cols-2 gap-3 text-center">
-        <div className={`rounded-lg p-3 border ${wbWinner ? "bg-green-900/20 border-green-700/40" : "bg-gray-800/50 border-gray-700/40"}`}>
+        <div className={`rounded-none p-3 border ${wbWinner ? "bg-green-900/20 border-green-700/40" : "bg-gray-800/50 border-gray-700/40"}`}>
           <div className="text-xs text-green-400 font-bold mb-1">Nhánh Thắng</div>
           <div className="text-white font-semibold">{wbWinner?.name ?? "Chưa có"}</div>
           {wbWinner && <div className="text-gray-400 text-xs">#{wbWinner.no}</div>}
         </div>
-        <div className={`rounded-lg p-3 border ${lbWinner ? "bg-orange-900/20 border-orange-700/40" : "bg-gray-800/50 border-gray-700/40"}`}>
+        <div className={`rounded-none p-3 border ${lbWinner ? "bg-orange-900/20 border-orange-700/40" : "bg-gray-800/50 border-gray-700/40"}`}>
           <div className="text-xs text-orange-400 font-bold mb-1">Nhánh Thua</div>
           <div className="text-white font-semibold">{lbWinner?.name ?? "Chưa có"}</div>
           {lbWinner && <div className="text-gray-400 text-xs">#{lbWinner.no}</div>}
@@ -1186,7 +1186,7 @@ const GrandFinalTab = ({
 
       {/* Champion banner */}
       {champion && (
-        <div className="text-center py-4 rounded-xl bg-gradient-to-r from-yellow-900/40 via-yellow-700/30 to-yellow-900/40 border border-yellow-500/50">
+        <div className="text-center py-4 rounded-none bg-gradient-to-r from-yellow-900/40 via-yellow-700/30 to-yellow-900/40 border border-yellow-500/50">
           <div className="text-yellow-300 text-xs font-bold tracking-widest mb-1">VÔ ĐỊCH</div>
           <div className="text-white text-2xl font-bold">{champion.name}</div>
           <div className="text-yellow-400 text-sm">#{champion.no}</div>
@@ -1198,7 +1198,7 @@ const GrandFinalTab = ({
         <button
           onClick={handleCreateMatches}
           disabled={!canCreate}
-          className="w-full py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold rounded-lg transition-colors"
+          className="w-full py-3 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold rounded-none transition-colors"
         >
           {canCreate ? "Tạo 2 trận Grand Final" : "Chờ kết quả nhánh thắng + nhánh thua"}
         </button>
@@ -1212,7 +1212,7 @@ const GrandFinalTab = ({
       {game1 && (
         <div className="space-y-3">
           {/* GF #1 */}
-          <div className="bg-gray-800/60 rounded-lg p-4 border border-gray-700/50">
+          <div className="bg-gray-800/60 rounded-none p-4 border border-gray-700/50">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs text-purple-400 font-bold">GF #1</span>
               {game1.winner
@@ -1231,7 +1231,7 @@ const GrandFinalTab = ({
               ))}
             </div>
             {!game1.winner && (
-              <button onClick={() => openMatch(game1)} className="w-full py-2 bg-purple-600/80 hover:bg-purple-500 text-white text-sm rounded-lg transition-colors">
+              <button onClick={() => openMatch(game1)} className="w-full py-2 bg-purple-600/80 hover:bg-purple-500 text-white text-sm rounded-none transition-colors">
                 Nhập kết quả GF #1
               </button>
             )}
@@ -1240,7 +1240,7 @@ const GrandFinalTab = ({
 
           {/* GF #2 */}
           {lbWonGame1 && game2 && (
-            <div className="bg-gray-800/60 rounded-lg p-4 border border-orange-700/30">
+            <div className="bg-gray-800/60 rounded-none p-4 border border-orange-700/30">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs text-orange-400 font-bold">GF #2 (Reset Bracket)</span>
                 {game2.winner
@@ -1259,7 +1259,7 @@ const GrandFinalTab = ({
                 ))}
               </div>
               {!game2.winner && (
-                <button onClick={() => openMatch(game2)} className="w-full py-2 bg-orange-600/80 hover:bg-orange-500 text-white text-sm rounded-lg transition-colors">
+                <button onClick={() => openMatch(game2)} className="w-full py-2 bg-orange-600/80 hover:bg-orange-500 text-white text-sm rounded-none transition-colors">
                   Nhập kết quả GF #2
                 </button>
               )}
@@ -1269,14 +1269,14 @@ const GrandFinalTab = ({
 
           {/* GF #1 chưa có kết quả: ẩn GF #2 */}
           {!game1.winner && (
-            <div className="bg-gray-800/30 rounded-lg p-4 border border-dashed border-gray-700/40 text-center text-gray-600 text-sm">
+            <div className="bg-gray-800/30 rounded-none p-4 border border-dashed border-gray-700/40 text-center text-gray-600 text-sm">
               GF #2 — chờ kết quả GF #1
             </div>
           )}
 
           {/* WB winner thắng GF #1: không cần GF #2 */}
           {wbWonGame1 && (
-            <div className="bg-gray-800/30 rounded-lg p-4 border border-dashed border-gray-700/40 text-center text-gray-500 text-sm">
+            <div className="bg-gray-800/30 rounded-none p-4 border border-dashed border-gray-700/40 text-center text-gray-500 text-sm">
               GF #2 — không cần (Nhánh Thắng vô địch)
             </div>
           )}
@@ -1477,7 +1477,7 @@ const GenericRoundCreateTab = ({
   return (
     <div>
       {/* Thông tin nguồn players */}
-      <div className="mb-4 px-4 py-2.5 bg-gray-800/60 rounded-lg border border-gray-700/50 text-sm text-gray-300 text-center">
+      <div className="mb-4 px-4 py-2.5 bg-gray-800/60 rounded-none border border-gray-700/50 text-sm text-gray-300 text-center">
         Nguồn: <span className="text-yellow-300 font-medium">{sourceSummary || "Tất cả players"}</span>
         {" — "}
         <span className="text-white font-bold">{eligiblePlayers.length}</span> người eligible
@@ -1487,7 +1487,7 @@ const GenericRoundCreateTab = ({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-gray-800/50 rounded-lg p-4">
+        <div className="bg-gray-800/50 rounded-none p-4">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-white">
               Drawing Slot #{currentSlot + 1}
@@ -1522,7 +1522,7 @@ const GenericRoundCreateTab = ({
           )}
 
           {lastDrawnPlayer && (
-            <div className="mt-4 p-3 bg-yellow-600/20 border border-yellow-600 rounded-lg">
+            <div className="mt-4 p-3 bg-yellow-600/20 border border-yellow-600 rounded-none">
               <p className="text-yellow-400 text-center">
                 Last Drawn: <span className="font-bold">No.{lastDrawnPlayer.no} {lastDrawnPlayer.name}</span>
               </p>
@@ -1534,7 +1534,7 @@ const GenericRoundCreateTab = ({
               <button
                 onClick={() => { if (!isSpinning) setIsSpinning(true); }}
                 disabled={isSpinning}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-none text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Draw 1
               </button>
@@ -1544,7 +1544,7 @@ const GenericRoundCreateTab = ({
                 <button
                   onClick={devDrawAll}
                   disabled={isSpinning}
-                  className="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-lg text-sm font-mono disabled:opacity-50 border border-red-500/50"
+                  className="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-none text-sm font-mono disabled:opacity-50 border border-red-500/50"
                 >
                   [DEV] Draw All Instant ({remainingPlayers.length})
                 </button>
@@ -1552,7 +1552,7 @@ const GenericRoundCreateTab = ({
                 <button
                   onClick={startAutoDraw}
                   disabled={isSpinning}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-none text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Auto Draw All ({remainingPlayers.length})
                 </button>
@@ -1561,7 +1561,7 @@ const GenericRoundCreateTab = ({
             {autoDrawing && (
               <button
                 onClick={stopAutoDraw}
-                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm animate-pulse"
+                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-none text-sm animate-pulse"
               >
                 Stop Auto Draw
               </button>
@@ -1570,7 +1570,7 @@ const GenericRoundCreateTab = ({
               <button
                 onClick={resetDraw}
                 disabled={isSpinning || autoDrawing}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-none text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Reset
               </button>
@@ -1579,7 +1579,7 @@ const GenericRoundCreateTab = ({
         </div>
 
         {/* Match list */}
-        <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700/30">
+        <div className="bg-gray-800/50 rounded-none p-4 border border-gray-700/30">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-white">Matches</h2>
             <span className="text-sm text-gray-400 bg-gray-700/50 px-2.5 py-1 rounded-full font-mono">
@@ -1593,7 +1593,7 @@ const GenericRoundCreateTab = ({
               .map((match) => (
                 <div
                   key={match.matchNumber}
-                  className={`px-3 py-2.5 rounded-lg border transition-colors ${
+                  className={`px-3 py-2.5 rounded-none border transition-colors ${
                     match.player2
                       ? "bg-gray-700/30 border-gray-600/30"
                       : "bg-yellow-900/15 border-yellow-600/30 animate-pulse"
@@ -1743,7 +1743,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-5 bg-gray-800/60 rounded-xl p-3 border border-gray-700/50">
+      <div className="flex items-center justify-between mb-5 bg-gray-800/60 rounded-none p-3 border border-gray-700/50">
         <div className="flex gap-5 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-gray-400" />
@@ -1780,12 +1780,12 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
             </div>
           )}
         </div>
-        <div className="flex gap-1 bg-gray-900/50 rounded-lg p-0.5">
+        <div className="flex gap-1 bg-gray-900/50 rounded-none p-0.5">
           {(["all", "pending", "completed"] as const).map((mode) => (
             <button
               key={mode}
               onClick={() => setFilterMode(mode)}
-              className={`px-3 py-1.5 text-xs rounded-md font-medium transition-all ${
+              className={`px-3 py-1.5 text-xs rounded-none font-medium transition-all ${
                 filterMode === mode
                   ? "bg-purple-600 text-white shadow-md"
                   : "text-gray-400 hover:text-white hover:bg-gray-700/50"
@@ -1823,7 +1823,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
                     });
                   }
                 }}
-                className={`text-left p-3 rounded-xl border-2 transition-all hover:scale-[1.02] hover:shadow-lg ${
+                className={`text-left p-3 rounded-none border-2 transition-all hover:scale-[1.02] hover:shadow-lg ${
                   match.winner
                     ? "bg-gradient-to-br from-gray-800/80 to-gray-900/80 border-green-600/40 hover:border-green-400"
                     : devMode
@@ -1854,7 +1854,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
                 </div>
                 <div className="space-y-0.5">
                   <div
-                    className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 transition-colors ${
+                    className={`flex items-center justify-between rounded-none px-2.5 py-1.5 transition-colors ${
                       p1Won
                         ? "bg-green-600/20 ring-1 ring-green-500/60"
                         : p2Won
@@ -1880,7 +1880,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
                     VS
                   </div>
                   <div
-                    className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 transition-colors ${
+                    className={`flex items-center justify-between rounded-none px-2.5 py-1.5 transition-colors ${
                       p2Won
                         ? "bg-green-600/20 ring-1 ring-green-500/60"
                         : p1Won
@@ -1921,7 +1921,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSearchOpen((o) => !o)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-xs border transition-all ${
                 searchOpen || searchResults
                   ? "bg-amber-600/20 border-amber-500/50 text-amber-300"
                   : "bg-gray-800/60 border-gray-700/40 text-gray-400 hover:text-white hover:bg-gray-700/60"
@@ -1953,13 +1953,13 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
             )}
           </div>
           {searchOpen && (
-            <div className="mt-2 p-3 bg-gray-900/80 border border-gray-700/50 rounded-xl flex flex-wrap gap-2 items-end">
+            <div className="mt-2 p-3 bg-gray-900/80 border border-gray-700/50 rounded-none flex flex-wrap gap-2 items-end">
               <div className="flex flex-col gap-1">
                 <label className="text-[10px] text-gray-500 font-medium">Vòng đấu</label>
                 <select
                   value={searchRound}
                   onChange={(e) => setSearchRound(e.target.value)}
-                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-none px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
                 >
                   {ROUND_SEARCH_OPTIONS.map((o) => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -1971,7 +1971,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
                 <select
                   value={searchBranch}
                   onChange={(e) => setSearchBranch(e.target.value)}
-                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-none px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
                 >
                   {BRANCH_OPTIONS.map((o) => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -1983,7 +1983,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
                 <select
                   value={searchType}
                   onChange={(e) => setSearchType(e.target.value as SearchType)}
-                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-none px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
                 >
                   <option value="playerName">Tên player</option>
                   <option value="playerNo">STT player</option>
@@ -2001,7 +2001,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
                     : searchType === "playerNo" ? "Nhập STT player..."
                     : "Nhập số trận..."
                   }
-                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 placeholder-gray-600"
+                  className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-none px-2 py-1.5 focus:outline-none focus:border-amber-500/60 placeholder-gray-600"
                 />
               </div>
             </div>
@@ -2014,7 +2014,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
             <button
               key={s.key}
               onClick={() => setBracketSection(s.key)}
-              className={`flex flex-col items-start px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+              className={`flex flex-col items-start px-4 py-2 rounded-none text-sm font-medium transition-all border ${
                 bracketSection === s.key
                   ? "bg-purple-600/30 border-purple-500/60 text-purple-200 shadow"
                   : "bg-gray-800/60 border-gray-700/40 text-gray-400 hover:text-white hover:bg-gray-700/60"
@@ -2052,7 +2052,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
           onClick={() => setDevPanel(null)}
         >
           <div
-            className="bg-gray-900 border border-red-500/50 rounded-2xl p-6 w-full max-w-sm shadow-2xl"
+            className="bg-gray-900 border border-red-500/50 rounded-none p-6 w-full max-w-sm shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -2075,7 +2075,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
                       await onDevSaveResult(devPanel.matchNumberAbsolute, { winnerNo: p.no, score: devScore || null, specialEvent: null, note: null });
                       setDevPanel(null);
                     }}
-                    className={`w-full px-4 py-3 rounded-xl text-left font-semibold transition-all border-2 ${
+                    className={`w-full px-4 py-3 rounded-none text-left font-semibold transition-all border-2 ${
                       isWinner
                         ? "bg-green-600/30 border-green-500 text-green-300"
                         : "bg-gray-800 border-gray-600 text-white hover:border-red-400 hover:bg-red-900/20"
@@ -2093,7 +2093,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
                 placeholder="Score (vd: 4-2)"
                 value={devScore}
                 onChange={(e) => setDevScore(e.target.value)}
-                className="flex-1 bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-400"
+                className="flex-1 bg-gray-800 border border-gray-600 rounded-none px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-red-400"
               />
               {devPanel.match.winner && (
                 <button
@@ -2102,7 +2102,7 @@ const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveRe
                     await onDevSaveResult(devPanel.matchNumberAbsolute, { winnerNo: 0, score: null, specialEvent: null, note: null });
                     setDevPanel(null);
                   }}
-                  className="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg text-xs"
+                  className="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-none text-xs"
                 >
                   Xoá KQ
                 </button>

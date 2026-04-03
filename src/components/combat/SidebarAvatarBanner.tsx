@@ -72,7 +72,7 @@ export const SidebarAvatarBanner = ({
       )}
       {/* Avatar area — overflow-hidden chỉ áp dụng ở đây */}
       <div
-        className={`relative rounded-t-2xl overflow-hidden h-72 bg-gray-800 ${false && blurred ? "blur-sm" : ""}`}
+        className={`relative rounded-none overflow-hidden h-72 bg-gray-800 ${false && blurred ? "blur-sm" : ""}`}
       >
         {avatarSrc ? (
           <img

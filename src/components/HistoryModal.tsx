@@ -44,7 +44,7 @@ export const HistoryModal = ({
       onClick={onClose}
     >
       <div
-        className="bg-gray-800 rounded-lg shadow-2xl w-full max-w-3xl max-h-[80vh] flex flex-col"
+        className="bg-gray-800 rounded-none shadow-2xl w-full max-w-3xl max-h-[80vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -78,7 +78,7 @@ export const HistoryModal = ({
               {[...history].reverse().map((entry, index) => (
                 <div
                   key={entry.id}
-                  className="bg-gray-700 p-4 rounded-lg hover:bg-gray-650 transition-colors"
+                  className="bg-gray-700 p-4 rounded-none hover:bg-gray-650 transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     {/* Index */}
@@ -167,7 +167,7 @@ export const HistoryModal = ({
           onClick={() => setShowConfirmDialog(false)}
         >
           <div
-            className="bg-gray-800 rounded-lg shadow-2xl p-6 max-w-md w-full mx-4"
+            className="bg-gray-800 rounded-none shadow-2xl p-6 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-xl font-bold text-white mb-3">Confirm Clear History</h3>
@@ -205,7 +205,7 @@ export const HistoryModal = ({
           onClick={() => setShowExportDialog(false)}
         >
           <div
-            className="bg-gray-800 rounded-lg shadow-2xl p-6 max-w-md w-full mx-4"
+            className="bg-gray-800 rounded-none shadow-2xl p-6 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-xl font-bold text-white mb-3">Export History</h3>

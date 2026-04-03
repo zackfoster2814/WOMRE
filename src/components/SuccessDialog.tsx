@@ -35,11 +35,11 @@ export const SuccessDialog = ({
       onClick={onClose}
     >
       <div
-        className="bg-gray-800 rounded-lg shadow-2xl max-w-md w-full animate-slide-in"
+        className="bg-gray-800 rounded-none shadow-2xl max-w-md w-full animate-slide-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="bg-green-600 px-6 py-4 rounded-t-lg flex items-center gap-3">
+        <div className="bg-green-600 px-6 py-4 rounded-none flex items-center gap-3">
           <span className="text-3xl">✓</span>
           <h3 className="text-xl font-bold text-white">{title}</h3>
         </div>
@@ -67,7 +67,7 @@ export const SuccessDialog = ({
                   onOpenFolder();
                   onClose();
                 }}
-                className="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-none text-white font-medium transition-colors flex items-center justify-center gap-2"
               >
                 Open Folder
               </button>
@@ -76,7 +76,7 @@ export const SuccessDialog = ({
               onClick={onClose}
               className={`${
                 onOpenFolder ? "flex-1" : "w-full"
-              } px-4 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg text-white font-medium transition-colors`}
+              } px-4 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-none text-white font-medium transition-colors`}
             >
               Close
             </button>

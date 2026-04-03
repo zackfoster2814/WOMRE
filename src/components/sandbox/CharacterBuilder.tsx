@@ -570,7 +570,7 @@ export const CharacterBuilder = ({
 
   return (
     <div
-      className={`bg-gray-800/80 backdrop-blur-sm border ${borderColor} rounded-xl overflow-hidden`}
+      className={`bg-gray-800/80 backdrop-blur-sm border ${borderColor} rounded-none overflow-hidden`}
     >
       {/* Header */}
       <div

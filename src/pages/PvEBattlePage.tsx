@@ -418,7 +418,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value as typeof filterType)}
-            className={`${!isWebView ? "" : "hidden"} px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500`}
+            className={`${!isWebView ? "" : "hidden"} px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-none text-white focus:outline-none focus:ring-2 focus:ring-cyan-500`}
           >
             <option value="all">All Teams ({summary.total})</option>
             <option value="with-boss">Has Boss ({summary.withBoss})</option>
@@ -451,7 +451,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
             return (
               <div
                 key={battle.teamId}
-                className={`bg-gray-800/90 backdrop-blur-sm border-2 rounded-xl overflow-hidden transition-all hover:scale-[1.02] ${
+                className={`bg-gray-800/90 backdrop-blur-sm border-2 rounded-none overflow-hidden transition-all hover:scale-[1.02] ${
                   result
                     ? result.outcome === "win"
                       ? "border-green-500/50"
@@ -627,7 +627,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                         <button
                           disabled
                           onClick={() => startBattle(battle)}
-                          className="w-full px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-lg transition-all transform shadow-lg text-sm"
+                          className="w-full px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-none transition-all transform shadow-lg text-sm"
                         >
                           Battle done!
                         </button>
@@ -642,7 +642,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                       {devMode && (
                         <button
                           onClick={() => openEditForm(battle.teamId)}
-                          className="w-full mt-2 px-4 py-2 bg-yellow-600/30 hover:bg-yellow-600/50 border border-yellow-500/50 text-yellow-300 font-medium rounded-lg transition-all text-sm"
+                          className="w-full mt-2 px-4 py-2 bg-yellow-600/30 hover:bg-yellow-600/50 border border-yellow-500/50 text-yellow-300 font-medium rounded-none transition-all text-sm"
                         >
                           {result ? "Edit Result" : "Add Result"}
                         </button>
@@ -669,7 +669,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
       {/* Dev Mode: Edit Result Dialog */}
       {editingTeamId !== null && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]">
-          <div className="bg-gray-900 border border-yellow-500/50 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+          <div className="bg-gray-900 border border-yellow-500/50 rounded-none p-6 max-w-md w-full mx-4 shadow-2xl">
             <h3 className="text-lg font-bold text-yellow-400 mb-4">
               Edit Result - Team {editingTeamId}
             </h3>
@@ -799,7 +799,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                   setEditForm((prev) => ({ ...prev, notes: e.target.value }))
                 }
                 placeholder="Ghi chÃº (ngÆ°á»i bá»‹ isekai, gear nháº­n, v.v.)"
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-y"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-none text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-y"
                 rows={3}
               />
             </div>
@@ -808,13 +808,13 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
             <div className="flex gap-2">
               <button
                 onClick={() => setEditingTeamId(null)}
-                className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium text-sm transition-all"
+                className="flex-1 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-none font-medium text-sm transition-all"
               >
                 Cancel
               </button>
               <button
                 onClick={saveResult}
-                className="flex-1 px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-white rounded-lg font-bold text-sm transition-all"
+                className="flex-1 px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-white rounded-none font-bold text-sm transition-all"
               >
                 Save
               </button>

@@ -152,12 +152,12 @@ export const DevWheelPanel = ({
 
   return (
     <div
-      className="fixed z-[9999] w-80 bg-gray-950 border border-yellow-500/60 rounded-xl shadow-2xl select-none"
+      className="fixed z-[9999] w-80 bg-gray-950 border border-yellow-500/60 rounded-none shadow-2xl select-none"
       style={{ left: pos.x, top: pos.y }}
     >
       {/* Header — drag handle */}
       <div
-        className="flex items-center justify-between px-3 py-2 bg-yellow-600/20 border-b border-yellow-500/40 rounded-t-xl cursor-grab active:cursor-grabbing"
+        className="flex items-center justify-between px-3 py-2 bg-yellow-600/20 border-b border-yellow-500/40 rounded-none cursor-grab active:cursor-grabbing"
         onMouseDown={handleMouseDown}
       >
         <span className="text-yellow-300 font-bold text-sm">⚙ DEV MODE</span>
@@ -276,7 +276,7 @@ export const DevWheelPanel = ({
                     onClick={() => {
                       if (p1Data && p2Data) onLoadMatchup(p1Data, p2Data);
                     }}
-                    className={`w-full text-left px-2 py-1.5 rounded-lg border transition-all ${
+                    className={`w-full text-left px-2 py-1.5 rounded-none border transition-all ${
                       isDone
                         ? "border-gray-700/50 bg-gray-900/30 opacity-60"
                         : hasBoth

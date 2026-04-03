@@ -570,7 +570,7 @@ export function CreatorsCatModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 border border-pink-500/40 rounded-2xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
+      <div className="bg-gray-900 border border-pink-500/40 rounded-none p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-pink-400 text-xl">🐱</span>
           <h2 className="text-white font-bold text-lg">
@@ -590,7 +590,7 @@ export function CreatorsCatModal({
               <button
                 key={eff}
                 onClick={() => applyEffect(eff)}
-                className="text-left px-4 py-2 bg-gray-800 hover:bg-pink-900/40 border border-gray-700 hover:border-pink-500/60 rounded-lg text-sm text-white transition-all"
+                className="text-left px-4 py-2 bg-gray-800 hover:bg-pink-900/40 border border-gray-700 hover:border-pink-500/60 rounded-none text-sm text-white transition-all"
               >
                 {eff}
               </button>
@@ -644,7 +644,7 @@ export function CreatorsCatModal({
                         };
                       });
                     }}
-                    className={`px-3 py-2 rounded-lg text-sm font-bold transition-all ${isSkeletonIQ ? "opacity-30 cursor-not-allowed bg-gray-700 text-gray-500 border border-gray-600" : selected ? "bg-pink-600 text-white border border-pink-400" : "bg-gray-800 text-gray-300 border border-gray-700 hover:border-pink-500/50"}`}
+                    className={`px-3 py-2 rounded-none text-sm font-bold transition-all ${isSkeletonIQ ? "opacity-30 cursor-not-allowed bg-gray-700 text-gray-500 border border-gray-600" : selected ? "bg-pink-600 text-white border border-pink-400" : "bg-gray-800 text-gray-300 border border-gray-700 hover:border-pink-500/50"}`}
                   >
                     {label}
                     {isSkeletonIQ ? " (cố định)" : ""}
@@ -712,7 +712,7 @@ export function CreatorsCatModal({
                       }));
                     }
                   }}
-                  className="w-full px-4 py-2 bg-pink-700 hover:bg-pink-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-lg text-sm font-bold transition-all"
+                  className="w-full px-4 py-2 bg-pink-700 hover:bg-pink-600 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded-none text-sm font-bold transition-all"
                 >
                   Xác nhận ({creatorsCatModal.chosenStats.length}/
                   {maxCount})
@@ -955,7 +955,7 @@ export function CreatorsCatModal({
                   isOpen: false,
                 }));
               }}
-              className="w-full px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white rounded-lg text-sm font-bold transition-all"
+              className="w-full px-4 py-2 bg-amber-700 hover:bg-amber-600 text-white rounded-none text-sm font-bold transition-all"
             >
               Loại bỏ đã chọn & Quay Archetype Wheel
             </button>
@@ -1012,7 +1012,7 @@ export function CreatorsCatModal({
           onClick={() =>
             setCreatorsCatModal((p) => ({ ...p, isOpen: false }))
           }
-          className="mt-4 w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg text-xs transition-all"
+          className="mt-4 w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-none text-xs transition-all"
         >
           Đóng
         </button>

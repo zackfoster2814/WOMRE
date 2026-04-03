@@ -239,7 +239,7 @@ export const ItemList = ({
   return (
     <div className="space-y-3">
       {/* Add Items Section */}
-      <div className="bg-gray-800 p-3 rounded-lg shadow-lg">
+      <div className="bg-gray-800 p-3 rounded-none shadow-lg">
         <h3 className="text-lg font-bold mb-2 text-white flex items-center gap-2">
           Add Items
         </h3>
@@ -351,7 +351,7 @@ export const ItemList = ({
       </div>
 
       {/* Items List */}
-      <div className="bg-gray-800 p-3 rounded-lg shadow-lg">
+      <div className="bg-gray-800 p-3 rounded-none shadow-lg">
         {/* Header with Title and Search */}
         <div className="flex items-center gap-3 mb-3">
           <h3 className="text-lg font-bold text-white whitespace-nowrap">

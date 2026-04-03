@@ -665,7 +665,7 @@ export const WheelPage = () => {
                 {/* Current Item Display - Responsive size */}
                 <div className="w-full md:w-64 flex flex-col justify-center">
                   {currentItem ? (
-                    <div className="bg-gray-700 p-4 sm:p-6 rounded-lg border-4 border-yellow-500 shadow-lg h-auto md:h-64 flex flex-col">
+                    <div className="bg-gray-700 p-4 sm:p-6 rounded-none border-4 border-yellow-500 shadow-lg h-auto md:h-64 flex flex-col">
                       <p className="text-sm text-gray-400 mb-3 font-semibold">
                         RESULT
                       </p>
@@ -690,7 +690,7 @@ export const WheelPage = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-gray-700 p-4 sm:p-6 rounded-lg border-4 border-gray-600 shadow-lg h-auto md:h-64 flex items-center justify-center min-h-[12rem]">
+                    <div className="bg-gray-700 p-4 sm:p-6 rounded-none border-4 border-gray-600 shadow-lg h-auto md:h-64 flex items-center justify-center min-h-[12rem]">
                       <p className="text-base sm:text-lg text-gray-500">
                         No selection
                       </p>
@@ -750,7 +750,7 @@ export const WheelPage = () => {
         {showExportSuccess && (
           <div className="fixed top-4 right-4 z-[70] animate-fade-in">
             <div
-              className={`bg-green-600 text-white px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3 ${
+              className={`bg-green-600 text-white px-6 py-4 rounded-none shadow-2xl flex items-center gap-3 ${
                 isTauri()
                   ? "cursor-pointer hover:bg-green-700 transition-colors"
                   : ""

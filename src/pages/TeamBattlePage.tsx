@@ -260,7 +260,7 @@ export const TeamBattlePage = () => {
               onChange={(e) =>
                 setFilterType(e.target.value as typeof filterType)
               }
-              className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-none text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
             >
               <option value="all">All Teams ({summary.total})</option>
               <option value="with-boss">
@@ -359,7 +359,7 @@ const BattleCard = ({
 
   return (
     <div
-      className={`bg-gray-800/90 backdrop-blur-sm border-2 rounded-xl overflow-hidden transition-all ${
+      className={`bg-gray-800/90 backdrop-blur-sm border-2 rounded-none overflow-hidden transition-all ${
         hasBoss ? "border-red-500/50" : "border-gray-600"
       }`}
     >
@@ -474,7 +474,7 @@ const BattleCard = ({
         {hasBoss && battle.boss && (
           <div className="grid grid-cols-2 gap-4">
             {/* Reward */}
-            <div className="p-3 rounded-lg border bg-green-500/10 border-green-500/50">
+            <div className="p-3 rounded-none border bg-green-500/10 border-green-500/50">
               <h4 className="text-sm font-bold mb-1 text-green-400">
                 Reward (Win)
               </h4>
@@ -484,7 +484,7 @@ const BattleCard = ({
             </div>
 
             {/* Punishment */}
-            <div className="p-3 rounded-lg border bg-red-500/10 border-red-500/50">
+            <div className="p-3 rounded-none border bg-red-500/10 border-red-500/50">
               <h4 className="text-sm font-bold mb-1 text-red-400">
                 Punishment (Lose)
               </h4>
@@ -503,7 +503,7 @@ const BattleCard = ({
                 e.stopPropagation();
                 onStartBattle();
               }}
-              className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white font-bold rounded-lg transition-all transform hover:scale-105 shadow-lg"
+              className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white font-bold rounded-none transition-all transform hover:scale-105 shadow-lg"
             >
               Enter Lair Battle
             </button>
@@ -589,7 +589,7 @@ const BossDetailModal = ({ boss, onClose }: BossDetailModalProps) => {
       onClick={onClose}
     >
       <div
-        className="bg-gray-800/95 backdrop-blur-sm border border-red-500/50 rounded-xl max-w-lg w-full max-h-[80vh] overflow-hidden shadow-2xl"
+        className="bg-gray-800/95 backdrop-blur-sm border border-red-500/50 rounded-none max-w-lg w-full max-h-[80vh] overflow-hidden shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -647,13 +647,13 @@ const BossDetailModal = ({ boss, onClose }: BossDetailModalProps) => {
           </div>
 
           {/* Reward */}
-          <div className="mb-4 p-4 rounded-lg bg-green-500/20 border border-green-500/50">
+          <div className="mb-4 p-4 rounded-none bg-green-500/20 border border-green-500/50">
             <h4 className="text-green-400 font-bold mb-2">Reward (Win)</h4>
             <p className="text-green-300 text-sm">{boss.reward}</p>
           </div>
 
           {/* Punishment */}
-          <div className="p-4 rounded-lg bg-red-500/20 border border-red-500/50">
+          <div className="p-4 rounded-none bg-red-500/20 border border-red-500/50">
             <h4 className="text-red-400 font-bold mb-2">Punishment (Lose)</h4>
             <p className="text-red-300 text-sm">{boss.punishment}</p>
           </div>
@@ -689,7 +689,7 @@ const StatBadgeLarge = ({
   value: number | null;
   color: string;
 }) => (
-  <div className="bg-gray-700/50 rounded-lg px-3 py-2">
+  <div className="bg-gray-700/50 rounded-none px-3 py-2">
     <div className={`text-sm font-medium ${color}`}>{label}</div>
     <div className="text-white font-bold text-xl">{value ?? "?"}</div>
   </div>

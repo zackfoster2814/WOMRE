@@ -42,7 +42,7 @@ export const SCPlayerCard = ({
 
   return (
     <div
-      className={`relative rounded-xl border-2 overflow-hidden transition-all duration-300 ${borderGlow}`}
+      className={`relative rounded-none border-2 overflow-hidden transition-all duration-300 ${borderGlow}`}
       style={{
         background: "linear-gradient(160deg, #0f172a 60%, #1e1b4b 100%)",
       }}

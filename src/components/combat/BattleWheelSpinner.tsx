@@ -30,13 +30,15 @@ export interface BattleWheelSpinnerProps {
   p2Val: number;
   p1AllStats?: Record<string, number>;
   p2AllStats?: Record<string, number>;
-  /** Spin buttons của round vừa resolve (hiện bên dưới stats P1) */
+  /** Spin buttons của round hiện tại (hiện SAU khi main wheel xác định winner) */
   p1SpinNodes?: ReactNode;
-  /** Spin buttons của round vừa resolve (hiện bên dưới stats P2) */
+  /** Spin buttons của round hiện tại (hiện SAU khi main wheel xác định winner) */
   p2SpinNodes?: ReactNode;
-  /** Block nút Next khi còn pending spins từ round trước */
-  hasPendingSpins?: boolean;
+  /** Block nút Next khi còn pending spins round này chưa quay */
+  hasCurrentPendingSpins?: boolean;
   disabled?: boolean;
+  /** Gọi ngay khi main wheel xác định winner (trước khi user click Next) */
+  onWinnerDetermined?: (winner: "player1" | "player2") => void;
   onSpinComplete: (winner: "player1" | "player2") => void;
 }
 
@@ -53,8 +55,9 @@ export function BattleWheelSpinner({
   p2AllStats,
   p1SpinNodes,
   p2SpinNodes,
-  hasPendingSpins = false,
+  hasCurrentPendingSpins = false,
   disabled = false,
+  onWinnerDetermined,
   onSpinComplete,
 }: BattleWheelSpinnerProps) {
   const [isSpinning, setIsSpinning] = useState(false);
@@ -70,7 +73,9 @@ export function BattleWheelSpinner({
 
   const handleSpinComplete = (item: WheelItem) => {
     setIsSpinning(false);
-    setSpinResult(item.id === "p1" ? "player1" : "player2");
+    const winner = item.id === "p1" ? "player1" : "player2";
+    setSpinResult(winner);
+    onWinnerDetermined?.(winner);
   };
 
   const handleNext = () => {
@@ -89,7 +94,7 @@ export function BattleWheelSpinner({
       {/* 3-column layout */}
       <div className="grid grid-cols-[1fr_auto_1fr] gap-3 w-full items-center">
         {/* P1 stats */}
-        <div className="rounded-xl border border-blue-500/20 bg-blue-950/30 p-2 flex flex-col gap-0.5">
+        <div className="rounded-none border border-blue-500/20 bg-blue-950/30 p-2 flex flex-col gap-0.5">
           <div className="text-blue-400 text-xs font-bold truncate mb-1 text-center">{p1Name}</div>
           {STAT_LABELS.map(({ key, label }) => {
             const val = p1AllStats?.[key] ?? (key === statKey ? p1Val : null);
@@ -116,7 +121,7 @@ export function BattleWheelSpinner({
           <div className="text-center text-[11px] font-bold text-blue-400 mt-1">
             {p1Pct.toFixed(1)}%
           </div>
-          {p1SpinNodes && (
+          {spinResult && p1SpinNodes && (
             <div className="flex flex-wrap justify-center gap-1 mt-1 pt-1 border-t border-blue-500/20">
               {p1SpinNodes}
             </div>
@@ -141,7 +146,7 @@ export function BattleWheelSpinner({
           {spinResult ? (
             <div className="flex flex-col items-center gap-1.5 mt-1">
               <div
-                className={`text-sm font-black px-3 py-1 rounded-lg border ${
+                className={`text-sm font-black px-3 py-1 rounded-none border ${
                   spinResult === "player1"
                     ? "text-blue-300 bg-blue-500/20 border-blue-500/40"
                     : "text-red-300 bg-red-500/20 border-red-500/40"
@@ -151,15 +156,15 @@ export function BattleWheelSpinner({
               </div>
               <button
                 onClick={handleNext}
-                disabled={hasPendingSpins}
-                title={hasPendingSpins ? "Còn hiệu ứng chưa quay từ round trước" : undefined}
-                className={`px-5 py-1.5 rounded-lg font-black text-sm transition-all shadow-lg ${
-                  hasPendingSpins
+                disabled={hasCurrentPendingSpins}
+                title={hasCurrentPendingSpins ? "Còn hiệu ứng round này chưa quay" : undefined}
+                className={`px-5 py-1.5 rounded-none font-black text-sm transition-all shadow-lg ${
+                  hasCurrentPendingSpins
                     ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
                     : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105"
                 }`}
               >
-                {hasPendingSpins ? "Quay hiệu ứng trước..." : "Next →"}
+                {hasCurrentPendingSpins ? "Quay hiệu ứng round này trước..." : "Next →"}
               </button>
             </div>
           ) : !isSpinning ? (
@@ -168,7 +173,7 @@ export function BattleWheelSpinner({
         </div>
 
         {/* P2 stats */}
-        <div className="rounded-xl border border-red-500/20 bg-red-950/30 p-2 flex flex-col gap-0.5">
+        <div className="rounded-none border border-red-500/20 bg-red-950/30 p-2 flex flex-col gap-0.5">
           <div className="text-red-400 text-xs font-bold truncate mb-1 text-center">{p2Name}</div>
           {STAT_LABELS.map(({ key, label }) => {
             const val = p2AllStats?.[key] ?? (key === statKey ? p2Val : null);
@@ -195,7 +200,7 @@ export function BattleWheelSpinner({
           <div className="text-center text-[11px] font-bold text-red-400 mt-1">
             {(100 - p1Pct).toFixed(1)}%
           </div>
-          {p2SpinNodes && (
+          {spinResult && p2SpinNodes && (
             <div className="flex flex-wrap justify-center gap-1 mt-1 pt-1 border-t border-red-500/20">
               {p2SpinNodes}
             </div>

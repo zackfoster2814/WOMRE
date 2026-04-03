@@ -120,7 +120,7 @@ export const PublicBracketPage = () => {
           <p className="text-red-400 text-xl mb-4">{error}</p>
           <button
             onClick={loadData}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-500 transition-colors"
+            className="px-4 py-2 bg-purple-600 text-white rounded-none hover:bg-purple-500 transition-colors"
           >
             Retry
           </button>
@@ -136,7 +136,7 @@ export const PublicBracketPage = () => {
         <div className="text-center mb-6 relative">
           <button
             onClick={() => { window.location.hash = "#/players"; }}
-            className="absolute left-0 top-1 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white rounded-lg transition-colors text-sm"
+            className="absolute left-0 top-1 px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white rounded-none transition-colors text-sm"
           >
             &larr; Players
           </button>
@@ -153,7 +153,7 @@ export const PublicBracketPage = () => {
         </div>
 
         {/* Stats + Filter Bar */}
-        <div className="flex items-center justify-between mb-4 bg-gray-800/50 rounded-lg px-4 py-3">
+        <div className="flex items-center justify-between mb-4 bg-gray-800/50 rounded-none px-4 py-3">
           <div className="flex gap-4 text-sm">
             <span className="text-gray-400">
               Total: <span className="text-white font-bold">{stats.total}</span>
@@ -198,7 +198,7 @@ export const PublicBracketPage = () => {
                 <button
                   key={match.matchNumber}
                   onClick={() => setSelectedMatch(match)}
-                  className={`text-left p-3 rounded-lg border transition-all hover:scale-[1.02] ${
+                  className={`text-left p-3 rounded-none border transition-all hover:scale-[1.02] ${
                     match.winner
                       ? "bg-green-900/20 border-green-700/50 hover:border-green-500"
                       : "bg-gray-800 border-gray-700 hover:border-purple-500"
@@ -265,7 +265,7 @@ export const PublicBracketPage = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setSearchOpen((o) => !o)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none text-xs border transition-all ${
                   searchOpen || searchResults
                     ? "bg-amber-600/20 border-amber-500/50 text-amber-300"
                     : "bg-gray-800/60 border-gray-700/40 text-gray-400 hover:text-white hover:bg-gray-700/60"
@@ -298,14 +298,14 @@ export const PublicBracketPage = () => {
             </div>
 
             {searchOpen && (
-              <div className="mt-2 p-3 bg-gray-900/80 border border-gray-700/50 rounded-xl flex flex-wrap gap-2 items-end">
+              <div className="mt-2 p-3 bg-gray-900/80 border border-gray-700/50 rounded-none flex flex-wrap gap-2 items-end">
                 {/* Dropdown: Round */}
                 <div className="flex flex-col gap-1">
                   <label className="text-[10px] text-gray-500 font-medium">Vòng đấu</label>
                   <select
                     value={searchRound}
                     onChange={(e) => setSearchRound(e.target.value)}
-                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-none px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
                   >
                     {ROUND_SEARCH_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
@@ -319,7 +319,7 @@ export const PublicBracketPage = () => {
                   <select
                     value={searchBranch}
                     onChange={(e) => setSearchBranch(e.target.value)}
-                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-none px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
                   >
                     {BRANCH_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
@@ -333,7 +333,7 @@ export const PublicBracketPage = () => {
                   <select
                     value={searchType}
                     onChange={(e) => setSearchType(e.target.value as typeof searchType)}
-                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
+                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-none px-2 py-1.5 focus:outline-none focus:border-amber-500/60 min-w-[140px]"
                   >
                     <option value="playerName">Tên player</option>
                     <option value="playerNo">STT player</option>
@@ -353,7 +353,7 @@ export const PublicBracketPage = () => {
                       : searchType === "playerNo" ? "Nhập số thứ tự player..."
                       : "Nhập số trận..."
                     }
-                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-lg px-2 py-1.5 focus:outline-none focus:border-amber-500/60 placeholder-gray-600"
+                    className="bg-gray-800 border border-gray-600/50 text-gray-200 text-xs rounded-none px-2 py-1.5 focus:outline-none focus:border-amber-500/60 placeholder-gray-600"
                   />
                 </div>
               </div>
@@ -369,7 +369,7 @@ export const PublicBracketPage = () => {
               <button
                 key={s.key}
                 onClick={() => setBracketSection(s.key)}
-                className={`flex flex-col items-start px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+                className={`flex flex-col items-start px-4 py-2 rounded-none text-sm font-medium transition-all border ${
                   bracketSection === s.key
                     ? "bg-purple-600/30 border-purple-500/60 text-purple-200 shadow"
                     : "bg-gray-800/60 border-gray-700/40 text-gray-400 hover:text-white hover:bg-gray-700/60"
@@ -403,7 +403,7 @@ export const PublicBracketPage = () => {
         <div className="text-center mt-6">
           <button
             onClick={loadData}
-            className="px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 hover:text-white transition-colors text-sm"
+            className="px-4 py-2 bg-gray-700 text-gray-300 rounded-none hover:bg-gray-600 hover:text-white transition-colors text-sm"
           >
             Refresh Now
           </button>
@@ -436,7 +436,7 @@ const MatchDetailModal = ({ match, onClose }: MatchDetailModalProps) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-gray-800 rounded-xl border border-gray-600 max-w-lg w-full p-6 shadow-2xl">
+      <div className="bg-gray-800 rounded-none border border-gray-600 max-w-lg w-full p-6 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-white">Match #{match.matchNumber}</h2>
@@ -452,7 +452,7 @@ const MatchDetailModal = ({ match, onClose }: MatchDetailModalProps) => {
         <div className="space-y-3">
           {/* Player 1 */}
           <div
-            className={`flex items-center justify-between rounded-lg px-4 py-3 ${
+            className={`flex items-center justify-between rounded-none px-4 py-3 ${
               match.winner?.no === match.player1?.no
                 ? "bg-green-700/30 ring-2 ring-green-500"
                 : "bg-gray-700/50"
@@ -478,7 +478,7 @@ const MatchDetailModal = ({ match, onClose }: MatchDetailModalProps) => {
 
           {/* Player 2 */}
           <div
-            className={`flex items-center justify-between rounded-lg px-4 py-3 ${
+            className={`flex items-center justify-between rounded-none px-4 py-3 ${
               match.winner?.no === match.player2?.no
                 ? "bg-green-700/30 ring-2 ring-green-500"
                 : "bg-gray-700/50"
@@ -532,7 +532,7 @@ const MatchDetailModal = ({ match, onClose }: MatchDetailModalProps) => {
         <div className="mt-6 text-center">
           <button
             onClick={onClose}
-            className="px-6 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 hover:text-white transition-colors"
+            className="px-6 py-2 bg-gray-700 text-gray-300 rounded-none hover:bg-gray-600 hover:text-white transition-colors"
           >
             Close
           </button>

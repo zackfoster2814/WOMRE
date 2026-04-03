@@ -154,7 +154,7 @@ export const EffectSelector = ({
 
       {/* Dropdown */}
       {isOpen && !disabled && availableOptions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 max-h-48 overflow-y-auto bg-gray-800 border border-gray-600 rounded-lg shadow-xl">
+        <div className="absolute z-50 w-full mt-1 max-h-48 overflow-y-auto bg-gray-800 border border-gray-600 rounded-none shadow-xl">
           {availableOptions.slice(0, 50).map((option) => (
             <button
               key={option.name}

@@ -407,7 +407,7 @@ const StatModifiersTable = ({
             className="w-full flex items-center justify-between mb-1 hover:opacity-80 transition-opacity"
           >
             <h4 className="text-xs text-yellow-400 font-medium flex items-center gap-1">
-              <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+              <span className="w-2 h-2 bg-yellow-400 animate-pulse" />
               hiệu ứng điều kiện <span className="text-yellow-600">({sourcesWithConditionalEffects.length})</span>
             </h4>
             <span className="text-gray-500 text-[10px]">{conditionalOpen ? "▲" : "▼"}</span>

@@ -2,15 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   GLOBAL BASE OVERRIDES
+   ============================================================ */
+@layer base {
+  /* Headings → Cinzel (Astral Fantasy Title font) */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+    letter-spacing: 0.03em;
+  }
+
+  /* All borders default to ghost style */
+  *, *::before, *::after {
+    border-color: rgba(70, 72, 77, 0.25);
+  }
+
+  /* Selection highlight */
+  ::selection {
+    background: rgba(255, 209, 108, 0.2);
+    color: #ffd16c;
+  }
+}
+
+/* ============================================================
+   CSS VARIABLES — The Arcane Ledger Design System
+   ============================================================ */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --color-surface:               #0c0e12;
+  --color-surface-low:           #111318;
+  --color-surface-container:     #171a1f;
+  --color-surface-container-high:#1e2128;
+  --color-surface-highest:       #23262c;
+  --color-surface-bright:        #2c3038;
+  --color-primary:               #ffd16c;
+  --color-primary-dim:           #c9a24f;
+  --color-primary-container:     #fdc003;
+  --color-secondary:             #56f1e0;
+  --color-tertiary:              #e69dff;
+  --color-outline:               #46484d;
+  --color-outline-dim:           rgba(70,72,77,0.2);
+  --color-error:                 #ff6b6b;
+
+  font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color-scheme: dark;
+  color: rgba(255,255,255,0.87);
+  background-color: var(--color-surface);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,58 +57,272 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--color-surface);
+  /* Subtle grain overlay */
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
 }
 
 #root {
   width: 100%;
   margin: 0 auto;
-  text-align: center;
 }
 
-/* Custom Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
+/* ============================================================
+   TYPOGRAPHY HELPERS
+   ============================================================ */
+.font-display { font-family: 'Cinzel', 'Playfair Display', Georgia, serif; }
+.font-lore    { font-family: 'Playfair Display', 'Newsreader', Georgia, serif; }
+.font-mono    { font-family: 'Space Grotesk', monospace; }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #1f2937;
-  border-radius: 4px;
+/* ============================================================
+   RELIC SCROLLBAR — global
+   ============================================================ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-dim) transparent;
 }
+*::-webkit-scrollbar       { width: 4px; height: 4px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--color-primary-dim);
+  border-radius: 0;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
 
+/* ============================================================
+   CUSTOM SCROLLBAR — legacy class (kept for compat)
+   ============================================================ */
+.custom-scrollbar::-webkit-scrollbar       { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: var(--color-surface-low); }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #4b5563;
-  border-radius: 4px;
+  background: var(--color-primary-dim);
+  border-radius: 0;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+/* ============================================================
+   BRACKET SCROLLBAR
+   ============================================================ */
+.bracket-scroll::-webkit-scrollbar         { width: 4px; height: 4px; }
+.bracket-scroll::-webkit-scrollbar-track   { background: var(--color-surface-low); }
+.bracket-scroll::-webkit-scrollbar-thumb   {
+  background: rgba(230,157,255,0.4);
+  border-radius: 0;
+}
+.bracket-scroll::-webkit-scrollbar-thumb:hover { background: rgba(230,157,255,0.75); }
+.bracket-scroll::-webkit-scrollbar-corner       { background: var(--color-surface-low); }
+
+/* ============================================================
+   COMPONENT PRIMITIVES
+   ============================================================ */
+
+/* Ghost Border — container boundary */
+.ghost-border {
+  border: 1px solid rgba(70,72,77,0.2);
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+/* Metallic bevel — top-left light catch */
+.bevel {
+  box-shadow: inset 0.5px 0.5px 0 rgba(255,255,255,0.08),
+              inset -0.5px -0.5px 0 rgba(0,0,0,0.4);
+}
+.bevel-gold {
+  box-shadow: inset 0.5px 0.5px 0 rgba(255,209,108,0.15),
+              inset -0.5px -0.5px 0 rgba(0,0,0,0.5);
 }
 
-/* Bracket scrollbar - luôn hiển thị, màu purple */
-.bracket-scroll::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+/* Bloom — ambient glow aura */
+.bloom         { box-shadow: 0 0 30px 8px rgba(255,209,108,0.1); }
+.bloom-sm      { box-shadow: 0 0 14px 4px rgba(255,209,108,0.12); }
+.bloom-cyan    { box-shadow: 0 0 20px 4px rgba(86,241,224,0.15); }
+.bloom-arcane  { box-shadow: 0 0 20px 4px rgba(230,157,255,0.15); }
+
+/* Glass panel — Level 1 (Enchanted Glassmorphism) */
+.glass {
+  background: rgba(15, 23, 42, 0.6);   /* slate-900/60 */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 158, 11, 0.2);  /* amber-500/20 */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
 }
 
-.bracket-scroll::-webkit-scrollbar-track {
-  background: rgba(17, 24, 39, 0.9);
-  border-radius: 0 0 8px 8px;
+/* Glass panel — Level 2 (Secondary / Detail panels) */
+.glass-l2 {
+  background: rgba(30, 41, 59, 0.4);   /* slate-800/40 */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(99, 102, 241, 0.1);  /* indigo-500/10 */
 }
 
-.bracket-scroll::-webkit-scrollbar-thumb {
-  background: rgba(124, 58, 237, 0.55);
-  border-radius: 5px;
-  border: 2px solid rgba(17, 24, 39, 0.6);
+/* Primary button gradient */
+.btn-primary {
+  background: linear-gradient(135deg, #ffd16c 0%, #fdc003 100%);
+  color: #0c0e12;
+  font-weight: 600;
+  border-radius: 10px;  /* Level 2 */
+  box-shadow: inset 0.5px 0.5px 0 rgba(255,255,255,0.2),
+              inset -0.5px -0.5px 0 rgba(0,0,0,0.3);
+  transition: filter 0.15s ease, box-shadow 0.15s ease, transform 0.2s ease;
+}
+.btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 0 14px 4px rgba(255,209,108,0.25),
+              inset 0.5px 0.5px 0 rgba(255,255,255,0.2);
 }
 
-.bracket-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.85);
+/* Secondary (ghost) button */
+.btn-secondary {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 10px;  /* Level 2 */
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.2s ease;
+}
+.btn-secondary:hover {
+  background: rgba(255,209,108,0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 0 10px 2px rgba(255,209,108,0.15);
 }
 
-.bracket-scroll::-webkit-scrollbar-corner {
-  background: rgba(17, 24, 39, 0.9);
+/* Magic Card — hover lift with arcane shadow */
+.card-magic {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-magic:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -15px rgba(139, 92, 246, 0.3);
+}
+
+/* Active list item accent */
+.list-item-active {
+  background: var(--color-surface-bright);
+  border-left: 2px solid var(--color-primary);
+  padding-left: calc(0.75rem - 2px);
+}
+
+/* Stat label — Space Grotesk */
+.stat-label {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.stat-value {
+  font-family: 'Space Grotesk', monospace;
+  font-weight: 600;
+}
+
+/* Progress bar "Essence" */
+.essence-bar {
+  background: #0c0e12;
+  position: relative;
+  overflow: hidden;
+}
+.essence-bar-fill {
+  background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+  position: relative;
+  overflow: hidden;
+  transition: width 0.4s ease;
+}
+.essence-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: skewX(-20deg);
+  animation: glimmer 5s ease-in-out infinite;
+}
+
+/* Input glass style */
+.input-arcane {
+  background: rgba(35,38,44,0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(70,72,77,0.3);
+  border-radius: 6px;  /* Level 1 */
+  color: rgba(255,255,255,0.87);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.input-arcane:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(255,209,108,0.15);
+}
+
+/* ============================================================
+   ASTRAL FANTASY — Runic Glow (Winner / Highlight states)
+   ============================================================ */
+.rune-glow {
+  position: relative;
+}
+.rune-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 1.5px rgba(255,209,108,0.6), 0 0 20px 4px rgba(255,209,108,0.15);
+  animation: rune-pulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes rune-pulse {
+  0%, 100% { box-shadow: 0 0 0 1.5px rgba(255,209,108,0.4), 0 0 12px 2px rgba(255,209,108,0.1); }
+  50%       { box-shadow: 0 0 0 1.5px rgba(255,209,108,0.85), 0 0 24px 6px rgba(255,209,108,0.28); }
+}
+
+/* Runic glow — Loser/Danger variant */
+.rune-glow-red::after {
+  box-shadow: 0 0 0 1.5px rgba(239,68,68,0.5), 0 0 16px 3px rgba(239,68,68,0.15);
+  animation: rune-pulse-red 2s ease-in-out infinite;
+}
+@keyframes rune-pulse-red {
+  0%, 100% { box-shadow: 0 0 0 1.5px rgba(239,68,68,0.3), 0 0 8px 1px rgba(239,68,68,0.08); }
+  50%       { box-shadow: 0 0 0 1.5px rgba(239,68,68,0.7), 0 0 20px 5px rgba(239,68,68,0.2); }
+}
+
+/* ============================================================
+   ASTRAL FANTASY — Crystal Loader (replaces Skeleton)
+   ============================================================ */
+.crystal-loader {
+  position: relative;
+  background: linear-gradient(135deg, rgba(15,23,42,0.8) 0%, rgba(30,41,59,0.8) 100%);
+  overflow: hidden;
+  border-radius: 8px;
+}
+.crystal-loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(86,241,224,0.12) 25%,
+    rgba(230,157,255,0.18) 50%,
+    rgba(255,209,108,0.12) 75%,
+    transparent 100%
+  );
+  animation: crystal-charge 1.8s ease-in-out infinite;
+}
+@keyframes crystal-charge {
+  0%   { transform: translateX(-100%) skewX(-15deg); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(200%) skewX(-15deg); opacity: 0; }
+}
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes glimmer {
+  0%   { transform: translateX(-100%) skewX(-20deg); opacity: 0; }
+  40%  { opacity: 0.4; }
+  60%  { opacity: 0.4; }
+  100% { transform: translateX(300%) skewX(-20deg); opacity: 0; }
 }

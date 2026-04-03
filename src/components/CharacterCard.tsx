@@ -4,13 +4,9 @@ import { EffectResolver } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
 import type { CharacterEffects } from "../effects/types";
 
-// Initialize effect data once
 let effectsInitialized = false;
 function ensureEffectsInitialized() {
-  if (!effectsInitialized) {
-    initializeEffectData();
-    effectsInitialized = true;
-  }
+  if (!effectsInitialized) { initializeEffectData(); effectsInitialized = true; }
 }
 
 interface CharacterCardProps {
@@ -18,432 +14,267 @@ interface CharacterCardProps {
   onClose?: () => void;
 }
 
-export const CharacterCard: React.FC<CharacterCardProps> = ({
-  character,
-  onClose,
-}) => {
-  // Initialize effects and calculate total stats
+export const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClose }) => {
   ensureEffectsInitialized();
-
-  const characterEffects: CharacterEffects = useMemo(() => {
-    return EffectResolver.calculateCharacterEffects(character);
-  }, [character]);
-
-  const baseTotal = Object.values(character.stats).reduce(
-    (sum, val) => sum + val,
-    0,
+  const characterEffects: CharacterEffects = useMemo(
+    () => EffectResolver.calculateCharacterEffects(character),
+    [character],
   );
+  const baseTotal = Object.values(character.stats).reduce((s, v) => s + v, 0);
+  const totalPower = Object.values(characterEffects.totalStats).reduce((s, v) => s + v, 0);
 
-  const totalPower = Object.values(characterEffects.totalStats).reduce(
-    (sum, val) => sum + val,
-    0,
-  );
+  const tagBase = "px-2.5 py-0.5 text-xs font-mono border";
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[150] p-4">
-      <div className="bg-white rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-surface/80 backdrop-blur-sm flex items-center justify-center z-[150] p-4">
+      <div
+        className="bg-surface-container border border-outline/25 w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar"
+        style={{ boxShadow: "0 0 60px 10px rgba(0,0,0,0.6), inset 0.5px 0.5px 0 rgba(255,255,255,0.06)" }}
+      >
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 rounded-t-lg">
+        <div className="relative p-6 border-b border-outline/20 bg-surface-low">
+          {/* Decorative top line */}
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-3xl font-bold">{character.name}</h2>
-              <p className="text-purple-200">@{character.username}</p>
-              <p className="text-sm mt-2">No. {character.no}</p>
+              <p className="font-mono text-[10px] text-primary/50 tracking-[0.3em] uppercase mb-1">
+                No. {character.no}
+              </p>
+              <h2 className="font-display text-3xl font-bold text-white">{character.name}</h2>
+              <p className="text-gray-400 text-sm mt-0.5">@{character.username}</p>
             </div>
             {onClose && (
               <button
                 onClick={onClose}
-                className="text-white hover:text-gray-200 text-2xl"
+                className="text-gray-500 hover:text-primary transition-colors text-2xl leading-none mt-1"
               >
                 ×
               </button>
             )}
           </div>
 
-          <div className="mt-4 flex gap-2 flex-wrap">
+          {/* Tags */}
+          <div className="mt-4 flex gap-1.5 flex-wrap">
             {character.isParasite && character.parasiteType && (
-              <span className="bg-red-500 px-3 py-1 rounded-full text-sm">
+              <span className={`${tagBase} border-error/40 text-error bg-error/10`}>
                 Ký Sinh: {character.parasiteType}
                 {character.wrathStacks !== undefined && character.wrathStacks > 0 && (
-                  <span className="ml-1 bg-red-700 px-2 py-0.5 rounded-full text-xs">
-                    Wrath: {character.wrathStacks}
-                  </span>
+                  <span className="ml-1 bg-error/20 px-1">Wrath: {character.wrathStacks}</span>
                 )}
               </span>
             )}
-            <span className="bg-blue-500 px-3 py-1 rounded-full text-sm">
+            <span className={`${tagBase} border-secondary/30 text-secondary bg-secondary/8`}>
               {character.race.race}
-              {character.race.subRace && ` - ${character.race.subRace}`}
+              {character.race.subRace && ` — ${character.race.subRace}`}
             </span>
-            {character.nestedArchetypes && character.nestedArchetypes.length > 0
+            {(character.nestedArchetypes && character.nestedArchetypes.length > 0
               ? character.nestedArchetypes.map((arch, i) => (
-                  <span
-                    key={i}
-                    className="bg-green-500 px-3 py-1 rounded-full text-sm"
-                  >
-                    {arch.name}
-                    {arch.subType && ` → ${arch.subType}`}
-                    {arch.subSubType && ` → ${arch.subSubType}`}
+                  <span key={i} className={`${tagBase} border-primary/30 text-primary/80 bg-primary/8`}>
+                    {arch.name}{arch.subType && ` → ${arch.subType}`}{arch.subSubType && ` → ${arch.subSubType}`}
                   </span>
                 ))
-              : character.archetypes &&
-                character.archetypes.map((archetype, i) => (
-                  <span
-                    key={i}
-                    className="bg-green-500 px-3 py-1 rounded-full text-sm"
-                  >
-                    {archetype}
+              : (character.archetypes || []).map((a, i) => (
+                  <span key={i} className={`${tagBase} border-primary/30 text-primary/80 bg-primary/8`}>{a}</span>
+                ))
+            )}
+            {(character.nestedHouses && character.nestedHouses.length > 0
+              ? character.nestedHouses.filter(h => !h.isLost).map((h, i) => (
+                  <span key={i} className={`${tagBase} border-yellow-500/30 text-yellow-400 bg-yellow-500/8`}>
+                    {h.name}{h.subType && ` → ${h.subType}`}
                   </span>
-                ))}
-            {character.nestedHouses && character.nestedHouses.length > 0
-              ? character.nestedHouses
-                  .filter((h) => !h.isLost)
-                  .map((house, idx) => (
-                    <span
-                      key={idx}
-                      className="bg-yellow-600 px-3 py-1 rounded-full text-sm"
-                    >
-                      {house.name}
-                      {house.subType && ` → ${house.subType}`}
-                    </span>
-                  ))
-              : character.houses &&
-                character.houses
-                  .filter((h) => !h.isLost)
-                  .map((house, idx) => (
-                    <span
-                      key={idx}
-                      className="bg-yellow-600 px-3 py-1 rounded-full text-sm"
-                    >
-                      {house.name}
-                    </span>
-                  ))}
+                ))
+              : (character.houses || []).filter(h => !h.isLost).map((h, i) => (
+                  <span key={i} className={`${tagBase} border-yellow-500/30 text-yellow-400 bg-yellow-500/8`}>{h.name}</span>
+                ))
+            )}
             {character.team && (
-              <span className="bg-indigo-500 px-3 py-1 rounded-full text-sm">
-                Team {character.team}
-              </span>
+              <span className={`${tagBase} border-tertiary/30 text-tertiary bg-tertiary/8`}>Team {character.team}</span>
             )}
           </div>
         </div>
 
         {/* Body */}
         <div className="p-6 space-y-6">
-          {/* Ký Sinh (Symbiosis) Info */}
+          {/* Parasite info */}
           {character.isParasite && character.parasiteType && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <h3 className="text-lg font-bold mb-2 text-red-800">Ký Sinh</h3>
-              <div className="space-y-1 text-sm">
-                <p>
-                  <span className="font-semibold text-red-700">Loại:</span>{" "}
-                  <span className="text-red-600">{character.parasiteType}</span>
-                </p>
+            <section className="border border-error/20 bg-error/5 p-4">
+              <h3 className="font-display text-base font-bold text-error mb-2">Ký Sinh</h3>
+              <div className="space-y-1 text-sm font-mono">
+                <p><span className="text-gray-400">Loại:</span> <span className="text-error/80">{character.parasiteType}</span></p>
                 {character.wrathStacks !== undefined && character.wrathStacks > 0 && (
-                  <p>
-                    <span className="font-semibold text-red-700">Stack Wrath:</span>{" "}
-                    <span className="text-red-600">{character.wrathStacks}</span>
-                    <span className="text-gray-500 text-xs ml-2">
-                      (+{character.wrathStacks} STR/BIQ/MA)
-                    </span>
-                  </p>
+                  <p><span className="text-gray-400">Stack Wrath:</span> <span className="text-error/80">{character.wrathStacks}</span>
+                    <span className="text-gray-600 ml-2">(+{character.wrathStacks} STR/BIQ/MA)</span></p>
                 )}
                 {character.parasiteName && (
-                  <p>
-                    <span className="font-semibold text-red-700">Parasite:</span>{" "}
-                    <span className="text-red-600">{character.parasiteName}</span>
-                  </p>
+                  <p><span className="text-gray-400">Parasite:</span> <span className="text-error/80">{character.parasiteName}</span></p>
                 )}
               </div>
-            </div>
+            </section>
           )}
 
           {/* Stats */}
-          <div>
-            <h3 className="text-xl font-bold mb-3 text-gray-800">
-              Stats (Base: {baseTotal} → Total: {totalPower})
-            </h3>
-            <div className="grid grid-cols-3 gap-4">
-              <StatBar
-                label="STR"
-                baseValue={character.stats.str}
-                totalValue={characterEffects.totalStats.strength}
-                max={15}
-                color="bg-red-500"
-              />
-              <StatBar
-                label="SPD"
-                baseValue={character.stats.spd}
-                totalValue={characterEffects.totalStats.speed}
-                max={15}
-                color="bg-yellow-500"
-              />
-              <StatBar
-                label="DUR"
-                baseValue={character.stats.dur}
-                totalValue={characterEffects.totalStats.durability}
-                max={15}
-                color="bg-green-500"
-              />
-              <StatBar
-                label="IQ"
-                baseValue={character.stats.iq}
-                totalValue={characterEffects.totalStats.iq}
-                max={15}
-                color="bg-blue-500"
-              />
-              <StatBar
-                label="BIQ"
-                baseValue={character.stats.biq}
-                totalValue={characterEffects.totalStats.biq}
-                max={15}
-                color="bg-purple-500"
-              />
-              <StatBar
-                label="MA"
-                baseValue={character.stats.ma}
-                totalValue={characterEffects.totalStats.ma}
-                max={15}
-                color="bg-pink-500"
-              />
+          <section>
+            <div className="flex items-baseline gap-3 mb-4">
+              <h3 className="font-display text-lg font-bold text-white">Stats</h3>
+              <span className="font-mono text-xs text-gray-500">
+                Base <span className="text-gray-300">{baseTotal}</span>
+                <span className="mx-1 text-outline">→</span>
+                Total <span className="text-primary">{totalPower}</span>
+              </span>
             </div>
-          </div>
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { label: "STR", base: character.stats.str, total: characterEffects.totalStats.strength, color: "var(--color-error)" },
+                { label: "SPD", base: character.stats.spd, total: characterEffects.totalStats.speed, color: "var(--color-primary)" },
+                { label: "DUR", base: character.stats.dur, total: characterEffects.totalStats.durability, color: "#4ade80" },
+                { label: "IQ",  base: character.stats.iq,  total: characterEffects.totalStats.iq,  color: "#60a5fa" },
+                { label: "BIQ", base: character.stats.biq, total: characterEffects.totalStats.biq, color: "var(--color-tertiary)" },
+                { label: "MA",  base: character.stats.ma,  total: characterEffects.totalStats.ma,  color: "var(--color-secondary)" },
+              ].map(s => (
+                <StatBar key={s.label} label={s.label} baseValue={s.base} totalValue={s.total} max={15} accentColor={s.color} />
+              ))}
+            </div>
+          </section>
 
           {/* Quirks */}
           {character.quirks && character.quirks.length > 0 && (
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">Quirks</h3>
-              <div className="flex flex-wrap gap-2">
-                {character.quirks.map((quirk, i) => (
-                  <span
-                    key={i}
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      quirk.isLost
-                        ? "bg-gray-100 text-gray-400 line-through"
-                        : "bg-gray-200"
-                    }`}
-                  >
-                    {quirk.name}
-                    {quirk.isLost && (
-                      <span className="text-red-400 text-xs ml-1">
-                        (đã mất)
-                      </span>
-                    )}
+            <Section title="Quirks">
+              <div className="flex flex-wrap gap-1.5">
+                {character.quirks.map((q, i) => (
+                  <span key={i} className={`px-2.5 py-0.5 text-xs border font-mono ${q.isLost ? "border-outline/20 text-gray-600 line-through" : "border-outline/30 text-gray-300"}`}>
+                    {q.name}{q.isLost && <span className="text-error/60 ml-1">(đã mất)</span>}
                   </span>
                 ))}
               </div>
-            </div>
+            </Section>
           )}
 
           {/* Powers */}
           {character.powers && character.powers.length > 0 && (
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">Powers</h3>
-              <ul className="list-disc list-inside space-y-1">
-                {character.powers.map((power, i) => (
-                  <li
-                    key={i}
-                    className={
-                      power.isLost
-                        ? "text-gray-400 line-through"
-                        : "text-gray-700"
-                    }
-                  >
-                    {power.name}
-                    {power.isLost && (
-                      <span className="text-red-400 text-xs ml-1">
-                        (đã mất)
-                      </span>
-                    )}
+            <Section title="Powers">
+              <ul className="space-y-1">
+                {character.powers.map((p, i) => (
+                  <li key={i} className={`flex items-center gap-2 text-sm font-mono ${p.isLost ? "text-gray-600 line-through" : "text-gray-200"}`}>
+                    <span className="text-secondary/40 text-xs">◈</span>
+                    {p.name}{p.isLost && <span className="text-error/60 text-xs">(đã mất)</span>}
                   </li>
                 ))}
               </ul>
-            </div>
+            </Section>
           )}
 
           {/* Gear */}
-          {character.gear &&
-            (character.gear.normalGear?.length > 0 ||
-              character.gear.legacyGear?.length > 0) && (
-              <div>
-                <h3 className="text-xl font-bold mb-3 text-gray-800">Gear</h3>
-                {character.gear.normalGear?.length > 0 && (
-                  <div className="mb-3">
-                    <h4 className="font-semibold text-gray-700 mb-2">
-                      Normal Gear:
-                    </h4>
-                    <ul className="list-disc list-inside space-y-1">
-                      {character.gear.normalGear.map((item, i) => (
-                        <li
-                          key={i}
-                          className={`text-sm ${item.isLost ? "text-gray-400 line-through" : "text-gray-600"}`}
-                        >
-                          {item.name}
-                          {item.isLost && (
-                            <span className="text-red-400 text-xs ml-1">
-                              (đã mất)
-                            </span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {character.gear.legacyGear?.length > 0 && (
-                  <div>
-                    <h4 className="font-semibold text-purple-700 mb-2">
-                      Legacy Gear:
-                    </h4>
-                    <ul className="list-disc list-inside space-y-1">
-                      {character.gear.legacyGear.map((item, i) => (
-                        <li
-                          key={i}
-                          className={`text-sm ${item.isLost ? "text-gray-400 line-through" : "text-purple-600"}`}
-                        >
-                          {item.name}
-                          {item.isLost && (
-                            <span className="text-red-400 text-xs ml-1">
-                              (đã mất)
-                            </span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            )}
+          {character.gear && (character.gear.normalGear?.length > 0 || character.gear.legacyGear?.length > 0) && (
+            <Section title="Gear">
+              {character.gear.normalGear?.length > 0 && (
+                <div className="mb-3">
+                  <p className="font-mono text-[10px] text-gray-500 tracking-widest uppercase mb-1.5">Normal</p>
+                  <ul className="space-y-1">
+                    {character.gear.normalGear.map((g, i) => (
+                      <li key={i} className={`text-sm font-mono flex gap-2 items-center ${g.isLost ? "text-gray-600 line-through" : "text-gray-200"}`}>
+                        <span className="text-primary/30 text-xs">—</span>{g.name}
+                        {g.isLost && <span className="text-error/60 text-xs">(đã mất)</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {character.gear.legacyGear?.length > 0 && (
+                <div>
+                  <p className="font-mono text-[10px] text-tertiary/50 tracking-widest uppercase mb-1.5">Legacy</p>
+                  <ul className="space-y-1">
+                    {character.gear.legacyGear.map((g, i) => (
+                      <li key={i} className={`text-sm font-mono flex gap-2 items-center ${g.isLost ? "text-gray-600 line-through" : "text-tertiary/80"}`}>
+                        <span className="text-tertiary/30 text-xs">◆</span>{g.name}
+                        {g.isLost && <span className="text-error/60 text-xs">(đã mất)</span>}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </Section>
+          )}
 
           {/* Weapons */}
           {character.weapons && character.weapons.length > 0 && (
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">Weapons</h3>
-              <div className="space-y-2">
-                {character.weapons.map((weapon, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <span
-                      className={`px-2 py-1 rounded text-xs ${
-                        weapon.type === "Unique"
-                          ? "bg-orange-500 text-white"
-                          : weapon.type === "Legacy"
-                            ? "bg-purple-500 text-white"
-                            : "bg-gray-300"
-                      }`}
-                    >
-                      {weapon.type}
-                    </span>
-                    <span className="text-gray-700">{weapon.name}</span>
-                    {weapon.usable === false && (
-                      <span className="text-red-500 text-sm">
-                        (không dùng được)
-                      </span>
-                    )}
+            <Section title="Weapons">
+              <div className="space-y-1.5">
+                {character.weapons.map((w, i) => (
+                  <div key={i} className="flex items-center gap-2 text-sm font-mono">
+                    <span className={`px-2 py-0.5 text-[10px] tracking-wider uppercase border ${
+                      w.type === "Unique"  ? "border-primary/40 text-primary/80 bg-primary/8" :
+                      w.type === "Legacy" ? "border-tertiary/40 text-tertiary/80 bg-tertiary/8" :
+                      "border-outline/30 text-gray-400"
+                    }`}>{w.type}</span>
+                    <span className="text-gray-200">{w.name}</span>
+                    {w.usable === false && <span className="text-error/60 text-xs">(không dùng được)</span>}
                   </div>
                 ))}
               </div>
-            </div>
+            </Section>
           )}
 
           {/* Runes */}
           {character.runes?.runes?.length > 0 && (
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">Runes</h3>
-              <div className="flex items-center gap-2 flex-wrap">
-                {character.runes.runes.map((rune, i) => (
-                  <span
-                    key={i}
-                    className={`px-3 py-1 rounded text-sm border ${
-                      rune.isLost
-                        ? "bg-gray-100 border-gray-300 text-gray-400 line-through"
-                        : "bg-amber-100 border-amber-400"
-                    }`}
-                  >
-                    {rune.name}
-                    {rune.isLost && (
-                      <span className="text-red-400 text-xs ml-1">
-                        (đã mất)
-                      </span>
-                    )}
+            <Section title="Runes">
+              <div className="flex flex-wrap gap-1.5">
+                {character.runes.runes.map((r, i) => (
+                  <span key={i} className={`px-2.5 py-0.5 text-xs border font-mono ${
+                    r.isLost ? "border-outline/20 text-gray-600 line-through" : "border-primary/30 text-primary/80 bg-primary/8"
+                  }`}>
+                    {r.name}{r.isLost && <span className="text-error/60 ml-1">(đã mất)</span>}
                   </span>
                 ))}
               </div>
               {character.runes.runeword && (
-                <p className="mt-2 text-sm">
-                  <span className="font-semibold">Runeword:</span>{" "}
-                  <span className="text-amber-700">
-                    {character.runes.runeword}
-                  </span>
+                <p className="mt-2 text-sm font-mono">
+                  <span className="text-gray-500">Runeword:</span>{" "}
+                  <span className="text-primary/80">{character.runes.runeword}</span>
                 </p>
               )}
-            </div>
+            </Section>
           )}
 
-          {/* Character Development */}
+          {/* Char Dev */}
           {character.charDevs && character.charDevs.length > 0 && (
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">
-                Character Development
-              </h3>
-              <div className="space-y-2">
-                {character.charDevs.map((charDev, i) => (
-                  <p
-                    key={i}
-                    className={`p-3 rounded ${
-                      charDev.isLost
-                        ? "bg-gray-100 text-gray-400 line-through"
-                        : "text-gray-700 bg-blue-50"
-                    }`}
-                  >
-                    {charDev.name}
-                    {charDev.isLost && (
-                      <span className="text-red-400 text-xs ml-1">
-                        (đã mất)
-                      </span>
-                    )}
+            <Section title="Character Development">
+              <div className="space-y-1.5">
+                {character.charDevs.map((d, i) => (
+                  <p key={i} className={`p-2.5 text-sm border-l-2 ${
+                    d.isLost
+                      ? "border-outline/20 text-gray-600 bg-surface-low/50 line-through"
+                      : "border-secondary/40 text-gray-200 bg-secondary/5"
+                  }`}>
+                    {d.name}{d.isLost && <span className="text-error/60 text-xs ml-1">(đã mất)</span>}
                   </p>
                 ))}
               </div>
-            </div>
+            </Section>
           )}
 
           {/* Lover */}
           {character.lover && character.lover.length > 0 && (
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">Lover</h3>
-              <div className="space-y-2">
-                {character.lover.map((loverName, idx) => (
-                  <p
-                    key={idx}
-                    className={
-                      loverName.isLost
-                        ? "text-pink-400 line-through"
-                        : "text-pink-600"
-                    }
-                  >
-                    ❤️ {loverName.name}
-                    {loverName.isLost && (
-                      <span className="text-red-400 text-xs ml-1">
-                        (đã mất)
-                      </span>
-                    )}
-                  </p>
-                ))}
-              </div>
-            </div>
+            <Section title="Lover">
+              {character.lover.map((l, i) => (
+                <p key={i} className={`text-sm font-mono ${l.isLost ? "text-gray-600 line-through" : "text-pink-400"}`}>
+                  ♥ {l.name}{l.isLost && <span className="text-error/60 text-xs ml-1">(đã mất)</span>}
+                </p>
+              ))}
+            </Section>
           )}
 
           {/* PvP Rewards */}
           {character.pvpRewards && character.pvpRewards.length > 0 && (
-            <div>
-              <h3 className="text-xl font-bold mb-3 text-gray-800">
-                PvP Rewards
-              </h3>
-              <ul className="list-disc list-inside space-y-1">
-                {character.pvpRewards.map((reward, i) => (
-                  <li key={i} className="text-green-700">
-                    {reward.description}
+            <Section title="PvP Rewards">
+              <ul className="space-y-1">
+                {character.pvpRewards.map((r, i) => (
+                  <li key={i} className="text-sm font-mono text-green-400 flex items-center gap-2">
+                    <span className="text-green-600 text-xs">+</span>{r.description}
                   </li>
                 ))}
               </ul>
-            </div>
+            </Section>
           )}
         </div>
       </div>
@@ -451,58 +282,55 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   );
 };
 
+// ── Section wrapper ────────────────────────────────────────────────────────────
+const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
+  <section>
+    <div className="flex items-center gap-3 mb-3">
+      <h3 className="font-display text-base font-bold text-gray-200">{title}</h3>
+      <div className="h-px flex-1 bg-outline/20" />
+    </div>
+    {children}
+  </section>
+);
+
+// ── StatBar ────────────────────────────────────────────────────────────────────
 interface StatBarProps {
   label: string;
   baseValue: number;
   totalValue: number;
   max: number;
-  color: string;
+  accentColor: string;
 }
 
-const StatBar: React.FC<StatBarProps> = ({
-  label,
-  baseValue,
-  totalValue,
-  max,
-  color,
-}) => {
-  const basePercentage = (baseValue / max) * 100;
-  const totalPercentage = (totalValue / max) * 100;
+const StatBar: React.FC<StatBarProps> = ({ label, baseValue, totalValue, max, accentColor }) => {
+  const baseW = Math.min((baseValue / max) * 100, 100);
+  const totalW = Math.min((totalValue / max) * 100, 100);
   const diff = totalValue - baseValue;
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-1">
-        <span className="text-sm font-semibold text-gray-700">{label}</span>
-        <span className="text-sm">
-          <span className="text-gray-400">{baseValue}</span>
-          <span className="text-gray-400 mx-1">→</span>
-          <span
-            className={`font-bold ${diff > 0 ? "text-green-600" : diff < 0 ? "text-red-600" : "text-gray-600"}`}
-          >
+      <div className="flex justify-between items-center mb-1.5">
+        <span className="stat-label">{label}</span>
+        <span className="font-mono text-xs">
+          <span className="text-gray-500">{baseValue}</span>
+          <span className="text-outline mx-1">→</span>
+          <span className="font-bold" style={{ color: diff > 0 ? "#4ade80" : diff < 0 ? "var(--color-error)" : "rgba(255,255,255,0.8)" }}>
             {totalValue}
           </span>
           {diff !== 0 && (
-            <span
-              className={`text-xs ml-1 ${diff > 0 ? "text-green-500" : "text-red-500"}`}
-            >
-              ({diff > 0 ? "+" : ""}
-              {diff})
+            <span className="ml-1 text-[10px]" style={{ color: diff > 0 ? "#4ade80" : "var(--color-error)" }}>
+              ({diff > 0 ? "+" : ""}{diff})
             </span>
           )}
         </span>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-2 relative">
-        {/* Base stat bar (lighter) */}
-        <div
-          className={`${color} opacity-30 h-2 rounded-full absolute`}
-          style={{ width: `${Math.min(basePercentage, 100)}%` }}
-        />
-        {/* Total stat bar */}
-        <div
-          className={`${color} h-2 rounded-full transition-all duration-300`}
-          style={{ width: `${Math.min(totalPercentage, 100)}%` }}
-        />
+      <div className="w-full h-1.5 bg-surface-low relative overflow-hidden">
+        {/* base */}
+        <div className="absolute top-0 left-0 h-full opacity-25 transition-all duration-300"
+          style={{ width: `${baseW}%`, background: accentColor }} />
+        {/* total */}
+        <div className="absolute top-0 left-0 h-full transition-all duration-500"
+          style={{ width: `${totalW}%`, background: accentColor }} />
       </div>
     </div>
   );

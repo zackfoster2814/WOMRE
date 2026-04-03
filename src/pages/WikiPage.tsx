@@ -93,7 +93,7 @@ function EffectCard({ entry }: { entry: EffectRegistryEntry }) {
 
   return (
     <div
-      className="bg-gray-800 rounded-lg p-4 hover:bg-gray-750 transition-colors cursor-pointer border border-gray-700 hover:border-gray-600"
+      className="bg-gray-800 rounded-none p-4 hover:bg-gray-750 transition-colors cursor-pointer border border-gray-700 hover:border-gray-600"
       onClick={() => setIsExpanded(!isExpanded)}
     >
       <div className="flex items-start justify-between">
@@ -187,7 +187,7 @@ function CategorySection({
     <section className="mb-8" id={category.id}>
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className={`w-full flex items-center gap-3 p-4 rounded-lg ${category.color} hover:opacity-90 transition-opacity`}
+        className={`w-full flex items-center gap-3 p-4 rounded-none ${category.color} hover:opacity-90 transition-opacity`}
       >
         <span className="text-2xl">{category.icon}</span>
         <div className="flex-1 text-left">
@@ -276,7 +276,7 @@ export function WikiPage() {
                 placeholder="Search effects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-2 pl-10 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 pl-10 bg-gray-800 border border-gray-700 rounded-none text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
               />
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
                 🔍
@@ -344,7 +344,7 @@ export function WikiPage() {
             </p>
             <button
               onClick={() => setSearchQuery('')}
-              className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white"
+              className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-none text-white"
             >
               Clear Search
             </button>

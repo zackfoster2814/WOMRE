@@ -349,7 +349,7 @@ export function PlayerCard3DFrame({
 
   return (
     <div
-      className="relative rounded-xl overflow-hidden"
+      className="relative rounded-none overflow-hidden"
       style={{ isolation: "isolate" }}
     >
       {/* Three.js canvas backdrop */}

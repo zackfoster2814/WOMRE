@@ -44,7 +44,7 @@ export const AudioControls = ({
       {/* Main Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-white font-medium transition-all shadow-lg flex items-center gap-2"
+        className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-none text-white font-medium transition-all shadow-lg flex items-center gap-2"
       >
         Audio
         <span className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
@@ -52,12 +52,12 @@ export const AudioControls = ({
 
       {/* Expanded Panel */}
       {isExpanded && (
-        <div className="absolute top-full right-0 mt-2 bg-gray-800 rounded-lg shadow-2xl p-3 w-64 z-50 border border-gray-700">
+        <div className="absolute top-full right-0 mt-2 bg-gray-800 rounded-none shadow-2xl p-3 w-64 z-50 border border-gray-700">
           <div className="space-y-2">
             {/* Sound On/Off */}
             <button
               onClick={onToggleMute}
-              className={`w-full px-4 py-2 rounded-lg font-medium transition-all ${
+              className={`w-full px-4 py-2 rounded-none font-medium transition-all ${
                 isMuted
                   ? "bg-red-600 hover:bg-red-700 text-white"
                   : "bg-green-600 hover:bg-green-700 text-white"
@@ -70,7 +70,7 @@ export const AudioControls = ({
             {/* Stop Audio */}
             <button
               onClick={onStopAudio}
-              className="w-full px-4 py-2 bg-orange-600 hover:bg-orange-700 rounded-lg text-white font-medium transition-colors"
+              className="w-full px-4 py-2 bg-orange-600 hover:bg-orange-700 rounded-none text-white font-medium transition-colors"
               title="Stop current audio"
             >
               Stop Audio
@@ -105,7 +105,7 @@ export const AudioControls = ({
                     onChange={handleFileUpload}
                     className="hidden"
                   />
-                  <div className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors cursor-pointer text-center">
+                  <div className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-none text-white font-medium transition-colors cursor-pointer text-center">
                     Choose Sound
                   </div>
                 </label>

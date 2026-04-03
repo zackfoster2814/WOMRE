@@ -159,7 +159,7 @@ export function RoundResultsPanel({
       {/* Unsaved changes dialog */}
       {showUnsavedDialog !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-          <div className="bg-gray-900 border border-yellow-600/50 rounded-xl p-5 max-w-xs w-full shadow-2xl">
+          <div className="bg-gray-900 border border-yellow-600/50 rounded-none p-5 max-w-xs w-full shadow-2xl">
             <div className="text-yellow-400 font-bold mb-2">Chưa lưu</div>
             <div className="text-gray-300 text-sm mb-4">
               Round này có thay đổi chưa lưu. Bạn có muốn lưu trước không?
@@ -344,7 +344,7 @@ export function RoundResultsPanel({
         return (
           <div
             key={`${key}-${roundArrayIndex}`}
-            className={`rounded-lg border transition-all duration-500 overflow-hidden ${
+            className={`rounded-none border transition-all duration-500 overflow-hidden ${
               revealed ? "opacity-100" : "opacity-20"
             } ${rowBg}`}
           >

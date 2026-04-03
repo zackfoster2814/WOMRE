@@ -74,13 +74,13 @@ export const CharacterList: React.FC = () => {
           placeholder="Search by name or username..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
         <select
           value={filterRace}
           onChange={(e) => setFilterRace(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">All Races</option>
           {uniqueRaces.map(race => (
@@ -91,7 +91,7 @@ export const CharacterList: React.FC = () => {
         <select
           value={filterHouse}
           onChange={(e) => setFilterHouse(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="px-4 py-2 border border-gray-300 rounded-none focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">All Houses</option>
           {uniqueHouses.map(house => (
@@ -106,7 +106,7 @@ export const CharacterList: React.FC = () => {
           <div
             key={char.no}
             onClick={() => handleCharacterClick(char.no)}
-            className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow border border-gray-200"
+            className="bg-white rounded-none shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow border border-gray-200"
           >
             <div className="flex justify-between items-start mb-2">
               <h3 className="text-lg font-bold text-gray-800">{char.name}</h3>

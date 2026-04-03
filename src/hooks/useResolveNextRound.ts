@@ -166,55 +166,8 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
         }
       }
     }
-    // Block nếu round trước còn pending spins (Bash, Crit, Evasion...)
-    if (stepRoundIndex > 0 && !zoltraakBiq2Pending) {
-      const lastRoundIdx = stepRoundIndex - 1;
-      const p1Effs = getPerRoundEffects(player1.character, player1.no);
-      const p2Effs = getPerRoundEffects(player2.character, player2.no);
-      const lastRound = [...stepState.roundLogs]
-        .reverse()
-        .find((l) => l.roundIndex === lastRoundIdx);
-      if (lastRound) {
-        const w = lastRound.winner;
-        if (
-          computeRoundPoints(
-            "player1",
-            w,
-            lastRoundIdx,
-            p1Effs,
-            lastRound.statKey,
-          ).pending
-        )
-          return;
-        if (
-          computeRoundPoints(
-            "player2",
-            w,
-            lastRoundIdx,
-            p2Effs,
-            lastRound.statKey,
-          ).pending
-        )
-          return;
-        if (lastRoundIdx < 5) {
-          const SPINS = ["Bash", "Luminescence", "Ranger-Silver"];
-          const p1WinEffs = w === "player1" ? p1Effs.onWin : [];
-          const p2WinEffs = w === "player2" ? p2Effs.onWin : [];
-          for (const eff of SPINS) {
-            if (
-              p1WinEffs.includes(eff) &&
-              !roundSpinResults[`${lastRoundIdx}-${eff}-player1`]
-            )
-              return;
-            if (
-              p2WinEffs.includes(eff) &&
-              !roundSpinResults[`${lastRoundIdx}-${eff}-player2`]
-            )
-              return;
-          }
-        }
-      }
-    }
+    // Block pending spins được xử lý ở BattleWheelSpinner (hasCurrentPendingSpins)
+    // → không cần block ở đây nữa
 
     // Patch score round trước dựa vào spin results (Gambler, Crit, Evasion...)
     // computeRoundStep luôn dùng điểm base (+1), spin results được apply ở đây

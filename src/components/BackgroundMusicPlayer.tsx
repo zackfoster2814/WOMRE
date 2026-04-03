@@ -101,7 +101,7 @@ export const BackgroundMusicPlayer = ({
       <div className="fixed bottom-6 left-6 z-50">
         {isExpanded ? (
           /* Expanded Player */
-          <div className="bg-gray-800 rounded-lg shadow-2xl p-4 w-80 border border-gray-700">
+          <div className="bg-gray-800 rounded-none shadow-2xl p-4 w-80 border border-gray-700">
             {/* Header */}
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
@@ -160,7 +160,7 @@ export const BackgroundMusicPlayer = ({
                 max={duration || 0}
                 value={currentTime}
                 onChange={handleSeek}
-                className="w-full h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+                className="w-full h-1 bg-gray-600 rounded-none appearance-none cursor-pointer"
                 style={{
                   background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${
                     (currentTime / duration) * 100
@@ -238,7 +238,7 @@ export const BackgroundMusicPlayer = ({
                   max="100"
                   value={volume}
                   onChange={(e) => setVolume(parseInt(e.target.value))}
-                  className="flex-1 h-1 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+                  className="flex-1 h-1 bg-gray-600 rounded-none appearance-none cursor-pointer"
                   style={{
                     background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${volume}%, #4b5563 ${volume}%, #4b5563 100%)`,
                   }}

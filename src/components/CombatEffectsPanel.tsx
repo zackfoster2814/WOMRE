@@ -2546,7 +2546,7 @@ const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
 
   return (
     <div
-      className={`rounded-lg border p-3 transition-all ${
+      className={`rounded-none border p-3 transition-all ${
         isResolved
           ? "border-gray-700 bg-gray-800/30 opacity-60"
           : effect.isActivated
@@ -2690,7 +2690,7 @@ const CollapsibleSection = ({
 
   return (
     <div
-      className={`rounded-xl border ${colorClass.split(" ")[0]} overflow-hidden`}
+      className={`rounded-none border ${colorClass.split(" ")[0]} overflow-hidden`}
     >
       {/* Section header — always visible */}
       <button
@@ -2937,7 +2937,7 @@ export const CombatEffectsPanel = ({
 
   return (
     <>
-      <div className="mt-6 bg-gray-900/95 border-2 border-purple-500/40 rounded-xl p-4">
+      <div className="mt-6 bg-gray-900/95 border-2 border-purple-500/40 rounded-none p-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-base font-bold text-purple-300">

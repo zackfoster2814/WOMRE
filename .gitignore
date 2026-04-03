@@ -25,6 +25,9 @@ dist-ssr
 
 # Claude Code
 .claude/
+.agent/
+.agents/
+MD/
 
 # Tauri
 src-tauri/target

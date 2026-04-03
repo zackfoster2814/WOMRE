@@ -79,7 +79,7 @@ export function SyncDataDialog({ onClose }: SyncDataDialogProps) {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
-      <div className="bg-gray-900 border border-gray-600 rounded-xl shadow-2xl w-[560px] max-h-[80vh] flex flex-col">
+      <div className="bg-gray-900 border border-gray-600 rounded-none shadow-2xl w-[560px] max-h-[80vh] flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-700">
           <div>
@@ -156,7 +156,7 @@ export function SyncDataDialog({ onClose }: SyncDataDialogProps) {
           <div className="px-5 py-3 border-t border-gray-700 flex justify-end">
             <button
               onClick={onClose}
-              className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm font-medium transition-colors"
+              className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-none text-sm font-medium transition-colors"
             >
               Đóng
             </button>

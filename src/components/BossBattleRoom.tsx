@@ -558,7 +558,7 @@ const PlayerSelectionWheel = ({ config }: { config: PlayerWheelConfig }) => {
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="bg-gray-900 rounded-2xl p-6 border-2 border-yellow-500/50 shadow-2xl">
+      <div className="bg-gray-900 rounded-none p-6 border-2 border-yellow-500/50 shadow-2xl">
         <div className="text-center mb-4">
           <span className="text-2xl">{effectEmojis[effectType]}</span>
           <h3 className="text-xl font-bold text-yellow-400 mt-1">
@@ -580,7 +580,7 @@ const PlayerSelectionWheel = ({ config }: { config: PlayerWheelConfig }) => {
           <div className="text-center mt-4">
             <button
               onClick={startSpin}
-              className="px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-lg transition-all text-lg"
+              className="px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-none transition-all text-lg"
             >
               Quay
             </button>
@@ -786,7 +786,7 @@ const BinaryWheel = ({ config }: { config: BinaryWheelConfig }) => {
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="bg-gray-900 rounded-2xl p-6 border-2 border-yellow-500/50 shadow-2xl">
+      <div className="bg-gray-900 rounded-none p-6 border-2 border-yellow-500/50 shadow-2xl">
         <div className="text-center mb-4">
           <span className="text-2xl">{emoji}</span>
           <h3 className="text-xl font-bold text-yellow-400 mt-1">{title}</h3>
@@ -804,7 +804,7 @@ const BinaryWheel = ({ config }: { config: BinaryWheelConfig }) => {
           <div className="text-center mt-4">
             <button
               onClick={startSpin}
-              className="px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-lg transition-all text-lg"
+              className="px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-none transition-all text-lg"
             >
               Quay
             </button>
@@ -1029,7 +1029,7 @@ const D20Wheel = ({ config }: { config: D20WheelConfig }) => {
         className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="bg-gray-900 rounded-2xl p-8 border-2 border-purple-500/50 shadow-2xl min-w-[350px]">
+        <div className="bg-gray-900 rounded-none p-8 border-2 border-purple-500/50 shadow-2xl min-w-[350px]">
           <div className="text-center mb-6">
             <span className="text-3xl">{emoji}</span>
             <h3 className="text-xl font-bold text-purple-400 mt-2">{title}</h3>
@@ -1046,7 +1046,7 @@ const D20Wheel = ({ config }: { config: D20WheelConfig }) => {
                 value={manualValue}
                 onChange={(e) => setManualValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleManualSubmit()}
-                className="w-24 text-center text-3xl font-bold bg-gray-800 border-2 border-purple-500 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-purple-400"
+                className="w-24 text-center text-3xl font-bold bg-gray-800 border-2 border-purple-500 text-white rounded-none px-4 py-3 focus:outline-none focus:border-purple-400"
                 autoFocus
               />
               <button
@@ -1056,7 +1056,7 @@ const D20Wheel = ({ config }: { config: D20WheelConfig }) => {
                   parseInt(manualValue) < 1 ||
                   parseInt(manualValue) > wheelSize
                 }
-                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all text-lg"
+                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-none transition-all text-lg"
               >
                 Xác nhận
               </button>
@@ -1079,7 +1079,7 @@ const D20Wheel = ({ config }: { config: D20WheelConfig }) => {
       className="fixed inset-0 bg-black/80 flex items-center justify-center z-[3000]"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="bg-gray-900 rounded-2xl p-6 border-2 border-yellow-500/50 shadow-2xl">
+      <div className="bg-gray-900 rounded-none p-6 border-2 border-yellow-500/50 shadow-2xl">
         <div className="text-center mb-4">
           <span className="text-2xl">{emoji}</span>
           <h3 className="text-xl font-bold text-yellow-400 mt-1">{title}</h3>
@@ -1097,7 +1097,7 @@ const D20Wheel = ({ config }: { config: D20WheelConfig }) => {
           <div className="text-center mt-4">
             <button
               onClick={startSpin}
-              className="px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-lg transition-all text-lg"
+              className="px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-none transition-all text-lg"
             >
               Quay
             </button>
@@ -1182,7 +1182,7 @@ const PlayerCard = ({
   return (
     <div
       onClick={onSelect}
-      className={`bg-gray-800/90 rounded-lg p-2 border-2 transition-all cursor-pointer ${
+      className={`bg-gray-800/90 rounded-none p-2 border-2 transition-all cursor-pointer ${
         isSelected
           ? "border-yellow-400 shadow-lg shadow-yellow-400/20"
           : isInactive
@@ -4522,14 +4522,14 @@ export const BossBattleRoom = ({
         {/* Header */}
         <div className="bg-gradient-to-r from-red-900 via-red-800 to-red-900 px-6 py-3 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
-            <div className="bg-red-500/30 px-3 py-1 rounded-lg border border-red-500">
+            <div className="bg-red-500/30 px-3 py-1 rounded-none border border-red-500">
               <span className="text-red-200 text-sm">PvE Battle</span>
             </div>
             <h2 className="text-xl font-bold text-white">
               Team {battle.teamId} vs {boss.name}
             </h2>
             {soloHerInfo.active && soloHerInfo.soloPlayer && (
-              <div className="bg-yellow-900/40 px-3 py-1 rounded-lg border border-yellow-500/50 flex items-center gap-2">
+              <div className="bg-yellow-900/40 px-3 py-1 rounded-none border border-yellow-500/50 flex items-center gap-2">
                 <span className="text-yellow-400 font-bold text-sm">
                   {soloHerInfo.soloPlayer.name} - Let Me Solo Her [ACTIVE]
                 </span>
@@ -4566,7 +4566,7 @@ export const BossBattleRoom = ({
         <div className="flex-1 flex min-h-0 p-4 gap-4">
           {/* Left: Boss Image */}
           <div className="w-[45%] flex flex-col min-h-0">
-            <div className="flex-1 bg-gray-900/80 rounded-xl border-2 border-red-500/30 overflow-hidden flex items-center justify-center">
+            <div className="flex-1 bg-gray-900/80 rounded-none border-2 border-red-500/30 overflow-hidden flex items-center justify-center">
               <img
                 src={bossImagePath}
                 alt={boss.name}
@@ -4588,7 +4588,7 @@ export const BossBattleRoom = ({
             </div>
 
             {/* Boss Info Panel */}
-            <div className="mt-2 bg-gray-800/80 rounded-lg p-3 border border-gray-700 max-h-48 overflow-y-auto">
+            <div className="mt-2 bg-gray-800/80 rounded-none p-3 border border-gray-700 max-h-48 overflow-y-auto">
               <h4 className="text-red-400 text-xs font-bold mb-2">
                 Boss Info:
               </h4>
@@ -4674,7 +4674,7 @@ export const BossBattleRoom = ({
 
             {/* Battle Messages */}
             {battleMessages.length > 0 && (
-              <div className="mt-2 bg-gray-800/80 rounded-lg p-3 border border-gray-700 max-h-32 overflow-y-auto">
+              <div className="mt-2 bg-gray-800/80 rounded-none p-3 border border-gray-700 max-h-32 overflow-y-auto">
                 <h4 className="text-gray-400 text-xs font-bold mb-2">
                   Battle Log:
                 </h4>
@@ -4693,7 +4693,7 @@ export const BossBattleRoom = ({
               );
               if (!selectedPlayer?.effectBreakdown || !selectedPlayer?.baseStats) return null;
               return (
-                <div className="mt-2 bg-gray-800/80 rounded-lg p-3 border border-yellow-500/30 max-h-48 overflow-y-auto">
+                <div className="mt-2 bg-gray-800/80 rounded-none p-3 border border-yellow-500/30 max-h-48 overflow-y-auto">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="text-yellow-400 text-xs font-bold">
                       #{selectedPlayer.no} {selectedPlayer.name}
@@ -4732,7 +4732,7 @@ export const BossBattleRoom = ({
                       onClick={() =>
                         result ? setSelectedRound(isSelected ? null : i) : null
                       }
-                      className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
+                      className={`px-3 py-2 rounded-none border-2 text-sm font-medium transition-all ${
                         isSelected
                           ? "border-yellow-400 bg-yellow-500/20 text-yellow-400"
                           : isCurrentRound
@@ -4954,13 +4954,13 @@ export const BossBattleRoom = ({
                     <div className="flex gap-4">
                       <button
                         onClick={startBattle}
-                        className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-bold rounded-lg transition-all transform hover:scale-105"
+                        className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-bold rounded-none transition-all transform hover:scale-105"
                       >
                         Start Battle
                       </button>
                       {/* <button
                         onClick={autoFight}
-                        className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-bold rounded-lg transition-all transform hover:scale-105"
+                        className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-bold rounded-none transition-all transform hover:scale-105"
                       >
                         Auto Fight
                       </button> */}
@@ -4988,7 +4988,7 @@ export const BossBattleRoom = ({
                       </div>
                       <button
                         onClick={continueAfterPreBattleWheel}
-                        className="mt-3 px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-bold rounded-lg transition-all"
+                        className="mt-3 px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400 text-white font-bold rounded-none transition-all"
                       >
                         Tiếp tục
                       </button>
@@ -5019,13 +5019,13 @@ export const BossBattleRoom = ({
                     <div className="flex gap-3 justify-center">
                       <button
                         onClick={resetBattle}
-                        className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-lg"
+                        className="px-6 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-none"
                       >
                         Battle Again
                       </button>
                       <button
                         onClick={exportBattleHistory}
-                        className="px-6 py-2 bg-gradient-to-r from-gray-600 to-gray-500 hover:from-gray-500 hover:to-gray-400 text-white font-bold rounded-lg transition-all"
+                        className="px-6 py-2 bg-gradient-to-r from-gray-600 to-gray-500 hover:from-gray-500 hover:to-gray-400 text-white font-bold rounded-none transition-all"
                       >
                         Export JSON
                       </button>
@@ -5067,7 +5067,7 @@ export const BossBattleRoom = ({
                 );
                 if (!selectedPlayer?.effectBreakdown || !selectedPlayer?.baseStats) return null;
                 return (
-                  <div className="mt-3 bg-gray-800/80 rounded-lg p-3 border border-yellow-500/30 max-h-[300px] overflow-y-auto">
+                  <div className="mt-3 bg-gray-800/80 rounded-none p-3 border border-yellow-500/30 max-h-[300px] overflow-y-auto">
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="text-sm font-bold text-yellow-400">
                         #{selectedPlayer.no} {selectedPlayer.name} - Hiệu ứng
@@ -5088,7 +5088,7 @@ export const BossBattleRoom = ({
               })()}
 
               {/* Team Total Stats */}
-              <div className="mt-4 bg-gray-800/50 rounded-lg p-3 border border-green-500/30">
+              <div className="mt-4 bg-gray-800/50 rounded-none p-3 border border-green-500/30">
                 <div className="flex justify-between items-center mb-2">
                   <h5 className="text-sm font-medium text-gray-400">
                     Team Total Stats ({activePlayers.length}/
@@ -5122,7 +5122,7 @@ export const BossBattleRoom = ({
               </div>
 
               {/* Boss Stats */}
-              <div className="mt-2 bg-gray-800/50 rounded-lg p-3 border border-red-500/30">
+              <div className="mt-2 bg-gray-800/50 rounded-none p-3 border border-red-500/30">
                 <div className="flex justify-between items-center mb-2">
                   <h5 className="text-sm font-medium text-gray-400">
                     {boss.name} Stats
@@ -5164,7 +5164,7 @@ export const BossBattleRoom = ({
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="bg-gray-900 border border-purple-500/50 rounded-xl p-6 max-w-lg w-full mx-4 shadow-2xl shadow-purple-500/20">
+          <div className="bg-gray-900 border border-purple-500/50 rounded-none p-6 max-w-lg w-full mx-4 shadow-2xl shadow-purple-500/20">
             <h3 className="text-xl font-bold text-purple-400 text-center mb-2">
               🌀 Kafka - Thôi Miên
             </h3>
@@ -5176,7 +5176,7 @@ export const BossBattleRoom = ({
                 <button
                   key={player.no}
                   onClick={() => hypnotizeResolveRef.current?.(player)}
-                  className="flex items-center gap-3 p-3 bg-gray-800 hover:bg-purple-900/50 border border-gray-700 hover:border-purple-500 rounded-lg transition-all duration-200 text-left group"
+                  className="flex items-center gap-3 p-3 bg-gray-800 hover:bg-purple-900/50 border border-gray-700 hover:border-purple-500 rounded-none transition-all duration-200 text-left group"
                 >
                   <div className="w-10 h-10 rounded-full bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 font-bold text-sm shrink-0">
                     {player.no}

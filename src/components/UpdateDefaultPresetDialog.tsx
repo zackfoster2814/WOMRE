@@ -35,12 +35,12 @@ export const UpdateDefaultPresetDialog = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60]">
-      <div className="bg-gray-800 rounded-lg shadow-2xl p-6 max-w-md w-full mx-4 border-2 border-yellow-500">
+      <div className="bg-gray-800 rounded-none shadow-2xl p-6 max-w-md w-full mx-4 border-2 border-yellow-500">
         <h2 className="text-2xl font-bold text-white mb-4">
           ⚠️ Update Default Preset?
         </h2>
 
-        <div className="bg-gray-700 p-4 rounded-lg mb-6">
+        <div className="bg-gray-700 p-4 rounded-none mb-6">
           <p className="text-gray-300 mb-3">
             This will <span className="text-yellow-400 font-bold">permanently update</span> the default preset file with current item states:
           </p>
@@ -69,14 +69,14 @@ export const UpdateDefaultPresetDialog = ({
           <button
             onClick={onClose}
             disabled={isUpdating}
-            className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-none text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
           <button
             onClick={handleConfirm}
             disabled={isUpdating}
-            className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg text-white font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-none text-white font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isUpdating ? "Updating..." : "Update Preset"}
           </button>

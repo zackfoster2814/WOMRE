@@ -54,7 +54,7 @@ export const SoundManager = ({
   };
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+    <div className="bg-gray-800 p-4 rounded-none shadow-lg">
       <h3 className="text-lg font-bold mb-3 text-white flex items-center gap-2">
         Global Win Sound
       </h3>

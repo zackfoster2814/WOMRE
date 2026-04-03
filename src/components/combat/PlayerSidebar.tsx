@@ -72,7 +72,7 @@ export function PlayerSidebar({
 
   return (
     <div
-      className={`w-[360px] shrink-0 flex flex-col bg-gray-900/90 rounded-2xl border ${borderClass} max-h-[85vh] ${false && isBlurred ? "blur-sm pointer-events-none select-none" : ""}`}
+      className={`w-[360px] shrink-0 flex flex-col bg-gray-900/90 rounded-none border ${borderClass} max-h-[85vh] ${false && isBlurred ? "blur-sm pointer-events-none select-none" : ""}`}
     >
       {/* Avatar */}
       {player && (
@@ -93,7 +93,7 @@ export function PlayerSidebar({
       <div className={`relative z-10 p-3 border-b ${headerBorderClass} shrink-0 space-y-2`}>
         <div className="relative">
           {player ? (
-            <div className={`flex items-center gap-2 px-3 py-2 bg-gray-900/60 border ${inputBorderClass} rounded-lg backdrop-blur-sm`}>
+            <div className={`flex items-center gap-2 px-3 py-2 bg-gray-900/60 border ${inputBorderClass} rounded-none backdrop-blur-sm`}>
               <span className={`${noClass} text-xs font-mono`}>#{player.no}</span>
               <span className="text-white text-sm font-bold flex-1 truncate">{player.name}</span>
               {!isTournamentMode && (
@@ -111,10 +111,10 @@ export function PlayerSidebar({
                 onFocus={() => setFocused(true)}
                 onBlur={() => setTimeout(() => setFocused(false), 150)}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={`w-full px-3 py-2 bg-gray-800 border ${inputBorderClass} rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 ${inputRingClass}`}
+                className={`w-full px-3 py-2 bg-gray-800 border ${inputBorderClass} rounded-none text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 ${inputRingClass}`}
               />
               {focused && filteredPlayers.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl max-h-56 overflow-y-auto">
+                <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-600 rounded-none shadow-xl max-h-56 overflow-y-auto">
                   {filteredPlayers.map((p) => (
                     <button
                       key={p.no}
@@ -140,16 +140,16 @@ export function PlayerSidebar({
         </div>
 
         {player && (
-          <div className="flex bg-gray-800/60 rounded-lg p-0.5 gap-0.5">
+          <div className="flex bg-gray-800/60 rounded-none p-0.5 gap-0.5">
             <button
               onClick={() => setTab("effects")}
-              className={`flex-1 text-xs py-1 rounded-md font-medium transition-all ${tab === "effects" ? activeTabClass : "text-gray-400 hover:text-white"}`}
+              className={`flex-1 text-xs py-1 rounded-none font-medium transition-all ${tab === "effects" ? activeTabClass : "text-gray-400 hover:text-white"}`}
             >
               Hiệu ứng
             </button>
             <button
               onClick={() => setTab("inventory")}
-              className={`flex-1 text-xs py-1 rounded-md font-medium transition-all ${tab === "inventory" ? activeTabClass : "text-gray-400 hover:text-white"}`}
+              className={`flex-1 text-xs py-1 rounded-none font-medium transition-all ${tab === "inventory" ? activeTabClass : "text-gray-400 hover:text-white"}`}
             >
               Inventory{" "}
               {items.length > 0 && <span className="opacity-60">({items.length})</span>}

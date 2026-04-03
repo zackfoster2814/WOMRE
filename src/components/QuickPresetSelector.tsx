@@ -87,7 +87,7 @@ export const QuickPresetSelector = ({
       <div className="fixed bottom-6 right-6 z-50">
         {isOpen ? (
           /* Expanded Menu */
-          <div className="bg-gray-800 rounded-lg shadow-2xl w-80 max-h-[70vh] flex flex-col border border-gray-700">
+          <div className="bg-gray-800 rounded-none shadow-2xl w-80 max-h-[70vh] flex flex-col border border-gray-700">
             {/* Header */}
             <div className="p-4 border-b border-gray-700 flex items-center justify-between">
               <h3 className="text-white font-semibold">Quick Presets</h3>
@@ -119,7 +119,7 @@ export const QuickPresetSelector = ({
                   key={preset.id}
                   onClick={() => handleSelectPreset(preset)}
                   disabled={isSpinning}
-                  className="w-full text-left p-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full text-left p-3 bg-gray-700 hover:bg-gray-600 rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="font-semibold text-white text-sm mb-1">
                     {preset.name}
@@ -136,7 +136,7 @@ export const QuickPresetSelector = ({
               <button
                 onClick={() => setUpdateDefaultDialog(true)}
                 disabled={isSpinning}
-                className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg text-white text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-3 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-none text-white text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 📥 Update Default Preset
               </button>

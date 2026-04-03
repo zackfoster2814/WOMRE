@@ -90,7 +90,7 @@ export function AfterCombatPanel({
     return (
       <div
         key={idx}
-        className={`flex items-start gap-2 rounded-lg border ${
+        className={`flex items-start gap-2 rounded-none border ${
           big
             ? `px-4 py-3 ${isP1 ? "bg-blue-900/30 border-blue-500/50" : "bg-red-900/30 border-red-500/50"}`
             : `px-3 py-2 text-xs ${isP1 ? "bg-blue-900/20 border-blue-600/30" : "bg-red-900/20 border-red-600/30"}`
@@ -620,7 +620,7 @@ export function AfterCombatPanel({
                   },
                 });
               }}
-              className={`shrink-0 font-bold rounded-lg border transition-colors ${
+              className={`shrink-0 font-bold rounded-none border transition-colors ${
                 big
                   ? "px-5 py-2 text-sm bg-yellow-600/80 hover:bg-yellow-500/90 text-white border-yellow-400/60"
                   : "px-2 py-1 text-[10px] bg-purple-700/60 hover:bg-purple-600/70 text-purple-100 border-purple-500/40"
@@ -638,7 +638,7 @@ export function AfterCombatPanel({
                   },
                 }));
               }}
-              className={`shrink-0 font-medium rounded-lg border transition-colors ${
+              className={`shrink-0 font-medium rounded-none border transition-colors ${
                 big
                   ? "px-3 py-2 text-sm bg-gray-700/60 hover:bg-gray-600/70 text-gray-300 border-gray-500/40"
                   : "px-2 py-1 text-[10px] bg-gray-800/60 hover:bg-gray-700/70 text-gray-400 border-gray-600/40"
@@ -671,7 +671,7 @@ export function AfterCombatPanel({
     <div className="mt-3 space-y-3">
       {/* PvP Reward — to, nổi bật */}
       {pvpRewardEntries.length > 0 && (
-        <div className="bg-yellow-900/20 rounded-xl border border-yellow-500/40 p-3 space-y-2">
+        <div className="bg-yellow-900/20 rounded-none border border-yellow-500/40 p-3 space-y-2">
           <div className="text-sm font-bold text-yellow-300 tracking-wide mb-1">
             PvP Reward
           </div>
@@ -682,7 +682,7 @@ export function AfterCombatPanel({
       )}
       {/* Hiệu ứng khác — nhỏ hơn */}
       {otherEntries.length > 0 && (
-        <div className="bg-gray-800/60 rounded-xl border border-purple-600/30 p-3 space-y-2">
+        <div className="bg-gray-800/60 rounded-none border border-purple-600/30 p-3 space-y-2">
           <div className="text-xs font-semibold text-purple-300 mb-1">
             Hiệu ứng sau combat
           </div>

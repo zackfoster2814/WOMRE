@@ -480,7 +480,7 @@ export const WheelCanvas = ({
               />
             </svg>
             {isMouseInWheelIdle && (
-              <div className="bg-black bg-opacity-75 text-white text-xl rounded-md px-4 py-2 pointer-events-auto max-w-lg whitespace-pre-line opacity-0 animate-[fade-in_0s_1s_forwards]">
+              <div className="bg-black bg-opacity-75 text-white text-xl rounded-none px-4 py-2 pointer-events-auto max-w-lg whitespace-pre-line opacity-0 animate-[fade-in_0s_1s_forwards]">
                 {description}
               </div>
             )}
