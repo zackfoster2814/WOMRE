@@ -6,6 +6,7 @@ import { initializeEffectData } from "../effects/data";
 import wheelBgImage from "../assets/img/wheel-bg.png";
 import { BossBattleRoom } from "../components/BossBattleRoom";
 import { getAssetPath } from "../utils/basePath";
+import { DataManager } from "../managers/DataManager";
 import {
   Boss,
   PlayerData,
@@ -68,9 +69,8 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
         setBosses(bossData.bosses || []);
 
         // Load teams
-        const teamRes = await fetch(getAssetPath("/data/battles/teams.json"));
-        const teamData = await teamRes.json();
-        setTeams(teamData.teams || []);
+        const teamsArr = await DataManager.getTeams();
+        setTeams(teamsArr);
 
         // Load battle results
         const battleRes = await fetch(

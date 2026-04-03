@@ -55,6 +55,7 @@ export interface PlayerData {
   weapons?: string[];
   gear?: string[];
   effectBreakdown?: EffectSourceBreakdown[];
+  pveOnlyFeatures?: string[];
 }
 
 export interface TeamMemberJson {

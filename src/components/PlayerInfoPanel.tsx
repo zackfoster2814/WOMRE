@@ -19,16 +19,15 @@ function ensureEffectsInitialized() {
   }
 }
 
-interface PlayerSummary {
+// Minimal listing type used only for the player dropdown in this panel
+interface PlayerListItem {
   no: number;
   name: string;
   username: string;
   race: string;
   house?: string;
-  // Parasitic Status (for hosts who have a symbiote)
   isParasite?: boolean;
   parasiteInfo?: string[];
-  // Symbiosis Status (for the symbiote itself)
   isSymbiosis?: boolean;
   symbiosisType?: string;
   symbiosisHost?: string;
@@ -69,7 +68,7 @@ export const PlayerInfoPanel = ({
   isSaving = false,
 }: PlayerInfoPanelProps) => {
   const [activeTab, setActiveTab] = useState<"list" | "info">("list");
-  const [playerList, setPlayerList] = useState<PlayerSummary[]>([]);
+  const [playerList, setPlayerList] = useState<PlayerListItem[]>([]);
   const [isLoadingList, setIsLoadingList] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -81,7 +80,7 @@ export const PlayerInfoPanel = ({
       try {
         // Load tất cả player từ Google Drive
         const texts = await fetchAllPlayerTexts();
-        const validPlayers: PlayerSummary[] = [];
+        const validPlayers: PlayerListItem[] = [];
         for (const [no, content] of texts) {
           try {
             const char = CharacterParser.parseCharacterFile(content);

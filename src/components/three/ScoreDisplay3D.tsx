@@ -1,80 +1,57 @@
-/**
- * ScoreDisplay3D - Upgraded Combat Edition
- *
- * Three.js backdrop for the center score area:
- * - VS: slow rotating double ring + ambient particles + mouse parallax
- * - After result: particle explosion burst + sustained orbit particles
- * - Winner side emits more intense colored particles
- * - New: Dynamic camera zoom when winner appears
- * - New: 3D score count-up animation (numbers float & glow)
- * - New: Winner crown emblem (rotating above score)
- * - New: Energy pulse wave on battle done
- * - New: Score difference energy bar between p1:p2
- */
-
 import { useRef, useMemo, useState, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
-// ── Double rotating rings for VS idle state (with parallax & winner pulse) ─────
-function VSRings({ winner }: { winner: "player1" | "player2" | null }) {
-  const ring1 = useRef<THREE.Mesh>(null!);
-  const ring2 = useRef<THREE.Mesh>(null!);
+// ── VSRings -> Astrolabe Dials (La bàn định mệnh) ─────────────────────────────
+function AstrolabeDials({ winner }: { winner: "player1" | "player2" | null }) {
+  const group = useRef<THREE.Group>(null!);
   const { mouse } = useThree();
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    const speed = winner ? 1.2 : 0.5;
-    ring1.current.rotation.z = t * speed;
-    ring2.current.rotation.z = -t * speed * 0.6;
-
-    ring1.current.rotation.x = Math.sin(t * 0.4) * 0.3 + mouse.y * 0.12;
-    ring2.current.rotation.x = Math.cos(t * 0.4) * 0.3 - mouse.y * 0.12;
-
-    // Parallax
-    ring1.current.position.x = mouse.x * 0.4;
-    ring2.current.position.x = mouse.x * -0.4;
-
-    // Winner pulse scale
-    const scale = winner ? 1 + Math.sin(t * 5) * 0.15 : 1;
-    ring1.current.scale.setScalar(scale);
-    ring2.current.scale.setScalar(scale);
+    const speed = winner ? 1.5 : 0.6;
+    
+    if (group.current) {
+      group.current.children.forEach((ring, i) => {
+        const sign = i % 2 === 0 ? 1 : -1;
+        ring.rotation.z = t * speed * sign * (1 - i * 0.2);
+        ring.rotation.x = Math.sin(t * 0.4) * 0.3 + mouse.y * 0.15;
+        ring.rotation.y = Math.cos(t * 0.4) * 0.3 + mouse.x * 0.15;
+        
+        // Winner pulse
+        const scale = winner ? 1 + Math.sin(t * 6 + i) * 0.05 : 1;
+        ring.scale.setScalar(scale);
+      });
+    }
   });
 
-  const ringColor = winner ? "#4ade80" : "#7c3aed";
+  const baseMaterial = new THREE.MeshStandardMaterial({
+    color: winner ? "#ffd700" : "#a89f91", // Gold khi win, Bronze khi idle
+    metalness: 0.9,
+    roughness: 0.3,
+    emissive: winner ? new THREE.Color("#cc8800") : new THREE.Color("#000000"),
+    emissiveIntensity: winner ? 0.4 : 0,
+  });
 
   return (
-    <>
-      <mesh ref={ring1}>
-        <torusGeometry args={[0.95, 0.012, 8, 64]} />
-        <meshBasicMaterial
-          color={ringColor}
-          transparent
-          opacity={winner ? 0.7 : 0.4}
-        />
+    <group ref={group}>
+      <mesh material={baseMaterial}>
+        <torusGeometry args={[0.95, 0.02, 16, 64]} />
       </mesh>
-      <mesh ref={ring2}>
-        <torusGeometry args={[1.3, 0.008, 8, 64]} />
-        <meshBasicMaterial
-          color={ringColor}
-          transparent
-          opacity={winner ? 0.55 : 0.25}
-        />
+      <mesh material={baseMaterial}>
+        <torusGeometry args={[1.2, 0.015, 16, 64]} />
       </mesh>
-    </>
+      <mesh material={baseMaterial}>
+        <torusGeometry args={[1.4, 0.01, 16, 64]} />
+      </mesh>
+    </group>
   );
 }
 
-// ── Burst: denser explosion with winner color ─────────────────────────────────
-function BurstParticles({
-  color,
-  trigger,
-}: {
-  color: string;
-  trigger: boolean;
-}) {
+// ── Burst: Vụ nổ ma thuật (Thần Thánh) ───────────────────────────────────────
+function BurstParticles({ color, trigger }: { color: string; trigger: boolean }) {
   const mesh = useRef<THREE.Points>(null!);
-  const count = 150;
+  const count = 200;
   const startTime = useRef(0);
 
   useEffect(() => {
@@ -89,11 +66,13 @@ function BurstParticles({
       pos[i * 3] = pos[i * 3 + 1] = pos[i * 3 + 2] = 0;
       const angle = Math.random() * Math.PI * 2;
       const pitch = (Math.random() - 0.5) * Math.PI;
-      const speed = 0.04 + Math.random() * 0.07;
+      const speed = 0.05 + Math.random() * 0.1;
+
+      // Nổ ra theo hình cầu
       dir[i * 3] = Math.cos(angle) * Math.cos(pitch) * speed;
-      dir[i * 3 + 1] = Math.sin(pitch) * speed * 1.2;
-      dir[i * 3 + 2] = Math.sin(angle) * Math.cos(pitch) * speed * 0.5;
-      sz[i] = 0.05 + Math.random() * 0.05;
+      dir[i * 3 + 1] = Math.sin(pitch) * speed;
+      dir[i * 3 + 2] = Math.sin(angle) * Math.cos(pitch) * speed;
+      sz[i] = 0.05 + Math.random() * 0.08;
     }
     return [pos, dir, sz];
   }, []);
@@ -109,12 +88,16 @@ function BurstParticles({
     if (!trigger) return;
     const elapsed = (Date.now() - startTime.current) / 1000;
     const pos = mesh.current.geometry.attributes.position.array as Float32Array;
+    
     for (let i = 0; i < count; i++) {
-      pos[i * 3] += directions[i * 3] * (1 - elapsed);
-      pos[i * 3 + 1] += directions[i * 3 + 1] * (1 - elapsed);
-      pos[i * 3 + 2] += directions[i * 3 + 2] * (1 - elapsed);
+      // Giảm tốc dần dần
+      const drag = Math.max(0, 1 - elapsed * 1.5);
+      pos[i * 3] += directions[i * 3] * drag;
+      pos[i * 3 + 1] += directions[i * 3 + 1] * drag;
+      pos[i * 3 + 2] += directions[i * 3 + 2] * drag;
     }
     mesh.current.geometry.attributes.position.needsUpdate = true;
+    
     if (mesh.current.material instanceof THREE.PointsMaterial) {
       mesh.current.material.opacity = Math.max(0, 1 - elapsed * 1.2);
     }
@@ -123,42 +106,27 @@ function BurstParticles({
   return trigger ? (
     <points ref={mesh} geometry={geo}>
       <pointsMaterial
-        size={0.08}
+        size={0.1}
         color={color}
         transparent
         opacity={1}
         sizeAttenuation
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
       />
     </points>
   ) : null;
 }
 
-// ── Orbiting particles with score intensity ──────────────────────────────────
-function OrbitParticles({
-  color,
-  radius,
-  baseCount = 25,
-  speed = 1,
-  intensity = 1,
-}: {
-  color: string;
-  radius: number;
-  baseCount?: number;
-  speed?: number;
-  intensity?: number;
-}) {
+// ── Quỹ đạo Tinh tú lượn lờ (Orbit Particles) ─────────────────────────────────
+function OrbitParticles({ color, radius, baseCount = 20, speed = 1, intensity = 1 }: any) {
   const mesh = useRef<THREE.Points>(null!);
   const count = Math.floor(baseCount + intensity * 20);
 
-  const offsets = useMemo(
-    () => Array.from({ length: count }, () => Math.random() * Math.PI * 2),
-    [count],
-  );
-
+  const offsets = useMemo(() => Array.from({ length: count }, () => Math.random() * Math.PI * 2), [count]);
   const geo = useMemo(() => {
-    const pos = new Float32Array(count * 3);
     const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    g.setAttribute("position", new THREE.BufferAttribute(new Float32Array(count * 3), 3));
     return g;
   }, [count]);
 
@@ -167,69 +135,53 @@ function OrbitParticles({
     const pos = mesh.current.geometry.attributes.position.array as Float32Array;
     for (let i = 0; i < count; i++) {
       const angle = t + offsets[i];
-      pos[i * 3] = Math.cos(angle) * (radius + Math.sin(t * 2 + i) * 0.15);
-      pos[i * 3 + 1] =
-        Math.sin(angle) * radius * 0.6 + Math.cos(t * 3 + i) * 0.25;
-      pos[i * 3 + 2] = Math.sin(angle * 1.3) * 0.4;
+      pos[i * 3] = Math.cos(angle) * (radius + Math.sin(t * 3 + i) * 0.1);
+      pos[i * 3 + 1] = Math.sin(angle) * radius * 0.5 + Math.cos(t * 2 + i) * 0.2;
+      pos[i * 3 + 2] = Math.sin(angle * 1.5) * 0.5;
     }
     mesh.current.geometry.attributes.position.needsUpdate = true;
   });
 
   return (
     <points ref={mesh} geometry={geo}>
-      <pointsMaterial
-        size={0.07 + intensity * 0.02}
-        color={color}
-        transparent
-        opacity={0.9}
-        sizeAttenuation
-      />
+      <pointsMaterial size={0.06 + intensity * 0.03} color={color} transparent opacity={0.8} sizeAttenuation blending={THREE.AdditiveBlending}/>
     </points>
   );
 }
 
-// ── Winner Crown Emblem (rotating 3D crown above score) ───────────────────────
-function WinnerCrown({ winner }: { winner: "player1" | "player2" | null }) {
+// ── Vòng Sáng Thần Thánh (Thay cái Crown côn nhựa) ────────────────────────────
+function DivineHalo({ winner }: { winner: "player1" | "player2" | null }) {
   const group = useRef<THREE.Group>(null!);
 
   useFrame(({ clock }) => {
     if (!winner || !group.current) return;
     const t = clock.getElapsedTime();
-    group.current.rotation.y = t * 1.2;
-    group.current.position.y = 1.2 + Math.sin(t * 3) * 0.15;
+    group.current.rotation.y = t * 1.5;
+    group.current.position.y = 1.3 + Math.sin(t * 2) * 0.1;
   });
 
   if (!winner) return null;
-
   const crownColor = winner === "player1" ? "#60a5fa" : "#f87171";
 
   return (
-    <group ref={group} position={[0, 1.8, 0]}>
-      {/* Crown base */}
+    <group ref={group} position={[0, 1.8, 0]} rotation={[Math.PI / 3, 0, 0]}>
       <mesh>
-        <torusGeometry args={[0.6, 0.08, 8, 32]} />
-        <meshStandardMaterial
-          color={crownColor}
-          emissive={crownColor}
-          emissiveIntensity={1.2}
-        />
+        <torusGeometry args={[0.5, 0.02, 16, 64]} />
+        <meshBasicMaterial color={crownColor} transparent opacity={0.9} blending={THREE.AdditiveBlending}/>
       </mesh>
-      {/* Spikes */}
-      {[-0.4, -0.2, 0, 0.2, 0.4].map((x, i) => (
-        <mesh key={i} position={[x, 0.5, 0]}>
-          <coneGeometry args={[0.12, 0.6, 6]} />
-          <meshStandardMaterial
-            color={crownColor}
-            emissive={crownColor}
-            emissiveIntensity={0.8}
-          />
+      {/* Tia sáng thánh tựa thập tự giá */}
+      {[0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2].map((angle, i) => (
+        <mesh key={i} rotation={[0, 0, angle]} position={[Math.cos(angle)*0.5, Math.sin(angle)*0.5, 0]}>
+          <coneGeometry args={[0.05, 0.4, 4]} />
+          <meshBasicMaterial color={crownColor} blending={THREE.AdditiveBlending} />
         </mesh>
       ))}
+      <pointLight color={crownColor} intensity={0.8} distance={3} />
     </group>
   );
 }
 
-// ── Energy Pulse Wave (expanding ring on battle done) ─────────────────────────
+// ── Sóng Phép Bay Hơi ─────────────────────────────────────────────────────────
 function PulseWave({ trigger, color }: { trigger: boolean; color: string }) {
   const mesh = useRef<THREE.Mesh>(null!);
   const startTime = useRef(0);
@@ -241,62 +193,57 @@ function PulseWave({ trigger, color }: { trigger: boolean; color: string }) {
   useFrame(() => {
     if (!trigger || !mesh.current) return;
     const elapsed = (Date.now() - startTime.current) / 1000;
-    const scale = 1 + elapsed * 4; // expand nhanh
-    mesh.current.scale.setScalar(scale);
+    mesh.current.scale.setScalar(1 + elapsed * 6);
     if (mesh.current.material instanceof THREE.MeshBasicMaterial) {
-      mesh.current.material.opacity = Math.max(0, 0.6 - elapsed * 1.5);
+      mesh.current.material.opacity = Math.max(0, 0.5 - elapsed * 1.2);
     }
   });
 
   return trigger ? (
-    <mesh ref={mesh} rotation={[Math.PI / 2, 0, 0]}>
-      <ringGeometry args={[0.5, 1.5, 64]} />
-      <meshBasicMaterial
-        color={color}
-        transparent
-        opacity={0.6}
-        side={THREE.DoubleSide}
-      />
+    <mesh ref={mesh} rotation={[0, 0, 0]}>
+      <ringGeometry args={[0.8, 1.2, 64]} />
+      <meshBasicMaterial color={color} transparent opacity={0.5} blending={THREE.AdditiveBlending} side={THREE.DoubleSide} depthWrite={false} />
     </mesh>
   ) : null;
 }
 
-// ── Score Difference Bar (energy fill between p1:p2) ──────────────────────────
-function ScoreDiffBar({
-  p1Score,
-  p2Score,
-}: {
-  p1Score: number;
-  p2Score: number;
-}) {
+// ── Thanh Sinh Lực / Mana Stream (Mana Bar) ──────────────────────────────────
+function ManaStreamBar({ p1Score, p2Score }: { p1Score: number; p2Score: number }) {
   const total = p1Score + p2Score || 1;
   const p1Ratio = p1Score / total;
-  const barWidth = 2.5;
+  const barWidth = 2.4;
 
   return (
-    <group position={[0, -0.8, 0]}>
-      {/* Background bar */}
-      <mesh>
-        <planeGeometry args={[barWidth, 0.15]} />
-        <meshBasicMaterial color="#374151" transparent opacity={0.6} />
+    <group position={[0, -0.9, 0]}>
+      {/* Viền Blade (Hơi nhọn ra 2 bên) */}
+      <mesh position={[0, 0, -0.01]}>
+        <planeGeometry args={[barWidth + 0.1, 0.14]} />
+        <meshBasicMaterial color="#111111" />
       </mesh>
-      {/* P1 fill */}
-      <mesh position={[-barWidth / 2 + (barWidth * p1Ratio) / 2, 0, 0.01]}>
-        <planeGeometry args={[barWidth * p1Ratio, 0.12]} />
-        <meshStandardMaterial
-          color="#3b82f6"
-          emissive="#3b82f6"
-          emissiveIntensity={0.8}
-        />
+      <mesh position={[barWidth/2 + 0.05, 0, -0.01]} rotation={[0, 0, -Math.PI/2]}>
+        <coneGeometry args={[0.07, 0.2, 3]} />
+        <meshBasicMaterial color="#111111" />
       </mesh>
-      {/* P2 fill */}
-      <mesh position={[barWidth / 2 - (barWidth * (1 - p1Ratio)) / 2, 0, 0.01]}>
-        <planeGeometry args={[barWidth * (1 - p1Ratio), 0.12]} />
-        <meshStandardMaterial
-          color="#ef4444"
-          emissive="#ef4444"
-          emissiveIntensity={0.8}
-        />
+      <mesh position={[-barWidth/2 - 0.05, 0, -0.01]} rotation={[0, 0, Math.PI/2]}>
+        <coneGeometry args={[0.07, 0.2, 3]} />
+        <meshBasicMaterial color="#111111" />
+      </mesh>
+
+      {/* P1 Mana */}
+      <mesh position={[-barWidth / 2 + (barWidth * p1Ratio) / 2, 0, 0]}>
+        <planeGeometry args={[barWidth * p1Ratio, 0.08]} />
+        <meshBasicMaterial color="#3b82f6" blending={THREE.AdditiveBlending} />
+      </mesh>
+      {/* P2 Mana */}
+      <mesh position={[barWidth / 2 - (barWidth * (1 - p1Ratio)) / 2, 0, 0]}>
+        <planeGeometry args={[barWidth * (1 - p1Ratio), 0.08]} />
+        <meshBasicMaterial color="#ef4444" blending={THREE.AdditiveBlending} />
+      </mesh>
+      
+      {/* Vệt văng sáng ở giữa đường chia */}
+      <mesh position={[-barWidth/2 + barWidth*p1Ratio, 0, 0.01]}>
+        <planeGeometry args={[0.04, 0.2]} />
+        <meshBasicMaterial color="#ffffff" blending={THREE.AdditiveBlending} />
       </mesh>
     </group>
   );
@@ -304,18 +251,10 @@ function ScoreDiffBar({
 
 // ── Exported component ────────────────────────────────────────────────────────
 interface ScoreDisplay3DProps {
-  winner: "player1" | "player2" | null;
-  p1Score?: number;
-  p2Score?: number;
-  children: React.ReactNode;
+  winner: "player1" | "player2" | null; p1Score?: number; p2Score?: number; children: React.ReactNode;
 }
 
-export function ScoreDisplay3D({
-  winner,
-  p1Score = 0,
-  p2Score = 0,
-  children,
-}: ScoreDisplay3DProps) {
+export function ScoreDisplay3D({ winner, p1Score = 0, p2Score = 0, children }: ScoreDisplay3DProps) {
   const [burst, setBurst] = useState(false);
   const [pulse, setPulse] = useState(false);
   const burstKey = useRef(0);
@@ -323,83 +262,39 @@ export function ScoreDisplay3D({
   useEffect(() => {
     if (winner) {
       burstKey.current += 1;
-      setBurst(true);
-      setPulse(true);
-      setTimeout(() => {
-        setBurst(false);
-        setPulse(false);
-      }, 2500);
+      setBurst(true); setPulse(true);
+      setTimeout(() => { setBurst(false); setPulse(false); }, 2500);
     }
   }, [winner]);
 
-  const scoreDiffIntensity =
-    Math.abs(p1Score - p2Score) / Math.max(p1Score + p2Score, 1);
-  const winColor =
-    winner === "player1"
-      ? "#60a5fa"
-      : winner === "player2"
-        ? "#f87171"
-        : "#7c3aed";
+  const scoreDiffIntensity = Math.abs(p1Score - p2Score) / Math.max(p1Score + p2Score, 1);
+  const winColor = winner === "player1" ? "#60a5fa" : winner === "player2" ? "#f87171" : "#ffd700";
 
   return (
-    <div
-      className="relative flex flex-col items-center justify-center"
-      style={{ isolation: "isolate" }}
-    >
-      {/* Three.js backdrop - larger for epic feel */}
-      <div
-        className="absolute inset-0"
-        style={{
-          zIndex: 0,
-          width: "180px",
-          height: "180px",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%,-50%)",
-        }}
-      >
-        <Canvas
-          camera={{ position: [0, 0, 5], fov: 60 }}
-          gl={{ alpha: true, antialias: true }}
-          style={{ background: "transparent" }}
-        >
-          <VSRings winner={winner} />
+    <div className="relative flex flex-col items-center justify-center" style={{ isolation: "isolate" }}>
+      <div className="absolute inset-0" style={{ zIndex: 0, width: "180px", height: "180px", left: "50%", top: "50%", transform: "translate(-50%,-50%)" }}>
+        <Canvas camera={{ position: [0, 0, 5], fov: 50 }} gl={{ alpha: true, antialias: true }}>
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[0, 5, 2]} intensity={2} />
+          
+          <AstrolabeDials winner={winner} />
+          
           {winner && (
             <>
-              <OrbitParticles
-                color="#3b82f6"
-                radius={1.3}
-                baseCount={22}
-                speed={1}
-                intensity={scoreDiffIntensity}
-              />
-              <OrbitParticles
-                color="#ef4444"
-                radius={1.0}
-                baseCount={18}
-                speed={-1.4}
-                intensity={scoreDiffIntensity}
-              />
-              <OrbitParticles
-                color={winColor}
-                radius={1.8}
-                baseCount={30}
-                speed={1.8}
-                intensity={scoreDiffIntensity * 1.8}
-              />
+              <OrbitParticles color="#3b82f6" radius={1.2} baseCount={20} speed={0.8} intensity={scoreDiffIntensity} />
+              <OrbitParticles color="#ef4444" radius={0.9} baseCount={15} speed={-1.2} intensity={scoreDiffIntensity} />
+              <OrbitParticles color={winColor} radius={1.6} baseCount={40} speed={1.5} intensity={scoreDiffIntensity * 2} />
             </>
           )}
           {burst && <BurstParticles color={winColor} trigger={burst} />}
           {pulse && <PulseWave trigger={pulse} color={winColor} />}
-          <WinnerCrown winner={winner} />
-          <ScoreDiffBar p1Score={p1Score} p2Score={p2Score} />
+          
+          <DivineHalo winner={winner} />
+          <ManaStreamBar p1Score={p1Score} p2Score={p2Score} />
         </Canvas>
       </div>
 
-      {/* HTML content overlay */}
-      <div className="relative" style={{ zIndex: 1 }}>
-        {children}
-      </div>
+      <div className="relative" style={{ zIndex: 1 }}>{children}</div>
     </div>
   );
 }

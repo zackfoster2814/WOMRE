@@ -1,17 +1,14 @@
 /**
- * PvPBackground3D
- * Full-screen animated Three.js background for the PvP battle screen - upgraded epic edition.
- * - Giữ nguyên tất cả hiệu ứng gốc: StarField, AuraSphere, RotatingRing, GridLines
- * - Nâng cấp: Thêm particle density, glow stronger, subtle warp, multi-layer, nebula mist, color shift
- * - Không thêm props mới, giữ nguyên cách dùng cũ <PvPBackground3D />
+ * PvPBackground3D - Astral Fantasy Edition
+ * Cỗ máy thiên văn (Astrolabe), đá thạch anh ma thuật (Crystals) và Vòng Xoay Phép Thuật
  */
 
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-// ── Enhanced Floating star particles (thêm warp nhẹ + gradient color) ─────────
-function StarField({ count = 400 }: { count?: number }) {
+// ── Golden Cosmos Stardust ───────────────────────────────────────────────────
+function StarField({ count = 600 }: { count?: number }) {
   const mesh = useRef<THREE.Points>(null!);
 
   const [positions, speeds, colors] = useMemo(() => {
@@ -23,14 +20,13 @@ function StarField({ count = 400 }: { count?: number }) {
       pos[i * 3] = (Math.random() - 0.5) * 50;
       pos[i * 3 + 1] = (Math.random() - 0.5) * 25;
       pos[i * 3 + 2] = (Math.random() - 0.5) * 12 - 6;
-      spd[i] = 0.004 + Math.random() * 0.015;
+      spd[i] = 0.002 + Math.random() * 0.01;
 
-      // Gradient color nhẹ theo độ cao (blue → purple → violet)
-      const heightMix = (pos[i * 3 + 1] + 12.5) / 25;
+      // Golden / Violet mist palette
       const c = new THREE.Color().lerpColors(
-        new THREE.Color("#a78bfa"),
-        new THREE.Color("#c084fc"),
-        heightMix,
+        new THREE.Color("#ffd700"), // gold
+        new THREE.Color("#8a2be2"), // violet
+        Math.random() > 0.3 ? 0 : 1 // 70% gold, 30% violet
       );
       col[i * 3] = c.r;
       col[i * 3 + 1] = c.g;
@@ -50,12 +46,8 @@ function StarField({ count = 400 }: { count?: number }) {
     const t = clock.getElapsedTime();
     const pos = mesh.current.geometry.attributes.position.array as Float32Array;
     for (let i = 0; i < count; i++) {
-      pos[i * 3 + 1] += speeds[i] * (1 + Math.sin(t * 0.5 + i) * 0.3); // thêm nhịp bay
+      pos[i * 3 + 1] += speeds[i] * (1 + Math.sin(t * 0.5 + i) * 0.2); // bay lên chậm
       if (pos[i * 3 + 1] > 15) pos[i * 3 + 1] = -15;
-
-      // Warp nhẹ: Z kéo dài theo tốc độ
-      pos[i * 3 + 2] -= speeds[i] * 0.5;
-      if (pos[i * 3 + 2] < -10) pos[i * 3 + 2] = 10;
     }
     mesh.current.geometry.attributes.position.needsUpdate = true;
   });
@@ -63,10 +55,10 @@ function StarField({ count = 400 }: { count?: number }) {
   return (
     <points ref={mesh} geometry={geometry}>
       <pointsMaterial
-        size={0.09}
+        size={0.08}
         vertexColors
         transparent
-        opacity={0.85}
+        opacity={0.6}
         sizeAttenuation
         blending={THREE.AdditiveBlending}
       />
@@ -74,148 +66,166 @@ function StarField({ count = 400 }: { count?: number }) {
   );
 }
 
-// ── Side aura spheres (blue/red) - thêm rotation + glow mạnh hơn ──────────────
-function AuraSphere({
-  position,
-  color,
-  phase = 0,
-}: {
-  position: [number, number, number];
-  color: string;
-  phase?: number;
-}) {
+// ── Mystic Crystals (Thay thế quả cầu Aura neon) ──────────────────────────────
+function MysticCrystal({ position, color }: { position: [number, number, number], color: string }) {
   const mesh = useRef<THREE.Mesh>(null!);
-
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime() + phase;
-    mesh.current.scale.setScalar(1.15 + Math.sin(t * 1.0) * 0.15);
-    mesh.current.rotation.y = t * 0.4; // thêm xoay nhẹ
-
-    if (mesh.current.material instanceof THREE.MeshBasicMaterial) {
-      mesh.current.material.opacity = 0.12 + Math.sin(t * 1.8) * 0.08;
-    }
-  });
-
-  return (
-    <mesh ref={mesh} position={position}>
-      <sphereGeometry args={[4, 32, 32]} />
-      <meshBasicMaterial
-        color={color}
-        transparent
-        opacity={0.12}
-        blending={THREE.AdditiveBlending}
-      />
-    </mesh>
-  );
-}
-
-// ── Slow rotating ring - thêm multi-layer & color shift ───────────────────────
-function RotatingRing({
-  color,
-  speed = 0.3,
-}: {
-  color: string;
-  speed?: number;
-}) {
-  const group = useRef<THREE.Group>(null!);
+  const glow = useRef<THREE.Mesh>(null!);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    if (group.current) {
-      group.current.children.forEach((ring, i) => {
-        ring.rotation.z = t * (speed + i * 0.1);
-        ring.rotation.x = Math.sin(t * 0.5 + i) * 0.2;
-        ring.scale.setScalar(1 + Math.sin(t * 2 + i) * 0.08);
-      });
-    }
+    const floatY = Math.sin(t * 1.5) * 0.5;
+    
+    mesh.current.position.y = floatY;
+    mesh.current.rotation.y = t * 0.4;
+    mesh.current.rotation.x = t * 0.2;
+
+    glow.current.position.y = floatY;
+    glow.current.scale.setScalar(1.2 + Math.abs(Math.sin(t * 2)) * 0.2);
   });
 
   return (
-    <group ref={group} position={[0, 0, -4]}>
-      <mesh>
-        <torusGeometry args={[6, 0.015, 8, 80]} />
-        <meshBasicMaterial
-          color={color}
-          transparent
-          opacity={0.15}
-          blending={THREE.AdditiveBlending}
+    <group position={position}>
+      {/* Lõi Thạch Anh */}
+      <mesh ref={mesh}>
+        <icosahedronGeometry args={[2.5, 0]} />
+        <meshPhysicalMaterial 
+          color={color} 
+          metalness={0.2}
+          roughness={0.1}
+          transmission={0.8}
+          thickness={1.5}
         />
       </mesh>
-      <mesh>
-        <torusGeometry args={[6.8, 0.01, 8, 80]} />
-        <meshBasicMaterial
-          color="#a78bfa"
-          transparent
-          opacity={0.1}
+      {/* Vầng sáng (Aura Glow) */}
+      <mesh ref={glow}>
+        <icosahedronGeometry args={[2.8, 2]} />
+        <meshBasicMaterial 
+          color={color} 
+          transparent 
+          opacity={0.15} 
           blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-      <mesh>
-        <torusGeometry args={[7.5, 0.008, 8, 80]} />
-        <meshBasicMaterial
-          color="#c084fc"
-          transparent
-          opacity={0.08}
-          blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
       </mesh>
     </group>
   );
 }
 
-// ── Thin horizontal grid lines - thêm pulse & glow ────────────────────────────
-function GridLines() {
-  const lines = useMemo(() => {
-    const pts: number[] = [];
-    for (let x = -25; x <= 25; x += 2.5) {
-      pts.push(x, -10, -12, x, -10, 12);
-    }
-    for (let z = -12; z <= 12; z += 2.5) {
-      pts.push(-25, -10, z, 25, -10, z);
-    }
-    return new Float32Array(pts);
-  }, []);
-
-  const geo = useMemo(() => {
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.BufferAttribute(lines, 3));
-    return g;
-  }, [lines]);
-
-  const material = useMemo(
-    () =>
-      new THREE.LineBasicMaterial({
-        color: "#7c3aed",
-        transparent: true,
-        opacity: 0.35,
-        blending: THREE.AdditiveBlending,
-      }),
-    [],
-  );
+// ── The Astrolabe (Thay cho Ring quay Neon) ──────────────────────────────────
+function Astrolabe() {
+  const group = useRef<THREE.Group>(null!);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    material.opacity = 0.25 + Math.abs(Math.sin(t * 3)) * 0.3; // pulse mạnh hơn
+    if (group.current) {
+      group.current.children.forEach((ring, i) => {
+        // Mỗi vòng xoay đa trục theo vận tốc riêng
+        ring.rotation.z = t * (0.1 + i * 0.05);
+        ring.rotation.x = t * (0.05 + i * 0.08);
+        ring.rotation.y = t * (0.08 + i * 0.03);
+      });
+    }
   });
 
-  return <lineSegments geometry={geo} material={material} />;
+  const material = new THREE.MeshStandardMaterial({
+    color: "#d4af37", // Gold
+    metalness: 0.9,
+    roughness: 0.2,
+    envMapIntensity: 1.5,
+  });
+
+  const sizes = [7, 7.5, 8.2, 9];
+
+  return (
+    <group ref={group} position={[0, 0, -6]}>
+      {sizes.map((size, index) => (
+        <mesh key={index} material={material}>
+          <torusGeometry args={[size, index % 2 === 0 ? 0.08 : 0.03, 16, 100]} />
+        </mesh>
+      ))}
+      <pointLight color="#ffd700" intensity={0.5} distance={15} />
+    </group>
+  );
 }
 
-// ── Main exported component (giữ nguyên cách dùng cũ) ─────────────────────────
+// ── Magic Floor Matrix (Sàn Phép Thuật thay cho Grid) ────────────────────────
+function MagicCircleFloor() {
+  const group = useRef<THREE.Group>(null!);
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    if (group.current) {
+      group.current.rotation.z = t * -0.05;
+      // Pulse glow
+      const op = 0.2 + Math.abs(Math.sin(t * 1.5)) * 0.15;
+      group.current.children.forEach((c) => {
+        if ((c as THREE.Mesh).material instanceof THREE.LineBasicMaterial) {
+          ((c as THREE.Mesh).material as THREE.LineBasicMaterial).opacity = op;
+        }
+      });
+    }
+  });
+
+  return (
+    <group position={[0, -8, -5]} rotation={[-Math.PI / 2 + 0.2, 0, 0]}>
+      <group ref={group}>
+        {/* Vòng ngoài cùng */}
+        <mesh>
+          <ringGeometry args={[14.8, 15, 64]} />
+          <meshBasicMaterial color="#a78bfa" transparent opacity={0.3} side={THREE.DoubleSide} blending={THREE.AdditiveBlending}/>
+        </mesh>
+        {/* Vòng đứt đoạn mô phỏng Runes */}
+        <mesh>
+          <ringGeometry args={[13.5, 14, 64]} />
+          <meshBasicMaterial color="#c084fc" transparent opacity={0.2} side={THREE.DoubleSide} blending={THREE.AdditiveBlending} wireframe/>
+        </mesh>
+        {/* Ngôi sao chóp 8 cánh (Fake by overlapping squares) */}
+        {[0, Math.PI / 4].map((rot, i) => (
+          <mesh key={i} rotation={[0, 0, rot]}>
+            <ringGeometry args={[10.5, 10.8, 4]} />
+            <meshBasicMaterial color="#e879f9" transparent opacity={0.25} blending={THREE.AdditiveBlending} side={THREE.DoubleSide} />
+          </mesh>
+        ))}
+        {/* Tâm phép thuật */}
+        <mesh>
+          <circleGeometry args={[5, 32]} />
+          <meshBasicMaterial color="#3b0764" transparent opacity={0.4} blending={THREE.AdditiveBlending} />
+        </mesh>
+      </group>
+    </group>
+  );
+}
+
+// ── Main Component ────────────────────────────────────────────────────────────
 export function PvPBackground3D() {
   return (
     <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
       <Canvas
-        camera={{ position: [0, 0, 10], fov: 65 }}
+        camera={{ position: [0, 0, 12], fov: 60 }}
         gl={{ alpha: true, antialias: true }}
         style={{ background: "transparent" }}
       >
+        <ambientLight intensity={0.4} />
+        <directionalLight position={[0, 10, 5]} intensity={0.8} color="#ffffff" />
+        
         <StarField count={800} />
-        <AuraSphere position={[-10, 0, -5]} color="#3b82f6" phase={0} />
-        <AuraSphere position={[10, 0, -5]} color="#ef4444" phase={Math.PI} />
-        <RotatingRing color="#7c3aed" speed={0.25} />
-        <GridLines />
+        <Astrolabe />
+        
+        {/* Left Crystal (P1) */}
+        <MysticCrystal position={[-12, 1, -2]} color="#3b82f6" />
+        {/* Right Crystal (P2) */}
+        <MysticCrystal position={[12, -1, -2]} color="#ef4444" />
+        
+        <MagicCircleFloor />
       </Canvas>
+
+      {/* Radial vignette mask for cosmic feel */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: "radial-gradient(ellipse at center, transparent 30%, rgba(5,0,16,0.85) 100%)",
+          zIndex: 1
+        }}
+      />
     </div>
   );
 }

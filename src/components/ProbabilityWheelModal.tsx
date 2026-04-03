@@ -6,7 +6,7 @@
  */
 
 import { useState } from "react";
-import { WheelCanvas } from "./WheelCanvas";
+import { ProbabilityWheel3D } from "./three/ProbabilityWheel3D";
 import type { WheelItem } from "../types";
 
 export interface WheelSpinItem {
@@ -96,14 +96,12 @@ export const ProbabilityWheelModal = ({
             <p className="text-gray-300 text-sm leading-relaxed">{description}</p>
           )}
 
-          {/* Wheel */}
-          <div className="w-80 h-80 mx-auto">
-            <WheelCanvas
+          {/* Wheel 3D */}
+          <div className="w-80 h-80 mx-auto" style={{ height: 350 }}>
+            <ProbabilityWheel3D
               items={wheelItems}
               isSpinning={isSpinning}
               onSpinComplete={handleSpinComplete}
-              spinButtonClassName="hidden"
-              maxFontSize={26}
             />
           </div>
 

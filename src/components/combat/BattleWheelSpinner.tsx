@@ -6,7 +6,7 @@
  */
 
 import { useState, type ReactNode } from "react";
-import { WheelCanvas } from "../WheelCanvas";
+import { ProbabilityWheel3D } from "../three/ProbabilityWheel3D";
 import type { WheelItem } from "../../types";
 
 const STAT_LABELS: { key: string; label: string }[] = [
@@ -128,14 +128,13 @@ export function BattleWheelSpinner({
           )}
         </div>
 
-        {/* Wheel */}
-        <div className="flex flex-col items-center gap-1" style={{ width: 260 }}>
-          <div className="w-full">
-            <WheelCanvas
+        {/* Wheel 3D */}
+        <div className="flex flex-col items-center gap-1 relative z-10" style={{ width: 280, height: 280 }}>
+          <div className="w-full h-full cursor-pointer hover:scale-105 transition-transform">
+            <ProbabilityWheel3D
               items={items}
               isSpinning={isSpinning}
               onSpinComplete={handleSpinComplete}
-              spinButtonClassName="w-16 h-16 text-sm font-black"
               onSpin={() => {
                 if (!disabled && !isSpinning && !spinResult) setIsSpinning(true);
               }}

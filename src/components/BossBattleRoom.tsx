@@ -2,8 +2,8 @@ import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { CharacterStats } from "../types/character";
 import { playTickSound, playDefaultWinSound } from "../utils/audio";
 import { EffectRegistry } from "../effects/registry";
-import type { EffectSourceBreakdown } from "../effects/resolver";
 import StatModifiersTable from "./StatModifiersTable";
+import type { PlayerData } from "../types/battleZone";
 
 // Types
 interface BossStats {
@@ -81,29 +81,7 @@ interface Boss {
   punishment: string;
 }
 
-interface PlayerData {
-  no: number;
-  name: string;
-  username: string;
-  stats: CharacterStats;
-  baseStats?: CharacterStats;
-  statModifiers?: {
-    stat: string;
-    value: number;
-    isBase: boolean;
-    source: string;
-  }[];
-  team?: number;
-  quirks?: string[];
-  race?: string;
-  subRace?: string;
-  powers?: string[];
-  gear?: string[];
-  weapons?: string[];
-  archetypes?: string[];
-  pveOnlyFeatures?: string[];
-  effectBreakdown?: EffectSourceBreakdown[];
-}
+// PlayerData imported from src/types/battleZone.ts
 
 interface TeamMemberJson {
   name: string;

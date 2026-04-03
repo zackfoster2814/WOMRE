@@ -11,6 +11,7 @@ import {
   PvPReward,
   TournamentInfo,
 } from "../types/character";
+import type { PlayerSummary } from "../types/player";
 import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
@@ -32,6 +33,7 @@ import {
   invalidatePlayerCache,
   clearPlayerIndexCache,
 } from "../utils/googleDrive";
+import { DataManager } from "../managers/DataManager";
 import { isTauri } from "../utils/localStorage";
 import { PvEBattlePage } from "./BattleZonePage";
 import { BattleType } from "../types";
@@ -78,39 +80,7 @@ function calculateTotalStats(player: PlayerSummary): EffectStats {
   return effects.totalStats;
 }
 
-interface PlayerSummary {
-  no: number;
-  name: string;
-  username: string;
-  race: string;
-  subRace?: string;
-  isReincarnator?: boolean;
-  actualRace?: string;
-  archetypes: string[];
-  nestedArchetypes?: NestedArchetype[];
-  quirks: LossableItem[];
-  powers: LossableItem[];
-  houses: LossableItem[];
-  nestedHouses?: NestedHouse[];
-  team?: number;
-  stats: CharacterStats;
-  gear: Gear;
-  weapons: Weapon[];
-  runes: Rune;
-  charDevs: LossableItem[];
-  lover?: LossableItem[];
-  pvpRewards?: PvPReward[];
-  giantBonusApplied?: boolean;
-  isParasite?: boolean;
-  parasiteInfo?: string[];
-  parasiteName?: string;
-  parasiteType?: string;
-  isSymbiosis?: boolean;
-  symbiosisType?: string;
-  symbiosisHost?: string;
-  // Tournament status
-  tournament?: TournamentInfo;
-}
+// PlayerSummary is now shared — imported from src/types/player.ts
 
 interface TeamMemberJson {
   name: string;
@@ -576,13 +546,7 @@ export const PlayerListPage = () => {
       // Reload teams data
       let teamsData: TeamJson[] = [];
       try {
-        const teamsRes = await fetch(getAssetPath("/data/battles/teams.json"), {
-          cache: "no-store",
-        });
-        if (teamsRes.ok) {
-          const teamsJson = await teamsRes.json();
-          teamsData = teamsJson.teams || [];
-        }
+        teamsData = await DataManager.getTeams({ force: true });
       } catch (error) {
         console.error("Failed to reload teams:", error);
       }
@@ -893,40 +857,40 @@ export const PlayerListPage = () => {
         backgroundAttachment: "fixed",
       }}
     >
-      {/* Fixed Header - add left padding for menu button in app mode */}
+      {/* Fixed Header */}
       <header
-        className={`flex-shrink-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 px-4 py-3 overflow-visible relative z-[50] ${!isWebOnly ? "pl-40" : ""}`}
+        className={`flex-shrink-0 bg-gradient-to-b from-slate-950/95 to-slate-900/90 backdrop-blur-md border-b border-amber-500/20 px-4 py-4 overflow-visible relative z-[50] shadow-[0_4_20px_rgba(0,0,0,0.5)] ${!isWebOnly ? "pl-40" : ""}`}
       >
         <div className="max-w-7xl mx-auto overflow-visible">
-          <div className="flex items-center justify-center gap-6 mb-3">
+          <div className="flex items-center justify-center gap-6 mb-4">
             {/* View Mode Toggle */}
-            <div className="flex bg-gray-800 rounded-none p-1">
+            <div className="flex bg-slate-900/80 p-1 border border-amber-500/20">
               <button
                 onClick={() => setViewMode("players")}
-                className={`px-4 py-2 rounded-none font-medium transition-colors ${
+                className={`px-6 py-2 font-display text-sm uppercase tracking-wider transition-all ${
                   viewMode === "players"
-                    ? "bg-teal-600 text-white"
-                    : "text-gray-400 hover:text-white"
+                    ? "bg-amber-900/40 text-amber-300 border border-amber-500/50 shadow-[inset_0_0_10px_rgba(212,175,55,0.2)]"
+                    : "text-gray-500 hover:text-amber-400/60 border border-transparent"
                 }`}
               >
                 Players
               </button>
               <button
                 onClick={() => setViewMode("teams")}
-                className={`px-4 py-2 rounded-none font-medium transition-colors ${
+                className={`px-6 py-2 font-display text-sm uppercase tracking-wider transition-all ${
                   viewMode === "teams"
-                    ? "bg-orange-600 text-white"
-                    : "text-gray-400 hover:text-white"
+                    ? "bg-amber-900/40 text-amber-300 border border-amber-500/50 shadow-[inset_0_0_10px_rgba(212,175,55,0.2)]"
+                    : "text-gray-500 hover:text-amber-400/60 border border-transparent"
                 }`}
               >
                 Teams
               </button>
               <button
                 onClick={() => setViewMode("house-lore")}
-                className={`px-4 py-2 rounded-none font-medium transition-colors ${
+                className={`px-6 py-2 font-display text-sm uppercase tracking-wider transition-all ${
                   viewMode === "house-lore"
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-400 hover:text-white"
+                    ? "bg-purple-900/40 text-purple-300 border border-purple-500/50 shadow-[inset_0_0_10px_rgba(168,85,247,0.2)]"
+                    : "text-gray-500 hover:text-purple-400/60 border border-transparent"
                 }`}
               >
                 House Lore
@@ -935,18 +899,18 @@ export const PlayerListPage = () => {
             <button
               onClick={refreshPlayers}
               disabled={isLoading}
-              className="px-4 py-2 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-600 rounded text-white font-medium transition-colors flex items-center gap-2"
+              className="px-5 py-2 bg-slate-800 border border-amber-500/30 hover:bg-slate-700 disabled:bg-gray-800 disabled:border-gray-700/50 disabled:text-gray-600 text-amber-400/90 font-mono text-sm transition-all flex items-center gap-2 hover:shadow-[0_0_10px_rgba(212,175,55,0.2)]"
             >
-              <span className={isLoading ? "animate-spin" : ""}>&#8635;</span>{" "}
-              Refresh
+              <span className={isLoading ? "animate-spin" : ""}>⟳</span>{" "}
+              Sync
             </button>
             <button
               onClick={() => {
                 window.location.hash = "#/bracket";
               }}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white font-medium transition-colors"
+              className="px-5 py-2 bg-red-950/80 border border-red-500/50 hover:bg-red-900 shadow-[0_0_10px_rgba(220,38,38,0.3)] hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] text-red-300 font-display font-medium tracking-wide transition-all flex items-center gap-2"
             >
-              PvP Bracket
+              ⚔ PvP Bracket
             </button>
           </div>
 
@@ -954,35 +918,39 @@ export const PlayerListPage = () => {
           {viewMode === "players" ? (
             /* Player Controls */
             <div className="flex flex-wrap gap-4 items-center justify-center overflow-visible">
-              <input
-                type="text"
-                placeholder="Search players..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-none text-white w-64 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              />
-              <label className="flex items-center gap-2 cursor-pointer select-none px-3 py-2 rounded-none border border-gray-600 bg-gray-800/80 hover:border-green-500/60 transition-colors">
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-500/50">⌕</span>
+                <input
+                  type="text"
+                  placeholder="Search players..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9 pr-4 py-2 bg-slate-900/80 border border-amber-500/20 text-amber-100/90 w-64 focus:outline-none focus:border-amber-500/50 focus:shadow-[0_0_10px_rgba(212,175,55,0.1)] transition-all font-serif placeholder-amber-500/30"
+                />
+              </div>
+              <label className="flex items-center gap-2 cursor-pointer select-none px-4 py-2 border border-green-500/30 bg-green-950/20 hover:bg-green-900/30 transition-all font-display">
                 <input
                   type="checkbox"
                   checked={onlyAlive}
                   onChange={(e) => setOnlyAlive(e.target.checked)}
-                  className="w-4 h-4 accent-green-500 cursor-pointer"
+                  className="w-4 h-4 accent-green-600 bg-slate-800 border-green-500/30 rounded-none cursor-pointer"
                 />
-                <span className={`text-sm font-medium ${onlyAlive ? "text-green-400" : "text-gray-400"}`}>
+                <span className={`text-sm tracking-wide ${onlyAlive ? "text-green-400" : "text-green-600/50"}`}>
                   Còn sống
                 </span>
               </label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="px-4 py-2 bg-gray-800/80 border border-gray-600 rounded-none text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="px-4 py-2 bg-slate-900/80 border border-amber-500/20 text-amber-200/80 focus:outline-none focus:border-amber-500/50 transition-all font-mono text-sm appearance-none cursor-pointer"
+                style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d4af37%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')", backgroundRepeat: "no-repeat", backgroundPosition: "right 10px center", backgroundSize: "10px auto", paddingRight: "30px" }}
               >
-                <option value="no">Sort by No.</option>
-                <option value="name">Sort by Name</option>
-                <option value="race">Sort by Race</option>
-                <option value="team">Sort by Team</option>
-                <option value="totalBaseStats">Sort by Total Base Stats</option>
-                <option value="totalStats">Sort by Total Stats</option>
+                <option value="no" className="bg-slate-900">Sort by No.</option>
+                <option value="name" className="bg-slate-900">Sort by Name</option>
+                <option value="race" className="bg-slate-900">Sort by Race</option>
+                <option value="team" className="bg-slate-900">Sort by Team</option>
+                <option value="totalBaseStats" className="bg-slate-900">Sort by Total Base</option>
+                <option value="totalStats" className="bg-slate-900">Sort by Total Stats</option>
               </select>
               {/* Race Filter Button */}
               <div className="relative" ref={raceFilterRef}>
@@ -992,15 +960,15 @@ export const PlayerListPage = () => {
                     setShowHouseFilter(false);
                     setShowTeamFilter(false);
                   }}
-                  className={`px-4 py-2 border rounded-none font-medium transition-colors flex items-center gap-2 ${
+                  className={`px-4 py-2 border font-display font-medium text-sm tracking-wide transition-all flex items-center gap-2 ${
                     selectedRaces.length > 0
-                      ? "bg-amber-600/80 border-amber-500 text-white"
-                      : "bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80"
+                      ? "bg-amber-900/40 border-amber-500/60 text-amber-300 shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+                      : "bg-slate-900/80 border-amber-500/20 text-amber-400/60 hover:bg-slate-800 hover:text-amber-400/80"
                   }`}
                 >
-                  <span>🏷️ Race Filter</span>
+                  <span>⟡ Race Filter</span>
                   {selectedRaces.length > 0 && (
-                    <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                    <span className="bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded text-xs border border-amber-500/30">
                       {selectedRaces.length}
                     </span>
                   )}
@@ -1068,15 +1036,15 @@ export const PlayerListPage = () => {
                     setShowRaceFilter(false);
                     setShowTeamFilter(false);
                   }}
-                  className={`px-4 py-2 border rounded-none font-medium transition-colors flex items-center gap-2 ${
+                  className={`px-4 py-2 border font-display font-medium text-sm tracking-wide transition-all flex items-center gap-2 ${
                     selectedHouses.length > 0
-                      ? "bg-cyan-600/80 border-cyan-500 text-white"
-                      : "bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80"
+                      ? "bg-purple-900/40 border-purple-500/60 text-purple-300 shadow-[0_0_10px_rgba(168,85,247,0.2)]"
+                      : "bg-slate-900/80 border-amber-500/20 text-amber-400/60 hover:bg-slate-800 hover:text-amber-400/80"
                   }`}
                 >
-                  <span>🏠 House Filter</span>
+                  <span>⊳ House Filter</span>
                   {selectedHouses.length > 0 && (
-                    <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                    <span className="bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded text-xs border border-purple-500/30">
                       {selectedHouses.length}
                     </span>
                   )}
@@ -1151,15 +1119,15 @@ export const PlayerListPage = () => {
                     setShowRaceFilter(false);
                     setShowHouseFilter(false);
                   }}
-                  className={`px-4 py-2 border rounded-none font-medium transition-colors flex items-center gap-2 ${
+                  className={`px-4 py-2 border font-display font-medium text-sm tracking-wide transition-all flex items-center gap-2 ${
                     selectedTeams.length > 0
-                      ? "bg-purple-600/80 border-purple-500 text-white"
-                      : "bg-gray-800/80 border-gray-600 text-white hover:bg-gray-700/80"
+                      ? "bg-cyan-900/40 border-cyan-500/60 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.2)]"
+                      : "bg-slate-900/80 border-amber-500/20 text-amber-400/60 hover:bg-slate-800 hover:text-amber-400/80"
                   }`}
                 >
-                  <span>👥 Team Filter</span>
+                  <span>◬ Team Filter</span>
                   {selectedTeams.length > 0 && (
-                    <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+                    <span className="bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded text-xs border border-cyan-500/30">
                       {selectedTeams.length}
                     </span>
                   )}
@@ -1246,9 +1214,9 @@ export const PlayerListPage = () => {
               </div>
               <button
                 onClick={() => setShowRaceStats(true)}
-                className="px-4 py-2 bg-amber-600/80 hover:bg-amber-700/80 border border-amber-500 rounded-none text-white font-medium transition-colors flex items-center gap-2"
+                className="px-4 py-2 bg-slate-900/80 hover:bg-amber-900/40 border border-amber-500/20 hover:border-amber-500/40 text-amber-400/70 hover:text-amber-300 font-display font-medium text-sm transition-all flex items-center gap-2"
               >
-                <span>📊</span> Race Stats
+                <span>☽</span> Race Stats
               </button>
               <span className="text-gray-400">
                 {filteredPlayers.length} players found
@@ -1313,15 +1281,15 @@ export const PlayerListPage = () => {
       {viewMode === "players" && (
         <button
           onClick={() => setShowRanking(!showRanking)}
-          className={`fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-white text-xl font-bold transition-all hover:scale-110 ${
+          className={`fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] flex items-center justify-center text-white text-xl transition-all hover:scale-110 border border-amber-500/50 group ${
             showRanking
-              ? "bg-red-600 hover:bg-red-500"
-              : "bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500"
+              ? "bg-red-950 hover:bg-red-900 border-red-500/50 shadow-[0_0_20px_rgba(220,38,38,0.4)]"
+              : "bg-gradient-to-br from-amber-600 to-orange-800 hover:from-amber-500 hover:to-orange-600"
           }`}
           style={{ zIndex: 1000 }}
           title="Bảng xếp hạng"
         >
-          {showRanking ? "✕" : "🏆"}
+          {showRanking ? <span className="text-red-300">✕</span> : <span className="group-hover:animate-pulse">✨</span>}
         </button>
       )}
 
@@ -1585,32 +1553,32 @@ const MiniHexagonChart = ({
     {
       key: "str" as keyof CharacterStats,
       effectKey: "strength" as keyof EffectStats,
-      color: "#f87171",
+      color: "#fcd34d", // amber-300
     },
     {
       key: "spd" as keyof CharacterStats,
       effectKey: "speed" as keyof EffectStats,
-      color: "#fbbf24",
+      color: "#fbbf24", // amber-400
     },
     {
       key: "dur" as keyof CharacterStats,
       effectKey: "durability" as keyof EffectStats,
-      color: "#60a5fa",
+      color: "#d4d4d8", // zinc-300
     },
     {
       key: "iq" as keyof CharacterStats,
       effectKey: "iq" as keyof EffectStats,
-      color: "#a78bfa",
+      color: "#a1a1aa", // zinc-400
     },
     {
       key: "biq" as keyof CharacterStats,
       effectKey: "biq" as keyof EffectStats,
-      color: "#f472b6",
+      color: "#f59e0b", // amber-500
     },
     {
       key: "ma" as keyof CharacterStats,
       effectKey: "ma" as keyof EffectStats,
-      color: "#fb923c",
+      color: "#d97706", // amber-600
     },
   ];
 
@@ -1671,16 +1639,16 @@ const MiniHexagonChart = ({
       {/* Base stat polygon (lighter, background) */}
       <polygon
         points={getBaseStatPoints()}
-        fill="rgba(156, 163, 175, 0.2)"
-        stroke="#9ca3af"
+        fill="rgba(212, 175, 55, 0.1)"
+        stroke="#d4af37"
         strokeWidth="0.5"
         strokeDasharray="2 1"
       />
       {/* Total stat polygon (main, foreground) */}
       <polygon
         points={getTotalStatPoints()}
-        fill="rgba(34, 197, 94, 0.3)"
-        stroke="#22c55e"
+        fill="rgba(212, 175, 55, 0.3)"
+        stroke="#fbbf24"
         strokeWidth="1.5"
       />
       {/* Stat points for total stats */}
@@ -1709,52 +1677,32 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
   const totalStatsSum = Object.values(totalStats).reduce((a, b) => a + b, 0);
 
   const statLabels = [
-    { key: "str" as keyof CharacterStats, label: "STR", color: "text-red-400" },
-    {
-      key: "spd" as keyof CharacterStats,
-      label: "SPD",
-      color: "text-yellow-400",
-    },
-    {
-      key: "dur" as keyof CharacterStats,
-      label: "DUR",
-      color: "text-blue-400",
-    },
-    {
-      key: "iq" as keyof CharacterStats,
-      label: "IQ",
-      color: "text-purple-400",
-    },
-    {
-      key: "biq" as keyof CharacterStats,
-      label: "BIQ",
-      color: "text-pink-400",
-    },
-    {
-      key: "ma" as keyof CharacterStats,
-      label: "MA",
-      color: "text-orange-400",
-    },
+    { key: "str" as keyof CharacterStats, label: "STR" },
+    { key: "spd" as keyof CharacterStats, label: "SPD" },
+    { key: "dur" as keyof CharacterStats, label: "DUR" },
+    { key: "iq" as keyof CharacterStats, label: "IQ" },
+    { key: "biq" as keyof CharacterStats, label: "BIQ" },
+    { key: "ma" as keyof CharacterStats, label: "MA" },
   ];
 
   return (
     <div
       onClick={onClick}
-      className={`bg-gray-800/80 backdrop-blur-sm border rounded-none p-4 cursor-pointer transition-all hover:scale-[1.02] hover:shadow-xl ${
+      className={`bg-slate-950/70 backdrop-blur-md border rounded-none p-4 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(212,175,55,0.15)] ${
         isSelected
-          ? "border-teal-500 ring-2 ring-teal-500/50"
-          : "border-gray-700 hover:border-gray-500"
-      } ${player.tournament?.status == "eliminated" ? "opacity-50 border-red-600" : ""}`}
+          ? "border-amber-400 ring-1 ring-amber-500/50"
+          : "border-amber-500/20 hover:border-amber-500/50"
+      } ${player.tournament?.status == "eliminated" ? "opacity-50 border-red-900 grayscale-[50%]" : ""}`}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="text-xs font-bold text-teal-400 bg-teal-400/20 px-2 py-0.5 rounded">
+            <span className="text-xs font-bold text-amber-500 bg-amber-950/40 border border-amber-500/30 px-2 py-0.5 rounded shadow-[inset_0_0_8px_rgba(212,175,55,0.1)]">
               No.{player.no}
             </span>
             {player.team && (
-              <span className="text-xs font-medium text-purple-400 bg-purple-400/20 px-2 py-0.5 rounded">
+              <span className="text-xs font-medium text-amber-200 bg-amber-900/30 border border-amber-500/20 px-2 py-0.5 rounded">
                 Team {player.team}
               </span>
             )}
@@ -1804,21 +1752,21 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
               </span>
             )}
           </div>
-          <h3 className="text-lg font-bold text-white truncate">
+          <h3 className="text-lg font-bold text-white truncate drop-shadow-[0_0_2px_rgba(212,175,55,0.5)] font-display tracking-wide">
             {player.name}
           </h3>
           {player.username && (
-            <p className="text-sm text-gray-400 truncate">{player.username}</p>
+            <p className="text-sm text-amber-500/50 truncate font-mono">@{player.username}</p>
           )}
         </div>
       </div>
 
       {/* Race & Archetypes */}
-      <div className="flex flex-wrap gap-2 mb-3">
-        <span className="text-xs font-medium text-amber-400 bg-amber-400/20 px-2 py-1 rounded">
+      <div className="flex flex-wrap gap-2 mb-3 mt-2">
+        <span className="text-xs font-medium text-emerald-300 bg-gradient-to-r from-emerald-900/50 to-transparent border-l-2 border-emerald-500 px-2 py-1 rounded-r shadow-sm">
           {player.race || "Unknown Race"}
           {player.isReincarnator && player.actualRace && (
-            <span className="text-amber-300 ml-1">→ {player.actualRace}</span>
+            <span className="text-emerald-200 ml-1">→ {player.actualRace}</span>
           )}
         </span>
         {player.archetypes &&
@@ -1826,7 +1774,7 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
           player.archetypes.map((archetype, idx) => (
             <span
               key={idx}
-              className="text-xs font-medium text-pink-400 bg-pink-400/20 px-2 py-1 rounded truncate max-w-[140px]"
+              className="text-xs font-medium text-purple-300 bg-gradient-to-r from-purple-900/50 to-transparent border-l-2 border-purple-500 px-2 py-1 rounded-r shadow-sm truncate max-w-[140px]"
             >
               {archetype}
             </span>
@@ -1837,7 +1785,7 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
       <div className="flex items-center gap-3">
         <MiniHexagonChart stats={player.stats} totalStats={totalStats} />
         <div className="flex-1 grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
-          {statLabels.map(({ key, label, color }) => {
+          {statLabels.map(({ key, label }) => {
             const baseValue = player.stats[key] || 0;
             const effectKey =
               key === "str"
@@ -1851,17 +1799,17 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
             const diff = totalValue - baseValue;
             return (
               <div key={key} className="flex justify-between">
-                <span className={color}>{label}</span>
+                <span className="text-amber-500/80 font-mono">{label}</span>
                 <span className="text-white font-medium">
-                  <span className="text-gray-500">{baseValue}</span>
-                  <span className="text-gray-600 mx-0.5">→</span>
+                  <span className="text-gray-600">{baseValue}</span>
+                  <span className="text-gray-700 mx-0.5">→</span>
                   <span
                     className={
                       diff > 0
                         ? "text-green-400"
                         : diff < 0
                           ? "text-red-400"
-                          : "text-white"
+                          : "text-amber-100"
                     }
                   >
                     {totalValue}
@@ -1870,12 +1818,12 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
               </div>
             );
           })}
-          <div className="col-span-2 border-t border-gray-600 mt-1 pt-1 flex justify-between">
-            <span className="text-gray-400">Total</span>
+          <div className="col-span-2 border-t border-amber-500/10 mt-1 pt-1 flex justify-between">
+            <span className="text-gray-500 font-mono">Total</span>
             <span>
-              <span className="text-gray-500">{baseTotal}</span>
-              <span className="text-gray-600 mx-0.5">→</span>
-              <span className="text-teal-400 font-bold">{totalStatsSum}</span>
+              <span className="text-gray-600">{baseTotal}</span>
+              <span className="text-gray-700 mx-0.5">→</span>
+              <span className="text-amber-400 font-bold">{totalStatsSum}</span>
             </span>
           </div>
         </div>
@@ -2185,51 +2133,51 @@ const PlayerDetailModal = ({
   const stats = [
     {
       key: "str",
-      label: "Strength",
+      label: "STR",
       baseValue: character.stats.str,
       totalValue: characterEffects.totalStats.strength,
-      color: "text-red-400",
-      bg: "bg-red-400",
+      color: "text-amber-500",
+      bg: "bg-amber-500",
     },
     {
       key: "spd",
-      label: "Speed",
+      label: "SPD",
       baseValue: character.stats.spd,
       totalValue: characterEffects.totalStats.speed,
-      color: "text-yellow-400",
-      bg: "bg-yellow-400",
+      color: "text-amber-400",
+      bg: "bg-amber-400",
     },
     {
       key: "dur",
-      label: "Durability",
+      label: "DUR",
       baseValue: character.stats.dur,
       totalValue: characterEffects.totalStats.durability,
-      color: "text-blue-400",
-      bg: "bg-blue-400",
+      color: "text-zinc-300",
+      bg: "bg-zinc-300",
     },
     {
       key: "iq",
       label: "IQ",
       baseValue: character.stats.iq,
       totalValue: characterEffects.totalStats.iq,
-      color: "text-purple-400",
-      bg: "bg-purple-400",
+      color: "text-zinc-400",
+      bg: "bg-zinc-400",
     },
     {
       key: "biq",
-      label: "Battle IQ",
+      label: "BIQ",
       baseValue: character.stats.biq,
       totalValue: characterEffects.totalStats.biq,
-      color: "text-pink-400",
-      bg: "bg-pink-400",
+      color: "text-orange-400",
+      bg: "bg-orange-400",
     },
     {
       key: "ma",
-      label: "Martial Arts",
+      label: "MA",
       baseValue: character.stats.ma,
       totalValue: characterEffects.totalStats.ma,
-      color: "text-orange-400",
-      bg: "bg-orange-400",
+      color: "text-amber-600",
+      bg: "bg-amber-600",
     },
   ];
 
@@ -2437,7 +2385,7 @@ const PlayerDetailModal = ({
                         {character.nestedArchetypes.map((arch, idx) => (
                           <span
                             key={idx}
-                            className="text-pink-400 text-sm inline-flex items-center relative"
+                            className="text-purple-300 bg-purple-950/40 border border-purple-500/20 text-sm inline-flex items-center relative px-2 py-0.5 rounded shadow-sm"
                           >
                             {arch.name}
                             <StatModifierBadge
@@ -2475,7 +2423,7 @@ const PlayerDetailModal = ({
                       character.archetypes.length > 0 ? (
                       <div className="flex flex-wrap gap-1">
                         {character.archetypes.map((archetype, idx) => (
-                          <span key={idx} className="text-pink-400 text-sm">
+                          <span key={idx} className="text-purple-300 bg-purple-950/40 border border-purple-500/20 text-sm px-2 py-0.5 rounded shadow-sm">
                             {archetype}
                             <StatModifierBadge
                               name={archetype}
@@ -2501,14 +2449,14 @@ const PlayerDetailModal = ({
                         {character.nestedHouses.map((house, idx) => (
                           <span
                             key={idx}
-                            className={`text-sm inline-flex items-center relative ${
+                            className={`text-sm inline-flex items-center relative px-2 py-0.5 rounded border shadow-sm ${
                               house.isLost &&
                               house.lostType !== "kinda_homeless"
-                                ? "text-gray-500 line-through"
+                                ? "text-gray-500 line-through border-gray-700 bg-gray-800/50"
                                 : house.isLost &&
                                     house.lostType === "kinda_homeless"
-                                  ? "text-yellow-500"
-                                  : "text-cyan-400"
+                                  ? "text-yellow-500 border-yellow-500/20 bg-yellow-950/30"
+                                  : "text-cyan-300 border-cyan-500/20 bg-cyan-950/40"
                             }`}
                           >
                             {house.name}
@@ -2560,10 +2508,10 @@ const PlayerDetailModal = ({
                         {character.houses.map((house, idx) => (
                           <span
                             key={idx}
-                            className={`text-sm ${
+                            className={`text-sm px-2 py-0.5 rounded border shadow-sm ${
                               house.isLost
-                                ? "text-gray-500 line-through"
-                                : "text-cyan-400"
+                                ? "text-gray-500 line-through border-gray-700 bg-gray-800/50"
+                                : "text-cyan-300 border-cyan-500/20 bg-cyan-950/40"
                             }`}
                           >
                             {house.name}

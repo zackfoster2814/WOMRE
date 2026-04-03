@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CharacterStats } from "../types/character";
+import type { PlayerData } from "../types/battleZone";
 import { CharacterParser } from "../utils/characterParser";
 import { getAssetPath } from "../utils/basePath";
 import { fetchAllPlayerTexts } from "../utils/googleDrive";
@@ -48,15 +49,7 @@ interface BossesData {
   bosses: Boss[];
 }
 
-// Player data from files
-interface PlayerData {
-  no: number;
-  name: string;
-  username: string;
-  stats: CharacterStats;
-  team?: number;
-  race?: string;
-}
+// PlayerData imported from src/types/battleZone.ts
 
 // Combined battle view
 interface BattleView {
