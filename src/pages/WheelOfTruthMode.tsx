@@ -62,9 +62,6 @@ import {
 import {
   PvPPlayerData,
   CombatResult,
-  CarryOverEffect,
-  RoundEvent,
-  PointChange,
   RoundLog,
   DothrakiRule,
   StepCombatState,

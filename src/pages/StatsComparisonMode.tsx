@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Character, CharacterStats } from "../types/character";
 // CharacterParser used via playerParsing.ts (imported below)
 import { EffectResolver } from "../effects/resolver";
@@ -27,11 +27,7 @@ import {
 } from "../utils/googleDrive";
 import {
   PvPPlayerData,
-  RoundResult,
   CombatResult,
-  CarryOverEffect,
-  RoundEvent,
-  PointChange,
   RoundLog,
   DothrakiRule,
   StepCombatState,

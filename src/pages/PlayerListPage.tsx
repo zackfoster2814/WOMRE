@@ -2,14 +2,8 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import {
   Character,
   CharacterStats,
-  LossableItem,
   NestedArchetype,
   NestedHouse,
-  Gear,
-  Weapon,
-  Rune,
-  PvPReward,
-  TournamentInfo,
 } from "../types/character";
 import type { PlayerSummary } from "../types/player";
 import { CharacterParser } from "../utils/characterParser";

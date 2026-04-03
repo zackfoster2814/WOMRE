@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useEffect, useState } from "react";
+import { useRef, useMemo, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -291,7 +291,7 @@ function CountdownNumber({ count }: { count: number }) {
 // ── Main Component ────────────────────────────────────────────────────────────
 export function CombatIntroScreen({ player1Name, player1No, player2Name, player2No, onComplete, volume = 1 }: any) {
   const [phase, setPhase] = useState<"enter" | "show" | "exit">("enter");
-  const [progress, setProgress] = useState(0);
+  const [, setProgress] = useState(0);
   const [countdown, setCountdown] = useState(5);
   const [isClashing, setIsClashing] = useState(false);
 
