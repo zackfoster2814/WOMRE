@@ -8,7 +8,7 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Demi-god
+Race: Demi-God
 Sub-race: Moon
 ```
 ```

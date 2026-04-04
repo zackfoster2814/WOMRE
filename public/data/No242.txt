@@ -8,7 +8,7 @@ Ký Sinh:
 + 
 ```
 ```
-Race: Skeleton 
+Race: Skeleton (Lich)
 Sub-race: Angel
 ```
 
@@ -20,12 +20,13 @@ Archetype:
 ``` 
 1 Quirk:  
 + Training Restricted
++ Brainrot
 ```
 ```
 Str:7 Cursed of 36k
 Spd:7 (Ban đầu là 4, +3 từ Conquerer) Cursed of 36k
 Dur:6 Cursed of 36k
-IQ:1 (Cố định)
+IQ:8 (Cố định)
 BIQ:8 Cursed of 36k
 MA:6 Cursed of 36k
 ```

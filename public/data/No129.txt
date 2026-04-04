@@ -67,7 +67,6 @@ Runeword: Không
 ```
 Char dev: 
 + MrBeast
-+ Obtain a Cultivation Technique (PvP Reward)
 ```
 
 ```
