@@ -10,6 +10,30 @@ export interface SCPlayerCardProps {
   displayStats?: CharacterStats | null;
 }
 
+function getHouseGradientForSC(player: PvPPlayerData): string {
+  const activeHouses = player.character?.houses?.filter((h) => !h.isLost) || [];
+  if (activeHouses.length === 0)
+    return "linear-gradient(160deg, #0f172a 60%, #1e1b4b 100%)";
+  const houseName = activeHouses[0].name.toLowerCase();
+
+  if (houseName.includes("Dothraki"))
+    return "linear-gradient(160deg, #78350f 0%, #0f172a 100%)";
+  if (houseName.includes("valhalla"))
+    return "linear-gradient(160deg, #1e3a8a 0%, #0f172a 100%)";
+  if (houseName.includes("eldritch"))
+    return "linear-gradient(160deg, #4c1d95 0%, #0f172a 100%)";
+  if (houseName.includes("sylvan"))
+    return "linear-gradient(160deg, #14532d 0%, #0f172a 100%)";
+  if (houseName.includes("roundtable"))
+    return "linear-gradient(160deg, #713f12 0%, #0f172a 100%)";
+  if (houseName.includes("Uchiha"))
+    return "linear-gradient(160deg, #020617 0%, #0f172a 100%)";
+  if (houseName.includes("Stark"))
+    return "linear-gradient(160deg, #164e63 0%, #0f172a 100%)";
+
+  return "linear-gradient(160deg, #0f172a 60%, #1e1b4b 100%)";
+}
+
 export const SCPlayerCard = ({
   player,
   side,
@@ -19,12 +43,19 @@ export const SCPlayerCard = ({
 }: SCPlayerCardProps) => {
   const stats = displayStats ?? player.stats;
   const isLeft = side === "left";
+  const isTraitor = player.character?.houses?.some(
+    (h) => h.isLost && (h as any).lostType !== "kinda_homeless",
+  );
+
   const borderGlow =
     showWinner && isWinner
-      ? "border-yellow-400/80 shadow-xl shadow-yellow-500/20"
-      : isLeft
-        ? "border-blue-500/60 shadow-lg shadow-blue-900/30"
-        : "border-red-500/60 shadow-lg shadow-red-900/30";
+      ? "border-amber-400/80 ring-1 ring-amber-500/50 shadow-[0_0_15px_rgba(255,209,108,0.5)]"
+      : isTraitor
+        ? "border-red-600/80 ring-1 ring-red-600/50 shadow-[0_0_15px_rgba(220,38,38,0.5)]"
+        : isLeft
+          ? "border-blue-500/60 shadow-[0_0_10px_rgba(59,130,246,0.3)]"
+          : "border-red-500/60 shadow-[0_0_10px_rgba(239,68,68,0.3)]";
+
   const race = player.character?.race?.race || player.race;
   const subRace = player.character?.race?.subRace || "";
   const total = STAT_ORDER.reduce((s, { key }) => s + (stats[key] || 0), 0);
@@ -42,14 +73,14 @@ export const SCPlayerCard = ({
 
   return (
     <div
-      className={`relative rounded-none border-2 overflow-hidden transition-all duration-300 ${borderGlow}`}
+      className={`relative rounded-xl overflow-hidden transition-all duration-300 card-magic glass-l2 ${borderGlow} ${isTraitor ? "rune-glow-red" : ""}`}
       style={{
-        background: "linear-gradient(160deg, #0f172a 60%, #1e1b4b 100%)",
+        background: getHouseGradientForSC(player),
       }}
     >
       {/* Decorative corner accent */}
       <div
-        className={`absolute top-0 ${isLeft ? "left-0" : "right-0"} w-12 h-12 opacity-20`}
+        className={`absolute top-0 ${isLeft ? "left-0" : "right-0"} w-12 h-12 opacity-20 pointer-events-none`}
         style={{
           background: `radial-gradient(circle at ${isLeft ? "top left" : "top right"}, ${isLeft ? "#3b82f6" : "#ef4444"}, transparent 70%)`,
         }}
@@ -57,7 +88,7 @@ export const SCPlayerCard = ({
 
       {/* ── Name plate ── */}
       <div
-        className={`px-3 py-2 border-b ${isLeft ? "border-blue-700/40 bg-blue-950/40" : "border-red-700/40 bg-red-950/40"} flex items-center gap-2 ${!isLeft ? "flex-row-reverse" : ""}`}
+        className={`px-3 py-2 border-b ${isLeft ? "border-blue-700/30 bg-blue-950/30" : "border-red-700/30 bg-red-950/30"} flex items-center gap-2 ${!isLeft ? "flex-row-reverse" : ""}`}
       >
         <span
           className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-bold ${isLeft ? "bg-blue-800/60 text-blue-300" : "bg-red-800/60 text-red-300"}`}

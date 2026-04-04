@@ -185,11 +185,11 @@ const HouseLoreSection = ({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       {/* Header */}
-      <div className="text-center mb-2">
-        <h2 className="text-3xl font-bold text-purple-300 mb-1">
-          Chuyện bộ tộc
+      <div className="text-center mb-6">
+        <h2 className="text-4xl lg:text-5xl font-bold text-primary font-display tracking-widest drop-shadow-[0_2px_10px_rgba(255,209,108,0.3)] mb-2">
+          Ghi Chép Cổ Tự
         </h2>
       </div>
 
@@ -209,41 +209,41 @@ const HouseLoreSection = ({
           return (
             <div
               key={house.houseName}
-              className={`bg-gradient-to-br ${house.bgGradient} border border-gray-600 rounded-none overflow-hidden shadow-xl`}
+              className={`bg-gradient-to-br ${house.bgGradient} border border-primary/30 rounded-2xl overflow-hidden shadow-panel-l1 card-magic bevel-gold`}
             >
               {/* House Header */}
               <div
-                className={`bg-${house.color}-600/30 px-6 py-4 border-b border-gray-600`}
+                className={`bg-${house.color}-600/30 px-6 py-5 border-b border-primary/20 backdrop-blur-sm`}
               >
-                <div className="flex items-center gap-3">
-                  <span className="text-4xl">{house.icon}</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-5xl drop-shadow-md">{house.icon}</span>
                   <div>
-                    <h3 className="text-xl font-bold text-white">
+                    <h3 className="text-2xl font-bold text-white font-lore tracking-wider">
                       {house.houseName}
                     </h3>
-                    <span className={`text-${house.color}-300 text-sm`}>
-                      {members.length} thành viên
+                    <span className={`text-${house.color}-300 text-sm font-mono tracking-widest`}>
+                      {members.length} THÀNH VIÊN
                     </span>
                   </div>
                 </div>
               </div>
 
               {/* House Content */}
-              <div className="p-6 space-y-4">
+              <div className="p-6 space-y-5 bg-surface/40 backdrop-blur-md">
                 {/* Description - fixed height for alignment */}
                 <div className="flex items-center" style={{ minHeight: 60 }}>
-                  <p className="text-gray-300 text-sm leading-relaxed text-center w-full">
-                    {house.description}
+                  <p className="text-gray-300 text-base leading-relaxed text-center w-full font-lore italic border-b border-outline-dim pb-4">
+                    "{house.description}"
                   </p>
                 </div>
 
                 {/* Base Effect - fixed height for alignment */}
                 <div
-                  className="bg-black/30 rounded-none p-3 flex flex-col justify-center"
+                  className="bg-black/40 rounded-xl p-4 flex flex-col justify-center border border-primary/10 shadow-inner"
                   style={{ minHeight: 72 }}
                 >
-                  <p className="text-xs text-gray-400 mb-1">Hiệu ứng cơ bản:</p>
-                  <p className={`text-${house.color}-300 font-medium text-sm`}>
+                  <p className="text-xs text-primary-dim mb-1 font-display uppercase tracking-widest">Hiệu ứng cơ sở:</p>
+                  <p className={`text-${house.color}-300 font-medium text-sm font-sans leading-relaxed`}>
                     {house.effect}
                   </p>
                 </div>
@@ -251,7 +251,7 @@ const HouseLoreSection = ({
                 {/* Traitor / Collective Section - fixed height for alignment */}
                 <div style={{ minHeight: 240 }}>
                   {house.traitor ? (
-                    <div className="bg-gradient-to-r from-red-900/40 to-red-800/40 border-2 border-red-500/50 rounded-none p-4 relative overflow-hidden h-full">
+                    <div className="glass-l2 border border-red-500/50 rounded-xl p-5 relative overflow-hidden h-full rune-glow-red">
                       {/* Warning stripes background */}
                       <div className="absolute inset-0 opacity-5">
                         <div
@@ -623,16 +623,19 @@ export const PlayerListPage = () => {
   };
 
   // Get unique races from all players (including Unknown for players without race)
+  // Normalize: giữ dạng hiển thị gốc nhưng deduplicate case-insensitive
   const availableRaces = useMemo(() => {
-    const races = new Set(
-      players.map((p) => p.race).filter((r) => r && r !== "Unknown"),
+    const seen = new Map<string, string>(); // lowercase → first seen display value
+    players.forEach((p) => {
+      if (!p.race || p.race === "Unknown") return;
+      const key = p.race.toLowerCase();
+      if (!seen.has(key)) seen.set(key, p.race);
+    });
+    const sortedRaces = Array.from(seen.values()).sort((a, b) =>
+      a.toLowerCase().localeCompare(b.toLowerCase()),
     );
-    const sortedRaces = Array.from(races).sort();
-    // Check if there are players with Unknown/empty race
     const hasUnknown = players.some((p) => !p.race || p.race === "Unknown");
-    if (hasUnknown) {
-      sortedRaces.push("Unknown");
-    }
+    if (hasUnknown) sortedRaces.push("Unknown");
     return sortedRaces;
   }, [players]);
 
@@ -744,17 +747,17 @@ export const PlayerListPage = () => {
       });
     }
 
-    // Apply race filter if any races are selected
+    // Apply race filter if any races are selected (case-insensitive)
     if (selectedRaces.length > 0) {
+      const selectedLower = selectedRaces.map((r) => r.toLowerCase());
       result = result.filter((p) => {
-        // Handle "Unknown" filter for players with empty or "Unknown" race
         if (
-          selectedRaces.includes("Unknown") &&
+          selectedLower.includes("unknown") &&
           (!p.race || p.race === "Unknown")
         ) {
           return true;
         }
-        return selectedRaces.includes(p.race);
+        return p.race && selectedLower.includes(p.race.toLowerCase());
       });
     }
 
@@ -853,18 +856,18 @@ export const PlayerListPage = () => {
     >
       {/* Fixed Header */}
       <header
-        className={`flex-shrink-0 bg-gradient-to-b from-slate-950/95 to-slate-900/90 backdrop-blur-md border-b border-amber-500/20 px-4 py-4 overflow-visible relative z-[50] shadow-[0_4_20px_rgba(0,0,0,0.5)] ${!isWebOnly ? "pl-40" : ""}`}
+        className={`flex-shrink-0 bg-surface/90 backdrop-blur-md border-b border-primary/20 px-4 py-4 overflow-visible relative z-[50] shadow-bloom ${!isWebOnly ? "pl-40" : ""}`}
       >
         <div className="max-w-7xl mx-auto overflow-visible">
           <div className="flex items-center justify-center gap-6 mb-4">
             {/* View Mode Toggle */}
-            <div className="flex bg-slate-900/80 p-1 border border-amber-500/20">
+            <div className="flex p-1 border border-primary/20 bg-surface/80 rounded-sm shadow-inner glass-l1">
               <button
                 onClick={() => setViewMode("players")}
                 className={`px-6 py-2 font-display text-sm uppercase tracking-wider transition-all ${
                   viewMode === "players"
-                    ? "bg-amber-900/40 text-amber-300 border border-amber-500/50 shadow-[inset_0_0_10px_rgba(212,175,55,0.2)]"
-                    : "text-gray-500 hover:text-amber-400/60 border border-transparent"
+                    ? "bg-primary/20 text-primary border border-primary/50 shadow-bloom"
+                    : "text-gray-500 hover:text-primary/60 border border-transparent"
                 }`}
               >
                 Players
@@ -873,8 +876,8 @@ export const PlayerListPage = () => {
                 onClick={() => setViewMode("teams")}
                 className={`px-6 py-2 font-display text-sm uppercase tracking-wider transition-all ${
                   viewMode === "teams"
-                    ? "bg-amber-900/40 text-amber-300 border border-amber-500/50 shadow-[inset_0_0_10px_rgba(212,175,55,0.2)]"
-                    : "text-gray-500 hover:text-amber-400/60 border border-transparent"
+                    ? "bg-primary/20 text-primary border border-primary/50 shadow-bloom"
+                    : "text-gray-500 hover:text-primary/60 border border-transparent"
                 }`}
               >
                 Teams
@@ -893,7 +896,7 @@ export const PlayerListPage = () => {
             <button
               onClick={refreshPlayers}
               disabled={isLoading}
-              className="px-5 py-2 bg-slate-800 border border-amber-500/30 hover:bg-slate-700 disabled:bg-gray-800 disabled:border-gray-700/50 disabled:text-gray-600 text-amber-400/90 font-mono text-sm transition-all flex items-center gap-2 hover:shadow-[0_0_10px_rgba(212,175,55,0.2)]"
+              className="px-5 py-2 btn-secondary disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
             >
               <span className={isLoading ? "animate-spin" : ""}>⟳</span>{" "}
               Sync
@@ -902,7 +905,7 @@ export const PlayerListPage = () => {
               onClick={() => {
                 window.location.hash = "#/bracket";
               }}
-              className="px-5 py-2 bg-red-950/80 border border-red-500/50 hover:bg-red-900 shadow-[0_0_10px_rgba(220,38,38,0.3)] hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] text-red-300 font-display font-medium tracking-wide transition-all flex items-center gap-2"
+              className="px-5 py-2 bg-red-900/30 border border-red-500/50 hover:bg-red-800/40 shadow-[0_0_10px_rgba(220,38,38,0.3)] hover:shadow-[0_0_15px_rgba(220,38,38,0.5)] text-red-300 font-display font-medium tracking-wide transition-all flex items-center gap-2 rounded-sm"
             >
               ⚔ PvP Bracket
             </button>
@@ -913,38 +916,38 @@ export const PlayerListPage = () => {
             /* Player Controls */
             <div className="flex flex-wrap gap-4 items-center justify-center overflow-visible">
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-500/50">⌕</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-primary/50">⌕</span>
                 <input
                   type="text"
                   placeholder="Search players..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 pr-4 py-2 bg-slate-900/80 border border-amber-500/20 text-amber-100/90 w-64 focus:outline-none focus:border-amber-500/50 focus:shadow-[0_0_10px_rgba(212,175,55,0.1)] transition-all font-serif placeholder-amber-500/30"
+                  className="pl-9 pr-4 py-2 input-arcane w-64 focus:ring-1 focus:ring-primary/50"
                 />
               </div>
-              <label className="flex items-center gap-2 cursor-pointer select-none px-4 py-2 border border-green-500/30 bg-green-950/20 hover:bg-green-900/30 transition-all font-display">
+              <label className="flex items-center gap-2 cursor-pointer select-none px-4 py-2 btn-secondary border-green-500/30 text-green-400 hover:bg-green-500/10 hover:border-green-500/50">
                 <input
                   type="checkbox"
                   checked={onlyAlive}
                   onChange={(e) => setOnlyAlive(e.target.checked)}
-                  className="w-4 h-4 accent-green-600 bg-slate-800 border-green-500/30 rounded-none cursor-pointer"
+                  className="w-4 h-4 accent-green-600 bg-surface/50 border-green-500/30 rounded-none cursor-pointer"
                 />
-                <span className={`text-sm tracking-wide ${onlyAlive ? "text-green-400" : "text-green-600/50"}`}>
+                <span className={`text-sm tracking-wide ${onlyAlive ? "text-green-400 font-bold" : "text-green-600/50"}`}>
                   Còn sống
                 </span>
               </label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="px-4 py-2 bg-slate-900/80 border border-amber-500/20 text-amber-200/80 focus:outline-none focus:border-amber-500/50 transition-all font-mono text-sm appearance-none cursor-pointer"
-                style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d4af37%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')", backgroundRepeat: "no-repeat", backgroundPosition: "right 10px center", backgroundSize: "10px auto", paddingRight: "30px" }}
+                className="px-4 py-2 input-arcane font-mono text-sm appearance-none cursor-pointer pr-10"
+                style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23d4af37%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E')", backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center", backgroundSize: "10px auto" }}
               >
-                <option value="no" className="bg-slate-900">Sort by No.</option>
-                <option value="name" className="bg-slate-900">Sort by Name</option>
-                <option value="race" className="bg-slate-900">Sort by Race</option>
-                <option value="team" className="bg-slate-900">Sort by Team</option>
-                <option value="totalBaseStats" className="bg-slate-900">Sort by Total Base</option>
-                <option value="totalStats" className="bg-slate-900">Sort by Total Stats</option>
+                <option value="no" className="bg-surface">Sort by No.</option>
+                <option value="name" className="bg-surface">Sort by Name</option>
+                <option value="race" className="bg-surface">Sort by Race</option>
+                <option value="team" className="bg-surface">Sort by Team</option>
+                <option value="totalBaseStats" className="bg-surface">Sort by Total Base</option>
+                <option value="totalStats" className="bg-surface">Sort by Total Stats</option>
               </select>
               {/* Race Filter Button */}
               <div className="relative" ref={raceFilterRef}>
@@ -954,10 +957,10 @@ export const PlayerListPage = () => {
                     setShowHouseFilter(false);
                     setShowTeamFilter(false);
                   }}
-                  className={`px-4 py-2 border font-display font-medium text-sm tracking-wide transition-all flex items-center gap-2 ${
+                  className={`px-4 py-2 font-display text-sm tracking-wide flex items-center gap-2 ${
                     selectedRaces.length > 0
-                      ? "bg-amber-900/40 border-amber-500/60 text-amber-300 shadow-[0_0_10px_rgba(212,175,55,0.2)]"
-                      : "bg-slate-900/80 border-amber-500/20 text-amber-400/60 hover:bg-slate-800 hover:text-amber-400/80"
+                      ? "btn-primary hover:shadow-bloom"
+                      : "btn-secondary text-primary/80"
                   }`}
                 >
                   <span>⟡ Race Filter</span>
@@ -991,8 +994,12 @@ export const PlayerListPage = () => {
                             ? players.filter(
                                 (p) => !p.race || p.race === "Unknown",
                               ).length
-                            : players.filter((p) => p.race === race).length;
-                        const isSelected = selectedRaces.includes(race);
+                            : players.filter(
+                                (p) => p.race?.toLowerCase() === race.toLowerCase(),
+                              ).length;
+                        const isSelected = selectedRaces.some(
+                          (r) => r.toLowerCase() === race.toLowerCase(),
+                        );
                         return (
                           <label
                             key={race}
@@ -1030,10 +1037,10 @@ export const PlayerListPage = () => {
                     setShowRaceFilter(false);
                     setShowTeamFilter(false);
                   }}
-                  className={`px-4 py-2 border font-display font-medium text-sm tracking-wide transition-all flex items-center gap-2 ${
+                  className={`px-4 py-2 font-display text-sm tracking-wide flex items-center gap-2 ${
                     selectedHouses.length > 0
-                      ? "bg-purple-900/40 border-purple-500/60 text-purple-300 shadow-[0_0_10px_rgba(168,85,247,0.2)]"
-                      : "bg-slate-900/80 border-amber-500/20 text-amber-400/60 hover:bg-slate-800 hover:text-amber-400/80"
+                      ? "btn-primary hover:shadow-bloom !bg-gradient-to-r !from-purple-600 !to-indigo-600"
+                      : "btn-secondary text-purple-300 border-purple-500/40 hover:border-purple-500/60 hover:bg-purple-900/20"
                   }`}
                 >
                   <span>⊳ House Filter</span>
@@ -1113,10 +1120,10 @@ export const PlayerListPage = () => {
                     setShowRaceFilter(false);
                     setShowHouseFilter(false);
                   }}
-                  className={`px-4 py-2 border font-display font-medium text-sm tracking-wide transition-all flex items-center gap-2 ${
+                  className={`px-4 py-2 font-display text-sm tracking-wide flex items-center gap-2 ${
                     selectedTeams.length > 0
-                      ? "bg-cyan-900/40 border-cyan-500/60 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.2)]"
-                      : "bg-slate-900/80 border-amber-500/20 text-amber-400/60 hover:bg-slate-800 hover:text-amber-400/80"
+                      ? "btn-primary hover:shadow-bloom !bg-gradient-to-r !from-cyan-600 !to-blue-600"
+                      : "btn-secondary text-cyan-300 border-cyan-500/40 hover:border-cyan-500/60 hover:bg-cyan-900/20"
                   }`}
                 >
                   <span>◬ Team Filter</span>
@@ -1682,11 +1689,11 @@ const PlayerCard = ({ player, onClick, isSelected }: PlayerCardProps) => {
   return (
     <div
       onClick={onClick}
-      className={`bg-slate-950/70 backdrop-blur-md border rounded-none p-4 cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_15px_rgba(212,175,55,0.15)] ${
+      className={`card-magic glass-l2 rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-bloom ${
         isSelected
-          ? "border-amber-400 ring-1 ring-amber-500/50"
-          : "border-amber-500/20 hover:border-amber-500/50"
-      } ${player.tournament?.status == "eliminated" ? "opacity-50 border-red-900 grayscale-[50%]" : ""}`}
+          ? "border-primary ring-1 ring-primary/50 rune-glow"
+          : "border-primary/20 hover:border-primary/50"
+      } ${player.tournament?.status == "eliminated" ? "opacity-40 border-red-900 grayscale" : ""}`}
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-2">
@@ -2185,14 +2192,12 @@ const PlayerDetailModal = ({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-4xl flex flex-col shadow-2xl rounded-t-2xl sm:rounded-2xl h-[95vh] sm:h-[90vh] border border-amber-500/15"
-        style={{ background: "linear-gradient(160deg, #020509 0%, #06080f 100%)" }}
+        className="w-full max-w-4xl flex flex-col h-[95vh] sm:h-[90vh] panel-magic glass-l2 bevel-gold animate-scale-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header — Astral Fantasy */}
         <div
-          className="px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between sticky top-0 z-10 rounded-t-2xl border-b border-amber-500/10"
-          style={{ background: "linear-gradient(135deg, rgba(10,14,26,0.97) 0%, rgba(20,10,30,0.97) 100%)", boxShadow: "0 1px 0 rgba(245,158,11,0.12)" }}
+          className="px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between sticky top-0 z-10 rounded-t-2xl border-b border-primary/20 bg-surface/80 backdrop-blur-md"
         >
           <div className="flex-1 min-w-0">
             {/* Badge row */}
@@ -2234,8 +2239,7 @@ const PlayerDetailModal = ({
         </div>
 
         {/* Tab Bar — Astral Fantasy */}
-        <div className="flex border-b border-amber-500/10 sticky top-[68px] sm:top-[76px] z-10"
-          style={{ background: "rgba(2,5,9,0.95)" }}>
+        <div className="flex border-b border-primary/20 sticky top-[68px] sm:top-[76px] z-10 bg-surface/90 backdrop-blur-sm">
           <button
             onClick={() => setActiveTab("info")}
             className={`flex-1 py-2.5 text-xs font-display font-bold tracking-[0.1em] transition-all ${
@@ -2327,7 +2331,7 @@ const PlayerDetailModal = ({
                 </div>
 
                 {/* Basic Info */}
-                <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4 space-y-2">
+                <div className="card-magic glass-l2 rounded-xl p-4 space-y-2">
                   {/* Race */}
                   <div className="flex items-center gap-2">
                     <span className="text-gray-400 text-sm min-w-[80px]">
@@ -2603,7 +2607,7 @@ const PlayerDetailModal = ({
                 </div>
 
                 {/* Stats */}
-                <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                <div className="card-magic glass-l2 rounded-xl p-4">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
                       <span className="text-amber-500/70 text-sm">✦</span> Stats
@@ -2684,7 +2688,7 @@ const PlayerDetailModal = ({
 
                 {/* Quirks */}
                 {character.quirks && character.quirks.length > 0 && (
-                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                  <div className="card-magic glass-l2 rounded-xl p-4">
                     <h3 className="font-display text-base font-bold text-amber-300/90 mb-3 flex items-center gap-2 tracking-wide">
                       <span className="text-amber-500/70 text-sm">✦</span> Quirks
                     </h3>
@@ -2722,7 +2726,7 @@ const PlayerDetailModal = ({
                 {/* Gear */}
                 {(character.gear?.normalGear?.length > 0 ||
                   character.gear?.legacyGear?.length > 0) && (
-                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                  <div className="card-magic glass-l2 rounded-xl p-4">
                     <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("gear")}>
                       <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
                         <span className="text-amber-500/70 text-sm">⚔</span> Gear
@@ -2800,7 +2804,7 @@ const PlayerDetailModal = ({
 
                 {/* Weapons */}
                 {character.weapons && character.weapons.length > 0 && (
-                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                  <div className="card-magic glass-l2 rounded-xl p-4">
                     <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("weapons")}>
                       <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
                         <span className="text-amber-500/70 text-sm">🗡</span> Weapons
@@ -2841,7 +2845,7 @@ const PlayerDetailModal = ({
                 {character.runes &&
                   (character.runes.runes?.length > 0 ||
                     character.runes.runeword) && (
-                    <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                    <div className="card-magic glass-l2 rounded-xl p-4">
                       <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("runes")}>
                         <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
                           <span className="text-orange-400/70 text-sm">᚛</span> Runes
@@ -2894,7 +2898,7 @@ const PlayerDetailModal = ({
 
                 {/* Powers */}
                 {character.powers && character.powers.length > 0 && (
-                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                  <div className="card-magic glass-l2 rounded-xl p-4">
                     <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("powers")}>
                       <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
                         <span className="text-red-400/70 text-sm">✦</span> Powers
@@ -2933,7 +2937,7 @@ const PlayerDetailModal = ({
 
                 {/* Character Development */}
                 {character.charDevs && character.charDevs.length > 0 && (
-                  <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+                  <div className="card-magic glass-l2 rounded-xl p-4">
                     <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("chardev")}>
                       <h3 className="font-display text-base font-bold text-amber-300/90 flex items-center gap-2 tracking-wide">
                         <span className="text-cyan-400/70 text-sm">✦</span> Char Dev
@@ -2969,7 +2973,7 @@ const PlayerDetailModal = ({
 
                 {/* Lover */}
                 {character.lover && character.lover.length > 0 && (
-                  <div className="bg-slate-900/60 rounded-xl border border-pink-500/15 p-4">
+                  <div className="card-magic glass-l2 border-pink-500/20 rounded-xl p-4">
                     <h3 className="font-display text-base font-bold text-pink-300/90 mb-3 flex items-center gap-2 tracking-wide">
                       <span className="text-pink-400/70 text-sm">♡</span> Lover
                     </h3>
@@ -2992,7 +2996,7 @@ const PlayerDetailModal = ({
 
                 {/* PvP Rewards */}
                 {character.pvpRewards && character.pvpRewards.length > 0 && (
-                  <div className="bg-slate-900/60 rounded-xl border border-green-500/15 p-4">
+                  <div className="card-magic glass-l2 border-green-500/20 rounded-xl p-4">
                     <button className="w-full flex items-center justify-between sm:cursor-default" onClick={() => toggleSection("pvp")}>
                       <h3 className="font-display text-base font-bold text-green-300/90 flex items-center gap-2 tracking-wide">
                         <span className="text-green-400/70 text-sm">★</span> PvP Rewards
@@ -3043,7 +3047,7 @@ const PlayerDetailModal = ({
           {/* Tab Content: Battle Log */}
           {activeTab === "battlelog" && (
             <div className="p-3 sm:p-6">
-              <div className="bg-slate-900/60 rounded-xl border border-amber-500/15 p-4">
+              <div className="card-magic glass-l2 rounded-xl p-4">
                 {character.battleLog && character.battleLog.length > 0 ? (
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">

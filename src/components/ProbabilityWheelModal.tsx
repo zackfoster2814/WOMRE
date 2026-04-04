@@ -6,7 +6,7 @@
  */
 
 import { useState } from "react";
-import { ProbabilityWheel3D } from "./three/ProbabilityWheel3D";
+import { WheelCanvas } from "./WheelCanvas";
 import type { WheelItem } from "../types";
 
 export interface WheelSpinItem {
@@ -76,77 +76,79 @@ export const ProbabilityWheelModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="bg-gray-900 border-2 border-purple-500/50 rounded-none p-6 w-full max-w-2xl mx-4 shadow-2xl">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-surface/80 animate-fade-in">
+      <div className="bg-slate-800/95 p-8 rounded-[24px] shadow-panel-l1 border border-primary/30 bevel-gold relative overflow-hidden w-full max-w-2xl mx-4">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-purple-300">{title}</h2>
+        <div className="flex items-center justify-between mb-6 relative z-10">
+          <h2 className="font-display text-3xl font-bold text-primary tracking-widest drop-shadow-md">{title}</h2>
           <button
             onClick={handleClose}
             disabled={isSpinning}
-            className="text-gray-400 hover:text-white disabled:opacity-30 transition-colors text-2xl leading-none"
+            className="text-gray-400 hover:text-primary disabled:opacity-30 transition-colors text-3xl leading-none"
           >
             ×
           </button>
         </div>
 
         {/* Body: description trên, wheel dưới */}
-        <div className="flex flex-col gap-4 mb-4">
+        <div className="flex flex-col gap-6 mb-8 relative z-10">
           {description && (
-            <p className="text-gray-300 text-sm leading-relaxed">{description}</p>
+            <p className="font-lore text-gray-300 text-base leading-relaxed text-center italic">{description}</p>
           )}
 
-          {/* Wheel 3D */}
-          <div className="w-80 h-80 mx-auto" style={{ height: 350 }}>
-            <ProbabilityWheel3D
+          {/* Wheel */}
+          <div className="w-80 h-80 mx-auto">
+            <WheelCanvas
               items={wheelItems}
               isSpinning={isSpinning}
               onSpinComplete={handleSpinComplete}
+              spinButtonClassName="hidden"
+              maxFontSize={26}
             />
           </div>
 
           {/* Result */}
           {result && (
             <div
-              className={`p-3 rounded-none ${
+              className={`p-4 rounded-xl text-center shadow-md animate-slide-in ${
                 result.isSuccess
-                  ? "bg-green-700/20 border border-green-500/60"
-                  : "bg-red-700/20 border border-red-500/60"
+                  ? "bg-green-900/40 border-2 border-green-500/60 rune-glow"
+                  : "bg-red-950/60 border-2 border-red-500/60 rune-glow-red"
               }`}
             >
-              <div className="text-xs text-gray-400 mb-1 uppercase tracking-wide">Kết quả</div>
-              <div className="text-base font-bold text-white">{result.label}</div>
+              <div className="text-xs text-primary-dim mb-2 font-display tracking-widest uppercase">Outcome</div>
+              <div className="text-2xl font-bold text-white font-lore drop-shadow-md">{result.label}</div>
               {result.description && (
-                <div className="text-xs text-gray-300 mt-1 leading-relaxed">{result.description}</div>
+                <div className="text-sm text-gray-300 mt-2 leading-relaxed font-sans">{result.description}</div>
               )}
             </div>
           )}
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-3 justify-center">
+        <div className="flex gap-4 justify-center relative z-10">
           {!result ? (
             <button
               onClick={handleSpin}
               disabled={isSpinning}
-              className="px-6 py-3 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 rounded-none text-white font-bold transition-all"
+              className="px-8 py-3 btn-primary disabled:opacity-50 tracking-wider text-sm font-display uppercase"
             >
-              {isSpinning ? "Đang quay..." : "🎡 Quay"}
+              {isSpinning ? "Commencing..." : "🎡 Spin"}
             </button>
           ) : (
             <button
               onClick={handleConfirm}
-              className="px-6 py-3 bg-green-600 hover:bg-green-500 rounded-none text-white font-bold transition-all"
+              className="px-8 py-3 btn-primary tracking-wider text-sm font-display uppercase"
             >
-              ✓ Xác nhận
+              ✓ Confirm Void
             </button>
           )}
           <button
             onClick={handleClose}
             disabled={isSpinning}
-            className="px-6 py-3 bg-gray-700 hover:bg-gray-600 disabled:opacity-30 rounded-none text-white font-medium transition-all"
+            className="px-8 py-3 btn-secondary disabled:opacity-30 tracking-wider text-sm"
           >
-            Đóng
+            Dismiss
           </button>
         </div>
       </div>

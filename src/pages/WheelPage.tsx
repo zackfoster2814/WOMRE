@@ -40,7 +40,9 @@ export const WheelPage = () => {
 
   // Dispatch custom event when spinning state changes
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent('wheelSpinningChange', { detail: { isSpinning } }));
+    window.dispatchEvent(
+      new CustomEvent("wheelSpinningChange", { detail: { isSpinning } }),
+    );
   }, [isSpinning]);
   const [customSfxUrl, setCustomSfxUrl] = useState<string>();
   const [customSfxName, setCustomSfxName] = useState<string>();
@@ -523,19 +525,17 @@ export const WheelPage = () => {
   // }, [currentItem]);
 
   return (
-    <div
-      className="min-h-screen py-2 px-4"
-      style={{
-        backgroundImage: `url(${wheelBgImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
-    >
-      <div className="max-w-[1600px] mx-auto">
+    <div className="min-h-screen pt-4 pb-32 px-4 relative overflow-hidden">
+      <div
+        className="fixed inset-0 bg-cover bg-center opacity-60 z-0 pointer-events-none"
+        style={{ backgroundImage: `url(${wheelBgImage})` }}
+      />
+      <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-surface/40 via-surface/80 to-surface z-0 pointer-events-none" />
+
+      <div className="max-w-[1600px] mx-auto relative z-10">
         <header className="mb-2">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-2 pl-44">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-4 px-2">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-primary to-amber-700 font-display tracking-widest drop-shadow-[0_2px_10px_rgba(255,209,108,0.3)]">
               Wheel of Multiverse
             </h1>
             <AudioControls
@@ -550,33 +550,27 @@ export const WheelPage = () => {
               }}
             />
           </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 pl-44">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 px-2">
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-              <p className="text-gray-400 text-xs sm:text-sm whitespace-nowrap">
-                V3.0 Lite Edition
+              <p className="text-primary-dim font-mono text-xs sm:text-sm whitespace-nowrap">
+                V3.0
               </p>
-              <span className="text-gray-600 hidden sm:inline">•</span>
+              <span className="text-primary-dim/40 hidden sm:inline">•</span>
               <input
                 type="text"
                 value={wheelName}
                 onChange={(e) => setWheelName(e.target.value)}
-                className="px-2 sm:px-3 py-1 bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
-                placeholder="Wheel name..."
+                className="px-4 py-1.5 input-arcane text-sm w-full sm:w-auto"
+                placeholder="Rune inscription..."
                 style={{ minWidth: "150px" }}
                 disabled={isSpinning}
               />
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 flex-wrap w-full sm:w-auto">
-              <label className="px-3 sm:px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded text-white font-medium transition-colors text-xs sm:text-sm flex items-center gap-2 cursor-pointer flex-1 sm:flex-initial justify-center">
-                <svg
-                  className="w-4 h-4 flex-shrink-0"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
-                </svg>
-                <span className="hidden sm:inline">Background Music</span>
-                <span className="sm:hidden">Music</span>
+            <div className="flex items-center gap-3 flex-wrap w-full sm:w-auto">
+              <label className="btn-secondary px-4 py-2 text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer flex-1 sm:flex-initial">
+                <span className="text-lg leading-none">♫</span>
+                <span className="hidden sm:inline">Ambience</span>
+                <span className="sm:hidden">SFX</span>
                 <input
                   type="file"
                   accept="audio/*"
@@ -592,9 +586,10 @@ export const WheelPage = () => {
               </label>
               <button
                 onClick={() => setIsHistoryOpen(true)}
-                className="px-3 sm:px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded text-white font-medium transition-colors text-xs sm:text-sm flex items-center gap-2 flex-1 sm:flex-initial justify-center"
+                className="btn-secondary px-4 py-2 text-xs sm:text-sm flex items-center justify-center gap-2 flex-1 sm:flex-initial"
               >
-                History ({spinHistory.length})
+                <span className="text-lg leading-none">📜</span>
+                Akashic Records ({spinHistory.length})
               </button>
             </div>
           </div>
@@ -617,7 +612,8 @@ export const WheelPage = () => {
           <div className="space-y-4">
             <div className="p-3 sm:p-6">
               <div className="flex flex-col md:flex-row gap-4">
-                <div className="flex-1">
+                <div className="flex-1 relative">
+                  <div className="absolute inset-0 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
                   <WheelCanvas
                     items={items}
                     isSpinning={isSpinning}
@@ -627,8 +623,7 @@ export const WheelPage = () => {
                     onSpin={handleSpin}
                     startAngle={startAngle}
                   />
-                  {/* Start Angle Control - Below wheel */}
-                  <div className="mt-4 flex items-center justify-center gap-3">
+                  <div className="mt-6 flex items-center justify-center gap-3">
                     <input
                       type="number"
                       value={angleInputValue}
@@ -646,7 +641,7 @@ export const WheelPage = () => {
                         }
                       }}
                       disabled={isSpinning}
-                      className="w-24 sm:w-36 px-2 sm:px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white text-center text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-24 sm:w-36 px-3 py-2 input-arcane text-center text-sm font-mono disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                     <button
                       onClick={() => {
@@ -654,10 +649,10 @@ export const WheelPage = () => {
                         setAngleInputValue("0");
                       }}
                       disabled={isSpinning}
-                      className="px-2 sm:px-3 py-2 bg-gray-600 hover:bg-gray-500 disabled:bg-gray-700 rounded text-white text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="btn-secondary px-4 py-2 text-xs sm:text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       title="Reset angle to 0"
                     >
-                      Reset
+                      Calibration
                     </button>
                   </div>
                 </div>
@@ -665,34 +660,34 @@ export const WheelPage = () => {
                 {/* Current Item Display - Responsive size */}
                 <div className="w-full md:w-64 flex flex-col justify-center">
                   {currentItem ? (
-                    <div className="bg-gray-700 p-4 sm:p-6 rounded-none border-4 border-yellow-500 shadow-lg h-auto md:h-64 flex flex-col">
-                      <p className="text-sm text-gray-400 mb-3 font-semibold">
-                        RESULT
+                    <div className="glass-l2 rounded-2xl p-6 shadow-panel-l1 border border-primary/40 h-auto md:h-64 flex flex-col transition-all duration-300 rune-glow">
+                      <p className="text-xs text-primary-dim mb-3 font-display tracking-[0.2em] uppercase text-center">
+                        Selected Entity
                       </p>
                       <div
-                        className="w-full h-6 rounded mb-4 flex-shrink-0"
+                        className="w-24 h-2 rounded-full mx-auto mb-6 shadow-bloom"
                         style={{
                           backgroundColor: getCurrentItemColor(),
                         }}
                       />
                       <div className="flex-1 flex flex-col items-center justify-center min-h-[3rem] relative">
-                        <p className="text-lg sm:text-xl font-bold text-white text-center break-words px-2">
+                        <p className="text-2xl sm:text-3xl font-bold text-white text-center break-words px-2 font-lore drop-shadow-md">
                           {currentItem.name}
                         </p>
                       </div>
-                      <div className="flex-shrink-0 mt-4">
-                        <p className="text-sm sm:text-base text-gray-400">
-                          Weight:{" "}
-                          <span className="text-white font-semibold">
+                      <div className="flex-shrink-0 mt-6 text-center">
+                        <p className="text-sm font-mono text-gray-400">
+                          MASS:{" "}
+                          <span className="text-secondary font-semibold drop-shadow-[0_0_4px_rgba(86,241,224,0.5)]">
                             {currentItem.weight}
                           </span>
                         </p>
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-gray-700 p-4 sm:p-6 rounded-none border-4 border-gray-600 shadow-lg h-auto md:h-64 flex items-center justify-center min-h-[12rem]">
-                      <p className="text-base sm:text-lg text-gray-500">
-                        No selection
+                    <div className="glass-l2 rounded-2xl p-6 shadow-panel-l1 border border-outline-dim h-auto md:h-64 flex items-center justify-center min-h-[12rem] opacity-60">
+                      <p className="text-base sm:text-lg font-lore tracking-widest text-gray-500 uppercase">
+                        Void Reader
                       </p>
                     </div>
                   )}

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { CharacterStats } from "../types/character";
 import { CharacterParser } from "../utils/characterParser";
 import { EffectResolver } from "../effects/resolver";
@@ -426,11 +426,11 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
           </select>
         </div>
 
-        <div className={`${!isWebView ? "" : "hidden"} text-center mb-8`}>
-          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 mb-4">
+        <div className={`${!isWebView ? "" : "hidden"} text-center mb-12`}>
+          <h1 className="font-display text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-primary via-blue-400 to-cyan-600 tracking-wider mb-4 drop-shadow-[0_0_20px_rgba(59,130,246,0.3)]">
             Lair Battle
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-primary/70 font-display tracking-widest uppercase text-lg">
             Select a team to challenge their assigned boss
           </p>
         </div>
@@ -451,26 +451,25 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
             return (
               <div
                 key={battle.teamId}
-                className={`bg-gray-800/90 backdrop-blur-sm border-2 rounded-none overflow-hidden transition-all hover:scale-[1.02] ${
+                className={`card-magic glass-l2 rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-bloom border ${
                   result
                     ? result.outcome === "win"
-                      ? "border-green-500/50"
-                      : "border-red-500/50"
+                      ? "border-green-500/50 ring-1 ring-green-500/20"
+                      : "border-red-500/50 ring-1 ring-red-500/20"
                     : hasBoss
-                      ? "border-red-500/50"
-                      : "border-gray-600"
+                      ? "border-amber-500/50 ring-1 ring-amber-500/20"
+                      : "border-primary/20"
                 }`}
               >
-                {/* Card Header */}
                 <div
-                  className={`px-4 py-3 ${
+                  className={`px-4 py-3 border-b border-white/5 ${
                     result
                       ? result.outcome === "win"
-                        ? "bg-green-600/20"
-                        : "bg-red-600/20"
+                        ? "bg-green-900/20"
+                        : "bg-red-900/20"
                       : hasBoss
-                        ? "bg-red-600/20"
-                        : "bg-gray-700/50"
+                        ? "bg-amber-900/20"
+                        : "bg-black/20"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -627,7 +626,7 @@ export const PvEBattlePage = ({ onBack, isWebView }: BattleModeProps) => {
                         <button
                           disabled
                           onClick={() => startBattle(battle)}
-                          className="w-full px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-500 text-white font-bold rounded-none transition-all transform shadow-lg text-sm"
+                          className="w-full px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-700 border border-gray-600 text-gray-400 font-bold rounded-xl transition-all shadow-panel-l1 text-sm mt-2"
                         >
                           Battle done!
                         </button>

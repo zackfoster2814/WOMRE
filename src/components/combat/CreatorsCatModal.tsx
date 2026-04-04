@@ -615,13 +615,13 @@ export function CreatorsCatModal({
                   "Roll lại 3 chỉ số"
                     ? 3
                     : 2;
-                // Skeleton: IQ cố định 1, không cho chọn khi Roll lại
+                // Skeleton family: IQ cố định, không cho chọn khi Roll lại
+                const skeletonRace = (pChar?.race?.race || "").toLowerCase();
                 const isSkeletonIQ =
                   creatorsCatModal.selectedEffect ===
                     "Roll lại 3 chỉ số" &&
                   key === "iq" &&
-                  (pChar?.race?.race || "").toLowerCase() ===
-                    "skeleton";
+                  skeletonRace.startsWith("skeleton");
                 return (
                   <button
                     key={key}

@@ -3,13 +3,19 @@ import { Character, CharacterStats } from "../types/character";
 import { EffectResolver } from "../effects/resolver";
 import { initializeEffectData } from "../effects/data";
 import wheelBgImage from "../assets/img/wheel-bg.png";
-import { fetchPlayerTexts, getPlayerIndex } from "../utils/googleDrive";
+import {
+  fetchPlayerTexts,
+  getPlayerIndex,
+  invalidatePlayerCache,
+} from "../utils/googleDrive";
 import {
   ProbabilityWheelModal,
   type WheelSpinItem,
 } from "../components/ProbabilityWheelModal";
 import { CombatEffectsPanel } from "../components/CombatEffectsPanel";
 import { ArenaLoadingScreen } from "../components/three/ArenaLoadingScreen";
+import { CombatIntroScreen } from "../components/three/CombatIntroScreen";
+import { CombatOutroScreen } from "../components/three/CombatOutroScreen";
 import { PvPBackground3D } from "../components/three/PvPBackground3D";
 import { CombatEffects3D } from "../components/three/CombatEffects3D";
 import { PlayerCard3DFrame } from "../components/three/PlayerCard3D";
@@ -89,7 +95,12 @@ function ensureEffectsInitialized() {
 
 let _bubbleIdCounter = 0;
 
-export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
+export const WheelOfTruthMode = ({
+  onBack,
+  tournamentMatch,
+  onSaveTournamentResult,
+  onNextMatch,
+}: BattleModeProps) => {
   // ── Player data ───────────────────────────────────────────────────────────
   const [allPlayers, setAllPlayers] = useState<PvPPlayerData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -140,6 +151,10 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
   const [masterVolume] = useState(1);
   const [bgmVolume] = useState(1);
 
+  // ── Intro / Outro ─────────────────────────────────────────────────────────
+  const [showIntro, setShowIntro] = useState(false);
+  const [showOutro, setShowOutro] = useState(false);
+
   // ── Combat state ──────────────────────────────────────────────────────────
   const [combatResult, setCombatResult] = useState<CombatResult | null>(null);
   const [, setIsAnimating] = useState(false);
@@ -147,6 +162,16 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
   const [stepState, setStepState] = useState<StepCombatState | null>(null);
   const [stepRoundIndex, setStepRoundIndex] = useState(-1);
   const [combatConfirmed, setCombatConfirmed] = useState(false);
+
+  // Tournament mode
+  const isTournamentMode = !!tournamentMatch;
+  const [tournamentSpecialEvent] = useState(
+    tournamentMatch?.existingSpecialEvent ?? "",
+  );
+  const [tournamentNote] = useState(
+    tournamentMatch?.existingNote ?? "",
+  );
+
   const [zoltraakBiq2Pending, setZoltraakBiq2Pending] = useState(false);
   const [pendingPreCombatCount, setPendingPreCombatCount] = useState(0);
 
@@ -345,6 +370,13 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
       try {
         ensureEffectsInitialized();
         const playerList: PvPPlayerData[] = [];
+
+        if (tournamentMatch) {
+          // Invalidate cache 2 player chính để luôn fetch data mới nhất
+          invalidatePlayerCache(tournamentMatch.player1No);
+          invalidatePlayerCache(tournamentMatch.player2No);
+        }
+
         const index = await getPlayerIndex();
         const nos = Object.keys(index)
           .filter((k) => /^No\d+$/.test(k))
@@ -362,6 +394,15 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
           reResolveWithAllChars(p, allChars),
         );
         setAllPlayers(resolved);
+
+        if (tournamentMatch) {
+          setPlayer1(
+            resolved.find((p) => p.no === tournamentMatch.player1No) ?? null,
+          );
+          setPlayer2(
+            resolved.find((p) => p.no === tournamentMatch.player2No) ?? null,
+          );
+        }
       } catch (error) {
         console.error("Error loading players:", error);
       } finally {
@@ -369,6 +410,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
       }
     };
     loadPlayers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── Filtered player lists ─────────────────────────────────────────────────
@@ -446,7 +488,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     player2,
     disabledItems,
     allPlayers,
-    isTournamentMode: false,
+    isTournamentMode,
     summoningScrollResult,
     goldenCoinPoints,
     oneTrickPonyStat,
@@ -508,7 +550,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
     stepRoundIndex,
     disabledItems,
     allPlayers,
-    isTournamentMode: false,
+    isTournamentMode,
     roundtableSubMode: false,
     zoltraakBiq2Pending,
     oneTrickPonyStat,
@@ -891,6 +933,36 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
       {/* 3D animated background layer */}
       <PvPBackground3D />
 
+      {/* Combat intro screen */}
+      {showIntro && player1 && player2 && (
+        <CombatIntroScreen
+          player1Name={player1.name}
+          player1No={player1.no}
+          player2Name={player2.name}
+          player2No={player2.no}
+          volume={masterVolume}
+          onComplete={() => {
+            setShowIntro(false);
+            startCombat();
+          }}
+        />
+      )}
+
+      {/* Combat outro screen */}
+      {showOutro && player1 && player2 && effectiveWinner && (
+        <CombatOutroScreen
+          winnerName={effectiveWinner === "player1" ? player1.name : player2.name}
+          winnerNo={effectiveWinner === "player1" ? player1.no : player2.no}
+          loserName={effectiveWinner === "player1" ? player2.name : player1.name}
+          loserNo={effectiveWinner === "player1" ? player2.no : player1.no}
+          winnerSide={effectiveWinner}
+          onComplete={() => {
+            setShowOutro(false);
+            setCombatConfirmed(true);
+          }}
+        />
+      )}
+
       {/* Full-screen Canvas overlay for critical hit screen shake */}
       {critActive && (
         <div
@@ -935,7 +1007,9 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
             <div className="flex items-center gap-3">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-500/30" />
               <h1 className="font-display text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-primary to-orange-400 tracking-widest">
-                Wheel of Truth
+                {isTournamentMode
+                  ? (tournamentMatch!.displayLabel ?? `Match #${tournamentMatch!.matchNumber}`)
+                  : "Wheel of Truth"}
               </h1>
               <div className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-500/30" />
             </div>
@@ -961,7 +1035,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
             combatResult={combatResult}
             masterVolume={masterVolume}
             bgmVolume={bgmVolume}
-            isTournamentMode={false}
+            isTournamentMode={isTournamentMode}
             onClear={() => {
               setPlayer1(null);
               setSearchTerm1("");
@@ -1360,7 +1434,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       <div className="flex justify-center pt-2">
                         <button
                           onClick={() => {
-                            startCombat();
+                            if (player1 && player2) setShowIntro(true);
                           }}
                           disabled={pendingPreCombatCount > 0}
                           className={`px-10 py-3 rounded-xl font-display font-bold text-base transition-all transform tracking-widest ${
@@ -1558,7 +1632,10 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                     {battleDone && !combatConfirmed && (
                       <div className="flex justify-center pt-1">
                         <button
-                          onClick={() => setCombatConfirmed(true)}
+                          onClick={() => {
+                            if (effectiveWinner && player1 && player2) setShowOutro(true);
+                            else setCombatConfirmed(true);
+                          }}
                           disabled={pendingSpins}
                           className={`px-8 py-2.5 font-display font-bold rounded-xl text-sm tracking-widest transition-all ${
                             pendingSpins
@@ -1582,7 +1659,47 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
                       </div>
                     )}
                     {combatConfirmed && (
-                      <div className="flex justify-center pt-1">
+                      <div className="flex flex-wrap justify-center gap-2 pt-1">
+                        {isTournamentMode && onSaveTournamentResult && effectiveWinner && (
+                          <button
+                            onClick={() => {
+                              const winner = effectiveWinner === "player1" ? player1 : player2;
+                              if (!winner) return;
+                              const score = tournamentSpecialEvent
+                                ? null
+                                : `${effectiveScores.s1}-${effectiveScores.s2}`;
+                              onSaveTournamentResult({
+                                winnerNo: winner.no,
+                                score,
+                                specialEvent: tournamentSpecialEvent || null,
+                                note: tournamentNote || null,
+                              });
+                            }}
+                            className="px-6 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 hover:border-amber-400 text-amber-300 hover:text-amber-100 font-display text-sm font-medium transition-all"
+                          >
+                            ✓ Lưu Kết Quả
+                          </button>
+                        )}
+                        {isTournamentMode && onNextMatch && effectiveWinner && (
+                          <button
+                            onClick={() => {
+                              const winner = effectiveWinner === "player1" ? player1 : player2;
+                              if (!winner) return;
+                              const score = tournamentSpecialEvent
+                                ? null
+                                : `${effectiveScores.s1}-${effectiveScores.s2}`;
+                              onNextMatch({
+                                winnerNo: winner.no,
+                                score,
+                                specialEvent: tournamentSpecialEvent || null,
+                                note: tournamentNote || null,
+                              });
+                            }}
+                            className="px-6 py-2 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 hover:border-purple-400 text-purple-300 hover:text-purple-100 font-display text-sm font-medium transition-all"
+                          >
+                            ▶ Trận Tiếp Theo
+                          </button>
+                        )}
                         <button
                           onClick={resetCombat}
                           className="px-6 py-2 rounded-lg bg-slate-800/70 hover:bg-slate-700/70 border border-amber-500/20 hover:border-amber-500/40 text-amber-300/70 hover:text-amber-200 font-display text-sm font-medium transition-all"
@@ -1808,7 +1925,7 @@ export const WheelOfTruthMode = ({ onBack }: BattleModeProps) => {
             combatResult={combatResult}
             masterVolume={masterVolume}
             bgmVolume={bgmVolume}
-            isTournamentMode={false}
+            isTournamentMode={isTournamentMode}
             onClear={() => {
               setPlayer2(null);
               setSearchTerm2("");

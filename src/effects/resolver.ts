@@ -33,7 +33,9 @@ export type { Condition, CharacterEffects } from "./types";
  * Nếu race là Reincarnator thì dùng actualRace (phần sau "->") thay thế.
  */
 export function getEffectiveRace(char: any, fallbackRace?: string): string {
-  const race: string = (char?.race?.race || fallbackRace || "").toLowerCase().trim();
+  const race: string = (char?.race?.race || fallbackRace || "")
+    .toLowerCase()
+    .trim();
   if (race === "reincarnator") {
     const actual = (char?.race?.actualRace || "").trim().toLowerCase();
     if (actual) return actual;
@@ -388,12 +390,15 @@ export class EffectResolver {
           }
           // Scale stat_modifier effects by Eir stack: Eir=+1, Eir(1)=+2, Eir(2)=+4, Eir(3)=+8 (2^N)
           const stackMultiplier = stackMatch ? Math.pow(2, stackCount) : 1;
-          const scaledEffects = stackMultiplier === 1 ? subRaceEntry.effects : subRaceEntry.effects.map((e) => {
-            if (e.type === "stat_modifier" && e.value !== undefined) {
-              return { ...e, value: e.value * stackMultiplier };
-            }
-            return e;
-          });
+          const scaledEffects =
+            stackMultiplier === 1
+              ? subRaceEntry.effects
+              : subRaceEntry.effects.map((e) => {
+                  if (e.type === "stat_modifier" && e.value !== undefined) {
+                    return { ...e, value: e.value * stackMultiplier };
+                  }
+                  return e;
+                });
           sources.push({
             type: "sub_race",
             name: displayName,
@@ -489,12 +494,20 @@ export class EffectResolver {
       } else {
         // Fallback: parse "+N Stat" directly for rewards not in registry (e.g. "+9 IQ", "+2 BIQ")
         const statAbbreviations: Record<string, DynamicStatTarget> = {
-          str: "strength", strength: "strength",
-          spd: "speed", speed: "speed",
-          dur: "durability", dura: "durability", durability: "durability",
-          iq: "iq", biq: "biq",
-          ma: "ma", "martial arts": "ma",
-          all: "all", "all stats": "all", "all stat": "all",
+          str: "strength",
+          strength: "strength",
+          spd: "speed",
+          speed: "speed",
+          dur: "durability",
+          dura: "durability",
+          durability: "durability",
+          iq: "iq",
+          biq: "biq",
+          ma: "ma",
+          "martial arts": "ma",
+          all: "all",
+          "all stats": "all",
+          "all stat": "all",
         };
         const match = normalizedName.match(/^([+-]?\d+)\s+(.+)$/i);
         if (match) {
@@ -505,13 +518,15 @@ export class EffectResolver {
             sources.push({
               type: "pvp_reward",
               name: pvpReward.description,
-              effects: [{
-                type: "stat_modifier",
-                stat: statTarget,
-                value,
-                timing: "immediate",
-                target: "self",
-              }],
+              effects: [
+                {
+                  type: "stat_modifier",
+                  stat: statTarget,
+                  value,
+                  timing: "immediate",
+                  target: "self",
+                },
+              ],
               rawDescription: pvpReward.description,
               isActive: true,
             });
@@ -897,14 +912,23 @@ export class EffectResolver {
 
         // Handle Don't say it - check suffix for upgrade status
         if (parsed.baseName.toLowerCase() === "don't say it") {
-          const suffix = charDev.name.slice(parsed.baseName.length).toLowerCase();
+          const suffix = charDev.name
+            .slice(parsed.baseName.length)
+            .toLowerCase();
           if (suffix.includes("(-)")) {
             // (-) → skip toàn bộ effect (không cộng không trừ)
             effects = [];
-          } else if (suffix.includes("+2 all stats") || suffix.includes("+2 all")) {
+          } else if (
+            suffix.includes("+2 all stats") ||
+            suffix.includes("+2 all")
+          ) {
             // (+2 all stats) → thay -2 all thành +2 all
             effects = effects.map((e) => {
-              if (e.type === "stat_modifier" && (e as any).stat === "all" && (e as any).value === -2) {
+              if (
+                e.type === "stat_modifier" &&
+                (e as any).stat === "all" &&
+                (e as any).value === -2
+              ) {
                 return { ...e, value: 2 };
               }
               return e;
@@ -1035,7 +1059,15 @@ export class EffectResolver {
           sources.push({
             type: "quirk",
             name: `Cheater (từ ${other.name})`,
-            effects: [{ type: "stat_modifier", stat: "all", value: 1, timing: "immediate", target: "self" }],
+            effects: [
+              {
+                type: "stat_modifier",
+                stat: "all",
+                value: 1,
+                timing: "immediate",
+                target: "self",
+              },
+            ],
             rawDescription: `Cheater: ${other.name} bị loại → +1 All Stats`,
             isActive: true,
           });
@@ -1186,13 +1218,15 @@ export class EffectResolver {
           sources.push({
             type: "other_source",
             name: desc,
-            effects: [{
-              type: "stat_modifier",
-              stat: statTarget,
-              value: m.value,
-              timing: "immediate",
-              target: "self",
-            }],
+            effects: [
+              {
+                type: "stat_modifier",
+                stat: statTarget,
+                value: m.value,
+                timing: "immediate",
+                target: "self",
+              },
+            ],
             rawDescription: `Nguồn khác: ${desc}`,
             isActive: true,
           });
@@ -1261,14 +1295,23 @@ export class EffectResolver {
       case "race_match": {
         if (context.opponent) {
           const baseRace = context.opponent.race.toLowerCase();
-          const oppEffRace = baseRace === "reincarnator" && context.opponent.subRace
-            ? context.opponent.subRace.toLowerCase()
-            : baseRace;
+          const oppEffRace =
+            baseRace === "reincarnator" && context.opponent.subRace
+              ? context.opponent.subRace.toLowerCase()
+              : baseRace;
+          // Normalize: Skeleton (Lich) và Skeleton (Lich King) đều match với "skeleton"
+          const normalizeRace = (r: string) =>
+            r.startsWith("skeleton") ? "skeleton" : r;
+          const normalizedOppRace = normalizeRace(oppEffRace);
           if (condition.races) {
-            result = condition.races.some((r) => r.toLowerCase() === oppEffRace);
+            result = condition.races.some(
+              (r) => normalizeRace(r.toLowerCase()) === normalizedOppRace,
+            );
           }
           if (condition.excludeRaces) {
-            result = !condition.excludeRaces.some((r) => r.toLowerCase() === oppEffRace);
+            result = !condition.excludeRaces.some(
+              (r) => normalizeRace(r.toLowerCase()) === normalizedOppRace,
+            );
           }
         }
         break;
@@ -2000,14 +2043,19 @@ export class EffectResolver {
       allCharacters,
     );
 
-    // Special case: Skeleton race has IQ locked at 1
-    // IQ cannot be modified by any effect until evolution to Lich
-    // Check if race is Skeleton (not Lich or Lich King which are evolutions)
+    // Special case: Skeleton race family has IQ locked
+    // Skeleton: IQ cố định theo giá trị data (không thể modify)
+    // Skeleton (Lich): IQ cố định ở 8
+    // Skeleton (Lich King): IQ cố định ở 8 (Lich King = Lich + stat buffs, không đổi IQ base)
     const race = character.race?.race?.toLowerCase() || "";
     if (race === "skeleton") {
-      // Force IQ to always be 1 for Skeleton
-      result.totalStats.iq = 1;
-      result.baseStats.iq = 1;
+      const dataIq = baseStats.iq;
+      result.totalStats.iq = dataIq;
+      result.baseStats.iq = dataIq;
+      result.bonusStats.iq = 0;
+    } else if (race === "skeleton (lich)" || race === "skeleton (lich king)") {
+      result.totalStats.iq = 8;
+      result.baseStats.iq = 8;
       result.bonusStats.iq = 0;
     }
 
@@ -2380,10 +2428,9 @@ export class EffectResolver {
           }
         }
 
-        // Special case: Skeleton race has IQ locked at 1
-        // Filter out IQ modifiers from breakdown since they don't apply
+        // Special case: Skeleton race family has IQ locked — filter IQ modifiers from breakdown
         const race = character.race?.race?.toLowerCase() || "";
-        if (race === "skeleton") {
+        if (race === "skeleton" || race === "skeleton (lich)" || race === "skeleton (lich king)") {
           mergedStatChanges = mergedStatChanges.filter(
             (change) => change.stat !== "iq",
           );

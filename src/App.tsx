@@ -7,6 +7,7 @@ import {
   useLocation,
   Navigate,
 } from "react-router-dom";
+import { LandingPage } from "./pages/LandingPage";
 import { WheelPage } from "./pages/WheelPage";
 import { PlayerListPage } from "./pages/PlayerListPage";
 import { BattleZonePage } from "./pages/BattleZonePage";
@@ -14,7 +15,6 @@ import { PvPTournamentPage } from "./pages/PvPTournamentPage";
 import { PublicBracketPage } from "./pages/PublicBracketPage";
 import { WikiPage } from "./pages/WikiPage";
 import { SandboxPage } from "./pages/SandboxPage";
-// import { TeamBattlePage } from "./pages/TeamBattlePage";
 import { isTauri } from "./utils/localStorage";
 import { fetchAllPlayerTexts } from "./utils/googleDrive";
 import { SyncDataDialog } from "./components/SyncDataDialog";
@@ -23,45 +23,24 @@ import { SyncDataDialog } from "./components/SyncDataDialog";
 const isWebOnly = !isTauri();
 
 const navItems = [
-  { path: "/", label: "Wheel of Name", color: "bg-blue-600" },
-  { path: "/players", label: "Players", color: "bg-green-600" },
-  // { path: "/battles", label: "Team Battles", color: "bg-orange-600" },
-  { path: "/battle", label: "Battle Zone", color: "bg-red-600" },
-  { path: "/pvp-tournament", label: "PvP Tournament", color: "bg-purple-600" },
-  // { path: "/sandbox", label: "Sandbox", color: "bg-amber-600" },
-  // { path: "/wiki", label: "Wiki", color: "bg-cyan-600" },
+  { path: "/wheel", label: "Astrolabe", icon: "🌌" },
+  { path: "/players", label: "Player", icon: "📜" },
+  { path: "/battle", label: "Combat", icon: "⚔️" },
+  { path: "/pvp-tournament", label: "PvP", icon: "🏆" },
 ];
 
-// Navigation component
+// HUD style navigation for Game
 const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false);
   const [isWheelSpinning, setIsWheelSpinning] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // Listen to wheel spinning state changes
   useEffect(() => {
     const handleSpinningChange = (
       event: CustomEvent<{ isSpinning: boolean }>,
     ) => {
       setIsWheelSpinning(event.detail.isSpinning);
-      // Close dropdown if wheel starts spinning
-      if (event.detail.isSpinning) {
-        setIsOpen(false);
-      }
     };
 
     window.addEventListener(
@@ -75,64 +54,94 @@ const Navigation = () => {
       );
   }, []);
 
+  // Đóng navbar khi wheel đang spin
+  useEffect(() => {
+    if (isWheelSpinning) setIsOpen(false);
+  }, [isWheelSpinning]);
+
+  // Hide HUD on landing page (sau tất cả hooks)
+  if (location.pathname === "/") return null;
+
   const handleNavigate = (path: string) => {
-    if (isWheelSpinning) return;
+    if (isWheelSpinning || location.pathname === path) return;
     navigate(path);
     setIsOpen(false);
   };
 
-  const handleToggleMenu = () => {
-    if (isWheelSpinning) return;
-    setIsOpen(!isOpen);
-  };
-
-  // Get current page label
-  const currentPage = navItems.find((item) => item.path === location.pathname);
-
   return (
-    <nav className="fixed top-4 left-4 z-[2000]" ref={menuRef}>
-      {/* Menu Button */}
+    <>
+      {/* Toggle button — luôn hiển thị ở góc trái */}
       <button
-        onClick={handleToggleMenu}
-        className={`px-4 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white font-medium transition-all shadow-lg flex items-center gap-2 ${
-          isWheelSpinning
-            ? "opacity-50 cursor-not-allowed"
-            : "hover:bg-gray-700 hover:shadow-xl"
-        }`}
+        onClick={() => setIsOpen((prev) => !prev)}
+        disabled={isWheelSpinning}
+        className={`fixed left-0 top-1/2 -translate-y-1/2 z-[2001] flex items-center justify-center w-6 h-14 rounded-r-lg transition-all duration-300
+          bg-surface/80 border border-primary/30 border-l-0 shadow-[2px_0_8px_rgba(0,0,0,0.4)]
+          ${isOpen ? "opacity-0 pointer-events-none" : "opacity-100 hover:bg-primary/10 hover:border-primary/60"}
+          ${isWheelSpinning ? "opacity-0 pointer-events-none" : ""}
+        `}
+        title="Mở menu"
       >
-        <span>☰</span>
-        <span>{currentPage?.label || "Menu"}</span>
-        <span
-          className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-        >
-          ▼
-        </span>
+        <span className="text-primary text-xs font-bold">›</span>
       </button>
 
-      {/* Dropdown Menu */}
+      {/* Overlay mờ khi mở — click để đóng */}
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-52 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl overflow-hidden">
+        <div
+          className="fixed inset-0 z-[1999] bg-black/40"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <nav
+        className={`fixed left-0 top-0 h-screen w-24 z-[2000] transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        <div className="h-full glass-l2 border-r border-primary/20 flex flex-col items-center gap-2 py-6 shadow-[5px_0_15px_rgba(0,0,0,0.5)] bg-surface/80">
+          {/* Nút đóng */}
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-3 right-1 w-5 h-5 flex items-center justify-center text-gray-500 hover:text-primary transition-colors text-xs"
+            title="Đóng menu"
+          >
+            ‹
+          </button>
+
+          <button
+            onClick={() => handleNavigate("/")}
+            className="p-3 text-primary hover:text-white transition-colors mb-8"
+            title="Quit to Title"
+          >
+            <span className="text-3xl drop-shadow-[0_0_5px_rgba(212,175,55,0.5)]">
+              🚪
+            </span>
+          </button>
+
           {navItems.map((item) => {
-            const isActive = location.pathname === item.path;
+            const isActive = location.pathname.startsWith(item.path);
             return (
               <button
                 key={item.path}
                 onClick={() => handleNavigate(item.path)}
-                className={`w-full px-4 py-3 flex items-center gap-2 transition-all text-left
-                  ${
-                    isActive
-                      ? `${item.color} text-white font-semibold`
-                      : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                  }`}
+                className={`relative group w-full py-4 flex flex-col items-center gap-2 transition-all duration-300
+                  ${isActive ? "bg-primary/10 text-primary border-r-4 border-primary shadow-[inset_0_0_15px_rgba(255,209,108,0.1)]" : "text-gray-400 hover:text-primary hover:bg-white/5 border-r-4 border-transparent"}
+                `}
               >
-                <span>{item.label}</span>
-                {isActive && <span className="ml-auto text-xs">●</span>}
+                <span
+                  className={`text-2xl transition-transform duration-300 ${isActive ? "scale-110 drop-shadow-[0_0_8px_rgba(255,209,108,0.8)]" : "group-hover:scale-110"}`}
+                >
+                  {item.icon}
+                </span>
+                <span
+                  className={`font-display text-[10px] uppercase text-center tracking-wider px-1 ${isActive ? "font-bold" : "font-medium"}`}
+                >
+                  {item.label}
+                </span>
               </button>
             );
           })}
         </div>
-      )}
-    </nav>
+      </nav>
+    </>
   );
 };
 
@@ -156,27 +165,29 @@ const PrefetchToast = () => {
   if (status === "idle") return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] flex items-center gap-3 bg-gray-800 border border-gray-600 text-white px-5 py-3 rounded-xl shadow-xl text-sm">
+    <div className="fixed bottom-24 right-6 z-[9999] flex items-center gap-3 glass-l2 border-primary/30 text-white px-5 py-3 rounded-xl shadow-bloom text-sm">
       {status === "loading" && (
         <>
-          <span className="animate-bounce text-lg shrink-0">🍳</span>
-          <span className="text-gray-300">
-            SVIT đang nấu cái gì đó, đợi xíu nhé
-          </span>
+          <div className="flex items-center justify-center w-6 h-6">
+            <div className="absolute w-4 h-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+          </div>
+          <span className="font-lore text-gray-300">Cooking...</span>
         </>
       )}
       {status === "done" && (
         <>
-          <span className="text-green-400">✓</span>
-          <span className="text-gray-300">
-            Đã điều chỉnh thành công tỉ lệ của {count} con vợ
+          <span className="text-secondary drop-shadow-[0_0_4px_rgba(86,241,224,0.8)]">
+            ✦
+          </span>
+          <span className="font-lore text-gray-300">
+            Khế ước vĩnh hằng với {count} linh hồn đã thiết lập.
           </span>
         </>
       )}
       {status === "error" && (
         <>
-          <span className="text-red-400">✗</span>
-          <span className="text-gray-300">Bug. Mai fix</span>
+          <span className="text-error">✗</span>
+          <span className="font-lore text-gray-300">Đứt kết nối tinh tú.</span>
         </>
       )}
     </div>
@@ -184,6 +195,37 @@ const PrefetchToast = () => {
 };
 
 const SYNC_SEQUENCE = "SYNCDATA";
+
+// Wrapper to animate routes
+const AnimatedRoutes = () => {
+  const location = useLocation();
+
+  return (
+    <div key={location.pathname} className="animate-fade-in min-h-screen">
+      <Routes location={location}>
+        {isWebOnly ? (
+          <>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/players" element={<PlayerListPage />} />
+            <Route path="/bracket" element={<PublicBracketPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/wheel" element={<WheelPage />} />
+            <Route path="/players" element={<PlayerListPage />} />
+            <Route path="/battle" element={<BattleZonePage />} />
+            <Route path="/pvp-tournament" element={<PvPTournamentPage />} />
+            <Route path="/bracket" element={<PublicBracketPage />} />
+            <Route path="/sandbox" element={<SandboxPage />} />
+            <Route path="/wiki" element={<WikiPage />} />
+          </>
+        )}
+      </Routes>
+    </div>
+  );
+};
 
 function App() {
   const [showSync, setShowSync] = useState(false);
@@ -220,32 +262,10 @@ function App() {
 
   return (
     <HashRouter>
-      {/* Hide navigation in web-only mode */}
       {!isWebOnly && <Navigation />}
       <PrefetchToast />
       {showSync && <SyncDataDialog onClose={() => setShowSync(false)} />}
-      <Routes>
-        {isWebOnly ? (
-          <>
-            {/* Web-only mode: only allow /players and /bracket */}
-            <Route path="/players" element={<PlayerListPage />} />
-            <Route path="/bracket" element={<PublicBracketPage />} />
-            <Route path="*" element={<Navigate to="/players" replace />} />
-          </>
-        ) : (
-          <>
-            {/* Full Tauri app: Wheel of Name is default */}
-            <Route path="/" element={<WheelPage />} />
-            <Route path="/players" element={<PlayerListPage />} />
-            {/* <Route path="/battles" element={<TeamBattlePage />} /> */}
-            <Route path="/battle" element={<BattleZonePage />} />
-            <Route path="/pvp-tournament" element={<PvPTournamentPage />} />
-            <Route path="/bracket" element={<PublicBracketPage />} />
-            <Route path="/sandbox" element={<SandboxPage />} />
-            <Route path="/wiki" element={<WikiPage />} />
-          </>
-        )}
-      </Routes>
+      <AnimatedRoutes />
     </HashRouter>
   );
 }

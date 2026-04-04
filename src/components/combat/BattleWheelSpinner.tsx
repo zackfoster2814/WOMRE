@@ -6,16 +6,17 @@
  */
 
 import { useState, type ReactNode } from "react";
-import { ProbabilityWheel3D } from "../three/ProbabilityWheel3D";
+import { WheelCanvas } from "../WheelCanvas";
 import type { WheelItem } from "../../types";
+// ProbabilityWheel3D removed — WheelCanvas used instead (3D had rendering/overflow bugs)
 
 const STAT_LABELS: { key: string; label: string }[] = [
   { key: "str", label: "STR" },
   { key: "spd", label: "SPD" },
   { key: "dur", label: "DUR" },
-  { key: "iq",  label: "IQ"  },
+  { key: "iq", label: "IQ" },
   { key: "biq", label: "BIQ" },
-  { key: "ma",  label: "MA"  },
+  { key: "ma", label: "MA" },
 ];
 
 export interface BattleWheelSpinnerProps {
@@ -61,7 +62,9 @@ export function BattleWheelSpinner({
   onSpinComplete,
 }: BattleWheelSpinnerProps) {
   const [isSpinning, setIsSpinning] = useState(false);
-  const [spinResult, setSpinResult] = useState<"player1" | "player2" | null>(null);
+  const [spinResult, setSpinResult] = useState<"player1" | "player2" | null>(
+    null,
+  );
 
   const total = p1Weight + p2Weight;
   const p1Pct = total > 0 ? (p1Weight / total) * 100 : 50;
@@ -95,7 +98,9 @@ export function BattleWheelSpinner({
       <div className="grid grid-cols-[1fr_auto_1fr] gap-3 w-full items-center">
         {/* P1 stats */}
         <div className="rounded-none border border-blue-500/20 bg-blue-950/30 p-2 flex flex-col gap-0.5">
-          <div className="text-blue-400 text-xs font-bold truncate mb-1 text-center">{p1Name}</div>
+          <div className="text-blue-400 text-xs font-bold truncate mb-1 text-center">
+            {p1Name}
+          </div>
           {STAT_LABELS.map(({ key, label }) => {
             const val = p1AllStats?.[key] ?? (key === statKey ? p1Val : null);
             const isCurrent = key === statKey;
@@ -108,11 +113,15 @@ export function BattleWheelSpinner({
                     : "text-gray-500"
                 }`}
               >
-                <span className={isCurrent ? "text-yellow-400" : ""}>{label}</span>
+                <span className={isCurrent ? "text-yellow-400" : ""}>
+                  {label}
+                </span>
                 <span className={isCurrent ? "text-white text-sm" : ""}>
                   {val ?? "—"}
                   {isCurrent && p1Val > p2Val && (
-                    <span className="text-yellow-400 text-[10px] ml-0.5">×2</span>
+                    <span className="text-yellow-400 text-[10px] ml-0.5">
+                      ×2
+                    </span>
                   )}
                 </span>
               </div>
@@ -128,22 +137,30 @@ export function BattleWheelSpinner({
           )}
         </div>
 
-        {/* Wheel 3D */}
-        <div className="flex flex-col items-center gap-1 relative z-10" style={{ width: 280, height: 280 }}>
-          <div className="w-full h-full cursor-pointer hover:scale-105 transition-transform">
-            <ProbabilityWheel3D
+        {/* Wheel */}
+        <div
+          className="flex flex-col items-center gap-1 relative z-10"
+          style={{ width: 240 }}
+        >
+          <div
+            className="cursor-pointer hover:scale-105 transition-transform"
+            style={{ width: 260, height: 260 }}
+          >
+            <WheelCanvas
               items={items}
               isSpinning={isSpinning}
               onSpinComplete={handleSpinComplete}
               onSpin={() => {
-                if (!disabled && !isSpinning && !spinResult) setIsSpinning(true);
+                if (!disabled && !isSpinning && !spinResult)
+                  setIsSpinning(true);
               }}
+              spinButtonClassName="w-12 h-12 text-xs"
             />
           </div>
 
           {/* Result + Next button */}
           {spinResult ? (
-            <div className="flex flex-col items-center gap-1.5 mt-1">
+            <div className="flex flex-col items-center gap-1.5">
               <div
                 className={`text-sm font-black px-3 py-1 rounded-none border ${
                   spinResult === "player1"
@@ -156,24 +173,34 @@ export function BattleWheelSpinner({
               <button
                 onClick={handleNext}
                 disabled={hasCurrentPendingSpins}
-                title={hasCurrentPendingSpins ? "Còn hiệu ứng round này chưa quay" : undefined}
+                title={
+                  hasCurrentPendingSpins
+                    ? "Còn hiệu ứng round này chưa quay"
+                    : undefined
+                }
                 className={`px-5 py-1.5 rounded-none font-black text-sm transition-all shadow-lg ${
                   hasCurrentPendingSpins
                     ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
                     : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105"
                 }`}
               >
-                {hasCurrentPendingSpins ? "Quay hiệu ứng round này trước..." : "Next →"}
+                {hasCurrentPendingSpins
+                  ? "Quay hiệu ứng round này trước..."
+                  : "Next →"}
               </button>
             </div>
           ) : !isSpinning ? (
-            <div className="text-[10px] text-gray-600 italic">Nhấn SPIN để quay</div>
+            <div className="text-[10px] text-gray-600 italic">
+              Nhấn SPIN để quay
+            </div>
           ) : null}
         </div>
 
         {/* P2 stats */}
         <div className="rounded-none border border-red-500/20 bg-red-950/30 p-2 flex flex-col gap-0.5">
-          <div className="text-red-400 text-xs font-bold truncate mb-1 text-center">{p2Name}</div>
+          <div className="text-red-400 text-xs font-bold truncate mb-1 text-center">
+            {p2Name}
+          </div>
           {STAT_LABELS.map(({ key, label }) => {
             const val = p2AllStats?.[key] ?? (key === statKey ? p2Val : null);
             const isCurrent = key === statKey;
@@ -186,11 +213,15 @@ export function BattleWheelSpinner({
                     : "text-gray-500"
                 }`}
               >
-                <span className={isCurrent ? "text-yellow-400" : ""}>{label}</span>
+                <span className={isCurrent ? "text-yellow-400" : ""}>
+                  {label}
+                </span>
                 <span className={isCurrent ? "text-white text-sm" : ""}>
                   {val ?? "—"}
                   {isCurrent && p2Val > p1Val && (
-                    <span className="text-yellow-400 text-[10px] ml-0.5">×2</span>
+                    <span className="text-yellow-400 text-[10px] ml-0.5">
+                      ×2
+                    </span>
                   )}
                 </span>
               </div>

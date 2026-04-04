@@ -405,7 +405,12 @@ export const PvPTournamentPage = () => {
         {/* Overlay */}
         <div className="absolute bottom-10 right-10 z-10">
           {loading ? (
-            <div className="text-white/50 text-sm">Đang tải dữ liệu...</div>
+            <div className="crystal-loader-wrapper scale-75">
+              <div className="crystal-loader" />
+              <div className="text-primary/70 font-display uppercase tracking-[0.2em] text-xs font-bold animate-pulse">
+                SVIT ĐANG NẤU...
+              </div>
+            </div>
           ) : (
             <button
               onClick={() => setShowIntro(false)}
@@ -474,16 +479,20 @@ export const PvPTournamentPage = () => {
         <div className="flex gap-2 mb-4 justify-center">
           <button
             onClick={() => setActiveTab("create")}
-            className={`px-6 py-3 rounded-none font-bold transition-all ${
-              activeTab === "create" ? "bg-purple-600 text-white shadow-lg" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
+            className={`px-8 py-3 rounded-xl font-display uppercase tracking-widest font-bold transition-all duration-300 ${
+              activeTab === "create" 
+                ? "bg-primary/20 text-primary border-b-2 border-primary shadow-[0_0_15px_rgba(255,209,108,0.3)]" 
+                : "bg-surface/60 text-gray-400 border-b-2 border-transparent hover:text-primary hover:bg-surface/80"
             }`}
           >
             Create
           </button>
           <button
             onClick={() => setActiveTab("bracket")}
-            className={`px-6 py-3 rounded-none font-bold transition-all ${
-              activeTab === "bracket" ? "bg-purple-600 text-white shadow-lg" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
+            className={`px-8 py-3 rounded-xl font-display uppercase tracking-widest font-bold transition-all duration-300 ${
+              activeTab === "bracket" 
+                ? "bg-primary/20 text-primary border-b-2 border-primary shadow-[0_0_15px_rgba(255,209,108,0.3)]" 
+                : "bg-surface/60 text-gray-400 border-b-2 border-transparent hover:text-primary hover:bg-surface/80"
             }`}
           >
             Bracket

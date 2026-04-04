@@ -10,6 +10,12 @@ let _playerIndexCache: Record<string, string> | null = null;
 // Cache nội dung từng player text {no: content}
 const _playerTextCache = new Map<number, string>();
 
+// Promise-level cache cho bundle load (IS_WEB) — tránh fetch trùng khi nhiều caller cùng lúc
+let _bundlePromise: Promise<void> | null = null;
+
+// Promise-level cache cho fetchAllPlayerTexts — dedup các caller đồng thời
+let _allTextsPromise: Promise<Map<number, string>> | null = null;
+
 /**
  * Lấy player index map {No1: fileId, No2: fileId, ...}
  * Cache lại sau lần đầu để không fetch lại nhiều lần
@@ -36,6 +42,10 @@ export function clearPlayerIndexCache(): void {
 export async function fetchPlayerText(no: number): Promise<string> {
   if (_playerTextCache.has(no)) return _playerTextCache.get(no)!;
   if (IS_WEB) {
+    // Thử load bundle trước — nếu bundle đã load thì cache có sẵn
+    await loadPlayerBundle();
+    if (_playerTextCache.has(no)) return _playerTextCache.get(no)!;
+    // Fallback: fetch riêng lẻ
     const res = await fetch(`${BASE_URL}data/No${no}.txt`);
     if (!res.ok) throw new Error(`Player No${no} not found`);
     const text = await res.text();
@@ -56,22 +66,56 @@ export async function fetchPlayerText(no: number): Promise<string> {
 // Base path cho static assets (khác nhau giữa dev và GitHub Pages)
 const BASE_URL = import.meta.env.BASE_URL ?? '/';
 
-async function fetchPlayerTextsLocal(nos: number[]): Promise<Map<number, string>> {
-  const result = new Map<number, string>();
-  const toFetch = nos.filter((no) => !_playerTextCache.has(no));
-  await Promise.all(
-    toFetch.map(async (no) => {
-      try {
-        const res = await fetch(`${BASE_URL}data/No${no}.txt`);
-        if (res.ok) {
-          const text = await res.text();
+/**
+ * Tải players-bundle.json một lần duy nhất và điền vào _playerTextCache.
+ * Các caller đồng thời dùng chung một Promise — không fetch trùng.
+ * Nếu bundle không tồn tại, promise resolve bình thường (không throw).
+ */
+async function loadPlayerBundle(): Promise<void> {
+  if (_bundlePromise) return _bundlePromise;
+  _bundlePromise = (async () => {
+    try {
+      const res = await fetch(`${BASE_URL}data/players-bundle.json`);
+      if (!res.ok) throw new Error(`bundle ${res.status}`);
+      const bundle: Record<string, string> = await res.json();
+      for (const [key, text] of Object.entries(bundle)) {
+        const no = parseInt(key, 10);
+        if (!isNaN(no) && !_playerTextCache.has(no)) {
           _playerTextCache.set(no, text);
         }
-      } catch {
-        // file không tồn tại — bỏ qua
       }
-    }),
-  );
+    } catch {
+      // Bundle chưa build hoặc không tồn tại — fallback sang fetch riêng lẻ
+      _bundlePromise = null;
+    }
+  })();
+  return _bundlePromise;
+}
+
+async function fetchPlayerTextsLocal(nos: number[]): Promise<Map<number, string>> {
+  // Nút thắt 1: nạp bundle trước (1 request thay vì N request)
+  await loadPlayerBundle();
+
+  // Nút thắt 1 fallback: các player chưa có trong cache sau khi load bundle
+  // (xảy ra khi bundle chưa được build) — fetch riêng lẻ
+  const toFetch = nos.filter((no) => !_playerTextCache.has(no));
+  if (toFetch.length > 0) {
+    await Promise.all(
+      toFetch.map(async (no) => {
+        try {
+          const res = await fetch(`${BASE_URL}data/No${no}.txt`);
+          if (res.ok) {
+            const text = await res.text();
+            _playerTextCache.set(no, text);
+          }
+        } catch {
+          // file không tồn tại — bỏ qua
+        }
+      }),
+    );
+  }
+
+  const result = new Map<number, string>();
   for (const no of nos) {
     if (_playerTextCache.has(no)) result.set(no, _playerTextCache.get(no)!);
   }
@@ -147,18 +191,27 @@ export async function fetchPlayerTexts(
 /**
  * Fetch tất cả player trong index song song
  * Trả về map {no: text} — dùng cache
+ * Nút thắt 3: promise-level dedup — nhiều caller đồng thời chỉ tạo 1 fetch duy nhất
  */
 export async function fetchAllPlayerTexts(): Promise<Map<number, string>> {
-  const index = await getPlayerIndex();
-  const nos = Object.keys(index)
-    .filter((k) => /^No\d+$/.test(k))
-    .map((k) => parseInt(k.replace("No", "")));
-  return fetchPlayerTexts(nos);
+  if (_allTextsPromise) return _allTextsPromise;
+  _allTextsPromise = (async () => {
+    const index = await getPlayerIndex();
+    const nos = Object.keys(index)
+      .filter((k) => /^No\d+$/.test(k))
+      .map((k) => parseInt(k.replace("No", "")));
+    return fetchPlayerTexts(nos);
+  })();
+  // Nếu lỗi, xóa cache để cho phép retry
+  _allTextsPromise.catch(() => { _allTextsPromise = null; });
+  return _allTextsPromise;
 }
 
 /** Reset toàn bộ cache player texts (dùng khi cần force reload) */
 export function clearPlayerTextCache(): void {
   _playerTextCache.clear();
+  _bundlePromise = null;
+  _allTextsPromise = null;
 }
 
 /** Xóa cache của 1 player để force fetch mới khi click vào */

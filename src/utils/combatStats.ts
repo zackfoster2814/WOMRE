@@ -4,7 +4,11 @@
 import { Character, CharacterStats } from "../types/character";
 import { EffectResolver, getEffectiveRace } from "../effects/resolver";
 import { EffectRegistry } from "../effects/registry";
-import { RACE_TIERS, STAT_NAME_MAP, _ALL_STAT_KEYS } from "../constants/battleZone";
+import {
+  RACE_TIERS,
+  STAT_NAME_MAP,
+  _ALL_STAT_KEYS,
+} from "../constants/battleZone";
 import { InventoryItem } from "../types/battleZone";
 
 /** Tính raceTier cho tiebreak. Với Reincarnator: dùng sub-race (race thực) để so sánh. */
@@ -173,7 +177,6 @@ export function calcStatsWithDisabled(
     biq: result.totalStats.biq,
     ma: result.totalStats.ma,
   };
-
 
   const charRace = (char as any).race?.race?.toLowerCase() || "";
   if (charRace === "skeleton") {
@@ -385,7 +388,12 @@ export function calcStatsWithBeforeCombat(
   allCharacters?: Character[],
   opponentHasUnoReverse?: boolean,
 ): CharacterStats {
-  const base = calcStatsWithDisabled(char, playerNo, disabledItems, allCharacters);
+  const base = calcStatsWithDisabled(
+    char,
+    playerNo,
+    disabledItems,
+    allCharacters,
+  );
   applyBeforeCombatStatMods(
     base,
     char,
@@ -410,25 +418,34 @@ export function calcStatsWithBeforeCombat(
   const selfHasFairDuel =
     ((char as any).powers || [])
       .filter((pw: any) => !pw.isLost)
-      .some(
-        (pw: any) =>
-          (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith(
-            "fair duel",
-          ),
-      ) && !([...disabledItems].some(k => k.startsWith(`${playerNo}-power-Fair Duel`)));
+      .some((pw: any) =>
+        (typeof pw === "string" ? pw : (pw?.name ?? ""))
+          .toLowerCase()
+          .startsWith("fair duel"),
+      ) &&
+    ![...disabledItems].some((k) =>
+      k.startsWith(`${playerNo}-power-Fair Duel`),
+    );
   const oppHasFairDuelBC = opponentChar
     ? ((opponentChar as any).powers || [])
         .filter((pw: any) => !pw.isLost)
-        .some(
-          (pw: any) =>
-            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith(
-              "fair duel",
-            ),
-        ) && !([...opponentDisabledItems].some(k => k.startsWith(`${opponentNo}-power-Fair Duel`)))
+        .some((pw: any) =>
+          (typeof pw === "string" ? pw : (pw?.name ?? ""))
+            .toLowerCase()
+            .startsWith("fair duel"),
+        ) &&
+      ![...opponentDisabledItems].some((k) =>
+        k.startsWith(`${opponentNo}-power-Fair Duel`),
+      )
     : false;
   const fairDuelActiveBC = selfHasFairDuel || oppHasFairDuelBC;
 
-  if (opponentChar && !hasUnoReverse && !opponentHasUnoReverse && !fairDuelActiveBC) {
+  if (
+    opponentChar &&
+    !hasUnoReverse &&
+    !opponentHasUnoReverse &&
+    !fairDuelActiveBC
+  ) {
     applyBeforeCombatStatMods(
       base,
       opponentChar,
@@ -475,7 +492,6 @@ export function calcStatsWithBeforeCombat(
     }
   }
 
-
   return base;
 }
 
@@ -493,7 +509,10 @@ export function getPerRoundEffects(
     const items = buildInventoryList(char);
     const cleanTarget = targetName.toLowerCase();
     const matching = items.filter((it) => {
-      const cleanName = it.name.replace(/\s*\(.*?\)/g, "").trim().toLowerCase();
+      const cleanName = it.name
+        .replace(/\s*\(.*?\)/g, "")
+        .trim()
+        .toLowerCase();
       return cleanName === cleanTarget;
     });
     if (matching.length === 0) return false;
@@ -505,9 +524,17 @@ export function getPerRoundEffects(
   const sources = [
     ...(char.quirks || [])
       .filter((q) => !q.isLost)
-      .map((q) => q.name.replace(/\s*\(.*?\)/g, "").trim().toLowerCase()),
+      .map((q) =>
+        q.name
+          .replace(/\s*\(.*?\)/g, "")
+          .trim()
+          .toLowerCase(),
+      ),
     ...(char.archetypes || []).map((a) =>
-      a.replace(/\s*\(.*?\)/g, "").trim().toLowerCase(),
+      a
+        .replace(/\s*\(.*?\)/g, "")
+        .trim()
+        .toLowerCase(),
     ),
     ...((char as any).nestedArchetypes || [])
       .filter((na: any) => !na.isLost && na.subType)
@@ -541,7 +568,10 @@ export function getPerRoundEffects(
   const onLose: string[] = [];
   const onTie: string[] = [];
 
-  if (sources.some((s) => s.includes("critical strike")) && isEffectActive("Critical Strike"))
+  if (
+    sources.some((s) => s.includes("critical strike")) &&
+    isEffectActive("Critical Strike")
+  )
     onWin.push("Critical Strike");
   if (sources.some((s) => s.includes("evasion")) && isEffectActive("Evasion"))
     onLose.push("Evasion");
@@ -571,23 +601,41 @@ export function getPerRoundEffects(
   if (rangerColor === "Yellow") onWin.push("Ranger-Yellow");
   if (rangerColor === "Pink") onWin.push("Ranger-Pink");
   if (rangerColor === "Silver") onWin.push("Ranger-Silver");
-  if (sources.some((s) => s === "bloodthirsty") && isEffectActive("Bloodthirsty"))
+  if (
+    sources.some((s) => s === "bloodthirsty") &&
+    isEffectActive("Bloodthirsty")
+  )
     onWin.push("Bloodthirsty");
-  if (sources.some((s) => s === "divine smite") && isEffectActive("Divine Smite"))
+  if (
+    sources.some((s) => s === "divine smite") &&
+    isEffectActive("Divine Smite")
+  )
     onWin.push("Divine Smite");
-  if (sources.some((s) => s === "yamato blade") && isEffectActive("Yamato Blade")) {
+  if (
+    sources.some((s) => s === "yamato blade") &&
+    isEffectActive("Yamato Blade")
+  ) {
     onWin.push("Yamato Blade-SPD");
     onWin.push("Yamato Blade-MA");
   }
   if (sources.some((s) => s === "cautious") && isEffectActive("Cautious"))
     onWin.push("Cautious-Self");
-  if (sources.some((s) => s === "hunter's mark") && isEffectActive("Hunter's Mark"))
+  if (
+    sources.some((s) => s === "hunter's mark") &&
+    isEffectActive("Hunter's Mark")
+  )
     onWin.push("Hunter's Mark");
-  if (sources.some((s) => s === "golden parry") && isEffectActive("Golden Parry"))
+  if (
+    sources.some((s) => s === "golden parry") &&
+    isEffectActive("Golden Parry")
+  )
     onLose.push("Golden Parry");
   if (sources.some((s) => s === "misericorde") && isEffectActive("Misericorde"))
     onLose.push("Misericorde");
-  if (sources.some((s) => s === "the sand of time") && isEffectActive("The Sand of Time"))
+  if (
+    sources.some((s) => s === "the sand of time") &&
+    isEffectActive("The Sand of Time")
+  )
     onLose.push("The Sand of Time");
   if (sources.some((s) => s === "red") && !onWin.includes("Ranger-Red"))
     onWin.push("Ranger-Red");

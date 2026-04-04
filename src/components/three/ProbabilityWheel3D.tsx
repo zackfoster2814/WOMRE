@@ -1,5 +1,5 @@
-import { useRef, useMemo, useEffect } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useRef, useMemo, useEffect, Suspense } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
 import * as THREE from "three";
 import type { WheelItem } from "../../types";
@@ -49,7 +49,7 @@ function WheelSlice3D({
         </lineSegments>
       </mesh>
 
-      {/* Label Text */}
+      {/* Label Text — dùng font mặc định của troika để tránh suspend khi load font ngoài */}
       <group
         rotation={[0, 0, midAngle]}
         position={[Math.cos(midAngle) * textRadius, Math.sin(midAngle) * textRadius, 0.25]}
@@ -60,11 +60,10 @@ function WheelSlice3D({
           maxWidth={1.8}
           lineHeight={1}
           letterSpacing={0.02}
-          textAlign="right"
-          font="https://fonts.gstatic.com/s/cinzel/v19/8vIJ7ww63mVu7gtzRXw.woff"
+          textAlign="center"
           anchorX="center"
           anchorY="middle"
-          rotation={[0, 0, -midAngle]} // Chữ luôn ngửa lên trên dù vòng xoay
+          rotation={[0, 0, -midAngle]}
           outlineWidth={0.01}
           outlineColor="#000000"
         >
@@ -222,17 +221,16 @@ function WheelLogic({
     }
   });
 
-  // Tilt nhẹ khi hover / idle
-  const { mouse } = useThree();
-  useFrame(() => {
-    if (groupRef.current && !isAnimating.current) {
-      groupRef.current.parent!.rotation.x = THREE.MathUtils.lerp(groupRef.current.parent!.rotation.x, -mouse.y * 0.2, 0.1);
-      groupRef.current.parent!.rotation.y = THREE.MathUtils.lerp(groupRef.current.parent!.rotation.y, mouse.x * 0.2, 0.1);
-    }
+  // Idle breathing — rất nhẹ, không có tilt cố định (camera tạo góc nhìn 3D)
+  const parentRef = useRef<THREE.Group>(null!);
+  useFrame(({ clock }) => {
+    if (!parentRef.current || isAnimating.current) return;
+    const t = clock.getElapsedTime();
+    parentRef.current.rotation.y = Math.sin(t * 0.25) * 0.04;
   });
 
   return (
-    <group>
+    <group ref={parentRef}>
       <group ref={groupRef}>
         {slices.map((slice, idx) => (
           <WheelSlice3D key={idx} slice={slice} index={idx} total={slices.length} />
@@ -294,7 +292,7 @@ export interface ProbabilityWheel3DProps {
 export function ProbabilityWheel3D({ items, isSpinning, onSpinComplete, onSpin }: ProbabilityWheel3DProps) {
   return (
     <div className="relative w-full h-full" style={{ isolation: "isolate" }}>
-      <Canvas camera={{ position: [0, -2, 7], fov: 50 }} gl={{ alpha: true, antialias: true }}>
+      <Canvas camera={{ position: [0, 3, 6], fov: 50 }} gl={{ alpha: true, antialias: true }}>
         <ambientLight intensity={0.6} />
         <directionalLight position={[0, 10, 10]} intensity={1.5} />
         <pointLight position={[0, 0, 5]} intensity={0.8} color="#a78bfa" />
@@ -305,10 +303,12 @@ export function ProbabilityWheel3D({ items, isSpinning, onSpinComplete, onSpin }
           <meshBasicMaterial color="#000" transparent opacity={0.3} />
         </mesh>
 
-        <group onClick={onSpin}>
-          <WheelLogic items={items} isSpinning={isSpinning} onSpinComplete={onSpinComplete} />
-          <SpinParticles isSpinning={isSpinning} />
-        </group>
+        <Suspense fallback={null}>
+          <group onClick={onSpin}>
+            <WheelLogic items={items} isSpinning={isSpinning} onSpinComplete={onSpinComplete} />
+            <SpinParticles isSpinning={isSpinning} />
+          </group>
+        </Suspense>
       </Canvas>
     </div>
   );
