@@ -114,6 +114,7 @@ export interface UseResolveNextRoundParams {
     color: string;
     autoApplied?: boolean;
     engineBase?: number;
+    opponentPtsAdjust?: number;
   };
   EffectRegistry: typeof EffectRegistry;
   EffectResolver: typeof EffectResolver;

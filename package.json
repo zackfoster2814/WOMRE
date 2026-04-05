@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/generate-player-index.js && tsc && vite build",
+    "build": "node scripts/bundle-players.js && node scripts/generate-player-index.js && tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "node scripts/generate-player-index.js && tauri build",
     "tauri:buildDrive": "node scripts/generate-player-index.js && tauri build && node scripts/post-build-copy.js",
-    "generate:players": "node scripts/generate-player-index.js"
+    "generate:players": "node scripts/generate-player-index.js",
+    "bundle:players": "node scripts/bundle-players.js"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
@@ -23,6 +24,7 @@
     "@tauri-apps/plugin-shell": "^2.3.3",
     "@types/papaparse": "^5.5.2",
     "canvas": "^3.2.0",
+    "framer-motion": "^12.38.0",
     "papaparse": "^5.5.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
