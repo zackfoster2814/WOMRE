@@ -205,10 +205,10 @@ const AnimatedRoutes = () => {
       <Routes location={location}>
         {isWebOnly ? (
           <>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<Navigate to="/players" replace />} />
             <Route path="/players" element={<PlayerListPage />} />
             <Route path="/bracket" element={<PublicBracketPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/players" replace />} />
           </>
         ) : (
           <>
