@@ -71,6 +71,9 @@ interface UseWheelHandlersParams {
   setGoldShipResult: Dispatch<
     SetStateAction<Record<string, boolean | null>>
   >;
+  setLuckManipulationResult: Dispatch<
+    SetStateAction<Record<string, number | null>>
+  >;
   setMadScientistResult: Dispatch<
     SetStateAction<Record<string, boolean | null>>
   >;
@@ -117,6 +120,7 @@ export function useWheelHandlers({
   setScryingSuccess,
   setEncroachingShadowSuccess,
   setGoldShipResult,
+  setLuckManipulationResult,
   setMadScientistResult,
   setDothrakiSpinResult,
   setBlackMagicStat,
@@ -265,6 +269,18 @@ export function useWheelHandlers({
           isPositive,
         },
       ]);
+    } else if (sourceName === "luck manipulation") {
+      const delta = (item.meta as any)?.delta ?? 0;
+      setLuckManipulationResult((prev) => ({ ...prev, [playerLabel]: delta }));
+      if (delta > 0) {
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: `+${delta} All Stats (Luck Manipulation)`,
+            isPositive: true,
+          },
+        ]);
+      }
     } else if (sourceName === "mad scientist") {
       const isShrinking = item.label.toLowerCase().includes("shrinking");
       setMadScientistResult((prev) => ({

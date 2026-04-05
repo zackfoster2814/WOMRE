@@ -444,12 +444,20 @@ export const WheelCanvas = ({
 
       {/* Canvas container with relative positioning */}
       <div className="relative group" style={{ margin: "0 auto", maxWidth: "800px" }}>
+        {/* Background circle to replace black from border image */}
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background: "radial-gradient(circle at 40% 35%, #334155, #1e293b 60%, #0f172a)",
+            zIndex: 1,
+          }}
+        />
         <canvas
           ref={canvasRef}
           width={800}
           height={800}
           className="w-full block"
-          style={{ backgroundColor: "transparent" }}
+          style={{ backgroundColor: "transparent", position: "relative", zIndex: 2 }}
           onMouseMove={handleCanvasMouseMove}
           onMouseLeave={() => setHoveredItemIndex(null)}
         />

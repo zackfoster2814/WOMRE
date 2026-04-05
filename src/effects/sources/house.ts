@@ -7,11 +7,24 @@
 import { defineEffect } from "../registry";
 import { registerImmediateHandler } from "../handlers/registry";
 import { registerCombatHandler } from "../handlers/registry";
-import type { ImmediateHandlerContext, ImmediateHandlerResult } from "../handlers/types";
-import type { CombatHandlerContext, CombatHandlerResult } from "../handlers/types";
+import type {
+  ImmediateHandlerContext,
+  ImmediateHandlerResult,
+} from "../handlers/types";
+import type {
+  CombatHandlerContext,
+  CombatHandlerResult,
+} from "../handlers/types";
 import type { StatName, CharacterStats } from "../types";
 
-const STAT_NAMES: StatName[] = ["strength", "speed", "durability", "iq", "biq", "ma"];
+const STAT_NAMES: StatName[] = [
+  "strength",
+  "speed",
+  "durability",
+  "iq",
+  "biq",
+  "ma",
+];
 
 // ============================================================================
 // HOUSE EFFECT DEFINITIONS
@@ -1111,7 +1124,8 @@ registerImmediateHandler(
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     return {
       skipDefault: true,
-      description: "Chắc chắn nhận 1 Weapon và 2 Rune lên Weapon đó (Hallownest)",
+      description:
+        "Chắc chắn nhận 1 Weapon và 2 Rune lên Weapon đó (Hallownest)",
     };
   },
   "Guaranteed weapon + 2 runes",
@@ -1122,7 +1136,8 @@ registerImmediateHandler(
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     return {
       skipDefault: true,
-      description: "Chắc chắn nhận 1 Weapon và 3 Rune lên Weapon đó (Hallownest Mason)",
+      description:
+        "Chắc chắn nhận 1 Weapon và 3 Rune lên Weapon đó (Hallownest Mason)",
     };
   },
   "Guaranteed weapon + 3 runes (Mason)",
@@ -1254,7 +1269,10 @@ registerCombatHandler(
   "roundtable_hold_retry",
   (ctx: CombatHandlerContext): CombatHandlerResult => {
     if (ctx.self.roundsLost <= ctx.self.roundsWon) {
-      return { description: "Roundtable Hold: Chưa kích hoạt (chưa thua)" };
+      return {
+        description:
+          "Roundtable Hold: Chưa kích hoạt (Chưa trước ngưỡng bị loại)",
+      };
     }
     const opponentHouses = (ctx.opponent?.character.houses || [])
       .filter((h: any) => !h.isLost)

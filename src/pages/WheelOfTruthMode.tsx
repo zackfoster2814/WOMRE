@@ -23,7 +23,11 @@ import { ScoreDisplay3D } from "../components/three/ScoreDisplay3D";
 import { Canvas } from "@react-three/fiber";
 import { FloatingStatBubblesOverlay } from "../components/combat/FloatingStatBubblesOverlay";
 import { SCPlayerCard } from "../components/combat/SCPlayerCard";
-import { STAT_ORDER, _ALL_STAT_KEYS } from "../constants/battleZone";
+import {
+  STAT_ORDER,
+  _ALL_STAT_KEYS,
+  playEndCombatSound,
+} from "../constants/battleZone";
 import {
   RoundSpinButton,
   calcRoundSpinEffects,
@@ -170,7 +174,9 @@ export const WheelOfTruthMode = ({
   const [tournamentSpecialEvent, setTournamentSpecialEvent] = useState(
     tournamentMatch?.existingSpecialEvent ?? "",
   );
-  const [tournamentNote, setTournamentNote] = useState(tournamentMatch?.existingNote ?? "");
+  const [tournamentNote, setTournamentNote] = useState(
+    tournamentMatch?.existingNote ?? "",
+  );
 
   const [zoltraakBiq2Pending, setZoltraakBiq2Pending] = useState(false);
   const [pendingPreCombatCount, setPendingPreCombatCount] = useState(0);
@@ -273,6 +279,8 @@ export const WheelOfTruthMode = ({
     setEncroachingShadowSuccess,
     goldShipResult,
     setGoldShipResult,
+    luckManipulationResult,
+    setLuckManipulationResult,
     rhittaResult,
     setRhittaResult,
     madScientistResult,
@@ -293,6 +301,9 @@ export const WheelOfTruthMode = ({
     setDothrakiSpinResult,
   } = useWheelSpins();
 
+  // ── Tiebreaker wheel modal ────────────────────────────────────────────────
+  const [tiebreakerModalOpen, setTiebreakerModalOpen] = useState(false);
+
   // ── Per-round effects helper ───────────────────────────────────────────────
   const getPerRoundEffects = (char: Character | undefined, playerNo?: number) =>
     getPerRoundEffectsFn(char, playerNo, disabledItems);
@@ -311,6 +322,7 @@ export const WheelOfTruthMode = ({
     color: string;
     autoApplied?: boolean;
     engineBase?: number;
+    opponentPtsAdjust?: number;
   } => {
     const ctx: ComputeRoundPointsContext = {
       roundSpinResults,
@@ -460,6 +472,7 @@ export const WheelOfTruthMode = ({
     setScryingSuccess({});
     setEncroachingShadowSuccess({});
     setGoldShipResult({});
+    setLuckManipulationResult({});
     setRhittaResult({});
     setMadScientistResult({});
     setSummoningScrollResult({});
@@ -480,6 +493,8 @@ export const WheelOfTruthMode = ({
     setAudioResetKey((k) => k + 1);
     setShowRoundResults(false);
     setCenterTab("pre");
+    setTiebreakerWheelResult(null);
+    setTiebreakerModalOpen(false);
   };
 
   // ── useStartCombat ────────────────────────────────────────────────────────
@@ -498,6 +513,7 @@ export const WheelOfTruthMode = ({
     scryingSuccess,
     encroachingShadowSuccess,
     goldShipResult,
+    luckManipulationResult,
     madScientistResult,
     dothrakiSpinResult,
     cursedCoinTarget,
@@ -605,6 +621,7 @@ export const WheelOfTruthMode = ({
     setScryingSuccess,
     setEncroachingShadowSuccess,
     setGoldShipResult,
+    setLuckManipulationResult,
     setMadScientistResult,
     setDothrakiSpinResult,
     setBlackMagicStat,
@@ -623,6 +640,8 @@ export const WheelOfTruthMode = ({
     liveScore,
     pendingSpins,
     effectiveWinner,
+    tiebreakerWheelResult,
+    setTiebreakerWheelResult,
   } = usePvPScores({
     stepState,
     stepRoundIndex,
@@ -640,6 +659,7 @@ export const WheelOfTruthMode = ({
     afterCombatEntries,
     afterCombatSpinResults,
     roundtableWinnerOverride: null,
+    alwaysTiebreakerWheel: true,
     computeRoundPoints,
   });
 
@@ -817,14 +837,17 @@ export const WheelOfTruthMode = ({
 
   const wotP1Val =
     currentStatInfo && stepState
-      ? Math.max(0, (stepState.p1Stats[currentStatInfo.key] ?? 0) + _wotBashDebuffForSide("player1"))
+      ? (stepState.p1Stats[currentStatInfo.key] ?? 0) +
+        _wotBashDebuffForSide("player1")
       : 0;
   const wotP2Val =
     currentStatInfo && stepState
-      ? Math.max(0, (stepState.p2Stats[currentStatInfo.key] ?? 0) + _wotBashDebuffForSide("player2"))
+      ? (stepState.p2Stats[currentStatInfo.key] ?? 0) +
+        _wotBashDebuffForSide("player2")
       : 0;
-  const wotP1W = wotP1Val > wotP2Val ? wotP1Val * 2 : wotP1Val;
-  const wotP2W = wotP2Val > wotP1Val ? wotP2Val * 2 : wotP2Val;
+  // Clamp về 0 chỉ để tính weight (không clamp wotP1Val/wotP2Val để điều kiện <= 0 hoạt động)
+  const wotP1W = Math.max(0, wotP1Val) > Math.max(0, wotP2Val) ? Math.max(0, wotP1Val) * 2 : Math.max(0, wotP1Val);
+  const wotP2W = Math.max(0, wotP2Val) > Math.max(0, wotP1Val) ? Math.max(0, wotP2Val) * 2 : Math.max(0, wotP2Val);
 
   // ── Spin buttons cho CURRENT round (hiện sau khi main wheel xác định winner) ─
   const currentStatKey =
@@ -1500,7 +1523,9 @@ export const WheelOfTruthMode = ({
                     player1 &&
                     player2 && (
                       <div className="flex flex-col gap-1 items-center pt-2">
-                        <div className="text-[10px] text-gray-500 font-mono">Chọn thắng thủ công</div>
+                        <div className="text-[10px] text-gray-500 font-mono">
+                          Chọn thắng thủ công
+                        </div>
                         <div className="flex gap-1.5">
                           <button
                             onClick={() => {
@@ -1579,36 +1604,57 @@ export const WheelOfTruthMode = ({
                 <div className={`p-3 ${centerTab !== "wheel" ? "hidden" : ""}`}>
                   {stepInProgress && currentStatInfo && (
                     <div className="mb-4">
-                      <BattleWheelSpinner
-                        key={stepRoundIndex}
-                        p1Name={player1.name}
-                        p2Name={player2.name}
-                        p1Weight={wotP1W}
-                        p2Weight={wotP2W}
-                        statLabel={currentStatInfo.label}
-                        statKey={currentStatInfo.key}
-                        p1Val={wotP1Val}
-                        p2Val={wotP2Val}
-                        p1AllStats={
-                          stepState?.p1Stats as unknown as Record<
-                            string,
-                            number
+                      {wotP1Val <= 0 && wotP2Val <= 0 ? (
+                        /* Cả 2 stat = 0 → hoà round, không quay */
+                        <div className="flex flex-col items-center gap-3 py-6">
+                          <div className="text-base font-black text-yellow-400 tracking-widest uppercase">
+                            {currentStatInfo.label} Round
+                          </div>
+                          <div className="text-sm text-gray-400">
+                            Cả 2 bên {currentStatInfo.label} = 0 — Hoà round này
+                          </div>
+                          <div className="text-sm font-black px-4 py-1.5 rounded-lg border text-gray-300 bg-gray-700/40 border-gray-600/40">
+                            Hoà
+                          </div>
+                          <button
+                            onClick={() => resolveNextRoundRef.current?.()}
+                            className="px-5 py-1.5 rounded-none font-black text-sm bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105 transition-all shadow-lg"
                           >
-                        }
-                        p2AllStats={
-                          stepState?.p2Stats as unknown as Record<
-                            string,
-                            number
-                          >
-                        }
-                        p1SpinNodes={wotP1SpinNodes}
-                        p2SpinNodes={wotP2SpinNodes}
-                        hasCurrentPendingSpins={hasCurrentPendingSpins}
-                        onWinnerDetermined={(w) => setCurrentRoundWinner(w)}
-                        onSpinComplete={(winner) =>
-                          setWheelForcedWinner(winner)
-                        }
-                      />
+                            Next →
+                          </button>
+                        </div>
+                      ) : (
+                        <BattleWheelSpinner
+                          key={stepRoundIndex}
+                          p1Name={player1.name}
+                          p2Name={player2.name}
+                          p1Weight={wotP1W}
+                          p2Weight={wotP2W}
+                          statLabel={currentStatInfo.label}
+                          statKey={currentStatInfo.key}
+                          p1Val={wotP1Val}
+                          p2Val={wotP2Val}
+                          p1AllStats={
+                            stepState?.p1Stats as unknown as Record<
+                              string,
+                              number
+                            >
+                          }
+                          p2AllStats={
+                            stepState?.p2Stats as unknown as Record<
+                              string,
+                              number
+                            >
+                          }
+                          p1SpinNodes={wotP1SpinNodes}
+                          p2SpinNodes={wotP2SpinNodes}
+                          hasCurrentPendingSpins={hasCurrentPendingSpins}
+                          onWinnerDetermined={(w) => setCurrentRoundWinner(w)}
+                          onSpinComplete={(winner) =>
+                            setWheelForcedWinner(winner)
+                          }
+                        />
+                      )}
                     </div>
                   )}
                   {(combatResult || stepState) && (
@@ -1735,14 +1781,50 @@ export const WheelOfTruthMode = ({
                     </div>
                   )}
 
+                  {/* Tiebreaker wheel — hoà → quay 50/50 xác định người thắng */}
+                  {battleDone && effectiveScores.s1 === effectiveScores.s2 && (
+                    <div className="rounded-xl border border-amber-500/40 bg-amber-950/20 px-4 py-3 flex flex-col items-center gap-2">
+                      <div className="text-amber-400 font-display font-black text-sm tracking-widest uppercase">
+                        Hoà — Tiebreaker
+                      </div>
+                      <div className="text-xs text-gray-400 text-center">
+                        Điểm bằng nhau ({effectiveScores.s1}–
+                        {effectiveScores.s2}). Quay vòng quay 50/50 để xác định
+                        người thắng.
+                      </div>
+                      {tiebreakerWheelResult ? (
+                        <div
+                          className={`text-sm font-black px-4 py-1.5 rounded-lg border ${
+                            tiebreakerWheelResult === "player1"
+                              ? "text-blue-300 bg-blue-500/20 border-blue-500/40"
+                              : "text-red-300 bg-red-500/20 border-red-500/40"
+                          }`}
+                        >
+                          {tiebreakerWheelResult === "player1"
+                            ? player1?.name
+                            : player2?.name}{" "}
+                          thắng tiebreak!
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setTiebreakerModalOpen(true)}
+                          className="px-6 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 hover:border-amber-400 text-amber-300 hover:text-amber-100 font-display text-sm font-bold transition-all hover:scale-105"
+                        >
+                          ✦ Quay Tiebreak ✦
+                        </button>
+                      )}
+                    </div>
+                  )}
+
                   {/* Kết thúc / Fight Again buttons */}
                   {battleDone && !combatConfirmed && (
                     <div className="flex justify-center pt-1">
                       <button
                         onClick={() => {
-                          if (effectiveWinner && player1 && player2)
+                          if (effectiveWinner && player1 && player2) {
                             setShowOutro(true);
-                          else setCombatConfirmed(true);
+                            playEndCombatSound();
+                          } else setCombatConfirmed(true);
                         }}
                         disabled={pendingSpins}
                         className={`px-8 py-2.5 font-display font-bold rounded-xl text-sm tracking-widest transition-all ${
@@ -1770,17 +1852,23 @@ export const WheelOfTruthMode = ({
                     <div className="mt-2 bg-gray-800/60 rounded-none border border-yellow-600/30 p-3 space-y-2">
                       <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label className="block text-[11px] text-gray-400 mb-1">Special Event</label>
+                          <label className="block text-[11px] text-gray-400 mb-1">
+                            Special Event
+                          </label>
                           <input
                             type="text"
                             value={tournamentSpecialEvent}
-                            onChange={(e) => setTournamentSpecialEvent(e.target.value)}
+                            onChange={(e) =>
+                              setTournamentSpecialEvent(e.target.value)
+                            }
                             placeholder="e.g. Instant Kill..."
                             className="w-full bg-gray-800 text-white border border-gray-600 rounded px-2 py-1.5 text-xs focus:border-yellow-500 focus:outline-none"
                           />
                         </div>
                         <div>
-                          <label className="block text-[11px] text-gray-400 mb-1">Note</label>
+                          <label className="block text-[11px] text-gray-400 mb-1">
+                            Note
+                          </label>
                           <input
                             type="text"
                             value={tournamentNote}
@@ -2126,6 +2214,36 @@ export const WheelOfTruthMode = ({
             });
           }
           setPreCombatModal((prev) => ({ ...prev, isOpen: false }));
+        }}
+      />
+
+      {/* Tiebreaker wheel modal */}
+      <ProbabilityWheelModal
+        isOpen={tiebreakerModalOpen}
+        onClose={() => setTiebreakerModalOpen(false)}
+        title="Tiebreaker"
+        description={`Hoà ${effectiveScores.s1}–${effectiveScores.s2} — Quay xác định người thắng`}
+        items={[
+          {
+            label: player1?.name ?? "Player 1",
+            weight: 1,
+            isSuccess: true,
+            color: "#3b82f6",
+          },
+          {
+            label: player2?.name ?? "Player 2",
+            weight: 1,
+            isSuccess: true,
+            color: "#ef4444",
+          },
+        ]}
+        onResult={(item: WheelSpinItem) => {
+          const winner =
+            item.label === (player1?.name ?? "Player 1")
+              ? "player1"
+              : "player2";
+          setTiebreakerWheelResult(winner);
+          setTiebreakerModalOpen(false);
         }}
       />
 

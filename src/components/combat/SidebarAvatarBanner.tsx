@@ -17,6 +17,7 @@ interface SidebarAvatarBannerProps {
   otherSideHasAudio?: boolean;
   audioStopped?: boolean;
   silenced?: boolean;
+  showSilencedBadge?: boolean;
   blurred?: boolean;
   bgmVolumeScale?: number;
 }
@@ -28,6 +29,7 @@ export const SidebarAvatarBanner = ({
   otherSideHasAudio,
   audioStopped,
   silenced,
+  showSilencedBadge,
   blurred,
   bgmVolumeScale = 1,
 }: SidebarAvatarBannerProps) => {
@@ -65,7 +67,7 @@ export const SidebarAvatarBanner = ({
     // Outer wrapper — không overflow-hidden để panel popup không bị clip
     <div className="relative shrink-0">
       {/* Mute/Deaf badge */}
-      {silenced && (
+      {(showSilencedBadge ?? silenced) && (
         <div className="absolute top-2 left-2 z-30 flex items-center gap-1 bg-black/70 rounded px-2 py-0.5 text-xs text-gray-300 font-semibold">
           🔇 Silenced
         </div>

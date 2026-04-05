@@ -30,6 +30,8 @@ interface UsePvPScoresParams {
   afterCombatEntries: AfterCombatEntry[];
   afterCombatSpinResults: Record<string, { label: string; isSuccess: boolean }>;
   roundtableWinnerOverride: "player1" | "player2" | null;
+  /** Khi true: hoà luôn dùng tiebreaker wheel, không fallback race tier */
+  alwaysTiebreakerWheel?: boolean;
   computeRoundPoints: (
     side: "player1" | "player2",
     winner: "player1" | "player2" | "tie",
@@ -37,7 +39,7 @@ interface UsePvPScoresParams {
     effects: { onWin: string[]; onLose: string[]; onTie: string[] },
     statKey?: string,
     roundsWonBefore?: number,
-  ) => { pts: number; pending: boolean; color: string; autoApplied?: boolean; engineBase?: number };
+  ) => { pts: number; pending: boolean; color: string; autoApplied?: boolean; engineBase?: number; opponentPtsAdjust?: number };
 }
 
 export function usePvPScores({
@@ -57,6 +59,7 @@ export function usePvPScores({
   afterCombatEntries,
   afterCombatSpinResults,
   roundtableWinnerOverride,
+  alwaysTiebreakerWheel = false,
   computeRoundPoints,
 }: UsePvPScoresParams) {
 const stepInProgress = !!stepState && stepRoundIndex < 6;
@@ -167,8 +170,14 @@ const liveScore = useMemo(() => {
           : w === "player2"
             ? (p2Pts.engineBase ?? 1)
             : 0;
-        if (!p1Pts.pending) s1 += p1Pts.pts - p1Base;
-        if (!p2Pts.pending) s2 += p2Pts.pts - p2Base;
+        if (!p1Pts.pending) {
+          s1 += p1Pts.pts - p1Base;
+          if (p1Pts.opponentPtsAdjust) s2 += p1Pts.opponentPtsAdjust;
+        }
+        if (!p2Pts.pending) {
+          s2 += p2Pts.pts - p2Base;
+          if (p2Pts.opponentPtsAdjust) s1 += p2Pts.opponentPtsAdjust;
+        }
       }
     }
     return { s1, s2 };
@@ -302,17 +311,18 @@ const pendingSpins = useMemo(() => {
     if (entry.wheelKey && !afterCombatSpinResults[entry.wheelKey])
       return true;
   }
-  // Block if same-race tiebreaker wheel hasn't been spun
+  // Block if tiebreaker wheel hasn't been spun (same-race, or alwaysTiebreakerWheel mode)
+  // Ngoại lệ: điểm <= 0 (cả 2 âm/0) → hoà thực sự, không cần quay
   if (combatResult && player1 && player2) {
     const { s1, s2 } = effectiveScores;
-    if (s1 === s2) {
+    if (s1 === s2 && !tiebreakerWheelResult) {
+      if (alwaysTiebreakerWheel) return true;
       const p1Race = (player1.character as any)?.race?.race || "";
       const p2Race = (player2.character as any)?.race?.race || "";
       if (
         p1Race &&
         p2Race &&
-        p1Race.toLowerCase() === p2Race.toLowerCase() &&
-        !tiebreakerWheelResult
+        p1Race.toLowerCase() === p2Race.toLowerCase()
       ) {
         return true;
       }
@@ -362,6 +372,10 @@ const effectiveWinner = useMemo((): "player1" | "player2" | null => {
   if (s2 > s1) return "player2";
   // Score bằng nhau: nếu combatResult.winner đã được set bởi Egoist/autoLose override → dùng luôn
   if (combatResult.winner) return combatResult.winner;
+  // alwaysTiebreakerWheel mode: luôn dùng wheel khi hoà
+  if (alwaysTiebreakerWheel) {
+    return tiebreakerWheelResult; // null nếu chưa quay
+  }
   // Tie: check if same race → require tiebreaker wheel
   const p1Race = (player1.character as any)?.race?.race || "";
   const p2Race = (player2.character as any)?.race?.race || "";
@@ -378,6 +392,7 @@ const effectiveWinner = useMemo((): "player1" | "player2" | null => {
   roundtableWinnerOverride,
   disabledItems,
   tiebreakerWheelResult,
+  alwaysTiebreakerWheel,
 ]);
 
   return {

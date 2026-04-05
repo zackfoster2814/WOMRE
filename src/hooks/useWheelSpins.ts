@@ -98,6 +98,11 @@ const [goldShipResult, setGoldShipResult] = useState<
   Record<string, boolean | null>
 >({});
 
+// Luck Manipulation: số delta all stats sau wheel (0 = không gì, 1 = +1, 2 = +2, null = chưa quay)
+const [luckManipulationResult, setLuckManipulationResult] = useState<
+  Record<string, number | null>
+>({});
+
 // Rhitta: kết quả wheel before_combat (true = thành công +3 STR +2 DUR, false/undefined = không)
 const [rhittaResult, setRhittaResult] = useState<Record<string, boolean>>({});
 
@@ -190,6 +195,7 @@ const [dothrakiSpinResult, setDothrakiSpinResult] = useState<
     scryingSuccess, setScryingSuccess,
     encroachingShadowSuccess, setEncroachingShadowSuccess,
     goldShipResult, setGoldShipResult,
+    luckManipulationResult, setLuckManipulationResult,
     rhittaResult, setRhittaResult,
     madScientistResult, setMadScientistResult,
     summoningScrollResult, setSummoningScrollResult,

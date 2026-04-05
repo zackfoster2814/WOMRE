@@ -30,6 +30,8 @@ export function computeRoundPoints(
   color: string;
   autoApplied?: boolean;
   engineBase?: number;
+  /** Điểm điều chỉnh cho đối thủ (âm = trừ điểm đối thủ, ví dụ Misericorde -1) */
+  opponentPtsAdjust?: number;
 } {
   if (!ctx) {
     return { pts: winner === side ? 1 : 0, pending: false, color: "text-gray-600" };
@@ -407,7 +409,7 @@ export function computeRoundPoints(
       if (!misericordeSpun)
         return { pts: 0, pending: true, color: "text-violet-400" };
       if (misericordeSpun.isSuccess)
-        return { pts: 1, pending: false, color: "text-violet-300" };
+        return { pts: 1, pending: false, color: "text-violet-300", opponentPtsAdjust: -1 };
     }
     // The Sand of Time: 40% +1 điểm bản thân -1 điểm đối thủ, chỉ lần đầu thua
     // triggerOnce: chỉ quay nếu chưa có round thua nào trước đó (roundIdx là lần thua đầu)

@@ -106,9 +106,13 @@ export function BattleWheelSpinner({
   const total = p1Weight + p2Weight;
   void total;
 
+  // Nếu cả 2 weight = 0 (stat bằng 0) → dùng 50/50
+  const safeP1W = effectiveP1W === 0 && effectiveP2W === 0 ? 1 : effectiveP1W;
+  const safeP2W = effectiveP1W === 0 && effectiveP2W === 0 ? 1 : effectiveP2W;
+
   const items: WheelItem[] = [
-    { id: "p1", name: p1Name, weight: effectiveP1W, color: "#3b82f6" },
-    { id: "p2", name: p2Name, weight: effectiveP2W, color: "#ef4444" },
+    { id: "p1", name: p1Name, weight: safeP1W, color: "#3b82f6" },
+    { id: "p2", name: p2Name, weight: safeP2W, color: "#ef4444" },
   ];
 
   const handleSpinComplete = (item: WheelItem) => {

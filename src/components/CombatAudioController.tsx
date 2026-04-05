@@ -51,7 +51,7 @@ const mkDefault = (ytVol = false): TrackState => ({
   isPlaying: false,
   currentTime: 0,
   duration: 0,
-  volume: ytVol ? 80 : 0.8,
+  volume: ytVol ? 50 : 0.5,
   title: "",
 });
 

@@ -59,7 +59,7 @@ export function PlayerSidebar({
   const quirks = (player?.character?.quirks || [])
     .filter((q: any) => !q.isLost)
     .map((q: any) => (typeof q === "string" ? q : q.name).toLowerCase());
-  const isSilenced = quirks.includes("mute") || quirks.includes("deaf");
+  const _isSilenced = quirks.includes("mute") || quirks.includes("deaf"); // badge only, không mute audio
   const isBlurred = quirks.includes("blind");
 
   const accentColor = accent === "blue" ? "blue" : "red";
@@ -83,7 +83,8 @@ export function PlayerSidebar({
           audioTracks={audioTracks}
           otherSideHasAudio={otherAudioTracks.length > 0}
           audioStopped={!!combatResult}
-          silenced={isSilenced}
+          silenced={false}
+          showSilencedBadge={_isSilenced}
           blurred={isBlurred}
           bgmVolumeScale={masterVolume * bgmVolume}
         />

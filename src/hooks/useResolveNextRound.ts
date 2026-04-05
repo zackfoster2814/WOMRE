@@ -18,6 +18,35 @@ import {
 import { AFTER_COMBAT_WHEEL_ITEMS } from "../constants/wheelConfigs";
 import { type AfterCombatEntry } from "./useWheelSpins";
 
+export const POWER_RANGER_STAT_WHEEL_ITEMS: WheelSpinItem[] = [
+  { label: "+1 Strength", weight: 1, isSuccess: true, color: "#ef4444", meta: { stat: "str", delta: 1 } },
+  { label: "+1 Speed", weight: 1, isSuccess: true, color: "#3b82f6", meta: { stat: "spd", delta: 1 } },
+  { label: "+1 Durability", weight: 1, isSuccess: true, color: "#84cc16", meta: { stat: "dur", delta: 1 } },
+  { label: "+1 IQ", weight: 1, isSuccess: true, color: "#06b6d4", meta: { stat: "iq", delta: 1 } },
+  { label: "+1 BIQ", weight: 1, isSuccess: true, color: "#a855f7", meta: { stat: "biq", delta: 1 } },
+  { label: "+1 Martial Arts", weight: 1, isSuccess: true, color: "#f97316", meta: { stat: "ma", delta: 1 } },
+];
+
+export const PVP_REWARD_WHEEL_ITEMS: WheelSpinItem[] = [
+  { label: "+1 Strength", weight: 10, isSuccess: true, color: "#ef4444", meta: { stat: "str", delta: 1 } },
+  { label: "+1 Speed", weight: 10, isSuccess: true, color: "#3b82f6", meta: { stat: "spd", delta: 1 } },
+  { label: "+1 Durability", weight: 10, isSuccess: true, color: "#84cc16", meta: { stat: "dur", delta: 1 } },
+  { label: "+1 IQ", weight: 10, isSuccess: true, color: "#06b6d4", meta: { stat: "iq", delta: 1 } },
+  { label: "+1 BIQ", weight: 10, isSuccess: true, color: "#a855f7", meta: { stat: "biq", delta: 1 } },
+  { label: "+1 MA", weight: 10, isSuccess: true, color: "#f97316", meta: { stat: "ma", delta: 1 } },
+  { label: "Nhận 1 Gear", weight: 10, isSuccess: true, color: "#fbbf24", meta: { gmAction: "gear" } },
+  { label: "+2 Stat Thấp Nhất", weight: 6, isSuccess: true, color: "#34d399", meta: { gmAction: "lowest2" } },
+  { label: "+2 Stat Cao Nhất", weight: 6, isSuccess: true, color: "#f472b6", meta: { gmAction: "highest2" } },
+  { label: "Nhận 1 Power", weight: 6, isSuccess: true, color: "#818cf8", meta: { gmAction: "power1" } },
+  { label: "Nhận 2 Power", weight: 2, isSuccess: true, color: "#c084fc", meta: { gmAction: "power2" } },
+  { label: "Nhận 1 Char Dev", weight: 4, isSuccess: true, color: "#fb923c", meta: { gmAction: "chardev1" } },
+  { label: "Nhận 2 Char Dev", weight: 1, isSuccess: true, color: "#f87171", meta: { gmAction: "chardev2" } },
+  { label: "+2 Stat ngẫu nhiên ×3", weight: 0.64, isSuccess: true, color: "#4ade80", meta: { gmAction: "rand2x3" } },
+  { label: "+2 Stat ngẫu nhiên ×6", weight: 0.36, isSuccess: true, color: "#86efac", meta: { gmAction: "rand2x6" } },
+  { label: "+1 All Stats", weight: 4, isSuccess: true, color: "#e2e8f0", meta: { gmAction: "allstats1" } },
+  { label: "Lời Nguyền Địa Ngục", weight: 3, isSuccess: false, color: "#7c3aed", meta: { gmAction: "loi_nguyen_dia_nguc" } },
+];
+
 export interface UseResolveNextRoundParams {
   // State reads
   player1: PvPPlayerData | null;
@@ -207,8 +236,8 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
           : w === "player2"
             ? (p2Pts.engineBase ?? 1)
             : 0;
-        const p1Diff = p1Pts.pts - p1Base;
-        const p2Diff = p2Pts.pts - p2Base;
+        const p1Diff = p1Pts.pts - p1Base + (p2Pts.opponentPtsAdjust ?? 0);
+        const p2Diff = p2Pts.pts - p2Base + (p1Pts.opponentPtsAdjust ?? 0);
         if (p1Diff !== 0 || p2Diff !== 0) {
           console.log(
             `[Patch1] R${lastRoundIdx + 1} stat=${lastRound.statKey} winner=${w}: p1Diff=${p1Diff}(pts=${p1Pts.pts},engineBase=${p1Base}) p2Diff=${p2Diff}(pts=${p2Pts.pts},engineBase=${p2Base}) | before p1=${patchedState.p1Score} p2=${patchedState.p2Score} → after p1=${patchedState.p1Score + p1Diff} p2=${patchedState.p2Score + p2Diff}`,
@@ -376,8 +405,8 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
           : w === "player2"
             ? (p2Pts.engineBase ?? 1)
             : 0;
-        const p1Diff = p1Pts.pts - p1Base;
-        const p2Diff = p2Pts.pts - p2Base;
+        const p1Diff = p1Pts.pts - p1Base + (p2Pts.opponentPtsAdjust ?? 0);
+        const p2Diff = p2Pts.pts - p2Base + (p1Pts.opponentPtsAdjust ?? 0);
         if (p1Diff !== 0 || p2Diff !== 0) {
           patchedState = {
             ...patchedState,
@@ -2803,11 +2832,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             }
           }
 
-          // ── House by name after_combat effects ─────────────────────────────
-          const houseNames: string[] = (char.houses || [])
-            .filter((h: any) => !h.isLost)
-            .map((h: any) => (typeof h === "string" ? h : (h?.name ?? "")));
-
           // Captain America (sub-archetype): sau combat → +1 STR, +1 DUR
           const nestedArchetypes: any[] = Array.isArray(
             (char as any).nestedArchetypes,
@@ -2834,24 +2858,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                   { stat: "str" as keyof CharacterStats, delta: 1 },
                   { stat: "dur" as keyof CharacterStats, delta: 1 },
                 ],
-              });
-            }
-          }
-
-          // Kazuya Kinoshita's House: sau combat → nhận 1 Gear "Golden Coin"
-          if (
-            houseNames.some((h) => h.toLowerCase().includes("kazuya kinoshita"))
-          ) {
-            const hKey = houseNames.find((h) =>
-              h.toLowerCase().includes("kazuya kinoshita"),
-            )!;
-            if (!disabledItems.has(`${player.no}-house-${hKey}`)) {
-              acEntries.push({
-                player: side,
-                quirkName: hKey,
-                description:
-                  '[GM Action] Kazuya Kinoshita\'s House: Sau combat → Nhận 1 Gear "Golden Coin"',
-                gmAction: true,
               });
             }
           }
@@ -4335,7 +4341,8 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
         const _isSubCombat =
           forceIsSubCombat !== undefined ? forceIsSubCombat : roundtableSubMode;
         if (!_isSubCombat) {
-          const PVP_REWARD_ITEMS: WheelSpinItem[] = [
+          const PVP_REWARD_ITEMS = PVP_REWARD_WHEEL_ITEMS;
+          const _pvpRewardItemsLegacy: WheelSpinItem[] = [
             {
               label: "+1 Strength",
               weight: 10,
@@ -4455,51 +4462,9 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               color: "#7c3aed",
               meta: { gmAction: "loi_nguyen_dia_nguc" },
             },
-          ];
-          const POWER_RANGER_STAT_ITEMS: WheelSpinItem[] = [
-            {
-              label: "+1 Strength",
-              weight: 1,
-              isSuccess: true,
-              color: "#ef4444",
-              meta: { stat: "str", delta: 1 },
-            },
-            {
-              label: "+1 Speed",
-              weight: 1,
-              isSuccess: true,
-              color: "#3b82f6",
-              meta: { stat: "spd", delta: 1 },
-            },
-            {
-              label: "+1 Durability",
-              weight: 1,
-              isSuccess: true,
-              color: "#84cc16",
-              meta: { stat: "dur", delta: 1 },
-            },
-            {
-              label: "+1 IQ",
-              weight: 1,
-              isSuccess: true,
-              color: "#06b6d4",
-              meta: { stat: "iq", delta: 1 },
-            },
-            {
-              label: "+1 BIQ",
-              weight: 1,
-              isSuccess: true,
-              color: "#a855f7",
-              meta: { stat: "biq", delta: 1 },
-            },
-            {
-              label: "+1 Martial Arts",
-              weight: 1,
-              isSuccess: true,
-              color: "#f97316",
-              meta: { stat: "ma", delta: 1 },
-            },
-          ];
+          ] as WheelSpinItem[]; // legacy — unused, PVP_REWARD_ITEMS now uses PVP_REWARD_WHEEL_ITEMS
+          void _pvpRewardItemsLegacy;
+          const POWER_RANGER_STAT_ITEMS = POWER_RANGER_STAT_WHEEL_ITEMS;
           const BRAVEST_POWER_ITEMS: WheelSpinItem[] =
             EffectRegistry.getAllByType("power").map((e) => ({
               label: e.name,

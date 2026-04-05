@@ -18,6 +18,7 @@ import {
   calcStatsWithBeforeCombat,
 } from "../utils/combatStats";
 import type { AfterCombatEntry } from "./useWheelSpins";
+import { PVP_REWARD_WHEEL_ITEMS, POWER_RANGER_STAT_WHEEL_ITEMS } from "./useResolveNextRound";
 
 // ============================================================================
 // Types
@@ -37,6 +38,7 @@ export interface UseStartCombatParams {
   scryingSuccess: Record<string, boolean>;
   encroachingShadowSuccess: Record<string, boolean>;
   goldShipResult: Record<string, any>;
+  luckManipulationResult: Record<string, number | null>;
   madScientistResult: Record<string, any>;
   dothrakiSpinResult: Record<string, any>;
   cursedCoinTarget: Record<string, string>;
@@ -97,6 +99,7 @@ export function useStartCombat(params: UseStartCombatParams): {
       encroachingShadowSuccess,
       scryingSuccess,
       goldShipResult,
+      luckManipulationResult,
       madScientistResult,
       dothrakiSpinResult,
       cursedCoinTarget,
@@ -574,6 +577,14 @@ export function useStartCombat(params: UseStartCombatParams): {
       for (const k of _ALL_STAT_KEYS) applyStatDelta(p2BaseStats, k, d2);
     }
 
+    // Luck Manipulation: +1 hoặc +2 all stats tùy kết quả wheel (0 = không gì)
+    if (luckManipulationResult["player1"]) {
+      for (const k of _ALL_STAT_KEYS) applyStatDelta(p1BaseStats, k, luckManipulationResult["player1"]!);
+    }
+    if (luckManipulationResult["player2"]) {
+      for (const k of _ALL_STAT_KEYS) applyStatDelta(p2BaseStats, k, luckManipulationResult["player2"]!);
+    }
+
     // Scrying: player có Scrying thành công → đối thủ bị -4 stat cao nhất (tính theo base stats gốc)
     if (scryingSuccess["player1"]) {
       const p2RawStats: CharacterStats = player2.baseStats;
@@ -785,6 +796,148 @@ export function useStartCombat(params: UseStartCombatParams): {
           p2DothrakiRule: null,
         });
         setAfterCombatEntries(earlyAcEntries);
+        setCombatResult({
+          rounds: [],
+          player1Score: 0,
+          player2Score: 0,
+          startPlayer1Score: p1StartScore,
+          startPlayer2Score: p2StartScore,
+          winner: autoWinner,
+          tieBreaker: null,
+        });
+        return;
+      }
+    }
+
+    // Ragnarok's Cobra: auto-lose ở vòng 64 — kết quả ngay, build after-combat entries đầy đủ
+    {
+      const checkCobra = (p: PvPPlayerData): boolean => {
+        const round: string = (p.character as any)?.tournament?.round ?? "-";
+        if (round !== "64") return false;
+        const allGear = [
+          ...((p.character as any)?.gear?.normalGear ?? []),
+          ...((p.character as any)?.gear?.legacyGear ?? []),
+        ];
+        return allGear.some(
+          (g: any) => !g.isLost && (g.name ?? "").toLowerCase().includes("ragnarok's cobra"),
+        );
+      };
+      const p1Cobra = checkCobra(player1);
+      const p2Cobra = checkCobra(player2);
+      if (p1Cobra || p2Cobra) {
+        const autoWinner: "player1" | "player2" = p1Cobra ? "player2" : "player1";
+        const loserSide: "player1" | "player2" = p1Cobra ? "player1" : "player2";
+        const winnerSide: "player1" | "player2" = autoWinner;
+
+        // Build after-combat entries: PvP Reward cho người thắng + quirk entries cơ bản
+        const cobraAcEntries: AfterCombatEntry[] = [];
+
+        for (const [side, p] of [["player1", player1], ["player2", player2]] as const) {
+          const c = p.character;
+          if (!c) continue;
+          const didWin = side === winnerSide;
+
+          // Eir sub-race
+          const subRaceRaw = ((c as any).race?.subRace || "").split("(")[0].trim().toLowerCase();
+          if (subRaceRaw === "eir") {
+            const subRaceFull: string = (c as any).race?.subRace || "Eir";
+            const stackMatch = subRaceFull.match(/\((\d+)\)/);
+            const stackN = stackMatch ? parseInt(stackMatch[1], 10) : 0;
+            const currentBonus = Math.pow(2, stackN);
+            cobraAcEntries.push({
+              player: side,
+              quirkName: "Eir",
+              description: `+${currentBonus} Durability (Eir — stack ${stackN}). [GM Action] Đổi Sub-race thành "Eir (${stackN + 1})".`,
+              statMods: [{ stat: "dur" as keyof CharacterStats, delta: currentBonus }],
+              gmAction: true,
+            });
+          }
+
+          if (!didWin) continue;
+
+          // Quirks check: Impatient
+          const quirks: string[] = ((c as any).quirks || [])
+            .filter((q: any) => !q?.isLost)
+            .map((q: any) => (typeof q === "string" ? q : (q?.name ?? "")).toLowerCase());
+          if (quirks.some((q) => q === "impatient" || q.startsWith("impatient ("))) {
+            cobraAcEntries.push({ player: side, quirkName: "Impatient", description: "Impatient: Không nhận PvP Reward vòng này." });
+            continue;
+          }
+
+          // Power Ranger archetype → quay stat thay PvP Reward
+          const archetypes: string[] = ((c as any).archetypes || [])
+            .filter((a: any) => !a?.isLost)
+            .map((a: any) => (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase());
+          const charDevNames: string[] = ((c as any).charDevs || [])
+            .filter((cd: any) => !cd?.isLost)
+            .map((cd: any) => (typeof cd === "string" ? cd : (cd?.name ?? "")).toLowerCase());
+          const isPowerRanger =
+            archetypes.some((a) => a === "power ranger" || a.startsWith("power ranger")) ||
+            charDevNames.some((cd) => cd.startsWith("become a power ranger"));
+          if (isPowerRanger) {
+            const wk = `power-ranger-cobra-${side}-1`;
+            cobraAcEntries.push({
+              player: side,
+              quirkName: "Power Ranger",
+              description: "Power Ranger: Quay 1 vòng chọn chỉ số được tăng (thay PvP Reward)",
+              wheelKey: wk,
+              wheelItems: POWER_RANGER_STAT_WHEEL_ITEMS,
+              statMods: [{ stat: "str" as keyof CharacterStats, delta: 1 }],
+            });
+            continue;
+          }
+
+          // PvP Reward
+          const wk = `pvp-reward-cobra-${side}-1`;
+          cobraAcEntries.push({
+            player: side,
+            quirkName: "PvP Reward",
+            description: "Quay PvP Reward (Ragnarok's Cobra — auto-lose)",
+            wheelKey: wk,
+            wheelItems: PVP_REWARD_WHEEL_ITEMS,
+            gmAction: true,
+          });
+        }
+
+        const cobraLog: RoundLog = {
+          roundIndex: -1,
+          statLabel: "Ragnarok's Cobra",
+          statKey: "ragnarok_cobra",
+          p1ValueUsed: 0,
+          p2ValueUsed: 0,
+          winner: autoWinner,
+          p1Score: 0,
+          p2Score: 0,
+          events: [{
+            player: loserSide,
+            source: "Ragnarok's Cobra",
+            description: `[Ragnarok's Cobra] ${p1Cobra ? player1.name : player2.name} thua ngay lập tức (Gear effect — vòng 64)`,
+            type: "info",
+          }],
+          pointChanges: [],
+          carryOverToNext: [],
+        };
+        setStepState({
+          p1Stats: p1BaseStats,
+          p2Stats: p2BaseStats,
+          p1Score: 0,
+          p2Score: 0,
+          startP1Score: p1StartScore,
+          startP2Score: p2StartScore,
+          p1CarryOver: [],
+          p2CarryOver: [],
+          resolvedRounds: [],
+          roundLogs: [cobraLog],
+          p1TenacityFired: false,
+          p2TenacityFired: false,
+          p1ConquerorFired: false,
+          p2ConquerorFired: false,
+          p1FiredHandlers: new Set<string>(),
+          p2FiredHandlers: new Set<string>(),
+          p1DothrakiRule: null,
+          p2DothrakiRule: null,
+        });
+        setAfterCombatEntries(cobraAcEntries);
         setCombatResult({
           rounds: [],
           player1Score: 0,
@@ -1547,57 +1700,8 @@ export function useStartCombat(params: UseStartCombatParams): {
             continue;
           }
 
-          // Luck Manipulation: từ vòng 64 (pvpWins ≥ 2) → 15% +1 all, 5% +2 all
+          // Luck Manipulation: xử lý qua CombatEffectsPanel wheel → bỏ qua ở đây
           if (handler === "luck_manipulation_round_64_check") {
-            const pvpWins =
-              (player.character as any)?.tournament?.pvpWins ??
-              (player.character as any)?.pvpWins ??
-              0;
-            if (pvpWins < 2) {
-              preCombatEvents.push({
-                player: playerSide,
-                source: srcName,
-                description: `Chưa đến vòng 64 (pvpWins=${pvpWins}) → không áp dụng (Luck Manipulation)`,
-                type: "info",
-              });
-            } else {
-              // Only run once (two effects registered, skip second if already logged)
-              const alreadyLogged = preCombatEvents.some(
-                (e) =>
-                  e.source === srcName &&
-                  e.player === playerSide &&
-                  e.type !== "info",
-              );
-              if (!alreadyLogged) {
-                const roll = Math.random() * 100;
-                if (roll < 5) {
-                  for (const s of _ALL_STAT_KEYS)
-                    applyStatDelta(selfBaseStats, s, 2);
-                  preCombatEvents.push({
-                    player: playerSide,
-                    source: srcName,
-                    description: `+2 tất cả stats (Luck Manipulation — 5%, roll: ${roll.toFixed(1)}%)`,
-                    type: "stat_boost",
-                  });
-                } else if (roll < 20) {
-                  for (const s of _ALL_STAT_KEYS)
-                    applyStatDelta(selfBaseStats, s, 1);
-                  preCombatEvents.push({
-                    player: playerSide,
-                    source: srcName,
-                    description: `+1 tất cả stats (Luck Manipulation — 15%, roll: ${roll.toFixed(1)}%)`,
-                    type: "stat_boost",
-                  });
-                } else {
-                  preCombatEvents.push({
-                    player: playerSide,
-                    source: srcName,
-                    description: `Không kích hoạt (Luck Manipulation — roll: ${roll.toFixed(1)}%)`,
-                    type: "info",
-                  });
-                }
-              }
-            }
             continue;
           }
         }

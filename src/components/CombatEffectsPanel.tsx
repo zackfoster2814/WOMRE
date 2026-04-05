@@ -533,6 +533,37 @@ const EFFECT_DEFS: EffectDef[] = [
     gmNote: "[GM Action] Trao 2 PvP Rewards cho player",
   },
 
+  // Luck Manipulation: từ vòng 64 (pvpWins >= 2), 5% +2 all stats / 15% +1 all stats / 80% không gì
+  {
+    source: "luck manipulation",
+    timing: "before_combat",
+    category: "wheel",
+    description: "Luck Manipulation: Từ vòng 64 — 5% +2 All Stats, 15% +1 All Stats.",
+    resolver: (ctx) => {
+      const round: string = (ctx.character as any)?.tournament?.round ?? "-";
+      const PRE64_ROUNDS = new Set(["-", "256", "128"]);
+      if (PRE64_ROUNDS.has(round)) {
+        return {
+          category: "auto" as EffectCategory,
+          description: `Luck Manipulation: Chưa đến vòng 64 (round=${round}) — không kích hoạt.`,
+          resolved: true,
+          isActivated: false,
+        };
+      }
+      return {
+        category: "wheel" as EffectCategory,
+        description: "Luck Manipulation: Từ vòng 64 — 5% +2 All Stats, 15% +1 All Stats.",
+        wheelItems: [
+          { label: "+2 All Stats (5%)", weight: 5, isSuccess: true, color: "#f59e0b", meta: { delta: 2 } },
+          { label: "+1 All Stats (15%)", weight: 15, isSuccess: true, color: "#10b981", meta: { delta: 1 } },
+          { label: "Không kích hoạt (80%)", weight: 80, isSuccess: false, color: "#6b7280", meta: { delta: 0 } },
+        ],
+        isActivated: true,
+      };
+    },
+    gmNote: "Nếu trúng: cộng +1 hoặc +2 tất cả stats cho player",
+  },
+
   // Scrying: 40% -4 stat cao nhất của đối thủ trước combat
   {
     source: "scrying",

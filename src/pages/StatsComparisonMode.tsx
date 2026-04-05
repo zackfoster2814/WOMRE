@@ -429,6 +429,7 @@ export const StatsComparisonMode = ({
       scryingSuccess,
       encroachingShadowSuccess,
       goldShipResult,
+      luckManipulationResult,
       rhittaResult,
       madScientistResult,
       summoningScrollResult,
@@ -469,6 +470,7 @@ export const StatsComparisonMode = ({
     setScryingSuccess({});
     setEncroachingShadowSuccess({});
     setGoldShipResult({});
+    setLuckManipulationResult({});
     setRhittaResult({});
     setMadScientistResult({});
     setSummoningScrollResult({});
@@ -516,6 +518,7 @@ export const StatsComparisonMode = ({
     setScryingSuccess(snap.scryingSuccess);
     setEncroachingShadowSuccess(snap.encroachingShadowSuccess);
     setGoldShipResult(snap.goldShipResult);
+    setLuckManipulationResult(snap.luckManipulationResult || {});
     setRhittaResult(snap.rhittaResult || {});
     setMadScientistResult(snap.madScientistResult);
     setSummoningScrollResult(snap.summoningScrollResult);
@@ -697,6 +700,7 @@ export const StatsComparisonMode = ({
     setScryingSuccess({});
     setEncroachingShadowSuccess({});
     setGoldShipResult({});
+    setLuckManipulationResult({});
     setRhittaResult({});
     setMadScientistResult({});
     setSummoningScrollResult({});
@@ -760,6 +764,8 @@ export const StatsComparisonMode = ({
     setEncroachingShadowSuccess,
     goldShipResult,
     setGoldShipResult,
+    luckManipulationResult,
+    setLuckManipulationResult,
     rhittaResult,
     setRhittaResult,
     madScientistResult,
@@ -799,6 +805,7 @@ export const StatsComparisonMode = ({
     scryingSuccess,
     encroachingShadowSuccess,
     goldShipResult,
+    luckManipulationResult,
     madScientistResult,
     dothrakiSpinResult,
     cursedCoinTarget,
@@ -846,6 +853,8 @@ export const StatsComparisonMode = ({
     const p2Summon = summoningScrollResult["player2"] ?? null;
     const p1Scrying = scryingSuccess["player1"] ?? false;
     const p2Scrying = scryingSuccess["player2"] ?? false;
+    const p1LuckManip = luckManipulationResult["player1"] ?? null;
+    const p2LuckManip = luckManipulationResult["player2"] ?? null;
     if (
       p1Rule === null &&
       p2Rule === null &&
@@ -856,7 +865,9 @@ export const StatsComparisonMode = ({
       !p1Summon &&
       !p2Summon &&
       !p1Scrying &&
-      !p2Scrying
+      !p2Scrying &&
+      !p1LuckManip &&
+      !p2LuckManip
     )
       return null;
     if (!player1 || !player2) return null;
@@ -990,11 +1001,17 @@ export const StatsComparisonMode = ({
       );
       s1[highest] = (s1[highest] || 0) - 4;
     }
+    // Luck Manipulation: preview +1/+2 all stats
+    const p1LuckDelta = luckManipulationResult["player1"] ?? 0;
+    const p2LuckDelta = luckManipulationResult["player2"] ?? 0;
+    if (p1LuckDelta) DSTAT_KEYS.forEach((k) => { s1[k] = (s1[k] || 0) + p1LuckDelta; });
+    if (p2LuckDelta) DSTAT_KEYS.forEach((k) => { s2[k] = (s2[k] || 0) + p2LuckDelta; });
     return { s1, s2 };
   }, [
     stepState,
     dothrakiSpinResult,
     goldShipResult,
+    luckManipulationResult,
     madScientistResult,
     summoningScrollResult,
     scryingSuccess,
@@ -1527,6 +1544,7 @@ export const StatsComparisonMode = ({
     setScryingSuccess,
     setEncroachingShadowSuccess,
     setGoldShipResult,
+    setLuckManipulationResult,
     setMadScientistResult,
     setDothrakiSpinResult,
     setBlackMagicStat,
