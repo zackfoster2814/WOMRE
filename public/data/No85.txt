@@ -76,6 +76,7 @@ Lover:
 ```
 Other Source:
 - +1 IQ (Stat Absorption)
+- +1 Str (Stat Absorption)
 ```
 ```
 PvP Reward:

@@ -56,7 +56,7 @@ Runeword: Không
 + Body Enhancing
 + Blood Frenzy
 + No stopping me
-+ Megamagic (từ King's Landing)
++ Metamagic (từ King's Landing)
 ```
 ```
 Char dev: 

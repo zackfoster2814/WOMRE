@@ -55,7 +55,7 @@ Runeword: Không
 1 Power: 
 + Frost Fingers
 + Ballet Dancing
-+ Megamagic (từ King's Landing)
++ Metamagic (từ King's Landing)
 ```
 ```
 Char dev: 

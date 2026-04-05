@@ -57,7 +57,7 @@ Runeword:
 1 Power: 
 + Power Negation
 + Mind Control
-+ Megamagic (từ King's Landing)
++ Metamagic (từ King's Landing)
 ```
 ```
 Char dev: 

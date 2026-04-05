@@ -51,7 +51,7 @@ Runeword: Không
 ```
 1 Power: 
 + Gaze of the Abyss
-+ Megamagic (từ King's Landing)
++ Metamagic (từ King's Landing)
 ```
 ```
 Char dev: 

@@ -60,7 +60,7 @@ Runeword: Undying Rage
 ```
 1 Power: 
 + Sonic Scream  (đã mất - tặng cho Toast (toast_4274))
-+ Megamagic (từ King's Landing)
++ Metamagic (từ King's Landing)
 ```
 
 ```
