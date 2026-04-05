@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: God
-Sub-race: Eir (1)
+Sub-race: Eir (2)
 ```
 
 ```
@@ -105,7 +105,7 @@ Other Source:
 - +1 Str
 - +1 Spd
 - +2 Dura
-- 2 Dura (Wand)
+- -2 Dura (Wand)
 - 1 power: Drunken Boxing (The Tamer Straight Sword)
 - 1 power: Thơm (Wand)
 ```

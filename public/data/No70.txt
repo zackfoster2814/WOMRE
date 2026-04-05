@@ -57,7 +57,7 @@ Runeword: Không
 3 Power: 
 + Spell Flux (Từ Archetype)
 + Mystifying Murmur (Từ Archetype)
-+ Luck Manipulation (Từ Hero X (enatc0))
++ Luck Manipulation 
 ```
 
 ```

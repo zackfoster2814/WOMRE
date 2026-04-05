@@ -110,8 +110,10 @@ export const WheelOfTruthMode = ({
   const [player2, setPlayer2] = useState<PvPPlayerData | null>(null);
   const [focus1, setFocus1] = useState(false);
   const [focus2, setFocus2] = useState(false);
-  const [leftTab, setLeftTab] = useState<"effects" | "inventory">("effects");
-  const [rightTab, setRightTab] = useState<"effects" | "inventory">("effects");
+  const [leftTab, setLeftTab] = useState<"effects" | "inventory">("inventory");
+  const [rightTab, setRightTab] = useState<"effects" | "inventory">(
+    "inventory",
+  );
 
   // ── Dev mode ──────────────────────────────────────────────────────────────
   const [devMode, setDevMode] = useState(false);
@@ -165,12 +167,10 @@ export const WheelOfTruthMode = ({
 
   // Tournament mode
   const isTournamentMode = !!tournamentMatch;
-  const [tournamentSpecialEvent] = useState(
+  const [tournamentSpecialEvent, setTournamentSpecialEvent] = useState(
     tournamentMatch?.existingSpecialEvent ?? "",
   );
-  const [tournamentNote] = useState(
-    tournamentMatch?.existingNote ?? "",
-  );
+  const [tournamentNote, setTournamentNote] = useState(tournamentMatch?.existingNote ?? "");
 
   const [zoltraakBiq2Pending, setZoltraakBiq2Pending] = useState(false);
   const [pendingPreCombatCount, setPendingPreCombatCount] = useState(0);
@@ -410,7 +410,7 @@ export const WheelOfTruthMode = ({
       }
     };
     loadPlayers();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── Filtered player lists ─────────────────────────────────────────────────
@@ -675,19 +675,53 @@ export const WheelOfTruthMode = ({
   const p1DisplayStats = useMemo(() => {
     if (stepState) return stepState.p1Stats;
     if (dothrakiPreviewStats) return dothrakiPreviewStats.s1;
-    // Dùng player.stats (calculateCharacterEffects) làm base; chỉ tính lại khi có disabled
-    return player1?.character && disabledItems.size > 0
-      ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
-      : (player1?.stats ?? null);
-  }, [player1, disabledItems, stepState, dothrakiPreviewStats]);
+    const base: CharacterStats | null =
+      player1?.character && disabledItems.size > 0
+        ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
+        : player1?.stats
+          ? { ...player1.stats }
+          : null;
+    if (!base) return null;
+    // Apply pre-combat wheel results vào preview (giống StatsComparisonMode)
+    const p1Summon = summoningScrollResult["player1"];
+    if (p1Summon) {
+      for (const [k, v] of Object.entries(p1Summon.statDeltas)) {
+        (base as any)[k] = ((base as any)[k] || 0) + (v as number);
+      }
+    }
+    return base;
+  }, [
+    player1,
+    disabledItems,
+    stepState,
+    dothrakiPreviewStats,
+    summoningScrollResult,
+  ]);
 
   const p2DisplayStats = useMemo(() => {
     if (stepState) return stepState.p2Stats;
     if (dothrakiPreviewStats) return dothrakiPreviewStats.s2;
-    return player2?.character && disabledItems.size > 0
-      ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
-      : (player2?.stats ?? null);
-  }, [player2, disabledItems, stepState, dothrakiPreviewStats]);
+    const base: CharacterStats | null =
+      player2?.character && disabledItems.size > 0
+        ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
+        : player2?.stats
+          ? { ...player2.stats }
+          : null;
+    if (!base) return null;
+    const p2Summon = summoningScrollResult["player2"];
+    if (p2Summon) {
+      for (const [k, v] of Object.entries(p2Summon.statDeltas)) {
+        (base as any)[k] = ((base as any)[k] || 0) + (v as number);
+      }
+    }
+    return base;
+  }, [
+    player2,
+    disabledItems,
+    stepState,
+    dothrakiPreviewStats,
+    summoningScrollResult,
+  ]);
 
   // ── Dev weight overrides ──────────────────────────────────────────────────
   const [devWeightOverrides, setDevWeightOverrides] = useState<
@@ -758,13 +792,36 @@ export const WheelOfTruthMode = ({
   // ── Wheel weights for BattleWheelSpinner (WoT-specific) ──────────────────
   const currentStatInfo =
     stepInProgress && stepRoundIndex < 6 ? STAT_ORDER[stepRoundIndex] : null;
+
+  // Bash / Luminescence debuff cho wheel weights:
+  // Trong WoT, winner được xác định bởi wheel spin (forcedWinner), không phải stat comparison.
+  // Nên debuff -3 từ Bash/Luminescence phải được áp dụng trực tiếp vào wotP1Val/wotP2Val
+  // (thay vì chỉ áp dụng trong engine nơi bị override bởi forcedWinner).
+  const _wotBashDebuffForSide = (targetSide: "player1" | "player2"): number => {
+    if (!stepState || stepRoundIndex === 0) return 0;
+    const prevRoundIdx = stepRoundIndex - 1;
+    const prevRound = stepState.resolvedRounds[prevRoundIdx];
+    if (!prevRound) return 0;
+    const prevWinner = prevRound.winner;
+    if (prevWinner === "tie") return 0;
+    const winnerSide = prevWinner;
+    if (targetSide === winnerSide) return 0; // debuff goes to OPPONENT of prev winner
+    // Check if prev winner had Bash or Luminescence and spin was successful
+    const BASH_EFFECTS = ["Bash", "Luminescence"] as const;
+    for (const eff of BASH_EFFECTS) {
+      const key = `${prevRoundIdx}-${eff}-${winnerSide}`;
+      if (roundSpinResults[key]?.isSuccess) return -3;
+    }
+    return 0;
+  };
+
   const wotP1Val =
     currentStatInfo && stepState
-      ? (stepState.p1Stats[currentStatInfo.key] ?? 0)
+      ? Math.max(0, (stepState.p1Stats[currentStatInfo.key] ?? 0) + _wotBashDebuffForSide("player1"))
       : 0;
   const wotP2Val =
     currentStatInfo && stepState
-      ? (stepState.p2Stats[currentStatInfo.key] ?? 0)
+      ? Math.max(0, (stepState.p2Stats[currentStatInfo.key] ?? 0) + _wotBashDebuffForSide("player2"))
       : 0;
   const wotP1W = wotP1Val > wotP2Val ? wotP1Val * 2 : wotP1Val;
   const wotP2W = wotP2Val > wotP1Val ? wotP2Val * 2 : wotP2Val;
@@ -951,9 +1008,13 @@ export const WheelOfTruthMode = ({
       {/* Combat outro screen */}
       {showOutro && player1 && player2 && effectiveWinner && (
         <CombatOutroScreen
-          winnerName={effectiveWinner === "player1" ? player1.name : player2.name}
+          winnerName={
+            effectiveWinner === "player1" ? player1.name : player2.name
+          }
           winnerNo={effectiveWinner === "player1" ? player1.no : player2.no}
-          loserName={effectiveWinner === "player1" ? player2.name : player1.name}
+          loserName={
+            effectiveWinner === "player1" ? player2.name : player1.name
+          }
           loserNo={effectiveWinner === "player1" ? player2.no : player1.no}
           winnerSide={effectiveWinner}
           onComplete={() => {
@@ -1008,7 +1069,8 @@ export const WheelOfTruthMode = ({
               <div className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-500/30" />
               <h1 className="font-display text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-primary to-orange-400 tracking-widest">
                 {isTournamentMode
-                  ? (tournamentMatch!.displayLabel ?? `Match #${tournamentMatch!.matchNumber}`)
+                  ? (tournamentMatch!.displayLabel ??
+                    `Match #${tournamentMatch!.matchNumber}`)
                   : "Wheel of Truth"}
               </h1>
               <div className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-500/30" />
@@ -1354,316 +1416,393 @@ export const WheelOfTruthMode = ({
                 </div>
 
                 {/* Tab 1: Trước Combat */}
-                {centerTab === "pre" && (
-                  <div className="p-3 space-y-3">
-                    {/* Stat comparison bars */}
-                    <div className="space-y-1">
-                      <div className="grid grid-cols-[1fr_56px_1fr] gap-1 mb-2 items-center">
-                        <div className="text-right text-[11px] font-black text-blue-400 tracking-wide truncate pr-1">
-                          {player1.name}
-                        </div>
-                        <div className="text-center" />
-                        <div className="text-left text-[11px] font-black text-red-400 tracking-wide truncate pl-1">
-                          {player2.name}
-                        </div>
+                <div
+                  className={`p-3 space-y-3 ${centerTab !== "pre" ? "hidden" : ""}`}
+                >
+                  {/* Stat comparison bars */}
+                  <div className="space-y-1">
+                    <div className="grid grid-cols-[1fr_56px_1fr] gap-1 mb-2 items-center">
+                      <div className="text-right text-[11px] font-black text-blue-400 tracking-wide truncate pr-1">
+                        {player1.name}
                       </div>
-                      {STAT_ORDER.map(({ key, label }) => {
-                        const v1 = (p1DisplayStats ?? player1.stats)[key];
-                        const v2 = (p2DisplayStats ?? player2.stats)[key];
-                        const p1Higher = v1 > v2;
-                        const p2Higher = v2 > v1;
-                        const maxVal = Math.max(v1, v2, 1);
-                        return (
-                          <div
-                            key={key}
-                            className="grid grid-cols-[1fr_56px_1fr] gap-1 items-center"
-                          >
-                            <div className="flex items-center gap-1.5 justify-end">
-                              <span
-                                className={`text-sm font-black w-6 text-right ${p1Higher ? "text-blue-300" : "text-gray-600"}`}
-                              >
-                                {v1}
-                              </span>
-                              <div className="flex-1 max-w-[80px] bg-slate-900/70 rounded-full h-1.5 overflow-hidden flex justify-end">
-                                <div
-                                  className={`h-full rounded-full transition-all duration-700 ${p1Higher ? "bg-gradient-to-l from-blue-400 to-cyan-400" : "bg-slate-700/60"}`}
-                                  style={{ width: `${(v1 / maxVal) * 100}%` }}
-                                />
-                              </div>
-                            </div>
-                            <div
-                              className={`text-center text-[10px] font-mono font-bold tracking-wider py-0.5 ${p1Higher === p2Higher ? "text-gray-600" : p1Higher ? "text-blue-500/70" : "text-red-500/70"}`}
-                            >
-                              {label}
-                            </div>
-                            <div className="flex items-center gap-1.5 justify-start">
-                              <div className="flex-1 max-w-[80px] bg-slate-900/70 rounded-full h-1.5 overflow-hidden">
-                                <div
-                                  className={`h-full rounded-full transition-all duration-700 ${p2Higher ? "bg-gradient-to-r from-red-400 to-orange-400" : "bg-slate-700/60"}`}
-                                  style={{ width: `${(v2 / maxVal) * 100}%` }}
-                                />
-                              </div>
-                              <span
-                                className={`text-sm font-black w-6 ${p2Higher ? "text-red-300" : "text-gray-600"}`}
-                              >
-                                {v2}
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      })}
+                      <div className="text-center" />
+                      <div className="text-left text-[11px] font-black text-red-400 tracking-wide truncate pl-1">
+                        {player2.name}
+                      </div>
                     </div>
-
-                    <CombatEffectsPanel
-                      player1={{
-                        name: player1.name,
-                        character: player1.character,
-                      }}
-                      player2={{
-                        name: player2.name,
-                        character: player2.character,
-                      }}
-                      player1ComputedStats={p1DisplayStats ?? undefined}
-                      player2ComputedStats={p2DisplayStats ?? undefined}
-                      resetKey="pre-main"
-                      preCombatOnly
-                      onWheelResolved={handleWheelResolved}
-                      onPendingPreCombatChange={setPendingPreCombatCount}
-                    />
-                    {!stepState && !battleDone && (
-                      <div className="flex justify-center pt-2">
-                        <button
-                          onClick={() => {
-                            if (player1 && player2) setShowIntro(true);
-                          }}
-                          disabled={pendingPreCombatCount > 0}
-                          className={`px-10 py-3 rounded-xl font-display font-bold text-base transition-all transform tracking-widest ${
-                            pendingPreCombatCount > 0
-                              ? "bg-slate-800/60 text-gray-600 cursor-not-allowed border border-slate-700/40"
-                              : "text-slate-950 hover:scale-105 hover:brightness-110"
-                          }`}
-                          style={
-                            pendingPreCombatCount > 0
-                              ? {}
-                              : {
-                                  background:
-                                    "linear-gradient(135deg, #ffd16c 0%, #fdc003 60%, #e6950a 100%)",
-                                  boxShadow:
-                                    "0 0 24px 4px rgba(255,209,108,0.25), inset 0.5px 0.5px 0 rgba(255,255,255,0.25)",
-                                }
-                          }
+                    {STAT_ORDER.map(({ key, label }) => {
+                      const v1 = (p1DisplayStats ?? player1.stats)[key];
+                      const v2 = (p2DisplayStats ?? player2.stats)[key];
+                      const p1Higher = v1 > v2;
+                      const p2Higher = v2 > v1;
+                      const maxVal = Math.max(v1, v2, 1);
+                      return (
+                        <div
+                          key={key}
+                          className="grid grid-cols-[1fr_56px_1fr] gap-1 items-center"
                         >
-                          {pendingPreCombatCount > 0
-                            ? `Còn ${pendingPreCombatCount} hiệu ứng chờ...`
-                            : "✦ Bắt Đầu ✦"}
-                        </button>
-                      </div>
-                    )}
-                    {(stepState || battleDone) && (
-                      <div className="text-center text-xs text-amber-600/40 py-2 italic font-lore">
-                        Combat đang diễn ra — xem tab Wheel of Truth
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Tab 2: Wheel of Truth (rounds) */}
-                {centerTab === "wheel" && (
-                  <div className="p-3">
-                    {stepInProgress && currentStatInfo && (
-                      <div className="mb-4">
-                        <BattleWheelSpinner
-                          key={stepRoundIndex}
-                          p1Name={player1.name}
-                          p2Name={player2.name}
-                          p1Weight={wotP1W}
-                          p2Weight={wotP2W}
-                          statLabel={currentStatInfo.label}
-                          statKey={currentStatInfo.key}
-                          p1Val={wotP1Val}
-                          p2Val={wotP2Val}
-                          p1AllStats={
-                            stepState?.p1Stats as unknown as Record<
-                              string,
-                              number
+                          <div className="flex items-center gap-1.5 justify-end">
+                            <span
+                              className={`text-sm font-black w-6 text-right ${p1Higher ? "text-blue-300" : "text-gray-600"}`}
                             >
-                          }
-                          p2AllStats={
-                            stepState?.p2Stats as unknown as Record<
-                              string,
-                              number
-                            >
-                          }
-                          p1SpinNodes={wotP1SpinNodes}
-                          p2SpinNodes={wotP2SpinNodes}
-                          hasCurrentPendingSpins={hasCurrentPendingSpins}
-                          onWinnerDetermined={(w) => setCurrentRoundWinner(w)}
-                          onSpinComplete={(winner) =>
-                            setWheelForcedWinner(winner)
-                          }
-                        />
-                      </div>
-                    )}
-                    {(combatResult || stepState) && (
-                      <div>
-                        <button
-                          onClick={() => setShowRoundResults((v) => !v)}
-                          className="w-full flex items-center justify-between px-4 py-2 rounded-lg border border-amber-500/15 hover:border-amber-500/30 bg-slate-900/50 hover:bg-slate-800/50 transition-all text-xs text-amber-500/60 hover:text-amber-300"
-                        >
-                          <span className="font-display font-bold tracking-widest text-[11px]">
-                            ✦ Lịch sử rounds
-                          </span>
-                          <span className="text-amber-600/40">
-                            {showRoundResults ? "▲" : "▼"}
-                          </span>
-                        </button>
-                        {showRoundResults && (
-                          <div className="mt-2">
-                            <RoundResultsPanel
-                              rounds={
-                                combatResult
-                                  ? combatResult.rounds
-                                  : stepState!.resolvedRounds
-                              }
-                              revealedUpTo={
-                                combatResult
-                                  ? null
-                                  : stepState!.resolvedRounds.length > 0
-                                    ? stepState!.resolvedRounds.length - 1
-                                    : -1
-                              }
-                              p1char={player1.character}
-                              p2char={player2.character}
-                              extraBiqRound={(() => {
-                                const rr = combatResult
-                                  ? combatResult.rounds
-                                  : (stepState?.resolvedRounds ?? []);
-                                return (
-                                  (rr.length >= 5 &&
-                                    rr[4]?.stat === "biq" &&
-                                    rr[5]?.stat === "biq") ||
-                                  rr.length > STAT_ORDER.length ||
-                                  zoltraakBiq2Pending
-                                );
-                              })()}
-                              player1={player1}
-                              player2={player2}
-                              disabledItems={disabledItems}
-                              roundSpinResults={roundSpinResults}
-                              getPerRoundEffects={getPerRoundEffects}
-                              computeRoundPoints={computeRoundPoints}
-                              applyDevWeights={applyDevWeights}
-                              setRoundSpinModal={setRoundSpinModal}
-                            />
+                              {v1}
+                            </span>
+                            <div className="flex-1 max-w-[80px] bg-slate-900/70 rounded-full h-1.5 overflow-hidden flex justify-end">
+                              <div
+                                className={`h-full rounded-full transition-all duration-700 ${p1Higher ? "bg-gradient-to-l from-blue-400 to-cyan-400" : "bg-slate-700/60"}`}
+                                style={{ width: `${(v1 / maxVal) * 100}%` }}
+                              />
+                            </div>
                           </div>
-                        )}
-                      </div>
-                    )}
-                    {!combatResult && !stepState && (
-                      <div className="text-center py-8">
-                        <div className="text-amber-600/30 text-3xl mb-2">⚔</div>
-                        <div className="font-lore text-amber-600/40 text-sm italic">
-                          Chưa bắt đầu — chuyển sang tab Trước Combat
+                          <div
+                            className={`text-center text-[10px] font-mono font-bold tracking-wider py-0.5 ${p1Higher === p2Higher ? "text-gray-600" : p1Higher ? "text-blue-500/70" : "text-red-500/70"}`}
+                          >
+                            {label}
+                          </div>
+                          <div className="flex items-center gap-1.5 justify-start">
+                            <div className="flex-1 max-w-[80px] bg-slate-900/70 rounded-full h-1.5 overflow-hidden">
+                              <div
+                                className={`h-full rounded-full transition-all duration-700 ${p2Higher ? "bg-gradient-to-r from-red-400 to-orange-400" : "bg-slate-700/60"}`}
+                                style={{ width: `${(v2 / maxVal) * 100}%` }}
+                              />
+                            </div>
+                            <span
+                              className={`text-sm font-black w-6 ${p2Higher ? "text-red-300" : "text-gray-600"}`}
+                            >
+                              {v2}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      );
+                    })}
                   </div>
-                )}
 
-                {/* Tab 3: Sau Combat */}
-                {centerTab === "after" && (
-                  <div className="p-3 space-y-3">
-                    {/* After-combat CombatEffectsPanel */}
-                    <CombatEffectsPanel
-                      player1={{
-                        name: player1.name,
-                        character: player1.character,
-                      }}
-                      player2={{
-                        name: player2.name,
-                        character: player2.character,
-                      }}
-                      player1ComputedStats={p1DisplayStats ?? undefined}
-                      player2ComputedStats={p2DisplayStats ?? undefined}
-                      resetKey="after-main"
-                      afterCombatOnly
-                      combatResult={
-                        battleDone && effectiveWinner
-                          ? {
-                              winner: effectiveWinner,
-                              player1Score: effectiveScores.s1,
-                              player2Score: effectiveScores.s2,
-                              rounds: combatResult!.rounds.map((r) => ({
-                                stat: r.stat,
-                                winner: r.winner,
-                              })),
-                            }
-                          : undefined
-                      }
-                      onWheelResolved={handleWheelResolved}
-                    />
-
-                    {/* After-combat quirk effects (PvP Reward etc.) */}
-                    <AfterCombatPanel
-                      battleDone={battleDone}
-                      afterCombatEntries={afterCombatEntries}
-                      player1={player1}
-                      player2={player2}
-                      afterCombatSpinResults={afterCombatSpinResults}
-                      setAfterCombatSpinResults={setAfterCombatSpinResults}
-                      setPreCombatModal={setPreCombatModal}
-                      spawnStatBubbles={spawnStatBubbles}
-                      setCreatorsCatModal={setCreatorsCatModal}
-                    />
-
-                    {/* Roundtable Hold banner */}
-                    {isPendingRoundtable && (
-                      <div
-                        className="rounded-lg border border-orange-500/40 bg-orange-950/30 px-4 py-3 text-center text-sm text-orange-300 font-display font-bold animate-pulse tracking-wide"
-                        style={{
-                          boxShadow: "0 0 16px 2px rgba(249,115,22,0.08)",
-                        }}
-                      >
-                        ⚔ Roundtable Hold — Trận phụ đang chờ xử lý
-                      </div>
-                    )}
-
-                    {/* Kết thúc / Fight Again buttons */}
-                    {battleDone && !combatConfirmed && (
-                      <div className="flex justify-center pt-1">
-                        <button
-                          onClick={() => {
-                            if (effectiveWinner && player1 && player2) setShowOutro(true);
-                            else setCombatConfirmed(true);
-                          }}
-                          disabled={pendingSpins}
-                          className={`px-8 py-2.5 font-display font-bold rounded-xl text-sm tracking-widest transition-all ${
-                            pendingSpins
-                              ? "bg-slate-800/60 text-gray-600 cursor-not-allowed border border-slate-700/40"
-                              : "text-white hover:scale-105"
-                          }`}
-                          style={
-                            pendingSpins
-                              ? {}
-                              : {
-                                  background:
-                                    "linear-gradient(135deg, #16a34a 0%, #059669 100%)",
-                                  boxShadow: "0 0 20px 4px rgba(22,163,74,0.2)",
-                                }
-                          }
-                        >
-                          {pendingSpins
-                            ? "Còn hiệu ứng chờ quay..."
-                            : "✦ Kết Thúc ✦"}
-                        </button>
-                      </div>
-                    )}
-                    {combatConfirmed && (
-                      <div className="flex flex-wrap justify-center gap-2 pt-1">
-                        {isTournamentMode && onSaveTournamentResult && effectiveWinner && (
+                  <CombatEffectsPanel
+                    player1={{
+                      name: player1.name,
+                      character: player1.character,
+                    }}
+                    player2={{
+                      name: player2.name,
+                      character: player2.character,
+                    }}
+                    player1ComputedStats={p1DisplayStats ?? undefined}
+                    player2ComputedStats={p2DisplayStats ?? undefined}
+                    resetKey="pre-main"
+                    preCombatOnly
+                    onWheelResolved={handleWheelResolved}
+                    onPendingPreCombatChange={setPendingPreCombatCount}
+                  />
+                  {/* Tournament: manual force win */}
+                  {isTournamentMode &&
+                    !stepState &&
+                    !battleDone &&
+                    player1 &&
+                    player2 && (
+                      <div className="flex flex-col gap-1 items-center pt-2">
+                        <div className="text-[10px] text-gray-500 font-mono">Chọn thắng thủ công</div>
+                        <div className="flex gap-1.5">
                           <button
                             onClick={() => {
-                              const winner = effectiveWinner === "player1" ? player1 : player2;
+                              const fakeCombat: CombatResult = {
+                                rounds: [],
+                                player1Score: 0,
+                                player2Score: 0,
+                                startPlayer1Score: 0,
+                                startPlayer2Score: 0,
+                                winner: "player1",
+                              };
+                              setCombatResult(fakeCombat);
+                              setCombatConfirmed(true);
+                            }}
+                            className="px-3 py-1.5 bg-blue-600/30 hover:bg-blue-600/50 text-blue-300 rounded-none text-xs border border-blue-500/30 transition-colors"
+                          >
+                            {player1.name} Win
+                          </button>
+                          <button
+                            onClick={() => {
+                              const fakeCombat: CombatResult = {
+                                rounds: [],
+                                player1Score: 0,
+                                player2Score: 0,
+                                startPlayer1Score: 0,
+                                startPlayer2Score: 0,
+                                winner: "player2",
+                              };
+                              setCombatResult(fakeCombat);
+                              setCombatConfirmed(true);
+                            }}
+                            className="px-3 py-1.5 bg-red-600/30 hover:bg-red-600/50 text-red-300 rounded-none text-xs border border-red-500/30 transition-colors"
+                          >
+                            {player2.name} Win
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  {!stepState && !battleDone && (
+                    <div className="flex justify-center pt-2">
+                      <button
+                        onClick={() => {
+                          if (player1 && player2) setShowIntro(true);
+                        }}
+                        disabled={pendingPreCombatCount > 0}
+                        className={`px-10 py-3 rounded-xl font-display font-bold text-base transition-all transform tracking-widest ${
+                          pendingPreCombatCount > 0
+                            ? "bg-slate-800/60 text-gray-600 cursor-not-allowed border border-slate-700/40"
+                            : "text-slate-950 hover:scale-105 hover:brightness-110"
+                        }`}
+                        style={
+                          pendingPreCombatCount > 0
+                            ? {}
+                            : {
+                                background:
+                                  "linear-gradient(135deg, #ffd16c 0%, #fdc003 60%, #e6950a 100%)",
+                                boxShadow:
+                                  "0 0 24px 4px rgba(255,209,108,0.25), inset 0.5px 0.5px 0 rgba(255,255,255,0.25)",
+                              }
+                        }
+                      >
+                        {pendingPreCombatCount > 0
+                          ? `Còn ${pendingPreCombatCount} hiệu ứng chờ...`
+                          : "✦ Truth-Seeking ✦"}
+                      </button>
+                    </div>
+                  )}
+                  {(stepState || battleDone) && (
+                    <div className="text-center text-xs text-amber-600/40 py-2 italic font-lore">
+                      Combat đang diễn ra — xem tab Wheel of Truth
+                    </div>
+                  )}
+                </div>
+
+                {/* Tab 2: Wheel of Truth (rounds) */}
+                <div className={`p-3 ${centerTab !== "wheel" ? "hidden" : ""}`}>
+                  {stepInProgress && currentStatInfo && (
+                    <div className="mb-4">
+                      <BattleWheelSpinner
+                        key={stepRoundIndex}
+                        p1Name={player1.name}
+                        p2Name={player2.name}
+                        p1Weight={wotP1W}
+                        p2Weight={wotP2W}
+                        statLabel={currentStatInfo.label}
+                        statKey={currentStatInfo.key}
+                        p1Val={wotP1Val}
+                        p2Val={wotP2Val}
+                        p1AllStats={
+                          stepState?.p1Stats as unknown as Record<
+                            string,
+                            number
+                          >
+                        }
+                        p2AllStats={
+                          stepState?.p2Stats as unknown as Record<
+                            string,
+                            number
+                          >
+                        }
+                        p1SpinNodes={wotP1SpinNodes}
+                        p2SpinNodes={wotP2SpinNodes}
+                        hasCurrentPendingSpins={hasCurrentPendingSpins}
+                        onWinnerDetermined={(w) => setCurrentRoundWinner(w)}
+                        onSpinComplete={(winner) =>
+                          setWheelForcedWinner(winner)
+                        }
+                      />
+                    </div>
+                  )}
+                  {(combatResult || stepState) && (
+                    <div>
+                      <button
+                        onClick={() => setShowRoundResults((v) => !v)}
+                        className="w-full flex items-center justify-between px-4 py-2 rounded-lg border border-amber-500/15 hover:border-amber-500/30 bg-slate-900/50 hover:bg-slate-800/50 transition-all text-xs text-amber-500/60 hover:text-amber-300"
+                      >
+                        <span className="font-display font-bold tracking-widest text-[11px]">
+                          ✦ Lịch sử rounds
+                        </span>
+                        <span className="text-amber-600/40">
+                          {showRoundResults ? "▲" : "▼"}
+                        </span>
+                      </button>
+                      {showRoundResults && (
+                        <div className="mt-2">
+                          <RoundResultsPanel
+                            rounds={
+                              combatResult
+                                ? combatResult.rounds
+                                : stepState!.resolvedRounds
+                            }
+                            revealedUpTo={
+                              combatResult
+                                ? null
+                                : stepState!.resolvedRounds.length > 0
+                                  ? stepState!.resolvedRounds.length - 1
+                                  : -1
+                            }
+                            p1char={player1.character}
+                            p2char={player2.character}
+                            extraBiqRound={(() => {
+                              const rr = combatResult
+                                ? combatResult.rounds
+                                : (stepState?.resolvedRounds ?? []);
+                              return (
+                                (rr.length >= 5 &&
+                                  rr[4]?.stat === "biq" &&
+                                  rr[5]?.stat === "biq") ||
+                                rr.length > STAT_ORDER.length ||
+                                zoltraakBiq2Pending
+                              );
+                            })()}
+                            player1={player1}
+                            player2={player2}
+                            disabledItems={disabledItems}
+                            roundSpinResults={roundSpinResults}
+                            getPerRoundEffects={getPerRoundEffects}
+                            computeRoundPoints={computeRoundPoints}
+                            applyDevWeights={applyDevWeights}
+                            setRoundSpinModal={setRoundSpinModal}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {!combatResult && !stepState && (
+                    <div className="text-center py-8">
+                      <div className="text-amber-600/30 text-3xl mb-2">⚔</div>
+                      <div className="font-lore text-amber-600/40 text-sm italic">
+                        Chưa bắt đầu — chuyển sang tab Trước Combat
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Tab 3: Sau Combat */}
+                <div
+                  className={`p-3 space-y-3 ${centerTab !== "after" ? "hidden" : ""}`}
+                >
+                  {/* After-combat CombatEffectsPanel */}
+                  <CombatEffectsPanel
+                    player1={{
+                      name: player1.name,
+                      character: player1.character,
+                    }}
+                    player2={{
+                      name: player2.name,
+                      character: player2.character,
+                    }}
+                    player1ComputedStats={p1DisplayStats ?? undefined}
+                    player2ComputedStats={p2DisplayStats ?? undefined}
+                    resetKey="after-main"
+                    afterCombatOnly
+                    combatResult={
+                      battleDone && effectiveWinner
+                        ? {
+                            winner: effectiveWinner,
+                            player1Score: effectiveScores.s1,
+                            player2Score: effectiveScores.s2,
+                            rounds: combatResult!.rounds.map((r) => ({
+                              stat: r.stat,
+                              winner: r.winner,
+                            })),
+                          }
+                        : undefined
+                    }
+                    onWheelResolved={handleWheelResolved}
+                  />
+
+                  {/* After-combat quirk effects (PvP Reward etc.) */}
+                  <AfterCombatPanel
+                    battleDone={battleDone}
+                    afterCombatEntries={afterCombatEntries}
+                    player1={player1}
+                    player2={player2}
+                    afterCombatSpinResults={afterCombatSpinResults}
+                    setAfterCombatSpinResults={setAfterCombatSpinResults}
+                    setPreCombatModal={setPreCombatModal}
+                    spawnStatBubbles={spawnStatBubbles}
+                    setCreatorsCatModal={setCreatorsCatModal}
+                  />
+
+                  {/* Roundtable Hold banner */}
+                  {isPendingRoundtable && (
+                    <div
+                      className="rounded-lg border border-orange-500/40 bg-orange-950/30 px-4 py-3 text-center text-sm text-orange-300 font-display font-bold animate-pulse tracking-wide"
+                      style={{
+                        boxShadow: "0 0 16px 2px rgba(249,115,22,0.08)",
+                      }}
+                    >
+                      ⚔ Roundtable Hold — Trận phụ đang chờ xử lý
+                    </div>
+                  )}
+
+                  {/* Kết thúc / Fight Again buttons */}
+                  {battleDone && !combatConfirmed && (
+                    <div className="flex justify-center pt-1">
+                      <button
+                        onClick={() => {
+                          if (effectiveWinner && player1 && player2)
+                            setShowOutro(true);
+                          else setCombatConfirmed(true);
+                        }}
+                        disabled={pendingSpins}
+                        className={`px-8 py-2.5 font-display font-bold rounded-xl text-sm tracking-widest transition-all ${
+                          pendingSpins
+                            ? "bg-slate-800/60 text-gray-600 cursor-not-allowed border border-slate-700/40"
+                            : "text-white hover:scale-105"
+                        }`}
+                        style={
+                          pendingSpins
+                            ? {}
+                            : {
+                                background:
+                                  "linear-gradient(135deg, #16a34a 0%, #059669 100%)",
+                                boxShadow: "0 0 20px 4px rgba(22,163,74,0.2)",
+                              }
+                        }
+                      >
+                        {pendingSpins
+                          ? "Còn hiệu ứng chờ quay..."
+                          : "✦ Kết Thúc ✦"}
+                      </button>
+                    </div>
+                  )}
+                  {combatConfirmed && isTournamentMode && (
+                    <div className="mt-2 bg-gray-800/60 rounded-none border border-yellow-600/30 p-3 space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[11px] text-gray-400 mb-1">Special Event</label>
+                          <input
+                            type="text"
+                            value={tournamentSpecialEvent}
+                            onChange={(e) => setTournamentSpecialEvent(e.target.value)}
+                            placeholder="e.g. Instant Kill..."
+                            className="w-full bg-gray-800 text-white border border-gray-600 rounded px-2 py-1.5 text-xs focus:border-yellow-500 focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-gray-400 mb-1">Note</label>
+                          <input
+                            type="text"
+                            value={tournamentNote}
+                            onChange={(e) => setTournamentNote(e.target.value)}
+                            placeholder="Additional notes..."
+                            className="w-full bg-gray-800 text-white border border-gray-600 rounded px-2 py-1.5 text-xs focus:border-yellow-500 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {combatConfirmed && (
+                    <div className="flex flex-wrap justify-center gap-2 pt-1">
+                      {isTournamentMode &&
+                        onSaveTournamentResult &&
+                        effectiveWinner && (
+                          <button
+                            onClick={() => {
+                              const winner =
+                                effectiveWinner === "player1"
+                                  ? player1
+                                  : player2;
                               if (!winner) return;
                               const score = tournamentSpecialEvent
                                 ? null
@@ -1680,41 +1819,41 @@ export const WheelOfTruthMode = ({
                             ✓ Lưu Kết Quả
                           </button>
                         )}
-                        {isTournamentMode && onNextMatch && effectiveWinner && (
-                          <button
-                            onClick={() => {
-                              const winner = effectiveWinner === "player1" ? player1 : player2;
-                              if (!winner) return;
-                              const score = tournamentSpecialEvent
-                                ? null
-                                : `${effectiveScores.s1}-${effectiveScores.s2}`;
-                              onNextMatch({
-                                winnerNo: winner.no,
-                                score,
-                                specialEvent: tournamentSpecialEvent || null,
-                                note: tournamentNote || null,
-                              });
-                            }}
-                            className="px-6 py-2 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 hover:border-purple-400 text-purple-300 hover:text-purple-100 font-display text-sm font-medium transition-all"
-                          >
-                            ▶ Trận Tiếp Theo
-                          </button>
-                        )}
+                      {isTournamentMode && onNextMatch && effectiveWinner && (
                         <button
-                          onClick={resetCombat}
-                          className="px-6 py-2 rounded-lg bg-slate-800/70 hover:bg-slate-700/70 border border-amber-500/20 hover:border-amber-500/40 text-amber-300/70 hover:text-amber-200 font-display text-sm font-medium transition-all"
+                          onClick={() => {
+                            const winner =
+                              effectiveWinner === "player1" ? player1 : player2;
+                            if (!winner) return;
+                            const score = tournamentSpecialEvent
+                              ? null
+                              : `${effectiveScores.s1}-${effectiveScores.s2}`;
+                            onNextMatch({
+                              winnerNo: winner.no,
+                              score,
+                              specialEvent: tournamentSpecialEvent || null,
+                              note: tournamentNote || null,
+                            });
+                          }}
+                          className="px-6 py-2 rounded-lg bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 hover:border-purple-400 text-purple-300 hover:text-purple-100 font-display text-sm font-medium transition-all"
                         >
-                          ⇄ Fight Again
+                          ▶ Trận Tiếp Theo
                         </button>
-                      </div>
-                    )}
-                    {!battleDone && (
-                      <div className="text-center font-lore text-xs text-amber-600/30 py-4 italic">
-                        Chưa kết thúc combat
-                      </div>
-                    )}
-                  </div>
-                )}
+                      )}
+                      <button
+                        onClick={resetCombat}
+                        className="px-6 py-2 rounded-lg bg-slate-800/70 hover:bg-slate-700/70 border border-amber-500/20 hover:border-amber-500/40 text-amber-300/70 hover:text-amber-200 font-display text-sm font-medium transition-all"
+                      >
+                        ⇄ Fight Again
+                      </button>
+                    </div>
+                  )}
+                  {!battleDone && (
+                    <div className="text-center font-lore text-xs text-amber-600/30 py-4 italic">
+                      Chưa kết thúc combat
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 

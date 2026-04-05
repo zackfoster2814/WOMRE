@@ -1,8 +1,9 @@
 import { useRef, useMemo, useEffect, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Text } from "@react-three/drei";
+import { Text, Float } from "@react-three/drei";
 import * as THREE from "three";
 import type { WheelItem } from "../../types";
+import { playTickSound, playDefaultWinSound } from "../../utils/audio";
 
 interface WheelSlice {
   item: WheelItem;
@@ -11,61 +12,68 @@ interface WheelSlice {
   color: string;
 }
 
-// ── Mảnh bánh 3D (Cylindrical Slice) ──────────────────────────────────────────
-function WheelSlice3D({
+// ── CONFIGURATION ───────────────────────────────────────────────────────────
+const WHEEL_RADIUS = 2.4;
+const WHEEL_DEPTH = 0.3;
+const POINTER_ANGLE = Math.PI / 2; // 12 o'clock (Top)
+const SPIN_DURATION = 4000;
+
+// ── Celestial Wedge Component ────────────────────────────────────────────────
+function CelestialWedge({
   slice,
-  index,
-  total,
 }: {
   slice: WheelSlice;
   index: number;
-  total: number;
 }) {
-  const thetaLength = slice.endAngle - slice.startAngle;
-  // Dịch một chút padding để các mảnh có rãnh (gap)
-  const gap = total > 1 ? 0.02 : 0;
-  const start = slice.startAngle + gap / 2;
-  const length = Math.max(0, thetaLength - gap);
+  const midAngle = (slice.startAngle + slice.endAngle) / 2;
+  const labelRadius = WHEEL_RADIUS * 0.7;
 
-  // Vị trí text (ở giữa slice)
-  const midAngle = start + length / 2;
-  const textRadius = 1.9;
+  // Use ExtrudeGeometry for absolute predictability in orientation
+  const geometry = useMemo(() => {
+    const shape = new THREE.Shape();
+    shape.moveTo(0, 0);
+    shape.absarc(0, 0, WHEEL_RADIUS, slice.startAngle, slice.endAngle, false);
+    shape.lineTo(0, 0);
+
+    return new THREE.ExtrudeGeometry(shape, {
+      depth: WHEEL_DEPTH,
+      bevelEnabled: true,
+      bevelThickness: 0.02,
+      bevelSize: 0.02,
+    });
+  }, [slice.startAngle, slice.endAngle]);
 
   return (
     <group>
-      {/* Khối đá Slice */}
-      <mesh rotation={[Math.PI / 2, 0, start]}>
-        {/* Radius top, radius bottom, height, radial seq, height seq, open ended, thetaStart, thetaLength */}
-        <cylinderGeometry args={[2.5, 2.5, 0.4, 32, 1, false, 0, length]} />
+      <mesh geometry={geometry}>
         <meshStandardMaterial
-          color={slice.color || (index % 2 === 0 ? "#1e3a8a" : "#7f1d1d")}
-          metalness={0.4}
-          roughness={0.7}
+          color={slice.color}
+          emissive={slice.color}
+          emissiveIntensity={0.2}
+          metalness={0.5}
+          roughness={0.5}
         />
-        {/* Cạnh viền sáng chìm (Fake inner border) */}
-        <lineSegments>
-          <edgesGeometry args={[new THREE.CylinderGeometry(2.5, 2.5, 0.41, 32, 1, false, 0, length)]} />
-          <lineBasicMaterial color="#ffd700" transparent opacity={0.3} />
-        </lineSegments>
       </mesh>
 
-      {/* Label Text — dùng font mặc định của troika để tránh suspend khi load font ngoài */}
+      {/* Item Text */}
       <group
-        rotation={[0, 0, midAngle]}
-        position={[Math.cos(midAngle) * textRadius, Math.sin(midAngle) * textRadius, 0.25]}
+        position={[
+          Math.cos(midAngle) * labelRadius,
+          Math.sin(midAngle) * labelRadius,
+          WHEEL_DEPTH + 0.05,
+        ]}
+        rotation={[0, 0, midAngle - Math.PI / 2]}
       >
         <Text
           color="#ffffff"
-          fontSize={0.25}
-          maxWidth={1.8}
-          lineHeight={1}
-          letterSpacing={0.02}
+          fontSize={0.22}
+          maxWidth={1.4}
           textAlign="center"
           anchorX="center"
           anchorY="middle"
-          rotation={[0, 0, -midAngle]}
-          outlineWidth={0.01}
+          outlineWidth={0.02}
           outlineColor="#000000"
+          material-depthTest={false} // Ensure text is always visible on top
         >
           {slice.item.name}
         </Text>
@@ -74,58 +82,48 @@ function WheelSlice3D({
   );
 }
 
-// ── Spinning Core (Trục La Bàn) ───────────────────────────────────────────────
-function AstrolabeCore() {
+// ── Astral Core ──────────────────────────────────────────────────────────────
+function AstralCore() {
   return (
-    <group>
-      {/* Khối trụ tâm */}
-      <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0, 0.2]}>
-        <cylinderGeometry args={[0.4, 0.5, 0.6, 16]} />
-        <meshStandardMaterial color="#d4af37" metalness={1} roughness={0.2} />
-      </mesh>
-      {/* Vòng khóa ngoài */}
-      <mesh position={[0, 0, 0.4]}>
-        <torusGeometry args={[0.5, 0.05, 16, 32]} />
-        <meshStandardMaterial color="#ffaa00" metalness={0.8} roughness={0.3} />
-      </mesh>
-    </group>
-  );
-}
-
-// ── Vòng khuyên bảo vệ ngoài cùng ──────────────────────────────────────────────
-function OuterRing() {
-  return (
-    <mesh position={[0, 0, -0.1]}>
-      <torusGeometry args={[2.7, 0.08, 16, 64]} />
-      <meshStandardMaterial color="#888888" metalness={0.8} roughness={0.4} />
-      {/* Đinh tán (Runes) */}
-      {Array.from({ length: 8 }).map((_, i) => (
-        <mesh key={i} position={[Math.cos((i * Math.PI) / 4) * 2.7, Math.sin((i * Math.PI) / 4) * 2.7, 0.08]} rotation={[Math.PI/2, 0, 0]}>
-          <cylinderGeometry args={[0.08, 0.08, 0.1, 8]} />
-          <meshStandardMaterial color="#ffd700" metalness={0.8} roughness={0.2} />
+    <group position={[0, 0, WHEEL_DEPTH]}>
+      <Float speed={2} rotationIntensity={1} floatIntensity={1}>
+        <mesh position={[0, 0, 0.2]}>
+          <octahedronGeometry args={[0.35, 0]} />
+          <meshStandardMaterial
+            color="#a78bfa"
+            emissive="#7c3aed"
+            emissiveIntensity={1}
+          />
         </mesh>
-      ))}
-    </mesh>
-  );
-}
-
-// ── Kim chỉ định (Pointer) ────────────────────────────────────────────────────
-function Pointer() {
-  // Đặt ở góc phải (0 degrees / 3 giờ) như thiết kế cũ
-  return (
-    <group position={[2.6, 0, 0.3]} rotation={[0, 0, -Math.PI / 2]}>
-      <mesh>
-        {/* Mũi tên nhọn */}
-        <coneGeometry args={[0.2, 0.8, 4]} />
-        <meshStandardMaterial color="#ff3300" metalness={0.8} roughness={0.2} emissive="#660000" emissiveIntensity={0.5} />
+      </Float>
+      {/* Central Hub Plate */}
+      <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.4, 0.45, 0.1, 24]}  />
+        <meshStandardMaterial color="#1e1b4b" metalness={0.8} />
       </mesh>
-      <pointLight color="#ff3300" intensity={0.5} distance={2} />
     </group>
   );
 }
 
-// ── Vòng Logic Quay ──────────────────────────────────────────────────────────
-function WheelLogic({
+// ── North Star Pointer ───────────────────────────────────────────────────────
+function NorthStarPointer() {
+  return (
+    <group position={[0, WHEEL_RADIUS + 0.15, WHEEL_DEPTH + 0.2]} rotation={[0, 0, Math.PI]}>
+      <mesh>
+        <coneGeometry args={[0.15, 0.45, 4]} />
+        <meshStandardMaterial
+          color="#fbbf24"
+          emissive="#f59e0b"
+          emissiveIntensity={1}
+        />
+      </mesh>
+      <pointLight color="#fbbf24" intensity={1} distance={2} />
+    </group>
+  );
+}
+
+// ── Internal Component Logic ──────────────────────────────────────────────────
+function WheelInternal({
   items,
   isSpinning,
   onSpinComplete,
@@ -135,178 +133,137 @@ function WheelLogic({
   onSpinComplete: (item: WheelItem) => void;
 }) {
   const groupRef = useRef<THREE.Group>(null!);
-  
-  // Trạng thái vật lý
   const currentRotation = useRef(0);
   const targetRotation = useRef(0);
   const startRotation = useRef(0);
   const spinStartTime = useRef(0);
   const isAnimating = useRef(false);
+  const lastTickIndex = useRef(-1);
 
-  // Tính toán Slices
   const slices = useMemo(() => {
     let totalWeight = items.reduce((acc, curr) => acc + curr.weight, 0);
     if (totalWeight === 0) totalWeight = 1;
 
     let currentAngle = 0;
     const result: WheelSlice[] = [];
+    const palette = ["#4c1d95", "#1e3a8a", "#b91c1c", "#047857", "#92400e", "#be185d"];
 
-    const defaultColors = ["#1e3a8a", "#7f1d1d", "#064e3b", "#581c87", "#9a3412"];
-
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+    items.forEach((item, i) => {
       const sliceAngle = (item.weight / totalWeight) * (Math.PI * 2);
       result.push({
         item,
         startAngle: currentAngle,
         endAngle: currentAngle + sliceAngle,
-        color: item.color || defaultColors[i % defaultColors.length],
+        color: item.color || palette[i % palette.length],
       });
       currentAngle += sliceAngle;
-    }
+    });
     return result;
   }, [items]);
 
-  // Kích hoạt Spin
   useEffect(() => {
     if (isSpinning && !isAnimating.current && items.length > 0) {
       isAnimating.current = true;
       spinStartTime.current = Date.now();
       startRotation.current = currentRotation.current;
 
-      // Tính vòng quay (3 đến 6 vòng + random)
-      const extraSpins = (3 + Math.random() * 3) * Math.PI * 2;
-      const randomStop = Math.random() * Math.PI * 2;
-      targetRotation.current = startRotation.current + extraSpins + randomStop;
-    }
-  }, [isSpinning, items.length]);
+      const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+      let rand = Math.random() * totalWeight;
+      let winnerIdx = 0;
+      for (let i = 0; i < items.length; i++) {
+        rand -= items[i].weight;
+        if (rand <= 0) {
+          winnerIdx = i;
+          break;
+        }
+      }
 
-  // Animation Loop (Ease Out)
+      const winnerSlice = slices[winnerIdx];
+      const midAngle = (winnerSlice.startAngle + winnerSlice.endAngle) / 2;
+      const extraSpins = (6 + Math.random() * 4) * Math.PI * 2;
+      
+      // Clockwise logic: we want (midAngle - totalRotation) % 2PI = PI/2
+      // targetRotation = midAngle - PI/2 + spins
+      let dist = midAngle - POINTER_ANGLE;
+      while (dist < 0) dist += Math.PI * 2;
+      
+      targetRotation.current = startRotation.current + extraSpins + dist;
+      lastTickIndex.current = -1;
+    }
+  }, [isSpinning, items, slices]);
+
   useFrame(() => {
     if (!isAnimating.current) return;
 
     const elapsed = Date.now() - spinStartTime.current;
-    const duration = 4000; // 4 giây xoay
-    let t = Math.min(elapsed / duration, 1);
-    
-    // Cubic Ease Out
-    t = 1 - Math.pow(1 - t, 3);
+    let t = Math.min(elapsed / SPIN_DURATION, 1);
+    t = 1 - Math.pow(1 - t, 5);
     
     const nextRot = startRotation.current + (targetRotation.current - startRotation.current) * t;
     currentRotation.current = nextRot;
     
     if (groupRef.current) {
-      // Xoay quanh trục Z
-      groupRef.current.rotation.z = -nextRot; // Dấu âm để xoay kim đồng hồ
+      groupRef.current.rotation.z = -nextRot;
+    }
+
+    const checkAngle = (nextRot + POINTER_ANGLE) % (Math.PI * 2);
+    const currentWedgeIdx = slices.findIndex(s => checkAngle >= s.startAngle && checkAngle < s.endAngle);
+    
+    if (currentWedgeIdx !== lastTickIndex.current && currentWedgeIdx !== -1) {
+      playTickSound();
+      lastTickIndex.current = currentWedgeIdx;
     }
 
     if (t >= 1) {
       isAnimating.current = false;
-      
-      // Tính toán kết quả
-      // Vòng tròn đã xoay đi một góc `currentRotation`. Kim chỉ nằm ở góc 0 (hướng 3 giờ).
-      // Góc tương đối của kim so với vòng là `currentRotation % (2PI)`.
-      const normalizedRot = currentRotation.current % (Math.PI * 2);
-      
-      const winnerSlice = slices.find((s) => {
-        return normalizedRot >= s.startAngle && normalizedRot < s.endAngle;
-      });
-
-      if (winnerSlice) {
-        onSpinComplete(winnerSlice.item);
-      } else {
-        // Fallback
-        onSpinComplete(slices[0].item);
-      }
+      const finalWinner = slices[lastTickIndex.current]?.item || slices[0].item;
+      playDefaultWinSound();
+      onSpinComplete(finalWinner);
     }
   });
 
-  // Idle breathing — rất nhẹ, không có tilt cố định (camera tạo góc nhìn 3D)
-  const parentRef = useRef<THREE.Group>(null!);
-  useFrame(({ clock }) => {
-    if (!parentRef.current || isAnimating.current) return;
-    const t = clock.getElapsedTime();
-    parentRef.current.rotation.y = Math.sin(t * 0.25) * 0.04;
-  });
-
   return (
-    <group ref={parentRef}>
+    <group>
       <group ref={groupRef}>
         {slices.map((slice, idx) => (
-          <WheelSlice3D key={idx} slice={slice} index={idx} total={slices.length} />
+          <CelestialWedge key={idx} slice={slice} index={idx} />
         ))}
-        <OuterRing />
       </group>
-      <AstrolabeCore />
-      <Pointer />
+      <AstralCore />
+      <NorthStarPointer />
     </group>
   );
 }
 
-// ── Hạt bụi ma thuật bay khi quay ──────────────────────────────────────────────
-function SpinParticles({ isSpinning }: { isSpinning: boolean }) {
-  const mesh = useRef<THREE.Points>(null!);
-  const count = 100;
-  
-  const [positions] = useMemo(() => {
-    const pos = new Float32Array(count * 3);
-    for (let i=0; i<count; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const r = 2.8 + Math.random() * 0.5;
-      pos[i*3] = Math.cos(angle) * r;
-      pos[i*3+1] = Math.sin(angle) * r;
-      pos[i*3+2] = (Math.random() - 0.5) * 1;
-    }
-    return [pos];
-  }, []);
-
-  useFrame(({ clock }) => {
-    if (!mesh.current) return;
-    const t = clock.getElapsedTime();
-    if (mesh.current.material instanceof THREE.PointsMaterial) {
-      mesh.current.material.opacity = isSpinning 
-        ? 0.8 + Math.sin(t * 10) * 0.2 
-        : 0.1 + Math.sin(t * 2) * 0.1;
-    }
-    mesh.current.rotation.z = t * (isSpinning ? 0.5 : 0.05);
-  });
-
-  return (
-    <points ref={mesh}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial size={0.06} color="#ffd700" transparent opacity={0.1} blending={THREE.AdditiveBlending} depthWrite={false} />
-    </points>
-  );
-}
-
-// ── Export Interface Tương tự WheelCanvas ─────────────────────────────────────
 export interface ProbabilityWheel3DProps {
   items: WheelItem[];
   isSpinning: boolean;
   onSpinComplete: (item: WheelItem) => void;
-  onSpin?: () => void; // Trigger callback khi bấm vào vòng
+  onSpin?: () => void;
 }
 
 export function ProbabilityWheel3D({ items, isSpinning, onSpinComplete, onSpin }: ProbabilityWheel3DProps) {
   return (
     <div className="relative w-full h-full" style={{ isolation: "isolate" }}>
-      <Canvas camera={{ position: [0, 3, 6], fov: 50 }} gl={{ alpha: true, antialias: true }}>
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[0, 10, 10]} intensity={1.5} />
-        <pointLight position={[0, 0, 5]} intensity={0.8} color="#a78bfa" />
+      <Canvas 
+        camera={{ position: [0, 0, 10], fov: 35 }} 
+        gl={{ alpha: true, antialias: true, stencil: false }}
+        onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 0); // Transparent background
+        }}
+      >
+        <ambientLight intensity={0.7} />
+        <pointLight position={[5, 10, 5]} intensity={1} />
         
-        {/* Glow chìm dưới đáy */}
-        <mesh position={[0, 0, -1]}>
-          <planeGeometry args={[10, 10]} />
-          <meshBasicMaterial color="#000" transparent opacity={0.3} />
+        {/* Dark Background Overlay */}
+        <mesh position={[0, 0, -2]}>
+          <planeGeometry args={[20, 20]} />
+          <meshBasicMaterial color="#0c111d" transparent opacity={0.6} />
         </mesh>
 
         <Suspense fallback={null}>
-          <group onClick={onSpin}>
-            <WheelLogic items={items} isSpinning={isSpinning} onSpinComplete={onSpinComplete} />
-            <SpinParticles isSpinning={isSpinning} />
+          <group onClick={onSpin} scale={0.7}>
+            <WheelInternal items={items} isSpinning={isSpinning} onSpinComplete={onSpinComplete} />
           </group>
         </Suspense>
       </Canvas>

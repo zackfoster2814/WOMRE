@@ -17,13 +17,13 @@ function AshParticles() {
       pos[i * 3] = Math.cos(angle) * r;
       pos[i * 3 + 1] = Math.sin(angle) * r;
       pos[i * 3 + 2] = (Math.random() - 0.5) * 4;
-      
+
       const speed = 0.01 + Math.random() * 0.03;
       // Bay lả tả lên trên
       vel[i * 3] = (Math.random() - 0.5) * 0.02;
       vel[i * 3 + 1] = speed;
       vel[i * 3 + 2] = (Math.random() - 0.5) * 0.02;
-      
+
       // Màu từ than hồng rực đến lửa vàng
       const t = Math.random();
       const c = new THREE.Color().lerpColors(
@@ -40,7 +40,10 @@ function AshParticles() {
 
   const geometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions.slice(), 3));
+    geo.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions.slice(), 3),
+    );
     geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
     return geo;
   }, [positions, colors]);
@@ -83,14 +86,15 @@ function StardustShockwave({ triggered }: { triggered: boolean }) {
   const startT = useRef<number | null>(null);
 
   useFrame(({ clock }) => {
-    if (triggered && startT.current === null) startT.current = clock.getElapsedTime();
+    if (triggered && startT.current === null)
+      startT.current = clock.getElapsedTime();
     if (startT.current === null) return;
     const elapsed = clock.getElapsedTime() - startT.current;
-    
+
     // Nổ chậm hơn xíu
-    const dur = 1.2; 
+    const dur = 1.2;
     const t = Math.min(elapsed / dur, 1);
-    
+
     if (meshRef.current) {
       // Scale theo ease out cubic
       const scale = 1 + (1 - Math.pow(1 - t, 3)) * 25;
@@ -160,7 +164,12 @@ function IntroScene({ vsVisible }: { vsVisible: boolean }) {
       <BackgroundNebula />
       <AshParticles />
       {/* Sấm chớp nhẹ ở background thay vì vạch chéo ngang */}
-      <pointLight position={[0, 0, -2]} color="#ffaa00" intensity={vsVisible ? 3.0 : 0} distance={15} />
+      <pointLight
+        position={[0, 0, -2]}
+        color="#ffaa00"
+        intensity={vsVisible ? 3.0 : 0}
+        distance={15}
+      />
       <StardustShockwave triggered={vsVisible} />
     </>
   );
@@ -174,18 +183,30 @@ function getRandomAvatarIndex(no: number): number {
   return (no % RANDOM_AVATAR_COUNT) + 1;
 }
 
-function AvatarWithFallback({ no, name, side }: { no: number; name: string; side: "left" | "right" }) {
+function AvatarWithFallback({
+  no,
+  name,
+  side,
+}: {
+  no: number;
+  name: string;
+  side: "left" | "right";
+}) {
   const [extIndex, setExtIndex] = useState(0);
   const [phase, setPhase] = useState<"player" | "random">("player");
   const [randomExtIndex, setRandomExtIndex] = useState(0);
   const isLeft = side === "left";
   const basePath = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
 
-  const playerSrc = phase === "player" && extIndex < AVATAR_EXTS.length
-      ? `${basePath}/data/avatars/no${no}.${AVATAR_EXTS[extIndex]}` : null;
+  const playerSrc =
+    phase === "player" && extIndex < AVATAR_EXTS.length
+      ? `${basePath}/data/avatars/no${no}.${AVATAR_EXTS[extIndex]}`
+      : null;
   const randomIndex = getRandomAvatarIndex(no);
-  const randomSrc = phase === "random" && randomExtIndex < AVATAR_EXTS.length
-      ? `${basePath}/data/avatars/randomAvatar/${randomIndex}.${AVATAR_EXTS[randomExtIndex]}` : null;
+  const randomSrc =
+    phase === "random" && randomExtIndex < AVATAR_EXTS.length
+      ? `${basePath}/data/avatars/randomAvatar/${randomIndex}.${AVATAR_EXTS[randomExtIndex]}`
+      : null;
 
   const src = playerSrc ?? randomSrc;
 
@@ -193,33 +214,51 @@ function AvatarWithFallback({ no, name, side }: { no: number; name: string; side
     const handleError = () => {
       if (phase === "player") {
         if (extIndex + 1 < AVATAR_EXTS.length) setExtIndex(extIndex + 1);
-        else { setPhase("random"); setRandomExtIndex(0); }
+        else {
+          setPhase("random");
+          setRandomExtIndex(0);
+        }
       } else {
         setRandomExtIndex((i) => i + 1);
       }
     };
     return (
       <img
-        key={src} src={src} alt={name}
+        key={src}
+        src={src}
+        alt={name}
         className="absolute inset-0"
-        style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "center top",
+        }}
         onError={handleError}
       />
     );
   }
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center select-none"
+    <div
+      className="absolute inset-0 flex items-center justify-center select-none"
       style={{
         background: isLeft
           ? "radial-gradient(ellipse at 30% 50%, rgba(30,58,138,0.4) 0%, transparent 80%)"
           : "radial-gradient(ellipse at 70% 50%, rgba(127,29,29,0.4) 0%, transparent 80%)",
-      }}>
-      <span className="font-black font-serif" style={{
-        fontSize: "clamp(8rem, 20vw, 18rem)", color: "transparent",
-        WebkitTextStroke: isLeft ? "1px rgba(255,215,0,0.15)" : "1px rgba(255,215,0,0.15)",
-        userSelect: "none",
-      }}>
+      }}
+    >
+      <span
+        className="font-black font-serif"
+        style={{
+          fontSize: "clamp(8rem, 20vw, 18rem)",
+          color: "transparent",
+          WebkitTextStroke: isLeft
+            ? "1px rgba(255,215,0,0.15)"
+            : "1px rgba(255,215,0,0.15)",
+          userSelect: "none",
+        }}
+      >
         {name.charAt(0).toUpperCase()}
       </span>
     </div>
@@ -238,19 +277,19 @@ function VSText({ isClashing }: { isClashing: boolean }) {
           // Gold border
           WebkitTextStroke: "2px rgba(255,215,0,0.9)",
           // Thêm bóng mờ vầng lửa phía sau
-          textShadow: isClashing 
+          textShadow: isClashing
             ? "0 0 50px rgba(255,60,0,1), 0 0 100px rgba(255,165,0,0.9), 0 0 150px rgba(255,215,0,0.6)"
             : "0 0 30px rgba(255,215,0,0.8), 0 0 60px rgba(255,165,0,0.5)",
           filter: "drop-shadow(0 0 20px rgba(255,215,0,0.8))",
           letterSpacing: "0.1em",
-          transition: "text-shadow 0.2s ease-out"
+          transition: "text-shadow 0.2s ease-out",
         }}
       >
         VS
       </div>
-      
+
       {/* Vát sáng quét ngang chữ (Shiny reflect) */}
-      <div 
+      <div
         className="absolute inset-0 select-none font-serif font-black overflow-hidden pointer-events-none"
         style={{
           fontSize: "clamp(5rem, 14vw, 10rem)",
@@ -258,8 +297,9 @@ function VSText({ isClashing }: { isClashing: boolean }) {
           WebkitBackgroundClip: "text",
           letterSpacing: "0.1em",
           opacity: isClashing ? 1 : 0,
-          transition: "opacity 0.2s"
-        }}>
+          transition: "opacity 0.2s",
+        }}
+      >
         VS
       </div>
     </div>
@@ -269,27 +309,43 @@ function VSText({ isClashing }: { isClashing: boolean }) {
 // ── Countdown Number (Divine Style) ───────────────────────────────────────────
 function CountdownNumber({ count }: { count: number }) {
   const [key, setKey] = useState(count);
-  useEffect(() => { setKey(count); }, [count]);
+  useEffect(() => {
+    setKey(count);
+  }, [count]);
 
   return (
-    <div key={key} className="font-serif" style={{
+    <div
+      key={key}
+      className="font-serif"
+      style={{
         fontSize: "clamp(3rem, 8vw, 5rem)",
         fontWeight: 900,
         color: "transparent",
-        WebkitTextStroke: count <= 1 ? "2px rgba(255,60,0,0.9)" : "2px rgba(255,215,0,0.7)",
-        textShadow: count <= 1
+        WebkitTextStroke:
+          count <= 1 ? "2px rgba(255,60,0,0.9)" : "2px rgba(255,215,0,0.7)",
+        textShadow:
+          count <= 1
             ? "0 0 30px rgba(255,60,0,1), 0 0 60px rgba(255,60,0,0.5)"
             : "0 0 20px rgba(255,215,0,0.8), 0 0 40px rgba(255,165,0,0.4)",
         animation: "divinePop 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards",
-        lineHeight: 1, userSelect: "none",
-      }}>
+        lineHeight: 1,
+        userSelect: "none",
+      }}
+    >
       {count}
     </div>
   );
 }
 
 // ── Main Component ────────────────────────────────────────────────────────────
-export function CombatIntroScreen({ player1Name, player1No, player2Name, player2No, onComplete, volume = 1 }: any) {
+export function CombatIntroScreen({
+  player1Name,
+  player1No,
+  player2Name,
+  player2No,
+  onComplete,
+  volume = 1,
+}: any) {
   const [phase, setPhase] = useState<"enter" | "show" | "exit">("enter");
   const [, setProgress] = useState(0);
   const [countdown, setCountdown] = useState(5);
@@ -326,7 +382,10 @@ export function CombatIntroScreen({ player1Name, player1No, player2Name, player2
     const t3 = setTimeout(() => onComplete(), total);
 
     return () => {
-      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearInterval(iv);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearInterval(iv);
       clashIntervals.forEach(clearTimeout);
     };
   }, []);
@@ -356,97 +415,205 @@ export function CombatIntroScreen({ player1Name, player1No, player2Name, player2
         }
       `}</style>
 
-      <div className="fixed inset-0 z-[9990] overflow-hidden"
+      <div
+        className="fixed inset-0 z-[9990] overflow-hidden"
         style={{
           opacity: exiting ? 0 : 1,
-          transition: exiting ? "opacity 0.7s ease-in" : "opacity 0.25s ease-out",
-        }}>
-        
+          transition: exiting
+            ? "opacity 0.7s ease-in"
+            : "opacity 0.25s ease-out",
+        }}
+      >
         {/* Three.js background */}
         <div className="absolute inset-0 pointer-events-none">
-          <Canvas camera={{ position: [0, 0, 6], fov: 60 }} gl={{ alpha: false, antialias: false }} dpr={[1, 1.5]}>
+          <Canvas
+            camera={{ position: [0, 0, 6], fov: 60 }}
+            gl={{ alpha: false, antialias: false }}
+            dpr={[1, 1.5]}
+          >
             <IntroScene vsVisible={vsVisible} />
           </Canvas>
         </div>
 
         {/* ── Avatar P1 ── */}
-        <div className="absolute inset-y-0 left-0 w-1/2"
+        <div
+          className="absolute inset-y-0 left-0 w-1/2"
           style={{
             clipPath: clipP1,
-            transform: entering ? "translateX(-100%)" : exiting ? "translateX(-80%)" : "translateX(0)",
+            transform: entering
+              ? "translateX(-100%)"
+              : exiting
+                ? "translateX(-80%)"
+                : "translateX(0)",
             opacity: entering ? 0 : exiting ? 0 : 1, // Fix lỗi giật hình
-            transition: entering ? "none" : exiting ? "transform 0.7s ease-in, opacity 0.7s ease-in" : "transform 0.65s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease-out",
+            transition: entering
+              ? "none"
+              : exiting
+                ? "transform 0.7s ease-in, opacity 0.7s ease-in"
+                : "transform 0.65s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease-out",
             zIndex: 2,
-          }}>
+          }}
+        >
           <AvatarWithFallback no={player1No} name={player1Name} side="left" />
-          
+
           {/* Gradient Shadows cho góc cạnh điện ảnh hơn */}
-          <div className="absolute inset-y-0 right-0 w-1/2" style={{ background: "linear-gradient(to right, transparent, rgba(5,0,16,0.95))" }} />
-          <div className="absolute inset-x-0 bottom-0 h-32" style={{ background: "linear-gradient(to top, rgba(5,0,16,0.9), transparent)" }} />
-          
-          <div className="absolute top-8 left-8" style={{ animation: !entering ? "nameSlideLeft 0.5s cubic-bezier(0.22,1,0.36,1) both" : "none" }}>
+          <div
+            className="absolute inset-y-0 right-0 w-1/2"
+            style={{
+              background:
+                "linear-gradient(to right, transparent, rgba(5,0,16,0.95))",
+            }}
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 h-32"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(5,0,16,0.9), transparent)",
+            }}
+          />
+
+          <div
+            className="absolute top-8 left-8"
+            style={{
+              animation: !entering
+                ? "nameSlideLeft 0.5s cubic-bezier(0.22,1,0.36,1) both"
+                : "none",
+            }}
+          >
             <div className="text-yellow-500/70 text-xs font-serif tracking-widest mb-1 uppercase drop-shadow-md">
-              Challenger · #{player1No}
+              Player · #{player1No}
             </div>
-            <div className="font-black text-white font-serif leading-tight tracking-wider"
-              style={{ fontSize: "clamp(1.4rem, 2.5vw, 2.2rem)", textShadow: "0 0 10px rgba(255,215,0,0.4), 2px 2px 5px rgba(0,0,0,1)" }}>
+            <div
+              className="font-black text-white font-serif leading-tight tracking-wider"
+              style={{
+                fontSize: "clamp(1.4rem, 2.5vw, 2.2rem)",
+                textShadow:
+                  "0 0 10px rgba(255,215,0,0.4), 2px 2px 5px rgba(0,0,0,1)",
+              }}
+            >
               {player1Name}
             </div>
           </div>
         </div>
 
         {/* ── Avatar P2 ── */}
-        <div className="absolute inset-y-0 right-0 w-1/2"
+        <div
+          className="absolute inset-y-0 right-0 w-1/2"
           style={{
             clipPath: clipP2,
-            transform: entering ? "translateX(100%)" : exiting ? "translateX(80%)" : "translateX(0)",
+            transform: entering
+              ? "translateX(100%)"
+              : exiting
+                ? "translateX(80%)"
+                : "translateX(0)",
             opacity: entering ? 0 : exiting ? 0 : 1,
-            transition: entering ? "none" : exiting ? "transform 0.7s ease-in, opacity 0.7s ease-in" : "transform 0.65s cubic-bezier(0.22,1,0.36,1) 0.1s, opacity 0.5s ease-out 0.1s",
+            transition: entering
+              ? "none"
+              : exiting
+                ? "transform 0.7s ease-in, opacity 0.7s ease-in"
+                : "transform 0.65s cubic-bezier(0.22,1,0.36,1) 0.1s, opacity 0.5s ease-out 0.1s",
             zIndex: 2,
-          }}>
+          }}
+        >
           <AvatarWithFallback no={player2No} name={player2Name} side="right" />
-          
-          <div className="absolute inset-y-0 left-0 w-1/2" style={{ background: "linear-gradient(to left, transparent, rgba(5,0,16,0.95))" }} />
-          <div className="absolute inset-x-0 bottom-0 h-32" style={{ background: "linear-gradient(to top, rgba(5,0,16,0.9), transparent)" }} />
-          
-          <div className="absolute top-8 right-8 text-right" style={{ animation: !entering ? "nameSlideRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.1s both" : "none" }}>
+
+          <div
+            className="absolute inset-y-0 left-0 w-1/2"
+            style={{
+              background:
+                "linear-gradient(to left, transparent, rgba(5,0,16,0.95))",
+            }}
+          />
+          <div
+            className="absolute inset-x-0 bottom-0 h-32"
+            style={{
+              background:
+                "linear-gradient(to top, rgba(5,0,16,0.9), transparent)",
+            }}
+          />
+
+          <div
+            className="absolute top-8 right-8 text-right"
+            style={{
+              animation: !entering
+                ? "nameSlideRight 0.5s cubic-bezier(0.22,1,0.36,1) 0.1s both"
+                : "none",
+            }}
+          >
             <div className="text-red-500/70 text-xs font-serif tracking-widest mb-1 uppercase drop-shadow-md">
-              #{player2No} · Defender
+              Player · #{player2No}
             </div>
-            <div className="font-black text-white font-serif leading-tight tracking-wider"
-              style={{ fontSize: "clamp(1.4rem, 2.5vw, 2.2rem)", textShadow: "0 0 10px rgba(255,0,0,0.4), 2px 2px 5px rgba(0,0,0,1)" }}>
+            <div
+              className="font-black text-white font-serif leading-tight tracking-wider"
+              style={{
+                fontSize: "clamp(1.4rem, 2.5vw, 2.2rem)",
+                textShadow:
+                  "0 0 10px rgba(255,0,0,0.4), 2px 2px 5px rgba(0,0,0,1)",
+              }}
+            >
               {player2Name}
             </div>
           </div>
         </div>
 
         {/* ── Magma fissure ở giữa (Thay cho Glow lines) ── */}
-        <div className="absolute inset-0 pointer-events-none"
-             style={{ opacity: entering ? 0 : exiting ? 0 : 1, transition: entering ? "none" : exiting ? "opacity 0.4s" : "opacity 0.4s ease-out 0.3s", zIndex: 3 }}>
-          <div className="absolute inset-y-0"
-              style={{
-                left: "calc(50% - 2px)", width: 4,
-                background: "linear-gradient(to bottom, transparent, rgba(255,165,0,0.9) 30%, rgba(255,215,0,1) 50%, rgba(255,60,0,0.9) 70%, transparent)",
-                transform: "skewX(-10deg)",
-                boxShadow: "0 0 20px 5px rgba(255,100,0,0.5), 0 0 40px 10px rgba(255,215,0,0.3)",
-              }} />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            opacity: entering ? 0 : exiting ? 0 : 1,
+            transition: entering
+              ? "none"
+              : exiting
+                ? "opacity 0.4s"
+                : "opacity 0.4s ease-out 0.3s",
+            zIndex: 3,
+          }}
+        >
+          <div
+            className="absolute inset-y-0"
+            style={{
+              left: "calc(50% - 2px)",
+              width: 4,
+              background:
+                "linear-gradient(to bottom, transparent, rgba(255,165,0,0.9) 30%, rgba(255,215,0,1) 50%, rgba(255,60,0,0.9) 70%, transparent)",
+              transform: "skewX(-10deg)",
+              boxShadow:
+                "0 0 20px 5px rgba(255,100,0,0.5), 0 0 40px 10px rgba(255,215,0,0.3)",
+            }}
+          />
         </div>
 
         {/* ── VS + Countdown ── */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none gap-2"
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none gap-2"
           style={{
             zIndex: 4,
             opacity: entering || exiting ? 0 : 1,
-            transform: entering ? "scale(3)" : exiting ? "scale(0.3)" : "scale(1)",
-            transition: entering ? "none" : exiting ? "transform 0.5s ease-in, opacity 0.5s ease-in" : "transform 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.25s, opacity 0.4s ease-out 0.25s",
-          }}>
+            transform: entering
+              ? "scale(3)"
+              : exiting
+                ? "scale(0.3)"
+                : "scale(1)",
+            transition: entering
+              ? "none"
+              : exiting
+                ? "transform 0.5s ease-in, opacity 0.5s ease-in"
+                : "transform 0.8s cubic-bezier(0.34,1.56,0.64,1) 0.25s, opacity 0.4s ease-out 0.25s",
+          }}
+        >
           <VSText isClashing={isClashing} />
           {!entering && !exiting && <CountdownNumber count={countdown} />}
         </div>
-        
-        {/* Lớp hạt (Vignette tối) xung quanh viền màn hình */}
-        <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%)", zIndex: 5 }} />
 
+        {/* Lớp hạt (Vignette tối) xung quanh viền màn hình */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%)",
+            zIndex: 5,
+          }}
+        />
       </div>
     </>
   );

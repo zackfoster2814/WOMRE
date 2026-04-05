@@ -38,7 +38,9 @@ Houses:
   - Xương sống lưỡi (Từ Char dev)
   - Radio (Từ Chardev)
   - Wooden Shield (Từ Char dev)
-  - Golden Coin (house)
+  - Golden Coin 
+  - Golden Coin 
+  - Golden Coin 
  + 1 Legacy gear:
   -
 ```

@@ -357,14 +357,23 @@ export const StatsComparisonMode = ({
     const loser = result.winner === "player1" ? player2 : player1;
     const opponent = result.winner === "player1" ? player1 : player2;
     if (!loser || !opponent) return false;
+
+    // Chỉ kích hoạt ở nhánh thua (loser bracket)
+    const loserBracket = loser.character?.tournament?.bracket;
+    if (loserBracket !== "loser") return false;
+
+    // Không kích hoạt ở chung kết (Grand Final = match 319)
+    if (tournamentMatch?.matchNumber === 319) return false;
+
     const loserHasRT = hasRoundtableHold(loser);
     const opponentHasRT = hasRoundtableHold(opponent);
     if (loserHasRT && !opponentHasRT) {
+      // Chỉ gọi người còn sống (status === "alive")
       const tarnished = allPlayers.filter(
         (p) =>
           p.no !== loser.no &&
           hasRoundtableHold(p) &&
-          p.character?.tournament?.status !== "eliminated",
+          p.character?.tournament?.status === "alive",
       );
       if (tarnished.length > 0) {
         setTarnishedList(tarnished);

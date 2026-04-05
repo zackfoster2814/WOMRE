@@ -76,7 +76,8 @@ Lover:
 ```
 PvP Reward:
 - Nhận 2 power Encroaching Shadow, Frost Armor
-- + 1 MA
+- +1 MA
+- +2 Spd (PvP Reward)
 ```
 ```
 Other Source:

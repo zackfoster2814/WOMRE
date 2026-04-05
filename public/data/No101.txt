@@ -95,6 +95,11 @@ Other Source:
 - Cursed Charmed (đào mộ)
 - +1 Str
 - +1 Quirk: Patient
+- +1 str
+- +1 spd
+- +1 IQ
+- +1 BIQ
+- +2 BIQ (House Tyrell)
 ```
 
 ======

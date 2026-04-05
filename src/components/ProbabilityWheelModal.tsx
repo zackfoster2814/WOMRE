@@ -6,6 +6,7 @@
  */
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { WheelCanvas } from "./WheelCanvas";
 import type { WheelItem } from "../types";
 
@@ -75,7 +76,7 @@ export const ProbabilityWheelModal = ({
     onClose();
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-surface/80 animate-fade-in">
       <div className="bg-slate-800/95 p-8 rounded-[24px] shadow-panel-l1 border border-primary/30 bevel-gold relative overflow-hidden w-full max-w-2xl mx-4">
         {/* Header */}
@@ -152,6 +153,7 @@ export const ProbabilityWheelModal = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

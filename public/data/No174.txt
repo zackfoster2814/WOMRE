@@ -38,7 +38,7 @@ Houses:
 ```
 2 Gear: 
  + 2 Normal gear:
-  - Golden Coin (Từ Archetype)
+  - Golden Coin 
   - Golden Coin 
   - Cuộn khăn giấy (đã mất)
   - Knight's Armor
