@@ -38,7 +38,7 @@ Houses:
   - Magical Scroll (Từ Quirk Artisan)
   - Thuốc Tráng Dương (Từ Quirk Artisan)
  + 1 Legacy gear:
-  - The Dice of the Dead (Từ House)
+  - The Dice of the Dead (2) (Từ House)
 ```
 ```
 2 Normal Weapon

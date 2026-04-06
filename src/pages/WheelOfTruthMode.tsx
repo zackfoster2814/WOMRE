@@ -1943,7 +1943,7 @@ export const WheelOfTruthMode = ({
                   )}
 
                   {/* Tiebreaker wheel — hoà → quay 50/50 xác định người thắng */}
-                  {battleDone && effectiveScores.s1 === effectiveScores.s2 && (
+                  {/* {battleDone && effectiveScores.s1 === effectiveScores.s2 && (
                     <div className="rounded-xl border border-amber-500/40 bg-amber-950/20 px-4 py-3 flex flex-col items-center gap-2">
                       <div className="text-amber-400 font-display font-black text-sm tracking-widest uppercase">
                         Hoà — Tiebreaker
@@ -1975,7 +1975,7 @@ export const WheelOfTruthMode = ({
                         </button>
                       )}
                     </div>
-                  )}
+                  )} */}
 
                   {/* Kết thúc / Fight Again buttons */}
                   {battleDone && !combatConfirmed && (
@@ -2009,7 +2009,7 @@ export const WheelOfTruthMode = ({
                       </button>
                     </div>
                   )}
-                  {combatConfirmed && isTournamentMode && (
+                  {/* {combatConfirmed && isTournamentMode && (
                     <div className="mt-2 bg-gray-800/60 rounded-none border border-yellow-600/30 p-3 space-y-2">
                       <div className="grid grid-cols-2 gap-2">
                         <div>
@@ -2040,7 +2040,7 @@ export const WheelOfTruthMode = ({
                         </div>
                       </div>
                     </div>
-                  )}
+                  )} */}
                   {combatConfirmed && isTournamentMode && (
                     <div className="mt-2 bg-gray-800/60 rounded-none border border-yellow-600/30 p-3 space-y-2">
                       <div className="grid grid-cols-2 gap-2">

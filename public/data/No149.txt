@@ -19,6 +19,7 @@ Archetype:
 ``` 
 1 Quirk:  
 + Pure (nhận Đai)
++ Brainrot
 ```
 ```
 Str: 4

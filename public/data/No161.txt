@@ -84,15 +84,7 @@ PvP:
 - Đối thủ: Rentarou
 - Kết quả: Win
 - Tỉ số: 2-5
-- Note: 
-```
-
-```
-PvP:
-- Đối thủ: Rentarou
-- Kết quả: Win
-- Tỉ số: 2-5
-- Reward: không quan trọng
+- Reward: tặng đối thủ
 - Note: 
 ```
 
