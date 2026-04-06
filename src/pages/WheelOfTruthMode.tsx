@@ -180,6 +180,8 @@ export const WheelOfTruthMode = ({
 
   const [zoltraakBiq2Pending, setZoltraakBiq2Pending] = useState(false);
   const [pendingPreCombatCount, setPendingPreCombatCount] = useState(0);
+  // false khi đang defer buildAfterCombat chờ tiebreak → không block pendingSpins trên entries
+  const [afterCombatBuilt, setAfterCombatBuilt] = useState(true);
 
   // 3D effect triggers
   const [p1EffectKey, setP1EffectKey] = useState(0);
@@ -495,6 +497,7 @@ export const WheelOfTruthMode = ({
     setCenterTab("pre");
     setTiebreakerWheelResult(null);
     setTiebreakerModalOpen(false);
+    setAfterCombatBuilt(true);
   };
 
   // ── useStartCombat ────────────────────────────────────────────────────────
@@ -593,6 +596,8 @@ export const WheelOfTruthMode = ({
     computeRoundStep,
     checkAndSetRoundtableHold,
     wheelForcedWinner,
+    alwaysTiebreakerWheel: true,
+    onDeferAfterCombat: () => setAfterCombatBuilt(false),
   });
   resolveNextRoundRef.current = resolveNextRound;
 
@@ -660,8 +665,21 @@ export const WheelOfTruthMode = ({
     afterCombatSpinResults,
     roundtableWinnerOverride: null,
     alwaysTiebreakerWheel: true,
+    afterCombatBuilt,
     computeRoundPoints,
   });
+
+  // Khi tiebreaker wheel xong → gọi pendingAfterCombatBuildRef với winner thực sự
+  // Sau khi build entries, auto chuyển sang tab "after" để user thấy và spin
+  useEffect(() => {
+    if (!tiebreakerWheelResult) return;
+    if (!pendingAfterCombatBuildRef.current) return;
+    const fn = pendingAfterCombatBuildRef.current;
+    pendingAfterCombatBuildRef.current = null;
+    fn(tiebreakerWheelResult);
+    setAfterCombatBuilt(true);
+    setCenterTab("after");
+  }, [tiebreakerWheelResult]);
 
   const mainWinner =
     combatConfirmed && effectiveWinner
@@ -702,7 +720,7 @@ export const WheelOfTruthMode = ({
           ? { ...player1.stats }
           : null;
     if (!base) return null;
-    // Apply pre-combat wheel results vào preview (giống StatsComparisonMode)
+    // Apply pre-combat wheel results vào preview
     const p1Summon = summoningScrollResult["player1"];
     if (p1Summon) {
       for (const [k, v] of Object.entries(p1Summon.statDeltas)) {
@@ -798,9 +816,18 @@ export const WheelOfTruthMode = ({
     if (stepState) setCenterTab("wheel");
   }, [!!stepState]);
 
-  // Auto-switch to "after" tab when combat ends
+  // Auto-switch to "after" tab when combat ends — nhưng nếu hòa thì ở lại tab "wheel" để quay tiebreak
   useEffect(() => {
-    if (battleDone) setCenterTab("after");
+    if (!battleDone) return;
+    if (
+      combatResult &&
+      combatResult.player1Score === combatResult.player2Score
+    ) {
+      // Hòa điểm: giữ tab "wheel", mở tiebreak modal ngay
+      setTiebreakerModalOpen(true);
+    } else {
+      setCenterTab("after");
+    }
   }, [battleDone]);
 
   // ── Round results collapse state ───────────────────────────────────────────
@@ -846,8 +873,33 @@ export const WheelOfTruthMode = ({
         _wotBashDebuffForSide("player2")
       : 0;
   // Clamp về 0 chỉ để tính weight (không clamp wotP1Val/wotP2Val để điều kiện <= 0 hoạt động)
-  const wotP1W = Math.max(0, wotP1Val) > Math.max(0, wotP2Val) ? Math.max(0, wotP1Val) * 2 : Math.max(0, wotP1Val);
-  const wotP2W = Math.max(0, wotP2Val) > Math.max(0, wotP1Val) ? Math.max(0, wotP2Val) * 2 : Math.max(0, wotP2Val);
+  const wotP1W =
+    Math.max(0, wotP1Val) > Math.max(0, wotP2Val)
+      ? Math.max(0, wotP1Val) * 2
+      : Math.max(0, wotP1Val);
+  const wotP2W =
+    Math.max(0, wotP2Val) > Math.max(0, wotP1Val)
+      ? Math.max(0, wotP2Val) * 2
+      : Math.max(0, wotP2Val);
+
+  // ── Green Dragon Crescent Blade: BIQ round skip wheel, lấy kết quả từ STR ─
+  const greenDragonBiqWinner = useMemo<
+    "player1" | "player2" | "tie" | null
+  >(() => {
+    if (!currentStatInfo || currentStatInfo.key !== "biq") return null;
+    if (!stepState || !player1 || !player2) return null;
+    const hasGreenDragon = (p: typeof player1) =>
+      (p.character?.weapons || []).some(
+        (w: any) =>
+          !w?.isLost &&
+          (w?.name ?? "").replace(/\s*\(.*?\)/g, "").trim() ===
+            "Green Dragon Crescent Blade" &&
+          !disabledItems.has(`${p.no}-weapon-Green Dragon Crescent Blade`),
+      );
+    if (!hasGreenDragon(player1) && !hasGreenDragon(player2)) return null;
+    const strRound = stepState.resolvedRounds.find((r) => r.stat === "str");
+    return strRound ? strRound.winner : null;
+  }, [currentStatInfo, stepState, player1, player2, disabledItems]);
 
   // ── Spin buttons cho CURRENT round (hiện sau khi main wheel xác định winner) ─
   const currentStatKey =
@@ -866,13 +918,13 @@ export const WheelOfTruthMode = ({
             isLastRound: stepRoundIndex >= 5,
             prevRounds: stepState.resolvedRounds,
             oppHasSpellFlux:
-              (player2?.character?.powers ?? []).some(
+              (player1?.character?.powers ?? []).some(
                 (p: any) =>
                   !p?.isLost &&
                   (typeof p === "string" ? p : (p?.name ?? ""))
                     .toLowerCase()
                     .startsWith("spell flux"),
-              ) && !disabledItems.has(`${player2?.no}-power-Spell Flux`),
+              ) && !disabledItems.has(`${player1?.no}-power-Spell Flux`),
           });
           if (p1Spin.length === 0) return null;
           return p1Spin.map((eff) => (
@@ -884,6 +936,7 @@ export const WheelOfTruthMode = ({
               roundSpinResults={roundSpinResults}
               applyDevWeights={applyDevWeights}
               setRoundSpinModal={setRoundSpinModal}
+              gamblerStackCount={p1Effs.gamblerStackCount}
             />
           ));
         })()
@@ -901,13 +954,13 @@ export const WheelOfTruthMode = ({
             isLastRound: stepRoundIndex >= 5,
             prevRounds: stepState.resolvedRounds,
             oppHasSpellFlux:
-              (player1?.character?.powers ?? []).some(
+              (player2?.character?.powers ?? []).some(
                 (p: any) =>
                   !p?.isLost &&
                   (typeof p === "string" ? p : (p?.name ?? ""))
                     .toLowerCase()
                     .startsWith("spell flux"),
-              ) && !disabledItems.has(`${player1?.no}-power-Spell Flux`),
+              ) && !disabledItems.has(`${player2?.no}-power-Spell Flux`),
           });
           if (p2Spin.length === 0) return null;
           return p2Spin.map((eff) => (
@@ -919,6 +972,7 @@ export const WheelOfTruthMode = ({
               roundSpinResults={roundSpinResults}
               applyDevWeights={applyDevWeights}
               setRoundSpinModal={setRoundSpinModal}
+              gamblerStackCount={p2Effs.gamblerStackCount}
             />
           ));
         })()
@@ -1604,7 +1658,44 @@ export const WheelOfTruthMode = ({
                 <div className={`p-3 ${centerTab !== "wheel" ? "hidden" : ""}`}>
                   {stepInProgress && currentStatInfo && (
                     <div className="mb-4">
-                      {wotP1Val <= 0 && wotP2Val <= 0 ? (
+                      {greenDragonBiqWinner !== null ? (
+                        /* Green Dragon Crescent Blade: BIQ skip wheel, lấy kết quả từ STR */
+                        <div className="flex flex-col items-center gap-3 py-6">
+                          <div className="text-base font-black text-yellow-400 tracking-widest uppercase">
+                            BIQ Round
+                          </div>
+                          <div className="text-sm text-gray-400 text-center">
+                            Green Dragon Crescent Blade — BIQ lấy kết quả từ STR
+                          </div>
+                          <div
+                            className={`text-sm font-black px-4 py-1.5 rounded-lg border ${
+                              greenDragonBiqWinner === "player1"
+                                ? "text-blue-300 bg-blue-700/40 border-blue-500/40"
+                                : greenDragonBiqWinner === "player2"
+                                  ? "text-red-300 bg-red-700/40 border-red-500/40"
+                                  : "text-gray-300 bg-gray-700/40 border-gray-600/40"
+                            }`}
+                          >
+                            {greenDragonBiqWinner === "player1"
+                              ? `${player1.name} thắng`
+                              : greenDragonBiqWinner === "player2"
+                                ? `${player2.name} thắng`
+                                : "Hoà"}
+                          </div>
+                          <button
+                            onClick={() => {
+                              if (greenDragonBiqWinner !== "tie") {
+                                setWheelForcedWinner(greenDragonBiqWinner);
+                              } else {
+                                resolveNextRoundRef.current?.();
+                              }
+                            }}
+                            className="px-5 py-1.5 rounded-none font-black text-sm bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105 transition-all shadow-lg"
+                          >
+                            Next →
+                          </button>
+                        </div>
+                      ) : wotP1Val <= 0 && wotP2Val <= 0 ? (
                         /* Cả 2 stat = 0 → hoà round, không quay */
                         <div className="flex flex-col items-center gap-3 py-6">
                           <div className="text-base font-black text-yellow-400 tracking-widest uppercase">
@@ -1720,6 +1811,41 @@ export const WheelOfTruthMode = ({
                       </div>
                     </div>
                   )}
+
+                  {/* Tiebreaker wheel — hoà → quay 50/50 xác định người thắng, hiển thị ngay sau combat */}
+                  {battleDone && effectiveScores.s1 === effectiveScores.s2 && (
+                    <div className="rounded-xl border border-amber-500/40 bg-amber-950/20 px-4 py-3 flex flex-col items-center gap-2 mt-2">
+                      <div className="text-amber-400 font-display font-black text-sm tracking-widest uppercase">
+                        Hoà — Tiebreaker
+                      </div>
+                      <div className="text-xs text-gray-400 text-center">
+                        Điểm bằng nhau ({effectiveScores.s1}–
+                        {effectiveScores.s2}). Quay vòng quay 50/50 để xác định
+                        người thắng.
+                      </div>
+                      {tiebreakerWheelResult ? (
+                        <div
+                          className={`text-sm font-black px-4 py-1.5 rounded-lg border ${
+                            tiebreakerWheelResult === "player1"
+                              ? "text-blue-300 bg-blue-500/20 border-blue-500/40"
+                              : "text-red-300 bg-red-500/20 border-red-500/40"
+                          }`}
+                        >
+                          {tiebreakerWheelResult === "player1"
+                            ? player1?.name
+                            : player2?.name}{" "}
+                          thắng tiebreak!
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setTiebreakerModalOpen(true)}
+                          className="px-6 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 hover:border-amber-400 text-amber-300 hover:text-amber-100 font-display text-sm font-bold transition-all hover:scale-105"
+                        >
+                          ✦ Quay Tiebreak ✦
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Tab 3: Sau Combat */}
@@ -1816,6 +1942,41 @@ export const WheelOfTruthMode = ({
                     </div>
                   )}
 
+                  {/* Tiebreaker wheel — hoà → quay 50/50 xác định người thắng */}
+                  {battleDone && effectiveScores.s1 === effectiveScores.s2 && (
+                    <div className="rounded-xl border border-amber-500/40 bg-amber-950/20 px-4 py-3 flex flex-col items-center gap-2">
+                      <div className="text-amber-400 font-display font-black text-sm tracking-widest uppercase">
+                        Hoà — Tiebreaker
+                      </div>
+                      <div className="text-xs text-gray-400 text-center">
+                        Điểm bằng nhau ({effectiveScores.s1}–
+                        {effectiveScores.s2}). Quay vòng quay 50/50 để xác định
+                        người thắng.
+                      </div>
+                      {tiebreakerWheelResult ? (
+                        <div
+                          className={`text-sm font-black px-4 py-1.5 rounded-lg border ${
+                            tiebreakerWheelResult === "player1"
+                              ? "text-blue-300 bg-blue-500/20 border-blue-500/40"
+                              : "text-red-300 bg-red-500/20 border-red-500/40"
+                          }`}
+                        >
+                          {tiebreakerWheelResult === "player1"
+                            ? player1?.name
+                            : player2?.name}{" "}
+                          thắng tiebreak!
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setTiebreakerModalOpen(true)}
+                          className="px-6 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 hover:border-amber-400 text-amber-300 hover:text-amber-100 font-display text-sm font-bold transition-all hover:scale-105"
+                        >
+                          ✦ Quay Tiebreak ✦
+                        </button>
+                      )}
+                    </div>
+                  )}
+
                   {/* Kết thúc / Fight Again buttons */}
                   {battleDone && !combatConfirmed && (
                     <div className="flex justify-center pt-1">
@@ -1846,6 +2007,38 @@ export const WheelOfTruthMode = ({
                           ? "Còn hiệu ứng chờ quay..."
                           : "✦ Kết Thúc ✦"}
                       </button>
+                    </div>
+                  )}
+                  {combatConfirmed && isTournamentMode && (
+                    <div className="mt-2 bg-gray-800/60 rounded-none border border-yellow-600/30 p-3 space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block text-[11px] text-gray-400 mb-1">
+                            Special Event
+                          </label>
+                          <input
+                            type="text"
+                            value={tournamentSpecialEvent}
+                            onChange={(e) =>
+                              setTournamentSpecialEvent(e.target.value)
+                            }
+                            placeholder="e.g. Instant Kill..."
+                            className="w-full bg-gray-800 text-white border border-gray-600 rounded px-2 py-1.5 text-xs focus:border-yellow-500 focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-gray-400 mb-1">
+                            Note
+                          </label>
+                          <input
+                            type="text"
+                            value={tournamentNote}
+                            onChange={(e) => setTournamentNote(e.target.value)}
+                            placeholder="Additional notes..."
+                            className="w-full bg-gray-800 text-white border border-gray-600 rounded px-2 py-1.5 text-xs focus:border-yellow-500 focus:outline-none"
+                          />
+                        </div>
+                      </div>
                     </div>
                   )}
                   {combatConfirmed && isTournamentMode && (
@@ -2214,6 +2407,36 @@ export const WheelOfTruthMode = ({
             });
           }
           setPreCombatModal((prev) => ({ ...prev, isOpen: false }));
+        }}
+      />
+
+      {/* Tiebreaker wheel modal */}
+      <ProbabilityWheelModal
+        isOpen={tiebreakerModalOpen}
+        onClose={() => setTiebreakerModalOpen(false)}
+        title="Tiebreaker"
+        description={`Hoà ${effectiveScores.s1}–${effectiveScores.s2} — Quay xác định người thắng`}
+        items={[
+          {
+            label: player1?.name ?? "Player 1",
+            weight: 1,
+            isSuccess: true,
+            color: "#3b82f6",
+          },
+          {
+            label: player2?.name ?? "Player 2",
+            weight: 1,
+            isSuccess: true,
+            color: "#ef4444",
+          },
+        ]}
+        onResult={(item: WheelSpinItem) => {
+          const winner =
+            item.label === (player1?.name ?? "Player 1")
+              ? "player1"
+              : "player2";
+          setTiebreakerWheelResult(winner);
+          setTiebreakerModalOpen(false);
         }}
       />
 

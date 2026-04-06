@@ -13,14 +13,14 @@ export interface ComputeRoundPointsContext {
   getPerRoundEffects: (
     char: Character | undefined,
     playerNo?: number,
-  ) => { onWin: string[]; onLose: string[]; onTie: string[] };
+  ) => { onWin: string[]; onLose: string[]; onTie: string[]; gamblerStackCount: number };
 }
 
 export function computeRoundPoints(
   side: "player1" | "player2",
   winner: "player1" | "player2" | "tie",
   roundIdx: number,
-  effects: { onWin: string[]; onLose: string[]; onTie: string[] },
+  effects: { onWin: string[]; onLose: string[]; onTie: string[]; gamblerStackCount?: number },
   statKey?: string,
   roundsWonBefore?: number,
   ctx?: ComputeRoundPointsContext,
@@ -100,7 +100,7 @@ export function computeRoundPoints(
           : player2?.character,
         oppSideForParry === "player1" ? player1?.no : player2?.no,
       )
-    : { onWin: [], onLose: [], onTie: [] };
+    : { onWin: [], onLose: [], onTie: [], gamblerStackCount: 0 };
   const goldenParrySpun = isWinner
     ? roundSpinResults[`${roundIdx}-Golden Parry-${oppSideForParry}`]
     : undefined;

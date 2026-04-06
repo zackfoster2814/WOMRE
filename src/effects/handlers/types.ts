@@ -21,6 +21,8 @@ export interface ImmediateHandlerContext {
   source: EffectSource;
   effect: Effect;
   allCharacters?: Character[]; // For cross-character lookups (e.g., Femboy checking if lover has AIDS)
+  /** Danh sách sources đã filtered (active, không disabled) — để handlers đếm active items đúng */
+  activeSources?: EffectSource[];
 }
 
 /**

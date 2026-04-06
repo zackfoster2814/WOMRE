@@ -538,7 +538,8 @@ const EFFECT_DEFS: EffectDef[] = [
     source: "luck manipulation",
     timing: "before_combat",
     category: "wheel",
-    description: "Luck Manipulation: Từ vòng 64 — 5% +2 All Stats, 15% +1 All Stats.",
+    description:
+      "Luck Manipulation: Từ vòng 64 — 5% +2 All Stats, 15% +1 All Stats.",
     resolver: (ctx) => {
       const round: string = (ctx.character as any)?.tournament?.round ?? "-";
       const PRE64_ROUNDS = new Set(["-", "256", "128"]);
@@ -552,11 +553,30 @@ const EFFECT_DEFS: EffectDef[] = [
       }
       return {
         category: "wheel" as EffectCategory,
-        description: "Luck Manipulation: Từ vòng 64 — 5% +2 All Stats, 15% +1 All Stats.",
+        description:
+          "Luck Manipulation: Từ vòng 64 — 5% +2 All Stats, 15% +1 All Stats.",
         wheelItems: [
-          { label: "+2 All Stats (5%)", weight: 5, isSuccess: true, color: "#f59e0b", meta: { delta: 2 } },
-          { label: "+1 All Stats (15%)", weight: 15, isSuccess: true, color: "#10b981", meta: { delta: 1 } },
-          { label: "Không kích hoạt (80%)", weight: 80, isSuccess: false, color: "#6b7280", meta: { delta: 0 } },
+          {
+            label: "+2 All Stats (5%)",
+            weight: 5,
+            isSuccess: true,
+            color: "#f59e0b",
+            meta: { delta: 2 },
+          },
+          {
+            label: "+1 All Stats (15%)",
+            weight: 15,
+            isSuccess: true,
+            color: "#10b981",
+            meta: { delta: 1 },
+          },
+          {
+            label: "Không kích hoạt (80%)",
+            weight: 80,
+            isSuccess: false,
+            color: "#6b7280",
+            meta: { delta: 0 },
+          },
         ],
         isActivated: true,
       };
@@ -870,9 +890,9 @@ const EFFECT_DEFS: EffectDef[] = [
     timing: "after_lose",
     category: "gm",
     description:
-      "Coven Council: Khi bị loại — 1 player ngẫu nhiên không thuộc Coven được Re-Spin 1 stat.",
+      "Coven Council: Khi bị loại (thua ở nhánh thua) — 1 player ngẫu nhiên không thuộc Coven được Re-Spin 1 stat.",
     gmNote:
-      "[GM Action] Chỉ kích hoạt khi player bị loại khỏi giải. Quay random 1 player không thuộc Coven Council → Re-Spin 1 stat bất kì của họ",
+      "[GM Action] Chỉ kích hoạt khi player thua ở nhánh thua (LB) — bị loại hẳn. Quay random 1 player không thuộc Coven Council → Re-Spin 1 stat bất kì của họ",
   },
 
   // ─── HOUSE MASON EFFECTS ─────────────────────────────────────────────────
@@ -1646,6 +1666,25 @@ const EFFECT_DEFS: EffectDef[] = [
     ],
   },
 
+  // Numby (Summon owned): trước combat quay wheel chọn 1 chỉ số nhận +4
+  {
+    source: "numby",
+    timing: "before_combat",
+    category: "wheel",
+    description:
+      "Numby: Trước combat — Quay wheel chọn 1 chỉ số ngẫu nhiên nhận +4 trong combat này.",
+    wheelItems: [
+      { label: "STR", weight: 1, isSuccess: true, color: "#ef4444" },
+      { label: "SPD", weight: 1, isSuccess: true, color: "#3b82f6" },
+      { label: "DUR", weight: 1, isSuccess: true, color: "#84cc16" },
+      { label: "IQ", weight: 1, isSuccess: true, color: "#06b6d4" },
+      { label: "BIQ", weight: 1, isSuccess: true, color: "#a855f7" },
+      { label: "MA", weight: 1, isSuccess: true, color: "#f97316" },
+    ],
+    gmNote:
+      "[GM Action] Quay wheel 6 chỉ số để chọn stat nhận +4. Áp dụng ngay vào combat.",
+  },
+
   // ─── RUNEWORD EFFECTS (wheel probability) ────────────────────────────────
 
   // Double Claws (El + Amn): 18% chain cướp Power trước combat
@@ -1678,20 +1717,65 @@ const EFFECT_DEFS: EffectDef[] = [
     source: "blackjack",
     timing: "during_combat",
     category: "wheel",
-    description: "Blackjack: Trong combat — Gọi ngẫu nhiên 1 Summon từ Summon Wheel.",
+    description:
+      "Blackjack: Trong combat — Gọi ngẫu nhiên 1 Summon từ Summon Wheel.",
     wheelItems: [
-      { label: "Chihuahua: -1 All Stats", weight: 10, isSuccess: false, color: "#6b7280" },
-      { label: "Mufasa: +3 STR", weight: 12, isSuccess: true, color: "#ef4444" },
-      { label: "Pack of Wolves: +3 SPD", weight: 12, isSuccess: true, color: "#3b82f6" },
-      { label: "Earth Golem: +3 DUR", weight: 12, isSuccess: true, color: "#84cc16" },
-      { label: "Water Elemental: +3 IQ", weight: 12, isSuccess: true, color: "#06b6d4" },
+      {
+        label: "Chihuahua: -1 All Stats",
+        weight: 10,
+        isSuccess: false,
+        color: "#6b7280",
+      },
+      {
+        label: "Mufasa: +3 STR",
+        weight: 12,
+        isSuccess: true,
+        color: "#ef4444",
+      },
+      {
+        label: "Pack of Wolves: +3 SPD",
+        weight: 12,
+        isSuccess: true,
+        color: "#3b82f6",
+      },
+      {
+        label: "Earth Golem: +3 DUR",
+        weight: 12,
+        isSuccess: true,
+        color: "#84cc16",
+      },
+      {
+        label: "Water Elemental: +3 IQ",
+        weight: 12,
+        isSuccess: true,
+        color: "#06b6d4",
+      },
       { label: "Imp: +3 BIQ", weight: 12, isSuccess: true, color: "#a855f7" },
       { label: "Igris: +3 MA", weight: 12, isSuccess: true, color: "#f97316" },
-      { label: "Numby: +4 vào 1 chỉ số ngẫu nhiên (Trong Combat)", weight: 12, isSuccess: true, color: "#eab308", meta: { needsStatRoll: true } },
-      { label: "Wyvern's Egg: +2 điểm khởi đầu (Chung kết tổng)", weight: 3, isSuccess: true, color: "#14b8a6", meta: { isWyvernsEgg: true } },
-      { label: "Creator's Cat: Nhận Char Dev 'Creator's Favor'", weight: 3, isSuccess: true, color: "#ec4899", meta: { isCreatorsCat: true } },
+      {
+        label: "Numby: +4 vào 1 chỉ số ngẫu nhiên (Trong Combat)",
+        weight: 12,
+        isSuccess: true,
+        color: "#eab308",
+        meta: { needsStatRoll: true },
+      },
+      {
+        label: "Wyvern's Egg: +2 điểm khởi đầu (Chung kết tổng)",
+        weight: 3,
+        isSuccess: true,
+        color: "#14b8a6",
+        meta: { isWyvernsEgg: true },
+      },
+      {
+        label: "Creator's Cat: Nhận Char Dev 'Creator's Favor'",
+        weight: 3,
+        isSuccess: true,
+        color: "#ec4899",
+        meta: { isCreatorsCat: true },
+      },
     ],
-    gmNote: "Kết quả summon sẽ áp dụng vào combat này. Sau combat sẽ quay tiếp wheel 97%/3% xem có giữ lại không.",
+    gmNote:
+      "Kết quả summon sẽ áp dụng vào combat này. Sau combat sẽ quay tiếp wheel 97%/3% xem có giữ lại không.",
   },
 
   // Blackjack (Sol + Thul): Gọi Summon ngẫu nhiên, 97% bỏ / 3% giữ sau combat
@@ -2427,11 +2511,12 @@ function buildPendingEffects(
           .replace(/\s*\([^)]*\)\s*$/g, "")
           .toLowerCase(),
       ),
-    // Runeword (single string field: character.runes.runeword)
-    ...(() => {
-      const rw = (character as any).runes?.runeword;
-      return rw ? [rw.toLowerCase()] : [];
-    })(),
+    // Runewords (for runeword effects with wheel probability, e.g. Double Claws, Blackjack, Pennyworthy, Affection)
+    ...((character as any).runes?.runewords || [])
+      .filter((r: any) => !r.isLost)
+      .map((r: any) =>
+        (typeof r === "string" ? r : (r?.name ?? "")).toLowerCase(),
+      ),
     // Char Dev entries (e.g. Mad Scientist)
     ...((character as any).charDevs || [])
       .filter((c: any) => !c.isLost)
@@ -2446,6 +2531,12 @@ function buildPendingEffects(
         const match = name.match(/\(([^)]+)\)/);
         return match ? [match[1].toLowerCase()] : [];
       }),
+    // Summons (e.g. "Numby")
+    ...((character as any).summons || [])
+      .filter((s: any) => !s.isLost)
+      .map((s: any) =>
+        (typeof s === "string" ? s : (s?.name ?? "")).toLowerCase(),
+      ),
   ];
 
   const effects: CombatPendingEffect[] = [];
@@ -2458,7 +2549,11 @@ function buildPendingEffects(
     // In pre-combat mode: only show before_combat effects
     if (preCombatOnly && def.timing !== "before_combat") return;
     // In after-combat mode: only show after_combat / after_win / after_lose effects
-    if (afterCombatOnly && !["after_combat", "after_win", "after_lose"].includes(def.timing)) return;
+    if (
+      afterCombatOnly &&
+      !["after_combat", "after_win", "after_lose"].includes(def.timing)
+    )
+      return;
 
     // Check timing relevance
     const timingOk =
@@ -2577,7 +2672,7 @@ const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
 
   return (
     <div
-      className={`rounded-none border p-3 transition-all ${
+      className={`rounded-lg border p-3 transition-all ${
         isResolved
           ? "border-gray-700 bg-gray-800/30 opacity-60"
           : effect.isActivated
@@ -2721,7 +2816,7 @@ const CollapsibleSection = ({
 
   return (
     <div
-      className={`rounded-none border ${colorClass.split(" ")[0]} overflow-hidden`}
+      className={`rounded-xl border ${colorClass.split(" ")[0]} overflow-hidden`}
     >
       {/* Section header — always visible */}
       <button
@@ -2922,28 +3017,19 @@ export const CombatEffectsPanel = ({
     const spinsLeft = spinModal.spinsLeft - 1;
     if (spinsLeft > 0) {
       // Còn lần quay nữa — close modal trước để trigger re-open
-      // Loại bỏ item vừa chọn khỏi wheelItems cho lần quay tiếp theo
-      const selectedPowerName = (item.meta as any)?.powerName;
-      const filteredItems = selectedPowerName
-        ? (effect.wheelItems || []).filter(
-            (wi) => (wi.meta as any)?.powerName !== selectedPowerName,
-          )
-        : effect.wheelItems;
-      const updatedEffect = { ...effect, wheelItems: filteredItems };
       setEffects((prev) =>
         prev.map((e) =>
           e.id === id
             ? {
                 ...e,
-                wheelItems: filteredItems,
                 resolvedNote: `Lần ${currentSpin}/${totalSpins}: ${item.label} (còn ${spinsLeft} lần)`,
               }
             : e,
         ),
       );
-      setSpinModal({ isOpen: false, effect: updatedEffect, spinsLeft });
+      setSpinModal({ isOpen: false, effect, spinsLeft });
       setTimeout(() => {
-        setSpinModal({ isOpen: true, effect: updatedEffect, spinsLeft });
+        setSpinModal({ isOpen: true, effect, spinsLeft });
       }, 150);
     } else {
       setEffects((prev) =>
@@ -2968,15 +3054,13 @@ export const CombatEffectsPanel = ({
 
   return (
     <>
-      <div className="mt-6 bg-gray-900/95 border-2 border-purple-500/40 rounded-none p-4">
+      <div className="mt-6 bg-gray-900/95 border-2 border-purple-500/40 rounded-xl p-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-base font-bold text-purple-300">
             {preCombatOnly
               ? "⚠️ Luật Đặc Biệt Trước Combat"
-              : afterCombatOnly
-                ? "⚡ Effects Sau Combat"
-                : "⚡ Combat Effects"}
+              : "⚡ Combat Effects"}
           </h3>
           <div className="flex items-center gap-2 text-xs">
             {activatedTotal > 0 && (
@@ -2998,7 +3082,7 @@ export const CombatEffectsPanel = ({
               colorClass={phase.color}
               items={phase.items}
               defaultOpen={
-                preCombatOnly || afterCombatOnly || phase.timings.includes("before_combat")
+                preCombatOnly || phase.timings.includes("before_combat")
               }
               forceOpen={
                 !preCombatOnly &&

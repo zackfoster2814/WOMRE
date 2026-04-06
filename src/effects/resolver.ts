@@ -556,8 +556,11 @@ export class EffectResolver {
         continue; // Skip normal power lookup
       }
 
+      // Strip annotation like "(Asmodeus)" to get base name for registry lookup
+      const basePowerName = power.name.replace(/\s*\([^)]*\)\s*$/, "").trim();
       const entry =
         EffectRegistry.get("power", power.name) ||
+        EffectRegistry.get("power", basePowerName) ||
         // Fallback: some powers come from wheels (MHA, JJK, Jojo, etc.) and are registered as archetype_sub
         // But skip if already added from nestedArchetypes to avoid duplicate effects
         (!nestedArchetypeSubNames.has(power.name) &&
@@ -568,6 +571,16 @@ export class EffectResolver {
           name: power.name,
           effects: entry.effects,
           rawDescription: entry.description,
+          isActive: true,
+        });
+      } else if (basePowerName !== power.name) {
+        // Power has annotation but no registry entry — still add as inert source
+        // so Groundwork and similar count-based effects can count it correctly
+        sources.push({
+          type: "power",
+          name: power.name,
+          effects: [],
+          rawDescription: "",
           isActive: true,
         });
       }
@@ -651,16 +664,21 @@ export class EffectResolver {
       ...(character.gear?.legacyGear || []),
     ]) {
       if (gear.isLost) continue; // Skip lost items
-      const entry = EffectRegistry.get("gear", gear.name);
+      // Handle stack notation: "Name (N)" → baseName="Name", stackCount=N
+      const stackMatch = gear.name.match(/^(.+?)\s*\((\d+)\)$/);
+      const baseName = stackMatch ? stackMatch[1].trim() : gear.name;
+      const stackCount = stackMatch ? parseInt(stackMatch[2]) : undefined;
+      const entry = EffectRegistry.get("gear", baseName);
       if (entry) {
         sources.push({
           type: "gear",
-          name: gear.name,
+          name: baseName,
           effects: entry.effects,
           rawDescription: entry.description,
           isActive: gear.usable !== false,
           isDisabled: gear.usable === false,
           disabledReason: gear.usable === false ? "Không dùng được" : undefined,
+          stackCount,
         });
       }
     }
@@ -1765,6 +1783,7 @@ export class EffectResolver {
               source,
               effect,
               allCharacters,
+              activeSources: sources.filter((s) => s.isActive && !s.isDisabled),
             } as ImmediateHandlerContext,
           );
 
@@ -1872,6 +1891,7 @@ export class EffectResolver {
           source,
           effect,
           allCharacters,
+          activeSources: sources.filter((s) => s.isActive && !s.isDisabled),
         } as ImmediateHandlerContext,
       );
       if (handlerResult?.statModifiers) {

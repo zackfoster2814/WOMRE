@@ -19,32 +19,170 @@ import { AFTER_COMBAT_WHEEL_ITEMS } from "../constants/wheelConfigs";
 import { type AfterCombatEntry } from "./useWheelSpins";
 
 export const POWER_RANGER_STAT_WHEEL_ITEMS: WheelSpinItem[] = [
-  { label: "+1 Strength", weight: 1, isSuccess: true, color: "#ef4444", meta: { stat: "str", delta: 1 } },
-  { label: "+1 Speed", weight: 1, isSuccess: true, color: "#3b82f6", meta: { stat: "spd", delta: 1 } },
-  { label: "+1 Durability", weight: 1, isSuccess: true, color: "#84cc16", meta: { stat: "dur", delta: 1 } },
-  { label: "+1 IQ", weight: 1, isSuccess: true, color: "#06b6d4", meta: { stat: "iq", delta: 1 } },
-  { label: "+1 BIQ", weight: 1, isSuccess: true, color: "#a855f7", meta: { stat: "biq", delta: 1 } },
-  { label: "+1 Martial Arts", weight: 1, isSuccess: true, color: "#f97316", meta: { stat: "ma", delta: 1 } },
+  {
+    label: "+1 Strength",
+    weight: 1,
+    isSuccess: true,
+    color: "#ef4444",
+    meta: { stat: "str", delta: 1 },
+  },
+  {
+    label: "+1 Speed",
+    weight: 1,
+    isSuccess: true,
+    color: "#3b82f6",
+    meta: { stat: "spd", delta: 1 },
+  },
+  {
+    label: "+1 Durability",
+    weight: 1,
+    isSuccess: true,
+    color: "#84cc16",
+    meta: { stat: "dur", delta: 1 },
+  },
+  {
+    label: "+1 IQ",
+    weight: 1,
+    isSuccess: true,
+    color: "#06b6d4",
+    meta: { stat: "iq", delta: 1 },
+  },
+  {
+    label: "+1 BIQ",
+    weight: 1,
+    isSuccess: true,
+    color: "#a855f7",
+    meta: { stat: "biq", delta: 1 },
+  },
+  {
+    label: "+1 Martial Arts",
+    weight: 1,
+    isSuccess: true,
+    color: "#f97316",
+    meta: { stat: "ma", delta: 1 },
+  },
 ];
 
 export const PVP_REWARD_WHEEL_ITEMS: WheelSpinItem[] = [
-  { label: "+1 Strength", weight: 10, isSuccess: true, color: "#ef4444", meta: { stat: "str", delta: 1 } },
-  { label: "+1 Speed", weight: 10, isSuccess: true, color: "#3b82f6", meta: { stat: "spd", delta: 1 } },
-  { label: "+1 Durability", weight: 10, isSuccess: true, color: "#84cc16", meta: { stat: "dur", delta: 1 } },
-  { label: "+1 IQ", weight: 10, isSuccess: true, color: "#06b6d4", meta: { stat: "iq", delta: 1 } },
-  { label: "+1 BIQ", weight: 10, isSuccess: true, color: "#a855f7", meta: { stat: "biq", delta: 1 } },
-  { label: "+1 MA", weight: 10, isSuccess: true, color: "#f97316", meta: { stat: "ma", delta: 1 } },
-  { label: "Nhận 1 Gear", weight: 10, isSuccess: true, color: "#fbbf24", meta: { gmAction: "gear" } },
-  { label: "+2 Stat Thấp Nhất", weight: 6, isSuccess: true, color: "#34d399", meta: { gmAction: "lowest2" } },
-  { label: "+2 Stat Cao Nhất", weight: 6, isSuccess: true, color: "#f472b6", meta: { gmAction: "highest2" } },
-  { label: "Nhận 1 Power", weight: 6, isSuccess: true, color: "#818cf8", meta: { gmAction: "power1" } },
-  { label: "Nhận 2 Power", weight: 2, isSuccess: true, color: "#c084fc", meta: { gmAction: "power2" } },
-  { label: "Nhận 1 Char Dev", weight: 4, isSuccess: true, color: "#fb923c", meta: { gmAction: "chardev1" } },
-  { label: "Nhận 2 Char Dev", weight: 1, isSuccess: true, color: "#f87171", meta: { gmAction: "chardev2" } },
-  { label: "+2 Stat ngẫu nhiên ×3", weight: 0.64, isSuccess: true, color: "#4ade80", meta: { gmAction: "rand2x3" } },
-  { label: "+2 Stat ngẫu nhiên ×6", weight: 0.36, isSuccess: true, color: "#86efac", meta: { gmAction: "rand2x6" } },
-  { label: "+1 All Stats", weight: 4, isSuccess: true, color: "#e2e8f0", meta: { gmAction: "allstats1" } },
-  { label: "Lời Nguyền Địa Ngục", weight: 3, isSuccess: false, color: "#7c3aed", meta: { gmAction: "loi_nguyen_dia_nguc" } },
+  {
+    label: "+1 Strength",
+    weight: 10,
+    isSuccess: true,
+    color: "#ef4444",
+    meta: { stat: "str", delta: 1 },
+  },
+  {
+    label: "+1 Speed",
+    weight: 10,
+    isSuccess: true,
+    color: "#3b82f6",
+    meta: { stat: "spd", delta: 1 },
+  },
+  {
+    label: "+1 Durability",
+    weight: 10,
+    isSuccess: true,
+    color: "#84cc16",
+    meta: { stat: "dur", delta: 1 },
+  },
+  {
+    label: "+1 IQ",
+    weight: 10,
+    isSuccess: true,
+    color: "#06b6d4",
+    meta: { stat: "iq", delta: 1 },
+  },
+  {
+    label: "+1 BIQ",
+    weight: 10,
+    isSuccess: true,
+    color: "#a855f7",
+    meta: { stat: "biq", delta: 1 },
+  },
+  {
+    label: "+1 MA",
+    weight: 10,
+    isSuccess: true,
+    color: "#f97316",
+    meta: { stat: "ma", delta: 1 },
+  },
+  {
+    label: "Nhận 1 Gear",
+    weight: 10,
+    isSuccess: true,
+    color: "#fbbf24",
+    meta: { gmAction: "gear" },
+  },
+  {
+    label: "+2 Stat Thấp Nhất",
+    weight: 6,
+    isSuccess: true,
+    color: "#34d399",
+    meta: { gmAction: "lowest2" },
+  },
+  {
+    label: "+2 Stat Cao Nhất",
+    weight: 6,
+    isSuccess: true,
+    color: "#f472b6",
+    meta: { gmAction: "highest2" },
+  },
+  {
+    label: "Nhận 1 Power",
+    weight: 6,
+    isSuccess: true,
+    color: "#818cf8",
+    meta: { gmAction: "power1" },
+  },
+  {
+    label: "Nhận 2 Power",
+    weight: 2,
+    isSuccess: true,
+    color: "#c084fc",
+    meta: { gmAction: "power2" },
+  },
+  {
+    label: "Nhận 1 Char Dev",
+    weight: 4,
+    isSuccess: true,
+    color: "#fb923c",
+    meta: { gmAction: "chardev1" },
+  },
+  {
+    label: "Nhận 2 Char Dev",
+    weight: 1,
+    isSuccess: true,
+    color: "#f87171",
+    meta: { gmAction: "chardev2" },
+  },
+  {
+    label: "+2 Stat ngẫu nhiên ×3",
+    weight: 0.64,
+    isSuccess: true,
+    color: "#4ade80",
+    meta: { gmAction: "rand2x3" },
+  },
+  {
+    label: "+2 Stat ngẫu nhiên ×6",
+    weight: 0.36,
+    isSuccess: true,
+    color: "#86efac",
+    meta: { gmAction: "rand2x6" },
+  },
+  {
+    label: "+1 All Stats",
+    weight: 4,
+    isSuccess: true,
+    color: "#e2e8f0",
+    meta: { gmAction: "allstats1" },
+  },
+  {
+    label: "Lời Nguyền Địa Ngục",
+    weight: 3,
+    isSuccess: false,
+    color: "#7c3aed",
+    meta: { gmAction: "loi_nguyen_dia_nguc" },
+  },
 ];
 
 export interface UseResolveNextRoundParams {
@@ -130,6 +268,10 @@ export interface UseResolveNextRoundParams {
   /** Wheel mode: nếu set, round này dùng winner từ vòng quay thay vì so sánh stat */
   wheelForcedWinner?: "player1" | "player2" | null;
   checkAndSetRoundtableHold: (result: CombatResult) => boolean;
+  /** Khi true: hoà điểm → defer buildAfterCombat vào pendingAfterCombatBuildRef, chờ tiebreaker wheel */
+  alwaysTiebreakerWheel?: boolean;
+  /** Callback khi defer buildAfterCombat: set afterCombatBuilt = false */
+  onDeferAfterCombat?: () => void;
 }
 
 export function useResolveNextRound(params: UseResolveNextRoundParams) {
@@ -166,6 +308,8 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
       computeRoundStep,
       checkAndSetRoundtableHold,
       wheelForcedWinner,
+      alwaysTiebreakerWheel,
+      onDeferAfterCombat,
     } = params;
     if (!stepState || !player1 || !player2 || stepRoundIndex >= 6) return;
     // Khi zoltraakBiq2Pending=true (stepRoundIndex giữ ở 4), check BIQ lần 1 pending trước
@@ -240,9 +384,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
         const p1Diff = p1Pts.pts - p1Base + (p2Pts.opponentPtsAdjust ?? 0);
         const p2Diff = p2Pts.pts - p2Base + (p1Pts.opponentPtsAdjust ?? 0);
         if (p1Diff !== 0 || p2Diff !== 0) {
-          console.log(
-            `[Patch1] R${lastRoundIdx + 1} stat=${lastRound.statKey} winner=${w}: p1Diff=${p1Diff}(pts=${p1Pts.pts},engineBase=${p1Base}) p2Diff=${p2Diff}(pts=${p2Pts.pts},engineBase=${p2Base}) | before p1=${patchedState.p1Score} p2=${patchedState.p2Score} → after p1=${patchedState.p1Score + p1Diff} p2=${patchedState.p2Score + p2Diff}`,
-          );
           patchedState = {
             ...patchedState,
             p1Score: patchedState.p1Score + p1Diff,
@@ -255,13 +396,17 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
 
         // Metamagic: nếu round BIQ hòa nhưng Cruelty quyết định người thắng → thắng Cruelty cũng nhận +1 Metamagic
         if (lastRound.statKey === "biq" && w === "tie") {
-          const p1CrueltySpun = roundSpinResults[`${lastRoundIdx}-Cruelty-player1`];
-          const p2CrueltySpun = roundSpinResults[`${lastRoundIdx}-Cruelty-player2`];
+          const p1CrueltySpun =
+            roundSpinResults[`${lastRoundIdx}-Cruelty-player1`];
+          const p2CrueltySpun =
+            roundSpinResults[`${lastRoundIdx}-Cruelty-player2`];
           // Xác định ai thực sự thắng BIQ qua Cruelty
           const crueltyWinner: "player1" | "player2" | null =
-            p1CrueltySpun?.isSuccess === true || p2CrueltySpun?.isSuccess === false
+            p1CrueltySpun?.isSuccess === true ||
+            p2CrueltySpun?.isSuccess === false
               ? "player1"
-              : p2CrueltySpun?.isSuccess === true || p1CrueltySpun?.isSuccess === false
+              : p2CrueltySpun?.isSuccess === true ||
+                  p1CrueltySpun?.isSuccess === false
                 ? "player2"
                 : null;
           if (crueltyWinner) {
@@ -269,13 +414,22 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               (player.character?.powers || []).some(
                 (pw: any) =>
                   !pw?.isLost &&
-                  (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() === "metamagic",
+                  (typeof pw === "string"
+                    ? pw
+                    : (pw?.name ?? "")
+                  ).toLowerCase() === "metamagic",
               ) && !disabledItems.has(`${player.no}-power-Metamagic`);
             if (crueltyWinner === "player1" && hasMetamagic(player1)) {
-              patchedState = { ...patchedState, p1Score: patchedState.p1Score + 1 };
+              patchedState = {
+                ...patchedState,
+                p1Score: patchedState.p1Score + 1,
+              };
             }
             if (crueltyWinner === "player2" && hasMetamagic(player2)) {
-              patchedState = { ...patchedState, p2Score: patchedState.p2Score + 1 };
+              patchedState = {
+                ...patchedState,
+                p2Score: patchedState.p2Score + 1,
+              };
             }
           }
         }
@@ -414,31 +568,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             p1Score: patchedState.p1Score + p1Diff,
             p2Score: patchedState.p2Score + p2Diff,
           };
-        }
-        // Metamagic: nếu round BIQ (Zoltraak BIQ×2, index 4) hòa nhưng Cruelty quyết định người thắng
-        if (biqRound.statKey === "biq" && w === "tie") {
-          const p1CrueltySpun = roundSpinResults[`4-Cruelty-player1`];
-          const p2CrueltySpun = roundSpinResults[`4-Cruelty-player2`];
-          const crueltyWinner: "player1" | "player2" | null =
-            p1CrueltySpun?.isSuccess === true || p2CrueltySpun?.isSuccess === false
-              ? "player1"
-              : p2CrueltySpun?.isSuccess === true || p1CrueltySpun?.isSuccess === false
-                ? "player2"
-                : null;
-          if (crueltyWinner) {
-            const hasMetamagic = (player: typeof player1) =>
-              (player.character?.powers || []).some(
-                (pw: any) =>
-                  !pw?.isLost &&
-                  (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() === "metamagic",
-              ) && !disabledItems.has(`${player.no}-power-Metamagic`);
-            if (crueltyWinner === "player1" && hasMetamagic(player1)) {
-              patchedState = { ...patchedState, p1Score: patchedState.p1Score + 1 };
-            }
-            if (crueltyWinner === "player2" && hasMetamagic(player2)) {
-              patchedState = { ...patchedState, p2Score: patchedState.p2Score + 1 };
-            }
-          }
         }
       }
     }
@@ -608,27 +737,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               : 0;
           finalP1Score += p1PtsMA.pts - p1BaseMA;
           finalP2Score += p2PtsMA.pts - p2BaseMA;
-          // Metamagic: nếu round BIQ hòa nhưng Cruelty quyết định người thắng → thắng Cruelty cũng nhận +1 Metamagic
-          if (lastRoundLogMA.statKey === "biq" && wMA === "tie") {
-            const p1CrueltySpun = roundSpinResults[`5-Cruelty-player1`];
-            const p2CrueltySpun = roundSpinResults[`5-Cruelty-player2`];
-            const crueltyWinner: "player1" | "player2" | null =
-              p1CrueltySpun?.isSuccess === true || p2CrueltySpun?.isSuccess === false
-                ? "player1"
-                : p2CrueltySpun?.isSuccess === true || p1CrueltySpun?.isSuccess === false
-                  ? "player2"
-                  : null;
-            if (crueltyWinner) {
-              const hasMetamagic = (player: typeof player1) =>
-                (player.character?.powers || []).some(
-                  (pw: any) =>
-                    !pw?.isLost &&
-                    (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase() === "metamagic",
-                ) && !disabledItems.has(`${player.no}-power-Metamagic`);
-              if (crueltyWinner === "player1" && hasMetamagic(player1)) finalP1Score += 1;
-              if (crueltyWinner === "player2" && hasMetamagic(player2)) finalP2Score += 1;
-            }
-          }
           console.log(
             `[Finalize] MA patch: p1PtsMA=${p1PtsMA.pts}(engineBase=${p1BaseMA}) p2PtsMA=${p2PtsMA.pts}(engineBase=${p2BaseMA}) => finalP1Score=${finalP1Score} finalP2Score=${finalP2Score}`,
           );
@@ -1231,33 +1339,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               }
               // Không phải vòng 256 → bỏ qua, không quay
             }
-            // Independent: sau combat quay 6-stat wheel, nhận +2 vào stat được chọn
-            else if (lname === "independent") {
-              const STAT_LABELS: { stat: keyof CharacterStats; label: string }[] = [
-                { stat: "str", label: "STR" },
-                { stat: "spd", label: "SPD" },
-                { stat: "dur", label: "DUR" },
-                { stat: "iq",  label: "IQ" },
-                { stat: "biq", label: "BIQ" },
-                { stat: "ma",  label: "MA" },
-              ];
-              const STAT_COLORS = ["#f87171","#fb923c","#fbbf24","#34d399","#60a5fa","#c084fc"];
-              const wk = `after-Independent-${side}`;
-              acEntries.push({
-                player: side,
-                quirkName: name,
-                description: "Quay 6-stat wheel → nhận +2 vào chỉ số được chọn (Independent)",
-                wheelKey: wk,
-                wheelItems: STAT_LABELS.map(({ stat, label }, i) => ({
-                  label: `+2 ${label}`,
-                  weight: 1,
-                  isSuccess: true,
-                  color: STAT_COLORS[i],
-                  meta: { stat },
-                })),
-                // statMods không dùng — AfterCombatPanel xử lý qua result.meta.stat
-              });
-            }
             // Cheater: chỉ thông báo khi player bị loại (thua combat)
             else if (lname === "cheater" && !didWin) {
               const lovers: any[] = (char.lover || []).filter(
@@ -1532,6 +1613,24 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                   statMods: [{ stat: lowestStat, delta: 1 }],
                 });
               }
+            }
+
+            // The Dice of the Dead: sau combat thắng → +1 stack (cộng vào số trong ngoặc tên gear)
+            const diceBaseMatch = gname.match(
+              /^The Dice of the Dead(?:\s*\((\d+)\))?$/i,
+            );
+            if (diceBaseMatch && didWin) {
+              const currentStack = diceBaseMatch[1]
+                ? parseInt(diceBaseMatch[1])
+                : 0;
+              const newStack = currentStack + 1;
+              const newWinChance = Math.min(50 + newStack * 4, 95);
+              acEntries.push({
+                player: side,
+                quirkName: "The Dice of the Dead",
+                description: `[GM Action] The Dice of the Dead: Thắng combat → +1 stack (${currentStack} → ${newStack}). Đổi tên gear thành "The Dice of the Dead (${newStack})". Gamble win chance: ${newWinChance}% thắng / ${100 - newWinChance}% thua.`,
+                gmAction: true,
+              });
             }
           }
 
@@ -2428,18 +2527,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                 (eff.timing === "after_combat_lose" && !didWin) ||
                 (eff.timing === "after_combat_win" && didWin);
               if (!timingOk) continue;
-              // grant_gear: GM Action
-              if (eff.type === "grant_gear") {
-                const gearName = (eff as any).grantName ?? "Gear";
-                const gearCount = (eff as any).grantCount ?? 1;
-                acEntries.push({
-                  player: side,
-                  quirkName: nh.name,
-                  description: `[GM Action] ${nh.name}: Sau combat → Nhận ${gearCount} Gear "${gearName}"`,
-                  gmAction: true,
-                });
-                continue;
-              }
               if (eff.type !== "stat_modifier") continue;
               const delta = eff.value ?? 0;
               if (delta === 0) continue;
@@ -2503,40 +2590,12 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                 });
               } else {
                 const sign = delta > 0 ? "+" : "";
-                // check_enemy_is_same_house: chỉ hiển thị khi đối thủ cùng nhà
-                if (eff.customHandler === "check_enemy_is_same_house") {
-                  const oppNestedHouses: any[] = Array.isArray(
-                    (opponent?.character as any)?.nestedHouses,
-                  )
-                    ? (opponent?.character as any).nestedHouses
-                    : [];
-                  const oppHasHouse = oppNestedHouses.some(
-                    (oh: any) =>
-                      !oh.isLost &&
-                      (oh.name ?? "").toLowerCase() ===
-                        nh.name.toLowerCase(),
-                  );
-                  if (oppHasHouse) {
-                    acEntries.push({
-                      player: targetSide,
-                      quirkName: nh.name,
-                      description: `${nh.name}: Sau combat → ${sign}${delta} ${(eff.stat as string).toUpperCase()}${isOpponent ? " (đối thủ)" : ""}`,
-                      statMods: [
-                        { stat: eff.stat as keyof CharacterStats, delta },
-                      ],
-                    });
-                  }
-                  // Không push acEntries nếu đối thủ không cùng nhà, nhưng stat vẫn được cộng bình thường
-                } else {
-                  acEntries.push({
-                    player: targetSide,
-                    quirkName: nh.name,
-                    description: `${nh.name}: Sau combat → ${sign}${delta} ${(eff.stat as string).toUpperCase()}${isOpponent ? " (đối thủ)" : ""}`,
-                    statMods: [
-                      { stat: eff.stat as keyof CharacterStats, delta },
-                    ],
-                  });
-                }
+                acEntries.push({
+                  player: targetSide,
+                  quirkName: nh.name,
+                  description: `${nh.name}: Sau combat → ${sign}${delta} ${(eff.stat as string).toUpperCase()}${isOpponent ? " (đối thủ)" : ""}`,
+                  statMods: [{ stat: eff.stat as keyof CharacterStats, delta }],
+                });
               }
             }
           }
@@ -2698,18 +2757,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               if (!masonEntry) continue;
               for (const eff of masonEntry.effects) {
                 if (eff.timing !== "after_combat") continue;
-                // grant_gear: GM Action
-                if (eff.type === "grant_gear") {
-                  const gearName = (eff as any).grantName ?? "Gear";
-                  const gearCount = (eff as any).grantCount ?? 1;
-                  acEntries.push({
-                    player: side,
-                    quirkName: masonSubKey,
-                    description: `[GM Action] ${masonSubKey}: Sau combat → Nhận ${gearCount} Gear "${gearName}"`,
-                    gmAction: true,
-                  });
-                  continue;
-                }
                 if (eff.type !== "stat_modifier") continue;
                 const delta = eff.value ?? 0;
                 if (delta === 0) continue;
@@ -2810,27 +2857,15 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             }
           }
 
-          // ── Mason archetype: Kazuya Kinoshita's House → thêm 1 Char Dev ──
-          // (Golden Coin đã được handle trong Mason grant_gear loop ở trên)
+          // ── Mason archetype: Golden Coin + Char Dev ────────────────────────
           if (hasMasonArchetype) {
-            const kazuyaMasonKey = "Kazuya Kinoshita's House Mason";
-            const hasKazuyaHouse = nestedHouses.some(
-              (nh: any) =>
-                !nh.isLost &&
-                !nh.subType &&
-                (nh.name ?? "") === "Kazuya Kinoshita's House",
-            );
-            if (
-              hasKazuyaHouse &&
-              !disabledItems.has(`${player.no}-house_sub-${kazuyaMasonKey}`)
-            ) {
-              acEntries.push({
-                player: side,
-                quirkName: kazuyaMasonKey,
-                description: `[GM Action] ${kazuyaMasonKey}: Sau combat → Nhận thêm 1 Char Dev`,
-                gmAction: true,
-              });
-            }
+            acEntries.push({
+              player: side,
+              quirkName: "Mason",
+              description:
+                '[GM Action] Mason: Sau combat → Nhận 1 Gear "Golden Coin" và 1 Char Dev',
+              gmAction: true,
+            });
           }
 
           // Captain America (sub-archetype): sau combat → +1 STR, +1 DUR
@@ -2892,22 +2927,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                   statMods: wonStats.map((s) => ({ stat: s, delta: 1 })),
                 });
               }
-            }
-
-            // Bloodlust: sau combat thắng → -1 IQ, -1 MA, +1 STR, +1 SPD, +2 DUR
-            if (lname === "bloodlust" && didWin) {
-              acEntries.push({
-                player: side,
-                quirkName: pname,
-                description: "-1 IQ, -1 MA, +1 STR, +1 SPD, +2 DUR (Bloodlust — thắng combat)",
-                statMods: [
-                  { stat: "iq" as keyof CharacterStats, delta: -1 },
-                  { stat: "ma" as keyof CharacterStats, delta: -1 },
-                  { stat: "str" as keyof CharacterStats, delta: 1 },
-                  { stat: "spd" as keyof CharacterStats, delta: 1 },
-                  { stat: "dur" as keyof CharacterStats, delta: 2 },
-                ],
-              });
             }
 
             // Fancy Feet: sau combat → -1 Dur (phần disable vũ khí/rune đối thủ đã xử lý trước combat)
@@ -2972,6 +2991,23 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                     "ma",
                   ] as (keyof CharacterStats)[]
                 ).map((s) => ({ stat: s, delta: 1 })),
+              });
+            }
+
+            // Bloodlust: sau combat thắng → -1 IQ/MA, +1 Str/Spd, +2 Dura
+            if (lname === "bloodlust" && didWin) {
+              acEntries.push({
+                player: side,
+                quirkName: pname,
+                description:
+                  "-1 IQ, -1 MA, +1 STR, +1 SPD, +2 DUR (Bloodlust — thắng combat)",
+                statMods: [
+                  { stat: "iq" as keyof CharacterStats, delta: -1 },
+                  { stat: "ma" as keyof CharacterStats, delta: -1 },
+                  { stat: "str" as keyof CharacterStats, delta: 1 },
+                  { stat: "spd" as keyof CharacterStats, delta: 1 },
+                  { stat: "dur" as keyof CharacterStats, delta: 2 },
+                ],
               });
             }
 
@@ -3318,17 +3354,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                 });
               }
             }
-
-            // Baldening: sau combat → đối thủ bị rụng hết tóc 💀 (GM action)
-            if (lname === "baldening") {
-              const oppName = opponent?.character?.name || "Đối thủ";
-              acEntries.push({
-                player: side,
-                quirkName: pname,
-                description: `Baldening 💀: ${oppName} bị rụng hết tóc. [GM Action] Cập nhật appearance đối thủ.`,
-                gmAction: true,
-              });
-            }
           }
 
           // ── Summon after_combat effects ─────────────────────────────────────
@@ -3610,7 +3635,7 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
           }
         };
 
-        // ── Coven Council: khi thua (bị loại R256) → quay chọn 1 player ngoài Coven → spin lại 1 stat ──
+        // ── Coven Council: khi thua ở nhánh thua (LB) → bị loại → quay chọn 1 player ngoài Coven → spin lại 1 stat ──
         for (const side of ["player1", "player2"] as const) {
           const player = side === "player1" ? player1 : player2;
           const didLose = actualWinner !== side;
@@ -3624,6 +3649,9 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             );
           const hasCoven = playerHouses.includes("coven council");
           if (!hasCoven) continue;
+          // Chỉ kích hoạt khi thua ở nhánh thua (LB) — tức là bị loại hẳn khỏi giải
+          const bracket = (char as any).tournament?.bracket || "";
+          if (bracket.toLowerCase() !== "loser") continue;
 
           // Lấy tất cả player còn sống không thuộc Coven Council
           const nonCovenPlayers = allPlayers.filter((p) => {
@@ -3653,7 +3681,7 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             player: side,
             quirkName: "Coven Council",
             description:
-              "Bị loại — quay chọn 1 player không thuộc Coven Council để Re-Spin 1 stat:",
+              "Bị loại (thua LB) — quay chọn 1 player không thuộc Coven Council để Re-Spin 1 stat:",
             wheelKey: wk,
             wheelItems: nonCovenPlayers.map((p) => ({
               label: `${p.name} (#${p.no})`,
@@ -4239,82 +4267,19 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
           });
         }
 
-        // ── Skeleton: khi thắng → kiểm tra tiến hóa Lich / Lich King ──
-        for (const side of ["player1", "player2"] as const) {
-          if (actualWinner !== side) continue; // chỉ khi thắng
-          const player = side === "player1" ? player1 : player2;
-          const char = player.character;
-          if (!char) continue;
-          const playerRace = ((char as any).race?.race || (char as any).race || "").toLowerCase();
-          const isSkeletonFamily = playerRace === "skeleton" || playerRace.startsWith("skeleton (");
-          if (!isSkeletonFamily) continue;
-
-          // Đếm PvP Wins từ battleLog
-          const battleLog: any[] = (char as any).battleLog || [];
-          const pvpWinsFromLog = battleLog.filter(
-            (entry: any) =>
-              (entry.type || "").toLowerCase() === "pvp" &&
-              (entry.result || "").toLowerCase() === "win",
-          ).length;
-          // Sau trận này thắng → pvpWins mới
-          const newPvpWins = pvpWinsFromLog + 1;
-
-          if (newPvpWins === 2) {
-            // Đúng 2 wins → tiến hóa Skeleton (Lich), IQ cố định thành 8
-            const currentIQ = (char as any).stats?.iq ?? 1;
-            const iqDelta = 8 - currentIQ;
-            acEntries.push({
-              player: side,
-              quirkName: "Skeleton → Skeleton (Lich)",
-              description: `[GM Action] ${player.name} đạt 2 PvP Win → Đổi race thành "Skeleton (Lich)". IQ set thành 8 (${iqDelta >= 0 ? "+" : ""}${iqDelta}).`,
-              statMods: iqDelta !== 0 ? [{ stat: "iq", delta: iqDelta }] : undefined,
-              gmAction: true,
-            });
-          } else if (newPvpWins === 4) {
-            // Đúng 4 wins → tiến hóa Skeleton (Lich King), +1 all stats
-            acEntries.push({
-              player: side,
-              quirkName: "Skeleton → Skeleton (Lich King)",
-              description: `[GM Action] ${player.name} đạt 4 PvP Win → Đổi race thành "Skeleton (Lich King)". Nhận +1 tất cả chỉ số.`,
-              statMods: [
-                { stat: "str", delta: 1 },
-                { stat: "spd", delta: 1 },
-                { stat: "dur", delta: 1 },
-                { stat: "iq", delta: 1 },
-                { stat: "biq", delta: 1 },
-                { stat: "ma", delta: 1 },
-              ],
-              gmAction: true,
-            });
-          }
-        }
-
         const p1WonCombat = actualWinner === "player1";
         const p2WonCombat = actualWinner === "player2";
         // Build roundResults map (str/spd/dur/iq/biq/ma → win/lose/tie) for each player
         const buildRoundResultsMap = (forSide: "player1" | "player2") => {
-          const oppSide = forSide === "player1" ? "player2" : "player1";
           const map: Record<string, "win" | "lose" | "tie"> = {};
-          for (let ri = 0; ri < resolvedRounds.length; ri++) {
-            const r = resolvedRounds[ri];
+          for (const r of resolvedRounds) {
             const key = r.stat;
-            if (r.winner === forSide) {
-              map[key] = "win";
-            } else if (r.winner === "tie") {
-              // Cruelty: round tie nhưng Cruelty spin quyết định ai thắng
-              // → nếu side này thắng Cruelty hoặc đối thủ thua Cruelty → coi là "win"
-              const selfCrueltySpun = roundSpinResults[`${ri}-Cruelty-${forSide}`];
-              const oppCrueltySpun = roundSpinResults[`${ri}-Cruelty-${oppSide}`];
-              if (selfCrueltySpun?.isSuccess === true || oppCrueltySpun?.isSuccess === false) {
-                map[key] = "win";
-              } else if (oppCrueltySpun?.isSuccess === true || selfCrueltySpun?.isSuccess === false) {
-                map[key] = "lose";
-              } else {
-                map[key] = "tie";
-              }
-            } else {
-              map[key] = "lose";
-            }
+            map[key] =
+              r.winner === forSide
+                ? "win"
+                : r.winner === "tie"
+                  ? "tie"
+                  : "lose";
           }
           return map;
         };
@@ -4545,17 +4510,9 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             if (oppHasMemoryFreeze) continue;
 
             // Power Ranger archetype → thay PvP Reward bằng 1 vòng quay stat (6 chỉ số)
-            // Power Ranger có thể đến từ archetypes[] hoặc charDevs[] (Become A Power Ranger)
-            const charDevNames = (char.charDevs || [])
-              .filter((cd: any) => !cd.isLost)
-              .map((cd: any) =>
-                (typeof cd === "string" ? cd : (cd?.name ?? "")).toLowerCase(),
-              );
-            const isPowerRanger =
-              archetypes.some(
-                (a) => a === "power ranger" || a.startsWith("power ranger"),
-              ) ||
-              charDevNames.some((cd) => cd.startsWith("become a power ranger"));
+            const isPowerRanger = archetypes.some(
+              (a) => a === "power ranger" || a.startsWith("power ranger"),
+            );
             if (isPowerRanger) {
               const wk = `after-PvPReward-PowerRanger-${side}`;
               acEntries.push({
@@ -4703,6 +4660,13 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
         ) => buildAfterCombat(w, s1, s2);
         return; // Chờ roundSpinResults useEffect gọi lại
       }
+      // Kiểm tra có cần defer buildAfterCombat chờ tiebreak không
+      const needsTiebreakerDefer =
+        alwaysTiebreakerWheel &&
+        p1Score === p2Score &&
+        !pendingMA &&
+        !isRoundtablePending;
+
       if (isRoundtablePending) {
         // Wrap với forceIsSubCombat=false vì khi defer gọi lại, roundtableSubMode trong closure
         // vẫn là true (sub-combat context) → sẽ bỏ qua PvP Reward nếu không override
@@ -4711,6 +4675,14 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
           s1?: number,
           s2?: number,
         ) => buildAfterCombat(w, s1, s2, false);
+      } else if (needsTiebreakerDefer) {
+        // Hoà điểm + alwaysTiebreakerWheel → defer buildAfterCombat chờ tiebreak wheel xác định winner
+        pendingAfterCombatBuildRef.current = (
+          w: "player1" | "player2",
+          s1?: number,
+          s2?: number,
+        ) => buildAfterCombat(w, s1, s2);
+        onDeferAfterCombat?.();
       } else {
         pendingAfterCombatBuildRef.current = null;
         buildAfterCombat(overallWinner);

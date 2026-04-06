@@ -501,8 +501,27 @@ export function getPerRoundEffects(
   char: Character | undefined,
   playerNo: number | undefined,
   disabledItems: Set<string>,
-): { onWin: string[]; onLose: string[]; onTie: string[] } {
-  if (!char) return { onWin: [], onLose: [], onTie: [] };
+): {
+  onWin: string[];
+  onLose: string[];
+  onTie: string[];
+  gamblerStackCount: number;
+} {
+  if (!char) return { onWin: [], onLose: [], onTie: [], gamblerStackCount: 0 };
+
+  // Tính stack count từ gear "The Dice of the Dead (N)"
+  const gamblerStackCount = (() => {
+    const allGear = [
+      ...((char as any).gear?.normalGear || []),
+      ...((char as any).gear?.legacyGear || []),
+    ];
+    for (const g of allGear) {
+      if (g.isLost) continue;
+      const m = (g.name as string).match(/^The Dice of the Dead\s*\((\d+)\)$/i);
+      if (m) return parseInt(m[1]);
+    }
+    return 0;
+  })();
 
   const isEffectActive = (targetName: string) => {
     if (playerNo === undefined) return true;
@@ -650,5 +669,5 @@ export function getPerRoundEffects(
   if (sources.some((s) => s === "silver") && !onWin.includes("Ranger-Silver"))
     onWin.push("Ranger-Silver");
 
-  return { onWin, onLose, onTie };
+  return { onWin, onLose, onTie, gamblerStackCount };
 }

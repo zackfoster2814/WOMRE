@@ -294,6 +294,9 @@ export interface EffectSource {
   isActive?: boolean;             // Có đang active không (weapon usable, etc.)
   isDisabled?: boolean;           // Bị vô hiệu hóa
   disabledReason?: string;
+
+  /** Stack count từ tên gear dạng "Name (N)" — ví dụ: The Dice of the Dead (2) → stackCount=2 */
+  stackCount?: number;
 }
 
 // ============================================================================

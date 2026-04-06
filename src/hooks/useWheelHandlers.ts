@@ -68,18 +68,14 @@ interface UseWheelHandlersParams {
   setEncroachingShadowSuccess: Dispatch<
     SetStateAction<Record<string, boolean>>
   >;
-  setGoldShipResult: Dispatch<
-    SetStateAction<Record<string, boolean | null>>
-  >;
+  setGoldShipResult: Dispatch<SetStateAction<Record<string, boolean | null>>>;
   setLuckManipulationResult: Dispatch<
     SetStateAction<Record<string, number | null>>
   >;
   setMadScientistResult: Dispatch<
     SetStateAction<Record<string, boolean | null>>
   >;
-  setDothrakiSpinResult: Dispatch<
-    SetStateAction<Record<string, DothrakiRule>>
-  >;
+  setDothrakiSpinResult: Dispatch<SetStateAction<Record<string, DothrakiRule>>>;
   setBlackMagicStat: Dispatch<
     SetStateAction<Record<string, keyof CharacterStats | null>>
   >;
@@ -95,9 +91,7 @@ interface UseWheelHandlersParams {
       >
     >
   >;
-  setTricksterResult: Dispatch<
-    SetStateAction<Record<string, string | null>>
-  >;
+  setTricksterResult: Dispatch<SetStateAction<Record<string, string | null>>>;
   setRhittaResult: Dispatch<SetStateAction<Record<string, boolean>>>;
   setCreatorsCatModal: Dispatch<SetStateAction<CreatorsCatModalState>>;
   spawnStatBubbles: (bubbles: StatBubbleInput[]) => void;
@@ -433,7 +427,10 @@ export function useWheelHandlers({
           { player: actualTarget, text: bubbleText, isPositive: false },
         ]);
       }
-    } else if (sourceName === "summoning scroll" || sourceName === "blackjack") {
+    } else if (
+      sourceName === "summoning scroll" ||
+      sourceName === "blackjack"
+    ) {
       const label = item.label;
       const statDeltas: Partial<Record<keyof CharacterStats, number>> = {};
       let startScoreDelta = 0;
@@ -602,6 +599,34 @@ export function useWheelHandlers({
             summonName: label.split(":")[0],
           },
         }));
+      }
+    } else if (sourceName === "numby") {
+      // Numby owned (summon riêng): wheel 6 stat → apply +4 vào stat được chọn
+      const numbyStatMap: Record<string, keyof CharacterStats> = {
+        STR: "str",
+        SPD: "spd",
+        DUR: "dur",
+        IQ: "iq",
+        BIQ: "biq",
+        MA: "ma",
+      };
+      const sk = numbyStatMap[item.label] as keyof CharacterStats;
+      if (sk) {
+        setSummoningScrollResult((prev) => ({
+          ...prev,
+          [playerLabel]: {
+            statDeltas: { [sk]: 4 },
+            startScoreDelta: 0,
+            summonName: "Numby",
+          },
+        }));
+        spawnStatBubbles([
+          {
+            player: playerLabel,
+            text: `Numby: +4 ${item.label} (Summon)`,
+            isPositive: true,
+          },
+        ]);
       }
     } else if (sourceName === "trickster") {
       const subtype = item.label.toLowerCase();

@@ -32,6 +32,8 @@ interface UsePvPScoresParams {
   roundtableWinnerOverride: "player1" | "player2" | null;
   /** Khi true: hoà luôn dùng tiebreaker wheel, không fallback race tier */
   alwaysTiebreakerWheel?: boolean;
+  /** Khi false: after-combat entries chưa được build (đang chờ tiebreak) → không block trên entries */
+  afterCombatBuilt?: boolean;
   computeRoundPoints: (
     side: "player1" | "player2",
     winner: "player1" | "player2" | "tie",
@@ -60,6 +62,7 @@ export function usePvPScores({
   afterCombatSpinResults,
   roundtableWinnerOverride,
   alwaysTiebreakerWheel = false,
+  afterCombatBuilt = true,
   computeRoundPoints,
 }: UsePvPScoresParams) {
 const stepInProgress = !!stepState && stepRoundIndex < 6;
@@ -299,17 +302,28 @@ const pendingSpins = useMemo(() => {
   const rounds = combatResult.rounds;
   const p1Effects = getPerRoundEffects(player1?.character, player1?.no, disabledItems);
   const p2Effects = getPerRoundEffects(player2?.character, player2?.no, disabledItems);
+  // Zoltraak: rounds có thể có 7 phần tử (BIQ×2 ở index 5).
+  // spinRoundIdx phải dùng stat order index (0-5), không phải array index.
+  // BIQ×2 (array index 5) vẫn dùng spinRoundIdx=4 vì cùng stat "biq".
+  // MA (array index 5 bình thường hoặc 6 khi có Zoltraak) dùng spinRoundIdx=5.
+  const hasExtraBiq = rounds.length > 6; // 7 rounds = có BIQ×2
   for (let i = 0; i < rounds.length; i++) {
     const r = rounds[i];
-    if (computeRoundPoints("player1", r.winner, i, p1Effects, r.stat).pending)
+    // spinRoundIdx: BIQ×2 ở array index 5 → vẫn là 4; MA shift +1 khi có extra BIQ
+    let spinRoundIdx = i;
+    if (hasExtraBiq && i >= 5) spinRoundIdx = i - 1; // biq×2→4, ma→5
+    if (computeRoundPoints("player1", r.winner, spinRoundIdx, p1Effects, r.stat).pending)
       return true;
-    if (computeRoundPoints("player2", r.winner, i, p2Effects, r.stat).pending)
+    if (computeRoundPoints("player2", r.winner, spinRoundIdx, p2Effects, r.stat).pending)
       return true;
   }
   // Also block if any after-combat wheel entry hasn't been spun yet
-  for (const entry of afterCombatEntries) {
-    if (entry.wheelKey && !afterCombatSpinResults[entry.wheelKey])
-      return true;
+  // Chỉ check khi afterCombatBuilt=true (entries đã được build, không phải đang chờ tiebreak)
+  if (afterCombatBuilt) {
+    for (const entry of afterCombatEntries) {
+      if (entry.wheelKey && !afterCombatSpinResults[entry.wheelKey])
+        return true;
+    }
   }
   // Block if tiebreaker wheel hasn't been spun (same-race, or alwaysTiebreakerWheel mode)
   // Ngoại lệ: điểm <= 0 (cả 2 âm/0) → hoà thực sự, không cần quay
@@ -370,6 +384,10 @@ const effectiveWinner = useMemo((): "player1" | "player2" | null => {
   const { s1, s2 } = effectiveScores;
   if (s1 > s2) return "player1";
   if (s2 > s1) return "player2";
+  // alwaysTiebreakerWheel mode: luôn dùng wheel khi hoà, bỏ qua race tier winner từ combatResult
+  if (alwaysTiebreakerWheel) {
+    return tiebreakerWheelResult; // null nếu chưa quay
+  }
   // Score bằng nhau: nếu combatResult.winner đã được set bởi Egoist/autoLose override → dùng luôn
   if (combatResult.winner) return combatResult.winner;
   // alwaysTiebreakerWheel mode: luôn dùng wheel khi hoà

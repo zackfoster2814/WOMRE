@@ -18,7 +18,10 @@ import {
   calcStatsWithBeforeCombat,
 } from "../utils/combatStats";
 import type { AfterCombatEntry } from "./useWheelSpins";
-import { PVP_REWARD_WHEEL_ITEMS, POWER_RANGER_STAT_WHEEL_ITEMS } from "./useResolveNextRound";
+import {
+  PVP_REWARD_WHEEL_ITEMS,
+  POWER_RANGER_STAT_WHEEL_ITEMS,
+} from "./useResolveNextRound";
 
 // ============================================================================
 // Types
@@ -296,14 +299,17 @@ export function useStartCombat(params: UseStartCombatParams): {
         if (customHandler === "kings_landing_penalty_check") {
           const selfRaceKL = (self.character?.race?.race ?? "").toLowerCase();
           const exemptRacesKL = ["god", "demi god", "demi-god", "demigod"];
-          const isExemptRaceKL = exemptRacesKL.some((r) => selfRaceKL.includes(r));
+          const isExemptRaceKL = exemptRacesKL.some((r) =>
+            selfRaceKL.includes(r),
+          );
           const archetypesKL: string[] = (self.character?.archetypes || []).map(
             (a: any) => (typeof a === "string" ? a : (a?.name ?? "")),
           );
           const isDevoteeKL = archetypesKL.some((a: string) =>
             a.toLowerCase().includes("devotee"),
           );
-          if (!isExemptRaceKL && !isDevoteeKL) pts += (ce.effect as any).points || 0;
+          if (!isExemptRaceKL && !isDevoteeKL)
+            pts += (ce.effect as any).points || 0;
           continue;
         }
         // Nếu có customHandler chưa được xử lý ở trên → skip (tránh cộng nhầm)
@@ -371,7 +377,9 @@ export function useStartCombat(params: UseStartCombatParams): {
     applyMoonrootBonus(player1, "player1");
     applyMoonrootBonus(player2, "player2");
 
-    const allChars = allPlayers.map((p) => p.character).filter((c): c is Character => !!c);
+    const allChars = allPlayers
+      .map((p) => p.character)
+      .filter((c): c is Character => !!c);
 
     const hasUnoP1BC =
       (player1.character?.powers || []).some(
@@ -546,15 +554,33 @@ export function useStartCombat(params: UseStartCombatParams): {
       // player1 dùng BM → debuff nhắm vào player2
       // URC bounce nếu player1 tự có URC HOẶC player2 có URC
       if (hasUnoP1 || hasUnoP2)
-        applyStatDelta(p1BaseStats, blackMagicStat["player1"]! as keyof CharacterStats, -2);
-      else applyStatDelta(p2BaseStats, blackMagicStat["player1"]! as keyof CharacterStats, -2);
+        applyStatDelta(
+          p1BaseStats,
+          blackMagicStat["player1"]! as keyof CharacterStats,
+          -2,
+        );
+      else
+        applyStatDelta(
+          p2BaseStats,
+          blackMagicStat["player1"]! as keyof CharacterStats,
+          -2,
+        );
     }
     if (blackMagicStat["player2"]) {
       // player2 dùng BM → debuff nhắm vào player1
       // URC bounce nếu player2 tự có URC HOẶC player1 có URC
       if (hasUnoP2 || hasUnoP1)
-        applyStatDelta(p2BaseStats, blackMagicStat["player2"]! as keyof CharacterStats, -2);
-      else applyStatDelta(p1BaseStats, blackMagicStat["player2"]! as keyof CharacterStats, -2);
+        applyStatDelta(
+          p2BaseStats,
+          blackMagicStat["player2"]! as keyof CharacterStats,
+          -2,
+        );
+      else
+        applyStatDelta(
+          p1BaseStats,
+          blackMagicStat["player2"]! as keyof CharacterStats,
+          -2,
+        );
     }
 
     // Rhitta: nếu quay thành công trước combat → +3 STR, +2 DUR
@@ -579,10 +605,12 @@ export function useStartCombat(params: UseStartCombatParams): {
 
     // Luck Manipulation: +1 hoặc +2 all stats tùy kết quả wheel (0 = không gì)
     if (luckManipulationResult["player1"]) {
-      for (const k of _ALL_STAT_KEYS) applyStatDelta(p1BaseStats, k, luckManipulationResult["player1"]!);
+      for (const k of _ALL_STAT_KEYS)
+        applyStatDelta(p1BaseStats, k, luckManipulationResult["player1"]!);
     }
     if (luckManipulationResult["player2"]) {
-      for (const k of _ALL_STAT_KEYS) applyStatDelta(p2BaseStats, k, luckManipulationResult["player2"]!);
+      for (const k of _ALL_STAT_KEYS)
+        applyStatDelta(p2BaseStats, k, luckManipulationResult["player2"]!);
     }
 
     // Scrying: player có Scrying thành công → đối thủ bị -4 stat cao nhất (tính theo base stats gốc)
@@ -711,7 +739,8 @@ export function useStartCombat(params: UseStartCombatParams): {
         const oppMainRace = ((opp.character as any)?.race?.race || "")
           .toLowerCase()
           .trim();
-        const oppEffRace = getEffectiveRace((opp.character as any)) || oppMainRace;
+        const oppEffRace =
+          getEffectiveRace(opp.character as any) || oppMainRace;
         return ["god", "demi-god", "demi god", "demigod"].includes(oppEffRace);
       };
       const p1Auto = checkDevotee(player1, player2);
@@ -819,26 +848,38 @@ export function useStartCombat(params: UseStartCombatParams): {
           ...((p.character as any)?.gear?.legacyGear ?? []),
         ];
         return allGear.some(
-          (g: any) => !g.isLost && (g.name ?? "").toLowerCase().includes("ragnarok's cobra"),
+          (g: any) =>
+            !g.isLost &&
+            (g.name ?? "").toLowerCase().includes("ragnarok's cobra"),
         );
       };
       const p1Cobra = checkCobra(player1);
       const p2Cobra = checkCobra(player2);
       if (p1Cobra || p2Cobra) {
-        const autoWinner: "player1" | "player2" = p1Cobra ? "player2" : "player1";
-        const loserSide: "player1" | "player2" = p1Cobra ? "player1" : "player2";
+        const autoWinner: "player1" | "player2" = p1Cobra
+          ? "player2"
+          : "player1";
+        const loserSide: "player1" | "player2" = p1Cobra
+          ? "player1"
+          : "player2";
         const winnerSide: "player1" | "player2" = autoWinner;
 
         // Build after-combat entries: PvP Reward cho người thắng + quirk entries cơ bản
         const cobraAcEntries: AfterCombatEntry[] = [];
 
-        for (const [side, p] of [["player1", player1], ["player2", player2]] as const) {
+        for (const [side, p] of [
+          ["player1", player1],
+          ["player2", player2],
+        ] as const) {
           const c = p.character;
           if (!c) continue;
           const didWin = side === winnerSide;
 
           // Eir sub-race
-          const subRaceRaw = ((c as any).race?.subRace || "").split("(")[0].trim().toLowerCase();
+          const subRaceRaw = ((c as any).race?.subRace || "")
+            .split("(")[0]
+            .trim()
+            .toLowerCase();
           if (subRaceRaw === "eir") {
             const subRaceFull: string = (c as any).race?.subRace || "Eir";
             const stackMatch = subRaceFull.match(/\((\d+)\)/);
@@ -848,7 +889,9 @@ export function useStartCombat(params: UseStartCombatParams): {
               player: side,
               quirkName: "Eir",
               description: `+${currentBonus} Durability (Eir — stack ${stackN}). [GM Action] Đổi Sub-race thành "Eir (${stackN + 1})".`,
-              statMods: [{ stat: "dur" as keyof CharacterStats, delta: currentBonus }],
+              statMods: [
+                { stat: "dur" as keyof CharacterStats, delta: currentBonus },
+              ],
               gmAction: true,
             });
           }
@@ -858,28 +901,43 @@ export function useStartCombat(params: UseStartCombatParams): {
           // Quirks check: Impatient
           const quirks: string[] = ((c as any).quirks || [])
             .filter((q: any) => !q?.isLost)
-            .map((q: any) => (typeof q === "string" ? q : (q?.name ?? "")).toLowerCase());
-          if (quirks.some((q) => q === "impatient" || q.startsWith("impatient ("))) {
-            cobraAcEntries.push({ player: side, quirkName: "Impatient", description: "Impatient: Không nhận PvP Reward vòng này." });
+            .map((q: any) =>
+              (typeof q === "string" ? q : (q?.name ?? "")).toLowerCase(),
+            );
+          if (
+            quirks.some((q) => q === "impatient" || q.startsWith("impatient ("))
+          ) {
+            cobraAcEntries.push({
+              player: side,
+              quirkName: "Impatient",
+              description: "Impatient: Không nhận PvP Reward vòng này.",
+            });
             continue;
           }
 
           // Power Ranger archetype → quay stat thay PvP Reward
           const archetypes: string[] = ((c as any).archetypes || [])
             .filter((a: any) => !a?.isLost)
-            .map((a: any) => (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase());
+            .map((a: any) =>
+              (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase(),
+            );
           const charDevNames: string[] = ((c as any).charDevs || [])
             .filter((cd: any) => !cd?.isLost)
-            .map((cd: any) => (typeof cd === "string" ? cd : (cd?.name ?? "")).toLowerCase());
+            .map((cd: any) =>
+              (typeof cd === "string" ? cd : (cd?.name ?? "")).toLowerCase(),
+            );
           const isPowerRanger =
-            archetypes.some((a) => a === "power ranger" || a.startsWith("power ranger")) ||
+            archetypes.some(
+              (a) => a === "power ranger" || a.startsWith("power ranger"),
+            ) ||
             charDevNames.some((cd) => cd.startsWith("become a power ranger"));
           if (isPowerRanger) {
             const wk = `power-ranger-cobra-${side}-1`;
             cobraAcEntries.push({
               player: side,
               quirkName: "Power Ranger",
-              description: "Power Ranger: Quay 1 vòng chọn chỉ số được tăng (thay PvP Reward)",
+              description:
+                "Power Ranger: Quay 1 vòng chọn chỉ số được tăng (thay PvP Reward)",
               wheelKey: wk,
               wheelItems: POWER_RANGER_STAT_WHEEL_ITEMS,
               statMods: [{ stat: "str" as keyof CharacterStats, delta: 1 }],
@@ -908,12 +966,187 @@ export function useStartCombat(params: UseStartCombatParams): {
           winner: autoWinner,
           p1Score: 0,
           p2Score: 0,
-          events: [{
-            player: loserSide,
-            source: "Ragnarok's Cobra",
-            description: `[Ragnarok's Cobra] ${p1Cobra ? player1.name : player2.name} thua ngay lập tức (Gear effect — vòng 64)`,
-            type: "info",
-          }],
+          events: [
+            {
+              player: loserSide,
+              source: "Ragnarok's Cobra",
+              description: `[Ragnarok's Cobra] ${p1Cobra ? player1.name : player2.name} thua ngay lập tức (Gear effect — vòng 64)`,
+              type: "info",
+            },
+          ],
+          pointChanges: [],
+          carryOverToNext: [],
+        };
+        setStepState({
+          p1Stats: p1BaseStats,
+          p2Stats: p2BaseStats,
+          p1Score: 0,
+          p2Score: 0,
+          startP1Score: p1StartScore,
+          startP2Score: p2StartScore,
+          p1CarryOver: [],
+          p2CarryOver: [],
+          resolvedRounds: [],
+          roundLogs: [cobraLog],
+          p1TenacityFired: false,
+          p2TenacityFired: false,
+          p1ConquerorFired: false,
+          p2ConquerorFired: false,
+          p1FiredHandlers: new Set<string>(),
+          p2FiredHandlers: new Set<string>(),
+          p1DothrakiRule: null,
+          p2DothrakiRule: null,
+        });
+        setAfterCombatEntries(cobraAcEntries);
+        setCombatResult({
+          rounds: [],
+          player1Score: 0,
+          player2Score: 0,
+          startPlayer1Score: p1StartScore,
+          startPlayer2Score: p2StartScore,
+          winner: autoWinner,
+          tieBreaker: null,
+        });
+        return;
+      }
+    }
+
+    // Ragnarok's Cobra: auto-lose ở vòng 64 — kết quả ngay, build after-combat entries đầy đủ
+    {
+      const checkCobra = (p: PvPPlayerData): boolean => {
+        const round: string = (p.character as any)?.tournament?.round ?? "-";
+        if (round !== "64") return false;
+        const allGear = [
+          ...((p.character as any)?.gear?.normalGear ?? []),
+          ...((p.character as any)?.gear?.legacyGear ?? []),
+        ];
+        return allGear.some(
+          (g: any) =>
+            !g.isLost &&
+            (g.name ?? "").toLowerCase().includes("ragnarok's cobra"),
+        );
+      };
+      const p1Cobra = checkCobra(player1);
+      const p2Cobra = checkCobra(player2);
+      if (p1Cobra || p2Cobra) {
+        const autoWinner: "player1" | "player2" = p1Cobra
+          ? "player2"
+          : "player1";
+        const loserSide: "player1" | "player2" = p1Cobra
+          ? "player1"
+          : "player2";
+        const winnerSide: "player1" | "player2" = autoWinner;
+
+        // Build after-combat entries: PvP Reward cho người thắng + quirk entries cơ bản
+        const cobraAcEntries: AfterCombatEntry[] = [];
+
+        for (const [side, p] of [
+          ["player1", player1],
+          ["player2", player2],
+        ] as const) {
+          const c = p.character;
+          if (!c) continue;
+          const didWin = side === winnerSide;
+
+          // Eir sub-race
+          const subRaceRaw = ((c as any).race?.subRace || "")
+            .split("(")[0]
+            .trim()
+            .toLowerCase();
+          if (subRaceRaw === "eir") {
+            const subRaceFull: string = (c as any).race?.subRace || "Eir";
+            const stackMatch = subRaceFull.match(/\((\d+)\)/);
+            const stackN = stackMatch ? parseInt(stackMatch[1], 10) : 0;
+            const currentBonus = Math.pow(2, stackN);
+            cobraAcEntries.push({
+              player: side,
+              quirkName: "Eir",
+              description: `+${currentBonus} Durability (Eir — stack ${stackN}). [GM Action] Đổi Sub-race thành "Eir (${stackN + 1})".`,
+              statMods: [
+                { stat: "dur" as keyof CharacterStats, delta: currentBonus },
+              ],
+              gmAction: true,
+            });
+          }
+
+          if (!didWin) continue;
+
+          // Quirks check: Impatient
+          const quirks: string[] = ((c as any).quirks || [])
+            .filter((q: any) => !q?.isLost)
+            .map((q: any) =>
+              (typeof q === "string" ? q : (q?.name ?? "")).toLowerCase(),
+            );
+          if (
+            quirks.some((q) => q === "impatient" || q.startsWith("impatient ("))
+          ) {
+            cobraAcEntries.push({
+              player: side,
+              quirkName: "Impatient",
+              description: "Impatient: Không nhận PvP Reward vòng này.",
+            });
+            continue;
+          }
+
+          // Power Ranger archetype → quay stat thay PvP Reward
+          const archetypes: string[] = ((c as any).archetypes || [])
+            .filter((a: any) => !a?.isLost)
+            .map((a: any) =>
+              (typeof a === "string" ? a : (a?.name ?? "")).toLowerCase(),
+            );
+          const charDevNames: string[] = ((c as any).charDevs || [])
+            .filter((cd: any) => !cd?.isLost)
+            .map((cd: any) =>
+              (typeof cd === "string" ? cd : (cd?.name ?? "")).toLowerCase(),
+            );
+          const isPowerRanger =
+            archetypes.some(
+              (a) => a === "power ranger" || a.startsWith("power ranger"),
+            ) ||
+            charDevNames.some((cd) => cd.startsWith("become a power ranger"));
+          if (isPowerRanger) {
+            const wk = `power-ranger-cobra-${side}-1`;
+            cobraAcEntries.push({
+              player: side,
+              quirkName: "Power Ranger",
+              description:
+                "Power Ranger: Quay 1 vòng chọn chỉ số được tăng (thay PvP Reward)",
+              wheelKey: wk,
+              wheelItems: POWER_RANGER_STAT_WHEEL_ITEMS,
+              statMods: [{ stat: "str" as keyof CharacterStats, delta: 1 }],
+            });
+            continue;
+          }
+
+          // PvP Reward
+          const wk = `pvp-reward-cobra-${side}-1`;
+          cobraAcEntries.push({
+            player: side,
+            quirkName: "PvP Reward",
+            description: "Quay PvP Reward (Ragnarok's Cobra — auto-lose)",
+            wheelKey: wk,
+            wheelItems: PVP_REWARD_WHEEL_ITEMS,
+            gmAction: true,
+          });
+        }
+
+        const cobraLog: RoundLog = {
+          roundIndex: -1,
+          statLabel: "Ragnarok's Cobra",
+          statKey: "ragnarok_cobra",
+          p1ValueUsed: 0,
+          p2ValueUsed: 0,
+          winner: autoWinner,
+          p1Score: 0,
+          p2Score: 0,
+          events: [
+            {
+              player: loserSide,
+              source: "Ragnarok's Cobra",
+              description: `[Ragnarok's Cobra] ${p1Cobra ? player1.name : player2.name} thua ngay lập tức (Gear effect — vòng 64)`,
+              type: "info",
+            },
+          ],
           pointChanges: [],
           carryOverToNext: [],
         };
@@ -1061,14 +1294,25 @@ export function useStartCombat(params: UseStartCombatParams): {
         const oppPowerCount = oppPowers.length;
 
         // Fair Duel: nếu bất kỳ ai có Fair Duel active → miễn nhiễm debuff từ đối thủ
-        const selfHasFairDuel = selfPowers.some(
-          (pw: any) =>
-            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith("fair duel"),
-        ) && !([...effectiveDisabledItems].some(k => k.startsWith(`${player.no}-power-Fair Duel`)));
-        const oppHasFairDuel = oppPowers.some(
-          (pw: any) =>
-            (typeof pw === "string" ? pw : (pw?.name ?? "")).toLowerCase().startsWith("fair duel"),
-        ) && oppChar && !([...effectiveDisabledItems].some(k => k.startsWith(`${(oppChar as any).no ?? ""}-power-Fair Duel`)));
+        const selfHasFairDuel =
+          selfPowers.some((pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? ""))
+              .toLowerCase()
+              .startsWith("fair duel"),
+          ) &&
+          ![...effectiveDisabledItems].some((k) =>
+            k.startsWith(`${player.no}-power-Fair Duel`),
+          );
+        const oppHasFairDuel =
+          oppPowers.some((pw: any) =>
+            (typeof pw === "string" ? pw : (pw?.name ?? ""))
+              .toLowerCase()
+              .startsWith("fair duel"),
+          ) &&
+          oppChar &&
+          ![...effectiveDisabledItems].some((k) =>
+            k.startsWith(`${(oppChar as any).no ?? ""}-power-Fair Duel`),
+          );
         const fairDuelActive = selfHasFairDuel || oppHasFairDuel;
 
         for (const ce of fx.combatEffects) {
@@ -1279,7 +1523,12 @@ export function useStartCombat(params: UseStartCombatParams): {
             const debuff = Math.floor(deadCount / 51);
             if (debuff > 0) {
               const STAT_KEYS_DS: (keyof CharacterStats)[] = [
-                "str", "spd", "dur", "iq", "biq", "ma",
+                "str",
+                "spd",
+                "dur",
+                "iq",
+                "biq",
+                "ma",
               ];
               for (const stat of STAT_KEYS_DS)
                 applyStatDelta(oppBaseStats, stat, -debuff);

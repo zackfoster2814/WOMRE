@@ -45,7 +45,7 @@ export const RANGER_ROUND_STAT: Record<string, string | string[]> = {
   "Ranger-Pink": ["biq", "ma"],
 };
 
-export function getSpinItems(effectName: string): WheelSpinItem[] {
+export function getSpinItems(effectName: string, gamblerStackCount = 0): WheelSpinItem[] {
   switch (effectName) {
     case "Critical Strike":    return CRIT_ITEMS;
     case "Evasion":            return EVASION_ITEMS;
@@ -66,6 +66,17 @@ export function getSpinItems(effectName: string): WheelSpinItem[] {
     case "Pennyworthy-Lose":   return PENNYWORTHY_LOSE_ITEMS;
     case "The Sand of Time":
     case "The Sand of Time-2": return SAND_OF_TIME_ITEMS;
+    case "Gambler": {
+      if (gamblerStackCount > 0) {
+        const winW = Math.min(50 + gamblerStackCount * 4, 95);
+        const loseW = 100 - winW;
+        return [
+          { label: `+2 điểm (${winW}%)`, weight: winW, isSuccess: true, color: "#f59e0b" },
+          { label: `+0 điểm (${loseW}%)`, weight: loseW, isSuccess: false, color: "#ef4444" },
+        ];
+      }
+      return GAMBLER_ITEMS;
+    }
     default:                   return GAMBLER_ITEMS;
   }
 }
@@ -103,6 +114,8 @@ export interface SpinButtonProps {
     roundIndex: number;
     side: "player1" | "player2";
   }) => void;
+  /** Stack count của Dice of the Dead cho player này — ảnh hưởng Gambler odds */
+  gamblerStackCount?: number;
 }
 
 export function RoundSpinButton({
@@ -112,10 +125,11 @@ export function RoundSpinButton({
   roundSpinResults,
   applyDevWeights,
   setRoundSpinModal,
+  gamblerStackCount = 0,
 }: SpinButtonProps) {
   const key = `${roundIdx}-${effectName}-${side}`;
   const result = roundSpinResults[key];
-  const items = applyDevWeights(effectName, getSpinItems(effectName));
+  const items = applyDevWeights(effectName, getSpinItems(effectName, gamblerStackCount));
   const label = getSpinLabel(effectName);
   const titleText = effectName === "The Sand of Time-2"
     ? "The Sand of Time (Spell Flux lần 2)"

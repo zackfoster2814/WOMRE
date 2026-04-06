@@ -264,7 +264,7 @@ export function registerAllHouseEffects() {
   // 14. Coven Council
   defineEffect("house", "Coven Council")
     .description(
-      "Không có Mason Effect. Nhận +4 IQ. Khi Player Coven Council bị loại, 1 Player random không thuộc Coven được Re-Spin 1 stat.",
+      "Không có Mason Effect. Nhận +4 IQ. Khi Player Coven Council bị loại (thua ở nhánh thua), 1 Player random không thuộc Coven được Re-Spin 1 stat.",
     )
     .addStat("iq", 4)
     .effect({

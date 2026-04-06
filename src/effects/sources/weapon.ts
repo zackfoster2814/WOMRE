@@ -1061,12 +1061,6 @@ export function registerAllWeaponEffects() {
     .description("+3 STR. Trong combat: Round BIQ có kết quả như round STR.")
     .weight(2.94)
     .addStat("strength", 3)
-    .effect({
-      type: "custom",
-      timing: "during_combat",
-      target: "self",
-      customHandler: "green_dragon_biq_str",
-    })
     .tags("physical")
     .register();
 
@@ -2012,6 +2006,8 @@ registerCombatHandler(
 registerCombatHandler(
   "green_dragon_biq_str",
   (ctx: CombatHandlerContext): CombatHandlerResult => {
+    // Chỉ kích hoạt ở round BIQ
+    if (ctx.currentRoundStat !== "biq") return { skipDefault: true };
     const strResult = ctx.roundResults?.strength;
     if (strResult === "win") {
       return {
