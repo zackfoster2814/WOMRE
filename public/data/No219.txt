@@ -1,8 +1,8 @@
 No.219
 Name: Tarus13 (13tarus)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -108,6 +108,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 0- (-1)
 - Note: Trước combat: Tarus13 Scrying: thành công Trong combat: Gam hụt 5
+```
+
+```
+PvP:
+- Đối thủ: .hor1zon
+- Kết quả: Lose
+- Tỉ số: 6-0
+- Note: Gamble trượt, choke
 ```
 
 ======

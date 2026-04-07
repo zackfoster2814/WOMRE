@@ -1,8 +1,8 @@
 No.109
 Name: We are Charlie Kirk (_yeetusmymeatus)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -35,9 +35,6 @@ Houses:
 ```
 4 Gear: 
  + 3 Normal gear:
-  - Shot Glass
-  - Leather Jacket
-  - Đá
  + 1 Legacy gear:
   -
 ```
@@ -52,15 +49,12 @@ Runeword: Không
 ```
 ```
 1 Power: 
-+ Water Breathing (Từ Sub-race) (Đã mất do PvE Punishment)
 + Luck Manipulation
 + The Sand of Time
 + Capybara
-+ Divine Lightning (Demonic Pact) (Đã mất do PvE Punishment)
 + Detect Thoughts 
 + Spell Flux 
 + Blowing Leaves
-+ Giấy nợ gia truyền (từ muốn liếm chân seed quá)
 ```
 ```
 Char dev: 
@@ -81,7 +75,7 @@ PvP Reward:
 ```
 Other Source:
 - +1 Speed
-- -2 All stats (Chokevy)
+- -3 All stats (Chokevy)
 - Nhận: Blowing Leaves
 - +1 Spd
 - +1 Stat thấp nhất (MA)
@@ -115,6 +109,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 3-3
 - Note: Trước combat: We are Charlie Kirk Golden Coin: Không kích   Trong combat: Sand of Time x2: Kích 1
+```
+
+```
+PvP:
+- Đối thủ: Euoid
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: giấy nợ gia truyền truyền lại cho Lunar
 ```
 
 ======

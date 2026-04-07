@@ -1,8 +1,8 @@
 No.107
 Name: dlwlrma (aem2804)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -111,6 +111,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-4
 - Note: Crit:không
+```
+
+```
+PvP:
+- Đối thủ: Hy
+- Kết quả: Lose
+- Tỉ số: 4-4
+- Note:dlwlrma Crit: IQ
 ```
 
 ======

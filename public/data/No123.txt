@@ -1,8 +1,8 @@
 No.123
 Name: Hoàng Tuyền Không Trấn (franx9816)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -17,7 +17,7 @@ Archetype:
 ```
 ```
 1 Quirk:  
-+ Shining Brightly
++ Under the Weather
 ```
 ```
 Str: 6
@@ -100,6 +100,15 @@ PvP:
 - Kết quả: win
 - Tỉ số: 1-4
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Yuto
+- Kết quả: Lose
+- Tỉ số: 4-3
+- Note: Shining Brightly thành Under the Weather
+
 ```
 
 ======

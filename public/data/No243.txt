@@ -1,8 +1,8 @@
 No.243
 Name: Karu (karu_87369)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -90,6 +90,7 @@ Other Source:
 PvP Reward:
 - +1 Gear: Fishing Rod
 - PvP Reward: +2 Stat cao nhất (Dura)
+- +1 Gear: Knight's Armor
 ```
 
 ======
@@ -117,5 +118,12 @@ PvP:
 - Đối thủ: SoloWingPixy
 - Kết quả: win
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: CobyKei
+- Kết quả: Win
+- Tỉ số: 4-3
 ```
 ======

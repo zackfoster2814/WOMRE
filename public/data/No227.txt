@@ -1,8 +1,8 @@
 No.227
 Name: dung7877 (dung7877)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -40,6 +40,7 @@ Houses:
  + 0 Normal gear:
   - Silver Steed (Từ House)
   - Ancient Protector
+  - Thuốc tráng dương
  + 0 Legacy gear:
   - 
 ```
@@ -81,10 +82,12 @@ Lover:
 Other Source:
 - Machinists Power: Fingerthing
 - Machinist: +1 Gear: Ancient Protector
+- Machinists: 1 Gear: Thuốc tráng dương
 ```
 ```
 PvP Reward:
 - +1 Dura
+- +1 Speed
 - +1 Speed
 
 ======
@@ -113,6 +116,14 @@ PvP:
 - Đối thủ: sodium_nickel_89
 - Kết quả: win
 - Tỉ số: 5-1
+```
+
+```
+PvP:
+- Đối thủ: Smolder
+- Kết quả: Win
+- Tỉ số: 5-1
+- Note: 
 ```
 
 ======

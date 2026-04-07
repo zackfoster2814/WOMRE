@@ -1,8 +1,8 @@
 No.161
 Name: nahhhh_hecker (nahhhh_hecker)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -94,6 +94,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 4-3
 - Note: PvP Reward: (Tặng đối thủ: +1 Speed)
+```
+
+```
+PvP:
+- Đối thủ: Vinh Vander Bek
+- Kết quả: Win
+- Tỉ số: 3-5
+- Note: PvP Reward: (Tặng Vinh Vander Bek nhưng anh ấy siêu nhân gao nên không nhận) +1 BIQ
 ```
 
 ======

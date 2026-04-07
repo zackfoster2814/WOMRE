@@ -1,8 +1,8 @@
 No.206
 Name: bo (bo3212)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -20,6 +20,7 @@ Archetype:
 2 Quirk:  
 + Herbalist
 + Training Restricted
++ Mute
 ```
 ```
 Str: 3
@@ -71,6 +72,7 @@ PvP Reward:
 - +1 MA
 - +1 Dura
 - +1 Str
+- +2 Stat cao nhất (Dura)
 ```
 ```
 Other Source:
@@ -107,6 +109,15 @@ PvP:
 - Kết quả: win
 - Tỉ số: 4-5
 - Note: bo nhận:  PvP Reward: +1 Dura và +1 Str Herbalist: Nhận thêm 1 phần thưởng PvP.
+```
+
+```
+PvP:
+- Đối thủ: Cô Fulun`
+- Kết quả: Win
+- Tỉ số: 4-3
+- Note: PvP Reward: +2 Stat cao nhất
+Herbalist: Mistpetal: Thêm 1 Quirk: Mute
 ```
 
 ======

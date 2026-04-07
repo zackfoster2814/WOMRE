@@ -1,8 +1,8 @@
 No.85
 Name: Tyrunny (anomaly.exe)
 Status: Còn sống
-Vòng thi đấu: 128
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -102,6 +102,14 @@ PvP:
 - Kết quả: lose
 - Tỉ số: 3-4
 - Note: gọi bố Huy Le ra đánh hộ, bị brainrot
+```
+
+```
+PvP:
+- Đối thủ: BLèBLè
+- Kết quả: Lose
+- Tỉ số: 4-2
+- Note: 
 ```
 
 ======

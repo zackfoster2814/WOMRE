@@ -1,8 +1,8 @@
 No.104
 Name: 1037 (.huy._)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -107,6 +107,14 @@ PvP:
 - Đối thủ: thomasjoec
 - Kết quả: win
 - Tỉ số: 0-7
+- Note: PvP Reward: (vội)
+```
+
+```
+PvP:
+- Đối thủ: Narita Taigoat
+- Kết quả: Win
+- Tỉ số: 2-4
 - Note: PvP Reward: (vội)
 ```
 

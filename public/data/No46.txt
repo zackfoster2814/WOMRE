@@ -1,8 +1,8 @@
 No.46
 Name: Yui (duyanh_57789)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -38,7 +38,8 @@ Houses:
   - Thuốc tráng dương (Đã mất do bán)
   - Golden Coin
   - Golden Coin
-  - Cursed Charm
+  - Cursed Charm (đã mất do bán)
+  - Golden Coin
  + 1 Legacy gear:
   -
 ```
@@ -69,6 +70,11 @@ Team: 4
 Lover:
 + tuancon
 ```
+```
+Other Source:
+- -2 dura (Aids)
+```
+
 ```
 PvP Reward:
 - +1 MA
@@ -101,6 +107,13 @@ PvP:
 - Kết quả: win
 - Tỉ số: 3-3
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Sparxie đã bán nước chưa
+- Kết quả: Lose
+- Tỉ số: 6-1
 ```
 
 ======

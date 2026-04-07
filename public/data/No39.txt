@@ -1,8 +1,8 @@
 No.39
 Name: Euoid (euoid)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -78,6 +78,7 @@ Team: 19
 ```
 Lover:
 + Quý Trần Tường (wyug1234)
++ Anh Bác Sĩ 
 ```
 ```
 PvP Reward:
@@ -120,6 +121,13 @@ PvP:
 - Kết quả: win
 - Tỉ số: 4-2
 - Note: Stat Abos: +1 MA
+```
+
+```
+PvP:
+- Đối thủ: We are Charlie Kirk
+- Kết quả: Lose
+- Tỉ số: 3-3
 ```
 
 ======

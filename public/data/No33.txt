@@ -1,8 +1,8 @@
 No.33
 Name: Inglorious (ingloriousv)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -109,6 +109,14 @@ PvP:
 - Tỉ số: 4-2
 - Note: Ingay Cursed Coin: Đối thủ -1 All, Ingay Invoker: Shrinking
 
+```
+
+```
+PvP:
+- Đối thủ: Hà
+- Kết quả: Lose
+- Tỉ số: 1-5
+- Note: 
 ```
 
 ======

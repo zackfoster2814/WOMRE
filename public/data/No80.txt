@@ -1,8 +1,8 @@
 No.80
 Name: Hà (huanghe11)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -77,6 +77,7 @@ Lover:
 Other Source:
 - +2 IQ (Independent)
 - +2 Spd (Independent)
+- +2 Spd (Independent)
 ```
 
 ```
@@ -88,6 +89,8 @@ PvP Reward:
 - +2 IQ
 - +2 MA
 - +2 Stat thấp nhất (str)
+- +2 Stat Cao nhất (str)
+- +2 Spd
 
 ```
 
@@ -121,5 +124,13 @@ PvP:
 - Đối thủ: Heir of Raumania
 - Kết quả: win
 - Tỉ số: 2-4
+```
+
+```
+PvP:
+- Đối thủ: Inglorious
+- Kết quả: Win
+- Tỉ số: 1-5
+- Note: PvP Reward: +2 Stat Cao nhất, Independent: Spd
 ```
 ======

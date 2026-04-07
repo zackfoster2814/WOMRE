@@ -1,8 +1,8 @@
 No.256
 Name: Nime
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -76,10 +76,13 @@ Lover:
 ```
 PvP Reward:
 - Nhận 1 Char Dev: No more Home
+- +1 All Stats
 ```
 ```
 Other Source:
-- +1 DUR (Resilient)
+- +1 DUR (Resilient) 
+- +1 Str (Resilient) 
+- +1 Ma (Resilient) 
 ```
 
 ======
@@ -99,6 +102,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-2
 - Note:  Nime nhận:  PvP Reward: (Bị nhét Brainrot) Resilient: (Không)
+```
+
+```
+PvP:
+- Đối thủ: llaW
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: Open-minded: Không
 ```
 
 ======

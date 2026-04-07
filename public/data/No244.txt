@@ -1,8 +1,8 @@
 No.244
 Name: .hor1zon
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -74,6 +74,7 @@ Lover:
 PvP Reward:
 - +1 Str
 - +1 Str
+- +1 Dura
 ```
 ```
 Other Source:
@@ -109,6 +110,14 @@ PvP:
 - Đối thủ: Roku da Poet
 - Kết quả: win
 - Tỉ số: 3-4
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Tarus13
+- Kết quả: Win
+- Tỉ số: 6-0
 - Note: 
 ```
 

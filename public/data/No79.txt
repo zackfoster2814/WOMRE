@@ -1,8 +1,8 @@
 No.79
 Name: Elai (elai2924)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -83,6 +83,8 @@ Other Source:
 - +1 Stat cao nhất (+1 MA)
 - +2 MA (Independent)
 - +1 MA (Bucking Bronco)
+- +1 BIQ ( Primodial Being)
+- +1 Stat cao nhất (+1 MA)
 ```
 
 ======
@@ -109,6 +111,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 3-3
 - Note: PvP Reward: (Vội) Elemental Wheel: Water: Nhận Power "Water Breathing", Nhận +1 BIQ, Nhận thêm +1 Stat cao nhất Indepentdend: +2 MA
+```
+
+```
+PvP:
+- Đối thủ: 0chjnchjn
+- Kết quả: Win
+- Tỉ số: 4-3
+- Note: Primordial Being: Water
 ```
 
 ======

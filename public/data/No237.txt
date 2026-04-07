@@ -1,8 +1,8 @@
 No.237
 Name: Trezork (tukhang4140)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -122,6 +122,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 5-0
 - Note: Trước combat: Trezork: +7 Spd Trong combat Trezork Bash: Dura, BIQ, PvP Reward: (Vội)
+```
+
+```
+PvP:
+- Đối thủ: Shin
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: bán vài round nhưng thắng tie break; PvP Reward: vội
 ```
 
 ======

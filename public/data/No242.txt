@@ -1,8 +1,8 @@
 No.242
 Name: bachtuotkun
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -107,6 +107,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-3
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Lovepcdolls
+- Kết quả: Lose
+- Tỉ số: 4-4
+- Note: Thắng round key kích metamagic, nhưng vẫn thua tiebreak
 ```
 
 ======

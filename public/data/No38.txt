@@ -1,8 +1,8 @@
 No.38
 Name: Lười (lazbu2501)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -108,6 +108,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 3-3
 - Note: Fast Learn nhận Spear of Fire, đào mộ không được gì
+```
+
+```
+PvP:
+- Đối thủ: radb1t_fr
+- Kết quả: Lose
+- Tỉ số: 2-3
+- Note: ko Bash; Fast Learner: Không
 ```
 
 ======

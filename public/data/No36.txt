@@ -1,8 +1,8 @@
 No.36
 Name: Lovepcdolls (lovepcdolls)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -64,6 +64,8 @@ Runeword: Không
 + Force Field (The Tamer Straight Sword)
 + Drunken Boxing
 + Thơm
++ Body Enhancing
++ Bloody Strike
 ```
 
 
@@ -90,6 +92,7 @@ Lover:
 PvP Reward:
 - 1 Gear: Silver Steed
 - +1 All Stats
+- +1 Speed
 ```
 ```
 Other Source:
@@ -106,8 +109,12 @@ Other Source:
 - +1 Spd
 - +2 Dura
 - -2 Dura (Wand)
+- -2 Dura (Wand)
+- +4 Dura (God)
 - 1 power: Drunken Boxing (The Tamer Straight Sword)
 - 1 power: Thơm (Wand)
+- 1 power: Bloody Strike (The Tamer Straight Sword)
+- 1 power: Body Enhancing (Wand)
 ```
 ======
 Battle Log:
@@ -129,6 +136,15 @@ PvP:
 - Kết quả: win
 - Tỉ số: 0-6
 - Note: Gặp bác sĩ hết bị Aids
+```
+
+```
+PvP:
+- Đối thủ: bachtuotkun
+- Kết quả: Win
+- Tỉ số: 4-4
+- Note: Devotee gặp Ske nên đc +1 điểm
+
 ```
 
 ======

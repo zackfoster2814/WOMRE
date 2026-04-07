@@ -1,8 +1,8 @@
 No.150
 Name: Myue (_fallen_myue)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -76,9 +76,10 @@ PvP Reward:
 ```
 ```
 Other Source:
-- Moonroot (Herbalist) (+1)
+- Moonroot (+1)
 - +2 Dura (Indipedent)
 - Herbalist: thêm 1 pvp
+- Moonroot (+1)
 ```
 
 ======
@@ -110,6 +111,16 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-2
 - Note: Fast Learner: không
+```
+
+```
+
+```
+PvP:
+- Đối thủ: Huy Le
+- Kết quả: Win
+- Tỉ số: 3-4
+- Fast Learner: Không, Herbalist: Moonroot: +1 điểm combat kế, PvP Reward: +2 Stat cao nhất (Tặng)
 ```
 
 ======

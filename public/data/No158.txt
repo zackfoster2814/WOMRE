@@ -1,8 +1,8 @@
 No.158
 Name: Gambling (da_ork_)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -87,6 +87,9 @@ Other Source:
 - -1 STR (từ Lazy)
 - -1 SPD (từ Lazy)
 - +2 IQ (từ Lazy)
+- -1 STR (từ Lazy)
+- -1 SPD (từ Lazy)
+- +2 IQ (từ Lazy)
 ```
 
 ```
@@ -122,6 +125,20 @@ PvP:
 - Đối thủ: Korokiri
 - Kết quả: win
 - Tỉ số: 5-1
+```
+
+```
+PvP:
+- Đối thủ: LDL
+- Kết quả: Lose
+- Tỉ số: 4-2
+```
+
+```
+PvP:
+- Đối thủ: LDL
+- Kết quả: Lose
+- Tỉ số: 4-2
 ```
 
 ======

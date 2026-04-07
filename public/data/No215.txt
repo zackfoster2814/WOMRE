@@ -1,8 +1,8 @@
 No.215
 Name: nguoisai (nguoidasai)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -55,6 +55,7 @@ Runeword:
 + Hóa Lỏng Băng
 + Let's Pump Some Iron!
 + Fist Fighting
++ Analysis Sins
 ```
 ```
 Char dev: 
@@ -75,11 +76,15 @@ Other Source:
 - -1 STR
 - -1 SPD
 - +2 IQ
+- -1 STR
+- -1 SPD
+- +2 IQ
 ```
 ```
 PvP Reward:
 - +1 MA
 - +1 MA
+- 1 Power (Analysis Sins)
 ```
 
 ======
@@ -112,6 +117,13 @@ PvP:
 - Kết quả: win
 - Tỉ số: 1-4
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Manhattan Cafe chơi TFT
+- Kết quả: Win
+- Tỉ số: 4-2
 ```
 
 ======

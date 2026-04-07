@@ -1,8 +1,8 @@
 No.138
 Name: Kami Tsuna (kamitsuna)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -115,6 +115,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 3-2
 - 
+```
+
+```
+PvP:
+- Đối thủ: Kẹo Con
+- Kết quả: Lose
+- Tỉ số: 4-2
+- Note: Kami Tsuna Sand of Time: Không kích
 ```
 
 ======

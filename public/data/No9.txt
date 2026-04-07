@@ -1,8 +1,8 @@
 No.9
 Name: caubetuky._. (haruhanasaki)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -38,6 +38,7 @@ Houses:
   - Xương sống lưỡi (Từ Char dev)
   - Radio (Từ Chardev)
   - Wooden Shield (Từ Char dev)
+  - Golden Coin 
   - Golden Coin 
   - Golden Coin 
   - Golden Coin 
@@ -103,6 +104,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 4-2
 - Note: caubetuky.. Numby: +4IQ
+```
+
+```
+PvP:
+- Đối thủ: Yoh Hai Kiếm
+- Kết quả: Lose
+- Tỉ số: 5-2
+- Note: Summon ra Chihuahua (bruh)
 ```
 
 ======

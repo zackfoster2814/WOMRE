@@ -1,8 +1,8 @@
 No.176
 Name: Lunar (huyvp1412)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -43,6 +43,7 @@ Houses:
   - Empty Stein
   - Wine
   - Ancient Protector
+  - Giấy nợ gia truyền (từ Chokevy 1)
  + 1 Legacy gear:
   -
 ```
@@ -66,6 +67,7 @@ Runeword: Affection (Đã mất)
 ```
 Char dev: 
 + Armed to the Teeth
++ Training Arc
 ```
 ```
 Team: 16
@@ -78,6 +80,7 @@ Lover:
 PvP Reward:
 - Nhận 1 power: AIDS
 - +1 IQ
+- +1 Char Dev: Training Arc
 ```
 ```
 Other Source:
@@ -112,6 +115,15 @@ PvP:
 - Kết quả: win
 - Tỉ số: 1-2
 - Note: Lunar Rampage: +1 All Stats
+```
+
+```
+PvP:
+- Đối thủ: Amos
+- Kết quả: Win
+- Tỉ số: 3-4
+- Note: PvP Reward: +1 Char Dev: Training Arc
+Rampage: không kích
 ```
 
 ======

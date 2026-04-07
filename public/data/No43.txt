@@ -1,8 +1,8 @@
 No.43
 Name: Swem (.swem)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -120,6 +120,13 @@ PvP:
 - Đối thủ: Lov4
 - Kết quả: win
 - Tỉ số: 2-2
+```
+
+```
+PvP:
+- Đối thủ: mHamster
+- Kết quả: Lose
+- Tỉ số: 2-3
 ```
 
 ======

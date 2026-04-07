@@ -1,8 +1,8 @@
 No.103
 Name: Kẹo Con (su167)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -61,6 +61,7 @@ Runeword: The Twin
 Summon: 
 + Igris
 + Numby
++ Chihuahua
 ```
 ```
 Char dev: 
@@ -77,6 +78,7 @@ Lover:
 PvP Reward:
 - +2 IQ (+2 Stat thấp nhất)
 - +1 Spd
+- +1 BIQ
 ```
 ```
 Other Source:
@@ -102,6 +104,15 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-5
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Kami Tsuna
+- Kết quả: Win
+- Tỉ số: 4-2
+- Note: Numby: IQ; PvP Reward: +1 BIQ
+Summon: Chihuahua
 ```
 
 ======

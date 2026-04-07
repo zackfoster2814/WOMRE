@@ -1,8 +1,8 @@
 No.129
 Name: Narita Taigoat (stan_taengoo)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -87,6 +87,7 @@ PvP Reward:
 ```
 Other source:
 - +2 Spd (House Tyrell)
+- +2 Spd
 ```
 
 ======
@@ -112,5 +113,13 @@ PvP:
 - Kết quả: win
 - Tỉ số: 4-3
 - Note: không câm không mù, Narita Taigoat tặng Ancient Protector cho: Mặc Quyên (hodrick_.), Shin, Hachi, Lunar, Huy Le
+```
+
+```
+PvP:
+- Đối thủ: 1037
+- Kết quả: Lose
+- Tỉ số: 2-4
+- Note: không mù không câm
 ```
 ======

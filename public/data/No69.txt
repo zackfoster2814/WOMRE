@@ -1,8 +1,8 @@
 No.69
 Name: Nốt Ruồi Lệch Pha (cooku_35645)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -63,10 +63,12 @@ Runeword: Không
 + Divine Smite
 + AIDS 
 + Shrinking
++ Burning Hand
 ```
 ```
 Char dev: 
 + No more family
++ Finality
 ```
 ```
 Team: 4
@@ -79,6 +81,7 @@ Lover:
 PvP Reward:
 - +1 Str
 - +1 Power: Divine Smite
+- +1 Speed
 ```
 ```
 Other Source:
@@ -118,6 +121,16 @@ PvP:
 - Kết quả: win
 - Tỉ số: 1-5
 - Note: Trước combat: Anti-Magic Barrier: Body Enhancing, No Stopping Me
+```
+
+```
+PvP:
+- Đối thủ: Kraken
+- Kết quả: Win
+- Tỉ số: 4-4
+- Note:ko Crit Evasion: Spd; PvP Reward: +1 Speed; Naga: +1 Char Dev: Finality; 2 ngón: chọn Swem, cướp Power Burning Hand
+
+```
 ```
 
 ======

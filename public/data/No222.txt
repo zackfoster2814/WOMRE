@@ -1,8 +1,8 @@
 No.222
 Name: Haijin (haijin2)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -79,6 +79,7 @@ Other Source:
 - +1 Dura
 - +2 MA
 - +1 BIQ
+- +1 MA
 ```
 
 ======
@@ -97,6 +98,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-4
 - Note: Trong combat: Ranger Silver: Str
+```
+
+```
+PvP:
+- Đối thủ: CúNga
+- Kết quả: Win
+- Tỉ số: 0-0
+- Note:  thắng vì Ragnarok
 ```
 
 ======

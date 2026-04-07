@@ -1,8 +1,8 @@
 No.105
 Name: LDL (longle_59366)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -71,9 +71,14 @@ Lover:
 PvP Reward:
 - 1 power (Wex)
 - +1 IQ
+- +1 Dura
+- +1 Dura
 ```
 ```
 Other Source:
+- +1 BIQ (Lords)
+- -1 STR (Thuốc Tráng Dương)
+- -1 DUR (Thuốc Tráng Dương)
 - +1 BIQ (Lords)
 - -1 STR (Thuốc Tráng Dương)
 - -1 DUR (Thuốc Tráng Dương)
@@ -106,6 +111,21 @@ PvP:
 - Kết quả: win
 - Tỉ số: 3-3
 - Note: LDL Trickster: KHông có gì
+```
+
+```
+PvP:
+- Đối thủ: Gambling
+- Kết quả: Win
+- Tỉ số: 4-2
+- Lưỡi hái -3 all
+```
+
+```
+PvP:
+- Đối thủ: Gambling
+- Kết quả: Win
+- Tỉ số: 4-2
 ```
 
 ======

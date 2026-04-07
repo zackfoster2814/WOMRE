@@ -1,8 +1,8 @@
 No.214
 Name: Cô Fulun` (cofulun)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -103,6 +103,13 @@ PvP:
 - Kết quả: win
 - Tỉ số: 4-1
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: bo
+- Kết quả: Lose
+- Tỉ số: 4-3
 ```
 
 ======

@@ -1,8 +1,8 @@
 No.184
 Name: Thanh Tước bé cưng (cleade1stmay)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -96,6 +96,7 @@ Other source:
 PvP Reward:
 - +1 spd
 - Nhận 1 Power: EscAPADe
+- +1 IQ
 ```
 
 ======
@@ -123,6 +124,13 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-5
 - Note: Học hỏi: Không
+```
+
+```
+PvP:
+- Đối thủ: catfish
+- Kết quả: Win
+- Tỉ số: 7-0
 ```
 
 

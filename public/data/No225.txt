@@ -1,8 +1,8 @@
 No.225
 Name: Smolder (smolred209)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -87,6 +87,8 @@ Other Source:
 - -1 Str (Thuốc tráng dương)
 - -1 dura (Thuốc tráng dương)
 - -1 Str (Thuốc tráng dương)
+- -1 dura (Thuốc tráng dương)
+- -1 Str (Thuốc tráng dương)
 ```
 
 ======
@@ -117,6 +119,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 4-3
 - Note: Smolder Misericorde: không
+```
+
+```
+PvP:
+- Đối thủ: dung7877
+- Kết quả: Lose
+- Tỉ số: 5-1
+- Note: Bro thua hết 2 round mình có lợi, Misericorde: MA
 ```
 
 ======

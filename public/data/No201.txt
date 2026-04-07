@@ -1,8 +1,8 @@
 No.201
 Name: Hy (hy3269)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -74,6 +74,7 @@ Lover:
 PvP Reward:
 - Nhận 1 gear: Thuốc Tráng Dương
 - Nhận 1 Gear: Đá
+- +1 Speed
 ```
 ```
 Other Source:
@@ -110,6 +111,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 5-1
 - Note: Orc kích hoạt
+```
+
+```
+PvP:
+- Đối thủ: dlwlrma
+- Kết quả: Win
+- Tỉ số: 4-4
+- Note: thắng tie break
 ```
 
 ======

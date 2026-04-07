@@ -1,8 +1,8 @@
 No.67
 Name: KuSenpai (kusenpai)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -75,9 +75,11 @@ PvP Reward:
 - +2 spd (+2 chỉ số ngẫu nhiên x3)
 - +2 IQ (+2 chỉ số ngẫu nhiên x3)
 - +2 Power: Mind Control, Age Manipulation
+- +1 Dura
 ```
 ```
 Other Source:
+- -2 Dura (AIDS)
 - -2 Dura (AIDS)
 - -2 Dura (AIDS)
 ```
@@ -98,4 +100,11 @@ PvP:
 - Note: KuSenpai Black Magic: -2 IQ
 ```
 
+```
+PvP:
+- Đối thủ: Solus
+- Kết quả: Win
+- Tỉ số: 5-1
+- Note: KuSenpai Black Magic: Str
+```
 ======

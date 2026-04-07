@@ -1,8 +1,8 @@
 No.186
 Name: Amos (amos0603)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -99,6 +99,13 @@ PvP:
 - Kết quả: win
 - Tỉ số: 3-2
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Lunar
+- Kết quả: Lose
+- Tỉ số: 3-4
 ```
 
 ======

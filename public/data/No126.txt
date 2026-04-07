@@ -1,8 +1,8 @@
 No.126
 Name: Shin (shinrin2872)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -112,6 +112,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 0-5
 - Note: Trước combat: Shin Trickster: -1 All Stat
+```
+
+```
+PvP:
+- Đối thủ: Trezork
+- Kết quả: Lose
+- Tỉ số: 3-3
+- Note: 
 ```
 
 ======

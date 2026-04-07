@@ -1,8 +1,8 @@
 No.240
 Name: kinbum
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -107,6 +107,15 @@ PvP:
 - Kết quả: win
 - Tỉ số: 0-4
 - Note: Trong combat: Kinbum Rau má nguyền: str Kinbum Blind: IQ, MA PvP Reward: (Brainrot) Naga: +1 power: Artist (không nhận)
+```
+
+```
+PvP:
+- Đối thủ: Mặc Quyên
+- Kết quả: Win
+- Tỉ số: 6-1
+- Note: Pennyworthy Lose: Str; Pennyworthy Win: Spd, Ma; Mù: Spd; PvP Reward: (Brainrot); Naga: Memory Alter (Penny k nhận Power);
+Herbalist: Mirage Flower: +1 PvP (Brainrot)
 ```
 
 ======

@@ -1,8 +1,8 @@
 No.181
 Name: мιтιᴘнᴀι︵²ᵏ⁷ (mitiphai)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -14,7 +14,6 @@ Sub-race: Lùn Xám
 ```
 Archetype: 
 + Farmer
- -> Aura Farmer
 + Gigachad
 ```
 ```
@@ -101,6 +100,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 4-2
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Hachi
+- Kết quả: Lose
+- Tỉ số: 6-2
+- Note: Mad Scientist: Enlarging, mất Aura farming
 ```
 
 ======

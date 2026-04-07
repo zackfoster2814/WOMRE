@@ -1,8 +1,8 @@
 No.238
 Name: CobyKei (reiniskhoa)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -45,6 +45,7 @@ Houses:
   - Beer
   - Healing Flasks
   - Sổ Tay
+  - Frying Pan
  + 0 Legacy gear:
   - 
 ```
@@ -65,6 +66,7 @@ Runeword:
 + Misty Step Ahead
 + Cleaning Sins
 + Metamagic (từ King's Landing)
++ AIDS
 ```
 
 ```
@@ -91,6 +93,8 @@ Other Source:
 - +2 MA (từ Bamialoai2)
 - Healing Flask (Hero Grave Keeper)
 - Đào mộ GoonNaga: Sổ Tay
+- -3 all stats
+- -1 IQ
 ```
 
 ======
@@ -120,6 +124,14 @@ PvP:
 - Tỉ số: 5-2
 - Note: PvP Reward: (Brainrot)
 
+```
+
+```
+PvP:
+- Đối thủ: Karu
+- Kết quả: Lose
+- Tỉ số: 4-3
+- Note: CobyKei Night Owl: Không; Đá: Kích; Hero Grave Keeper: Shiro - Frying Pan - AIDS
 ```
 
 ======

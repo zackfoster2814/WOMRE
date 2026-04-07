@@ -1,8 +1,8 @@
 No.116
 Name: Huy Le (.ilovepony)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -74,6 +74,7 @@ Lover:
 PvP Reward:
 - +1 MA
 - +1 All Stats
+- +2 str (Stat cao nhất)
 ```
 ```
 Other Source:
@@ -104,4 +105,15 @@ PvP:
 - Tỉ số: 5-3
 - Note: gọi bố Huy Le ra đánh hộ, bị brainrot
 ```
+
+```
+
+```
+PvP:
+- Đối thủ: Myue
+- Kết quả: Lose
+- Tỉ số: 3-4
+- Note: bro choke, nhận PvP Reward: +2 Stat cao nhất từ myue
+```
+
 ======

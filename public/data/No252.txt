@@ -1,8 +1,8 @@
 No.252
 Name: Hachi (hachi2378)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -77,6 +77,7 @@ Lover:
 PvP Reward:
 - Nhận 1 char dev: Armed to the Teeth
 - +1 BIQ
+- +1 Speed
 ```
 
 ======
@@ -102,6 +103,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-5
 - Note: Trước combat 2: Hachi rauma: không Ingay Cursed Coin: Bóp mình Ingay Invoker: Enlarging
+```
+
+```
+PvP:
+- Đối thủ: мιтιᴘнᴀι︵²ᵏ⁷
+- Kết quả: Win
+- Tỉ số: 6-2
+- Note: Raumanian: +1 điểm
 ```
 
 ======

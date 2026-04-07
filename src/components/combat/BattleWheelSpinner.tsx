@@ -1,4 +1,4 @@
-/**
+﻿/**
  * BattleWheelSpinner
  *
  * Layout 3 cột: [Stats P1] | [Vòng quay] | [Stats P2]
@@ -42,6 +42,9 @@ export interface BattleWheelSpinnerProps {
   /** Gọi ngay khi main wheel xác định winner (trước khi user click Next) */
   onWinnerDetermined?: (winner: "player1" | "player2") => void;
   onSpinComplete: (winner: "player1" | "player2") => void;
+  /** Cho phép respin trước khi confirm round */
+  canRespin?: boolean;
+  onRespin?: () => void;
 }
 
 export function BattleWheelSpinner({
@@ -61,9 +64,13 @@ export function BattleWheelSpinner({
   disabled = false,
   onWinnerDetermined,
   onSpinComplete,
+  canRespin = true,
+  onRespin,
 }: BattleWheelSpinnerProps) {
   const [isSpinning, setIsSpinning] = useState(false);
-  const [spinResult, setSpinResult] = useState<"player1" | "player2" | null>(null);
+  const [spinResult, setSpinResult] = useState<"player1" | "player2" | null>(
+    null,
+  );
 
   // ── Debug weight override ────────────────────────────────────────────────
   const [debugOpen, setDebugOpen] = useState(false);
@@ -74,11 +81,14 @@ export function BattleWheelSpinner({
 
   const effectiveP1Val = overrideP1 ?? p1Val;
   const effectiveP2Val = overrideP2 ?? p2Val;
-  const effectiveP1W = effectiveP1Val > effectiveP2Val ? effectiveP1Val * 2 : effectiveP1Val;
-  const effectiveP2W = effectiveP2Val > effectiveP1Val ? effectiveP2Val * 2 : effectiveP2Val;
+  const effectiveP1W =
+    effectiveP1Val > effectiveP2Val ? effectiveP1Val * 2 : effectiveP1Val;
+  const effectiveP2W =
+    effectiveP2Val > effectiveP1Val ? effectiveP2Val * 2 : effectiveP2Val;
 
   const effectiveTotal = effectiveP1W + effectiveP2W;
-  const effectiveP1Pct = effectiveTotal > 0 ? (effectiveP1W / effectiveTotal) * 100 : 50;
+  const effectiveP1Pct =
+    effectiveTotal > 0 ? (effectiveP1W / effectiveTotal) * 100 : 50;
 
   const hasOverride = overrideP1 !== null || overrideP2 !== null;
 
@@ -128,6 +138,12 @@ export function BattleWheelSpinner({
     setSpinResult(null);
   };
 
+  const handleRespin = () => {
+    if (!spinResult) return;
+    setSpinResult(null);
+    onRespin?.();
+  };
+
   return (
     <div className="flex flex-col items-center gap-2 relative">
       {/* Round label + debug button */}
@@ -143,8 +159,8 @@ export function BattleWheelSpinner({
             hasOverride
               ? "bg-orange-700/60 text-orange-300 border-orange-500/60 hover:bg-orange-600/60"
               : debugOpen
-              ? "bg-gray-700/80 text-gray-300 border-gray-500/60"
-              : "bg-gray-800/60 text-gray-500 border-gray-700/40 hover:text-gray-300 hover:border-gray-600/60"
+                ? "bg-gray-700/80 text-gray-300 border-gray-500/60"
+                : "bg-gray-800/60 text-gray-500 border-gray-700/40 hover:text-gray-300 hover:border-gray-600/60"
           }`}
         >
           ⚙{hasOverride ? " ✦" : ""}
@@ -159,7 +175,9 @@ export function BattleWheelSpinner({
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="flex flex-col gap-1">
-              <label className="text-[10px] text-blue-400 font-bold">{p1Name}</label>
+              <label className="text-[10px] text-blue-400 font-bold">
+                {p1Name}
+              </label>
               <input
                 type="number"
                 value={debugP1Input}
@@ -169,7 +187,9 @@ export function BattleWheelSpinner({
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="text-[10px] text-red-400 font-bold">{p2Name}</label>
+              <label className="text-[10px] text-red-400 font-bold">
+                {p2Name}
+              </label>
               <input
                 type="number"
                 value={debugP2Input}
@@ -199,12 +219,15 @@ export function BattleWheelSpinner({
       {/* 3-column layout */}
       <div className="grid grid-cols-[1fr_auto_1fr] gap-3 w-full items-center">
         {/* P1 stats */}
-        <div className={`rounded-none border p-2 flex flex-col gap-0.5 ${hasOverride ? "border-blue-400/40 bg-blue-950/40" : "border-blue-500/20 bg-blue-950/30"}`}>
+        <div
+          className={`rounded-none border p-2 flex flex-col gap-0.5 ${hasOverride ? "border-blue-400/40 bg-blue-950/40" : "border-blue-500/20 bg-blue-950/30"}`}
+        >
           <div className="text-blue-400 text-xs font-bold truncate mb-1 text-center">
             {p1Name}
           </div>
           {STAT_LABELS.map(({ key, label }) => {
-            const val = key === statKey ? effectiveP1Val : (p1AllStats?.[key] ?? null);
+            const val =
+              key === statKey ? effectiveP1Val : (p1AllStats?.[key] ?? null);
             const isCurrent = key === statKey;
             const isOverridden = isCurrent && overrideP1 !== null;
             return (
@@ -216,13 +239,19 @@ export function BattleWheelSpinner({
                     : "text-gray-500"
                 }`}
               >
-                <span className={isCurrent ? "text-yellow-400" : ""}>{label}</span>
+                <span className={isCurrent ? "text-yellow-400" : ""}>
+                  {label}
+                </span>
                 <span className={isCurrent ? "text-white text-sm" : ""}>
                   {isOverridden ? (
                     <span className="text-orange-300">{val}</span>
-                  ) : (val ?? "—")}
+                  ) : (
+                    (val ?? "—")
+                  )}
                   {isCurrent && effectiveP1Val > effectiveP2Val && (
-                    <span className="text-yellow-400 text-[10px] ml-0.5">×2</span>
+                    <span className="text-yellow-400 text-[10px] ml-0.5">
+                      ×2
+                    </span>
                   )}
                 </span>
               </div>
@@ -271,31 +300,60 @@ export function BattleWheelSpinner({
               >
                 {spinResult === "player1" ? p1Name : p2Name} thắng!
               </div>
-              <button
-                onClick={handleNext}
-                disabled={hasCurrentPendingSpins}
-                title={hasCurrentPendingSpins ? "Còn hiệu ứng round này chưa quay" : undefined}
-                className={`px-5 py-1.5 rounded-none font-black text-sm transition-all shadow-lg ${
-                  hasCurrentPendingSpins
-                    ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
-                    : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105"
-                }`}
-              >
-                {hasCurrentPendingSpins ? "Quay hiệu ứng round này trước..." : "Next →"}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleRespin}
+                  disabled={!canRespin}
+                  title={
+                    !canRespin
+                      ? "Còn hiệu ứng round này chưa quay xong, chưa thể respin"
+                      : "Quay lại round này"
+                  }
+                  className={`px-4 py-1.5 rounded-none font-black text-sm transition-all shadow-lg border ${
+                    !canRespin
+                      ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border-gray-600/40"
+                      : "bg-slate-800/60 text-gray-200 border-slate-600/50 hover:bg-slate-700/60 hover:text-white"
+                  }`}
+                >
+                  Respin
+                </button>
+                <button
+                  onClick={handleNext}
+                  disabled={hasCurrentPendingSpins}
+                  title={
+                    hasCurrentPendingSpins
+                      ? "Còn hiệu ứng round này chưa quay"
+                      : undefined
+                  }
+                  className={`px-5 py-1.5 rounded-none font-black text-sm transition-all shadow-lg ${
+                    hasCurrentPendingSpins
+                      ? "bg-gray-700/50 text-gray-500 cursor-not-allowed border border-gray-600/40"
+                      : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105"
+                  }`}
+                >
+                  {hasCurrentPendingSpins
+                    ? "Quay hiệu ứng round này trước..."
+                    : "Next →"}
+                </button>
+              </div>
             </div>
           ) : !isSpinning ? (
-            <div className="text-[10px] text-gray-600 italic">Nhấn SPIN để quay</div>
+            <div className="text-[10px] text-gray-600 italic">
+              Nhấn SPIN để quay
+            </div>
           ) : null}
         </div>
 
         {/* P2 stats */}
-        <div className={`rounded-none border p-2 flex flex-col gap-0.5 ${hasOverride ? "border-red-400/40 bg-red-950/40" : "border-red-500/20 bg-red-950/30"}`}>
+        <div
+          className={`rounded-none border p-2 flex flex-col gap-0.5 ${hasOverride ? "border-red-400/40 bg-red-950/40" : "border-red-500/20 bg-red-950/30"}`}
+        >
           <div className="text-red-400 text-xs font-bold truncate mb-1 text-center">
             {p2Name}
           </div>
           {STAT_LABELS.map(({ key, label }) => {
-            const val = key === statKey ? effectiveP2Val : (p2AllStats?.[key] ?? null);
+            const val =
+              key === statKey ? effectiveP2Val : (p2AllStats?.[key] ?? null);
             const isCurrent = key === statKey;
             const isOverridden = isCurrent && overrideP2 !== null;
             return (
@@ -307,13 +365,19 @@ export function BattleWheelSpinner({
                     : "text-gray-500"
                 }`}
               >
-                <span className={isCurrent ? "text-yellow-400" : ""}>{label}</span>
+                <span className={isCurrent ? "text-yellow-400" : ""}>
+                  {label}
+                </span>
                 <span className={isCurrent ? "text-white text-sm" : ""}>
                   {isOverridden ? (
                     <span className="text-orange-300">{val}</span>
-                  ) : (val ?? "—")}
+                  ) : (
+                    (val ?? "—")
+                  )}
                   {isCurrent && effectiveP2Val > effectiveP1Val && (
-                    <span className="text-yellow-400 text-[10px] ml-0.5">×2</span>
+                    <span className="text-yellow-400 text-[10px] ml-0.5">
+                      ×2
+                    </span>
                   )}
                 </span>
               </div>

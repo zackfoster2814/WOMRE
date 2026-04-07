@@ -1,8 +1,8 @@
 No.45
 Name: CúNga (minh1mui)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -100,6 +100,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-4
 - Note: CúNga nhận:  PvP Reward: Nhận Gear: Wine
+```
+
+```
+PvP:
+- Đối thủ: Haijin
+- Kết quả: Lose
+- Tỉ số: 0-0
+- Note: thua vì Ragnarok
 ```
 
 ======

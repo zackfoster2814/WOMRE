@@ -1,8 +1,8 @@
 No.156
 Name: mHamster (d.d.alfonce)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -67,6 +67,7 @@ Lover:
 PvP Reward:
 - +1 MA
 - +1 Str
+- +1 Dura
 ```
 ```
 Other Source:
@@ -89,6 +90,15 @@ PvP:
 - Kết quả: win
 - Tỉ số: 5-2
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Swem
+- Kết quả: Win
+- Tỉ số: 2-3
+- PvP Reward: +1 Dura
+Bloody Strike: Kích (+1 spd/dura/iq)
 ```
 
 ======

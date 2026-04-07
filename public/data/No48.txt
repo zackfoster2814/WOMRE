@@ -1,8 +1,8 @@
 No.48
 Name: llaW (llaw3344)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -112,6 +112,13 @@ PvP:
 - Đối thủ: Muon liem chan Seed qua
 - Kết quả: win
 - Tỉ số: 0-5
+```
+
+```
+PvP:
+- Đối thủ: Nime
+- Kết quả: Lose
+- Tỉ số: 3-3
 ```
 
 ======

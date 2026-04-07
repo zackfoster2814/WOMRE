@@ -1,8 +1,8 @@
 No.128
 Name: 0chjnchjn (tine2417)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -80,7 +80,7 @@ PvP Reward:
 ```
 Other Source:
 - học power: Quas
-- -2 All stats (Chokevy)
+- -3 All stats (Chokevy)
 - 1 Power: Chaos Enchantment (Fast Learn)
 - -1 All Stats (Night Owl)
 - -1 Dura
@@ -112,6 +112,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 2-4
 - Note: Trước combat: 0chjnchjn: Enlarging
+```
+
+```
+PvP:
+- Đối thủ: Elai
+- Kết quả: Lose
+- Tỉ số: 4-3
+- Note: học Power: Mewing, Bị night owl
 ```
 
 ======

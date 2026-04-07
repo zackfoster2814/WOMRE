@@ -1039,6 +1039,25 @@ export const WheelOfTruthMode = ({
     currentStatKey,
   ]);
 
+  // â”€â”€ hasCurrentRoundSpinResults: Ä‘Ã£ quay hiá»‡u á»©ng round hiá»‡n táº¡i chÆ°a â”€â”€â”€â”€
+  // const hasCurrentRoundSpinResults = useMemo(() => {
+  //   if (stepRoundIndex < 0) return false;
+  //   const prefix = `${stepRoundIndex}-`;
+  //   return Object.keys(roundSpinResults).some((k) => k.startsWith(prefix));
+  // }, [roundSpinResults, stepRoundIndex]);
+
+  const resetCurrentRoundSpinResults = useCallback(() => {
+    if (stepRoundIndex < 0) return;
+    const prefix = `${stepRoundIndex}-`;
+    setRoundSpinResults((prev) => {
+      const next: typeof prev = {};
+      for (const [k, v] of Object.entries(prev)) {
+        if (!k.startsWith(prefix)) next[k] = v;
+      }
+      return next;
+    });
+  }, [setRoundSpinResults, stepRoundIndex]);
+
   // ── Swap players ──────────────────────────────────────────────────────────
   const swapPlayers = () => {
     setPlayer1(player2);
@@ -1740,6 +1759,12 @@ export const WheelOfTruthMode = ({
                           p1SpinNodes={wotP1SpinNodes}
                           p2SpinNodes={wotP2SpinNodes}
                           hasCurrentPendingSpins={hasCurrentPendingSpins}
+                          canRespin
+                          onRespin={() => {
+                            setCurrentRoundWinner(null);
+                            setWheelForcedWinner(null);
+                            resetCurrentRoundSpinResults();
+                          }}
                           onWinnerDetermined={(w) => setCurrentRoundWinner(w)}
                           onSpinComplete={(winner) =>
                             setWheelForcedWinner(winner)
@@ -2407,36 +2432,6 @@ export const WheelOfTruthMode = ({
             });
           }
           setPreCombatModal((prev) => ({ ...prev, isOpen: false }));
-        }}
-      />
-
-      {/* Tiebreaker wheel modal */}
-      <ProbabilityWheelModal
-        isOpen={tiebreakerModalOpen}
-        onClose={() => setTiebreakerModalOpen(false)}
-        title="Tiebreaker"
-        description={`Hoà ${effectiveScores.s1}–${effectiveScores.s2} — Quay xác định người thắng`}
-        items={[
-          {
-            label: player1?.name ?? "Player 1",
-            weight: 1,
-            isSuccess: true,
-            color: "#3b82f6",
-          },
-          {
-            label: player2?.name ?? "Player 2",
-            weight: 1,
-            isSuccess: true,
-            color: "#ef4444",
-          },
-        ]}
-        onResult={(item: WheelSpinItem) => {
-          const winner =
-            item.label === (player1?.name ?? "Player 1")
-              ? "player1"
-              : "player2";
-          setTiebreakerWheelResult(winner);
-          setTiebreakerModalOpen(false);
         }}
       />
 

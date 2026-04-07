@@ -1,8 +1,8 @@
 No.236
 Name: Yuto (yuto2306)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -24,7 +24,7 @@ Archetype:
 ```
 Str:2
 Spd:3
-Dur:10
+Dur:1
 IQ:6
 BIQ:4
 MA:4 ban đầu là 1 (Unborn)
@@ -109,5 +109,14 @@ PvP:
 - Kết quả: win
 - Tỉ số: 1-4
 - Note:  Trickster: Ace of Spades
+```
+
+```
+PvP:
+- Đối thủ: Hoàng Tuyền Không Trấn
+- Kết quả: Win
+- Tỉ số: 4-3
+- Note: PvP Reward: Lời Nguyền Địa Ngục:  Re-spin lại stat cao nhất của bạn và một người còn sống ngẫu nhiên: Yuto quay lại Dura từ 10 thành 1, Mặc Quyên quay lại IQ từ 10 thành 2
+
 ```
 ======

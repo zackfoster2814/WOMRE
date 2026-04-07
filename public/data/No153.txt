@@ -1,8 +1,8 @@
 No.153
 Name: catfish (catfish0140)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -22,7 +22,7 @@ Archetype:
 + Generous
 ```
 ```
-Str: 10
+Str: 2 (từ 10 do dính lời nguyền địa ngục)
 Spd: 6
 Dur: 7
 IQ: 6
@@ -109,5 +109,12 @@ PvP:
 - Đối thủ: CatShark
 - Kết quả: win
 - Tỉ số: 0-7
+```
+
+```
+PvP:
+- Đối thủ: Thanh Tước bé cưng
+- Kết quả: Lose
+- Tỉ số: 7-0
 ```
 ======

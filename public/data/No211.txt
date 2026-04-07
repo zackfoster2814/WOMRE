@@ -1,8 +1,8 @@
 No.211
 Name: radb1t_fr (radb1t_fr)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -23,7 +23,7 @@ Archetype:
 + Fast Learner (Từ Char Dev)
 ```
 ```
-Str: 10
+Str: 1
 Spd: 10
 Dur: 9
 IQ: 1
@@ -61,6 +61,7 @@ Runeword:
 + 4 Hit combo
 + Encroaching Shadow
 + Frost Armor
++ U=ma2
 ```
 ```
 Char dev: 
@@ -111,6 +112,15 @@ PvP:
 - Kết quả: win
 - Tỉ số: 4-2
 - Note:  Không Fast Learner
+```
+
+```
+PvP:
+- Đối thủ: Lười
+- Kết quả: Win
+- Tỉ số: 2-3
+- Note: Fast Learner: Có: U=ma2, Hùng canh mộ: Không, PvP Reward: Lời Nguyền Địa Ngục: radb1t_fr quay lại str từ 10 thành 1, Anh Bác Sĩ quay lại Speed từ 10 thành 5
+
 ```
 
 ======

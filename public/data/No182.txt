@@ -1,8 +1,8 @@
 No.182
 Name: BLèBLè (amebear)
 Status: Còn sống
-Vòng thi đấu: 64
-Nhánh thi đấu: -
+Vòng thi đấu: 32
+Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
 + 
@@ -83,12 +83,15 @@ Other Source:
 - +2 str (stats cao nhất)
 - +3 DUR (Zealot)
 - +2 Dura (House Tyrell)
-- +2 DUR (Zealot)
+- +2 DURa (Zealot)
+- +2 MA (Tyrell)
+- +2 Dura (Zealot)
 - +2 MA (Tyrell)
 ```
 ```
 PvP Reward:
 - +1 BIQ
+- +1 speed
 ```
 
 
@@ -114,5 +117,13 @@ PvP:
 - Đối thủ: Devourer Of Gays
 - Kết quả: win
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: Tyrunny
+- Kết quả: Win
+- Tỉ số: 4-2
+- Note: Power Negation: Master of War, Zealot, Tyrell
 ```
 ======
