@@ -76,7 +76,7 @@ PvP Reward:
 ```
 ```
 Other Source:
-- Moonroot (+1)
+- Moonroot 
 - +2 Dura (Indipedent)
 - Herbalist: thêm 1 pvp
 - Moonroot (+1)

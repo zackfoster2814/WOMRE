@@ -88,6 +88,7 @@ PvP Reward:
 Other source:
 - +2 Spd (House Tyrell)
 - +2 Spd
+- +2 Str (Tyrell) 
 ```
 
 ======

@@ -93,6 +93,9 @@ Other Source:
 - Naga House: Shrinking
 - -1 IQ (Follower of 2 ngón)
 - -1 BIQ (Follower of 2 ngón)
+- -1 IQ (Follower of 2 ngón)
+- -1 BIQ (Follower of 2 ngón)
+- -2 Dura
 ```
 
 ======
@@ -130,7 +133,6 @@ PvP:
 - Tỉ số: 4-4
 - Note:ko Crit Evasion: Spd; PvP Reward: +1 Speed; Naga: +1 Char Dev: Finality; 2 ngón: chọn Swem, cướp Power Burning Hand
 
-```
 ```
 
 ======

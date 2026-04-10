@@ -118,7 +118,7 @@ PvP:
 - Đối thủ: Hy
 - Kết quả: Lose
 - Tỉ số: 4-4
-- Note:dlwlrma Crit: IQ
+- Note: dlwlrma Crit: IQ
 ```
 
 ======

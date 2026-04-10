@@ -69,6 +69,10 @@ Lover:
 +
 ```
 ```
+Summon:
++ Imp
+```
+```
 Other Source:
 - -1 STR
 - -1 SPD

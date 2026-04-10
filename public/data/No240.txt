@@ -77,6 +77,7 @@ Other Source:
 - +1 all stats (Naga)
 - Sunberry(Thắng: Nhận +2 vào chỉ số cao nhất.)
 - +2 MA
+- +2 Str
 ```
 
 ======
@@ -114,8 +115,7 @@ PvP:
 - Đối thủ: Mặc Quyên
 - Kết quả: Win
 - Tỉ số: 6-1
-- Note: Pennyworthy Lose: Str; Pennyworthy Win: Spd, Ma; Mù: Spd; PvP Reward: (Brainrot); Naga: Memory Alter (Penny k nhận Power);
-Herbalist: Mirage Flower: +1 PvP (Brainrot)
+- Note: Pennyworthy Lose: Str; Pennyworthy Win: Spd, Ma; Mù: Spd; PvP Reward: (Brainrot); Naga: Memory Alter (Penny k nhận Power) Herbalist: Mirage Flower: +1 PvP (Brainrot)
 ```
 
 ======

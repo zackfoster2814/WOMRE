@@ -79,6 +79,7 @@ PvP Reward:
 - Nhận 2 power Encroaching Shadow, Frost Armor
 - +1 MA
 - +2 Spd (PvP Reward)
+- lời nguyền địa ngục 
 ```
 ```
 Other Source:
@@ -111,14 +112,14 @@ PvP:
 - Đối thủ: Sâm bổ lượng Châu Đốc
 - Kết quả: win
 - Tỉ số: 4-2
-- Note:  Không Fast Learner
+- Note: Không Fast Learner
 ```
 
 ```
 PvP:
 - Đối thủ: Lười
 - Kết quả: Win
-- Tỉ số: 2-3
+- Tỉ số: 3-3
 - Note: Fast Learner: Có: U=ma2, Hùng canh mộ: Không, PvP Reward: Lời Nguyền Địa Ngục: radb1t_fr quay lại str từ 10 thành 1, Anh Bác Sĩ quay lại Speed từ 10 thành 5
 
 ```

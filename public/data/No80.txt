@@ -88,8 +88,8 @@ PvP Reward:
 - +2 Dura
 - +2 IQ
 - +2 MA
-- +2 Stat thấp nhất (str)
-- +2 Stat Cao nhất (str)
+- +2 MA (Stat thấp nhất)
+- +2 Str (Stat Cao nhất)
 - +2 Spd
 
 ```

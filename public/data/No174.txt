@@ -41,7 +41,8 @@ Houses:
   - Golden Coin 
   - Golden Coin 
   - Cuộn khăn giấy (đã mất)
-  - Knight's Armor
+  - Knight's Armor (đã Mất)
+  - Golden Coin 
  + 0 Legacy gear:
   - 
 ```
@@ -80,6 +81,14 @@ PvP Reward:
 - +1 MA
 - +1 Dura
 ```
+```
+Other Source:
+- +1 Dur
+- +1 IQ
+- +1 BIQ
+- +1 MA
+- -2 Dura
+```
 
 ======
 Battle Log:
@@ -111,8 +120,7 @@ PvP:
 - Đối thủ: _paower
 - Kết quả: Lose
 - Tỉ số: 5-1
-- Note: Cacao Resilient: +1 Dur, +1 IQ, +1 BIQ, +1 MA
-Cacao bán Knight's Armor để lấy 1 Golden Coin
+- Note: Cacao Resilient: +1 Dur, +1 IQ, +1 BIQ, +1 MA Cacao bán Knight's Armor để lấy 1 Golden Coin
 ```
 
 ======

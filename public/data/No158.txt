@@ -90,6 +90,9 @@ Other Source:
 - -1 STR (từ Lazy)
 - -1 SPD (từ Lazy)
 - +2 IQ (từ Lazy)
+- -1 STR (từ Lazy)
+- -1 SPD (từ Lazy)
+- +2 IQ (từ Lazy)
 ```
 
 ```

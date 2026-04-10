@@ -72,7 +72,7 @@ PvP Reward:
 - +1 MA
 - +1 Dura
 - +1 Str
-- +2 Stat cao nhất (Dura)
+- +2 Dura (Stat cao nhất)
 ```
 ```
 Other Source:

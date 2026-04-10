@@ -114,7 +114,7 @@ PvP:
 PvP:
 - Đối thủ: radb1t_fr
 - Kết quả: Lose
-- Tỉ số: 2-3
+- Tỉ số: 3-3
 - Note: ko Bash; Fast Learner: Không
 ```
 

@@ -82,6 +82,9 @@ Other Source:
 - +1 BIQ (Lords)
 - -1 STR (Thuốc Tráng Dương)
 - -1 DUR (Thuốc Tráng Dương)
+- +1 BIQ (Lords)
+- -1 STR (Thuốc Tráng Dương)
+- -1 DUR (Thuốc Tráng Dương)
 ```
 
 ======

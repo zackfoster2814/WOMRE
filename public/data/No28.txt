@@ -86,6 +86,7 @@ Other Source:
 - +2 all stats
 - Dragon's Weed nhận Arcana Blast
 - +1 All stats (từ Eldritch Mushroom)
+- +1 all stats (Final Reserves)
 ```
 
 ```
@@ -94,8 +95,6 @@ PvP Reward:
 - +1 IQ
 - +1 MA 
 ```
-
-
 
 ======
 Battle Log:

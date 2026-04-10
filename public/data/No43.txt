@@ -62,7 +62,7 @@ Runeword: Không
 
 ```
 5 Power: 
-+ Burning Hand
++ Burning Hand (đã mất)
 + Uno Reverse Card
 + Master of war
 + Quas (Moon Elf) (đã mất)

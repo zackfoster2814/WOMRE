@@ -64,6 +64,7 @@ Runeword: Không
 + The Coast is Clear! (Lockalock Skill Book)
 + Scrying
 + Analysis Sin
++ Spear of Fire
 ```
 
 ```
@@ -91,6 +92,7 @@ Other Source:
 - -1 Dura
 - +1 Ma
 - -1 Dura
+- +1 all stats
 ```
 
 ======

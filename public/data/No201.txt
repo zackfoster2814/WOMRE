@@ -80,6 +80,9 @@ PvP Reward:
 Other Source:
 - +2 Dura (Orc)
 - +2 Dura (Orc)
+- +2 IQ (Orc)
+- -1 STR (thuốc Tráng Dương)
+- -1 DUR (thuốc Tráng Dương)
 - -1 STR (thuốc Tráng Dương)
 - -1 DUR (thuốc Tráng Dương)
 ```

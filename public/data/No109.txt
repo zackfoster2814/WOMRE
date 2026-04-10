@@ -35,6 +35,7 @@ Houses:
 ```
 4 Gear: 
  + 3 Normal gear:
+   - Swift boots
  + 1 Legacy gear:
   -
 ```
@@ -55,6 +56,8 @@ Runeword: Không
 + Detect Thoughts 
 + Spell Flux 
 + Blowing Leaves
++ Fire Control
++ Power Negation
 ```
 ```
 Char dev: 
@@ -71,14 +74,17 @@ Lover:
 PvP Reward:
 - Lời nguyền địa ngục 
 - +2 str (Stat cao nhất)
+- Nhận 1 gear
 ```
 ```
 Other Source:
 - +1 Speed
 - -3 All stats (Chokevy)
 - Nhận: Blowing Leaves
+- Nhận: Fire Control
 - +1 Spd
-- +1 Stat thấp nhất (MA)
+- +1 MA (Stat thấp nhất)
+- +1 MA
 ```
 
 ======
@@ -116,7 +122,7 @@ PvP:
 - Đối thủ: Euoid
 - Kết quả: Win
 - Tỉ số: 3-3
-- Note: giấy nợ gia truyền truyền lại cho Lunar
+- Note: nhận thêm fire, giấy nợ gia truyền truyền lại cho Lunar
 ```
 
 ======

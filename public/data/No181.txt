@@ -73,6 +73,10 @@ PvP Reward:
 - +1 str
 - +1 Str
 ```
+```
+Other Source:
+- +1 all stats (Final Reserves)
+```
 
 ======
 Battle Log: 

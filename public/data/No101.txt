@@ -104,9 +104,14 @@ Other Source:
 - +1 BIQ
 - +1 MA
 - +2 BIQ (House Tyrell)
-- +2 BIQ (House Tyrell)
+- +2 Dura (House Tyrell)
 - +1 BIQ (Water)
 - +1 Spd (Water)
+- +1 Str
+- +1 spd
+- +1 dura
+- +1 iq
+- +1 biq
 ```
 
 ======
@@ -141,9 +146,6 @@ PvP:
 - Đối thủ: Duckie2369
 - Kết quả: Win
 - Tỉ số: 5-1
-- Note: PvP Reward: (Brainrot)
-Primordial Being: Water
-Hero Grave Keeper: ar2di Lover's Glover (Euoid)
-Mất Trinh
+- Note: PvP Reward: (Brainrot), Primordial Being Water, Hero Grave Keeper: ar2di Lover's Glover (Euoid), Mất Trinh
 ```
 ======

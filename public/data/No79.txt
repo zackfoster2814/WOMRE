@@ -78,13 +78,14 @@ PvP Reward:
 ```
 Other Source:
 - +1 Str (Earth Being)
-- + Water Breathing( Elemental wheel) 
+- Water Breathing( Elemental wheel) 
 - +1 BIQ ( Primodial Being)
 - +1 Stat cao nhất (+1 MA)
 - +2 MA (Independent)
 - +1 MA (Bucking Bronco)
 - +1 BIQ ( Primodial Being)
 - +1 Stat cao nhất (+1 MA)
+- +1 MA
 ```
 
 ======

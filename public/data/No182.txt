@@ -83,7 +83,7 @@ Other Source:
 - +2 str (stats cao nhất)
 - +3 DUR (Zealot)
 - +2 Dura (House Tyrell)
-- +2 DURa (Zealot)
+- +2 Dura (Zealot)
 - +2 MA (Tyrell)
 - +2 Dura (Zealot)
 - +2 MA (Tyrell)

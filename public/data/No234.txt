@@ -79,6 +79,10 @@ Team: 24
 Lover:
 + 
 ```
+```
+Other Source:
+- +1 Dura
+```
 
 ======
 Battle Log:
@@ -112,5 +116,6 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 4-4
 - Note: ko né
+```
 
 ======

@@ -39,7 +39,7 @@ Houses:
  + 5 Normal gear:
   - Fishing Rod (Từ Fisher)
   - Frying Pan(Từ Artisan)
-  - Đá (Từ Artisan) (0)
+  - Đá (Từ Artisan) 
   - Knight's Armor
   - Shot Glass
   - Cursed Charm
@@ -61,7 +61,7 @@ Runeword: Không
 
 ```
 1 Power: 
-+ The Sand of Time(Từ Frying Pan)
++ The Sand of Time (Từ Frying Pan)
 ```
 
 ```
@@ -86,7 +86,7 @@ PvP Reward:
 ```
 ```
 Other Source:
-- 
+- -3 All stats
 ```
 
 

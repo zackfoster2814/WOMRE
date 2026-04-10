@@ -38,7 +38,6 @@ Houses:
   - Đai trinh tiết
   - Ancient Protector
   - Holy symbol
-  - Khung hình thờ (đã mất)
  + 1 Legacy gear:
   -
 ```
@@ -79,6 +78,7 @@ Other Source:
 - Nhận Power "Earth-Shaking"
 - +1 Str
 - Nhận thêm 1 Quirk: Slow Healer
+- -1 dura
 ```
 
 ======

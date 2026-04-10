@@ -72,6 +72,9 @@ PvP Reward:
 ```
 Other Source:
 - +1 all stats
+- +1 Spd
+- +1 Dura
+- +1 IQ
 ```
 
 ======
@@ -97,8 +100,7 @@ PvP:
 - Đối thủ: Swem
 - Kết quả: Win
 - Tỉ số: 2-3
-- PvP Reward: +1 Dura
-Bloody Strike: Kích (+1 spd/dura/iq)
+- PvP Reward: +1 Dura, Bloody Strike: Kích (+1 spd/dura/iq)
 ```
 
 ======

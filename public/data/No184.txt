@@ -91,6 +91,8 @@ Other source:
 - -1 str
 - -1 STR
 - -1 DUR
+- -1 STR
+- -1 DUR
 ```
 ```
 PvP Reward:
@@ -132,6 +134,4 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 7-0
 ```
-
-
 ======

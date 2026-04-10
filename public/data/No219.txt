@@ -79,6 +79,8 @@ Other Source:
 - -1 Str
 - -1 dura
 - -1 Str
+- -1 dura
+- -1 Str
 - -1 Dura
 ```
 

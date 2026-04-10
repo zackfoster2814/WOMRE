@@ -23,7 +23,7 @@ Archetype:
 ```
 ```
 Str: 2 ban đầu là 4 (inversion -> 7, Giant -5)
-Spd: 10 ban đầu là 1 (inversion -> 10)
+Spd: 3 (dính lời nguyền từ 10 ban đầu là 1 (inversion -> 10))
 Dur: 7 ban đầu là 4 (inversion -> 7)
 IQ: 7 ban đầu là 9 (inversion -> 2, Giant +5)
 BIQ: 8 ban đầu là 3 (inversion -> 8)
@@ -84,6 +84,9 @@ Other Source:
 - -1 IQ 
 - -1 BIQ
 - Arcana Blast (2 ngón Trung Kiên)
+- +2 Dura
+- -1 IQ 
+- -1 BIQ
 - +2 Dura
 - -1 IQ 
 - -1 BIQ

@@ -44,6 +44,7 @@ Houses:
   - Shot Glass
   - Radio
   - Fishing Rod
+  - Knight's Armor
  + 0 Legacy gear:
   - 
 ```

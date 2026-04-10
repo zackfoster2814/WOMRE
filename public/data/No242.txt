@@ -60,7 +60,7 @@ Runeword:
 ```
 2 Power:  
 + Dream Manipulation
-+ Bloody Strike
++ Bloody Strike (đã mất)
 + Metamagic (từ King's Landing)
 ```
 

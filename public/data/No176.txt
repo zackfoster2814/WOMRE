@@ -87,6 +87,7 @@ Other Source:
 - +1 all stats
 - +1 All stats
 - -2 Dura (AIDS)
+- -2 Dura (AIDS)
 ```
 
 ======
@@ -122,8 +123,7 @@ PvP:
 - Đối thủ: Amos
 - Kết quả: Win
 - Tỉ số: 3-4
-- Note: PvP Reward: +1 Char Dev: Training Arc
-Rampage: không kích
+- Note: PvP Reward: +1 Char Dev: Training Arc, Rampage: không kích
 ```
 
 ======

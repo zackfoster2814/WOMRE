@@ -94,7 +94,7 @@ Other Source:
 - Healing Flask (Hero Grave Keeper)
 - Đào mộ GoonNaga: Sổ Tay
 - -3 all stats
-- -1 IQ
+- +1 IQ
 ```
 
 ======

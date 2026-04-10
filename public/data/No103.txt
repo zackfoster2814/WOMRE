@@ -111,8 +111,7 @@ PvP:
 - Đối thủ: Kami Tsuna
 - Kết quả: Win
 - Tỉ số: 4-2
-- Note: Numby: IQ; PvP Reward: +1 BIQ
-Summon: Chihuahua
+- Note: Numby: IQ; PvP Reward: +1 BIQ, Summon: Chihuahua
 ```
 
 ======
