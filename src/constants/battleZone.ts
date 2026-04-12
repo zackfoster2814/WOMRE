@@ -29,6 +29,9 @@ export const RACE_TIERS: Record<string, number> = {
   Goblin: 22,
 };
 
+/** Virtual roundIdx dùng cho BIQ round lần 2 (Zoltraak). Tách biệt với roundIdx=4 (BIQ×1). */
+export const BIQ2_ROUND_IDX = 7;
+
 export const STAT_ORDER: { key: keyof CharacterStats; label: string }[] = [
   { key: "str", label: "STR" },
   { key: "spd", label: "SPD" },

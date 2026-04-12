@@ -1354,11 +1354,9 @@ registerImmediateHandler(
 registerImmediateHandler(
   "haru_urara_round_32_check",
   (ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
-    const pvpWins =
-      (ctx.character as any).pvpWins ??
-      (ctx.character as any).tournament?.pvpWins ??
-      0;
-    if (pvpWins < 3) {
+    const round = ctx.character.tournament?.round ?? "-";
+    const earlyRounds = ["256", "128", "64", "-"];
+    if (earlyRounds.includes(round)) {
       return {
         skipDefault: true,
         description: "Haru Urara: chưa tới vòng 32 (chưa kích hoạt)",
@@ -1370,7 +1368,7 @@ registerImmediateHandler(
       description: "+3 All Stats (Haru Urara - đã đến vòng 32, net +2)",
     };
   },
-  "+3 all stats if survived to round 32 (net +2 after initial -1)",
+  "+3 all stats if tournament round is 32 or beyond (net +2 after initial -1)",
 );
 
 registerImmediateHandler(
@@ -1856,7 +1854,9 @@ registerCombatHandler(
 registerCombatHandler(
   "haru_urara_round_32_check",
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (ctx.self.pvpWins < 3) {
+    const round = ctx.self.character.tournament?.round ?? "-";
+    const earlyRounds = ["256", "128", "64", "-"];
+    if (earlyRounds.includes(round)) {
       return { skipDefault: true, description: "Haru Urara: chưa tới vòng 32" };
     }
     return {
@@ -1864,7 +1864,7 @@ registerCombatHandler(
       description: "+3 All Stats (Haru Urara - đã đến vòng 32)",
     };
   },
-  "+3 all stats during combat if reached round 32",
+  "+3 all stats during combat if tournament round is 32 or beyond",
 );
 
 registerCombatHandler(

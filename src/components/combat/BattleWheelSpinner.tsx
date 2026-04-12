@@ -72,6 +72,18 @@ export function BattleWheelSpinner({
     null,
   );
 
+  // ── Force win dialog ─────────────────────────────────────────────────────
+  const [forceWinPending, setForceWinPending] = useState<
+    "player1" | "player2" | null
+  >(null);
+
+  const handleForceWinConfirm = () => {
+    if (!forceWinPending) return;
+    setSpinResult(forceWinPending);
+    onWinnerDetermined?.(forceWinPending);
+    setForceWinPending(null);
+  };
+
   // ── Debug weight override ────────────────────────────────────────────────
   const [debugOpen, setDebugOpen] = useState(false);
   const [debugP1Input, setDebugP1Input] = useState("");
@@ -146,6 +158,46 @@ export function BattleWheelSpinner({
 
   return (
     <div className="flex flex-col items-center gap-2 relative">
+      {/* Force win confirmation dialog */}
+      {forceWinPending && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-gray-900 border border-yellow-600/60 rounded-lg px-8 py-6 flex flex-col gap-4 shadow-2xl min-w-[320px] max-w-sm">
+            <div className="text-yellow-400 font-black text-base tracking-widest uppercase text-center">
+              Xác nhận Force Win
+            </div>
+            <div className="text-gray-200 text-sm text-center leading-relaxed">
+              Có xác định player{" "}
+              <span
+                className={`font-black ${forceWinPending === "player1" ? "text-blue-300" : "text-red-300"}`}
+              >
+                {forceWinPending === "player1" ? p1Name : p2Name}
+              </span>{" "}
+              thắng round{" "}
+              <span className="font-black text-yellow-300">{statLabel}</span>{" "}
+              không?
+            </div>
+            <div className="flex gap-3 justify-center mt-1">
+              <button
+                onClick={() => setForceWinPending(null)}
+                className="px-5 py-1.5 rounded font-bold text-sm bg-gray-700/80 text-gray-300 border border-gray-600/50 hover:bg-gray-600/80 transition-colors"
+              >
+                Huỷ
+              </button>
+              <button
+                onClick={handleForceWinConfirm}
+                className={`px-5 py-1.5 rounded font-black text-sm text-white transition-all hover:scale-105 ${
+                  forceWinPending === "player1"
+                    ? "bg-blue-600 hover:bg-blue-500 border border-blue-400/50"
+                    : "bg-red-600 hover:bg-red-500 border border-red-400/50"
+                }`}
+              >
+                Xác nhận
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Round label + debug button */}
       <div className="w-full flex items-center justify-center relative">
         <div className="text-base font-black text-yellow-400 tracking-widest uppercase">
@@ -166,6 +218,26 @@ export function BattleWheelSpinner({
           ⚙{hasOverride ? " ✦" : ""}
         </button>
       </div>
+
+      {/* Force win buttons — hàng riêng bên dưới label */}
+      {!spinResult && !isSpinning && (
+        <div className="w-full flex items-center justify-between px-1">
+          <button
+            onClick={() => setForceWinPending("player1")}
+            title={`Force ${p1Name} thắng round ${statLabel}`}
+            className="text-[11px] px-2 py-0.5 rounded border bg-blue-900/60 text-blue-300 border-blue-600/50 hover:bg-blue-700/70 hover:text-blue-100 transition-colors font-bold"
+          >
+            ⚡ {p1Name}
+          </button>
+          <button
+            onClick={() => setForceWinPending("player2")}
+            title={`Force ${p2Name} thắng round ${statLabel}`}
+            className="text-[11px] px-2 py-0.5 rounded border bg-red-900/60 text-red-300 border-red-600/50 hover:bg-red-700/70 hover:text-red-100 transition-colors font-bold"
+          >
+            {p2Name} ⚡
+          </button>
+        </div>
+      )}
 
       {/* Debug panel */}
       {debugOpen && (
@@ -331,9 +403,7 @@ export function BattleWheelSpinner({
                       : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105"
                   }`}
                 >
-                  {hasCurrentPendingSpins
-                    ? "Quay hiệu ứng round này trước..."
-                    : "Next →"}
+                  {hasCurrentPendingSpins ? "Còn hiệu ứng chưa quay" : "Next →"}
                 </button>
               </div>
             </div>

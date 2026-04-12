@@ -27,6 +27,7 @@ import {
   STAT_ORDER,
   _ALL_STAT_KEYS,
   playEndCombatSound,
+  BIQ2_ROUND_IDX,
 } from "../constants/battleZone";
 import {
   RoundSpinButton,
@@ -882,6 +883,25 @@ export const WheelOfTruthMode = ({
       ? Math.max(0, wotP2Val) * 2
       : Math.max(0, wotP2Val);
 
+  // ── Glass Cannon: DUR round skip wheel từ vòng 64 trở đi (matchNumber >= 193) ─
+  const glassCannонAutoLose = useMemo<"player1" | "player2" | "both" | null>(() => {
+    if (!currentStatInfo || currentStatInfo.key !== "dur") return null;
+    if (!tournamentMatch || tournamentMatch.matchNumber < 193) return null;
+    if (!player1 || !player2) return null;
+    const hasGlassCannon = (p: typeof player1) =>
+      (p.character?.archetypes || []).some(
+        (a: string) =>
+          a.trim() === "Glass Cannon" &&
+          !disabledItems.has(`${p.no}-archetype-Glass Cannon`),
+      );
+    const p1Has = hasGlassCannon(player1);
+    const p2Has = hasGlassCannon(player2);
+    if (p1Has && p2Has) return "both";
+    if (p1Has) return "player1";
+    if (p2Has) return "player2";
+    return null;
+  }, [currentStatInfo, tournamentMatch, player1, player2, disabledItems]);
+
   // ── Green Dragon Crescent Blade: BIQ round skip wheel, lấy kết quả từ STR ─
   const greenDragonBiqWinner = useMemo<
     "player1" | "player2" | "tie" | null
@@ -906,6 +926,8 @@ export const WheelOfTruthMode = ({
     stepInProgress && stepRoundIndex < 6
       ? STAT_ORDER[stepRoundIndex]?.key
       : null;
+  // BIQ×2 (Zoltraak): dùng BIQ2_ROUND_IDX làm key riêng để không trùng với BIQ×1 (roundIdx=4)
+  const effectiveSpinRoundIdx = zoltraakBiq2Pending ? BIQ2_ROUND_IDX : stepRoundIndex;
   const wotP1SpinNodes =
     currentRoundWinner && player1 && stepState && currentStatKey
       ? (() => {
@@ -932,7 +954,7 @@ export const WheelOfTruthMode = ({
               key={eff}
               effectName={eff}
               side="player1"
-              roundIdx={stepRoundIndex}
+              roundIdx={effectiveSpinRoundIdx}
               roundSpinResults={roundSpinResults}
               applyDevWeights={applyDevWeights}
               setRoundSpinModal={setRoundSpinModal}
@@ -968,7 +990,7 @@ export const WheelOfTruthMode = ({
               key={eff}
               effectName={eff}
               side="player2"
-              roundIdx={stepRoundIndex}
+              roundIdx={effectiveSpinRoundIdx}
               roundSpinResults={roundSpinResults}
               applyDevWeights={applyDevWeights}
               setRoundSpinModal={setRoundSpinModal}
@@ -994,7 +1016,7 @@ export const WheelOfTruthMode = ({
       computeRoundPoints(
         "player1",
         currentRoundWinner,
-        stepRoundIndex,
+        effectiveSpinRoundIdx,
         p1Effs,
         currentStatKey,
       ).pending
@@ -1004,7 +1026,7 @@ export const WheelOfTruthMode = ({
       computeRoundPoints(
         "player2",
         currentRoundWinner,
-        stepRoundIndex,
+        effectiveSpinRoundIdx,
         p2Effs,
         currentStatKey,
       ).pending
@@ -1017,12 +1039,12 @@ export const WheelOfTruthMode = ({
       for (const eff of AFTER_WIN_SPINS) {
         if (
           p1WinEffs.includes(eff) &&
-          !roundSpinResults[`${stepRoundIndex}-${eff}-player1`]
+          !roundSpinResults[`${effectiveSpinRoundIdx}-${eff}-player1`]
         )
           return true;
         if (
           p2WinEffs.includes(eff) &&
-          !roundSpinResults[`${stepRoundIndex}-${eff}-player2`]
+          !roundSpinResults[`${effectiveSpinRoundIdx}-${eff}-player2`]
         )
           return true;
       }
@@ -1048,7 +1070,8 @@ export const WheelOfTruthMode = ({
 
   const resetCurrentRoundSpinResults = useCallback(() => {
     if (stepRoundIndex < 0) return;
-    const prefix = `${stepRoundIndex}-`;
+    // BIQ×2 dùng BIQ2_ROUND_IDX, không phải stepRoundIndex=4
+    const prefix = `${zoltraakBiq2Pending ? BIQ2_ROUND_IDX : stepRoundIndex}-`;
     setRoundSpinResults((prev) => {
       const next: typeof prev = {};
       for (const [k, v] of Object.entries(prev)) {
@@ -1056,7 +1079,7 @@ export const WheelOfTruthMode = ({
       }
       return next;
     });
-  }, [setRoundSpinResults, stepRoundIndex]);
+  }, [setRoundSpinResults, stepRoundIndex, zoltraakBiq2Pending]);
 
   // ── Swap players ──────────────────────────────────────────────────────────
   const swapPlayers = () => {
@@ -1677,7 +1700,46 @@ export const WheelOfTruthMode = ({
                 <div className={`p-3 ${centerTab !== "wheel" ? "hidden" : ""}`}>
                   {stepInProgress && currentStatInfo && (
                     <div className="mb-4">
-                      {greenDragonBiqWinner !== null ? (
+                      {glassCannонAutoLose !== null ? (
+                        /* Glass Cannon: DUR round tự động thua từ vòng 64 trở đi */
+                        <div className="flex flex-col items-center gap-3 py-6">
+                          <div className="text-base font-black text-yellow-400 tracking-widest uppercase">
+                            DUR Round
+                          </div>
+                          <div className="text-sm text-gray-400 text-center">
+                            Glass Cannon — tự động thua round DUR
+                          </div>
+                          <div
+                            className={`text-sm font-black px-4 py-1.5 rounded-lg border ${
+                              glassCannонAutoLose === "both"
+                                ? "text-gray-300 bg-gray-700/40 border-gray-600/40"
+                                : glassCannонAutoLose === "player1"
+                                  ? "text-red-300 bg-red-700/40 border-red-500/40"
+                                  : "text-blue-300 bg-blue-700/40 border-blue-500/40"
+                            }`}
+                          >
+                            {glassCannонAutoLose === "both"
+                              ? "Cả 2 đều có Glass Cannon — Hoà"
+                              : glassCannонAutoLose === "player1"
+                                ? `${player1!.name} thua`
+                                : `${player2!.name} thua`}
+                          </div>
+                          <button
+                            onClick={() => {
+                              if (glassCannонAutoLose === "player1") {
+                                setWheelForcedWinner("player2");
+                              } else if (glassCannонAutoLose === "player2") {
+                                setWheelForcedWinner("player1");
+                              } else {
+                                resolveNextRoundRef.current?.();
+                              }
+                            }}
+                            className="px-5 py-1.5 rounded-none font-black text-sm bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105 transition-all shadow-lg"
+                          >
+                            Next →
+                          </button>
+                        </div>
+                      ) : greenDragonBiqWinner !== null ? (
                         /* Green Dragon Crescent Blade: BIQ skip wheel, lấy kết quả từ STR */
                         <div className="flex flex-col items-center gap-3 py-6">
                           <div className="text-base font-black text-yellow-400 tracking-widest uppercase">

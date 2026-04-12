@@ -1,7 +1,7 @@
 export const GOOGLE_API_KEY = "AIzaSyDaiI65IooRD7p2ROjb9Eno7bxePciRKRI";
 
 export const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbxPyhvbmK5Jiy1YHAXQ_Dx6bOsOqU6axYZGGJPx_lepOcrhm2hI00JS7PwCaTtjoLOa/exec";
+  "https://wheel-drive-proxy.tuankhoi240202.workers.dev";
 
 export const ROUND_256_FILE_ID = "14U9YuHKo-rn0xhlANeV415MCoHFrWVXf";
 

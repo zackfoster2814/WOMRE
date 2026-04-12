@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Character, CharacterStats } from "../../types/character";
 import { PvPPlayerData, RoundResult } from "../../types/battleZone";
 import { WheelSpinItem } from "../../components/ProbabilityWheelModal";
-import { STAT_ORDER } from "../../constants/battleZone";
+import { STAT_ORDER, BIQ2_ROUND_IDX } from "../../constants/battleZone";
 import {
   CRIT_ITEMS,
   EVASION_ITEMS,
@@ -466,12 +466,13 @@ export function RoundResultsPanel({
         const p2WonBeforeThis = rounds
           .slice(0, roundArrayIndex)
           .filter((r) => r.winner === "player2").length;
+        const spinRoundIdx = isBiq2Row ? BIQ2_ROUND_IDX : roundArrayIndex;
         const p1Pts =
           revealed && round && showSpins
             ? computeRoundPoints(
                 "player1",
                 round.winner,
-                roundArrayIndex,
+                spinRoundIdx,
                 p1Effects,
                 key,
                 p1WonBeforeThis,
@@ -482,7 +483,7 @@ export function RoundResultsPanel({
             ? computeRoundPoints(
                 "player2",
                 round.winner,
-                roundArrayIndex,
+                spinRoundIdx,
                 p2Effects,
                 key,
                 p2WonBeforeThis,
@@ -592,13 +593,13 @@ export function RoundResultsPanel({
                 <div className="grid grid-cols-[1fr_56px_1fr] gap-1 px-2 pb-1.5 border-t border-gray-700/20 pt-1">
                   <div className="flex justify-end gap-1 flex-wrap">
                     {p1SpinEffects.map((eff) =>
-                      makeSpinButton(eff, "player1", roundArrayIndex),
+                      makeSpinButton(eff, "player1", isBiq2Row ? BIQ2_ROUND_IDX : roundArrayIndex),
                     )}
                   </div>
                   <div />
                   <div className="flex justify-start gap-1 flex-wrap">
                     {p2SpinEffects.map((eff) =>
-                      makeSpinButton(eff, "player2", roundArrayIndex),
+                      makeSpinButton(eff, "player2", isBiq2Row ? BIQ2_ROUND_IDX : roundArrayIndex),
                     )}
                   </div>
                 </div>

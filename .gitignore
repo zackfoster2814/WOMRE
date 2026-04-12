@@ -32,3 +32,7 @@ MD/
 # Tauri
 src-tauri/target
 src-tauri/Cargo.lock
+.gitnexus
+
+# Service account credentials (never commit)
+auth/*.json

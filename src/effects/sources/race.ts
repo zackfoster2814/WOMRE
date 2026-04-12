@@ -1081,8 +1081,7 @@ export function registerAllRaceEffects() {
       type: "custom",
       timing: "immediate",
       target: "self",
-      customHandler: "haru_urara_late_game_buff",
-      triggerOnce: true,
+      customHandler: "haru_urara_round_32_check",
     })
     .register();
 

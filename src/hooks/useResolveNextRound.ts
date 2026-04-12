@@ -9,7 +9,7 @@ import {
   StepCombatState,
   CarryOverEffect,
 } from "../types/battleZone";
-import { STAT_ORDER, _ALL_STAT_KEYS } from "../constants/battleZone";
+import { STAT_ORDER, _ALL_STAT_KEYS, BIQ2_ROUND_IDX } from "../constants/battleZone";
 import { type WheelSpinItem } from "../components/ProbabilityWheelModal";
 import {
   calcStatsWithDisabled,
@@ -633,10 +633,25 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             ...log2.events,
           ],
         };
+        // Patch BIQ×2 score từ spin results (Pennyworthy-Win, Crit, etc.)
+        // BIQ×2 dùng BIQ2_ROUND_IDX làm key thay vì 4
+        const biq2Winner = log2.winner;
+        const p1EffsBiq2 = getPerRoundEffects(player1.character, player1.no);
+        const p2EffsBiq2 = getPerRoundEffects(player2.character, player2.no);
+        const p1PtsBiq2 = computeRoundPoints("player1", biq2Winner, BIQ2_ROUND_IDX, p1EffsBiq2, "biq");
+        const p2PtsBiq2 = computeRoundPoints("player2", biq2Winner, BIQ2_ROUND_IDX, p2EffsBiq2, "biq");
+        const p1BaseBiq2 = p1PtsBiq2.autoApplied ? p1PtsBiq2.pts : biq2Winner === "player1" ? (p1PtsBiq2.engineBase ?? 1) : 0;
+        const p2BaseBiq2 = p2PtsBiq2.autoApplied ? p2PtsBiq2.pts : biq2Winner === "player2" ? (p2PtsBiq2.engineBase ?? 1) : 0;
+        const p1DiffBiq2 = p1PtsBiq2.pts - p1BaseBiq2 + (p2PtsBiq2.opponentPtsAdjust ?? 0);
+        const p2DiffBiq2 = p2PtsBiq2.pts - p2BaseBiq2 + (p1PtsBiq2.opponentPtsAdjust ?? 0);
+        const patchedNewState2 = (p1DiffBiq2 !== 0 || p2DiffBiq2 !== 0)
+          ? { ...newState2, p1Score: newState2.p1Score + p1DiffBiq2, p2Score: newState2.p2Score + p2DiffBiq2 }
+          : newState2;
+
         // patchedState.roundLogs đã có BIQ×1 log; newState2 tự append BIQ×2 log
         // Dùng patchedState.roundLogs + log2marked để tránh duplicate
         finalState = {
-          ...newState2,
+          ...patchedNewState2,
           roundLogs: [...patchedState.roundLogs, log2marked],
         };
         finalLog = log2marked;

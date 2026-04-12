@@ -244,104 +244,49 @@ export async function appendReportToDrive(fileId: string, content: string): Prom
 
 /**
  * Read a JSON file from Google Drive
- * Uses Apps Script doGet (CORS-safe) as primary method
+ * Uses Cloudflare Worker proxy (CORS-safe, works on both web and Tauri)
  */
 export async function readDriveFile<T>(fileId: string): Promise<T> {
-  // Primary: use Apps Script doGet (handles CORS properly)
   if (APPS_SCRIPT_URL) {
-    try {
-      const url = `${APPS_SCRIPT_URL}?fileId=${fileId}`;
-      const response = await fetch(url, {
-        method: "GET",
-        redirect: "follow",
-      });
-      if (response.ok) {
-        return response.json();
-      }
-      console.warn("Apps Script read response not ok:", response.status);
-    } catch (e) {
-      console.warn("Apps Script read failed:", e);
-    }
+    const url = `${APPS_SCRIPT_URL}?fileId=${fileId}`;
+    const response = await fetch(url, { method: "GET" });
+    if (response.ok) return response.json();
+    throw new Error(`Worker read failed: ${response.status}`);
   }
-
-  // Fallback: try with API key (may fail with CORS in some environments)
-  if (GOOGLE_API_KEY) {
-    try {
-      const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${GOOGLE_API_KEY}`;
-      const response = await fetch(url);
-      if (response.ok) {
-        return response.json();
-      }
-    } catch (e) {
-      console.warn("Drive API key read failed:", e);
-    }
-  }
-
-  // Last fallback: try direct download URL
-  const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-  const response = await fetch(directUrl);
-  if (!response.ok) {
-    throw new Error(`Failed to read file from Drive: ${response.status} ${response.statusText}`);
-  }
-  return response.json();
+  throw new Error("No Worker URL configured.");
 }
 
 /**
  * Write/update a JSON file on Google Drive
- * Uses Google Apps Script as proxy (no login required)
- * IMPORTANT: Uses text/plain to avoid CORS preflight
+ * Uses Cloudflare Worker proxy (works on both web and Tauri)
  */
 export async function writeDriveFile<T>(fileId: string, data: T): Promise<void> {
   if (!APPS_SCRIPT_URL) {
-    throw new Error(
-      "Apps Script URL not configured. See src/config/googleDrive.ts for setup instructions."
-    );
+    throw new Error("Worker URL not configured.");
   }
-
-  // Use text/plain to avoid CORS preflight (OPTIONS request)
-  // Apps Script reads e.postData.contents regardless of content type
   const url = `${APPS_SCRIPT_URL}?fileId=${fileId}`;
   const response = await fetch(url, {
     method: "POST",
     body: JSON.stringify(data, null, 2),
-    redirect: "follow",
   });
-
   if (!response.ok) {
-    throw new Error(`Failed to write file to Drive: ${response.status} ${response.statusText}`);
+    throw new Error(`Worker write failed: ${response.status} ${response.statusText}`);
   }
-
   const result = await response.json().catch(() => null);
   if (result && !result.success) {
-    throw new Error(`Apps Script error: ${JSON.stringify(result)}`);
+    throw new Error(`Worker error: ${JSON.stringify(result)}`);
   }
 }
 
 /**
- * Read a file from Google Drive as plain text (for .txt player files)
+ * Read a file from Google Drive as plain text (for .txt player files, Tauri only)
  */
 export async function readDriveFileAsText(fileId: string): Promise<string> {
-  // Try Apps Script first
-  if (APPS_SCRIPT_URL) {
-    try {
-      const url = `${APPS_SCRIPT_URL}?fileId=${fileId}`;
-      const response = await fetch(url, { method: "GET", redirect: "follow" });
-      if (response.ok) return response.text();
-    } catch {
-      // CORS or network error — fall through to API key
-    }
-  }
-  // Fallback: Google Drive API with API key
-  if (GOOGLE_API_KEY) {
-    try {
-      const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${GOOGLE_API_KEY}`;
-      const response = await fetch(url);
-      if (response.ok) return response.text();
-    } catch {
-      // fall through
-    }
-  }
-  throw new Error(`Failed to read text file from Drive: ${fileId}`);
+  if (!APPS_SCRIPT_URL) throw new Error("Worker URL not configured.");
+  const url = `${APPS_SCRIPT_URL}?fileId=${fileId}`;
+  const response = await fetch(url, { method: "GET" });
+  if (response.ok) return response.text();
+  throw new Error(`Worker read text failed: ${response.status} for ${fileId}`);
 }
 
 /**
