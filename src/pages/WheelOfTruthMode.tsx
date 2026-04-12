@@ -6,7 +6,6 @@ import wheelBgImage from "../assets/img/wheel-bg.png";
 import {
   fetchPlayerTexts,
   getPlayerIndex,
-  invalidatePlayerCache,
 } from "../utils/googleDrive";
 import {
   ProbabilityWheelModal,
@@ -388,15 +387,13 @@ export const WheelOfTruthMode = ({
         ensureEffectsInitialized();
 
         if (tournamentMatch) {
-          // Invalidate cache 2 player chính để luôn fetch data mới nhất
-          invalidatePlayerCache(tournamentMatch.player1No);
-          invalidatePlayerCache(tournamentMatch.player2No);
-
           // Phase 1: fetch 2 player cần thiết trước → set ngay, không chờ 260 player
+          // noCache=true để bypass cả in-memory lẫn Cloudflare edge cache
+          // → luôn lấy data mới nhất từ Drive (quan trọng vì trận trước có thể đã thay đổi stats)
           const twoTexts = await fetchPlayerTexts([
             tournamentMatch.player1No,
             tournamentMatch.player2No,
-          ]);
+          ], { noCache: true });
           const p1Raw = parsePlayerFromText(
             twoTexts.get(tournamentMatch.player1No) ?? "",
             tournamentMatch.player1No,
@@ -411,12 +408,14 @@ export const WheelOfTruthMode = ({
         }
 
         // Phase 2: load toàn bộ players (background) — cần cho allPlayers dropdown + cross-char effects
+        // 2 player tournament đã được fetch với noCache=true ở phase 1 → in-memory cache đã có data mới
+        // Phase 2 sẽ dùng lại data đó (không fetch lại 2 player này)
         const playerList: PvPPlayerData[] = [];
         const index = await getPlayerIndex();
         const nos = Object.keys(index)
           .filter((k) => /^No\d+$/.test(k))
           .map((k) => parseInt(k.replace(/\D/g, "")));
-        const texts = await fetchPlayerTexts(nos);
+        const texts = await fetchPlayerTexts(nos); // dùng cache bình thường — 2 player đã có data mới
         for (const [no, content] of texts) {
           const player = parsePlayerFromText(content, no);
           if (player) playerList.push(player);
@@ -430,10 +429,12 @@ export const WheelOfTruthMode = ({
         );
         setAllPlayers(resolved);
 
-        // Cập nhật lại player1/player2 với stats đã resolved cross-char effects
+        // Cập nhật player1/player2 với cross-char effects — data 2 player lấy từ resolved
+        // (vốn đã được parse từ _playerTextCache đã có data mới sau phase 1)
         if (tournamentMatch) {
           const r1 = resolved.find((p) => p.no === tournamentMatch.player1No);
           const r2 = resolved.find((p) => p.no === tournamentMatch.player2No);
+          // Chỉ update nếu r1/r2 parse được — giữ nguyên data phase 1 nếu không tìm thấy
           if (r1) setPlayer1(r1);
           if (r2) setPlayer2(r2);
         }

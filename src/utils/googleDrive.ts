@@ -39,14 +39,16 @@ export async function fetchPlayerText(no: number): Promise<string> {
   return text;
 }
 
-// ── Fetch multiple players (batchRead, sequential chunks) ────────────────────
+// ── Fetch multiple players (batchRead, parallel chunks) ──────────────────────
 
 export async function fetchPlayerTexts(
   nos: number[],
+  { noCache = false }: { noCache?: boolean } = {},
 ): Promise<Map<number, string>> {
   const index = await getPlayerIndex();
   const result = new Map<number, string>();
-  const toFetch = nos.filter((no) => !_playerTextCache.has(no));
+  // noCache=true → bỏ qua in-memory cache của app, buộc fetch lại từ Worker/Drive
+  const toFetch = noCache ? nos : nos.filter((no) => !_playerTextCache.has(no));
 
   if (toFetch.length > 0 && APPS_SCRIPT_URL) {
     const validNos = toFetch.filter((no) => index[`No${no}`]);
@@ -55,30 +57,34 @@ export async function fetchPlayerTexts(
       validNos.map((no) => [index[`No${no}`], no]),
     );
 
-    // Chia chunk và fetch song song — Worker có cache nên mỗi chunk sẽ rất nhanh lần 2+
-    const BATCH_SIZE = 50;
+    // BATCH_SIZE nhỏ để Worker không vượt giới hạn 50 subrequests/invocation (free tier)
+    const BATCH_SIZE = 15;
+    const MAX_CONCURRENT = 6;
     const chunks: string[][] = [];
     for (let i = 0; i < fileIds.length; i += BATCH_SIZE) {
       chunks.push(fileIds.slice(i, i + BATCH_SIZE));
     }
 
-    await Promise.all(
-      chunks.map(async (chunk) => {
-        try {
-          const url = `${APPS_SCRIPT_URL}?action=batchRead&fileIds=${chunk.join(",")}`;
-          const res = await fetch(url, { method: "GET" });
-          if (!res.ok) return;
-          const batch = await res.json() as Record<string, string | null>;
-          for (const [fileId, content] of Object.entries(batch)) {
-            if (content == null) continue;
-            const no = noByFileId.get(fileId);
-            if (no !== undefined) _playerTextCache.set(no, content);
-          }
-        } catch {
-          // chunk fail — bỏ qua
+    const fetchChunk = async (chunk: string[]) => {
+      try {
+        const url = `${APPS_SCRIPT_URL}?action=batchRead&fileIds=${chunk.join(",")}`;
+        const res = await fetch(url, { method: "GET" });
+        if (!res.ok) return;
+        const batch = await res.json() as Record<string, string | null>;
+        for (const [fileId, content] of Object.entries(batch)) {
+          if (content == null) continue;
+          const no = noByFileId.get(fileId);
+          if (no !== undefined) _playerTextCache.set(no, content);
         }
-      }),
-    );
+      } catch {
+        // chunk fail — bỏ qua
+      }
+    };
+
+    // Chạy song song theo window MAX_CONCURRENT
+    for (let i = 0; i < chunks.length; i += MAX_CONCURRENT) {
+      await Promise.all(chunks.slice(i, i + MAX_CONCURRENT).map(fetchChunk));
+    }
   }
 
   for (const no of nos) {

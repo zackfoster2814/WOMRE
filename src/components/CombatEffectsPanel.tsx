@@ -2045,8 +2045,9 @@ const EFFECT_DEFS: EffectDef[] = [
         .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
         .filter(Boolean)
         // Lọc bỏ các power đã bị disabled bởi Anti-Magic Barrier trước đó
-        .filter((name: string) =>
-          !oppNo || !ctx.disabledItems?.has(`${oppNo}-power-${name}`)
+        .filter(
+          (name: string) =>
+            !oppNo || !ctx.disabledItems?.has(`${oppNo}-power-${name}`),
         );
       if (oppPowers.length === 0) return null;
       // Nếu đối thủ chỉ có 1 power → disable luôn, không cần spin
@@ -2097,8 +2098,9 @@ const EFFECT_DEFS: EffectDef[] = [
         .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
         .filter(Boolean)
         // Lọc bỏ các power đã bị disabled trước đó (Power Negation, Memory Alter, v.v.)
-        .filter((name: string) =>
-          !oppNo || !ctx.disabledItems?.has(`${oppNo}-power-${name}`)
+        .filter(
+          (name: string) =>
+            !oppNo || !ctx.disabledItems?.has(`${oppNo}-power-${name}`),
         );
       if (oppPowers.length === 0) return null;
       // Nếu đối thủ có ≤2 power active → disable toàn bộ, không cần spin
@@ -2750,7 +2752,7 @@ const EffectRow = ({ effect, onApply, onSpinRequest }: EffectRowProps) => {
 
           {/* Resolved note */}
           {isResolved && effect.resolvedNote && (
-            <p className="text-gray-500 text-xs mt-1">
+            <p className="text-yellow-100 text-xs mt-1">
               ✓ {effect.resolvedNote}
             </p>
           )}
@@ -3028,7 +3030,9 @@ export const CombatEffectsPanel = ({
       effect.sourceName === "memory alter";
     let finalEffect = effect;
     if (isPowerDisableEffect && effect.wheelItems?.length) {
-      const disableTarget = effect.wheelItems[0]?.meta?.disableTarget as string | undefined;
+      const disableTarget = effect.wheelItems[0]?.meta?.disableTarget as
+        | string
+        | undefined;
       const oppPlayer = disableTarget === "player1" ? player1 : player2;
       if (oppPlayer) {
         const oppNo = oppPlayer.no;
@@ -3095,9 +3099,10 @@ export const CombatEffectsPanel = ({
             (w) => w.meta?.powerName !== disabledPowerName,
           )
         : effect.wheelItems;
-      const nextEffect = nextWheelItems !== effect.wheelItems
-        ? { ...effect, wheelItems: nextWheelItems }
-        : effect;
+      const nextEffect =
+        nextWheelItems !== effect.wheelItems
+          ? { ...effect, wheelItems: nextWheelItems }
+          : effect;
 
       setEffects((prev) =>
         prev.map((e) =>

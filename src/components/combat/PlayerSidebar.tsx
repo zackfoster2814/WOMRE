@@ -53,8 +53,16 @@ export function PlayerSidebar({
   selectTabOnPick = "effects" as "effects" | "inventory",
 }: PlayerSidebarProps) {
   const items = player?.character ? buildInventoryList(player.character) : [];
-  const audioTracks = detectCombatAudioTracks(player?.character, disabledItems, player?.no);
-  const otherAudioTracks = detectCombatAudioTracks(otherPlayer?.character, undefined, otherPlayer?.no);
+  const audioTracks = detectCombatAudioTracks(
+    player?.character,
+    disabledItems,
+    player?.no,
+  );
+  const otherAudioTracks = detectCombatAudioTracks(
+    otherPlayer?.character,
+    undefined,
+    otherPlayer?.no,
+  );
 
   const quirks = (player?.character?.quirks || [])
     .filter((q: any) => !q.isLost)
@@ -63,12 +71,17 @@ export function PlayerSidebar({
   const isBlurred = quirks.includes("blind");
 
   const accentColor = accent === "blue" ? "blue" : "red";
-  const borderClass = accent === "blue" ? "border-blue-500/30" : "border-red-500/30";
-  const headerBorderClass = accent === "blue" ? "border-blue-500/20" : "border-red-500/20";
-  const inputBorderClass = accent === "blue" ? "border-blue-600/40" : "border-red-600/40";
-  const inputRingClass = accent === "blue" ? "focus:ring-blue-500" : "focus:ring-red-500";
+  const borderClass =
+    accent === "blue" ? "border-blue-500/30" : "border-red-500/30";
+  const headerBorderClass =
+    accent === "blue" ? "border-blue-500/20" : "border-red-500/20";
+  const inputBorderClass =
+    accent === "blue" ? "border-blue-600/40" : "border-red-600/40";
+  const inputRingClass =
+    accent === "blue" ? "focus:ring-blue-500" : "focus:ring-red-500";
   const noClass = accent === "blue" ? "text-blue-400" : "text-red-400";
-  const activeTabClass = accent === "blue" ? "bg-blue-600 text-white" : "bg-red-600 text-white";
+  const activeTabClass =
+    accent === "blue" ? "bg-blue-600 text-white" : "bg-red-600 text-white";
 
   return (
     <div
@@ -91,14 +104,25 @@ export function PlayerSidebar({
       )}
 
       {/* Header: search + tab switcher */}
-      <div className={`relative z-10 p-3 border-b ${headerBorderClass} shrink-0 space-y-2`}>
+      <div
+        className={`relative z-10 p-3 border-b ${headerBorderClass} shrink-0 space-y-2`}
+      >
         <div className="relative">
           {player ? (
-            <div className={`flex items-center gap-2 px-3 py-2 bg-gray-900/60 border ${inputBorderClass} rounded-none backdrop-blur-sm`}>
-              <span className={`${noClass} text-xs font-mono`}>#{player.no}</span>
-              <span className="text-white text-sm font-bold flex-1 truncate">{player.name}</span>
+            <div
+              className={`flex items-center gap-2 px-3 py-2 bg-gray-900/60 border ${inputBorderClass} rounded-none backdrop-blur-sm`}
+            >
+              <span className={`${noClass} text-xs font-mono`}>
+                #{player.no}
+              </span>
+              <span className="text-white text-sm font-bold flex-1 truncate">
+                {player.name}
+              </span>
               {!isTournamentMode && (
-                <button onClick={onClear} className="text-gray-500 hover:text-white text-xs shrink-0">
+                <button
+                  onClick={onClear}
+                  className="text-gray-500 hover:text-white text-xs shrink-0"
+                >
                   ✕
                 </button>
               )}
@@ -128,10 +152,16 @@ export function PlayerSidebar({
                       className="w-full px-3 py-2 text-left hover:bg-gray-700 text-white text-sm flex justify-between items-center gap-2"
                     >
                       <span className="flex items-center gap-1.5 min-w-0">
-                        <span className={`${noClass} font-mono text-xs shrink-0`}>#{p.no}</span>
+                        <span
+                          className={`${noClass} font-mono text-xs shrink-0`}
+                        >
+                          #{p.no}
+                        </span>
                         <span className="truncate">{p.name}</span>
                       </span>
-                      <span className="text-xs text-gray-400 shrink-0">{p.race}</span>
+                      <span className="text-xs text-gray-400 shrink-0">
+                        {p.race}
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -153,7 +183,9 @@ export function PlayerSidebar({
               className={`flex-1 text-xs py-1 rounded-none font-medium transition-all ${tab === "inventory" ? activeTabClass : "text-gray-400 hover:text-white"}`}
             >
               Inventory{" "}
-              {items.length > 0 && <span className="opacity-60">({items.length})</span>}
+              {items.length > 0 && (
+                <span className="opacity-60">({items.length})</span>
+              )}
             </button>
           </div>
         )}
@@ -170,30 +202,42 @@ export function PlayerSidebar({
           ) : (
             <div className="space-y-0.5">
               {items.length === 0 ? (
-                <div className="text-gray-600 text-sm text-center py-8">Không có item</div>
+                <div className="text-gray-600 text-sm text-center py-8">
+                  Không có item
+                </div>
               ) : (
                 items.map((item, i) => {
                   const k = `${player.no}-${item.sourceType}-${item.name}`;
                   const disabled = disabledItems.has(k);
                   const colorClass =
-                    (sourceTypeColors as Record<string, string>)[item.sourceType] || "text-gray-400";
+                    (sourceTypeColors as Record<string, string>)[
+                      item.sourceType
+                    ] || "text-gray-400";
                   return (
                     <button
                       key={i}
-                      onClick={() => toggleItem(player.no, item.sourceType, item.name)}
+                      onClick={() =>
+                        toggleItem(player.no, item.sourceType, item.name)
+                      }
                       className={`w-full text-left text-sm px-2 py-1.5 rounded transition-all ${disabled ? "opacity-35 bg-gray-800/20" : "hover:bg-gray-700/40 bg-gray-800/10"}`}
                     >
                       <div className="flex items-center gap-1.5">
-                        <span className={`${colorClass} ${disabled ? "line-through" : ""}`}>
+                        <span
+                          className={`${colorClass} ${disabled ? "line-through" : ""}`}
+                        >
                           {item.name}
                         </span>
-                        <span className="text-gray-700 text-xs">[{item.sourceType}]</span>
+                        <span className="text-white-700 text-xs">
+                          [{item.sourceType}]
+                        </span>
                         {disabled && (
-                          <span className="text-red-500 text-xs ml-auto">OFF</span>
+                          <span className="text-red-500 text-xs ml-auto">
+                            OFF
+                          </span>
                         )}
                       </div>
                       {item.description && !disabled && (
-                        <div className="text-gray-500 text-xs mt-0.5 leading-snug">
+                        <div className="text-yellow-100 text-xs mt-0.5 leading-snug">
                           {item.description}
                         </div>
                       )}
