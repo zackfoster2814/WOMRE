@@ -43,7 +43,7 @@ Houses:
  + 0 Normal gear:
   - Khung hình thờ (từ PvE Punishment)
   - Gold Pine Resin
-  - Cursed Charmed
+  - Cursed Charm
   - Lover's Glover
  + 1 Legacy gear:
   - Spirit of the Wheel (đã mất do PVE Punishment)

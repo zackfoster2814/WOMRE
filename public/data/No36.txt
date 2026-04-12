@@ -9,7 +9,7 @@ Ký Sinh:
 ```
 ```
 Race: God
-Sub-race: Eir (2)
+Sub-race: Eir (3)
 ```
 
 ```
@@ -118,16 +118,13 @@ Other Source:
 ```
 ======
 Battle Log:
-```
-- God gặp Devotee
-```
 
 ```
 PvP:
 - Đối thủ: Bộ PC
 - Kết quả: Win
 - Tỉ số: 0-0
-- note: nhận 4 power từ Patient
+- note: nhận 4 power từ Patient - God gặp Devotee
 ```
 
 ```

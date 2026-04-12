@@ -93,6 +93,7 @@ Other Source:
 - +1 Ma
 - -1 Dura
 - +1 all stats
+- -1 Dura
 ```
 
 ======
