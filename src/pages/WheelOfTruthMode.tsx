@@ -306,6 +306,8 @@ export const WheelOfTruthMode = ({
 
   // ── Tiebreaker wheel modal ────────────────────────────────────────────────
   const [tiebreakerModalOpen, setTiebreakerModalOpen] = useState(false);
+  // ── Manual overall winner (admin chọn tay, bypass tiebreaker) ────────────
+  const [manualOverallWinner, setManualOverallWinner] = useState<"player1" | "player2" | null>(null);
 
   // ── Per-round effects helper ───────────────────────────────────────────────
   const getPerRoundEffects = (char: Character | undefined, playerNo?: number) =>
@@ -498,6 +500,7 @@ export const WheelOfTruthMode = ({
     setCenterTab("pre");
     setTiebreakerWheelResult(null);
     setTiebreakerModalOpen(false);
+    setManualOverallWinner(null);
     setAfterCombatBuilt(true);
   };
 
@@ -667,6 +670,7 @@ export const WheelOfTruthMode = ({
     roundtableWinnerOverride: null,
     alwaysTiebreakerWheel: true,
     afterCombatBuilt,
+    manualOverallWinner,
     computeRoundPoints,
   });
 
@@ -681,6 +685,17 @@ export const WheelOfTruthMode = ({
     setAfterCombatBuilt(true);
     setCenterTab("after");
   }, [tiebreakerWheelResult]);
+
+  // Khi admin chọn tay winner → cũng gọi pendingAfterCombatBuildRef, bypass tiebreaker
+  useEffect(() => {
+    if (!manualOverallWinner) return;
+    if (!pendingAfterCombatBuildRef.current) return;
+    const fn = pendingAfterCombatBuildRef.current;
+    pendingAfterCombatBuildRef.current = null;
+    fn(manualOverallWinner);
+    setAfterCombatBuilt(true);
+    setCenterTab("after");
+  }, [manualOverallWinner]);
 
   const mainWinner =
     combatConfirmed && effectiveWinner
@@ -822,10 +837,11 @@ export const WheelOfTruthMode = ({
     if (!battleDone) return;
     if (
       combatResult &&
-      combatResult.player1Score === combatResult.player2Score
+      combatResult.player1Score === combatResult.player2Score &&
+      !manualOverallWinner
     ) {
-      // Hòa điểm: giữ tab "wheel", mở tiebreak modal ngay
-      setTiebreakerModalOpen(true);
+      // Hòa điểm: giữ tab "wheel", KHÔNG tự mở modal — để user chọn quay hay chọn tay
+      setCenterTab("wheel");
     } else {
       setCenterTab("after");
     }
@@ -1910,7 +1926,25 @@ export const WheelOfTruthMode = ({
                         {effectiveScores.s2}). Quay vòng quay 50/50 để xác định
                         người thắng.
                       </div>
-                      {tiebreakerWheelResult ? (
+                      {manualOverallWinner ? (
+                        <div className="flex flex-col items-center gap-1">
+                          <div
+                            className={`text-sm font-black px-4 py-1.5 rounded-lg border ${
+                              manualOverallWinner === "player1"
+                                ? "text-blue-300 bg-blue-500/20 border-blue-500/40"
+                                : "text-red-300 bg-red-500/20 border-red-500/40"
+                            }`}
+                          >
+                            {manualOverallWinner === "player1" ? player1?.name : player2?.name} thắng (chọn tay)
+                          </div>
+                          <button
+                            onClick={() => setManualOverallWinner(null)}
+                            className="text-[10px] text-gray-500 hover:text-gray-300 transition-colors underline"
+                          >
+                            Huỷ
+                          </button>
+                        </div>
+                      ) : tiebreakerWheelResult ? (
                         <div
                           className={`text-sm font-black px-4 py-1.5 rounded-lg border ${
                             tiebreakerWheelResult === "player1"
@@ -1924,12 +1958,29 @@ export const WheelOfTruthMode = ({
                           thắng tiebreak!
                         </div>
                       ) : (
-                        <button
-                          onClick={() => setTiebreakerModalOpen(true)}
-                          className="px-6 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 hover:border-amber-400 text-amber-300 hover:text-amber-100 font-display text-sm font-bold transition-all hover:scale-105"
-                        >
-                          ✦ Quay Tiebreak ✦
-                        </button>
+                        <div className="flex flex-col items-center gap-2 w-full">
+                          <button
+                            onClick={() => setTiebreakerModalOpen(true)}
+                            className="px-6 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 hover:border-amber-400 text-amber-300 hover:text-amber-100 font-display text-sm font-bold transition-all hover:scale-105"
+                          >
+                            ✦ Quay Tiebreak ✦
+                          </button>
+                          <div className="text-[10px] text-gray-600 uppercase tracking-widest">hoặc chọn tay</div>
+                          <div className="flex gap-2 w-full">
+                            <button
+                              onClick={() => setManualOverallWinner("player1")}
+                              className="flex-1 px-3 py-1.5 rounded border bg-blue-900/50 text-blue-300 border-blue-600/50 hover:bg-blue-700/60 text-xs font-black transition-colors"
+                            >
+                              {player1?.name}
+                            </button>
+                            <button
+                              onClick={() => setManualOverallWinner("player2")}
+                              className="flex-1 px-3 py-1.5 rounded border bg-red-900/50 text-red-300 border-red-600/50 hover:bg-red-700/60 text-xs font-black transition-colors"
+                            >
+                              {player2?.name}
+                            </button>
+                          </div>
+                        </div>
                       )}
                     </div>
                   )}
@@ -2005,26 +2056,26 @@ export const WheelOfTruthMode = ({
                         {effectiveScores.s2}). Quay vòng quay 50/50 để xác định
                         người thắng.
                       </div>
-                      {tiebreakerWheelResult ? (
-                        <div
-                          className={`text-sm font-black px-4 py-1.5 rounded-lg border ${
-                            tiebreakerWheelResult === "player1"
-                              ? "text-blue-300 bg-blue-500/20 border-blue-500/40"
-                              : "text-red-300 bg-red-500/20 border-red-500/40"
-                          }`}
-                        >
-                          {tiebreakerWheelResult === "player1"
-                            ? player1?.name
-                            : player2?.name}{" "}
-                          thắng tiebreak!
+                      {manualOverallWinner ? (
+                        <div className="flex flex-col items-center gap-1">
+                          <div className={`text-sm font-black px-4 py-1.5 rounded-lg border ${manualOverallWinner === "player1" ? "text-blue-300 bg-blue-500/20 border-blue-500/40" : "text-red-300 bg-red-500/20 border-red-500/40"}`}>
+                            {manualOverallWinner === "player1" ? player1?.name : player2?.name} thắng (chọn tay)
+                          </div>
+                          <button onClick={() => setManualOverallWinner(null)} className="text-[10px] text-gray-500 hover:text-gray-300 transition-colors underline">Huỷ</button>
+                        </div>
+                      ) : tiebreakerWheelResult ? (
+                        <div className={`text-sm font-black px-4 py-1.5 rounded-lg border ${tiebreakerWheelResult === "player1" ? "text-blue-300 bg-blue-500/20 border-blue-500/40" : "text-red-300 bg-red-500/20 border-red-500/40"}`}>
+                          {tiebreakerWheelResult === "player1" ? player1?.name : player2?.name}{" "}thắng tiebreak!
                         </div>
                       ) : (
-                        <button
-                          onClick={() => setTiebreakerModalOpen(true)}
-                          className="px-6 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 hover:border-amber-400 text-amber-300 hover:text-amber-100 font-display text-sm font-bold transition-all hover:scale-105"
-                        >
-                          ✦ Quay Tiebreak ✦
-                        </button>
+                        <div className="flex flex-col items-center gap-2 w-full">
+                          <button onClick={() => setTiebreakerModalOpen(true)} className="px-6 py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/50 hover:border-amber-400 text-amber-300 hover:text-amber-100 font-display text-sm font-bold transition-all hover:scale-105">✦ Quay Tiebreak ✦</button>
+                          <div className="text-[10px] text-gray-600 uppercase tracking-widest">hoặc chọn tay</div>
+                          <div className="flex gap-2 w-full">
+                            <button onClick={() => setManualOverallWinner("player1")} className="flex-1 px-3 py-1.5 rounded border bg-blue-900/50 text-blue-300 border-blue-600/50 hover:bg-blue-700/60 text-xs font-black transition-colors">{player1?.name}</button>
+                            <button onClick={() => setManualOverallWinner("player2")} className="flex-1 px-3 py-1.5 rounded border bg-red-900/50 text-red-300 border-red-600/50 hover:bg-red-700/60 text-xs font-black transition-colors">{player2?.name}</button>
+                          </div>
+                        </div>
                       )}
                     </div>
                   )}

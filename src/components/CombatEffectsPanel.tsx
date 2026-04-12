@@ -12,7 +12,7 @@
  * - Section separation rõ ràng: Trước / Trong / Sau combat
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ProbabilityWheelModal,
   type WheelSpinItem,
@@ -143,6 +143,9 @@ interface ResolverCtx {
   roundsWon: number;
   roundsLost: number;
   margin: number;
+  /** disabledItems tại thời điểm build — dùng để lọc power đã bị disable trước đó */
+  disabledItems?: Set<string>;
+  opponentPlayerNo?: number;
 }
 
 const STAT_LABELS: Record<string, string> = {
@@ -2036,16 +2039,21 @@ const EFFECT_DEFS: EffectDef[] = [
     resolver: (ctx) => {
       const disableTarget =
         ctx.playerLabel === "player1" ? "player2" : "player1";
+      const oppNo = ctx.opponentPlayerNo;
       const oppPowers = (ctx.opponentCharacter?.powers || [])
         .filter((p: any) => !p?.isLost)
         .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
-        .filter(Boolean);
+        .filter(Boolean)
+        // Lọc bỏ các power đã bị disabled bởi Anti-Magic Barrier trước đó
+        .filter((name: string) =>
+          !oppNo || !ctx.disabledItems?.has(`${oppNo}-power-${name}`)
+        );
       if (oppPowers.length === 0) return null;
       // Nếu đối thủ chỉ có 1 power → disable luôn, không cần spin
       if (oppPowers.length <= 1) {
         return {
           category: "auto" as EffectCategory,
-          description: `Power Negation: Đối thủ chỉ có 1 Power (${oppPowers[0]}) → tự động vô hiệu.`,
+          description: `Power Negation: Đối thủ chỉ có 1 Power active (${oppPowers[0]}) → tự động vô hiệu.`,
           autoDisablePowers: [{ powerName: oppPowers[0], disableTarget }],
         };
       }
@@ -2083,16 +2091,21 @@ const EFFECT_DEFS: EffectDef[] = [
     resolver: (ctx) => {
       const disableTarget =
         ctx.playerLabel === "player1" ? "player2" : "player1";
+      const oppNo = ctx.opponentPlayerNo;
       const oppPowers = (ctx.opponentCharacter?.powers || [])
         .filter((p: any) => !p?.isLost)
         .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
-        .filter(Boolean);
+        .filter(Boolean)
+        // Lọc bỏ các power đã bị disabled trước đó (Power Negation, Memory Alter, v.v.)
+        .filter((name: string) =>
+          !oppNo || !ctx.disabledItems?.has(`${oppNo}-power-${name}`)
+        );
       if (oppPowers.length === 0) return null;
-      // Nếu đối thủ có ≤2 power → disable toàn bộ, không cần spin
+      // Nếu đối thủ có ≤2 power active → disable toàn bộ, không cần spin
       if (oppPowers.length <= 2) {
         return {
           category: "auto" as EffectCategory,
-          description: `Anti-Magic Barrier: Đối thủ có ${oppPowers.length} Power (≤2) → tự động vô hiệu tất cả: ${oppPowers.join(", ")}.`,
+          description: `Anti-Magic Barrier: Đối thủ có ${oppPowers.length} Power active (≤2) → tự động vô hiệu tất cả: ${oppPowers.join(", ")}.`,
           autoDisablePowers: oppPowers.map((powerName) => ({
             powerName,
             disableTarget,
@@ -2430,6 +2443,7 @@ function buildPendingEffects(
   afterCombatOnly?: boolean,
   disabledItems?: Set<string>,
   playerNo?: number,
+  opponentPlayerNo?: number,
 ): CombatPendingEffect[] {
   const result = combatResult ?? EMPTY_COMBAT_RESULT;
   const isWinner = result.winner === playerLabel;
@@ -2443,6 +2457,7 @@ function buildPendingEffects(
   ).length;
   const margin = Math.abs(result.player1Score - result.player2Score);
 
+  // opponentPlayerNo passed explicitly from caller
   const ctx: ResolverCtx = {
     character,
     opponentCharacter,
@@ -2453,6 +2468,8 @@ function buildPendingEffects(
     roundsWon,
     roundsLost,
     margin,
+    disabledItems,
+    opponentPlayerNo,
   };
 
   // Collect source names (quirks + archetypes + house names + house sub-types + sub-race + powers + gears) lowercase
@@ -2902,6 +2919,7 @@ export const CombatEffectsPanel = ({
           afterCombatOnly,
           disabledItems,
           player1.no,
+          player2.no,
         ),
       );
     }
@@ -2918,6 +2936,7 @@ export const CombatEffectsPanel = ({
           afterCombatOnly,
           disabledItems,
           player2.no,
+          player1.no,
         ),
       );
     }
@@ -2929,6 +2948,7 @@ export const CombatEffectsPanel = ({
   // Reset toàn bộ khi resetKey thay đổi (e.g. sub-combat mới bắt đầu)
   useEffect(() => {
     setEffects(buildEffects());
+    localDisabledPowersRef.current = new Set();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resetKey]);
 
@@ -2962,6 +2982,10 @@ export const CombatEffectsPanel = ({
     spinsLeft: number;
   }>({ isOpen: false, effect: null, spinsLeft: 1 });
 
+  // Track power đã bị disable trong session combat này — cập nhật NGAY khi spin kết thúc
+  // (không chờ prop disabledItems từ parent update async)
+  const localDisabledPowersRef = useRef<Set<string>>(new Set());
+
   if (effects.length === 0) return null;
 
   const handleApply = (id: string) => {
@@ -2994,7 +3018,34 @@ export const CombatEffectsPanel = ({
 
   const handleSpinRequest = (effect: CombatPendingEffect) => {
     const totalSpins = (effect.wheelItems?.[0]?.meta?.spinCount as number) ?? 1;
-    setSpinModal({ isOpen: true, effect, spinsLeft: totalSpins });
+    // Với power_disable effects (Power Negation, Anti-Magic Barrier, Memory Alter):
+    // rebuild wheelItems tại thời điểm mở modal để loại bỏ power đã bị disabled trước đó.
+    // Dùng localDisabledPowersRef (cập nhật đồng bộ ngay khi spin kết thúc) kết hợp
+    // với disabledItems prop để không bỏ sót power đã bị disable từ trước đó.
+    const isPowerDisableEffect =
+      effect.sourceName === "power negation" ||
+      effect.sourceName === "anti-magic barrier" ||
+      effect.sourceName === "memory alter";
+    let finalEffect = effect;
+    if (isPowerDisableEffect && effect.wheelItems?.length) {
+      const disableTarget = effect.wheelItems[0]?.meta?.disableTarget as string | undefined;
+      const oppPlayer = disableTarget === "player1" ? player1 : player2;
+      if (oppPlayer) {
+        const oppNo = oppPlayer.no;
+        const filteredItems = effect.wheelItems.filter((w) => {
+          const powerKey = `${oppNo}-power-${w.meta?.powerName}`;
+          // Kiểm tra cả prop (từ parent) lẫn local ref (cập nhật ngay trong session)
+          return (
+            !disabledItems?.has(powerKey) &&
+            !localDisabledPowersRef.current.has(powerKey)
+          );
+        });
+        if (filteredItems.length !== effect.wheelItems.length) {
+          finalEffect = { ...effect, wheelItems: filteredItems };
+        }
+      }
+    }
+    setSpinModal({ isOpen: true, effect: finalEffect, spinsLeft: totalSpins });
   };
 
   const handleSpinResult = (item: WheelSpinItem) => {
@@ -3010,26 +3061,58 @@ export const CombatEffectsPanel = ({
         : item.isSuccess
           ? `Thành công: ${item.label}`
           : `Thất bại: ${item.label}`;
+
+    // Nếu là power-disable effect: ghi ngay vào localRef TRƯỚC khi gọi onWheelResolved
+    // để lần spin kế tiếp (e.g. Anti-Magic Barrier sau Power Negation) nhìn thấy power này đã bị disable
+    const isPowerDisableEffect =
+      effect.sourceName === "power negation" ||
+      effect.sourceName === "anti-magic barrier" ||
+      effect.sourceName === "memory alter";
+    if (isPowerDisableEffect) {
+      const disabledPowerName = item.meta?.powerName as string | undefined;
+      const disableTarget = item.meta?.disableTarget as string | undefined;
+      if (disabledPowerName && disableTarget) {
+        const targetPlayer = disableTarget === "player1" ? player1 : player2;
+        if (targetPlayer) {
+          localDisabledPowersRef.current = new Set([
+            ...localDisabledPowersRef.current,
+            `${targetPlayer.no}-power-${disabledPowerName}`,
+          ]);
+        }
+      }
+    }
+
     onWheelResolved?.(effect.playerLabel, effect.sourceName, item);
 
     const totalSpins = (effect.wheelItems?.[0]?.meta?.spinCount as number) ?? 1;
     const currentSpin = totalSpins - spinModal.spinsLeft + 1;
     const spinsLeft = spinModal.spinsLeft - 1;
     if (spinsLeft > 0) {
-      // Còn lần quay nữa — close modal trước để trigger re-open
+      // Còn lần quay nữa — lọc bỏ power vừa bị disable ra khỏi wheel
+      const disabledPowerName = item.meta?.powerName as string | undefined;
+      const nextWheelItems = disabledPowerName
+        ? (effect.wheelItems ?? []).filter(
+            (w) => w.meta?.powerName !== disabledPowerName,
+          )
+        : effect.wheelItems;
+      const nextEffect = nextWheelItems !== effect.wheelItems
+        ? { ...effect, wheelItems: nextWheelItems }
+        : effect;
+
       setEffects((prev) =>
         prev.map((e) =>
           e.id === id
             ? {
                 ...e,
+                wheelItems: nextWheelItems,
                 resolvedNote: `Lần ${currentSpin}/${totalSpins}: ${item.label} (còn ${spinsLeft} lần)`,
               }
             : e,
         ),
       );
-      setSpinModal({ isOpen: false, effect, spinsLeft });
+      setSpinModal({ isOpen: false, effect: nextEffect, spinsLeft });
       setTimeout(() => {
-        setSpinModal({ isOpen: true, effect, spinsLeft });
+        setSpinModal({ isOpen: true, effect: nextEffect, spinsLeft });
       }, 150);
     } else {
       setEffects((prev) =>

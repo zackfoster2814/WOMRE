@@ -4,54 +4,33 @@ import {
   PLAYER_INDEX_FILE_ID,
 } from "../config/googleDrive";
 
+void GOOGLE_API_KEY; // unused but kept for potential fallback
+
 // Cache player index sau lần đầu load
 let _playerIndexCache: Record<string, string> | null = null;
 
 // Cache nội dung từng player text {no: content}
 const _playerTextCache = new Map<number, string>();
 
-// Promise-level cache cho bundle load (IS_WEB) — tránh fetch trùng khi nhiều caller cùng lúc
-let _bundlePromise: Promise<void> | null = null;
-
 // Promise-level cache cho fetchAllPlayerTexts — dedup các caller đồng thời
 let _allTextsPromise: Promise<Map<number, string>> | null = null;
 
-/**
- * Lấy player index map {No1: fileId, No2: fileId, ...}
- * Cache lại sau lần đầu để không fetch lại nhiều lần
- */
-// Web (không phải Tauri) thì dùng local files, Tauri native dùng Drive
-const IS_WEB = !import.meta.env.TAURI_ENV_TARGET_TRIPLE;
+// ── Player Index ──────────────────────────────────────────────────────────────
 
 export async function getPlayerIndex(): Promise<Record<string, string>> {
   if (_playerIndexCache) return _playerIndexCache;
-  if (IS_WEB) return getPlayerIndexLocal();
   _playerIndexCache = await readDriveFile<Record<string, string>>(PLAYER_INDEX_FILE_ID);
   return _playerIndexCache;
 }
 
-/** Reset cache index (dùng khi cần force reload dữ liệu mới nhất) */
 export function clearPlayerIndexCache(): void {
   _playerIndexCache = null;
 }
 
-/**
- * Fetch nội dung text của 1 player theo số (No)
- * Có cache: lần đầu fetch từ Drive, lần sau trả từ cache
- */
+// ── Fetch single player ───────────────────────────────────────────────────────
+
 export async function fetchPlayerText(no: number): Promise<string> {
   if (_playerTextCache.has(no)) return _playerTextCache.get(no)!;
-  if (IS_WEB) {
-    // Thử load bundle trước — nếu bundle đã load thì cache có sẵn
-    await loadPlayerBundle();
-    if (_playerTextCache.has(no)) return _playerTextCache.get(no)!;
-    // Fallback: fetch riêng lẻ
-    const res = await fetch(`${BASE_URL}data/No${no}.txt`);
-    if (!res.ok) throw new Error(`Player No${no} not found`);
-    const text = await res.text();
-    _playerTextCache.set(no, text);
-    return text;
-  }
   const index = await getPlayerIndex();
   const fileId = index[`No${no}`];
   if (!fileId) throw new Error(`Player No${no} not found in index`);
@@ -60,93 +39,11 @@ export async function fetchPlayerText(no: number): Promise<string> {
   return text;
 }
 
-/**
- * Fetch player texts từ local public/data/ (dùng cho production/deploy)
- */
-// Base path cho static assets (khác nhau giữa dev và GitHub Pages)
-const BASE_URL = import.meta.env.BASE_URL ?? '/';
+// ── Fetch multiple players (batchRead, sequential chunks) ────────────────────
 
-/**
- * Tải players-bundle.json một lần duy nhất và điền vào _playerTextCache.
- * Các caller đồng thời dùng chung một Promise — không fetch trùng.
- * Nếu bundle không tồn tại, promise resolve bình thường (không throw).
- */
-async function loadPlayerBundle(): Promise<void> {
-  if (_bundlePromise) return _bundlePromise;
-  _bundlePromise = (async () => {
-    try {
-      const res = await fetch(`${BASE_URL}data/players-bundle.json`);
-      if (!res.ok) throw new Error(`bundle ${res.status}`);
-      const bundle: Record<string, string> = await res.json();
-      for (const [key, text] of Object.entries(bundle)) {
-        const no = parseInt(key, 10);
-        if (!isNaN(no) && !_playerTextCache.has(no)) {
-          _playerTextCache.set(no, text);
-        }
-      }
-    } catch {
-      // Bundle chưa build hoặc không tồn tại — fallback sang fetch riêng lẻ
-      _bundlePromise = null;
-    }
-  })();
-  return _bundlePromise;
-}
-
-async function fetchPlayerTextsLocal(nos: number[]): Promise<Map<number, string>> {
-  // Nút thắt 1: nạp bundle trước (1 request thay vì N request)
-  await loadPlayerBundle();
-
-  // Nút thắt 1 fallback: các player chưa có trong cache sau khi load bundle
-  // (xảy ra khi bundle chưa được build) — fetch riêng lẻ
-  const toFetch = nos.filter((no) => !_playerTextCache.has(no));
-  if (toFetch.length > 0) {
-    await Promise.all(
-      toFetch.map(async (no) => {
-        try {
-          const res = await fetch(`${BASE_URL}data/No${no}.txt`);
-          if (res.ok) {
-            const text = await res.text();
-            _playerTextCache.set(no, text);
-          }
-        } catch {
-          // file không tồn tại — bỏ qua
-        }
-      }),
-    );
-  }
-
-  const result = new Map<number, string>();
-  for (const no of nos) {
-    if (_playerTextCache.has(no)) result.set(no, _playerTextCache.get(no)!);
-  }
-  return result;
-}
-
-/**
- * Lấy player index local từ public/data/player-index.json
- * Local format: {"players": [1, 2, 3, ...]} → convert sang {"No1": "local", "No2": "local", ...}
- */
-async function getPlayerIndexLocal(): Promise<Record<string, string>> {
-  if (_playerIndexCache) return _playerIndexCache;
-  const res = await fetch(`${BASE_URL}data/player-index.json`);
-  const data = await res.json();
-  const nos: number[] = Array.isArray(data) ? data : (data.players ?? []);
-  const index: Record<string, string> = {};
-  for (const no of nos) {
-    index[`No${no}`] = `local:${no}`;
-  }
-  _playerIndexCache = index;
-  return _playerIndexCache;
-}
-
-/**
- * Fetch nhiều player qua Apps Script batchRead (1 request / chunk)
- * Trả về map {no: text} — dùng cache, chỉ fetch những player chưa có
- */
 export async function fetchPlayerTexts(
   nos: number[],
 ): Promise<Map<number, string>> {
-  if (IS_WEB) return fetchPlayerTextsLocal(nos);
   const index = await getPlayerIndex();
   const result = new Map<number, string>();
   const toFetch = nos.filter((no) => !_playerTextCache.has(no));
@@ -158,28 +55,30 @@ export async function fetchPlayerTexts(
       validNos.map((no) => [index[`No${no}`], no]),
     );
 
-    const BATCH_SIZE = 65;
+    // Chia chunk và fetch song song — Worker có cache nên mỗi chunk sẽ rất nhanh lần 2+
+    const BATCH_SIZE = 50;
     const chunks: string[][] = [];
     for (let i = 0; i < fileIds.length; i += BATCH_SIZE) {
       chunks.push(fileIds.slice(i, i + BATCH_SIZE));
     }
 
-    const responses = await Promise.all(
+    await Promise.all(
       chunks.map(async (chunk) => {
-        const url = `${APPS_SCRIPT_URL}?action=batchRead&fileIds=${chunk.join(",")}`;
-        const res = await fetch(url, { method: "GET", redirect: "follow" });
-        if (!res.ok) return {} as Record<string, string | null>;
-        return res.json() as Promise<Record<string, string | null>>;
+        try {
+          const url = `${APPS_SCRIPT_URL}?action=batchRead&fileIds=${chunk.join(",")}`;
+          const res = await fetch(url, { method: "GET" });
+          if (!res.ok) return;
+          const batch = await res.json() as Record<string, string | null>;
+          for (const [fileId, content] of Object.entries(batch)) {
+            if (content == null) continue;
+            const no = noByFileId.get(fileId);
+            if (no !== undefined) _playerTextCache.set(no, content);
+          }
+        } catch {
+          // chunk fail — bỏ qua
+        }
       }),
     );
-
-    for (const batch of responses) {
-      for (const [fileId, content] of Object.entries(batch)) {
-        if (content == null) continue;
-        const no = noByFileId.get(fileId);
-        if (no !== undefined) _playerTextCache.set(no, content);
-      }
-    }
   }
 
   for (const no of nos) {
@@ -188,11 +87,8 @@ export async function fetchPlayerTexts(
   return result;
 }
 
-/**
- * Fetch tất cả player trong index song song
- * Trả về map {no: text} — dùng cache
- * Nút thắt 3: promise-level dedup — nhiều caller đồng thời chỉ tạo 1 fetch duy nhất
- */
+// ── Fetch all players ─────────────────────────────────────────────────────────
+
 export async function fetchAllPlayerTexts(): Promise<Map<number, string>> {
   if (_allTextsPromise) return _allTextsPromise;
   _allTextsPromise = (async () => {
@@ -202,110 +98,69 @@ export async function fetchAllPlayerTexts(): Promise<Map<number, string>> {
       .map((k) => parseInt(k.replace("No", "")));
     return fetchPlayerTexts(nos);
   })();
-  // Nếu lỗi, xóa cache để cho phép retry
   _allTextsPromise.catch(() => { _allTextsPromise = null; });
   return _allTextsPromise;
 }
 
-/** Reset toàn bộ cache player texts (dùng khi cần force reload) */
+// ── Cache management ──────────────────────────────────────────────────────────
+
 export function clearPlayerTextCache(): void {
   _playerTextCache.clear();
-  _bundlePromise = null;
   _allTextsPromise = null;
 }
 
-/** Xóa cache của 1 player để force fetch mới khi click vào */
 export function invalidatePlayerCache(no: number): void {
   _playerTextCache.delete(no);
 }
 
-/**
- * Append plain text to a Drive file (read current → append → overwrite).
- * Uses Apps Script with action=appendText.
- */
-export async function appendReportToDrive(fileId: string, content: string): Promise<void> {
-  if (!APPS_SCRIPT_URL) {
-    throw new Error("Apps Script URL not configured.");
-  }
-  const url = `${APPS_SCRIPT_URL}?fileId=${fileId}&action=appendText`;
-  const response = await fetch(url, {
-    method: "POST",
-    body: content,
-    redirect: "follow",
-  });
-  if (!response.ok) {
-    throw new Error(`appendReportToDrive failed: ${response.status} ${response.statusText}`);
-  }
-  const result = await response.json().catch(() => null);
-  if (result && !result.success) {
-    throw new Error(`Apps Script error: ${JSON.stringify(result)}`);
-  }
-}
+// ── Drive read/write via Cloudflare Worker ────────────────────────────────────
 
-/**
- * Read a JSON file from Google Drive
- * Uses Cloudflare Worker proxy (CORS-safe, works on both web and Tauri)
- */
 export async function readDriveFile<T>(fileId: string): Promise<T> {
-  if (APPS_SCRIPT_URL) {
-    const url = `${APPS_SCRIPT_URL}?fileId=${fileId}`;
-    const response = await fetch(url, { method: "GET" });
-    if (response.ok) return response.json();
-    throw new Error(`Worker read failed: ${response.status}`);
-  }
-  throw new Error("No Worker URL configured.");
+  if (!APPS_SCRIPT_URL) throw new Error("Worker URL not configured.");
+  const res = await fetch(`${APPS_SCRIPT_URL}?fileId=${fileId}`, { method: "GET" });
+  if (!res.ok) throw new Error(`Worker read failed: ${res.status}`);
+  return res.json();
 }
 
-/**
- * Write/update a JSON file on Google Drive
- * Uses Cloudflare Worker proxy (works on both web and Tauri)
- */
 export async function writeDriveFile<T>(fileId: string, data: T): Promise<void> {
-  if (!APPS_SCRIPT_URL) {
-    throw new Error("Worker URL not configured.");
-  }
-  const url = `${APPS_SCRIPT_URL}?fileId=${fileId}`;
-  const response = await fetch(url, {
+  if (!APPS_SCRIPT_URL) throw new Error("Worker URL not configured.");
+  const res = await fetch(`${APPS_SCRIPT_URL}?fileId=${fileId}`, {
     method: "POST",
     body: JSON.stringify(data, null, 2),
   });
-  if (!response.ok) {
-    throw new Error(`Worker write failed: ${response.status} ${response.statusText}`);
-  }
-  const result = await response.json().catch(() => null);
-  if (result && !result.success) {
-    throw new Error(`Worker error: ${JSON.stringify(result)}`);
-  }
+  if (!res.ok) throw new Error(`Worker write failed: ${res.status} ${res.statusText}`);
+  const result = await res.json().catch(() => null);
+  if (result && !result.success) throw new Error(`Worker error: ${JSON.stringify(result)}`);
 }
 
-/**
- * Read a file from Google Drive as plain text (for .txt player files, Tauri only)
- */
 export async function readDriveFileAsText(fileId: string): Promise<string> {
   if (!APPS_SCRIPT_URL) throw new Error("Worker URL not configured.");
-  const url = `${APPS_SCRIPT_URL}?fileId=${fileId}`;
-  const response = await fetch(url, { method: "GET" });
-  if (response.ok) return response.text();
-  throw new Error(`Worker read text failed: ${response.status} for ${fileId}`);
+  const res = await fetch(`${APPS_SCRIPT_URL}?fileId=${fileId}`, { method: "GET" });
+  if (!res.ok) throw new Error(`Worker read text failed: ${res.status} for ${fileId}`);
+  return res.text();
 }
 
-/**
- * List all files in a Drive folder, returns {filename_without_ext: fileId}
- */
+export async function appendReportToDrive(fileId: string, content: string): Promise<void> {
+  if (!APPS_SCRIPT_URL) throw new Error("Worker URL not configured.");
+  const res = await fetch(`${APPS_SCRIPT_URL}?fileId=${fileId}&action=appendText`, {
+    method: "POST",
+    body: content,
+  });
+  if (!res.ok) throw new Error(`appendReportToDrive failed: ${res.status} ${res.statusText}`);
+  const result = await res.json().catch(() => null);
+  if (result && !result.success) throw new Error(`Worker error: ${JSON.stringify(result)}`);
+}
+
 export async function listDriveFolder(folderId: string): Promise<Record<string, string>> {
-  if (!APPS_SCRIPT_URL) throw new Error("Apps Script URL not configured.");
-  const url = `${APPS_SCRIPT_URL}?action=listFolder&folderId=${folderId}`;
-  const response = await fetch(url, { method: "GET", redirect: "follow" });
-  if (!response.ok) throw new Error(`listDriveFolder failed: ${response.status}`);
-  return response.json();
+  if (!APPS_SCRIPT_URL) throw new Error("Worker URL not configured.");
+  const res = await fetch(`${APPS_SCRIPT_URL}?action=listFolder&folderId=${folderId}`, { method: "GET" });
+  if (!res.ok) throw new Error(`listDriveFolder failed: ${res.status}`);
+  return res.json();
 }
 
-/**
- * Check if Google Drive is configured
- */
 export function isDriveConfigured(): { canRead: boolean; canWrite: boolean } {
   return {
-    canRead: !!APPS_SCRIPT_URL || !!GOOGLE_API_KEY,
+    canRead: !!APPS_SCRIPT_URL,
     canWrite: !!APPS_SCRIPT_URL,
   };
 }

@@ -1365,7 +1365,7 @@ registerImmediateHandler(
     return {
       statModifiers: STAT_NAMES.map((stat) => ({ stat, value: 3 })),
       skipDefault: true,
-      description: "+3 All Stats (Haru Urara - đã đến vòng 32, net +2)",
+      description: "+2 All Stats (Haru Urara - đã đến vòng 32, net +2)",
     };
   },
   "+3 all stats if tournament round is 32 or beyond (net +2 after initial -1)",

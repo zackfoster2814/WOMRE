@@ -34,6 +34,8 @@ interface UsePvPScoresParams {
   alwaysTiebreakerWheel?: boolean;
   /** Khi false: after-combat entries chưa được build (đang chờ tiebreak) → không block trên entries */
   afterCombatBuilt?: boolean;
+  /** Admin chọn tay winner — override toàn bộ, bypass tiebreaker */
+  manualOverallWinner?: "player1" | "player2" | null;
   computeRoundPoints: (
     side: "player1" | "player2",
     winner: "player1" | "player2" | "tie",
@@ -63,6 +65,7 @@ export function usePvPScores({
   roundtableWinnerOverride,
   alwaysTiebreakerWheel = false,
   afterCombatBuilt = true,
+  manualOverallWinner = null,
   computeRoundPoints,
 }: UsePvPScoresParams) {
 const stepInProgress = !!stepState && stepRoundIndex < 6;
@@ -363,6 +366,8 @@ const effectiveWinner = useMemo((): "player1" | "player2" | null => {
   if (!combatResult || !player1 || !player2) return null;
   // Roundtable Hold: Tarnished thắng trận phụ → override winner về người thua được cứu
   if (roundtableWinnerOverride) return roundtableWinnerOverride;
+  // Admin chọn tay → bypass tiebreaker và mọi logic hoà
+  if (manualOverallWinner) return manualOverallWinner;
 
   // Devotee auto-lose vs God/Demi-God (mạnh hơn mọi hiệu ứng kết quả khác)
   const devoteeAutoLose = (p: PvPPlayerData, opp: PvPPlayerData): boolean => {
@@ -408,6 +413,7 @@ const effectiveWinner = useMemo((): "player1" | "player2" | null => {
   player1,
   player2,
   roundtableWinnerOverride,
+  manualOverallWinner,
   disabledItems,
   tiebreakerWheelResult,
   alwaysTiebreakerWheel,
