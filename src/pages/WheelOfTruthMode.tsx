@@ -386,14 +386,32 @@ export const WheelOfTruthMode = ({
     const loadPlayers = async () => {
       try {
         ensureEffectsInitialized();
-        const playerList: PvPPlayerData[] = [];
 
         if (tournamentMatch) {
           // Invalidate cache 2 player chính để luôn fetch data mới nhất
           invalidatePlayerCache(tournamentMatch.player1No);
           invalidatePlayerCache(tournamentMatch.player2No);
+
+          // Phase 1: fetch 2 player cần thiết trước → set ngay, không chờ 260 player
+          const twoTexts = await fetchPlayerTexts([
+            tournamentMatch.player1No,
+            tournamentMatch.player2No,
+          ]);
+          const p1Raw = parsePlayerFromText(
+            twoTexts.get(tournamentMatch.player1No) ?? "",
+            tournamentMatch.player1No,
+          );
+          const p2Raw = parsePlayerFromText(
+            twoTexts.get(tournamentMatch.player2No) ?? "",
+            tournamentMatch.player2No,
+          );
+          if (p1Raw) setPlayer1(p1Raw);
+          if (p2Raw) setPlayer2(p2Raw);
+          setLoading(false); // hiện UI ngay, không cần chờ load hết
         }
 
+        // Phase 2: load toàn bộ players (background) — cần cho allPlayers dropdown + cross-char effects
+        const playerList: PvPPlayerData[] = [];
         const index = await getPlayerIndex();
         const nos = Object.keys(index)
           .filter((k) => /^No\d+$/.test(k))
@@ -412,13 +430,12 @@ export const WheelOfTruthMode = ({
         );
         setAllPlayers(resolved);
 
+        // Cập nhật lại player1/player2 với stats đã resolved cross-char effects
         if (tournamentMatch) {
-          setPlayer1(
-            resolved.find((p) => p.no === tournamentMatch.player1No) ?? null,
-          );
-          setPlayer2(
-            resolved.find((p) => p.no === tournamentMatch.player2No) ?? null,
-          );
+          const r1 = resolved.find((p) => p.no === tournamentMatch.player1No);
+          const r2 = resolved.find((p) => p.no === tournamentMatch.player2No);
+          if (r1) setPlayer1(r1);
+          if (r2) setPlayer2(r2);
         }
       } catch (error) {
         console.error("Error loading players:", error);
