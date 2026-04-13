@@ -181,6 +181,8 @@ export function calcStatsWithDisabled(
   const charRace = (char as any).race?.race?.toLowerCase() || "";
   if (charRace === "skeleton") {
     final.iq = 1;
+  } else if (charRace === "skeleton (lich)" || charRace === "skeleton (lich king)") {
+    final.iq = 8;
   }
 
   const hasSlowMetabolism =
@@ -476,6 +478,8 @@ export function calcStatsWithBeforeCombat(
   const charRaceBC = (char as any).race?.race?.toLowerCase() || "";
   if (charRaceBC === "skeleton") {
     base.iq = 1;
+  } else if (charRaceBC === "skeleton (lich)" || charRaceBC === "skeleton (lich king)") {
+    base.iq = 8;
   }
 
   const archetypes: string[] = (char as any).archetypes || [];

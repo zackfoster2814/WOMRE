@@ -22,8 +22,11 @@ export const parsePlayerFromText = (
       ma: effects.totalStats.ma,
     };
     const pvpBaseStats: CharacterStats = { ...char.stats };
-    if ((char.race?.race || "").toLowerCase() === "skeleton") {
+    const raceL = (char.race?.race || "").toLowerCase();
+    if (raceL === "skeleton") {
       pvpBaseStats.iq = 1;
+    } else if (raceL === "skeleton (lich)" || raceL === "skeleton (lich king)") {
+      pvpBaseStats.iq = 8;
     }
     return {
       no: char.no || fallbackNo,
