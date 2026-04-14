@@ -25,7 +25,7 @@ Str: 7
 Spd: 5 (Respin thành 5 từ Greatrune, ban đầu là 1)
 Dur: 5
 IQ: 6
-BIQ: 1
+BIQ: 3 (từ 1 bị nguyền từ Coven Councol)
 MA: 8
 ```
 

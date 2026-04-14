@@ -62,6 +62,8 @@ Runeword: Không
 + Anti-Magic Barrier
 + Rickrolling
 + Power Negation (từ King's Landing)
++ The Coast is Clear! 
++ Body Enhancing
 ```
 
 ```
@@ -122,5 +124,18 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 2-4
 - Note: không mù không câm
+```
+PvP:
+- Đối thủ: Miltiphai
+- Kết quả: Lose
+- Tỉ số: 3-3
+- Note: câm round biq
+```
+```
+PvP:
+- Đối thủ: bo
+- Kết quả: lose
+- Tỉ số: 6-1
+- Note: gặp counter 
 ```
 ======

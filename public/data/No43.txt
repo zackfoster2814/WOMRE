@@ -1,6 +1,6 @@
 No.43
 Name: Swem (.swem)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -127,6 +127,13 @@ PvP:
 - Đối thủ: mHamster
 - Kết quả: Lose
 - Tỉ số: 2-3
+```
+
+```
+PvP:
+- Đối thủ: dlwlrma
+- Kết quả: Lose
+- Tỉ số: 6- -1
 ```
 
 ======

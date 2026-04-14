@@ -2,7 +2,7 @@ No.46
 Name: Yui (duyanh_57789)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -73,12 +73,14 @@ Lover:
 ```
 Other Source:
 - -2 dura (Aids)
+- -2 Dura (Aids)
 ```
 
 ```
 PvP Reward:
 - +1 MA
 - +1 Gear: Cursed Charm
+- +1 Spd
 ```
 
 ======
@@ -114,6 +116,14 @@ PvP:
 - Đối thủ: Sparxie đã bán nước chưa
 - Kết quả: Lose
 - Tỉ số: 6-1
+```
+
+```
+PvP:
+- Đối thủ: Kraken
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: choke 1 round, thắng tie break, pvp rw +1 spd, Aid -2 dura
 ```
 
 ======

@@ -1,6 +1,6 @@
 No.45
 Name: CúNga (minh1mui)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -108,6 +108,13 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 0-0
 - Note: thua vì Ragnarok
+```
+
+```
+PvP:
+- Đối thủ: Vinh Vander Bek
+- Kết quả: Lose
+- Tỉ số: 3-3
 ```
 
 ======

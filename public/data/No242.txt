@@ -2,7 +2,7 @@ No.242
 Name: bachtuotkun
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -115,6 +115,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 4-4
 - Note: Thắng round key kích metamagic, nhưng vẫn thua tiebreak
+```
+
+```
+PvP:
+- Đối thủ: catfish
+- Kết quả: Win
+- Tỉ số: 5-3
+- Note: k nhận pvp reward do brain rot
 ```
 
 ======

@@ -1,6 +1,6 @@
 No.234
 Name: Kraken (kraken235)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -116,6 +116,13 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 4-4
 - Note: ko né
+```
+
+```
+PvP:
+- Đối thủ: Yui
+- Kết quả: Lose
+- Tỉ số: 3-3
 ```
 
 ======

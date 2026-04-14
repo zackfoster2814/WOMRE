@@ -38,6 +38,7 @@ Houses:
  + 2 Normal gear:
   - Đai trinh tiết
   - Wizard Hat
+  - Golden coin
  + 1 Legacy gear:
   -
 ```
@@ -72,6 +73,7 @@ Lover:
 PvP Reward:
 - +1 str
 - +1 Str
+- Nhận 1 gear: Golden coin
 ```
 ```
 Other Source:
@@ -113,5 +115,11 @@ PvP:
 - Tỉ số: 6-2
 - Note: Mad Scientist: Enlarging, mất Aura farming
 ```
-
+```
+PvP:
+- Đối thủ: Narita Taigoat
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: Gọi bo ra đánh
+```
 ======

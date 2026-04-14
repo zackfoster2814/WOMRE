@@ -110,7 +110,6 @@ Other Source:
 - +2 Dura
 - -2 Dura (Wand)
 - -2 Dura (Wand)
-- +4 Dura (God)
 - 1 power: Drunken Boxing (The Tamer Straight Sword)
 - 1 power: Thơm (Wand)
 - 1 power: Bloody Strike (The Tamer Straight Sword)

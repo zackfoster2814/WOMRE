@@ -32,6 +32,7 @@ import {
   searchMatches,
   type SearchType,
 } from "../config/tournamentConfig";
+import { TournamentLoadingScreen3D } from "../components/three/TournamentLoadingScreen3D";
 
 // Initialize effects
 let effectsInitialized = false;
@@ -387,40 +388,13 @@ export const PvPTournamentPage = () => {
     input.click();
   }, []);
 
-  // Hiển thị màn hình intro video chỉ khi data cần load (showIntro=true) và chưa bỏ qua
+  // Hiển thị màn hình intro 3D tương tác
   if (showIntro) {
-    const introSrc = Math.random() < 0.001
-      ? "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&modestbranding=1&rel=0"
-      : "https://www.youtube.com/embed/8FrhYIFDTTc?autoplay=1&controls=0&modestbranding=1&rel=0";
     return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center relative">
-        {/* YouTube iframe full screen */}
-        <iframe
-          src={introSrc}
-          className="w-full h-full absolute inset-0"
-          style={{ border: "none" }}
-          allow="autoplay; encrypted-media"
-          allowFullScreen
-        />
-        {/* Overlay */}
-        <div className="absolute bottom-10 right-10 z-10">
-          {loading ? (
-            <div className="crystal-loader-wrapper scale-75">
-              <div className="crystal-loader" />
-              <div className="text-primary/70 font-display uppercase tracking-[0.2em] text-xs font-bold animate-pulse">
-                SVIT ĐANG NẤU...
-              </div>
-            </div>
-          ) : (
-            <button
-              onClick={() => setShowIntro(false)}
-              className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white text-lg rounded-none backdrop-blur border border-white/30 transition"
-            >
-              Bỏ qua
-            </button>
-          )}
-        </div>
-      </div>
+      <TournamentLoadingScreen3D
+        loading={loading}
+        onSkip={() => setShowIntro(false)}
+      />
     );
   }
 

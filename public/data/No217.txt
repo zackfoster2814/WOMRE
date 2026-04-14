@@ -2,7 +2,7 @@ No.217
 Name: Mặc Quyên (hodrick_.)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -87,6 +87,7 @@ PvP Reward:
 - +1 Power
 - +2 MA (House Tyrell)
 - +2 IQ (tyrell)
+- +2 IQ (tyrell)
 ```
 
 ======
@@ -122,4 +123,18 @@ PvP:
 - Tỉ số: 6-1
 ```
 
+```
+PvP:
+- Đối thủ: Tyrunny
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: clutch BIQ 2 lần, win tie break
+```
+```
+PvP:
+- Đối thủ: Ingay
+- Kết quả: Win
+- Tỉ số: 5-1
+- Note: +2 chỉ số thấp nhất (Tyrell)
+```
 ======

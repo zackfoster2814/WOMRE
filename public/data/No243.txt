@@ -86,6 +86,7 @@ Lover:
 Other Source:
 - +2 IQ (dryad)
 - +2 Str (dryad)
+- +2 MA (dryad)
 ```
 ```
 PvP Reward:

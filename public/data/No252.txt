@@ -23,7 +23,7 @@ Archetype:
 ```
 ```
 Str:9 Cursed of 36k
-Spd:0 Cursed of 36k
+Spd:2 Cursed of 36k
 Dur:6 Cursed of 36k
 IQ:3 Cursed of 36k
 BIQ:5 Cursed of 36k

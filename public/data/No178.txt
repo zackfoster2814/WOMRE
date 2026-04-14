@@ -2,7 +2,7 @@ No.178
 Name: Vinh Vander Bek (vinhvan)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -24,7 +24,7 @@ Archetype:
 + Bloodthirsty (Đã mất do Quirkless)
 ```
 ```
-Str: 10
+Str: 5 (lời nguyền địa ngục từ 10)
 Spd: 8
 Dur: 3
 IQ: 4
@@ -91,6 +91,7 @@ Other Source:
 - +1 Dura
 - +1 BIQ
 - +1 MA
+- +1 str
 ```
 
 ======
@@ -118,6 +119,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 3-5
 - Note: Gao Đen: k kích
+```
+
+```
+PvP:
+- Đối thủ: CúNga
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: +1 str cho tất cả siêu nhân
 ```
 
 ======

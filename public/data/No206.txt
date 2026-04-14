@@ -76,11 +76,12 @@ PvP Reward:
 ```
 ```
 Other Source:
-- Moonroot (+1)
+- Moonroot
 - Herbalist: Nhận thêm 1 phần thưởng PvP.
 - +1 Dura 
 - +1 Str 
 - Herbalist: Mirage Flower: Nhận thêm 1 phần thưởng PvP
+- Moonroot (+1)
 ```
 
 ======
@@ -118,6 +119,14 @@ PvP:
 - Tỉ số: 4-3
 - Note: PvP Reward: +2 Stat cao nhất
 Herbalist: Mistpetal: Thêm 1 Quirk: Mute
+```
+
+```
+PvP:
+- Đối thủ: bo
+- Kết quả: Win
+- Tỉ số: 6-1
+- Note: heh
 ```
 
 ======

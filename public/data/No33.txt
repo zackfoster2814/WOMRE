@@ -2,7 +2,7 @@ No.33
 Name: Inglorious (ingloriousv)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -80,6 +80,7 @@ Lover:
 PvP Reward:
 - +1 MA
 - +1 Str
+- +1 Dura
 ```
 ======
 Battle Log:
@@ -117,6 +118,22 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 1-5
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Mặc Quyên
+- Kết quả: Lose
+- Tỉ số: 5-1
+- Note: Roundtable Hold
+```
+
+```
+PvP:
+- Đối thủ: Amos
+- Kết quả: Win
+- Tỉ số: 4-2
+- Note: pvp rw nhận 1 dura
 ```
 
 ======

@@ -1,6 +1,6 @@
 No.158
 Name: Gambling (da_ork_)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -143,5 +143,17 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 4-2
 ```
+PvP:
+- Đối thủ: Solus
+- Kết quả: Lose 
+- Tỉ số: 0-5
+```
+PvP:
+- Đối thủ: Bo
+- Kết quả: Lose
+- Tỉ số: 4-3
+- Note: quay lại spd hachi thành 2
+```
+
 
 ======

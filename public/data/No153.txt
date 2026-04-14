@@ -1,6 +1,6 @@
 No.153
 Name: catfish (catfish0140)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -59,6 +59,8 @@ Runeword: Không
 ```
 0 Power: 
 + 4 Hit combo (từ PvE Punishment)
++ Divine Smite
++ Dream Manipulation
 ```
 
 ```
@@ -116,5 +118,13 @@ PvP:
 - Đối thủ: Thanh Tước bé cưng
 - Kết quả: Lose
 - Tỉ số: 7-0
+```
+
+```
+PvP:
+- Đối thủ: bachtuotkun
+- Kết quả: Lose
+- Tỉ số: 5-3
+- Note: Bón 2 spd cho caubetuky
 ```
 ======

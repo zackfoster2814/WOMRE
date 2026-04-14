@@ -2,7 +2,7 @@ No.138
 Name: Kami Tsuna (kamitsuna)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -75,7 +75,7 @@ Team: 6
 
 ```
 Lover:
-+ 
++ llaW
 ```
 
 ```
@@ -83,6 +83,7 @@ PvP Reward:
 - +1 IQ
 - +1 BIQ
 - +1 Gear: Cursed Charm
+- +1 spd
 ```
 ```
 Other Source:
@@ -123,6 +124,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 4-2
 - Note: Kami Tsuna Sand of Time: Không kích
+```
+
+```
+PvP:
+- Đối thủ: llaW
+- Kết quả: Win
+- Tỉ số: 1-4
+- Note: Sand of time thành công, pvp nhận +1 spd, là người yêu
 ```
 
 ======

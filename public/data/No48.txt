@@ -1,6 +1,6 @@
 No.48
 Name: llaW (llaw3344)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -79,6 +79,7 @@ Team: 22
 ```
 Lover:
 + NewbieLady
++ Kami Tsuna
 ```
 
 ```
@@ -119,6 +120,13 @@ PvP:
 - Đối thủ: Nime
 - Kết quả: Lose
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: Kami Tsuna
+- Kết quả: Lose
+- Tỉ số: 1-4
 ```
 
 ======

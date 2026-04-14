@@ -39,7 +39,7 @@ Houses:
  + 0 Normal gear:
   - 
  + 0 Legacy gear:
-  - Honored Goblin's Scroll (Từ House)
+  - Honored Goblin's Scroll (đã mất)
 ```
 
 ```

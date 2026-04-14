@@ -2,7 +2,7 @@ No.116
 Name: Huy Le (.ilovepony)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -22,7 +22,7 @@ Archetype:
 + Athletic
 ```
 ```
-Str: 10
+Str: 6 (lúc đầu là 10)
 Spd: 3
 Dur: 10
 IQ: 7
@@ -115,6 +115,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 3-4
 - Note: bro choke, nhận PvP Reward: +2 Stat cao nhất từ myue
+```
+
+```
+PvP:
+- Đối thủ: Hoàng Tuyền Không Trấn
+- Kết quả: Win
+- Tỉ số: 4-3
+- Note: Pvp nhận lời nguyền, quay lại str từ 10 thành 6, quay lại str Vinh vander beck từ 10 thành 5
 ```
 
 ======

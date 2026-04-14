@@ -1,6 +1,6 @@
 No.123
 Name: Hoàng Tuyền Không Trấn (franx9816)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -109,6 +109,13 @@ PvP:
 - Tỉ số: 4-3
 - Note: Shining Brightly thành Under the Weather
 
+```
+
+```
+PvP:
+- Đối thủ: Huy Le
+- Kết quả: Lose
+- Tỉ số: 4-3
 ```
 
 ======

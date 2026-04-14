@@ -1,6 +1,6 @@
 No.9
 Name: caubetuky._. (haruhanasaki)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -76,6 +76,10 @@ PvP Reward:
 - +1 Dura
 - +1 Power: Fragrant
 ```
+```
+Other Source:
+- +2 spd
+```
 
 ======
 Battle Log: 
@@ -112,6 +116,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 5-2
 - Note: Summon ra Chihuahua (bruh)
+```
+
+```
+PvP:
+- Đối thủ: Euoid
+- Kết quả: Lose
+- Tỉ số: 3-3
+- Note: nt, bón cho Karu 2 Ma
 ```
 
 ======

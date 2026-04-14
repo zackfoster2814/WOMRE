@@ -1,6 +1,6 @@
 No.38
 Name: Lười (lazbu2501)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -81,6 +81,7 @@ Other Source:
 - Gear: Magical Scroll (Hero Grave Keeper)
 - +2 SPD (Orc)
 - +2 SPD (Orc)
+- -3 BIQ (Orc)
 ```
 
 ======
@@ -116,6 +117,13 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 3-3
 - Note: ko Bash; Fast Learner: Không
+```
+
+```
+PvP:
+- Đối thủ: Manhattan Cafe chơi TFT
+- Kết quả: Lose
+- Tỉ số: 4-2
 ```
 
 ======

@@ -2,7 +2,7 @@ No.107
 Name: dlwlrma (aem2804)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -59,6 +59,8 @@ Runeword: Không
 + Red Shift/LP1211-M
 + Misty Step Ahead
 + Critical Strike (Từ Hidden Blade)
++ Enhanced Hearing
++ The Goat
 ```
 
 ```
@@ -78,6 +80,7 @@ Lover:
 Summon:
 + Mufasa
 + Pack of Wolves
++ Water Elemental
 ```
 ```
 PvP Reward:
@@ -119,6 +122,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 4-4
 - Note: dlwlrma Crit: IQ
+```
+
+```
+PvP:
+- Đối thủ: Swem
+- Kết quả: Win
+- Tỉ số: 6- -1
+- Note: Crit 1 round, nhận summon Water Elemental, pvp nhận 2 power
 ```
 
 ======

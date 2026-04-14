@@ -1,6 +1,6 @@
 No.214
 Name: Cô Fulun` (cofulun)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -108,6 +108,13 @@ PvP:
 ```
 PvP:
 - Đối thủ: bo
+- Kết quả: Lose
+- Tỉ số: 4-3
+```
+
+```
+PvP:
+- Đối thủ: CobyKei
 - Kết quả: Lose
 - Tỉ số: 4-3
 ```

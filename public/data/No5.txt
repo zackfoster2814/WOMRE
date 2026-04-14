@@ -1,6 +1,6 @@
 No.5
 Name: Duckie2369
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -114,6 +114,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 5-1
 - Note:  Fast Learner: Không 
+```
+
+```
+PvP:
+- Đối thủ: Shin
+- Kết quả: Lose
+- Tỉ số: 4-3
+- Note: Crit round BIQ nhưng k đủ
 ```
 
 ======

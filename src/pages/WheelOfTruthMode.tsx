@@ -198,11 +198,16 @@ export const WheelOfTruthMode = ({
   // Center tab: pre | wheel | after
   const [centerTab, setCenterTab] = useState<"pre" | "wheel" | "after">("pre");
 
-  // Stubs for hooks that need roundtable state (not used in WheelOfTruth)
+  // ── Roundtable Hold state ─────────────────────────────────────────────────
   const [isPendingRoundtable, setIsPendingRoundtable] = useState(false);
-  const [, setPendingLoser] = useState<"player1" | "player2" | null>(null);
-  const [, setSelectedTarnished] = useState<PvPPlayerData | null>(null);
-  const [, setSubCombatResult] = useState<CombatResult | null>(null);
+  const [pendingLoser, setPendingLoser] = useState<"player1" | "player2" | null>(null);
+  const [selectedTarnished, setSelectedTarnished] = useState<PvPPlayerData | null>(null);
+  const [subCombatResult, setSubCombatResult] = useState<CombatResult | null>(null);
+  const [tarnishedList, setTarnishedList] = useState<PvPPlayerData[]>([]);
+  const [tarnishedSearchTerm, setTarnishedSearchTerm] = useState("");
+  const [roundtableSubMode, setRoundtableSubMode] = useState(false);
+  const [roundtableSnapshot, setRoundtableSnapshot] = useState<Record<string, any> | null>(null);
+  const [roundtableWinnerOverride, setRoundtableWinnerOverride] = useState<"player1" | "player2" | null>(null);
 
   // Refs needed by hooks
   const pendingAfterCombatBuildRef = useRef<any>(null);
@@ -213,6 +218,8 @@ export const WheelOfTruthMode = ({
     p2: Set<string>;
   } | null>(null);
   const resolveNextRoundRef = useRef<(() => void) | null>(null);
+  // Flag để skip battleDone useEffect khi đang restore từ roundtable snapshot
+  const restoringFromRoundtableRef = useRef(false);
 
   // ── Stat bubbles ──────────────────────────────────────────────────────────
   const [p1Bubbles, setP1Bubbles] = useState<StatBubble[]>([]);
@@ -377,8 +384,207 @@ export const WheelOfTruthMode = ({
     );
   };
 
-  // ── checkAndSetRoundtableHold (stub — no roundtable in WheelOfTruth) ──────
-  const checkAndSetRoundtableHold = (_result: CombatResult): boolean => false;
+  // ── Roundtable Hold helpers ───────────────────────────────────────────────
+  const hasRoundtableHold = (player: PvPPlayerData) =>
+    player.character?.houses?.some(
+      (h: any) => !h.isLost && h.name === "Roundtable Hold",
+    ) ?? false;
+
+  const filteredTarnished = useMemo(() => {
+    if (!tarnishedSearchTerm) return tarnishedList;
+    const term = tarnishedSearchTerm.toLowerCase();
+    return tarnishedList.filter(
+      (p) =>
+        p.name.toLowerCase().includes(term) ||
+        p.username.toLowerCase().includes(term) ||
+        p.no.toString().includes(term),
+    );
+  }, [tarnishedList, tarnishedSearchTerm]);
+
+  // checkAndSetRoundtableHold:
+  // - Không hòa: winner rõ → trigger ngay nếu loser có RT hold, defer buildAfterCombat
+  // - Hòa: winner tạm theo race tier có thể sai → stub false, chờ tiebreak wheel
+  //   rồi gọi tryTriggerRoundtableHold với winner thực
+  const checkAndSetRoundtableHold = (result: CombatResult): boolean => {
+    if (result.tieBreaker === "race") return false;
+    return _doTriggerRoundtableHold(result.winner);
+  };
+
+  // Dùng tất cả players kể cả allPlayers chưa load đầy đủ:
+  // chỉ cần loser có RT hold + bracket loser là đủ để defer.
+  // Tarnished list sẽ được populate từ allPlayers (có thể load sau).
+  const _doTriggerRoundtableHold = (actualWinner: "player1" | "player2"): boolean => {
+    const loserSide = actualWinner === "player1" ? "player2" : "player1";
+    const loser = actualWinner === "player1" ? player2 : player1;
+    const opponent = actualWinner === "player1" ? player1 : player2;
+    if (!loser || !opponent) return false;
+
+    const loserBracket = loser.character?.tournament?.bracket;
+    if (loserBracket !== "loser") return false;
+
+    if (tournamentMatch?.matchNumber === 319) return false;
+
+    if (!hasRoundtableHold(loser)) return false;
+    if (hasRoundtableHold(opponent)) return false;
+
+    // Lấy Tarnished từ allPlayers (có thể còn đang load)
+    // Nếu allPlayers rỗng → defer trước, populate tarnishedList sau khi allPlayers có
+    const tarnished = allPlayers.filter(
+      (p) =>
+        p.no !== loser.no &&
+        hasRoundtableHold(p) &&
+        p.character?.tournament?.status === "alive",
+    );
+    // Trigger defer buildAfterCombat ngay cả khi tarnished rỗng (sẽ populate sau)
+    setTarnishedList(tarnished);
+    setIsPendingRoundtable(true);
+    setPendingLoser(loserSide);
+    return true;
+  };
+
+  const tryTriggerRoundtableHold = (actualWinner: "player1" | "player2"): boolean => {
+    return _doTriggerRoundtableHold(actualWinner);
+  };
+
+  // ── Roundtable sub-combat: snapshot/restore ────────────────────────────────
+  const startRoundtableSubCombat = (
+    tarnished: PvPPlayerData,
+    mainWinnerPlayer: PvPPlayerData,
+    mainCombatResult: CombatResult,
+    pendingLoserSide: "player1" | "player2",
+    savedTarnishedList: PvPPlayerData[],
+  ) => {
+    const snapshot = {
+      player1, player2, searchTerm1, searchTerm2,
+      combatResult: mainCombatResult,
+      stepState, stepRoundIndex, combatConfirmed,
+      roundSpinResults, oneTrickPonyStat, huntersMarkStat,
+      guidanceStats, raumanianSuccess, goldenCoinPoints,
+      cursedCoinTarget, scryingSuccess, encroachingShadowSuccess,
+      goldShipResult, luckManipulationResult, rhittaResult,
+      madScientistResult, summoningScrollResult, tricksterResult,
+      blackMagicStat, dothrakiSpinResult,
+      afterCombatEntries, afterCombatSpinResults,
+      isPendingRoundtable: true,
+      pendingLoser: pendingLoserSide,
+      tarnishedList: savedTarnishedList,
+      selectedTarnished: tarnished,
+      disabledItems,
+      deferredAfterCombatBuild: pendingAfterCombatBuildRef.current,
+      tiebreakerWheelResult,
+      manualOverallWinner,
+    };
+    setRoundtableSnapshot(snapshot);
+    setRoundtableSubMode(true);
+
+    setPlayer1(tarnished);
+    setPlayer2(mainWinnerPlayer);
+    setSearchTerm1(tarnished.name);
+    setSearchTerm2(mainWinnerPlayer.name);
+
+    setCombatResult(null);
+    setStepState(null);
+    setStepRoundIndex(-1);
+    setCombatConfirmed(false);
+    setRoundSpinResults({});
+    setOneTrickPonyStat({});
+    setHuntersMarkStat({});
+    setHuntersMarkStat2({});
+    setGuidanceStats({});
+    setRaumanianSuccess({});
+    setGoldenCoinPoints({});
+    setCursedCoinTarget({});
+    setScryingSuccess({});
+    setEncroachingShadowSuccess({});
+    setGoldShipResult({});
+    setLuckManipulationResult({});
+    setRhittaResult({});
+    setMadScientistResult({});
+    setSummoningScrollResult({});
+    setTricksterResult({});
+    setBlackMagicStat({});
+    setDothrakiSpinResult({});
+    setAfterCombatEntries([]);
+    setAfterCombatSpinResults({});
+    setIsPendingRoundtable(false);
+    setPendingLoser(null);
+    setTarnishedList([]);
+    setSelectedTarnished(null);
+    setSubCombatResult(null);
+    setDisabledItems(new Set());
+    setTiebreakerWheelResult(null);
+    setManualOverallWinner(null);
+    setRoundtableWinnerOverride(null);
+    setAudioResetKey((k) => k + 1);
+    setShowRoundResults(false);
+    setCenterTab("pre");
+  };
+
+  const confirmRoundtableSubCombat = (subResult: CombatResult) => {
+    if (!roundtableSnapshot) return;
+    const snap = roundtableSnapshot;
+    const tarnishedWon = subResult.winner === "player1";
+    const actualMainWinner: "player1" | "player2" = tarnishedWon
+      ? (snap.pendingLoser as "player1" | "player2")
+      : snap.pendingLoser === "player1" ? "player2" : "player1";
+
+    // Restore main combat state
+    setPlayer1(snap.player1);
+    setPlayer2(snap.player2);
+    setSearchTerm1(snap.searchTerm1);
+    setSearchTerm2(snap.searchTerm2);
+    setStepState(snap.stepState);
+    setStepRoundIndex(snap.stepRoundIndex);
+    setCombatConfirmed(snap.combatConfirmed);
+    setRoundSpinResults(snap.roundSpinResults);
+    setOneTrickPonyStat(snap.oneTrickPonyStat);
+    setHuntersMarkStat(snap.huntersMarkStat);
+    setGuidanceStats(snap.guidanceStats);
+    setRaumanianSuccess(snap.raumanianSuccess);
+    setGoldenCoinPoints(snap.goldenCoinPoints);
+    setCursedCoinTarget(snap.cursedCoinTarget || {});
+    setScryingSuccess(snap.scryingSuccess);
+    setEncroachingShadowSuccess(snap.encroachingShadowSuccess);
+    setGoldShipResult(snap.goldShipResult);
+    setLuckManipulationResult(snap.luckManipulationResult || {});
+    setRhittaResult(snap.rhittaResult || {});
+    setMadScientistResult(snap.madScientistResult);
+    setSummoningScrollResult(snap.summoningScrollResult);
+    setTricksterResult(snap.tricksterResult);
+    setBlackMagicStat(snap.blackMagicStat);
+    setDothrakiSpinResult(snap.dothrakiSpinResult);
+    setAfterCombatEntries(snap.afterCombatEntries ?? []);
+    setAfterCombatSpinResults(snap.afterCombatSpinResults);
+    setTarnishedList(snap.tarnishedList);
+    setSelectedTarnished(snap.selectedTarnished);
+    setSubCombatResult(subResult);
+    setDisabledItems(snap.disabledItems);
+    setCombatResult(snap.combatResult);
+    if (snap.tiebreakerWheelResult) setTiebreakerWheelResult(snap.tiebreakerWheelResult);
+    if (snap.manualOverallWinner) setManualOverallWinner(snap.manualOverallWinner);
+
+    if (tarnishedWon) {
+      setRoundtableWinnerOverride(snap.pendingLoser as "player1" | "player2");
+    } else {
+      setRoundtableWinnerOverride(null);
+    }
+
+    setIsPendingRoundtable(false);
+    setPendingLoser(snap.pendingLoser);
+    setRoundtableSubMode(false);
+    setRoundtableSnapshot(null);
+    setAudioResetKey((k) => k + 1);
+    setCenterTab("after");
+
+    // Build after-combat entries với winner thật
+    const deferredBuild = snap.deferredAfterCombatBuild as
+      | ((w: "player1" | "player2") => void)
+      | null;
+    if (deferredBuild) {
+      deferredBuild(actualMainWinner);
+    }
+    pendingAfterCombatBuildRef.current = null;
+  };
 
   // ── Load all players ──────────────────────────────────────────────────────
   useEffect(() => {
@@ -484,6 +690,11 @@ export const WheelOfTruthMode = ({
     setPendingLoser(null);
     setSelectedTarnished(null);
     setSubCombatResult(null);
+    setTarnishedList([]);
+    setTarnishedSearchTerm("");
+    setRoundtableSubMode(false);
+    setRoundtableSnapshot(null);
+    setRoundtableWinnerOverride(null);
     setRoundSpinResults({});
     setOneTrickPonyStat({});
     setHuntersMarkStat({});
@@ -592,7 +803,7 @@ export const WheelOfTruthMode = ({
     disabledItems,
     allPlayers,
     isTournamentMode,
-    roundtableSubMode: false,
+    roundtableSubMode,
     zoltraakBiq2Pending,
     oneTrickPonyStat,
     huntersMarkStat,
@@ -685,34 +896,51 @@ export const WheelOfTruthMode = ({
     goldenCoinPoints,
     afterCombatEntries,
     afterCombatSpinResults,
-    roundtableWinnerOverride: null,
+    roundtableWinnerOverride,
     alwaysTiebreakerWheel: true,
     afterCombatBuilt,
     manualOverallWinner,
     computeRoundPoints,
   });
 
-  // Khi tiebreaker wheel xong → gọi pendingAfterCombatBuildRef với winner thực sự
-  // Sau khi build entries, auto chuyển sang tab "after" để user thấy và spin
+  // Khi tiebreaker wheel xong → thử trigger Roundtable Hold trước, rồi mới build after-combat
+  // Nếu Roundtable Hold trigger: giữ nguyên pendingAfterCombatBuildRef (không gọi fn)
+  // → confirmRoundtableSubCombat sẽ gọi với winner thực sau trận phụ
   useEffect(() => {
     if (!tiebreakerWheelResult) return;
+    if (!roundtableSubMode && !subCombatResult) {
+      const triggered = tryTriggerRoundtableHold(tiebreakerWheelResult);
+      if (triggered) {
+        setCenterTab("after");
+        return; // giữ pendingAfterCombatBuildRef để confirmRoundtableSubCombat dùng
+      }
+    }
     if (!pendingAfterCombatBuildRef.current) return;
     const fn = pendingAfterCombatBuildRef.current;
     pendingAfterCombatBuildRef.current = null;
     fn(tiebreakerWheelResult);
     setAfterCombatBuilt(true);
     setCenterTab("after");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tiebreakerWheelResult]);
 
-  // Khi admin chọn tay winner → cũng gọi pendingAfterCombatBuildRef, bypass tiebreaker
+  // Khi admin chọn tay winner → thử trigger Roundtable Hold, rồi mới build after-combat
   useEffect(() => {
     if (!manualOverallWinner) return;
+    if (!roundtableSubMode && !subCombatResult) {
+      const triggered = tryTriggerRoundtableHold(manualOverallWinner);
+      if (triggered) {
+        setCenterTab("after");
+        return;
+      }
+    }
     if (!pendingAfterCombatBuildRef.current) return;
     const fn = pendingAfterCombatBuildRef.current;
     pendingAfterCombatBuildRef.current = null;
     fn(manualOverallWinner);
     setAfterCombatBuilt(true);
     setCenterTab("after");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [manualOverallWinner]);
 
   const mainWinner =
@@ -726,6 +954,32 @@ export const WheelOfTruthMode = ({
     stepState && stepState.roundLogs.length > 0
       ? stepState.roundLogs[stepState.roundLogs.length - 1]
       : null;
+
+  // Khi combat kết thúc không hòa (winner rõ ngay, không cần tiebreak) → trigger Roundtable Hold
+  // Hòa: chờ tiebreaker wheel / manual → useEffect tiebreakerWheelResult / manualOverallWinner xử lý
+  useEffect(() => {
+    if (!combatResult || roundtableSubMode) return;
+    if (combatResult.player1Score === combatResult.player2Score) return;
+    if (isPendingRoundtable) return;
+    if (subCombatResult) return; // đã chạy trận phụ rồi, không trigger lại
+    tryTriggerRoundtableHold(combatResult.winner);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [combatResult?.player1Score, combatResult?.player2Score, combatResult?.winner, roundtableSubMode]);
+
+  // Khi allPlayers load xong và đang pending Roundtable → populate tarnishedList
+  useEffect(() => {
+    if (!isPendingRoundtable || roundtableSubMode || allPlayers.length === 0) return;
+    if (!pendingLoser || !player1 || !player2) return;
+    const loser = pendingLoser === "player1" ? player1 : player2;
+    const tarnished = allPlayers.filter(
+      (p) =>
+        p.no !== loser.no &&
+        hasRoundtableHold(p) &&
+        p.character?.tournament?.status === "alive",
+    );
+    setTarnishedList(tarnished);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allPlayers, isPendingRoundtable]);
 
   // ── dothrakiPreviewStats ──────────────────────────────────────────────────
   const dothrakiPreviewStats = useMemo(() => {
@@ -853,6 +1107,11 @@ export const WheelOfTruthMode = ({
   // Auto-switch to "after" tab when combat ends — nhưng nếu hòa thì ở lại tab "wheel" để quay tiebreak
   useEffect(() => {
     if (!battleDone) return;
+    // Đang restore từ roundtable snapshot → confirm đã set tab "after", không override
+    if (restoringFromRoundtableRef.current) {
+      restoringFromRoundtableRef.current = false;
+      return;
+    }
     if (
       combatResult &&
       combatResult.player1Score === combatResult.player2Score &&
@@ -1538,6 +1797,68 @@ export const WheelOfTruthMode = ({
                     "0 8px 32px rgba(0,0,0,0.7), inset 0.5px 0.5px 0 rgba(255,209,108,0.05)",
                 }}
               >
+                {/* Roundtable Hold — sub-combat banner (luôn visible, không phụ thuộc tab) */}
+                {roundtableSubMode && roundtableSnapshot && (
+                  <div className="border-b border-orange-500/40 bg-orange-950/50 px-4 py-3">
+                    <div className="text-xs font-display font-bold text-orange-300 text-center tracking-widest uppercase mb-1">
+                      Tran Phu — Roundtable Hold
+                    </div>
+                    <div className="text-xs text-orange-200/70 text-center mb-2">
+                      <span className="text-white font-bold">{roundtableSnapshot.selectedTarnished?.name}</span>
+                      {" "}vs{" "}
+                      <span className="text-white font-bold">
+                        {roundtableSnapshot.pendingLoser === "player1"
+                          ? roundtableSnapshot.player2?.name
+                          : roundtableSnapshot.player1?.name}
+                      </span>
+                    </div>
+                    {combatResult && combatConfirmed && effectiveWinner ? (
+                      <div className="space-y-2">
+                        <div className={`text-xs font-bold px-3 py-1.5 rounded-lg border text-center ${
+                          effectiveWinner === "player1"
+                            ? "text-green-300 bg-green-900/30 border-green-500/40"
+                            : "text-red-300 bg-red-900/30 border-red-500/40"
+                        }`}>
+                          {effectiveWinner === "player1"
+                            ? `${player1?.name} (Tarnished) THANG → ${roundtableSnapshot.pendingLoser === "player1" ? roundtableSnapshot.player1?.name : roundtableSnapshot.player2?.name} duoc cuu!`
+                            : `${player1?.name} (Tarnished) THUA → ${roundtableSnapshot.pendingLoser === "player1" ? roundtableSnapshot.player1?.name : roundtableSnapshot.player2?.name} van bi loai.`}
+                        </div>
+                        <button
+                          onClick={() =>
+                            confirmRoundtableSubCombat({
+                              ...combatResult,
+                              winner: effectiveWinner,
+                            })
+                          }
+                          className="w-full px-4 py-2 font-display font-bold text-xs rounded-lg text-white transition-all hover:scale-105 border border-green-500/50"
+                          style={{ background: "linear-gradient(135deg, #15803d 0%, #047857 100%)", boxShadow: "0 0 12px 2px rgba(21,128,61,0.2)" }}
+                        >
+                          Xac nhan & Quay ve tran chinh
+                        </button>
+                      </div>
+                    ) : battleDone && !combatConfirmed ? (
+                      <button
+                        onClick={() => {
+                          if (effectiveWinner && player1 && player2) {
+                            setShowOutro(true);
+                            playEndCombatSound();
+                          } else {
+                            setCombatConfirmed(true);
+                          }
+                        }}
+                        className="w-full px-4 py-2 font-display font-bold text-xs rounded-lg text-white transition-all hover:scale-105 border border-amber-500/50"
+                        style={{ background: "linear-gradient(135deg, #d97706 0%, #b45309 100%)", boxShadow: "0 0 12px 2px rgba(217,119,6,0.2)" }}
+                      >
+                        Ket Thuc Tran Phu
+                      </button>
+                    ) : (
+                      <div className="text-xs text-orange-300/60 italic text-center">
+                        Chay tran phu binh thuong, sau do nhan Ket Thuc.
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {/* Tab bar */}
                 <div className="flex border-b border-amber-500/10">
                   <button
@@ -2051,15 +2372,130 @@ export const WheelOfTruthMode = ({
                     setCreatorsCatModal={setCreatorsCatModal}
                   />
 
-                  {/* Roundtable Hold banner */}
-                  {isPendingRoundtable && (
-                    <div
-                      className="rounded-lg border border-orange-500/40 bg-orange-950/30 px-4 py-3 text-center text-sm text-orange-300 font-display font-bold animate-pulse tracking-wide"
-                      style={{
-                        boxShadow: "0 0 16px 2px rgba(249,115,22,0.08)",
-                      }}
-                    >
-                      ⚔ Roundtable Hold — Trận phụ đang chờ xử lý
+                  {/* Roundtable Hold — chọn Tarnished & chạy trận phụ */}
+                  {!roundtableSubMode && isPendingRoundtable && pendingLoser && (
+                    <div className="bg-yellow-900/30 border border-yellow-500/50 rounded-xl p-4 mb-3">
+                      <div className="text-yellow-400 font-display font-bold text-sm mb-1 tracking-wide">
+                        KET QUA TAM HOAN — Roundtable Hold
+                      </div>
+                      <div className="text-yellow-300/80 text-xs mb-3">
+                        <strong>
+                          {pendingLoser === "player1" ? player1?.name : player2?.name}
+                        </strong>{" "}
+                        thua nhưng có Roundtable Hold. Chọn một Tarnished còn sống lên đấu trận phụ.
+                      </div>
+
+                      {!selectedTarnished ? (
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="text-xs text-gray-400">
+                              {tarnishedList.length} Tarnished còn hoạt động:
+                            </div>
+                            <button
+                              onClick={() => {
+                                const colors = ["#f59e0b","#10b981","#3b82f6","#a855f7","#ef4444","#06b6d4","#84cc16","#ec4899"];
+                                setPreCombatModal({
+                                  isOpen: true,
+                                  title: "Roundtable Hold — Quay chọn Tarnished",
+                                  description: "Quay ngẫu nhiên để chọn Tarnished tham chiến trận phụ",
+                                  items: tarnishedList.map((p, i) => ({
+                                    label: `${p.name} (#${p.no})`,
+                                    weight: 1,
+                                    isSuccess: true,
+                                    color: colors[i % colors.length],
+                                    meta: { playerNo: p.no },
+                                  })),
+                                  side: (pendingLoser ?? "player1") as "player1" | "player2",
+                                  effectKey: "roundtable-tarnished-spin",
+                                  onResult: (result) => {
+                                    const no = result.meta?.playerNo as number;
+                                    const chosen = tarnishedList.find((p) => p.no === no);
+                                    if (chosen) setSelectedTarnished(chosen);
+                                  },
+                                });
+                              }}
+                              className="px-3 py-1 bg-yellow-700/50 hover:bg-yellow-600/60 border border-yellow-500/50 rounded-lg text-yellow-200 text-xs font-bold transition-colors"
+                            >
+                              Quay ngau nhien
+                            </button>
+                          </div>
+                          <input
+                            type="text"
+                            placeholder="Tim Tarnished..."
+                            value={tarnishedSearchTerm}
+                            onChange={(e) => setTarnishedSearchTerm(e.target.value)}
+                            className="w-full px-3 py-1.5 bg-gray-800 border border-yellow-600/40 rounded-lg text-white placeholder-gray-500 text-xs focus:outline-none focus:ring-1 focus:ring-yellow-500 mb-2"
+                          />
+                          <div className="max-h-40 overflow-y-auto space-y-1">
+                            {filteredTarnished.map((p) => (
+                              <button
+                                key={p.no}
+                                onClick={() => setSelectedTarnished(p)}
+                                className="w-full px-3 py-2 text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-yellow-500/50 rounded-lg text-white text-xs flex justify-between items-center transition-all"
+                              >
+                                <span>
+                                  <span className="text-yellow-400">#{p.no}</span>{" "}
+                                  {p.name}
+                                </span>
+                                <span className="text-xs text-gray-400">{p.race}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="text-xs text-gray-300 mb-3 flex items-center gap-2">
+                            <span className="text-yellow-400">Tarnished được chọn:</span>
+                            <span className="font-bold text-white">{selectedTarnished.name}</span>
+                            <button
+                              onClick={() => { setSelectedTarnished(null); setSubCombatResult(null); }}
+                              className="text-xs text-gray-500 hover:text-white ml-auto"
+                            >
+                              x Doi
+                            </button>
+                          </div>
+                          <button
+                            onClick={() => {
+                              if (!combatResult) return;
+                              const mainWinnerP = combatResult.winner === "player1" ? player1! : player2!;
+                              startRoundtableSubCombat(
+                                selectedTarnished,
+                                mainWinnerP,
+                                combatResult,
+                                pendingLoser!,
+                                tarnishedList,
+                              );
+                            }}
+                            className="w-full px-4 py-2 bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-500 hover:to-orange-500 text-white font-display font-bold text-xs rounded-xl transition-all tracking-widest"
+                          >
+                            Chay Tran Phu (Wheel of Truth)
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Roundtable Hold — kết quả sau khi restore snapshot */}
+                  {!roundtableSubMode && subCombatResult && selectedTarnished && !isPendingRoundtable && (
+                    <div className="bg-gray-900/60 border border-orange-600/40 rounded-xl p-3 mb-3">
+                      <div className="text-orange-300 font-display font-bold text-xs mb-2 tracking-wide">
+                        Kết quả trận phụ Roundtable Hold:{" "}
+                        <span className="text-yellow-300">{selectedTarnished.name}</span>
+                      </div>
+                      <div className="mt-2 text-center text-sm font-bold">
+                        <span className="text-blue-400">{subCombatResult.player1Score}</span>
+                        <span className="text-gray-500 mx-2">:</span>
+                        <span className="text-red-400">{subCombatResult.player2Score}</span>
+                      </div>
+                      <div className={`mt-2 text-xs font-bold text-center px-3 py-1.5 rounded-lg border ${
+                        subCombatResult.winner === "player1"
+                          ? "text-green-300 bg-green-900/30 border-green-500/40"
+                          : "text-red-300 bg-red-900/30 border-red-500/40"
+                      }`}>
+                        {subCombatResult.winner === "player1"
+                          ? `Tarnished (${selectedTarnished.name}) thắng → ${pendingLoser === "player1" ? player1?.name : player2?.name} được cứu`
+                          : `Tarnished (${selectedTarnished.name}) thua → ${pendingLoser === "player1" ? player1?.name : player2?.name} vẫn bị loại`}
+                      </div>
                     </div>
                   )}
 
@@ -2134,34 +2570,38 @@ export const WheelOfTruthMode = ({
                   )} */}
 
                   {/* Kết thúc / Fight Again buttons */}
-                  {battleDone && !combatConfirmed && (
-                    <div className="flex justify-center pt-1">
+                  {battleDone && !combatConfirmed && !isPendingRoundtable && (
+                    <div className="flex flex-col items-center gap-2 pt-1">
+                      {!roundtableSubMode && pendingSpins && (
+                        <div className="text-xs text-amber-500/70 font-display tracking-wide text-center">
+                          Quay hết hiệu ứng bên trên rồi nhấn Kết Thúc
+                        </div>
+                      )}
                       <button
                         onClick={() => {
                           if (effectiveWinner && player1 && player2) {
                             setShowOutro(true);
                             playEndCombatSound();
-                          } else setCombatConfirmed(true);
+                          } else {
+                            setCombatConfirmed(true);
+                          }
                         }}
-                        disabled={pendingSpins}
+                        disabled={!roundtableSubMode && pendingSpins}
                         className={`px-8 py-2.5 font-display font-bold rounded-xl text-sm tracking-widest transition-all ${
-                          pendingSpins
+                          !roundtableSubMode && pendingSpins
                             ? "bg-slate-800/60 text-gray-600 cursor-not-allowed border border-slate-700/40"
                             : "text-white hover:scale-105"
                         }`}
                         style={
-                          pendingSpins
+                          !roundtableSubMode && pendingSpins
                             ? {}
                             : {
-                                background:
-                                  "linear-gradient(135deg, #16a34a 0%, #059669 100%)",
+                                background: "linear-gradient(135deg, #16a34a 0%, #059669 100%)",
                                 boxShadow: "0 0 20px 4px rgba(22,163,74,0.2)",
                               }
                         }
                       >
-                        {pendingSpins
-                          ? "Còn hiệu ứng chờ quay..."
-                          : "✦ Kết Thúc ✦"}
+                        {!roundtableSubMode && pendingSpins ? "Còn hiệu ứng chờ quay..." : "✦ Kết Thúc ✦"}
                       </button>
                     </div>
                   )}
@@ -2197,7 +2637,7 @@ export const WheelOfTruthMode = ({
                       </div>
                     </div>
                   )} */}
-                  {combatConfirmed && isTournamentMode && (
+                  {combatConfirmed && isTournamentMode && !roundtableSubMode && (
                     <div className="mt-2 bg-gray-800/60 rounded-none border border-yellow-600/30 p-3 space-y-2">
                       <div className="grid grid-cols-2 gap-2">
                         <div>
@@ -2229,7 +2669,7 @@ export const WheelOfTruthMode = ({
                       </div>
                     </div>
                   )}
-                  {combatConfirmed && (
+                  {combatConfirmed && !roundtableSubMode && (
                     <div className="flex flex-wrap justify-center gap-2 pt-1">
                       {isTournamentMode &&
                         onSaveTournamentResult &&

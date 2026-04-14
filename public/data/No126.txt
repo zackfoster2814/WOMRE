@@ -2,7 +2,7 @@ No.126
 Name: Shin (shinrin2872)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -54,6 +54,7 @@ Runeword: Không
 1 Power: 
 + Thunder orb
 + Earth-Shaking
++ Blowing Leaves
 ```
 ```
 Char dev: 
@@ -70,6 +71,7 @@ Lover:
 PvP Reward:
 - +1 IQ
 - +1 MA
+- +1 Dura
 ```
 ```
 Other Source:
@@ -78,7 +80,11 @@ Other Source:
 - Nhận Power "Earth-Shaking"
 - +1 Str
 - Nhận thêm 1 Quirk: Slow Healer
-- -1 dura
+- -1 dura (Slow Healer)
+- -1 Dura (Slow Healer)
+- +1 Spd
+- +1 BIQ
+- Nhận Power Blowing Leaves
 ```
 
 ======
@@ -120,6 +126,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 3-3
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Duckie2369
+- Kết quả: Win
+- Tỉ số: 4-3
+- Note: Holy symbol -2 all vì gặp orc, nhận Air(+1 spd, +1 stat thấp nhất và thổi lá), pvp nhận 1 dura, slow healer: -1 dura
 ```
 
 ======

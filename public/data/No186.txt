@@ -1,6 +1,6 @@
 No.186
 Name: Amos (amos0603)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -106,6 +106,14 @@ PvP:
 - Đối thủ: Lunar
 - Kết quả: Lose
 - Tỉ số: 3-4
+```
+
+```
+PvP:
+- Đối thủ: Inglorious
+- Kết quả: Lose
+- Tỉ số: 4-2
+- Note: quay lại BIQ của Yoh 2 kiếm từ 1 lên 3
 ```
 
 ======

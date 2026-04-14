@@ -2,7 +2,7 @@ No.191
 Name: Solus (solus_2108)
 Status: Còn sống 
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -18,7 +18,7 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Under the Weather
++ Shining Brightly
 + Bloodthirsty
 + Training Restricted(Từ Bánh Mì)
 ```
@@ -83,6 +83,7 @@ Lover:
 ```
 PvP Reward:
 - +1 Spd
+- +2 str 
 ```
 ```
 Other Source:
@@ -90,6 +91,7 @@ Other Source:
 - -2 Dura 
 - -2 Dura 
 - -2 Dura 
+- -2 Dura (AIDS)
 - -2 Dura (AIDS)
 ```
 
@@ -129,4 +131,13 @@ PvP:
 - Tỉ số: 5-1
 - Note: Solus Shining Brightly thành Under the Weather
 ```
+```
+PvP:
+- Đối thủ: Gambling
+- Kết quả: Win
+- Tỉ số: 0-5 
+- Note: Gọi bo ra đánh hộ win, Under the Weather chuyển thành Shining Brightly
+```
+
+
 ======

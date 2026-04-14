@@ -18,6 +18,7 @@ import { SandboxPage } from "./pages/SandboxPage";
 import { isTauri } from "./utils/localStorage";
 import { fetchAllPlayerTexts } from "./utils/googleDrive";
 import { SyncDataDialog } from "./components/SyncDataDialog";
+import { PvPRightSidebar } from "./components/combat/PvPRightSidebar";
 
 // Check if running in web-only mode (not Tauri)
 const isWebOnly = !isTauri();
@@ -196,12 +197,16 @@ const PrefetchToast = () => {
 
 const SYNC_SEQUENCE = "SYNCDATA";
 
-// Wrapper to animate routes
-const AnimatedRoutes = () => {
+// Wrapper to animate routes with push effect
+const AnimatedRoutes = ({ rightSidebarOpen }: { rightSidebarOpen: boolean }) => {
   const location = useLocation();
 
   return (
-    <div key={location.pathname} className="animate-fade-in min-h-screen">
+    <div 
+      key={location.pathname} 
+      className="animate-fade-in min-h-screen transition-all duration-300 ease-in-out"
+      style={{ paddingRight: rightSidebarOpen ? "120px" : "0" }}
+    >
       <Routes location={location}>
         {isWebOnly ? (
           <>
@@ -229,6 +234,7 @@ const AnimatedRoutes = () => {
 
 function App() {
   const [showSync, setShowSync] = useState(false);
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
   const syncKeyBuffer = useRef("");
   const syncKeyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -260,12 +266,24 @@ function App() {
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
 
+  const handleSidebarButtonClick = (type: string) => {
+    console.log(`Global Sidebar Button Clicked: ${type}`);
+    // Future: Dispatch event or open global modal
+    const event = new CustomEvent("pvp-wheel-request", { detail: { type } });
+    window.dispatchEvent(event);
+  };
+
   return (
     <HashRouter>
       {!isWebOnly && <Navigation />}
       <PrefetchToast />
       {showSync && <SyncDataDialog onClose={() => setShowSync(false)} />}
-      <AnimatedRoutes />
+      <AnimatedRoutes rightSidebarOpen={rightSidebarOpen} />
+      <PvPRightSidebar 
+        isOpen={rightSidebarOpen} 
+        onToggle={setRightSidebarOpen} 
+        onButtonClick={handleSidebarButtonClick}
+      />
     </HashRouter>
   );
 }

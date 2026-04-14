@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { Character, CharacterStats } from "../types/character";
 // CharacterParser used via playerParsing.ts (imported below)
 import { Condition, EffectResolver } from "../effects/resolver";
@@ -3984,7 +3984,6 @@ export const StatsComparisonMode = ({
                                   </div>
                                 ) : (
                                   <div className="mt-2 text-red-400 font-bold text-sm bg-red-900/30 border border-red-500/40 rounded-lg px-3 py-2">
-                                    Tarnished thua →{" "}
                                     <strong>
                                       {pendingLoser === "player1"
                                         ? player1?.name
@@ -3995,7 +3994,7 @@ export const StatsComparisonMode = ({
                                 )}
                                 <button
                                   onClick={() => setIsPendingRoundtable(false)}
-                                  className="mt-3 px-4 py-1.5 bg-green-700 hover:bg-green-600 text-white text-xs rounded-lg border border-green-500 font-bold transition-colors"
+                                  className="mt-3 px-4 py-1.5 bg-green-700 hover:bg-green-600 text-white text-xs rounded-lg border border-green-500 font-bold transition-all"
                                 >
                                   Xác nhận kết quả cuối
                                 </button>

@@ -2,7 +2,7 @@ No.39
 Name: Euoid (euoid)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -19,6 +19,7 @@ Archetype:
 ``` 
 1 Quirk:  
 + Slow Healer
++ One Trick Pony
 ```
 ```
 Str: 3
@@ -39,6 +40,7 @@ Houses:
  + 2 Normal gear:
   - Đai Trinh Tiết
   - Empty Stein
+  - Fingerthing
  + 1 Legacy gear:
   - Lockalock Skill Book
 ```
@@ -85,6 +87,7 @@ Lover:
 PvP Reward:
 - +2 MA (stats thấp nhất)
 - nhận power Analysis Sin
+- Nhận 1 gear Fingerthing (nhận quirk OTP)
 ```
 ```
 Other Source:
@@ -131,6 +134,14 @@ PvP:
 - Đối thủ: We are Charlie Kirk
 - Kết quả: Lose
 - Tỉ số: 3-3
+```
+
+```
+PvP:
+- Đối thủ: caubetuky._.
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: trận căng, thắng tie break, slow healer -1 dura, pvp nhận 1 gear
 ```
 
 ======

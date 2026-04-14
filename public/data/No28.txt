@@ -2,7 +2,7 @@ No.28
 Name: Manhattan Cafe chơi TFT (randomguy5719)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -87,6 +87,7 @@ Other Source:
 - Dragon's Weed nhận Arcana Blast
 - +1 All stats (từ Eldritch Mushroom)
 - +1 all stats (Final Reserves)
+- +0 all stats (không vì lý do gì)
 ```
 
 ```
@@ -94,6 +95,8 @@ PvP Reward:
 - +2 BIQ (chỉ số thấp nhất)
 - +1 IQ
 - +1 MA 
+- +1 str
+- +2 str
 ```
 
 ======
@@ -127,5 +130,13 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 4-2
 - note: Nhận Eldritch Mushroom
+```
+
+```
+PvP:
+- Đối thủ: Lười
+- Kết quả: Win
+- Tỉ số: 4-2
+- Note: thảo dược: nhận 2 pvp (+2 vào chỉ số thấp nhất, +1 str)
 ```
 ======

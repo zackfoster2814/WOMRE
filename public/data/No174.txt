@@ -1,6 +1,6 @@
 No.174
 Name: Ca Cao (Catos CaCao)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 1
 ```
@@ -121,6 +121,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 5-1
 - Note: Cacao Resilient: +1 Dur, +1 IQ, +1 BIQ, +1 MA Cacao bán Knight's Armor để lấy 1 Golden Coin
+```
+
+```
+PvP:
+- Đối thủ: Smolder
+- Kết quả: Lose
+- Tỉ số: 3-3
+- Note: thua vì egoist
 ```
 
 ======

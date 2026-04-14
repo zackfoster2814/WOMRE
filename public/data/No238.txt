@@ -2,7 +2,7 @@ No.238
 Name: CobyKei (reiniskhoa)
 Status: Còn sống
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -47,7 +47,7 @@ Houses:
   - Sổ Tay
   - Frying Pan
  + 0 Legacy gear:
-  - 
+  - Honored Goblin's Scroll
 ```
 
 ```
@@ -95,6 +95,9 @@ Other Source:
 - Đào mộ GoonNaga: Sổ Tay
 - -3 all stats
 - +1 IQ
+- +1 IQ (sổ tay)
+- -1 all stat (night owl)
+- -2 dura (aids)
 ```
 
 ======
@@ -132,6 +135,14 @@ PvP:
 - Kết quả: Lose
 - Tỉ số: 4-3
 - Note: CobyKei Night Owl: Không; Đá: Kích; Hero Grave Keeper: Shiro - Frying Pan - AIDS
+```
+
+```
+PvP:
+- Đối thủ: Cô Fulun`
+- Kết quả: Win
+- Tỉ số: 4-3
+- Note: Win nhờ metamagic, Sổ tay +1 IQ, night owl -1 all, đào mộ được Honored of Golbin Scroll, aids -2 dura
 ```
 
 ======
