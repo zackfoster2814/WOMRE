@@ -3026,33 +3026,23 @@ registerCombatHandler(
 registerCombatHandler(
   "venturers_weight_bonus",
   (ctx: CombatHandlerContext): CombatHandlerResult => {
-    if (!ctx.opponent) return { skipDefault: true };
-    const selfTotal = STAT_NAMES.reduce(
-      (sum, s) => sum + (ctx.self.stats as Record<StatName, number>)[s],
-      0,
-    );
-    const oppTotal = STAT_NAMES.reduce(
-      (sum, s) => sum + (ctx.opponent!.stats as Record<StatName, number>)[s],
-      0,
-    );
-    if (selfTotal > oppTotal) {
+    if (!ctx.opponent || !ctx.currentRoundStat) return { skipDefault: true };
+    const statKey = ctx.currentRoundStat as StatName;
+    const selfVal = (ctx.self.stats as Record<StatName, number>)[statKey] ?? 0;
+    const oppVal = (ctx.opponent!.stats as Record<StatName, number>)[statKey] ?? 0;
+    if (selfVal === oppVal) return { skipDefault: true };
+    if (selfVal > oppVal) {
       return {
-        selfStatMods: STAT_NAMES.map((stat) => ({
-          stat,
-          value: Math.floor(4 / STAT_NAMES.length) || 1,
-        })),
-        description: "+4 tổng stats (Venturers - trọng số cao hơn)",
+        selfStatMods: [{ stat: statKey, value: 4 }],
+        description: `+4 ${statKey.toUpperCase()} (Venturers - trọng số cao hơn)`,
       };
     }
     return {
-      selfStatMods: STAT_NAMES.map((stat) => ({
-        stat,
-        value: Math.floor(8 / STAT_NAMES.length) || 1,
-      })),
-      description: "+8 tổng stats (Venturers - trọng số thấp hơn)",
+      selfStatMods: [{ stat: statKey, value: 8 }],
+      description: `+8 ${statKey.toUpperCase()} (Venturers - trọng số thấp hơn)`,
     };
   },
-  "+4 if higher weight, +8 if lower weight",
+  "+4 to current round stat if higher, +8 if lower",
 );
 
 registerCombatHandler(
