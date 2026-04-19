@@ -1915,6 +1915,32 @@ export class EffectResolver {
     // Ensure unique immunities
     result.immunities = [...new Set(result.immunities)];
 
+    // Skeleton IQ lock — must run after all modifiers so nothing can override it
+    if (character) {
+      const race = character.race?.race?.toLowerCase() || "";
+      if (race === "skeleton") {
+        result.totalStats.iq = baseStats.iq;
+        result.baseStats.iq = baseStats.iq;
+        result.bonusStats.iq = 0;
+      } else if (race === "skeleton (lich)" || race === "skeleton (lich king)") {
+        result.totalStats.iq = 8;
+        result.baseStats.iq = 8;
+        result.bonusStats.iq = 0;
+      }
+    }
+
+    // Slow Metabolism — speed cannot increase beyond base
+    if (result.immunities.includes("speed_increase")) {
+      const originalSpeed = baseStats.speed;
+      if (result.totalStats.speed > originalSpeed) {
+        result.totalStats.speed = originalSpeed;
+      }
+      if (result.bonusStats.speed > 0) {
+        result.bonusStats.speed = 0;
+      }
+      result.baseStats.speed = result.totalStats.speed;
+    }
+
     return result;
   }
 
@@ -2062,38 +2088,6 @@ export class EffectResolver {
       character,
       allCharacters,
     );
-
-    // Special case: Skeleton race family has IQ locked
-    // Skeleton: IQ cố định theo giá trị data (không thể modify)
-    // Skeleton (Lich): IQ cố định ở 8
-    // Skeleton (Lich King): IQ cố định ở 8 (Lich King = Lich + stat buffs, không đổi IQ base)
-    const race = character.race?.race?.toLowerCase() || "";
-    if (race === "skeleton") {
-      const dataIq = baseStats.iq;
-      result.totalStats.iq = dataIq;
-      result.baseStats.iq = dataIq;
-      result.bonusStats.iq = 0;
-    } else if (race === "skeleton (lich)" || race === "skeleton (lich king)") {
-      result.totalStats.iq = 8;
-      result.baseStats.iq = 8;
-      result.bonusStats.iq = 0;
-    }
-
-    // Special case: Slow Metabolism - Speed cannot increase, only decrease
-    // So sánh totalStats.speed với base speed gốc (character.stats.spd)
-    // Loại bỏ cả base tăng (isBase) lẫn bonus tăng để đảm bảo speed không vượt gốc
-    if (result.immunities.includes("speed_increase")) {
-      const originalSpeed = baseStats.speed; // speed gốc từ character.stats
-      if (result.totalStats.speed > originalSpeed) {
-        result.totalStats.speed = originalSpeed;
-      }
-      // Xóa bonusStats.speed nếu dương
-      if (result.bonusStats.speed > 0) {
-        result.bonusStats.speed = 0;
-      }
-      // Đưa baseStats.speed về đúng với totalStats sau khi cap
-      result.baseStats.speed = result.totalStats.speed;
-    }
 
     return result;
   }

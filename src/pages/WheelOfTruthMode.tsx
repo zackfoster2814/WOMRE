@@ -107,6 +107,10 @@ export const WheelOfTruthMode = ({
 }: BattleModeProps) => {
   // ── Player data ───────────────────────────────────────────────────────────
   const [allPlayers, setAllPlayers] = useState<PvPPlayerData[]>([]);
+  const allCharacters = useMemo(
+    () => allPlayers.map((p) => p.character).filter((c): c is NonNullable<typeof c> => !!c),
+    [allPlayers],
+  );
   const [loading, setLoading] = useState(true);
   const [searchTerm1, setSearchTerm1] = useState("");
   const [searchTerm2, setSearchTerm2] = useState("");
@@ -169,6 +173,10 @@ export const WheelOfTruthMode = ({
   const [stepRoundIndex, setStepRoundIndex] = useState(-1);
   const [combatConfirmed, setCombatConfirmed] = useState(false);
 
+  // Manual score adjustments
+  const [manualScoreAdjust1, setManualScoreAdjust1] = useState(0);
+  const [manualScoreAdjust2, setManualScoreAdjust2] = useState(0);
+
   // Tournament mode
   const isTournamentMode = !!tournamentMatch;
   const [tournamentSpecialEvent, setTournamentSpecialEvent] = useState(
@@ -218,6 +226,8 @@ export const WheelOfTruthMode = ({
     p2: Set<string>;
   } | null>(null);
   const resolveNextRoundRef = useRef<(() => void) | null>(null);
+  // Log combat pending — được ghi Drive khi GM confirm
+  const pendingCombatLogRef = useRef<{ sep: string; body: string } | null>(null);
   // Flag để skip battleDone useEffect khi đang restore từ roundtable snapshot
   const restoringFromRoundtableRef = useRef(false);
 
@@ -298,6 +308,8 @@ export const WheelOfTruthMode = ({
     setSummoningScrollResult,
     tricksterResult,
     setTricksterResult,
+    eternalMangekyouResult,
+    setEternalMangekyouResult,
     blackMagicStat,
     setBlackMagicStat,
     creatorsCatModal,
@@ -502,6 +514,7 @@ export const WheelOfTruthMode = ({
     setMadScientistResult({});
     setSummoningScrollResult({});
     setTricksterResult({});
+    setEternalMangekyouResult({});
     setBlackMagicStat({});
     setDothrakiSpinResult({});
     setAfterCombatEntries([]);
@@ -724,13 +737,15 @@ export const WheelOfTruthMode = ({
     pendingCrueltyAfterCombatRef.current = null;
     pendingFinalizeStateRef.current = null;
     preBiqFiredHandlersRef.current = null;
+    pendingCombatLogRef.current = null;
     setAudioResetKey((k) => k + 1);
     setShowRoundResults(false);
     setCenterTab("pre");
     setTiebreakerWheelResult(null);
     setTiebreakerModalOpen(false);
-    setManualOverallWinner(null);
     setAfterCombatBuilt(true);
+    setManualScoreAdjust1(0);
+    setManualScoreAdjust2(0);
   };
 
   // ── useStartCombat ────────────────────────────────────────────────────────
@@ -747,6 +762,7 @@ export const WheelOfTruthMode = ({
     tricksterResult,
     raumanianSuccess,
     scryingSuccess,
+    eternalMangekyouResult,
     encroachingShadowSuccess,
     goldShipResult,
     luckManipulationResult,
@@ -821,6 +837,7 @@ export const WheelOfTruthMode = ({
     pendingCrueltyAfterCombatRef,
     pendingFinalizeStateRef,
     preBiqFiredHandlersRef,
+    pendingCombatLogRef,
     spawnStatBubbles,
     getPerRoundEffects,
     computeRoundPoints,
@@ -831,6 +848,8 @@ export const WheelOfTruthMode = ({
     wheelForcedWinner,
     alwaysTiebreakerWheel: true,
     onDeferAfterCombat: () => setAfterCombatBuilt(false),
+    manualScoreAdjust1,
+    manualScoreAdjust2,
   });
   resolveNextRoundRef.current = resolveNextRound;
 
@@ -862,6 +881,7 @@ export const WheelOfTruthMode = ({
     setLuckManipulationResult,
     setMadScientistResult,
     setDothrakiSpinResult,
+    setEternalMangekyouResult,
     setBlackMagicStat,
     setSummoningScrollResult,
     setTricksterResult,
@@ -901,6 +921,8 @@ export const WheelOfTruthMode = ({
     afterCombatBuilt,
     manualOverallWinner,
     computeRoundPoints,
+    manualScoreAdjust1,
+    manualScoreAdjust2,
   });
 
   // Khi tiebreaker wheel xong → thử trigger Roundtable Hold trước, rồi mới build after-combat
@@ -989,13 +1011,13 @@ export const WheelOfTruthMode = ({
     if (!p1Rule && !p2Rule) return null;
     if (!player1 || !player2) return null;
     const s1: CharacterStats = player1.character
-      ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
+      ? calcStatsWithDisabled(player1.character, player1.no, disabledItems, allCharacters)
       : { ...player1.stats };
     const s2: CharacterStats = player2.character
-      ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
+      ? calcStatsWithDisabled(player2.character, player2.no, disabledItems, allCharacters)
       : { ...player2.stats };
     return { s1, s2 };
-  }, [player1, player2, dothrakiSpinResult, disabledItems, stepState]);
+  }, [player1, player2, dothrakiSpinResult, disabledItems, stepState, allCharacters]);
 
   // ── p1DisplayStats / p2DisplayStats ──────────────────────────────────────
   const p1DisplayStats = useMemo(() => {
@@ -1003,7 +1025,7 @@ export const WheelOfTruthMode = ({
     if (dothrakiPreviewStats) return dothrakiPreviewStats.s1;
     const base: CharacterStats | null =
       player1?.character && disabledItems.size > 0
-        ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
+        ? calcStatsWithDisabled(player1.character, player1.no, disabledItems, allCharacters)
         : player1?.stats
           ? { ...player1.stats }
           : null;
@@ -1022,6 +1044,7 @@ export const WheelOfTruthMode = ({
     stepState,
     dothrakiPreviewStats,
     summoningScrollResult,
+    allCharacters,
   ]);
 
   const p2DisplayStats = useMemo(() => {
@@ -1029,7 +1052,7 @@ export const WheelOfTruthMode = ({
     if (dothrakiPreviewStats) return dothrakiPreviewStats.s2;
     const base: CharacterStats | null =
       player2?.character && disabledItems.size > 0
-        ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
+        ? calcStatsWithDisabled(player2.character, player2.no, disabledItems, allCharacters)
         : player2?.stats
           ? { ...player2.stats }
           : null;
@@ -1047,6 +1070,7 @@ export const WheelOfTruthMode = ({
     stepState,
     dothrakiPreviewStats,
     summoningScrollResult,
+    allCharacters,
   ]);
 
   // ── Dev weight overrides ──────────────────────────────────────────────────
@@ -1325,6 +1349,26 @@ export const WheelOfTruthMode = ({
       ).pending
     )
       return true;
+    // The Sand of Time dùng key lastRoundIdx (stepRoundIndex - 1), không phải effectiveSpinRoundIdx
+    // → phải check riêng để block Next khi Sand chưa spin
+    if (stepRoundIndex > 0 && !zoltraakBiq2Pending) {
+      const lastRoundIdx = stepRoundIndex - 1;
+      const lastRoundLog = [...stepState.roundLogs].reverse().find((l) => l.roundIndex === lastRoundIdx);
+      if (lastRoundLog) {
+        const lastWinner = lastRoundLog.winner;
+        const lastStat = lastRoundLog.statKey;
+        // BIQ round (idx=4) có thể đã dùng BIQ2_ROUND_IDX làm spin key nếu Green Dragon active
+        const effectiveLastRoundIdx =
+          lastRoundIdx === 4 &&
+          Object.keys(roundSpinResults).some((k) => k.startsWith(`${BIQ2_ROUND_IDX}-`))
+            ? BIQ2_ROUND_IDX
+            : lastRoundIdx;
+        if (computeRoundPoints("player1", lastWinner, effectiveLastRoundIdx, p1Effs, lastStat).pending)
+          return true;
+        if (computeRoundPoints("player2", lastWinner, effectiveLastRoundIdx, p2Effs, lastStat).pending)
+          return true;
+      }
+    }
     if (stepRoundIndex < 5) {
       const AFTER_WIN_SPINS = ["Bash", "Luminescence", "Ranger-Silver"];
       const p1WinEffs = currentRoundWinner === "player1" ? p1Effs.onWin : [];
@@ -1432,6 +1476,57 @@ export const WheelOfTruthMode = ({
           onComplete={() => {
             setShowOutro(false);
             setCombatConfirmed(true);
+            if (!player1 || !player2) return;
+            const p1name = player1.name;
+            const p2name = player2.name;
+            import("../utils/googleDrive").then(({ appendReportToDrive }) => {
+              import("../config/googleDrive").then(({ REPORT_FILE_ID }) => {
+                const pending = pendingCombatLogRef.current;
+                pendingCombatLogRef.current = null;
+                const ls: string[] = [];
+                let baseBody = pending?.body ?? "";
+                const placeholderLine = "\n[Chờ GM xác nhận — vòng quay & after-combat sẽ được ghi tiếp]";
+                baseBody = baseBody.replace(placeholderLine, "");
+                const STAT_LABELS_WOT: Record<string, string> = {
+                  "0": "STR", "1": "SPD", "2": "DUR", "3": "IQ", "4": "BIQ", "5": "MA",
+                };
+                const roundSpinEntries = Object.entries(roundSpinResults);
+                if (roundSpinEntries.length > 0) {
+                  ls.push(`\n[Vòng quay trong combat]`);
+                  for (const [key, result] of roundSpinEntries) {
+                    const parts = key.split("-");
+                    const side = parts[parts.length - 1] as "player1" | "player2";
+                    const pname = side === "player1" ? p1name : p2name;
+                    const effectName = parts.slice(1, parts.length - 1).join("-");
+                    const roundIdx = parts[0];
+                    const roundLabel = STAT_LABELS_WOT[roundIdx] ?? `Round ${Number(roundIdx) + 1}`;
+                    ls.push(
+                      `  [${pname}] ${effectName} (${roundLabel}): ${result.label} → ${result.isSuccess ? "✓ Thành công" : "✗ Thất bại"}`,
+                    );
+                  }
+                }
+                if (afterCombatEntries.length > 0) {
+                  ls.push(`\n[Hiệu ứng sau combat]`);
+                  for (const entry of afterCombatEntries) {
+                    const pname = entry.player === "player1" ? p1name : p2name;
+                    if (entry.wheelKey) {
+                      const spinRes = afterCombatSpinResults[entry.wheelKey];
+                      const spinText = spinRes
+                        ? `→ Quay: "${spinRes.label}" (${spinRes.isSuccess ? "✓" : "✗"})`
+                        : `→ Chưa quay`;
+                      ls.push(`  [${pname}] ${entry.quirkName}: ${entry.description} ${spinText}`);
+                    } else {
+                      ls.push(`  [${pname}] ${entry.quirkName}: ${entry.description}`);
+                    }
+                  }
+                }
+                const line = "═".repeat(60);
+                ls.push(`\n${line}`);
+                const sep = pending?.sep ?? "";
+                const fullContent = sep + baseBody + ls.join("\n") + "\n";
+                appendReportToDrive(REPORT_FILE_ID, fullContent).catch(() => {});
+              });
+            });
           }}
         />
       )}
@@ -1563,23 +1658,43 @@ export const WheelOfTruthMode = ({
               />
 
               {/* Round indicator banner — Rune Scroll style */}
-              {stepState && stepRoundIndex >= 0 && (
-                <div className="relative z-10 flex justify-center pt-3 pb-1">
-                  <div
-                    className="flex items-center gap-2 px-5 py-1 rounded-full border border-amber-500/40 backdrop-blur-sm"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(120,60,0,0.4) 0%, rgba(80,40,0,0.5) 100%)",
-                      boxShadow: "0 0 16px 2px rgba(255,209,108,0.1)",
-                    }}
-                  >
-                    <span className="text-amber-500/60 text-[10px]">✦</span>
-                    <span className="font-display text-amber-300 text-[11px] font-bold tracking-[0.2em] uppercase">
-                      Round {stepRoundIndex + 1} / 6
-                    </span>
-                    <span className="text-amber-500/60 text-[10px]">✦</span>
+              {(stepState || battleDone) && typeof liveScore.s1 === "number" ? (
+                <div className="relative z-10 flex items-center justify-between px-6 pt-3 pb-1">
+                  {/* Left Player Points Adjustment */}
+                  <div className="flex gap-1.5" style={{ pointerEvents: 'auto' }}>
+                    <button onClick={() => setManualScoreAdjust1(s => s - 1)} className="w-6 h-6 rounded bg-slate-900/60 border border-blue-500/30 text-blue-400 flex items-center justify-center hover:bg-blue-900/80 hover:text-blue-200 transition-colors font-black text-sm shadow-lg backdrop-blur-sm hover:scale-105">-</button>
+                    <button onClick={() => setManualScoreAdjust1(s => s + 1)} className="w-6 h-6 rounded bg-slate-900/60 border border-blue-500/30 text-blue-400 flex items-center justify-center hover:bg-blue-900/80 hover:text-blue-200 transition-colors font-black text-sm shadow-lg backdrop-blur-sm hover:scale-105">+</button>
+                  </div>
+
+                  {stepState && stepRoundIndex >= 0 && (
+                    <div
+                      className="flex items-center gap-2 px-5 py-1 rounded-full border border-amber-500/40 backdrop-blur-sm"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, rgba(120,60,0,0.4) 0%, rgba(80,40,0,0.5) 100%)",
+                        boxShadow: "0 0 16px 2px rgba(255,209,108,0.1)",
+                      }}
+                    >
+                      <span className="text-amber-500/60 text-[10px]">✦</span>
+                      <span className="font-display text-amber-300 text-[11px] font-bold tracking-[0.2em] uppercase">
+                        Round {stepRoundIndex + 1} / 6
+                      </span>
+                      <span className="text-amber-500/60 text-[10px]">✦</span>
+                    </div>
+                  )}
+
+                  {!stepState && (
+                    <div className="w-[120px]" /> /* Spacer to keep buttons at edges */
+                  )}
+
+                  {/* Right Player Points Adjustment */}
+                  <div className="flex gap-1.5" style={{ pointerEvents: 'auto' }}>
+                    <button onClick={() => setManualScoreAdjust2(s => s - 1)} className="w-6 h-6 rounded bg-slate-900/60 border border-red-500/30 text-red-400 flex items-center justify-center hover:bg-red-900/80 hover:text-red-200 transition-colors font-black text-sm shadow-lg backdrop-blur-sm hover:scale-105">-</button>
+                    <button onClick={() => setManualScoreAdjust2(s => s + 1)} className="w-6 h-6 rounded bg-slate-900/60 border border-red-500/30 text-red-400 flex items-center justify-center hover:bg-red-900/80 hover:text-red-200 transition-colors font-black text-sm shadow-lg backdrop-blur-sm hover:scale-105">+</button>
                   </div>
                 </div>
+              ) : (
+                <div className="pt-8" />
               )}
 
               <div className="relative z-10 p-3">
@@ -2118,7 +2233,87 @@ export const WheelOfTruthMode = ({
                                 ? `${player2.name} thắng`
                                 : "Hoà"}
                           </div>
+                          {(() => {
+                            // BIQ overlay bypass wheel → currentRoundWinner=null, phải tính spin nodes riêng
+                            const biqWinner = greenDragonBiqWinner;
+                            const biqStatKey = "biq";
+                            const p1BiqSpin = player1 && stepState && biqWinner
+                              ? calcRoundSpinEffects({
+                                  effects: getPerRoundEffects(player1.character, player1.no),
+                                  winner: biqWinner,
+                                  side: "player1",
+                                  statKey: biqStatKey,
+                                  isLastRound: stepRoundIndex >= 5,
+                                  prevRounds: stepState.resolvedRounds,
+                                  oppHasSpellFlux: (player1?.character?.powers ?? []).some(
+                                    (p: any) => !p?.isLost && (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase().startsWith("spell flux"),
+                                  ) && !disabledItems.has(`${player1?.no}-power-Spell Flux`),
+                                })
+                              : [];
+                            const p2BiqSpin = player2 && stepState && biqWinner
+                              ? calcRoundSpinEffects({
+                                  effects: getPerRoundEffects(player2.character, player2.no),
+                                  winner: biqWinner,
+                                  side: "player2",
+                                  statKey: biqStatKey,
+                                  isLastRound: stepRoundIndex >= 5,
+                                  prevRounds: stepState.resolvedRounds,
+                                  oppHasSpellFlux: (player2?.character?.powers ?? []).some(
+                                    (p: any) => !p?.isLost && (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase().startsWith("spell flux"),
+                                  ) && !disabledItems.has(`${player2?.no}-power-Spell Flux`),
+                                })
+                              : [];
+                            if (p1BiqSpin.length === 0 && p2BiqSpin.length === 0) return null;
+                            const p1Effs = player1 ? getPerRoundEffects(player1.character, player1.no) : null;
+                            const p2Effs = player2 ? getPerRoundEffects(player2.character, player2.no) : null;
+                            return (
+                              <div className="flex flex-col items-center gap-2 w-full px-2">
+                                {p1BiqSpin.length > 0 && (
+                                  <div className="flex flex-wrap justify-center gap-2">
+                                    {p1BiqSpin.map((eff) => (
+                                      <RoundSpinButton
+                                        key={eff}
+                                        effectName={eff}
+                                        side="player1"
+                                        roundIdx={BIQ2_ROUND_IDX}
+                                        roundSpinResults={roundSpinResults}
+                                        applyDevWeights={applyDevWeights}
+                                        setRoundSpinModal={setRoundSpinModal}
+                                        gamblerStackCount={p1Effs?.gamblerStackCount ?? 0}
+                                      />
+                                    ))}
+                                  </div>
+                                )}
+                                {p2BiqSpin.length > 0 && (
+                                  <div className="flex flex-wrap justify-center gap-2">
+                                    {p2BiqSpin.map((eff) => (
+                                      <RoundSpinButton
+                                        key={eff}
+                                        effectName={eff}
+                                        side="player2"
+                                        roundIdx={BIQ2_ROUND_IDX}
+                                        roundSpinResults={roundSpinResults}
+                                        applyDevWeights={applyDevWeights}
+                                        setRoundSpinModal={setRoundSpinModal}
+                                        gamblerStackCount={p2Effs?.gamblerStackCount ?? 0}
+                                      />
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })()}
                           <button
+                            disabled={(() => {
+                              // hasCurrentPendingSpins dùng currentRoundWinner (null ở đây) → check riêng
+                              if (!greenDragonBiqWinner || !stepState || !player1 || !player2) return false;
+                              const p1Effs = getPerRoundEffects(player1.character, player1.no);
+                              const p2Effs = getPerRoundEffects(player2.character, player2.no);
+                              return (
+                                computeRoundPoints("player1", greenDragonBiqWinner, BIQ2_ROUND_IDX, p1Effs, "biq").pending ||
+                                computeRoundPoints("player2", greenDragonBiqWinner, BIQ2_ROUND_IDX, p2Effs, "biq").pending
+                              );
+                            })()}
                             onClick={() => {
                               if (greenDragonBiqWinner !== "tie") {
                                 setWheelForcedWinner(greenDragonBiqWinner);
@@ -2126,7 +2321,7 @@ export const WheelOfTruthMode = ({
                                 resolveNextRoundRef.current?.();
                               }
                             }}
-                            className="px-5 py-1.5 rounded-none font-black text-sm bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105 transition-all shadow-lg"
+                            className="px-5 py-1.5 rounded-none font-black text-sm bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
                           >
                             Next →
                           </button>
@@ -2895,11 +3090,11 @@ export const WheelOfTruthMode = ({
                         <span>
                           Score{" "}
                           <span className="text-blue-400 font-bold">
-                            {log.p1Score}
+                            {log.p1Score + manualScoreAdjust1}
                           </span>{" "}
                           :{" "}
                           <span className="text-red-400 font-bold">
-                            {log.p2Score}
+                            {log.p2Score + manualScoreAdjust2}
                           </span>
                         </span>
                         {stepInProgress && viewIdx === logs.length - 1 && (

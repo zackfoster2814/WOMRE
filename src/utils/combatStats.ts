@@ -169,7 +169,7 @@ export function calcStatsWithDisabled(
     allCharacters,
   );
 
-  const final: CharacterStats = {
+  return {
     str: result.totalStats.strength,
     spd: result.totalStats.speed,
     dur: result.totalStats.durability,
@@ -177,29 +177,6 @@ export function calcStatsWithDisabled(
     biq: result.totalStats.biq,
     ma: result.totalStats.ma,
   };
-
-  const charRace = (char as any).race?.race?.toLowerCase() || "";
-  if (charRace === "skeleton") {
-    final.iq = 1;
-  } else if (charRace === "skeleton (lich)" || charRace === "skeleton (lich king)") {
-    final.iq = 8;
-  }
-
-  const hasSlowMetabolism =
-    ((char as any).quirks || [])
-      .filter((q: any) => !q.isLost)
-      .some((q: any) => (q.name ?? "").toLowerCase() === "slow metabolism") &&
-    !disabledItems.has(`${playerNo}-quirk-Slow Metabolism`);
-  if (hasSlowMetabolism) {
-    const spdDecrease = result.statModifiers
-      .filter(
-        (m: any) => (m.stat === "speed" || m.stat === "spd") && m.value < 0,
-      )
-      .reduce((sum: number, m: any) => sum + m.value, 0);
-    final.spd = char.stats.spd + spdDecrease;
-  }
-
-  return final;
 }
 
 export function applyBeforeCombatStatMods(
@@ -473,13 +450,6 @@ export function calcStatsWithBeforeCombat(
       opponentRaceTier,
       opponentChar,
     );
-  }
-
-  const charRaceBC = (char as any).race?.race?.toLowerCase() || "";
-  if (charRaceBC === "skeleton") {
-    base.iq = 1;
-  } else if (charRaceBC === "skeleton (lich)" || charRaceBC === "skeleton (lich king)") {
-    base.iq = 8;
   }
 
   const archetypes: string[] = (char as any).archetypes || [];

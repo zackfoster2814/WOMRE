@@ -39,6 +39,7 @@ export interface UseStartCombatParams {
   tricksterResult: Record<string, string | null>;
   raumanianSuccess: Record<string, boolean>;
   scryingSuccess: Record<string, boolean>;
+  eternalMangekyouResult: Record<string, "dur" | "iq" | "str" | null>;
   encroachingShadowSuccess: Record<string, boolean>;
   goldShipResult: Record<string, any>;
   luckManipulationResult: Record<string, number | null>;
@@ -100,6 +101,7 @@ export function useStartCombat(params: UseStartCombatParams): {
       raumanianSuccess,
       tricksterResult,
       encroachingShadowSuccess,
+      eternalMangekyouResult,
       scryingSuccess,
       goldShipResult,
       luckManipulationResult,
@@ -358,21 +360,10 @@ export function useStartCombat(params: UseStartCombatParams): {
       side: "player1" | "player2",
     ) => {
       if (!p.character) return;
-      const nas: any[] = (p.character as any).nestedArchetypes || [];
-      for (const na of nas) {
-        const subType: string = na.subType || "";
-        if (!subType.toLowerCase().startsWith("moonroot")) continue;
-        if (na.subTypeIsLost) continue;
-        const disabled = effectiveDisabledItems.has(
-          `${p.no}-archetype_sub-${subType}`,
-        );
-        if (disabled) continue;
-        const bonusMatch = subType.match(/\(\+(\d+)\)/);
-        if (!bonusMatch) continue;
-        const bonus = parseInt(bonusMatch[1], 10);
-        if (side === "player1") p1StartScore += bonus;
-        else p2StartScore += bonus;
-      }
+      const bonus = (p.character as any).moonrootBonus as number | undefined;
+      if (!bonus) return;
+      if (side === "player1") p1StartScore += bonus;
+      else p2StartScore += bonus;
     };
     applyMoonrootBonus(player1, "player1");
     applyMoonrootBonus(player2, "player2");
@@ -627,6 +618,14 @@ export function useStartCombat(params: UseStartCombatParams): {
         (p1RawStats[a] || 0) >= (p1RawStats[b] || 0) ? a : b,
       );
       applyStatDelta(p1BaseStats, highestStat, -4);
+    }
+
+    // Eternal Mangekyou Sharingan: debuff đối thủ -6 vào stat được chọn từ wheel
+    if (eternalMangekyouResult["player1"]) {
+      applyStatDelta(p2BaseStats, eternalMangekyouResult["player1"], -6);
+    }
+    if (eternalMangekyouResult["player2"]) {
+      applyStatDelta(p1BaseStats, eternalMangekyouResult["player2"], -6);
     }
 
     // Mad Scientist: Shrinking (true) = bản thân +6 SPD, -3 STR, -3 DUR; Enlarging (false) = bản thân +3 STR, +3 DUR, -6 SPD
@@ -1578,20 +1577,8 @@ export function useStartCombat(params: UseStartCombatParams): {
             continue;
           }
 
-          // Adapt: log GM action
+          // Adapt: handled via CombatEffectsPanel (auto disable) — skip pre-combat log
           if (handler === "adapt_disable_known_powers") {
-            const knownPowers: string[] =
-              (player.character as any)?.adaptKnownPowers || [];
-            const desc =
-              knownPowers.length === 0
-                ? `[Adapt] Chưa có Power nào được ghi nhớ — không vô hiệu hóa được Power nào`
-                : `[Adapt] Vô hiệu hóa các Power đối thủ đã gặp: ${knownPowers.join(", ")}`;
-            preCombatEvents.push({
-              player: playerSide,
-              source: srcName,
-              description: desc,
-              type: "info",
-            });
             continue;
           }
 
@@ -1750,25 +1737,8 @@ export function useStartCombat(params: UseStartCombatParams): {
             continue;
           }
 
-          // Eternal Mangekyou Sharingan: chọn ngẫu nhiên 1 trong 3 hiệu ứng → debuff đối thủ ngay
+          // Eternal Mangekyou Sharingan: debuff được xử lý qua wheel trước combat (eternalMangekyouResult state)
           if (handler === "eternal_mangekyou_random_effect") {
-            const emOptions: Array<{
-              stat: keyof typeof selfBaseStats;
-              label: string;
-              effect: string;
-            }> = [
-              { stat: "dur", label: "DUR", effect: "Amaterasu" },
-              { stat: "iq", label: "IQ", effect: "Tsukuyomi" },
-              { stat: "str", label: "STR", effect: "Susanoo" },
-            ];
-            const chosen = emOptions[Math.floor(Math.random() * 3)];
-            // Debuff applied to opponent base stats
-            preCombatEvents.push({
-              player: oppSide,
-              source: srcName,
-              description: `${chosen.effect} — -6 ${chosen.label} (Eternal Mangekyou Sharingan từ ${player.name ?? playerSide})`,
-              type: "stat_debuff",
-            });
             continue;
           }
 

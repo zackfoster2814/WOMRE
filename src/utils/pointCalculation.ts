@@ -211,13 +211,17 @@ export function computeRoundPoints(
               ];
             if (!sandOppSpun || !sand2OppSpun)
               return { pts: 1, pending: true, color: "text-amber-400" };
-            // Nếu ít nhất 1 sand thành công → winner mất điểm
+            // Cả 2 thành công → winner bị -1 điểm
+            if (sandOppSpun.isSuccess && sand2OppSpun.isSuccess)
+              return { pts: -1, pending: false, color: "text-red-400" };
+            // 1 thành công → winner không nhận điểm
             if (sandOppSpun.isSuccess || sand2OppSpun.isSuccess)
               return { pts: 0, pending: false, color: "text-amber-400" };
             // Cả 2 thất bại → winner vẫn nhận +1 bình thường (fall through)
           } else {
             if (!sandOppSpun) {
-              // Chưa spin → pending ở loser side sẽ block Next Round
+              // Chưa spin → pending, chờ loser spin xong mới biết winner nhận điểm không
+              return { pts: 1, pending: true, color: "text-amber-400" };
             } else if (sandOppSpun.isSuccess) {
               // Sand thành công → winner không nhận điểm base
               return { pts: 0, pending: false, color: "text-amber-400" };
@@ -446,12 +450,15 @@ export function computeRoundPoints(
             roundSpinResults[`${roundIdx}-The Sand of Time-2-${side}`];
           if (!sandSpun || !sand2Spun)
             return { pts: 0, pending: true, color: "text-amber-500" };
-          const pts =
+          const successCount =
             (sandSpun.isSuccess ? 1 : 0) + (sand2Spun.isSuccess ? 1 : 0);
+          // Cả 2 thành công: B +2, A -1 (opponentPtsAdjust = -1 thêm vào pts=0 của A từ winner branch)
+          const opponentPtsAdjust = successCount === 2 ? -1 : 0;
           return {
-            pts,
+            pts: successCount,
             pending: false,
-            color: pts > 0 ? "text-amber-300" : "text-gray-600",
+            color: successCount > 0 ? "text-amber-300" : "text-gray-600",
+            opponentPtsAdjust,
           };
         }
         if (!sandSpun)

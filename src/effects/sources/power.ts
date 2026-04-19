@@ -1518,7 +1518,7 @@ export function registerAllPowerEffects() {
     .register();
 
   defineEffect("power", "Spear of Fire")
-    .description("Buff: +2 MA. Nếu dùng vũ khí có 2 Rune: +1 điểm khởi đầu.")
+    .description("Buff: +2 MA. Nếu đối thủ có vũ khí dùng được và ≥2 Rune: +1 điểm khởi đầu.")
     .weight(0.78)
     .addStat("ma", 2)
     .effect({

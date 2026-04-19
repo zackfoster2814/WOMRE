@@ -164,7 +164,7 @@ function DarkVoidFlash({ trigger }: { trigger: boolean }) {
     <mesh ref={flashRef} position={[0, 0, 1]}>
       <planeGeometry args={[8, 8]} />
       {/* Blend đen tím che lại */}
-      <meshBasicMaterial color="#1a0033" transparent opacity={0} blending={THREE.MultiplyBlending} />
+      <meshBasicMaterial color="#1a0033" transparent opacity={0} blending={THREE.MultiplyBlending} premultipliedAlpha />
     </mesh>
   );
 }

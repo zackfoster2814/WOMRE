@@ -129,6 +129,11 @@ export function useWheelSpins() {
     Record<string, string | null>
   >({});
 
+  // Eternal Mangekyou Sharingan: stat bị debuff -6 của đối thủ (key = playerLabel người dùng EMS, value = "dur"|"iq"|"str")
+  const [eternalMangekyouResult, setEternalMangekyouResult] = useState<
+    Record<string, "dur" | "iq" | "str" | null>
+  >({});
+
   // Black Magic: stat bị -2 của đối thủ (key = playerLabel của người dùng Black Magic, value = stat key)
   const [blackMagicStat, setBlackMagicStat] = useState<
     Record<string, keyof CharacterStats | null>
@@ -217,6 +222,8 @@ export function useWheelSpins() {
     setSummoningScrollResult,
     tricksterResult,
     setTricksterResult,
+    eternalMangekyouResult,
+    setEternalMangekyouResult,
     blackMagicStat,
     setBlackMagicStat,
     creatorsCatModal,

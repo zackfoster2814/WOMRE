@@ -197,8 +197,8 @@ export function calcRoundSpinEffects(params: {
     }
     if (e === "The Sand of Time") {
       if (!loserSide) return false;
-      // isSandFirstLoss: chưa thua round nào trước đây
-      const firstLoss = prevRounds.every((r) => r.winner !== (loserSide === "player1" ? "player2" : "player1"));
+      // isSandFirstLoss: loserSide chưa thua round nào trước đây
+      const firstLoss = prevRounds.every((r) => r.winner === "tie" || r.winner === loserSide);
       return firstLoss;
     }
     return true;

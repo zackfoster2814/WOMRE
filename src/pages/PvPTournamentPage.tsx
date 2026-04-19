@@ -33,6 +33,7 @@ import {
   type SearchType,
 } from "../config/tournamentConfig";
 import { TournamentLoadingScreen3D } from "../components/three/TournamentLoadingScreen3D";
+import { loadSettings } from "../utils/appSettings";
 
 // Initialize effects
 let effectsInitialized = false;
@@ -132,6 +133,10 @@ export const PvPTournamentPage = () => {
       }
     };
     loadPlayers();
+  }, []);
+
+  useEffect(() => {
+    if (loadSettings().tournamentMode === "double_elim") setActiveTab("bracket");
   }, []);
 
   useEffect(() => {
@@ -1633,7 +1638,9 @@ const BRACKET_SECTIONS = [
 
 const BracketTab = ({ roundData, allRoundData, onOpenMatch, devMode, onDevSaveResult }: BracketTabProps) => {
   const [filterMode, setFilterMode] = useState<"all" | "pending" | "completed">("all");
-  const [bracketSection, setBracketSection] = useState<"qualifying" | "winners">("qualifying");
+  const [bracketSection, setBracketSection] = useState<"qualifying" | "winners">(() =>
+    loadSettings().tournamentMode === "double_elim" ? "winners" : "qualifying"
+  );
   // Search
   const [searchRound, setSearchRound] = useState("all");
   const [searchBranch, setSearchBranch] = useState("all");

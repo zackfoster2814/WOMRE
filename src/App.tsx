@@ -19,6 +19,7 @@ import { isTauri } from "./utils/localStorage";
 import { fetchAllPlayerTexts } from "./utils/googleDrive";
 import { SyncDataDialog } from "./components/SyncDataDialog";
 import { PvPRightSidebar } from "./components/combat/PvPRightSidebar";
+import { SettingsPage } from "./pages/SettingsPage";
 
 // Check if running in web-only mode (not Tauri)
 const isWebOnly = !isTauri();
@@ -28,6 +29,7 @@ const navItems = [
   { path: "/players", label: "Player", icon: "📜" },
   { path: "/battle", label: "Combat", icon: "⚔️" },
   { path: "/pvp-tournament", label: "PvP", icon: "🏆" },
+  { path: "/settings", label: "Settings", icon: "⚙️" },
 ];
 
 // HUD style navigation for Game
@@ -225,6 +227,7 @@ const AnimatedRoutes = ({ rightSidebarOpen }: { rightSidebarOpen: boolean }) => 
             <Route path="/bracket" element={<PublicBracketPage />} />
             <Route path="/sandbox" element={<SandboxPage />} />
             <Route path="/wiki" element={<WikiPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
           </>
         )}
       </Routes>

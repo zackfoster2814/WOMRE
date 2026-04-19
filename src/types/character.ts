@@ -166,6 +166,7 @@ export interface Character {
   powers: LossableItem[];
   summons?: LossableItem[];
   adaptKnownPowers?: string[];
+  moonrootBonus?: number;
 
   // Character Development
   charDevs: LossableItem[]; // Support multiple char devs

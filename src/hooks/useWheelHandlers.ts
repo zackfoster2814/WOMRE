@@ -76,6 +76,9 @@ interface UseWheelHandlersParams {
     SetStateAction<Record<string, boolean | null>>
   >;
   setDothrakiSpinResult: Dispatch<SetStateAction<Record<string, DothrakiRule>>>;
+  setEternalMangekyouResult: Dispatch<
+    SetStateAction<Record<string, "dur" | "iq" | "str" | null>>
+  >;
   setBlackMagicStat: Dispatch<
     SetStateAction<Record<string, keyof CharacterStats | null>>
   >;
@@ -117,6 +120,7 @@ export function useWheelHandlers({
   setLuckManipulationResult,
   setMadScientistResult,
   setDothrakiSpinResult,
+  setEternalMangekyouResult,
   setBlackMagicStat,
   setSummoningScrollResult,
   setTricksterResult,
@@ -223,6 +227,20 @@ export function useWheelHandlers({
           .play()
           .catch(() => {});
       } catch (_) {}
+    } else if (sourceName === "eternal mangekyou sharingan") {
+      const stat = (item.meta?.stat as "dur" | "iq" | "str") ?? null;
+      const effectName = (item.meta?.effect as string) ?? item.label;
+      setEternalMangekyouResult((prev) => ({ ...prev, [playerLabel]: stat }));
+      if (stat) {
+        const oppLabel = playerLabel === "player1" ? "player2" : "player1";
+        spawnStatBubbles([
+          {
+            player: oppLabel,
+            text: `-6 ${stat.toUpperCase()} (${effectName} — EMS)`,
+            isPositive: false,
+          },
+        ]);
+      }
     } else if (sourceName === "scrying") {
       const success = item.isSuccess === true;
       setScryingSuccess((prev) => ({ ...prev, [playerLabel]: success }));
@@ -375,7 +393,8 @@ export function useWheelHandlers({
     } else if (
       (sourceName === "power negation" ||
         sourceName === "anti-magic barrier" ||
-        sourceName === "memory alter") &&
+        sourceName === "memory alter" ||
+        sourceName === "adapt") &&
       item.meta?.powerName
     ) {
       // Power Negation / Anti-Magic Barrier: disable power được chọn của đối thủ

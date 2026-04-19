@@ -227,6 +227,8 @@ export interface UseResolveNextRoundParams {
     p1: Set<string>;
     p2: Set<string>;
   } | null>;
+  /** Ref lưu log combat đã build, để trang cha ghi Drive khi GM confirm */
+  pendingCombatLogRef: MutableRefObject<{ sep: string; body: string } | null>;
   // Functions
   spawnStatBubbles: (
     bubbles: Array<{
@@ -239,6 +241,8 @@ export interface UseResolveNextRoundParams {
     char: Character | undefined,
     playerNo?: number,
   ) => { onWin: string[]; onLose: string[]; onTie: string[] };
+  manualScoreAdjust1?: number;
+  manualScoreAdjust2?: number;
   computeRoundPoints: (
     side: "player1" | "player2",
     winner: "player1" | "player2" | "tie",
@@ -310,6 +314,8 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
       wheelForcedWinner,
       alwaysTiebreakerWheel,
       onDeferAfterCombat,
+      manualScoreAdjust1 = 0,
+      manualScoreAdjust2 = 0,
     } = params;
     if (!stepState || !player1 || !player2 || stepRoundIndex >= 6) return;
     // Khi zoltraakBiq2Pending=true (stepRoundIndex giữ ở 4), check BIQ lần 1 pending trước
@@ -383,12 +389,14 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             : 0;
         const p1Diff = p1Pts.pts - p1Base + (p2Pts.opponentPtsAdjust ?? 0);
         const p2Diff = p2Pts.pts - p2Base + (p1Pts.opponentPtsAdjust ?? 0);
+        console.log(`[SandPatch] lastRound=${lastRoundIdx} winner=${w} stat=${lastRound.statKey} | p1Pts=${p1Pts.pts}(base=${p1Base},auto=${p1Pts.autoApplied},eng=${p1Pts.engineBase}) p2Pts=${p2Pts.pts}(base=${p2Base},auto=${p2Pts.autoApplied},eng=${p2Pts.engineBase}) | p1Diff=${p1Diff} p2Diff=${p2Diff} | p1Score=${patchedState.p1Score} p2Score=${patchedState.p2Score}`);
         if (p1Diff !== 0 || p2Diff !== 0) {
           patchedState = {
             ...patchedState,
             p1Score: patchedState.p1Score + p1Diff,
             p2Score: patchedState.p2Score + p2Diff,
           };
+          console.log(`[SandPatch] Applied! new p1Score=${patchedState.p1Score} p2Score=${patchedState.p2Score}`);
         }
 
         // The Sand of Time: winner nhận pts=0 từ computeRoundPoints khi Sand thành công
@@ -924,6 +932,9 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
           [p1Score, p2Score] = [p2Score, p1Score];
         }
 
+        const effectiveP1Score = p1Score + manualScoreAdjust1;
+        const effectiveP2Score = p2Score + manualScoreAdjust2;
+
         // Egoist: nếu người thắng có Egoist mà cách biệt < 4 → đổi kết quả (người kia thắng)
         // Lưu score trước flip để log margin đúng trong buildAfterCombat
         preEgoistP1Score = p1Score;
@@ -945,8 +956,8 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
           );
           if (!egoistArchetypes.includes("egoist")) return;
           if (disabledItems.has(`${egoistPlayer.no}-archetype-Egoist`)) return;
-          const selfScore = egoistSide === "player1" ? p1Score : p2Score;
-          const oppScore = egoistSide === "player1" ? p2Score : p1Score;
+          const selfScore = egoistSide === "player1" ? effectiveP1Score : effectiveP2Score;
+          const oppScore = egoistSide === "player1" ? effectiveP2Score : effectiveP1Score;
           const margin = selfScore - oppScore;
           if (margin < 4) {
             // Không thắng đủ cách biệt (kể cả hòa, thua) → thua instant: override winner
@@ -954,9 +965,9 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
             tieBreaker = null;
           }
         };
-        // Tính overallWinner tạm trước để Egoist check dùng
-        if (p1Score > p2Score) overallWinner = "player1";
-        else if (p2Score > p1Score) overallWinner = "player2";
+        // Tính overallWinner tạm trước để Egoist check dùng (sử dụng điểm đã apply manual adjust)
+        if (effectiveP1Score > effectiveP2Score) overallWinner = "player1";
+        else if (effectiveP2Score > effectiveP1Score) overallWinner = "player2";
         else {
           tieBreaker = "race";
           overallWinner =
@@ -1369,6 +1380,25 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                 });
               }
             }
+            // Independent: sau combat → +2 vào 1 chỉ số ngẫu nhiên (quay vòng 6 stats)
+            else if (lname === "independent") {
+              const independentWheelItems: WheelSpinItem[] = [
+                { label: "STR", weight: 1, isSuccess: true, color: "#ef4444" },
+                { label: "SPD", weight: 1, isSuccess: true, color: "#3b82f6" },
+                { label: "DUR", weight: 1, isSuccess: true, color: "#84cc16" },
+                { label: "IQ", weight: 1, isSuccess: true, color: "#a855f7" },
+                { label: "BIQ", weight: 1, isSuccess: true, color: "#ec4899" },
+                { label: "MA", weight: 1, isSuccess: true, color: "#f59e0b" },
+              ];
+              acEntries.push({
+                player: side,
+                quirkName: name,
+                description:
+                  "Independent: Sau combat → +2 vào 1 chỉ số ngẫu nhiên",
+                wheelKey: `after-Independent-stat-${side}`,
+                wheelItems: independentWheelItems,
+              });
+            }
           }
 
           // ── Gear after_combat effects ──────────────────────────────────────
@@ -1605,6 +1635,9 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                   "biq",
                   "ma",
                 ] as (keyof CharacterStats)[];
+                const allCharsForCalc = allPlayers
+                  .map((p) => p.character)
+                  .filter((c): c is NonNullable<typeof c> => !!c);
                 const currentStats = stepState
                   ? side === "player1"
                     ? stepState.p1Stats
@@ -1614,6 +1647,7 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                         player.character,
                         player.no,
                         disabledItems,
+                        allCharsForCalc,
                       )
                     : player?.stats;
                 const lowestStat = currentStats
@@ -1810,8 +1844,18 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                   (typeof g === "string" ? g : (g?.name ?? "")).toLowerCase(),
                 ),
             );
-            const availableGears = EffectRegistry.getAllByType("gear")
-              .map((e) => e.name)
+            const MACHINISTS_GEAR_POOL = [
+              "Fishing Rod", "Sổ tay", "Văn tế", "Silver Steed", "Wooden Shield",
+              "Wizard Hat", "Love Letter", "Holy Symbol", "Fingerthing", "Healing Flasks",
+              "Leather Jacket", "Baguette", "Frying Pan", "Spatula", "Gold Pine Resin",
+              "Knight's Armor", "Cursed Charm", "Đai Trinh Tiết", "Swift Boots", "Kuro's Charm",
+              "Buckler", "Soap", "Magical Scroll", "Ba hoa trắng", "Xương sống lưỡi",
+              "Thuốc tráng dương", "Ancient Protector", "Cuộn khăn giấy", "Academie Ring",
+              "Dark Lanthorn", "Lover's Glover", "Storage Room Key", "Giấy Nợ Gia Truyền",
+              "Cursed Coin", "Shot Glass", "Empty Stein", "Golden Coin", "Kẹo", "Ớt",
+              "Mì Tôm", "Bò Khô", "Radio", "Đá", "Beer", "Wine",
+            ];
+            const availableGears = MACHINISTS_GEAR_POOL
               .filter((g) => !ownedGears.has(g.toLowerCase()));
             const gearColors = [
               "#f59e0b",
@@ -1882,6 +1926,9 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                 "biq",
                 "ma",
               ];
+              const allCharsForCalc2 = allPlayers
+                .map((p) => p.character)
+                .filter((c): c is NonNullable<typeof c> => !!c);
               const currentStats = stepState
                 ? side === "player1"
                   ? stepState.p1Stats
@@ -1891,6 +1938,7 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
                       player.character,
                       player.no,
                       disabledItems,
+                      allCharsForCalc2,
                     )
                   : player.stats;
               const lowestStat = currentStats
@@ -2011,26 +2059,6 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
               quirkName: "Lords",
               description: "+1 BIQ (Lords — sau combat)",
               statMods: [{ stat: "biq" as keyof CharacterStats, delta: 1 }],
-            });
-          }
-
-          // Independent: sau combat → +2 vào 1 chỉ số ngẫu nhiên (mở vòng quay 6 stats)
-          if (archetypes.includes("independent")) {
-            const independentWheelItems: WheelSpinItem[] = [
-              { label: "STR", weight: 1, isSuccess: true, color: "#ef4444" },
-              { label: "SPD", weight: 1, isSuccess: true, color: "#3b82f6" },
-              { label: "DUR", weight: 1, isSuccess: true, color: "#84cc16" },
-              { label: "IQ", weight: 1, isSuccess: true, color: "#a855f7" },
-              { label: "BIQ", weight: 1, isSuccess: true, color: "#ec4899" },
-              { label: "MA", weight: 1, isSuccess: true, color: "#f59e0b" },
-            ];
-            acEntries.push({
-              player: side,
-              quirkName: "Independent",
-              description:
-                "Independent: Sau combat → +2 vào 1 chỉ số ngẫu nhiên",
-              wheelKey: `after-Independent-stat-${side}`,
-              wheelItems: independentWheelItems,
             });
           }
 
@@ -4676,9 +4704,11 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
         return; // Chờ roundSpinResults useEffect gọi lại
       }
       // Kiểm tra có cần defer buildAfterCombat chờ tiebreak không
+      const _effP1Score = p1Score + manualScoreAdjust1;
+      const _effP2Score = p2Score + manualScoreAdjust2;
       const needsTiebreakerDefer =
         alwaysTiebreakerWheel &&
-        p1Score === p2Score &&
+        _effP1Score === _effP2Score &&
         !pendingMA &&
         !isRoundtablePending;
 
@@ -4703,108 +4733,139 @@ export function useResolveNextRound(params: UseResolveNextRoundParams) {
         buildAfterCombat(overallWinner);
       }
 
-      // autoSave — full log như sandbox
-      import("../utils/googleDrive").then(({ appendReportToDrive }) => {
-        import("../config/googleDrive").then(({ REPORT_FILE_ID }) => {
-          const now = new Date().toLocaleString("vi-VN");
-          const sep = `\n${"─".repeat(60)}\nPVP SESSION: ${now}\n${"─".repeat(60)}\n`;
-          const line = "═".repeat(60);
-          const p1name = player1.name,
-            p2name = player2.name;
-          const winnerName = overallWinner === "player1" ? p1name : p2name;
-          const loserName = overallWinner === "player1" ? p2name : p1name;
-          const ls: string[] = [];
+      // Build log và lưu vào ref — trang cha sẽ ghi Drive khi GM confirm
+      {
+        const now = new Date().toLocaleString("vi-VN");
+        const sep = `\n${"─".repeat(60)}\nPVP SESSION: ${now}\n${"─".repeat(60)}\n`;
+        const line = "═".repeat(60);
+        const p1name = player1.name,
+          p2name = player2.name;
+        const winnerName = overallWinner === "player1" ? p1name : p2name;
+        const loserName = overallWinner === "player1" ? p2name : p1name;
+        const ls: string[] = [];
 
-          ls.push(`PvP Battle Report`);
-          ls.push(`Thời gian: ${now}`);
-          ls.push(line);
-          ls.push(`${p1name} (#${player1.no}) vs ${p2name} (#${player2.no})`);
-          ls.push(
-            `Race: ${player1.character?.race?.race ?? "?"} (T${player1.raceTier}) vs ${player2.character?.race?.race ?? "?"} (T${player2.raceTier})`,
-          );
-          ls.push(line);
+        ls.push(`PvP Battle Report`);
+        ls.push(`Thời gian: ${now}`);
+        ls.push(line);
+        ls.push(`${p1name} (#${player1.no}) vs ${p2name} (#${player2.no})`);
+        ls.push(
+          `Race: ${player1.character?.race?.race ?? "?"} (T${player1.raceTier}) vs ${player2.character?.race?.race ?? "?"} (T${player2.raceTier})`,
+        );
+        ls.push(line);
 
-          // Inventory
-          const renderInv = (p: PvPPlayerData) => {
-            const char = p.character;
-            if (!char) return;
-            ls.push(`\nItems & hiệu ứng — ${p.name}:`);
-            const inv = buildInventoryList(char);
-            if (inv.length === 0) ls.push("  (không có)");
-            for (const it of inv) ls.push(`  [${it.sourceType}] ${it.name}`);
-            if (char.runes?.runeword)
-              ls.push(`  [runeword] ${char.runes.runeword}`);
-          };
-          renderInv(player1);
-          renderInv(player2);
+        // Inventory
+        const renderInv = (p: PvPPlayerData) => {
+          const char = p.character;
+          if (!char) return;
+          ls.push(`\nItems & hiệu ứng — ${p.name}:`);
+          const inv = buildInventoryList(char);
+          if (inv.length === 0) ls.push("  (không có)");
+          for (const it of inv) ls.push(`  [${it.sourceType}] ${it.name}`);
+          if (char.runes?.runeword)
+            ls.push(`  [runeword] ${char.runes.runeword}`);
+        };
+        renderInv(player1);
+        renderInv(player2);
 
-          // Stats before combat
-          const SKEYS: {
-            key: keyof typeof finalState.p1Stats;
-            label: string;
-          }[] = [
-            { key: "str", label: "STR" },
-            { key: "spd", label: "SPD" },
-            { key: "dur", label: "DUR" },
-            { key: "iq", label: "IQ" },
-            { key: "biq", label: "BIQ" },
-            { key: "ma", label: "MA" },
-          ];
-          const fmtStats = (s: typeof finalState.p1Stats) =>
-            SKEYS.map(({ key, label }) => `${label}:${s[key] ?? 0}`).join(" ");
-          ls.push(`\nStats vào combat:`);
-          ls.push(`  ${p1name}: ${fmtStats(finalState.p1Stats)}`);
-          ls.push(`  ${p2name}: ${fmtStats(finalState.p2Stats)}`);
+        // Stats before combat
+        const SKEYS: {
+          key: keyof typeof finalState.p1Stats;
+          label: string;
+        }[] = [
+          { key: "str", label: "STR" },
+          { key: "spd", label: "SPD" },
+          { key: "dur", label: "DUR" },
+          { key: "iq", label: "IQ" },
+          { key: "biq", label: "BIQ" },
+          { key: "ma", label: "MA" },
+        ];
+        const fmtStats = (s: typeof finalState.p1Stats) =>
+          SKEYS.map(({ key, label }) => `${label}:${s[key] ?? 0}`).join(" ");
+        ls.push(`\nStats vào combat:`);
+        ls.push(`  ${p1name}: ${fmtStats(finalState.p1Stats)}`);
+        ls.push(`  ${p2name}: ${fmtStats(finalState.p2Stats)}`);
 
-          // Round-by-round
-          ls.push(`\nKết quả từng round:`);
-          for (const log of finalState.roundLogs) {
-            if (log.roundIndex === -1) {
-              ls.push(`  [PRE-COMBAT]`);
-              for (const ev of log.events) {
-                const pname = ev.player === "player1" ? p1name : p2name;
-                ls.push(`    [${pname}] ${ev.description}`);
-              }
-              continue;
-            }
-            const rw =
-              log.winner === "player1"
-                ? p1name
-                : log.winner === "player2"
-                  ? p2name
-                  : "HÒA";
-            ls.push(
-              `  ${log.statLabel}: ${rw} (${log.p1ValueUsed} vs ${log.p2ValueUsed})`,
-            );
+        // Round-by-round (chi tiết đầy đủ: stat value, điểm, events, carry-over, point changes)
+        ls.push(`\nKết quả từng round:`);
+        let runP1Score = finalState.startP1Score;
+        let runP2Score = finalState.startP2Score;
+        for (const log of finalState.roundLogs) {
+          if (log.roundIndex === -1) {
+            ls.push(`  [PRE-COMBAT]`);
             for (const ev of log.events) {
               const pname = ev.player === "player1" ? p1name : p2name;
-              ls.push(`    [${pname}] ${ev.source}: ${ev.description}`);
+              ls.push(`    [${pname}] ${ev.description}`);
             }
-            if ((log.carryOverToNext?.length ?? 0) > 0) {
-              for (const co of log.carryOverToNext) {
-                const pname = co.player === "player1" ? p1name : p2name;
-                ls.push(
-                  `    → Carry [${pname}]: ${co.source} ${co.value > 0 ? "+" : ""}${co.value} ${co.stat.toUpperCase()} round kế`,
-                );
-              }
+            continue;
+          }
+          const rw =
+            log.winner === "player1"
+              ? p1name
+              : log.winner === "player2"
+                ? p2name
+                : "HÒA";
+          // Tính điểm accumulated sau round này
+          for (const pc of log.pointChanges ?? []) {
+            if (pc.player === "player1") runP1Score += pc.delta;
+            else runP2Score += pc.delta;
+          }
+          const isCrit = log.events.some(
+            (e) =>
+              e.description.toLowerCase().includes("critical") ||
+              e.source.toLowerCase().includes("crit"),
+          );
+          const critTag = isCrit ? " [CRIT]" : "";
+          ls.push(
+            `  Round ${log.roundIndex + 1} — ${log.statLabel}${critTag}: ${rw} (${p1name} ${log.p1ValueUsed} vs ${p2name} ${log.p2ValueUsed}) | Điểm: ${runP1Score}-${runP2Score}`,
+          );
+          // Events (stat boost/debuff, point changes)
+          for (const ev of log.events) {
+            const pname = ev.player === "player1" ? p1name : p2name;
+            const tag =
+              ev.type === "stat_boost"
+                ? "↑"
+                : ev.type === "stat_debuff"
+                  ? "↓"
+                  : ev.type === "point_change"
+                    ? "Δ"
+                    : ev.type === "carry_over"
+                      ? "→"
+                      : "·";
+            ls.push(`    ${tag} [${pname}] ${ev.source}: ${ev.description}`);
+          }
+          // Point changes detail
+          if ((log.pointChanges?.length ?? 0) > 0) {
+            for (const pc of log.pointChanges) {
+              const pname = pc.player === "player1" ? p1name : p2name;
+              ls.push(
+                `    Δ Điểm [${pname}]: ${pc.delta > 0 ? "+" : ""}${pc.delta} (${pc.reason})`,
+              );
             }
           }
+          // Carry-over effects to next round
+          if ((log.carryOverToNext?.length ?? 0) > 0) {
+            for (const co of log.carryOverToNext) {
+              const pname = co.player === "player1" ? p1name : p2name;
+              ls.push(
+                `    → Carry [${pname}]: ${co.source} ${co.value > 0 ? "+" : ""}${co.value} ${co.stat.toUpperCase()} round kế`,
+              );
+            }
+          }
+        }
 
-          ls.push(
-            `\nKết quả: ${winnerName} WIN ${Math.max(p1Score, p2Score)}-${Math.min(p1Score, p2Score)}`,
-          );
-          ls.push(`  ${loserName} thua`);
-          if (tieBreaker === "race") ls.push(`  (Tie-breaker: Race Tier)`);
+        ls.push(
+          `\nKết quả: ${winnerName} WIN ${Math.max(_effP1Score, _effP2Score)}-${Math.min(_effP1Score, _effP2Score)}`,
+        );
+        ls.push(`  ${loserName} thua`);
+        if (tieBreaker === "race") ls.push(`  (Tie-breaker: Race Tier)`);
 
-          // After-combat quirk effects logged separately via handleConfirmCombat
+        // Phần vòng quay trong combat + sau combat sẽ được append bởi trang cha khi GM confirm
+        ls.push(`\n[Chờ GM xác nhận — vòng quay & after-combat sẽ được ghi tiếp]`);
+        ls.push(`\n${line}`);
 
-          ls.push(`\n${line}`);
-
-          appendReportToDrive(REPORT_FILE_ID, sep + ls.join("\n") + "\n").catch(
-            () => {},
-          );
-        });
-      });
+        const { pendingCombatLogRef } = params;
+        pendingCombatLogRef.current = { sep, body: ls.join("\n") + "\n" };
+      }
     }
   };
   return { resolveNextRound };

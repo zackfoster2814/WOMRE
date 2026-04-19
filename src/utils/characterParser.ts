@@ -326,7 +326,7 @@ export class CharacterParser {
     const powerIndex = this.findSectionIndex(lines, "Power:");
     character.powers = this.parseListValue(lines, powerIndex);
 
-    // Extract adaptKnownPowers từ power "Adapt -> X -> Y"
+    // Extract adaptKnownPowers từ power "Adapt -> X -> Y" hoặc "Adapt (X, Y, Z)"
     for (const p of character.powers) {
       if (/^Adapt\s*->/i.test(p.name)) {
         character.adaptKnownPowers = p.name
@@ -334,7 +334,15 @@ export class CharacterParser {
           .slice(1)
           .map((s) => s.trim())
           .filter(Boolean);
-        // Normalize tên power về "Adapt" để resolver lookup đúng
+        p.name = "Adapt";
+        break;
+      }
+      const bracketMatch = p.name.match(/^Adapt\s*[\[(](.+)[\])]$/i);
+      if (bracketMatch) {
+        character.adaptKnownPowers = bracketMatch[1]
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
         p.name = "Adapt";
         break;
       }
@@ -375,6 +383,7 @@ export class CharacterParser {
 
     // Parse Other Source Mods từ "Nguồn khác:" block
     character.otherSourceMods = this.parseOtherSourceMods(lines);
+    character.moonrootBonus = CharacterParser.parseMoonrootBonus(lines);
     // if (character.otherSourceMods && character.otherSourceMods.length > 0) {
     //   console.log(`[Parser] ${character.name} otherSourceMods:`, JSON.stringify(character.otherSourceMods));
     // }
@@ -561,6 +570,24 @@ export class CharacterParser {
     }
 
     return result.length > 0 ? result : undefined;
+  }
+
+  /** Parse Moonroot bonus từ "Other Source:" block, e.g. "- Moonroot (+1)" → 1 */
+  static parseMoonrootBonus(lines: string[]): number | undefined {
+    const battleLogIdx = lines.findIndex((l) => l.includes("Battle Log:"));
+    const searchEnd = battleLogIdx >= 0 ? battleLogIdx : lines.length;
+    let blockIdx = -1;
+    for (let i = 0; i < searchEnd; i++) {
+      if (/Other\s+Source\s*:/i.test(lines[i])) { blockIdx = i; break; }
+    }
+    if (blockIdx < 0) return undefined;
+    for (let i = blockIdx + 1; i < Math.min(blockIdx + 30, lines.length); i++) {
+      const line = lines[i].trim();
+      if (!line || line.startsWith("======") || line.startsWith("```")) break;
+      const m = line.match(/^-\s*Moonroot\s*\(\+(\d+)\)/i);
+      if (m) return parseInt(m[1], 10);
+    }
+    return undefined;
   }
 
   /**

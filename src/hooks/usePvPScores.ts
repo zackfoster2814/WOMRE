@@ -1,4 +1,4 @@
-﻿import { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { PvPPlayerData, CombatResult, StepCombatState } from "../types/battleZone";
 import { EffectResolver, getEffectiveRace } from "../effects/resolver";
 import { getPerRoundEffects } from "../utils/combatStats";
@@ -44,6 +44,8 @@ interface UsePvPScoresParams {
     statKey?: string,
     roundsWonBefore?: number,
   ) => { pts: number; pending: boolean; color: string; autoApplied?: boolean; engineBase?: number; opponentPtsAdjust?: number };
+  manualScoreAdjust1?: number;
+  manualScoreAdjust2?: number;
 }
 
 export function usePvPScores({
@@ -67,6 +69,8 @@ export function usePvPScores({
   afterCombatBuilt = true,
   manualOverallWinner = null,
   computeRoundPoints,
+  manualScoreAdjust1 = 0,
+  manualScoreAdjust2 = 0,
 }: UsePvPScoresParams) {
 const stepInProgress = !!stepState && stepRoundIndex < 6;
 
@@ -122,7 +126,7 @@ const pendingSpinsForLastRound = useMemo(() => {
 // Rounds còn pending spin → chưa tính vào score
 const effectiveScores = useMemo(() => {
   if (!combatResult) return { s1: 0, s2: 0 };
-  return { s1: combatResult.player1Score, s2: combatResult.player2Score };
+  return { s1: combatResult.player1Score + manualScoreAdjust1, s2: combatResult.player2Score + manualScoreAdjust2 };
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [
   combatResult,
@@ -133,6 +137,8 @@ const effectiveScores = useMemo(() => {
   oneTrickPonyStat,
   huntersMarkStat,
   tricksterResult,
+  manualScoreAdjust1,
+  manualScoreAdjust2,
 ]);
 
 // Live score: 0:0 trước combat; trong combat chỉ tính rounds đã xác nhận hết spin; sau combat dùng effectiveScores
@@ -176,20 +182,28 @@ const liveScore = useMemo(() => {
           : w === "player2"
             ? (p2Pts.engineBase ?? 1)
             : 0;
+        const p1Diff = p1Pts.pts - p1Base;
+        const p2Diff = p2Pts.pts - p2Base;
+        if (p1Diff !== 0 || p2Diff !== 0 || p1Pts.pending || p2Pts.pending) {
+          console.log(`[liveScore] lastRoundIdx=${lastRoundIdx} winner=${w} stat=${lastRLog.statKey} | p1Pts=${p1Pts.pts}(base=${p1Base},pending=${p1Pts.pending},auto=${p1Pts.autoApplied}) p2Pts=${p2Pts.pts}(base=${p2Base},pending=${p2Pts.pending},auto=${p2Pts.autoApplied}) | stepState.p1Score=${stepState.p1Score} stepState.p2Score=${stepState.p2Score}`);
+        }
         if (!p1Pts.pending) {
-          s1 += p1Pts.pts - p1Base;
+          s1 += p1Diff;
           if (p1Pts.opponentPtsAdjust) s2 += p1Pts.opponentPtsAdjust;
         }
         if (!p2Pts.pending) {
-          s2 += p2Pts.pts - p2Base;
+          s2 += p2Diff;
           if (p2Pts.opponentPtsAdjust) s1 += p2Pts.opponentPtsAdjust;
+        }
+        if (p1Diff !== 0 || p2Diff !== 0 || p1Pts.pending || p2Pts.pending) {
+          console.log(`[liveScore] => s1=${s1} s2=${s2}`);
         }
       }
     }
-    return { s1, s2 };
+    return { s1: s1 + manualScoreAdjust1, s2: s2 + manualScoreAdjust2 };
   }
   // Before combat: compute starting points from before_combat effects + raumanianSuccess
-  if (!player1 || !player2) return { s1: 0, s2: 0 };
+  if (!player1 || !player2) return { s1: 0 + manualScoreAdjust1, s2: 0 + manualScoreAdjust2 };
   const computePreCombatScore = (
     self: PvPPlayerData,
     opponent: PvPPlayerData,
@@ -277,8 +291,8 @@ const liveScore = useMemo(() => {
     return pts;
   };
   return {
-    s1: computePreCombatScore(player1, player2, "player1"),
-    s2: computePreCombatScore(player2, player1, "player2"),
+    s1: computePreCombatScore(player1, player2, "player1") + manualScoreAdjust1,
+    s2: computePreCombatScore(player2, player1, "player2") + manualScoreAdjust2,
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [
@@ -292,6 +306,8 @@ const liveScore = useMemo(() => {
   raumanianSuccess,
   goldenCoinPoints,
   roundSpinResults,
+  manualScoreAdjust1,
+  manualScoreAdjust2,
 ]);
 
 // Tiebreaker wheel result khi 2 player cùng race và điểm bằng nhau

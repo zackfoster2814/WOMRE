@@ -587,6 +587,39 @@ const EFFECT_DEFS: EffectDef[] = [
     gmNote: "Nếu trúng: cộng +1 hoặc +2 tất cả stats cho player",
   },
 
+  // Eternal Mangekyou Sharingan: quay 1 trong 3 hiệu ứng debuff đối thủ -6
+  {
+    source: "eternal mangekyou sharingan",
+    timing: "before_combat",
+    category: "wheel",
+    description:
+      "Eternal Mangekyou Sharingan: Kích hoạt ngẫu nhiên 1 trong 3 — Amaterasu: đối thủ -6 DUR; Tsukuyomi: đối thủ -6 IQ; Susanoo: đối thủ -6 STR.",
+    wheelItems: [
+      {
+        label: "Amaterasu — đối thủ -6 DUR",
+        weight: 1,
+        isSuccess: true,
+        color: "#ef4444",
+        meta: { stat: "dur", effect: "Amaterasu" },
+      },
+      {
+        label: "Tsukuyomi — đối thủ -6 IQ",
+        weight: 1,
+        isSuccess: true,
+        color: "#a855f7",
+        meta: { stat: "iq", effect: "Tsukuyomi" },
+      },
+      {
+        label: "Susanoo — đối thủ -6 STR",
+        weight: 1,
+        isSuccess: true,
+        color: "#3b82f6",
+        meta: { stat: "str", effect: "Susanoo" },
+      },
+    ],
+    gmNote: "Áp dụng debuff -6 vào stat tương ứng của đối thủ trước combat",
+  },
+
   // Scrying: 40% -4 stat cao nhất của đối thủ trước combat
   {
     source: "scrying",
@@ -2030,6 +2063,60 @@ const EFFECT_DEFS: EffectDef[] = [
 
   // ─── POWER EFFECTS (before_combat wheel) ─────────────────────────────────
 
+  // Adapt: vô hiệu toàn bộ power của đối thủ mà đã được ghi nhớ (auto, không cần spin)
+  {
+    source: "adapt",
+    timing: "before_combat",
+    category: "auto",
+    description:
+      "Adapt: Vô hiệu hóa toàn bộ Power của đối thủ mà bản thân đã ghi nhớ từ các trận trước.",
+    resolver: (ctx) => {
+      const knownPowers: string[] =
+        (ctx.character as any).adaptKnownPowers || [];
+      if (knownPowers.length === 0) {
+        return {
+          category: "gm" as EffectCategory,
+          description: "Adapt: Chưa ghi nhớ Power nào — không vô hiệu được.",
+          resolved: true,
+          resolvedNote: "Adapt: Chưa có Power nào được ghi nhớ",
+        };
+      }
+      const disableTarget =
+        ctx.playerLabel === "player1" ? "player2" : "player1";
+      const oppNo = ctx.opponentPlayerNo;
+      // Lọc: chỉ disable power còn active ở đối thủ và nằm trong danh sách ghi nhớ
+      const oppActivePowers = (ctx.opponentCharacter?.powers || [])
+        .filter((p: any) => !p?.isLost)
+        .map((p: any) => (typeof p === "string" ? p : (p?.name ?? "")))
+        .filter(Boolean)
+        .filter(
+          (name: string) =>
+            !oppNo || !ctx.disabledItems?.has(`${oppNo}-power-${name}`),
+        );
+      const toDisable = knownPowers.filter((kp) =>
+        oppActivePowers.some(
+          (ap) => ap.toLowerCase() === kp.toLowerCase(),
+        ),
+      );
+      if (toDisable.length === 0) {
+        return {
+          category: "gm" as EffectCategory,
+          description: `Adapt: Các Power đã ghi nhớ (${knownPowers.join(", ")}) đều không còn active ở đối thủ — không vô hiệu được.`,
+          resolved: true,
+          resolvedNote: "Adapt: Không có Power ghi nhớ nào còn active",
+        };
+      }
+      return {
+        category: "auto" as EffectCategory,
+        description: `Adapt: Vô hiệu hóa ${toDisable.length} Power đối thủ đã ghi nhớ: ${toDisable.join(", ")}`,
+        autoDisablePowers: toDisable.map((powerName) => ({
+          powerName,
+          disableTarget,
+        })),
+      };
+    },
+  },
+
   // Power Negation: vô hiệu 1 power ngẫu nhiên của đối thủ (wheel chọn)
   {
     source: "power negation",
@@ -2513,6 +2600,14 @@ function buildPendingEffects(
         return !disabledItems.has(`${playerNo}-power-${name}`);
       })
       .map((p: any) => (typeof p === "string" ? p : p.name).toLowerCase()),
+    // Adapt: power name có thể là "Adapt (x, y, z)" → thêm "adapt" thuần để match EFFECT_DEFS
+    ...((character as any).adaptKnownPowers !== undefined ||
+    (character.powers || []).some((p: any) => {
+      const n = (typeof p === "string" ? p : (p?.name ?? "")).toLowerCase();
+      return n === "adapt" || n.startsWith("adapt (") || n.startsWith("adapt(");
+    })
+      ? ["adapt"]
+      : []),
     // Gears (for gear effects with wheel probability, e.g. Cursed Coin, Staff of the Fallen One)
     ...[
       ...((character as any).gear?.normalGear || []),
@@ -2994,6 +3089,8 @@ export const CombatEffectsPanel = ({
     const effect = effects.find((e) => e.id === id);
     // Auto-disable powers nếu không cần spin (số power ≤ số cần disable)
     if (effect?.autoDisablePowers?.length) {
+      // Cập nhật localDisabledPowersRef ngay lập tức (không chờ parent re-render)
+      const newDisabled = new Set(localDisabledPowersRef.current);
       for (const { powerName, disableTarget } of effect.autoDisablePowers) {
         onWheelResolved?.(effect.playerLabel, effect.sourceName, {
           label: powerName,
@@ -3001,18 +3098,49 @@ export const CombatEffectsPanel = ({
           isSuccess: true,
           meta: { powerName, disableTarget },
         });
+        const targetPlayer = disableTarget === "player1" ? player1 : player2;
+        if (targetPlayer) {
+          newDisabled.add(`${targetPlayer.no}-power-${powerName}`);
+        }
       }
+      localDisabledPowersRef.current = newDisabled;
+
+      // Resolve ngay các wheel effects của đối thủ mà source power đã bị disable
+      const disabledPowerNamesLower = effect.autoDisablePowers.map((p) =>
+        p.powerName.toLowerCase(),
+      );
+      const disabledTargetLabel = effect.autoDisablePowers[0]?.disableTarget;
+      setEffects((prev) =>
+        prev.map((e) => {
+          if (e.resolved) return e;
+          if (e.id === id) {
+            return {
+              ...e,
+              resolved: true,
+              resolvedNote: `Đã vô hiệu: ${effect.autoDisablePowers!.map((p) => p.powerName).join(", ")}`,
+            };
+          }
+          // Mark resolved nếu effect thuộc player bị disable VÀ source name bị disable
+          if (
+            disabledTargetLabel &&
+            e.playerLabel === disabledTargetLabel &&
+            disabledPowerNamesLower.includes(e.sourceName.toLowerCase())
+          ) {
+            return {
+              ...e,
+              resolved: true,
+              resolvedNote: `Power bị vô hiệu hóa bởi ${effect.sourceName}`,
+            };
+          }
+          return e;
+        }),
+      );
+      return;
     }
     setEffects((prev) =>
       prev.map((e) =>
         e.id === id
-          ? {
-              ...e,
-              resolved: true,
-              resolvedNote: effect?.autoDisablePowers?.length
-                ? `Đã vô hiệu: ${effect.autoDisablePowers.map((p) => p.powerName).join(", ")}`
-                : "Đã apply",
-            }
+          ? { ...e, resolved: true, resolvedNote: "Đã apply" }
           : e,
       ),
     );
@@ -3120,10 +3248,31 @@ export const CombatEffectsPanel = ({
         setSpinModal({ isOpen: true, effect: nextEffect, spinsLeft });
       }, 150);
     } else {
+      // Nếu là power-disable effect: mark resolved ngay các wheel effects của đối thủ bị disable
+      const disabledPowerName = item.meta?.powerName as string | undefined;
+      const disableTarget = item.meta?.disableTarget as string | undefined;
       setEffects((prev) =>
-        prev.map((e) =>
-          e.id === id ? { ...e, resolved: true, resolvedNote: note } : e,
-        ),
+        prev.map((e) => {
+          if (e.id === id) return { ...e, resolved: true, resolvedNote: note };
+          if (
+            e.resolved ||
+            !isPowerDisableEffect ||
+            !disabledPowerName ||
+            !disableTarget
+          )
+            return e;
+          if (
+            e.playerLabel === disableTarget &&
+            e.sourceName.toLowerCase() === disabledPowerName.toLowerCase()
+          ) {
+            return {
+              ...e,
+              resolved: true,
+              resolvedNote: `Power bị vô hiệu hóa bởi ${effect.sourceName}`,
+            };
+          }
+          return e;
+        }),
       );
       setSpinModal({ isOpen: false, effect: null, spinsLeft: 1 });
     }

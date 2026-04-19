@@ -105,6 +105,10 @@ export const StatsComparisonMode = ({
   onNextMatch,
 }: BattleModeProps) => {
   const [allPlayers, setAllPlayers] = useState<PvPPlayerData[]>([]);
+  const allCharacters = useMemo(
+    () => allPlayers.map((p) => p.character).filter((c): c is NonNullable<typeof c> => !!c),
+    [allPlayers],
+  );
   const [loading, setLoading] = useState(true);
   const [searchTerm1, setSearchTerm1] = useState("");
   const [searchTerm2, setSearchTerm2] = useState("");
@@ -151,6 +155,8 @@ export const StatsComparisonMode = ({
     p1: Set<string>;
     p2: Set<string>;
   } | null>(null);
+  // Log combat pending — được ghi Drive khi GM confirm
+  const pendingCombatLogRef = useRef<{ sep: string; body: string } | null>(null);
 
   // Step-by-step combat state
   const [stepState, setStepState] = useState<StepCombatState | null>(null);
@@ -1976,6 +1982,7 @@ export const StatsComparisonMode = ({
     setMadScientistResult({});
     setSummoningScrollResult({});
     setTricksterResult({});
+    setEternalMangekyouResult({});
     setBlackMagicStat({});
     setDothrakiSpinResult({});
     setAfterCombatEntries([]);
@@ -2071,44 +2078,40 @@ export const StatsComparisonMode = ({
     if (!player1 || !player2) return;
     const p1name = player1.name;
     const p2name = player2.name;
-    const hasAnySpinLog =
-      Object.keys(roundSpinResults).length > 0 ||
-      Object.keys(afterCombatSpinResults).length > 0 ||
-      afterCombatEntries.length > 0;
-    if (!hasAnySpinLog) return;
 
     import("../utils/googleDrive").then(({ appendReportToDrive }) => {
       import("../config/googleDrive").then(({ REPORT_FILE_ID }) => {
+        const pending = pendingCombatLogRef.current;
+        pendingCombatLogRef.current = null;
         const ls: string[] = [];
-        ls.push(`\n>>> KẾT QUẢ VÒNG QUAY (sau combat confirm) <<<`);
 
-        // Per-round spins (Crit, Gambler, Golden Parry, Evasion, Mute, Blind, Ranger, Pennyworthy...)
+        // Nếu có log combat từ hook, dùng làm header (bỏ dòng placeholder cuối)
+        let baseBody = pending?.body ?? "";
+        const placeholderLine = "\n[Chờ GM xác nhận — vòng quay & after-combat sẽ được ghi tiếp]";
+        baseBody = baseBody.replace(placeholderLine, "");
+
+        const STAT_LABELS: Record<string, string> = {
+          "0": "STR", "1": "SPD", "2": "DUR", "3": "IQ", "4": "BIQ", "5": "MA",
+        };
+
+        // Vòng quay trong combat (Crit, Gambler, Golden Parry, Evasion, Ranger...)
         const roundSpinEntries = Object.entries(roundSpinResults);
         if (roundSpinEntries.length > 0) {
           ls.push(`\n[Vòng quay trong combat]`);
           for (const [key, result] of roundSpinEntries) {
-            // key format: `${roundIdx}-${effectName}-${side}`
             const parts = key.split("-");
             const side = parts[parts.length - 1] as "player1" | "player2";
             const pname = side === "player1" ? p1name : p2name;
             const effectName = parts.slice(1, parts.length - 1).join("-");
             const roundIdx = parts[0];
-            const STAT_LABELS: Record<string, string> = {
-              "0": "STR",
-              "1": "SPD",
-              "2": "DUR",
-              "3": "IQ",
-              "4": "BIQ",
-              "5": "MA",
-            };
-            const roundLabel = STAT_LABELS[roundIdx] ?? `Round ${roundIdx}`;
+            const roundLabel = STAT_LABELS[roundIdx] ?? `Round ${Number(roundIdx) + 1}`;
             ls.push(
               `  [${pname}] ${effectName} (${roundLabel}): ${result.label} → ${result.isSuccess ? "✓ Thành công" : "✗ Thất bại"}`,
             );
           }
         }
 
-        // After-combat entries (Edgelord, PvP Reward, Resilient, quirks...)
+        // Hiệu ứng sau combat (Edgelord, PvP Reward, Resilient, quirks, after-combat wheels...)
         if (afterCombatEntries.length > 0) {
           ls.push(`\n[Hiệu ứng sau combat]`);
           for (const entry of afterCombatEntries) {
@@ -2118,18 +2121,19 @@ export const StatsComparisonMode = ({
               const spinText = spinRes
                 ? `→ Quay: "${spinRes.label}" (${spinRes.isSuccess ? "✓" : "✗"})`
                 : `→ Chưa quay`;
-              ls.push(
-                `  [${pname}] ${entry.quirkName}: ${entry.description} ${spinText}`,
-              );
+              ls.push(`  [${pname}] ${entry.quirkName}: ${entry.description} ${spinText}`);
             } else {
               ls.push(`  [${pname}] ${entry.quirkName}: ${entry.description}`);
             }
           }
         }
 
-        appendReportToDrive(REPORT_FILE_ID, ls.join("\n") + "\n").catch(
-          () => {},
-        );
+        const line = "═".repeat(60);
+        ls.push(`\n${line}`);
+
+        const sep = pending?.sep ?? "";
+        const fullContent = sep + baseBody + ls.join("\n") + "\n";
+        appendReportToDrive(REPORT_FILE_ID, fullContent).catch(() => {});
       });
     });
   };
@@ -2223,6 +2227,7 @@ export const StatsComparisonMode = ({
     setStepState(null);
     setStepRoundIndex(-1);
     setCombatConfirmed(false);
+    pendingCombatLogRef.current = null;
     setAudioResetKey((k) => k + 1);
     setViewLogIndex(null);
     setRoundtableSubMode(false);
@@ -2284,6 +2289,8 @@ export const StatsComparisonMode = ({
     setSummoningScrollResult,
     tricksterResult,
     setTricksterResult,
+    eternalMangekyouResult,
+    setEternalMangekyouResult,
     blackMagicStat,
     setBlackMagicStat,
     creatorsCatModal,
@@ -2321,6 +2328,7 @@ export const StatsComparisonMode = ({
     cursedCoinTarget,
     guidanceStats,
     blackMagicStat,
+    eternalMangekyouResult,
     rhittaResult,
     setAfterCombatEntries,
     setCombatConfirmed,
@@ -2382,10 +2390,10 @@ export const StatsComparisonMode = ({
       return null;
     if (!player1 || !player2) return null;
     const s1: CharacterStats = player1.character
-      ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
+      ? calcStatsWithDisabled(player1.character, player1.no, disabledItems, allCharacters)
       : { ...player1.stats };
     const s2: CharacterStats = player2.character
-      ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
+      ? calcStatsWithDisabled(player2.character, player2.no, disabledItems, allCharacters)
       : { ...player2.stats };
     const DSTAT_KEYS = [
       "str",
@@ -2534,6 +2542,7 @@ export const StatsComparisonMode = ({
     player1,
     player2,
     disabledItems,
+    allCharacters,
   ]);
 
   const TRICKSTER_DISPLAY_DELTA: Record<string, number> = {
@@ -2548,7 +2557,7 @@ export const StatsComparisonMode = ({
     // nếu có disabled items thì tính lại để phản ánh đúng
     const base =
       player1?.character && disabledItems.size > 0
-        ? calcStatsWithDisabled(player1.character, player1.no, disabledItems)
+        ? calcStatsWithDisabled(player1.character, player1.no, disabledItems, allCharacters)
         : (player1?.stats ?? null);
     const delta =
       TRICKSTER_DISPLAY_DELTA[(tricksterResult["player1"] ?? "").toLowerCase()];
@@ -2604,13 +2613,14 @@ export const StatsComparisonMode = ({
     dothrakiPreviewStats,
     tricksterResult,
     blackMagicStat,
+    allCharacters,
   ]);
 
   const p2DisplayStats = useMemo(() => {
     if (stepState) return stepState.p2Stats;
     if (dothrakiPreviewStats) return dothrakiPreviewStats.s2;
     const base = player2?.character
-      ? calcStatsWithDisabled(player2.character, player2.no, disabledItems)
+      ? calcStatsWithDisabled(player2.character, player2.no, disabledItems, allCharacters)
       : (player2?.stats ?? null);
     const delta =
       TRICKSTER_DISPLAY_DELTA[(tricksterResult["player2"] ?? "").toLowerCase()];
@@ -2661,6 +2671,7 @@ export const StatsComparisonMode = ({
     dothrakiPreviewStats,
     tricksterResult,
     blackMagicStat,
+    allCharacters,
   ]);
 
   // Dev Mode: wheel weight overrides (effectName -> itemIndex -> weight)
@@ -2733,7 +2744,12 @@ export const StatsComparisonMode = ({
       stepState,
       getPerRoundEffects,
     };
-    return computeRoundPointsFn(
+    const sandKey = `${roundIdx}-The Sand of Time-${side === "player1" ? "player2" : "player1"}`;
+    const sandResult = roundSpinResults[sandKey];
+    if (sandResult !== undefined) {
+      console.log(`[CRP-wrapper] side=${side} roundIdx=${roundIdx} sandKey=${sandKey} sandResult=${JSON.stringify(sandResult)} stepState.roundLogs=${JSON.stringify(ctx.stepState?.roundLogs?.map(l=>({ri:l.roundIndex,w:l.winner})))}`);
+    }
+    const result = computeRoundPointsFn(
       side,
       winner,
       roundIdx,
@@ -2742,6 +2758,10 @@ export const StatsComparisonMode = ({
       roundsWonBefore,
       ctx,
     );
+    if (sandResult !== undefined) {
+      console.log(`[CRP-wrapper] => pts=${result.pts} pending=${result.pending} autoApplied=${result.autoApplied} engineBase=${result.engineBase}`);
+    }
+    return result;
   };
 
   const battleDone = !!combatResult;
@@ -2865,6 +2885,7 @@ export const StatsComparisonMode = ({
     pendingCrueltyAfterCombatRef,
     pendingFinalizeStateRef,
     preBiqFiredHandlersRef,
+    pendingCombatLogRef,
     spawnStatBubbles,
     getPerRoundEffects,
     computeRoundPoints,
@@ -2907,6 +2928,7 @@ export const StatsComparisonMode = ({
     setBlackMagicStat,
     setSummoningScrollResult,
     setTricksterResult,
+    setEternalMangekyouResult,
     setRhittaResult,
     setCreatorsCatModal,
     spawnStatBubbles,

@@ -1,7 +1,15 @@
 // Audio state management
 let isMuted = false;
+let globalVolume = 0.8; // 0.0 – 1.0
 let currentAudio: HTMLAudioElement | null = null;
 let audioContext: AudioContext | null = null;
+
+// Get/set global volume (0–1)
+export const getAudioVolume = (): number => globalVolume;
+export const setAudioVolume = (v: number) => {
+  globalVolume = Math.max(0, Math.min(1, v));
+  if (currentAudio) currentAudio.volume = globalVolume;
+};
 
 // Get or create AudioContext singleton
 const getAudioContext = (): AudioContext => {
@@ -100,7 +108,7 @@ export const playCustomSound = (audioUrl: string) => {
 
   try {
     currentAudio = new Audio(audioUrl);
-    currentAudio.volume = 0.5;
+    currentAudio.volume = globalVolume;
 
     // Clear reference when sound finishes
     currentAudio.onended = () => {
