@@ -1706,6 +1706,27 @@ export class EffectResolver {
               effect.timing === "immediate"
             ) {
               // Process this effect as immediate (fall through to stat modifier logic below)
+            } else if (
+              effect.timing === "on_loser_bracket" ||
+              effect.timing === "on_winner_bracket"
+            ) {
+              // Apply bracket-based effects if character is in the matching bracket
+              const isLoserBracket = character?.tournament?.bracket === "loser";
+              const isWinnerBracket = character?.tournament?.bracket === "winner";
+              if (
+                (effect.timing === "on_loser_bracket" && isLoserBracket) ||
+                (effect.timing === "on_winner_bracket" && isWinnerBracket)
+              ) {
+                // Fall through to process as immediate
+              } else {
+                result.combatEffects.push({
+                  source,
+                  effect,
+                  isActive: false,
+                  reason: `Requires ${effect.timing === "on_loser_bracket" ? "loser" : "winner"} bracket`,
+                });
+                continue;
+              }
             } else {
               // Other non-immediate effects - store for combat
               result.combatEffects.push({ source, effect, isActive: true });

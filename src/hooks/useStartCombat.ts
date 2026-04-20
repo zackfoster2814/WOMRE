@@ -387,6 +387,14 @@ export function useStartCombat(params: UseStartCombatParams): {
             "uno reverse card",
       ) && !effectiveDisabledItems.has(`${player2.no}-power-Uno Reverse Card`);
 
+    const _snapStats = (s: CharacterStats) =>
+      `STR=${s.str} SPD=${s.spd} DUR=${s.dur} IQ=${s.iq} BIQ=${s.biq} MA=${s.ma} TTL=${s.str+s.spd+s.dur+s.iq+s.biq+s.ma}`;
+    const _logDiff = (label: string, before: CharacterStats, after: CharacterStats, name: string) => {
+      const keys: (keyof CharacterStats)[] = ["str","spd","dur","iq","biq","ma"];
+      const diffs = keys.filter(k => after[k] !== before[k]).map(k => `${k.toUpperCase()}: ${before[k]}→${after[k]} (${after[k]-before[k]>0?"+":""}${after[k]-before[k]})`);
+      if (diffs.length) console.log(`  [${name}] ${label}: ${diffs.join(", ")}`);
+    };
+
     const p1BaseStats: CharacterStats = player1.character
       ? calcStatsWithBeforeCombat(
           player1.character,
@@ -420,6 +428,13 @@ export function useStartCombat(params: UseStartCombatParams): {
         )
       : { ...player2.stats };
 
+    console.group(`%c[Combat Stats Debug] ${player1.name} vs ${player2.name}`, "color:#f59e0b;font-weight:bold");
+    console.log(`[BASE after calcStatsWithBeforeCombat]`);
+    console.log(`  ${player1.name}: ${_snapStats(p1BaseStats)}`);
+    console.log(`  ${player2.name}: ${_snapStats(p2BaseStats)}`);
+    console.log(`  hasUnoP1BC=${hasUnoP1BC} hasUnoP2BC=${hasUnoP2BC}`);
+    const _p1Before_cursed = {...p1BaseStats}, _p2Before_cursed = {...p2BaseStats};
+
     // Cursed Coin: -1 all stats cho người bị chọn
     if (cursedCoinTarget["player1"]) {
       const affected =
@@ -432,37 +447,50 @@ export function useStartCombat(params: UseStartCombatParams): {
       for (const k of _ALL_STAT_KEYS) applyStatDelta(affected, k, -1);
     }
 
-    // Uno Reverse Card: redirect before_combat debuffs của đối thủ về đối thủ
-    // calcStatsWithBeforeCombat đã skip apply debuffs opp vào ta khi opp có URC —
-    // cần apply debuffs đó vào chính opp ở đây
-    if (hasUnoP1BC && player2.character) {
-      // p1 có URC → debuffs của p2 nhắm vào opponent (p1) bị redirect về p2
-      applyBeforeCombatStatMods(
-        p2BaseStats,
-        player2.character,
-        player2.no,
-        effectiveDisabledItems,
-        p1Race,
-        "opponent",
-        player2.raceTier,
-        player1.raceTier,
-        player1.character,
-      );
+    _logDiff("Cursed Coin", _p1Before_cursed, p1BaseStats, player1.name);
+    _logDiff("Cursed Coin", _p2Before_cursed, p2BaseStats, player2.name);
+    const _p1Before_uno = {...p1BaseStats}, _p2Before_uno = {...p2BaseStats};
+
+    // Uno Reverse Card: nếu bất kỳ bên nào có URC → debuff "opponent" bounce về người gây ra
+    // calcStatsWithBeforeCombat đã skip apply debuffs opp khi anyUno active
+    // → apply debuff "opponent" của mỗi player lên chính player đó
+    const anyUnoBC = hasUnoP1BC || hasUnoP2BC;
+    if (anyUnoBC) {
+      if (player1.character) {
+        // debuff "opponent" của p1 bounce về p1 (onlyNegative=true: chỉ bounce debuffs, không bounce buff dương)
+        applyBeforeCombatStatMods(
+          p1BaseStats,
+          player1.character,
+          player1.no,
+          effectiveDisabledItems,
+          p2Race,
+          "opponent",
+          player1.raceTier,
+          player2.raceTier,
+          player2.character,
+          true,
+        );
+      }
+      if (player2.character) {
+        // debuff "opponent" của p2 bounce về p2 (onlyNegative=true: chỉ bounce debuffs, không bounce buff dương)
+        applyBeforeCombatStatMods(
+          p2BaseStats,
+          player2.character,
+          player2.no,
+          effectiveDisabledItems,
+          p1Race,
+          "opponent",
+          player2.raceTier,
+          player1.raceTier,
+          player1.character,
+          true,
+        );
+      }
     }
-    if (hasUnoP2BC && player1.character) {
-      // p2 có URC → debuffs của p1 nhắm vào opponent (p2) bị redirect về p1
-      applyBeforeCombatStatMods(
-        p1BaseStats,
-        player1.character,
-        player1.no,
-        effectiveDisabledItems,
-        p2Race,
-        "opponent",
-        player1.raceTier,
-        player2.raceTier,
-        player2.character,
-      );
-    }
+
+    _logDiff("URC redirect", _p1Before_uno, p1BaseStats, player1.name);
+    _logDiff("URC redirect", _p2Before_uno, p2BaseStats, player2.name);
+    const _p1Before_bm = {...p1BaseStats}, _p2Before_bm = {...p2BaseStats};
 
     // King Gnome's Banana: +2 all stats nếu IQ cao hơn đối thủ, -2 all stats nếu IQ thấp hơn
     const hasKingBanana = (p: PvPPlayerData) =>
@@ -521,6 +549,10 @@ export function useStartCombat(params: UseStartCombatParams): {
     if (encroachingShadowSuccess["player2"])
       applyStatDelta(p2BaseStats, "spd", 7);
 
+    _logDiff("King Gnome Banana / Trickster / Encroaching", _p1Before_bm, p1BaseStats, player1.name);
+    _logDiff("King Gnome Banana / Trickster / Encroaching", _p2Before_bm, p2BaseStats, player2.name);
+    const _p1Before_misc = {...p1BaseStats}, _p2Before_misc = {...p2BaseStats};
+
     // Black Magic: -2 vào stat được chọn của đối thủ
     // Uno Reverse Card: nếu target có URC thì debuff quay lại người dùng Black Magic
     const hasUnoP1 =
@@ -543,7 +575,8 @@ export function useStartCombat(params: UseStartCombatParams): {
       !effectiveDisabledItems.has(`${player2.no}-power-Uno Reverse Card`);
     if (blackMagicStat["player1"]) {
       // player1 dùng BM → debuff nhắm vào player2
-      // URC bounce nếu player1 tự có URC HOẶC player2 có URC
+      // URC bounce nếu NGƯỜI NHẬN (player2) có URC → bounce về player2 (người dùng BM = player1)
+      // URC bounce nếu NGƯỜI DÙNG BM (player1) có URC → bounce về player1 (tự hứng)
       if (hasUnoP1 || hasUnoP2)
         applyStatDelta(
           p1BaseStats,
@@ -559,8 +592,9 @@ export function useStartCombat(params: UseStartCombatParams): {
     }
     if (blackMagicStat["player2"]) {
       // player2 dùng BM → debuff nhắm vào player1
-      // URC bounce nếu player2 tự có URC HOẶC player1 có URC
-      if (hasUnoP2 || hasUnoP1)
+      // URC bounce nếu NGƯỜI NHẬN (player1) có URC → bounce về player1 (người dùng BM = player2)
+      // URC bounce nếu NGƯỜI DÙNG BM (player2) có URC → bounce về player2 (tự hứng)
+      if (hasUnoP1 || hasUnoP2)
         applyStatDelta(
           p2BaseStats,
           blackMagicStat["player2"]! as keyof CharacterStats,
@@ -573,6 +607,10 @@ export function useStartCombat(params: UseStartCombatParams): {
           -2,
         );
     }
+
+    _logDiff(`Black Magic (BM=${JSON.stringify(blackMagicStat)})`, _p1Before_misc, p1BaseStats, player1.name);
+    _logDiff(`Black Magic (BM=${JSON.stringify(blackMagicStat)})`, _p2Before_misc, p2BaseStats, player2.name);
+    const _p1Before_rhitta = {...p1BaseStats}, _p2Before_rhitta = {...p2BaseStats};
 
     // Rhitta: nếu quay thành công trước combat → +3 STR, +2 DUR
     if (rhittaResult["player1"]) {
@@ -605,19 +643,24 @@ export function useStartCombat(params: UseStartCombatParams): {
     }
 
     // Scrying: player có Scrying thành công → đối thủ bị -4 stat cao nhất (tính theo base stats gốc)
+    // URC: nếu người nhận có URC → bounce về người dùng Scrying
     if (scryingSuccess["player1"]) {
-      const p2RawStats: CharacterStats = player2.baseStats;
+      const unoActive = hasUnoP1 || hasUnoP2;
+      // URC: bounce về người dùng Scrying (p1); không có URC: trừ target (p2)
+      const targetBase = unoActive ? p1BaseStats : p2BaseStats;
       const highestStat = _ALL_STAT_KEYS.reduce((a, b) =>
-        (p2RawStats[a] || 0) >= (p2RawStats[b] || 0) ? a : b,
+        (targetBase[a] || 0) >= (targetBase[b] || 0) ? a : b,
       );
-      applyStatDelta(p2BaseStats, highestStat, -4);
+      applyStatDelta(targetBase, highestStat, -4);
     }
     if (scryingSuccess["player2"]) {
-      const p1RawStats: CharacterStats = player1.baseStats;
+      const unoActive = hasUnoP1 || hasUnoP2;
+      // URC: bounce về người dùng Scrying (p2); không có URC: trừ target (p1)
+      const targetBase = unoActive ? p2BaseStats : p1BaseStats;
       const highestStat = _ALL_STAT_KEYS.reduce((a, b) =>
-        (p1RawStats[a] || 0) >= (p1RawStats[b] || 0) ? a : b,
+        (targetBase[a] || 0) >= (targetBase[b] || 0) ? a : b,
       );
-      applyStatDelta(p1BaseStats, highestStat, -4);
+      applyStatDelta(targetBase, highestStat, -4);
     }
 
     // Eternal Mangekyou Sharingan: debuff đối thủ -6 vào stat được chọn từ wheel
@@ -725,6 +768,13 @@ export function useStartCombat(params: UseStartCombatParams): {
         }
       }
     }
+
+    _logDiff("Rhitta / Gold Ship / Luck / Scrying / EMS / MadSci / Summon / Morningstar / Lady", _p1Before_rhitta, p1BaseStats, player1.name);
+    _logDiff("Rhitta / Gold Ship / Luck / Scrying / EMS / MadSci / Summon / Morningstar / Lady", _p2Before_rhitta, p2BaseStats, player2.name);
+    console.log(`[FINAL before setStepState]`);
+    console.log(`  ${player1.name}: ${_snapStats(p1BaseStats)}`);
+    console.log(`  ${player2.name}: ${_snapStats(p2BaseStats)}`);
+    console.groupEnd();
 
     // Devotee auto-lose vs God/Demi-God: kết thúc ngay, không qua rounds
     {

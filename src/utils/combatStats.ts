@@ -189,6 +189,8 @@ export function applyBeforeCombatStatMods(
   selfRaceTier?: number,
   opponentRaceTier?: number,
   opponentChar?: Character | null,
+  onlyNegative?: boolean, // URC bounce: chỉ apply debuff value < 0, skip buff dương (e.g. Age Manip +1 IQ)
+  onlyPositive?: boolean, // URC calcStats: chỉ apply buff value > 0 của opponent (debuffs âm sẽ bounce về caster)
 ): void {
   const effOpponentRace = getEffectiveRace(opponentChar, opponentRace);
   const fx = EffectResolver.calculateCharacterEffects(char, { isPvE: false });
@@ -284,6 +286,8 @@ export function applyBeforeCombatStatMods(
     const srcName = ce.source?.name || "?";
     const srcType = ce.source?.type || "?";
     if (disabledItems.has(`${charNo}-${srcType}-${srcName}`)) continue;
+    // Skip effects với stat: "random" — stat thực tế phải đến từ wheel spin (e.g. Black Magic)
+    if (ce.effect.stat === "random") continue;
 
     const conditions: any[] = (ce.effect as any).conditions || [];
     if (conditions.some((c: any) => c.type === "probability")) continue;
@@ -348,6 +352,8 @@ export function applyBeforeCombatStatMods(
     if (!conditionMet) continue;
 
     const val = ce.effect.value!;
+    if (onlyNegative && val > 0) continue;   // URC bounce: skip buff dương
+    if (onlyPositive && val < 0) continue;   // URC calcStats: skip debuff âm (sẽ bounce về caster)
     const targets = resolveStatTargets(ce.effect.stat, base);
     for (const k of targets) applyStatDelta(base, k, val);
   }
@@ -419,12 +425,10 @@ export function calcStatsWithBeforeCombat(
     : false;
   const fairDuelActiveBC = selfHasFairDuel || oppHasFairDuelBC;
 
-  if (
-    opponentChar &&
-    !hasUnoReverse &&
-    !opponentHasUnoReverse &&
-    !fairDuelActiveBC
-  ) {
+  // Nếu có URC ở bất kỳ bên → chỉ apply buff dương từ opponent (debuff sẽ do useStartCombat bounce về caster)
+  // Nếu không có URC → apply toàn bộ effects "opponent" của đối thủ lên bản thân
+  const anyUnoActive = hasUnoReverse || !!opponentHasUnoReverse;
+  if (opponentChar && !fairDuelActiveBC) {
     applyBeforeCombatStatMods(
       base,
       opponentChar,
@@ -435,20 +439,8 @@ export function calcStatsWithBeforeCombat(
       opponentRaceTier,
       selfRaceTier,
       char,
-    );
-  }
-
-  if (hasUnoReverse) {
-    applyBeforeCombatStatMods(
-      base,
-      char,
-      playerNo,
-      disabledItems,
-      opponentRace,
-      "opponent",
-      selfRaceTier,
-      opponentRaceTier,
-      opponentChar,
+      undefined,                         // onlyNegative
+      anyUnoActive ? true : undefined,   // onlyPositive: URC active → chỉ apply buff dương của opponent
     );
   }
 

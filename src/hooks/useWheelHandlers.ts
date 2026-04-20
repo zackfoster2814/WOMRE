@@ -420,6 +420,7 @@ export function useWheelHandlers({
       };
       const stat = statMap[item.label];
       if (stat) {
+        console.log(`[BlackMagic] playerLabel=${playerLabel} item.label="${item.label}" → stat="${stat}"`);
         setBlackMagicStat((prev) => ({ ...prev, [playerLabel]: stat }));
         const oppLabel = playerLabel === "player1" ? "player2" : "player1";
         const selfPlayer = playerLabel === "player1" ? player1 : player2;
@@ -434,7 +435,7 @@ export function useWheelHandlers({
                   : (pw?.name ?? "")
                 ).toLowerCase() === "uno reverse card",
             ) && !disabledItems.has(`${p?.no}-power-Uno Reverse Card`);
-        // URC: nếu chính người dùng BM có URC → debuff quay lại họ; nếu đối thủ có URC → debuff quay lại người dùng BM
+        // URC: nếu người dùng BM hoặc người nhận có URC → debuff bounce về người dùng BM
         const selfHasUno = checkUno(selfPlayer);
         const oppHasUno = checkUno(oppPlayer);
         const unoActive = selfHasUno || oppHasUno;
