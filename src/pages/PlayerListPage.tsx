@@ -26,12 +26,14 @@ import {
   fetchPlayerText,
   invalidatePlayerCache,
   clearPlayerIndexCache,
+  readDriveFileAsText,
 } from "../utils/googleDrive";
 import { DataManager } from "../managers/DataManager";
 import { isTauri } from "../utils/localStorage";
 import { PvEBattlePage } from "./BattleZonePage";
 import { BattleType } from "../types";
 import { PlayerWheelDialog } from "../components/PlayerWheelDialog";
+import { BattleLogViewer } from "../components/BattleLogViewer";
 
 // Check if running in web-only mode
 const isWebOnly = !isTauri();
@@ -420,6 +422,32 @@ export const PlayerListPage = () => {
   const [selectedTeams, setSelectedTeams] = useState<number[]>([]);
   const [showTeamFilter, setShowTeamFilter] = useState(false);
   const [showRanking, setShowRanking] = useState(false);
+  const [showLog, setShowLog] = useState(false);
+  const [logContent, setLogContent] = useState<string>("");
+  const [logLoading, setLogLoading] = useState(false);
+  const logPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const LOG_FILE_ID = "1-0s5J0pHvsvOWL565mmQdZG6RqyucItz";
+
+  const fetchLogContent = async () => {
+    try {
+      const text = await readDriveFileAsText(LOG_FILE_ID);
+      setLogContent(text);
+    } catch {}
+  };
+
+  useEffect(() => {
+    if (!showLog) {
+      if (logPollRef.current) clearInterval(logPollRef.current);
+      return;
+    }
+    setLogLoading(true);
+    readDriveFileAsText(LOG_FILE_ID)
+      .then((text) => { setLogContent(text); setLogLoading(false); })
+      .catch(() => setLogLoading(false));
+    logPollRef.current = setInterval(fetchLogContent, 10000);
+    return () => { if (logPollRef.current) clearInterval(logPollRef.current); };
+  }, [showLog]);
 
   const raceFilterRef = useRef<HTMLDivElement>(null);
   const houseFilterRef = useRef<HTMLDivElement>(null);
@@ -1282,18 +1310,35 @@ export const PlayerListPage = () => {
 
       {/* Floating Ranking Button */}
       {viewMode === "players" && (
-        <button
-          onClick={() => setShowRanking(!showRanking)}
-          className={`fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] flex items-center justify-center text-white text-xl transition-all hover:scale-110 border border-amber-500/50 group ${
-            showRanking
-              ? "bg-red-950 hover:bg-red-900 border-red-500/50 shadow-[0_0_20px_rgba(220,38,38,0.4)]"
-              : "bg-gradient-to-br from-amber-600 to-orange-800 hover:from-amber-500 hover:to-orange-600"
-          }`}
-          style={{ zIndex: 1000 }}
-          title="Bảng xếp hạng"
-        >
-          {showRanking ? <span className="text-red-300">✕</span> : <span className="group-hover:animate-pulse">✨</span>}
-        </button>
+        <>
+          {/* Combat Log button */}
+          <button
+            onClick={() => setShowLog(!showLog)}
+            className={`fixed bottom-24 right-6 w-14 h-14 rounded-full flex items-center justify-center text-white text-xs font-bold transition-all hover:scale-110 border shadow-lg ${
+              showLog
+                ? "bg-red-950 hover:bg-red-900 border-red-500/50 shadow-[0_0_16px_rgba(220,38,38,0.4)]"
+                : "bg-gray-800 hover:bg-gray-700 border-gray-500/50 shadow-[0_0_16px_rgba(100,100,255,0.3)]"
+            }`}
+            style={{ zIndex: 1000 }}
+            title="Combat Log"
+          >
+            {showLog ? <span className="text-red-300 text-base">✕</span> : <span className="text-[10px] text-center leading-tight">COM<br/>BAT</span>}
+          </button>
+
+          {/* Ranking button */}
+          <button
+            onClick={() => setShowRanking(!showRanking)}
+            className={`fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)] flex items-center justify-center text-white text-xl transition-all hover:scale-110 border border-amber-500/50 group ${
+              showRanking
+                ? "bg-red-950 hover:bg-red-900 border-red-500/50 shadow-[0_0_20px_rgba(220,38,38,0.4)]"
+                : "bg-gradient-to-br from-amber-600 to-orange-800 hover:from-amber-500 hover:to-orange-600"
+            }`}
+            style={{ zIndex: 1000 }}
+            title="Bảng xếp hạng"
+          >
+            {showRanking ? <span className="text-red-300">✕</span> : <span className="group-hover:animate-pulse">✨</span>}
+          </button>
+        </>
       )}
 
       {/* Ranking Panel */}
@@ -1379,6 +1424,21 @@ export const PlayerListPage = () => {
             ...
           </span>
         </div>
+      )}
+
+      {/* Combat Log Panel — fixed bên phải, bên trên nút bảng xếp hạng */}
+      {showLog && (
+        <BattleLogViewer
+          content={logContent}
+          loading={logLoading}
+          onClose={() => setShowLog(false)}
+          onReload={() => {
+            setLogLoading(true);
+            readDriveFileAsText(LOG_FILE_ID)
+              .then((text) => { setLogContent(text); setLogLoading(false); })
+              .catch(() => setLogLoading(false));
+          }}
+        />
       )}
 
       {/* Player Detail Modal */}
