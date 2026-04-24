@@ -1,8 +1,8 @@
 No.181
 Name: мιтιᴘнᴀι︵²ᵏ⁷ (mitiphai)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thua 1
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -77,7 +77,6 @@ PvP Reward:
 ```
 ```
 Other Source:
-- +1 all stats (Final Reserves)
 ```
 
 ======
@@ -121,5 +120,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-3
 - Note: Gọi bo ra đánh
+```
+
+```
+PvP:
+- Đối thủ: Myue
+- Kết quả: Lose
+- Tỉ số: 6-2
+- Note: Gọi solus ra đánh hộ
 ```
 ======

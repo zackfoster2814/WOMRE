@@ -1,8 +1,8 @@
 No.77
 Name: Yoh Hai Kiếm (yoh711)
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -70,6 +70,8 @@ Runeword: Không
 + Arcana Blast (Từ PvE)
 + Encroaching Shadow (Từ PvE)
 + Bash (Từ PvE)
++ Bloodlust
++ Armor Piercing
 ```
 
 ```
@@ -92,6 +94,12 @@ Other Source:
 - -2 Dura
 - -2 Dura
 - +1 Dura (Healing Factor)
+- -2 Dura
+- +1 Dura (Healing Factor)
+- Nhiệm vụ House: +2 vào 3 stat ngẫu nhiên (BIQ, MA, DUR) và 2 Power (Bloodlust, Armor Piercing)
+- +2 BIQ
+- +2 MA
+- +2 Dura
 ```
 
 
@@ -100,6 +108,7 @@ PvP Reward:
 - +1 BIQ
 - +1 MA
 - +1 BIQ
+- +2 BIQ
 ```
 
 ======
@@ -134,5 +143,21 @@ PvP:
 - Tỉ số: 5-2
 - Note: Crit: IQ; Bash: Dura, IQ, BIQ
 
+```
+
+```
+PvP:
+- Đối thủ: Kẹo Con
+- Kết quả: Lose
+- Tỉ số: 4-2
+- Note: 
+```
+
+```
+PvP:
+- Đối thủ: Lunar
+- Kết quả: Win
+- Tỉ số: 5-2
+- Note: Aids (-2 dura), Healing factor (+1 Dura)
 ```
 ======

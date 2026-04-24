@@ -1,8 +1,8 @@
 No.161
 Name: nahhhh_hecker (nahhhh_hecker)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -26,7 +26,7 @@ Str: 0 (ban đầu là 3, do PvE Punishment)
 Spd: 5 (ban đầu là 9, do PvE Punishment)
 Dur: 5
 IQ: 5
-BIQ: 6
+BIQ: 6 (bị quay lại từ 6 thành 6)
 MA: 6
 ```
 ```
@@ -54,6 +54,9 @@ Runeword: Không
 1 Power: 
 + Zoltraak
 + Writer
++ Golden Vow
++ Bucking Bronco
++ Gaze of the Abyss
 ```
 ```
 Char dev: 
@@ -67,6 +70,12 @@ Lover:
 +
 ```
 
+```
+Other Source:
+- +1 Dura
+- +1 Str
+- +1 Spd
+```
 ======
 Battle Log: 
 ```
@@ -102,6 +111,21 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-5
 - Note: PvP Reward: (Tặng Vinh Vander Bek nhưng anh ấy siêu nhân gao nên không nhận) +1 BIQ
+```
+
+```
+PvP:
+- Đối thủ: We are Charlie Kirk
+- Kết quả: Lose
+- Tỉ số: 4-3
+- Note: Generous kích hoạt( nhận n stat, nhận n power)
+```
+
+```
+PvP:
+- Đối thủ: Huy Le
+- Kết quả: Lose
+- Tỉ số: 5-5
 ```
 
 ======

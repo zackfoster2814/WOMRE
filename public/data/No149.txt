@@ -1,8 +1,8 @@
 No.149
 Name: Sparxie đã bán nước chưa (god19879725)
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -23,7 +23,7 @@ Archetype:
 ```
 ```
 Str: 4
-Spd: 7
+Spd: 9 (+2 base từ house)
 Dur: 5
 IQ: 5
 BIQ: 8
@@ -42,6 +42,10 @@ Houses:
   - Ancient Protector
   - Gold Pine Resin
   - Radio
+  - Golden Coin
+  - Golden Coin
+  - Golden Coin
+  - Golden Coin
  + 0 Legacy gear:
   - 
 ```
@@ -61,7 +65,8 @@ Runeword: Không
 2 Power: 
 + Acid Breath
 + Groundwork
-+ Poision Breath
++ Poison Breath
++ Garlic Breath
 ```
 
 ```
@@ -81,6 +86,14 @@ Lover:
 ```
 PvP Reward:
 - +1 BIQ
+```
+```
+Other Source:
+- Nhiệm vụ House: (+1 spd/iq/ma, base stat cao nhất +2)
+- +1 spd
+- +1 ma
+- +1 iq
+- +2 Spd
 ```
 
 
@@ -121,4 +134,19 @@ PvP:
 - Đối thủ: Yui
 - Kết quả: Win
 - Tỉ số: 6-1
+```
+
+```
+PvP:
+- Đối thủ: Nốt Ruồi Lệch Pha
+- Kết quả: Lose
+- Tỉ số: 4-5
+- 
+```
+
+```
+PvP:
+- Đối thủ: CobyKei
+- Kết quả: Win
+- Tỉ số: 6-0
 ```

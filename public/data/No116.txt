@@ -1,8 +1,8 @@
 No.116
 Name: Huy Le (.ilovepony)
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thua 2
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -23,7 +23,7 @@ Archetype:
 ```
 ```
 Str: 6 (lúc đầu là 10)
-Spd: 3
+Spd: 1 (Radahn quay lại spd)
 Dur: 10
 IQ: 7
 BIQ: 10
@@ -75,11 +75,14 @@ PvP Reward:
 - +1 MA
 - +1 All Stats
 - +2 str (Stat cao nhất)
+- +2 Dura
 ```
 ```
 Other Source:
 - Nhận 4 power Lone Wolf, Gate to Heaven, Red Shift/LP1211-M, Ice Spike
 - +1 IQ
+- Nhiệm vụ house: Nhận Great Rune Radahn
+- +4 spd
 ```
 
 ======
@@ -123,6 +126,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 4-3
 - Note: Pvp nhận lời nguyền, quay lại str từ 10 thành 6, quay lại str Vinh vander beck từ 10 thành 5
+```
+
+```
+PvP:
+- Đối thủ: nahhhh_hecker
+- Kết quả: Win
+- Tỉ số: 5-5
 ```
 
 ======

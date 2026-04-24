@@ -1,7 +1,7 @@
 No.62
 Name: _paower (baoissleepy)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -26,7 +26,7 @@ Str: 2 ban đầu là 4 (inversion -> 7, Giant -5)
 Spd: 3 (dính lời nguyền từ 10 ban đầu là 1 (inversion -> 10))
 Dur: 7 ban đầu là 4 (inversion -> 7)
 IQ: 7 ban đầu là 9 (inversion -> 2, Giant +5)
-BIQ: 8 ban đầu là 3 (inversion -> 8)
+BIQ: 2 (nguyền từ 8 ban đầu là 3)
 MA: 5 ban đầu là 6 (inversion -> 5)
 ```
 ```
@@ -57,9 +57,12 @@ Runeword: Không
 1 Power: 
 + Luck Manipulation 
 + Hydrate (Từ House)
-+ Adapt 
++ Adapt [Power Negation, Mind Control, Metamagic]
 + Arcana Blast (từ 2 ngón)
 + Lone Wolf
++ Power Negation
++ Mind Control
++ Hunter Reward
 ```
 ```
 Char dev: 
@@ -76,6 +79,7 @@ Lover:
 PvP Reward:
 - Nhận 1 gear: Buckler
 - Nhận 1 Gear: Swift Boots
+- +1 MA
 ```
 ```
 Other Source:
@@ -88,6 +92,14 @@ Other Source:
 - -1 IQ 
 - -1 BIQ
 - +2 Dura
+- -1 IQ 
+- -1 BIQ
+- +2 Dura
+- Power Negation (2 ngón We are Charlie Kirk)
+- Nhiệm vụ house: Nhận +2 vào 3 chỉ số (str, spd, iq), nhận 2 power (Mind Control và Hunter Reward)
+- +2 str
+- +2 spd
+- +2 iq 
 - -1 IQ 
 - -1 BIQ
 ```
@@ -130,6 +142,14 @@ PvP:
 - Note: _paower nhận: 
 PvP Reward: Lời Nguyền Địa Ngục: _paower quay lại spd từ 10 thành 3, catfish quay lại str từ 10 thành 2
 _paower 2 ngón: cướp của Taurus13: Lone Wolf
+```
+
+```
+PvP:
+- Đối thủ: .hor1zon
+- Kết quả: Win
+- Tỉ số: 2-3
+- Note: FL học đc Power Negation, Malenia(+2 dura), Adapt: Power Negation, Mind Control, Metamagic
 ```
 
 ======

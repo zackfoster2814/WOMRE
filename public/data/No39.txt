@@ -1,8 +1,8 @@
 No.39
 Name: Euoid (euoid)
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thua 2
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -72,6 +72,7 @@ Runeword: Không
 ```
 Char dev: 
 + In love
++ Ascended
 ```
 
 ```
@@ -88,6 +89,7 @@ PvP Reward:
 - +2 MA (stats thấp nhất)
 - nhận power Analysis Sin
 - Nhận 1 gear Fingerthing (nhận quirk OTP)
+- +2 MA
 ```
 ```
 Other Source:
@@ -97,6 +99,13 @@ Other Source:
 - -1 Dura
 - +1 all stats
 - -1 Dura
+- +1 IQ
+- -1 Dura
+- -1 Dura
+- +1 MA
+- Nhiệm vụ house: Nhận char dev Ascended, 2 stat cao nhất +4
+- +4 IQ
+- +4 BIQ
 ```
 
 ======
@@ -142,6 +151,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-3
 - Note: trận căng, thắng tie break, slow healer -1 dura, pvp nhận 1 gear
+```
+
+```
+PvP:
+- Đối thủ: KuSenpai
+- Kết quả: Win
+- Tỉ số: 3-4
+- Note: Slow healer (-1 Dura), Stat Asorption (+1 MA)
 ```
 
 ======

@@ -1398,6 +1398,15 @@ export class EffectResolver {
         break;
       }
 
+      case "has_char_dev":
+        if (condition.charDev) {
+          const charDevList = context.self.charDevs || [];
+          result = charDevList.some((name) =>
+            name.toLowerCase().includes(condition.charDev!.toLowerCase()),
+          );
+        }
+        break;
+
       case "opponent_has":
         if (context.opponent) {
           if (condition.opponentItemType === "lover") {
@@ -1418,6 +1427,15 @@ export class EffectResolver {
     }
 
     return condition.negate ? !result : result;
+  }
+
+  static tournamentRoundToNumber(round: string | undefined): number | null {
+    if (!round || round === "-") return null;
+    const map: Record<string, number> = {
+      "256": 256, "128": 128, "64": 64, "32": 32, "16": 16, "8": 8,
+      quarter: 8, semi: 4, final: 2,
+    };
+    return map[round] ?? null;
   }
 
   private static compare(a: number, op: string, b: number): boolean {
@@ -1618,6 +1636,17 @@ export class EffectResolver {
             result = false;
           }
           break;
+
+        case "tournament_round": {
+          const round = character?.tournament?.round;
+          const roundNum = EffectResolver.tournamentRoundToNumber(round);
+          if (roundNum !== null && condition.tournamentRound !== undefined && condition.tournamentRoundOperator) {
+            result = this.compare(roundNum, condition.tournamentRoundOperator, condition.tournamentRound);
+          } else {
+            result = true; // Không có round info → bỏ qua condition
+          }
+          break;
+        }
 
         default:
           // Other condition types need combat context, skip for immediate
@@ -1831,6 +1860,16 @@ export class EffectResolver {
                   result.bonusStats[mod.stat] += mod.value;
                 }
                 result.totalStats[mod.stat] += mod.value;
+              }
+            }
+
+            // Remove char dev by name (set isLost: true)
+            if (handlerResult.removeCharDev && character?.charDevs) {
+              const target = handlerResult.removeCharDev.toLowerCase();
+              for (const cd of character.charDevs) {
+                if (cd.name.toLowerCase().includes(target)) {
+                  cd.isLost = true;
+                }
               }
             }
 

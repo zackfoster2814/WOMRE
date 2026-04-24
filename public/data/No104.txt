@@ -1,8 +1,8 @@
 No.104
 Name: 1037 (.huy._)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -25,12 +25,12 @@ Archetype:
 + Progressive (Từ Baguette)
 ```
 ```
-Str: 7
-Spd: 4 (+3 từ Archetype)
-Dur: 9
-IQ: 4
-BIQ: 7
-MA: 10
+Str: 7 (từ 6 lúc đầu là 7)
+Spd: 6 (+3 từ Archetype) (lúc đầu là 4)
+Dur: 1 (lúc đầu là 9)
+IQ: 4 (lúc đầu là 4)
+BIQ: 2 (lúc đầu là 7)
+MA: 6 (lúc đầu là 10)
 ```
 
 ```
@@ -81,6 +81,10 @@ Team: 11
 Lover:
 + 
 ```
+```
+Other Source:
+- -3 all stat (Đá)
+```
 
 ======
 Battle Log:
@@ -116,6 +120,21 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 2-4
 - Note: PvP Reward: (vội)
+```
+
+```
+PvP:
+- Đối thủ: Thanh Tước bé cưng
+- Kết quả: Lose
+- Tỉ số: 5-2
+- Note: Progressive(str 7 thành 6; spd 4 thành 6; dura 9 thành 1; iq 4 thành 4, biq 7 thành 2; ma 10 thành 6), Đá (-3 all)
+```
+
+```
+PvP:
+- Đối thủ: bo
+- Kết quả: Lose
+- Tỉ số: 6-2
 ```
 
 ======

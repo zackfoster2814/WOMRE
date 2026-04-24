@@ -1,6 +1,6 @@
 No.107
 Name: dlwlrma (aem2804)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 2
 ```
@@ -130,6 +130,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 6- -1
 - Note: Crit 1 round, nhận summon Water Elemental, pvp nhận 2 power
+```
+
+```
+PvP:
+- Đối thủ: Inglorious
+- Kết quả: Lose
+- Tỉ số: 3-3
+- Note: Conven Concil (Nguyền IQ abs từ 10 thành 2)
 ```
 
 ======

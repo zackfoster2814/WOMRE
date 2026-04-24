@@ -1,8 +1,8 @@
 No.244
 Name: .hor1zon
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -85,6 +85,10 @@ Other Source:
 - -1 STR
 - -1 DUR
 - -1 All stats (từ Diablo)
+- -2 Dura
+- -1 STR
+- -1 DUR
+- Nhiệm vụ house: Nhận Great Rune Malenia
 ```
 
 ======
@@ -123,4 +127,25 @@ PvP:
 - Note: 
 ```
 
+```
+PvP:
+- Đối thủ: _paower
+- Kết quả: Lose
+- Tỉ số: 2-3
+- Note: Malenia của đối thủ (-2 Dura), thuốc tráng dương (-1 str, -1 dura)
+```
+
+```
+PvP:
+- Đối thủ: Solus
+- Kết quả: lose
+- Tỉ số: 3-0
+```
+```
+PvP:
+- Đối thủ: Bo
+- Kết quả: Lose
+- Tỉ số: 4-4
+- Note: Thua tie break
+```
 ======

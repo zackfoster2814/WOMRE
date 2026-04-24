@@ -1,7 +1,7 @@
 No.80
 Name: Hà (huanghe11)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -56,8 +56,11 @@ Runeword: Không
 ```
 3 Power: 
 + Spell Flux (Từ Stargazer)
-+ U=ma2 (Từ Stargazer)
++ U=ma2 (Từ Stargazer) (đã mất)
 + Dream Manipulation
++ ice spike
++ thunder orbs
++ Dominator
 ```
 
 ```
@@ -78,6 +81,10 @@ Other Source:
 - +2 IQ (Independent)
 - +2 Spd (Independent)
 - +2 Spd (Independent)
+- +2 spd (Independent)
+- +3 str
+- +2 Spd
+- 3 power
 ```
 
 ```
@@ -91,6 +98,7 @@ PvP Reward:
 - +2 MA (Stat thấp nhất)
 - +2 Str (Stat Cao nhất)
 - +2 Spd
+- +2 Ma (stat thấp nhất)
 
 ```
 
@@ -132,5 +140,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 1-5
 - Note: PvP Reward: +2 Stat Cao nhất, Independent: Spd
+```
+
+```
+PvP:
+- Đối thủ: bo
+- Kết quả: Win
+- Tỉ số: 2-6
+- Note: Independent (+2 spd)
 ```
 ======

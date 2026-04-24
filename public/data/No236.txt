@@ -1,7 +1,7 @@
 No.236
 Name: Yuto (yuto2306)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -18,12 +18,12 @@ Archetype:
 ```
 ``` 
 2 Quirk:  
-+ Patient
-+ Lucky (Max: Dura)
++ Patient (đã mất do Quirkless)
++ Lucky (Max: Dura) (Đã mất do Quirkless)
 ```
 ```
 Str:2
-Spd:3
+Spd:8 (nguyền từ 3)
 Dur:1
 IQ:6
 BIQ:4
@@ -63,6 +63,8 @@ Runeword:
 + Dream Manipulation
 + Invulnerability
 + Tsunami Control
++ Quirkless
++ Lightning Enchant
 ```
 
 ```
@@ -83,6 +85,17 @@ Lover:
 PvP Reward:
 - +1 Dura
 - +1 MA
+- +1 IQ
+```
+```
+Other Source:
+- +2 IQ
+- +2 Str
+- +2 MA
+- Nhiệm vụ House: Nhận +2 vào 3 stat bất kì (+2 iq, str, ma), Nhận 2 power( Quirkless và Lightning Enchant)
+- +2 iq
+- +2 str
+- +2 ma
 ```
 
 ======
@@ -118,5 +131,13 @@ PvP:
 - Tỉ số: 4-3
 - Note: PvP Reward: Lời Nguyền Địa Ngục:  Re-spin lại stat cao nhất của bạn và một người còn sống ngẫu nhiên: Yuto quay lại Dura từ 10 thành 1, Mặc Quyên quay lại IQ từ 10 thành 2
 
+```
+
+```
+PvP:
+- Đối thủ: Lovepcdolls
+- Kết quả: Win
+- Tỉ số: 0-0
+- Note: Devotee gặp Demigod
 ```
 ======

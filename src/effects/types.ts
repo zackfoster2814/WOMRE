@@ -143,6 +143,7 @@ export type ConditionType =
   | 'race_tier_compare'       // So sánh tier race
   | 'bracket'                 // Đang ở nhánh nào
   | 'pvp_win_count'           // Số trận PvP thắng
+  | 'tournament_round'        // So sánh vòng thi đấu hiện tại (từ character.tournament.round)
   | 'round_result'            // Kết quả round
   | 'opponent_has'            // Opponent có gì
   | 'probability'             // Xác suất %
@@ -187,6 +188,10 @@ export interface Condition {
 
   // For has_char_dev
   charDev?: string;
+
+  // For tournament_round
+  tournamentRound?: number;           // Số vòng để so sánh (16, 8, 32, ...)
+  tournamentRoundOperator?: '>' | '<' | '=' | '>=' | '<=';
 
   // For metadata_match
   key?: string;
@@ -375,6 +380,7 @@ export interface CombatContext {
     weapons: string[];
     bracket: 'winner' | 'loser';
     pvpWins: number;
+    charDevs?: string[];  // Tên các char dev đang active (chưa isLost)
   };
 
   opponent?: {

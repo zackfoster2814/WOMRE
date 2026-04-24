@@ -109,6 +109,9 @@ export interface ImmediateHandlerResult {
     isBase?: boolean;
   }>;
 
+  // Remove a char dev by name (set isLost: true) — dùng để tắt effect gắn với char dev đó
+  removeCharDev?: string;
+
   // Skip default effect processing
   skipDefault?: boolean;
 

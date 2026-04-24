@@ -1,7 +1,7 @@
 No.215
 Name: nguoisai (nguoidasai)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -83,12 +83,17 @@ Other Source:
 - -1 STR
 - -1 SPD
 - +2 IQ
+- -1 STR
+- -1 SPD
+- +2 IQ
+- Nhiệm vụ house: Quay lại 1 chỉ số ngẫu nhiên của toàn bộ người cùng nhánh
 ```
 ```
 PvP Reward:
 - +1 MA
 - +1 MA
 - 1 Power (Analysis Sins)
+- +1 BIQ
 ```
 
 ======
@@ -128,6 +133,14 @@ PvP:
 - Đối thủ: Manhattan Cafe chơi TFT
 - Kết quả: Win
 - Tỉ số: 4-2
+```
+
+```
+PvP:
+- Đối thủ: kinbum
+- Kết quả: Win
+- Tỉ số: 4-3
+- Note: Lazy (-1 str, -1 spd +2 iq)
 ```
 
 ======

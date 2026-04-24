@@ -1,7 +1,7 @@
 No.256
 Name: Nime
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -29,7 +29,7 @@ Spd: 8 (Cursed of 36k)
 Dur: 4 (Cursed of 36k)
 IQ: 2 (Cursed of 36k)
 BIQ: 6 (Cursed of 36k)
-MA: 3 (Cursed of 36k)
+MA: 6 (nguyền từ 3) (Cursed of 36k)
 ```
 ```
 Houses: 
@@ -42,6 +42,7 @@ Houses:
   - Baguette
   - Radio
   - Gold Pine Resin
+  - Khung hình thờ
  + 1 Legacy gear:
   -
 ```
@@ -77,12 +78,15 @@ Lover:
 PvP Reward:
 - Nhận 1 Char Dev: No more Home
 - +1 All Stats
+- +1 str
 ```
 ```
 Other Source:
 - +1 DUR (Resilient) 
 - +1 Str (Resilient) 
 - +1 Ma (Resilient) 
+- +1 DUR (Resilient) 
+- +1 Str (Resilient)
 ```
 
 ======
@@ -110,6 +114,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-3
 - Note: Open-minded: Không
+```
+
+```
+PvP:
+- Đối thủ: Myue
+- Kết quả: Win
+- Tỉ số: 2-4
+- Note: Resilient (+1 Dura, +1 STR), 
 ```
 
 ======

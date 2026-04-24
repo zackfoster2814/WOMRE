@@ -37,7 +37,6 @@ Houses:
 ```
 1 Gear: 
  + 1 Normal gear:
-  - Radio
  + 0 Legacy gear:
   - 
 ```

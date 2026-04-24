@@ -1,8 +1,8 @@
 No.191
 Name: Solus (solus_2108)
 Status: Còn sống 
-Vòng thi đấu: 32
-Nhánh thi đấu: Thua 2
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -42,6 +42,7 @@ Houses:
   - Leather Jacket
   - Baguette 
   - Fishing Rod
+  - Soap
  + 0 Legacy gear:
   - 
 ```
@@ -84,6 +85,7 @@ Lover:
 PvP Reward:
 - +1 Spd
 - +2 str 
+- Nhận 1 gear xà phòng
 ```
 ```
 Other Source:
@@ -91,6 +93,8 @@ Other Source:
 - -2 Dura 
 - -2 Dura 
 - -2 Dura 
+- -2 Dura (AIDS)
+- -2 Dura (AIDS)
 - -2 Dura (AIDS)
 - -2 Dura (AIDS)
 ```
@@ -139,5 +143,20 @@ PvP:
 - Note: Gọi bo ra đánh hộ win, Under the Weather chuyển thành Shining Brightly
 ```
 
+```
+PvP:
+- Đối thủ: Myue
+- Kết quả: Lose
+- Tỉ số: 3-0
+- Note: 
+```
+```
+PvP:
+- Đối thủ: .hor1zon
+- Kết quả: Lose
+- Tỉ số: 3-0
+- Note: Gọi Bo ra đánh hộ
+- Note: 
+```
 
 ======

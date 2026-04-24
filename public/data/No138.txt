@@ -1,6 +1,6 @@
 No.138
 Name: Kami Tsuna (kamitsuna)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 2
 ```
@@ -132,6 +132,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 1-4
 - Note: Sand of time thành công, pvp nhận +1 spd, là người yêu
+```
+
+```
+PvP:
+- Đối thủ: Anh Bác Sĩ
+- Kết quả: Lose
+- Tỉ số: 4-1
 ```
 
 ======

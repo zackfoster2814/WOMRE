@@ -1,6 +1,6 @@
 No.178
 Name: Vinh Vander Bek (vinhvan)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 2
 ```
@@ -127,6 +127,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-3
 - Note: +1 str cho tất cả siêu nhân
+```
+
+```
+PvP:
+- Đối thủ: Shin
+- Kết quả: Lose
+- Tỉ số: 4-2
 ```
 
 ======

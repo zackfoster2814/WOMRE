@@ -1,8 +1,8 @@
 No.217
 Name: Mặc Quyên (hodrick_.)
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thua 2
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -26,9 +26,9 @@ Archetype:
 Str:5 ban đầu là 6 (Inversion)
 Spd:9 ban đầu là 2 (Inversion)
 Dur:6 ban đầu là 5 (Inversion)
-IQ: 2 (10 ban đầu là 1, xong bị lời nguyền địa ngục)
+IQ: 5 (10 ban đầu là 1, xong bị lời nguyền địa ngục) (+3 IQ từ house)
 BIQ:4 ban đầu là 7 (Inversion)
-MA:2 ban đầu là 9 (Inversion)
+MA:4 ban đầu là 9 (Inversion) (+2 MA từ house)
 ```
 
 ```
@@ -88,6 +88,13 @@ PvP Reward:
 - +2 MA (House Tyrell)
 - +2 IQ (tyrell)
 - +2 IQ (tyrell)
+- +2 spd (tyrell)
+```
+```
+Other Source:
+- Nhiệm vụ House: +1 vào stat thấp nhất 5 lần (+3 IQ, +2 MA)
+- +3 IQ
+- +2 MA
 ```
 
 ======
@@ -136,5 +143,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Note: +2 chỉ số thấp nhất (Tyrell)
+```
+
+```
+PvP:
+- Đối thủ: Hy
+- Kết quả: Win
+- Tỉ số: 5-2
+- Note: Tyrell (+2 stat thap nhat)
 ```
 ======

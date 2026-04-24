@@ -1,8 +1,8 @@
 No.222
 Name: Haijin (haijin2)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -81,6 +81,7 @@ Other Source:
 - +1 BIQ
 - +1 MA
 - +1 Str
+- +2 MA (Atreides)
 ```
 
 ======
@@ -107,6 +108,21 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 0-0
 - Note:  thắng vì Ragnarok
+```
+
+```
+PvP:
+- Đối thủ: BLèBLè
+- Kết quả: Lose
+- Tỉ số: 4-2
+- Note: Atreides (+2 MA)
+```
+
+```
+PvP:
+- Đối thủ: kinbum
+- Kết quả: Lose
+- Tỉ số: 1-3
 ```
 
 ======

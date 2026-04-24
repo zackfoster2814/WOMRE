@@ -1,8 +1,8 @@
 No.242
 Name: bachtuotkun
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thua 2
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -41,6 +41,8 @@ Houses:
  + 0 Normal gear:
   - Holy Symbol (Từ House)
   - Buckler (Từ House)
+  - Knight's Armor
+  - Ớt
  + 0 Legacy gear:
   - 
 ```
@@ -92,6 +94,8 @@ Other Source:
 - +1 SPD (Bloody Strike)
 - +1 DUR (Bloody Strike)
 - +1 BIQ (Bloody Strike)
+- Nhiệm vụ house: +4 dura và 2 normal gear (Knight's Armor, Ớt)
+- +4 Dura
 ```
 
 ```
@@ -123,6 +127,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 5-3
 - Note: k nhận pvp reward do brain rot
+```
+
+```
+PvP:
+- Đối thủ: Lovepcdolls
+- Kết quả: Win
+- Tỉ số: 3-5
+- Note: 
 ```
 
 ======

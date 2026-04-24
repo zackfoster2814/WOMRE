@@ -1,8 +1,8 @@
 No.150
 Name: Myue (_fallen_myue)
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -23,6 +23,7 @@ Archetype:
 + Generous (Từ Rykard)
 + Herbalist (Từ Rykard)
 + Independent (Từ Rykard)
++ Artistic
 ```
 ```
 Str: 6
@@ -55,7 +56,9 @@ Runeword: Không
 ```
 ```
 1 Power: 
-+
++ Blood Manipulation
++ Red Shift/LP1211-M
++ Borrow Time
 ```
 ```
 Char dev: 
@@ -79,7 +82,12 @@ Other Source:
 - Moonroot 
 - +2 Dura (Indipedent)
 - Herbalist: thêm 1 pvp
-- Moonroot (+1)
+- Moonroot 
+- +1 spd
+- +1 spd
+- +1 str
+- Moonroot 
+- +2 BIQ (Independent)
 ```
 
 ======
@@ -123,4 +131,26 @@ PvP:
 - Fast Learner: Không, Herbalist: Moonroot: +1 điểm combat kế, PvP Reward: +2 Stat cao nhất (Tặng)
 ```
 
+```
+PvP:
+- Đối thủ: Nime
+- Kết quả: Lose
+- Tỉ số: 2-4
+- Note: Thảo dược: +3 điểm combat kế, Generous kích hoạt
+```
+
+```
+PvP:
+- Đối thủ: мιтιᴘнᴀι︵²ᵏ⁷
+- Kết quả: Win
+- Tỉ số: 6-2
+- Note: Fast Learner: Không, Thảo dược: nhận quirk, Independent: +2 BIQ
+```
+```
+PvP:
+- Đối thủ: Solus
+- Kết quả: Win
+- Tỉ số: 3-0
+- Note: Fast Learner: Không, Thảo dược: nhận quirk, Independent: +2 BIQ
+```
 ======

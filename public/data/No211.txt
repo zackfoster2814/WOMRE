@@ -1,7 +1,7 @@
 No.211
 Name: radb1t_fr (radb1t_fr)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -26,7 +26,7 @@ Archetype:
 Str: 1
 Spd: 10
 Dur: 9
-IQ: 1
+IQ: 10 (bị nguyền từ 1)
 BIQ: 5
 MA: 1
 ```
@@ -46,6 +46,8 @@ Houses:
 ```
 1 Normal Weapon
 + 
+1 Unique Weapon
++ Great Highland Bagpipe
 ```
 ```
 1 Rune: 
@@ -59,9 +61,8 @@ Runeword:
 + Odin Blessing
 + Borrowed Time
 + 4 Hit combo
-+ Encroaching Shadow
-+ Frost Armor
 + U=ma2
++ Railroad Realm
 ```
 ```
 Char dev: 
@@ -76,15 +77,17 @@ Lover:
 ```
 ```
 PvP Reward:
-- Nhận 2 power Encroaching Shadow, Frost Armor
-- +1 MA
-- +2 Spd (PvP Reward)
-- lời nguyền địa ngục 
+- Nhận 2 power Encroaching Shadow, Frost Armor (đã mất)
+- +1 MA (đã mất)
+- +2 Spd (PvP Reward) (đã mất)
+- lời nguyền địa ngục (đã mất)
+- +1 power (Burning hand)  (đã mất)
 ```
 ```
 Other Source:
 - +2 Str
 - Học 4 hit combo
+- Nhiệm vụ House: + Great Highland Bagpipe
 ```
 
 ======
@@ -122,6 +125,14 @@ PvP:
 - Tỉ số: 3-3
 - Note: Fast Learner: Có: U=ma2, Hùng canh mộ: Không, PvP Reward: Lời Nguyền Địa Ngục: radb1t_fr quay lại str từ 10 thành 1, Anh Bác Sĩ quay lại Speed từ 10 thành 5
 
+```
+
+```
+PvP:
+- Đối thủ: Hachi
+- Kết quả: Win
+- Tỉ số: 3-4
+- Note: FL: học Railroad Realm
 ```
 
 ======

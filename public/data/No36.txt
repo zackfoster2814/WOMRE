@@ -1,15 +1,15 @@
 No.36
 Name: Lovepcdolls (lovepcdolls)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
 ```
 ```
 Race: God
-Sub-race: Eir (3)
+Sub-race: Eir (4)
 ```
 
 ```
@@ -66,6 +66,7 @@ Runeword: Không
 + Thơm
 + Body Enhancing
 + Bloody Strike
++ Tsunami Control
 ```
 
 
@@ -114,6 +115,8 @@ Other Source:
 - 1 power: Thơm (Wand)
 - 1 power: Bloody Strike (The Tamer Straight Sword)
 - 1 power: Body Enhancing (Wand)
+- -2 dura
+- 1 power: Tsunami Control
 ```
 ======
 Battle Log:
@@ -141,6 +144,22 @@ PvP:
 - Tỉ số: 4-4
 - Note: Devotee gặp Ske nên đc +1 điểm
 
+```
+
+```
+PvP:
+- Đối thủ: Yuto
+- Kết quả: Lose
+- Tỉ số: 0-0
+- Note: Devotee gặp Demigod, Wand(- 2 dura, + Tsunami Control)
+```
+
+```
+PvP:
+- Đối thủ: bachtuotkun
+- Kết quả: Lose
+- Tỉ số: 3-5
+- Note: Conven concil (Quay lại MA LDL từ 5 thành 1), Văn tế( Quay lại str của 1037 từ 6 thành 7)
 ```
 
 ======

@@ -577,6 +577,13 @@ export function computeRoundStep(
       weapons: isSelf
         ? p1.character?.weapons || []
         : p2.character?.weapons || [],
+      charDevs: isSelf
+        ? (p1.character?.charDevs || [])
+            .filter((cd: any) => !cd.isLost)
+            .map((cd: any) => cd.name)
+        : (p2.character?.charDevs || [])
+            .filter((cd: any) => !cd.isLost)
+            .map((cd: any) => cd.name),
       gears: isSelf
         ? [
             ...(p1.character?.gear?.normalGear || []),

@@ -1,6 +1,6 @@
 No.219
 Name: Tarus13 (13tarus)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 2
 ```
@@ -44,6 +44,7 @@ Houses:
 2 Normal Weapon
 + Necronomicon (Dùng Được) (Đã mất) (Unique)
 + Backhand Blade (Không dùng được) (Unique)
++ Ukulele (Không dùng được) 
 ```
 ```
 1 Rune: 
@@ -56,6 +57,8 @@ Runeword:
 + Lone Wolf(Từ House)
 + Magma Strike
 + Scrying
++ U=ma2
++ Enhancing
 ```
 ```
 Char dev: 
@@ -85,6 +88,8 @@ Other Source:
 - -1 Dura
 - -1 Str
 - -1 Dura
+- Nhiệm vụ house: Nhận ukulele
+- Final Reserv: 2 power( U=ma2, Body Enhancing)
 ```
 
 ======
@@ -129,6 +134,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 6-3
 - Note: Gam thắng 2 round, clutch 1 round, pvp +1 MA, Thuốc tráng dương (-1 str, -1 dura), The dice of the Dead(3). 
+```
+
+```
+PvP:
+- Đối thủ: Manhattan Cafe chơi TFT
+- Kết quả: Lose
+- Tỉ số: 2-5
 ```
 
 ======

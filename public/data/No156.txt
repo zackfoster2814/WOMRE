@@ -1,8 +1,8 @@
 No.156
 Name: mHamster (d.d.alfonce)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -51,6 +51,7 @@ Runeword: Không
 1 Power: 
 + Storm Calling (Từ Legacy Gear)
 + Bloody Strike
++ Eternal Mangekyou Sharingan
 ```
 ```
 Char dev: 
@@ -75,6 +76,8 @@ Other Source:
 - +1 Spd
 - +1 Dura
 - +1 IQ
+- +1 spd
+- +1 BIQ
 ```
 
 ======
@@ -101,6 +104,21 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 2-3
 - PvP Reward: +1 Dura, Bloody Strike: Kích (+1 spd/dura/iq)
+```
+
+```
+PvP:
+- Đối thủ: Karu
+- Kết quả: Lose
+- Tỉ số: 4-2
+- Note: Nhận Eternal Magenkyou Sharingan, Bloody strike(+1 spd/biq), 
+```
+
+```
+PvP:
+- Đối thủ: Smolder
+- Kết quả: Lose
+- Tỉ số: 2-4
 ```
 
 ======

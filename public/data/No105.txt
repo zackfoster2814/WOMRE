@@ -1,7 +1,7 @@
 No.105
 Name: LDL (longle_59366)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -15,6 +15,7 @@ Sub-race: Werebat
 Archetype: 
 + Trickster
 + Lords
++ Venturers
 ```
 ```
 1 Quirk:  
@@ -26,7 +27,7 @@ Spd: 5
 Dur: 8
 IQ: 5
 BIQ: 10
-MA: 1
+MA: 1 (nguyền từ 5 (nguyền từ 1))
 ```
 ```
 Houses: 
@@ -55,6 +56,8 @@ Runeword: Không
 + Cold Breeze
 + 67
 + Wex
++ Drunken Boxing
++ Storm Calling
 ```
 ```
 Char dev: 
@@ -73,6 +76,7 @@ PvP Reward:
 - +1 IQ
 - +1 Dura
 - +1 Dura
+- 2 power( Drunken Boxing, Storm Calling)
 ```
 ```
 Other Source:
@@ -85,6 +89,10 @@ Other Source:
 - +1 BIQ (Lords)
 - -1 STR (Thuốc Tráng Dương)
 - -1 DUR (Thuốc Tráng Dương)
+- +1 BIQ (Lords)
+- -1 STR (Thuốc Tráng Dương)
+- -1 DUR (Thuốc Tráng Dương)
+- Nhiệm vụ House: Nhận Archertype (Venturers)
 ```
 
 ======
@@ -129,6 +137,14 @@ PvP:
 - Đối thủ: Gambling
 - Kết quả: Win
 - Tỉ số: 4-2
+```
+
+```
+PvP:
+- Đối thủ: Lunar
+- Kết quả: Win
+- Tỉ số: 2-2
+- Note: Thuốc tráng dương (-1 str, -1 dura), Lords(+1 biq)
 ```
 
 ======

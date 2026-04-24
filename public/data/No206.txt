@@ -1,8 +1,8 @@
 No.206
 Name: bo (bo3212)
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -21,6 +21,12 @@ Archetype:
 + Herbalist
 + Training Restricted
 + Mute
++ Clumsy
++ Fast Learner
++ Cruelty
++ Slow Metabolism
++ Lazy
++ Slow Healer
 ```
 ```
 Str: 3
@@ -33,6 +39,8 @@ MA: 7
 ```
 Houses: 
 + Roundtable Hold
++ Golden Order (không thuộc house nhưng add vào để lấy great rune)
+  -> Mohg
 ```
 ```
 4 Gear: 
@@ -54,7 +62,7 @@ Runeword:
 ```
 ```
 1 Power: 
-+
++ Artist
 ```
 ```
 Char dev: 
@@ -73,6 +81,7 @@ PvP Reward:
 - +1 Dura
 - +1 Str
 - +2 Dura (Stat cao nhất)
+- +2 Dura (Stat cao nhất)
 ```
 ```
 Other Source:
@@ -82,6 +91,12 @@ Other Source:
 - +1 Str 
 - Herbalist: Mirage Flower: Nhận thêm 1 phần thưởng PvP
 - Moonroot (+1)
+- Thảo dược: Nhận Power Artist
+- -1 str
+- -1 Dur
+- +2 IQ
+- -1 Dur
+- Nhiệm vụ house: Nhận Great Rune Mohg
 ```
 
 ======
@@ -127,6 +142,30 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 6-1
 - Note: heh
+```
+
+```
+PvP:
+- Đối thủ: Hà
+- Kết quả: Lose
+- Tỉ số: 2-6
+- Note: Thảo dược Mistepal (nhận 6 quirk)
+```
+
+```
+PvP:
+- Đối thủ: 1037
+- Kết quả: Win
+- Tỉ số: 6-2
+- Note: FL: Metamagic, Thảo dược: Nhận Power Artist, Lazy (-1 str, -1 dur, +2 iq), Slow healer (-1 Dur)
+```
+
+```
+PvP:
+- Đối thủ: .hor1zon
+- Kết quả: Lose
+- Tỉ số: 4-4
+- Note: Win tie break
 ```
 
 ======

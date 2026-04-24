@@ -1,7 +1,7 @@
 No.182
 Name: BLèBLè (amebear)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -22,9 +22,9 @@ Archetype:
 + Clumsy
 ```
 ```
-Str: 10
+Str: 6 (Coven Council nguyền từ 10)
 Spd: 8
-Dur: 1
+Dur: 6 (lúc đầu là 1)
 IQ: 6
 BIQ: 8
 MA: 6
@@ -87,11 +87,15 @@ Other Source:
 - +2 MA (Tyrell)
 - +2 Dura (Zealot)
 - +2 MA (Tyrell)
+- +2 Dura (Zealot)
+- +2 BIQ (House Tyrell)
+- Nhiệm vụ house: Nhận +1 stat thấp nhất 5 lần (+5 Dura)
 ```
 ```
 PvP Reward:
 - +1 BIQ
 - +1 speed
+- +1 Dura
 ```
 
 
@@ -125,5 +129,13 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 4-2
 - Note: Power Negation: Master of War, Zealot, Tyrell
+```
+
+```
+PvP:
+- Đối thủ: Haijin
+- Kết quả: Win
+- Tỉ số: 4-2
+- Note: Zealot (+2 Dura), Tyrell (+2 biq)
 ```
 ======

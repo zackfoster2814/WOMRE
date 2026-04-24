@@ -1,8 +1,8 @@
 No.201
 Name: Hy (hy3269)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -85,6 +85,10 @@ Other Source:
 - -1 DUR (thuốc Tráng Dương)
 - -1 STR (thuốc Tráng Dương)
 - -1 DUR (thuốc Tráng Dương)
+- -1 STR (thuốc Tráng Dương)
+- -1 DUR (thuốc Tráng Dương)
+- -3 All stat(đá)
+- -3 BIQ (orc)
 ```
 
 ======
@@ -122,6 +126,21 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 4-4
 - Note: thắng tie break
+```
+
+```
+PvP:
+- Đối thủ: Trezork
+- Kết quả: Lose
+- Tỉ số: 4-3
+- Note: Thuốc tráng dương (-1 str, -1 dura), Đá (-3 all), Orc (-3 BIQ)
+```
+
+```
+PvP:
+- Đối thủ: Mặc Quyên
+- Kết quả: Lose
+- Tỉ số: 5-2
 ```
 
 ======

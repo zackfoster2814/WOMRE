@@ -1,7 +1,7 @@
 No.103
 Name: Kẹo Con (su167)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -22,7 +22,7 @@ Archetype:
 + Training Restricted
 ```
 ```
-Str: 6
+Str: 6 (nguyền từ 6)
 Spd: 8
 Dur: 6
 IQ: 1
@@ -56,12 +56,16 @@ Runeword: The Twin
 ```
 1 Power: 
 + Cursed
++ Ice Spike
++ Thunder Orb
++ Dominator
 ```
 ```
 Summon: 
 + Igris
 + Numby
 + Chihuahua
++ Pack of Wolves
 ```
 ```
 Char dev: 
@@ -79,6 +83,7 @@ PvP Reward:
 - +2 IQ (+2 Stat thấp nhất)
 - +1 Spd
 - +1 BIQ
+- +1 BIQ
 ```
 ```
 Other Source:
@@ -86,6 +91,13 @@ Other Source:
 - +2 Str (The Twin kích hoạt)
 - +2 Dura (The Twin kích hoạt)
 - Nhận Numby (The Johnnies)
+- +2 spd (The Twin kích hoạt)
+- +2 iq (The Twin kích hoạt)
+- +2 BIQ (The Twin kích hoạt)
+- +2 MA (The Twin kích hoạt)
+- Nhiệm vụ house: Nhận (+3 str, +2 spd) và 3 power(Ice Spike, Thunder Orb, Dominator)
+- +3 str
+- +2 spd
 ```
 
 ======
@@ -112,6 +124,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 4-2
 - Note: Numby: IQ; PvP Reward: +1 BIQ, Summon: Chihuahua
+```
+
+```
+PvP:
+- Đối thủ: Yoh Hai Kiếm
+- Kết quả: Win
+- Tỉ số: 4-2
+- Note: Urara (bỏ -1 all nhận +2 all), nhân summon Pack of Wolves
 ```
 
 ======

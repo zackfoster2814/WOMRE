@@ -1,7 +1,7 @@
 No.109
 Name: We are Charlie Kirk (_yeetusmymeatus)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -19,12 +19,13 @@ Archetype:
 2 Quirk:  
 + Artstic
 + Let me solo her
++ Athletic
 ```
 ```
-Str: 7
+Str: 9 (bị quay lại từ 7 thành 7, nhiệm vụ house lên 9)
 Spd: 5 (lời nguyền xuống từ 10)
 Dur: 6
-IQ: 2
+IQ: 1 (nguyền từ 2)
 BIQ: 1
 MA: 0 (ban đầu là 5, Demonic Pact)
 ```
@@ -57,11 +58,15 @@ Runeword: Không
 + Spell Flux 
 + Blowing Leaves
 + Fire Control
-+ Power Negation
++ Earth Shaking
++ Encroaching Shadow
++ Frost Armor
++ Burning hand
 ```
 ```
 Char dev: 
 + Demonic Pact (kéo MA xuống 0)
++ SVKS (cướp của Rabbit)
 ```
 ```
 Team: 17
@@ -75,16 +80,29 @@ PvP Reward:
 - Lời nguyền địa ngục 
 - +2 str (Stat cao nhất)
 - Nhận 1 gear
+- Char dev( SVKS)
+- Nhận 2 power Encroaching Shadow, Frost Armor (svks)
+- +1 MA (svks)
+- +2 Spd (svks)
+- lời nguyền địa ngục (svks)
+- +1 power (Burning hand)  (svks)
+- +1 Dura (svks)
 ```
 ```
 Other Source:
 - +1 Speed
-- -3 All stats (Chokevy)
+- -4 All stats (Chokevy)
 - Nhận: Blowing Leaves
 - Nhận: Fire Control
 - +1 Spd
 - +1 MA (Stat thấp nhất)
 - +1 MA
+- +1 str (primodial)
+- Nhận: Earth Shaking
+- Nhiệm vụ house: +1 spd/iq/ma, +2 base stat cao nhất
+- +1 spd
+- +1 iq
+- +1 ma
 ```
 
 ======
@@ -123,6 +141,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-3
 - Note: nhận thêm fire, giấy nợ gia truyền truyền lại cho Lunar
+```
+
+```
+PvP:
+- Đối thủ: nahhhh_hecker
+- Kết quả: Win
+- Tỉ số: 4-3
+- Note: Primodial Being (+1 str, +1 quirk, +Earth Shaking)
 ```
 
 ======

@@ -1,6 +1,6 @@
 No.238
 Name: CobyKei (reiniskhoa)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
 Nhánh thi đấu: Thua 2
 ```
@@ -143,6 +143,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 4-3
 - Note: Win nhờ metamagic, Sổ tay +1 IQ, night owl -1 all, đào mộ được Honored of Golbin Scroll, aids -2 dura
+```
+
+```
+PvP:
+- Đối thủ: Sparxie đã bán nước chưa
+- Kết quả: Lose
+- Tỉ số: 6-0
+- Note: Bón 2 IQ cho Karu
 ```
 
 ======

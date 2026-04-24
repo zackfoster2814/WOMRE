@@ -1,8 +1,8 @@
 No.225
 Name: Smolder (smolred209)
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thua 2
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -59,7 +59,9 @@ Runeword:
 1 Power: 
 + Homeguard (Từ House)
 + Poison Breath (Từ House)
++ Garlic Breath
 + Baldening
++ Uno Reverse Card
 ```
 
 ```
@@ -81,9 +83,12 @@ PvP Reward:
 - +1 dura
 - +2 Stat cao nhất (BIQ)
 - +1 str
+- +1 Power
 ```
 ```
 Other Source:
+- -1 dura (Thuốc tráng dương)
+- -1 Str (Thuốc tráng dương)
 - -1 dura (Thuốc tráng dương)
 - -1 Str (Thuốc tráng dương)
 - -1 dura (Thuốc tráng dương)
@@ -137,7 +142,15 @@ PvP:
 - Đối thủ: Ca Cao
 - Kết quả: Win
 - Tỉ số: 3-3
-- Not: Thuốc tráng dương (-1 str, -1 dura), pvp rw +1 str
+- Note: Thuốc tráng dương (-1 str, -1 dura), pvp rw +1 str
+```
+
+```
+PvP:
+- Đối thủ: mHamster
+- Kết quả: Win
+- Tỉ số: 2-4
+- Note: Thuốc tráng dương (-1 str, -1 dura)
 ```
 
 ======

@@ -337,11 +337,9 @@ registerCombatHandler(
 registerCombatHandler(
   'final_reserves_round_16',
   (_ctx: CombatHandlerContext): CombatHandlerResult => {
-    // This would need round info from context
-    // For now, return empty
     return { skipDefault: true };
   },
-  'Bonus at Round 16'
+  'Handled by immediate handler at round 16'
 );
 
 // ============================================================================

@@ -1,8 +1,8 @@
 No.67
 Name: KuSenpai (kusenpai)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -25,7 +25,7 @@ Archetype:
 Str: 7 (bị nguyền từ 10 - văn tế)
 Spd: 2
 Dur: 6
-IQ: 5
+IQ: 5 (bị Coven Council quay từ 6 thành 5)
 BIQ: 6
 MA: 10
 ```
@@ -82,6 +82,7 @@ Other Source:
 - -2 Dura (AIDS)
 - -2 Dura (AIDS)
 - -2 Dura (AIDS)
+- -2 Dura (AIDS)
 ```
 
 ======
@@ -106,5 +107,20 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Note: KuSenpai Black Magic: Str
+```
+
+```
+PvP:
+- Đối thủ: Elai
+- Kết quả: Lose
+- Tỉ số: 4-4
+- Note: Kích Brave (+1 all), aids (-2 dura) 
+```
+
+```
+PvP:
+- Đối thủ: Euoid
+- Kết quả: Lose
+- Tỉ số: 3-4
 ```
 ======

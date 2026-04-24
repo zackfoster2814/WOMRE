@@ -1,8 +1,8 @@
 No.101
 Name: Anh Bác Sĩ (shigurekt1sha)
 Status: Còn sống
-Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Vòng thi đấu: 16
+Nhánh thi đấu: Thua 1
 ```
 Ký Sinh:
 + 
@@ -26,10 +26,10 @@ Archetype:
 ```
 ```
 Str: 8
-Spd: 5 (bị giảm từ 10)
-Dur: 6
-IQ: 10
-BIQ: 5
+Spd: 7 (bị giảm từ 10) (+2 vì house)
+Dur: 7 (+1 vì house)
+IQ: 2 (bị nguyền từ 10)
+BIQ: 7 (+2 vì house)
 MA: 6
 ```
 
@@ -45,6 +45,8 @@ Houses:
   - Gold Pine Resin
   - Cursed Charm
   - Lover's Glover
+  - Radio
+  - Đai Trinh Tiết
  + 1 Legacy gear:
   - Spirit of the Wheel (đã mất do PVE Punishment)
 ```
@@ -87,31 +89,17 @@ Lover:
 
 Other Source:
 - Earth-Shaking (Primordial Being)
-- +1 Str (Primordial Being)
 - Let me solo her (Primordial Being)
 - Gold Pine Resin (Hero Grave Keeper)
-- +2 Dura (House Tyrell)
-- +1 Str
-- +1 Spd
-- +1 IQ
-- +1 BIQ
 - Cursed Charmed (đào mộ)
-- +1 Str
 - +1 Quirk: Patient
-- +1 str
-- +1 spd
-- +1 IQ
-- +1 BIQ
-- +1 MA
-- +2 BIQ (House Tyrell)
-- +2 Dura (House Tyrell)
-- +1 BIQ (Water)
-- +1 Spd (Water)
-- +1 Str
-- +1 spd
-- +1 dura
-- +1 iq
-- +1 biq
+- Nhiệm vụ house: +1 vào base stat thấp nhất 5 lần
+- +7 STR
+- +7 SPD
+- +11 IQ
+- +7 BIQ
+- +6 DURA
+- +3 MA
 ```
 
 ======
@@ -148,4 +136,64 @@ PvP:
 - Tỉ số: 5-1
 - Note: PvP Reward: (Brainrot), Primordial Being Water, Hero Grave Keeper: ar2di Lover's Glover (Euoid), Mất Trinh
 ```
+
+```
+PvP:
+- Đối thủ: dung7877
+- Kết quả: Lose
+- Tỉ số: 3-3
+- Note: House tyrell (+2 IQ), Bloody strike(+1 STR/BIQ/MA), Grave keeper: Radio
+```
+
+```
+PvP:
+- Đối thủ: Kami Tsuna
+- Kết quả: Win
+- Tỉ số: 4-1
+- Note: Tyrell (+2 spd), Bloody Strike(+1 Str/Spd/Dur/IQ/MA), Primodial (+1 BIQ và 1 stat cao nhất IQ), Đào mộ (nhận Đai Trinh tiết)
+```
 ======
+
+
+
+# Archive
+#- Earth-Shaking (Primordial Being)
+#- +1 Str (Primordial Being)
+#- Let me solo her (Primordial Being)
+#- Gold Pine Resin (Hero Grave Keeper)
+#- +2 Dura (House Tyrell)
+#- +1 Str
+#- +1 Spd
+#- +1 IQ
+#- +1 BIQ
+#- Cursed Charmed (đào mộ)
+#- +1 Str
+#- +1 Quirk: Patient
+#- +1 str
+#- +1 spd
+#- +1 IQ
+#- +1 BIQ
+#- +1 MA
+#- +2 BIQ (House Tyrell)
+#- +2 Dura (House Tyrell)
+#- +1 BIQ (Water)
+#- +1 Spd (Water)
+#- +1 Str
+#- +1 spd
+#- +1 dura
+#- +1 iq
+#- +1 biq
+#- +2 IQ
+#- +1 Str
+#- +1 BIQ
+#- +1 MA
+#- +2 Spd (House Tyrell)
+#- +1 Str
+#- +1 spd
+#- +1 dura
+#- +1 iq
+#- +1 MA
+#- +1 iq
+#- Nhiệm vụ house: +1 vào base stat thấp nhất 5 lần
+#- +4 iq
+#- +1 MA

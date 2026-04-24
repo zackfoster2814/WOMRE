@@ -1,7 +1,7 @@
 No.184
 Name: Thanh Tước bé cưng (cleade1stmay)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -22,7 +22,7 @@ Archetype:
 ```
 ```
 Str: 6
-Spd: 6
+Spd: 5 (bị nguyền từ 6)
 Dur: 9
 IQ: 8
 BIQ: 6
@@ -68,11 +68,14 @@ Runeword: Không
 + Encroaching Shadow (Từ PvE)
 + Bash (Từ PvE)
 + EscAPADe
++ 67
 ```
 
 ```
 Char dev: 
 + Become Hand of The King
++ Cơ cấu
++ Prime time
 ```
 
 ```
@@ -93,12 +96,18 @@ Other source:
 - -1 DUR
 - -1 STR
 - -1 DUR
+- -1 STR
+- -1 DUR
+- Nhiệm vụ house: +2 stat cao nhất (MA), +2 stat thấp nhất (STR) và 2 char dev (Cơ cấu và Prime time)
+- +2 MA
+- +2 STR
 ```
 ```
 PvP Reward:
 - +1 spd
 - Nhận 1 Power: EscAPADe
 - +1 IQ
+- +1 all stat
 ```
 
 ======
@@ -133,5 +142,13 @@ PvP:
 - Đối thủ: catfish
 - Kết quả: Win
 - Tỉ số: 7-0
+```
+
+```
+PvP:
+- Đối thủ: 1037
+- Kết quả: Win
+- Tỉ số: 5-2
+- Note: FL học đc 67, Thuốc tráng dương (-1 str, -1 dura)
 ```
 ======

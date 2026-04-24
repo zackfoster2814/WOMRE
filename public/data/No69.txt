@@ -1,7 +1,7 @@
 No.69
 Name: Nốt Ruồi Lệch Pha (cooku_35645)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -20,11 +20,12 @@ Archetype:
 + Brave
 + Artisan
 + Shining Brightly
++ Brainrot
 ```
 ```
-Str: 5
-Spd: 10
-Dur: 4 (Ban đầu là 4, về 0 do PvE Punishment)
+Str: 3 (nguyền từ 5)
+Spd: 0 (bị kéo về 0)
+Dur: 0 (Ban đầu là 4, về 0 do PvE Punishment)
 IQ: 6 
 BIQ: 1 (từ 6 bị nguyền còn)
 MA: 10
@@ -38,6 +39,7 @@ Houses:
  + 2 Normal gear:
   - Soap (Từ Quirk)
   - Ớt
+  - Love Letter
  + 1 Legacy gear:
   -
 ```
@@ -69,6 +71,7 @@ Runeword: Không
 Char dev: 
 + No more family
 + Finality
++ Braindead
 ```
 ```
 Team: 4
@@ -82,6 +85,7 @@ PvP Reward:
 - +1 Str
 - +1 Power: Divine Smite
 - +1 Speed
+- 1 gear: Love Lette
 ```
 ```
 Other Source:
@@ -96,6 +100,15 @@ Other Source:
 - -1 IQ (Follower of 2 ngón)
 - -1 BIQ (Follower of 2 ngón)
 - -2 Dura
+- -2 Dura
+- Cướp từ Hà: U=Ma2
+- Naga House: Braindead
+- Nhiệm vụ House: Might (spd)
+- +3 Str
+- +3 Dura
+- +3 IQ
+- +3 BIQ
+- +3 MA
 ```
 
 ======
@@ -133,6 +146,14 @@ PvP:
 - Tỉ số: 4-4
 - Note:ko Crit Evasion: Spd; PvP Reward: +1 Speed; Naga: +1 Char Dev: Finality; 2 ngón: chọn Swem, cướp Power Burning Hand
 
+```
+
+```
+PvP:
+- Đối thủ: Sparxie đã bán nước chưa
+- Kết quả: Win
+- Tỉ số: 4-5
+- Note: Cướp power U=Ma2 từ Hà, Naga nhận Char dev, Aids (-2 Dura) 
 ```
 
 ======

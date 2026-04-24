@@ -160,14 +160,6 @@ export function registerCharDevEffects() {
     )
     .weight(1.2)
     .effect({
-      type: "stat_modifier",
-      stat: "all",
-      value: 1,
-      timing: "during_combat",
-      target: "self",
-      conditions: [{ type: "bracket", bracket: "loser" }],
-    })
-    .effect({
       type: "custom",
       timing: "on_round_16",
       target: "self",
@@ -1452,8 +1444,9 @@ registerImmediateHandler(
   (_ctx: ImmediateHandlerContext): ImmediateHandlerResult => {
     return {
       skipDefault: true,
+      removeCharDev: "Final Reserves",
       description:
-        "Final Reserves: Vòng 16 nhánh thua → loại bỏ hiệu ứng, nhận 2 Power ngẫu nhiên",
+        "Final Reserves: Vòng 16 nhánh thua → loại bỏ hiệu ứng +1 all stats",
     };
   },
   "At loser round 16: remove effect and gain 2 random Powers",

@@ -1,7 +1,7 @@
 No.243
 Name: Karu (karu_87369)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -25,11 +25,11 @@ Archetype:
 ```
 ```
 Str:4 Cursed of 36k
-Spd:1 Cursed of 36k
+Spd:4 Cursed of 36k (lúc đầu là 1, cộng từ house)
 Dur:9 Cursed of 36k
 IQ:5 Cursed of 36k
-BIQ:1 Cursed of 36k
-MA:2 Cursed of 36k
+BIQ:7 Cursed of 36k (lúc đầu là 1, cộng từ house, nguyền lên 7)
+MA:6 Cursed of 36k (lúc đầu là 2, cộng từ house thành 3, được Fate's trick buff thành 6)
 ```
 
 ```
@@ -45,6 +45,7 @@ Houses:
   - Radio
   - Fishing Rod
   - Knight's Armor
+  - Khung hình thờ
  + 0 Legacy gear:
   - 
 ```
@@ -66,11 +67,17 @@ Runeword:
 + Drunken Boxing
 + Sacred Fire (Từ No more Family)
 + Rising Tide (Từ No more Family)
++ Ice Hammer
++ Sonic Scream
 ```
 
 ```
 Char dev: 
 + No more Family
++ Lord of the Seven Kingdoms
++ Kungfu Training
++ Become Hand of The King
++ Fate's Trick
 ```
 
 ```
@@ -87,12 +94,20 @@ Other Source:
 - +2 IQ (dryad)
 - +2 Str (dryad)
 - +2 MA (dryad)
+- Nhiệm vụ House: nhận char dev: Lord of Seven Kingdoms (+3 base Spd, +3 base Biq +1 base Ma); Nhận 3 quả trứng: Viserion (+3 stat cao nhất và power Ice Hammer, Silverwing (+3 char dev Become Hand of The King, Fate's Trick, Kungfu Training, Drogon (+ 2 stat cao nhất và thấp nhất và power Sonic Scream)
+- +3 Dura
+- +2 Dura
+- +2 MA 
+- +2 IQ
+- +9 base Spd
+
 ```
 ```
 PvP Reward:
 - +1 Gear: Fishing Rod
 - PvP Reward: +2 Stat cao nhất (Dura)
 - +1 Gear: Knight's Armor
+- +2 dura
 ```
 
 ======
@@ -127,5 +142,13 @@ PvP:
 - Đối thủ: CobyKei
 - Kết quả: Win
 - Tỉ số: 4-3
+```
+
+```
+PvP:
+- Đối thủ: mHamster
+- Kết quả: Win
+- Tỉ số: 4-2
+- Note: pvp rw(+2 stat cao nhất)
 ```
 ======

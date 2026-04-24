@@ -1,8 +1,8 @@
 No.176
 Name: Lunar (huyvp1412)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -37,19 +37,13 @@ Houses:
 ```
 6 Gear: 
  + 5 Normal gear:
-  - Beer (Từ Char Dev)
-  - Spatula (Từ Char Dev)
-  - Lover's Glover (Roku da Poet (roku2807))(Từ Char Dev)
-  - Empty Stein
-  - Wine
-  - Ancient Protector
-  - Giấy nợ gia truyền (từ Chokevy 1)
+  - 
  + 1 Legacy gear:
   -
 ```
 ```
 1 Normal Weapon
-+ Claymore(Dùng được) (Đã mất)
++ 
 ```
 ```
 1 Rune: 
@@ -88,6 +82,7 @@ Other Source:
 - +1 All stats
 - -2 Dura (AIDS)
 - -2 Dura (AIDS)
+- -2 Dura (AIDS)
 ```
 
 ======
@@ -124,6 +119,21 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-4
 - Note: PvP Reward: +1 Char Dev: Training Arc, Rampage: không kích
+```
+
+```
+PvP:
+- Đối thủ: LDL
+- Kết quả: Lose
+- Tỉ số: 2-2
+- Note: Aid (-2 dura), giấy nợ gia truyền (mất hết gear và vũ khí, chuyển giấy cho Sparxie)
+```
+
+```
+PvP:
+- Đối thủ: Yoh Hai Kiếm
+- Kết quả: Lose
+- Tỉ số: 5-2
 ```
 
 ======

@@ -1,7 +1,7 @@
 No.227
 Name: dung7877 (dung7877)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -13,8 +13,10 @@ Sub-race: Ice Troll
 ```
 
 ```
-Archetype: Infirmarian
+Archetype: 
++ Infirmarian
 + Machinists 
++ Evolvers
 ```
 ``` 
 1 Quirk:  
@@ -25,7 +27,7 @@ Archetype: Infirmarian
 Str:4
 Spd:5
 Dur:2
-IQ:6
+IQ:5
 BIQ:5
 MA:3
 ```
@@ -41,6 +43,7 @@ Houses:
   - Silver Steed (Từ House)
   - Ancient Protector
   - Thuốc tráng dương
+  - Wizard Hat
  + 0 Legacy gear:
   - 
 ```
@@ -83,10 +86,15 @@ Other Source:
 - Machinists Power: Fingerthing
 - Machinist: +1 Gear: Ancient Protector
 - Machinists: 1 Gear: Thuốc tráng dương
+- -1 str (Thuốc tráng dương)
+- -1 dura (Thuốc tráng dương)
+- Machinists: 1 Gear: Wizard Hat
+- Nhiệm vụ House: Nhận Archetype: Evolvers
 ```
 ```
 PvP Reward:
 - +1 Dura
+- +1 Speed
 - +1 Speed
 - +1 Speed
 
@@ -124,6 +132,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 5-1
 - Note: 
+```
+
+```
+PvP:
+- Đối thủ: Anh Bác Sĩ
+- Kết quả: Win
+- Tỉ số: 3-3
+- Note: Thuốc tráng dương (-1 str, -1 dura)
 ```
 
 ======

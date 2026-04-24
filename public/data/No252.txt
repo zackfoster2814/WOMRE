@@ -1,8 +1,8 @@
 No.252
 Name: Hachi (hachi2378)
-Status: Còn sống
+Status: Đã bị loại
 Vòng thi đấu: 32
-Nhánh thi đấu: Thắng
+Nhánh thi đấu: Thua 2
 ```
 Ký Sinh:
 + 
@@ -111,6 +111,20 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 6-2
 - Note: Raumanian: +1 điểm
+```
+
+```
+PvP:
+- Đối thủ: radb1t_fr
+- Kết quả: Lose
+- Tỉ số: 3-4
+```
+
+```
+PvP:
+- Đối thủ: Yui
+- Kết quả: Lose
+- Tỉ số: 4-4
 ```
 
 ======

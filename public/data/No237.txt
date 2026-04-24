@@ -1,7 +1,7 @@
 No.237
 Name: Trezork (tukhang4140)
 Status: Còn sống
-Vòng thi đấu: 32
+Vòng thi đấu: 16
 Nhánh thi đấu: Thắng
 ```
 Ký Sinh:
@@ -21,11 +21,11 @@ Archetype:
 + Impatient 
 ```
 ```
-Str:1
+Str:5 (Lúc đầu là 1, được cộng từ house)
 Spd:6
 Dur:10
 IQ:5
-BIQ:4
+BIQ:11 (lúc đầu là 4, lên 10, được cộng từ house)
 MA:6
 ```
 
@@ -94,7 +94,6 @@ PvP Reward:
 
 ```
 Other Source:
-- Khung hình thờ 
 - +3 str (Mason Tyrell)
 - -1 STR
 - -1 DUR
@@ -104,6 +103,11 @@ Other Source:
 - -2 Dura
 - -2 Dura
 - -2 Dura
+- +3 Dura
+- -2 Dura
+- +4 str
+- +1 BIQ
+- Nhiệm vụ house: Nhận +1 stat thấp nhất 5 lần (+4 str, 1 BIQ)
 ```
 ======
 Battle Log:
@@ -136,6 +140,14 @@ PvP:
 - Kết quả: Win
 - Tỉ số: 3-3
 - Note: bán vài round nhưng thắng tie break; PvP Reward: vội
+```
+
+```
+PvP:
+- Đối thủ: Hy
+- Kết quả: Win
+- Tỉ số: 4-3
+- Note: Bash siêu gánh, Tyrell (+3 Dura), Aids (-2 Dura), 
 ```
 
 ======
