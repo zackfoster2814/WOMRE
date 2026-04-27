@@ -130,6 +130,24 @@ export const StatsComparisonMode = ({
   const [pendingLoser, setPendingLoser] = useState<
     "player1" | "player2" | null
   >(null);
+  // Tiebreaker BGM
+  const tiebreakerAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [tiebreakerBGMPlaying, setTiebreakerBGMPlaying] = useState(false);
+  useEffect(() => {
+    tiebreakerAudioRef.current = new Audio("/assets/combatSFX/tiebreak.mp3");
+    tiebreakerAudioRef.current.loop = true;
+    return () => { tiebreakerAudioRef.current?.pause(); };
+  }, []);
+  const toggleTiebreakerBGM = () => {
+    if (!tiebreakerAudioRef.current) return;
+    if (tiebreakerBGMPlaying) {
+      tiebreakerAudioRef.current.pause();
+    } else {
+      tiebreakerAudioRef.current.play();
+    }
+    setTiebreakerBGMPlaying((p) => !p);
+  };
+
   // Deferred after-combat build fn: gọi sau khi Roundtable Hold xác định winner thật
   const pendingAfterCombatBuildRef = useRef<
     | ((
@@ -4159,41 +4177,49 @@ export const StatsComparisonMode = ({
                         </button>
                       </div>
                     ) : (
-                      <button
-                        onClick={() => {
-                          setPreCombatModal({
-                            isOpen: true,
-                            title: "Tiebreaker",
-                            description: `${p1Race} vs ${p1Race} — Quay 50/50 xác định người thắng`,
-                            items: [
-                              {
-                                label: player1.name,
-                                weight: 1,
-                                isSuccess: true,
-                                color: "#3b82f6",
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            setPreCombatModal({
+                              isOpen: true,
+                              title: "Tiebreaker",
+                              description: `${p1Race} vs ${p1Race} — Quay 50/50 xác định người thắng`,
+                              items: [
+                                {
+                                  label: player1.name,
+                                  weight: 1,
+                                  isSuccess: true,
+                                  color: "#3b82f6",
+                                },
+                                {
+                                  label: player2.name,
+                                  weight: 1,
+                                  isSuccess: true,
+                                  color: "#ef4444",
+                                },
+                              ],
+                              side: "player1",
+                              effectKey: "tiebreaker-race",
+                              onResult: (result) => {
+                                setTiebreakerWheelResult(
+                                  result.label === player1.name
+                                    ? "player1"
+                                    : "player2",
+                                );
                               },
-                              {
-                                label: player2.name,
-                                weight: 1,
-                                isSuccess: true,
-                                color: "#ef4444",
-                              },
-                            ],
-                            side: "player1",
-                            effectKey: "tiebreaker-race",
-                            onResult: (result) => {
-                              setTiebreakerWheelResult(
-                                result.label === player1.name
-                                  ? "player1"
-                                  : "player2",
-                              );
-                            },
-                          });
-                        }}
-                        className="px-4 py-2 bg-yellow-600/40 hover:bg-yellow-600/60 text-yellow-200 font-bold rounded-lg text-sm border border-yellow-500/40 transition-colors"
-                      >
-                        🎯 Quay Tiebreaker
-                      </button>
+                            });
+                          }}
+                          className="px-4 py-2 bg-yellow-600/40 hover:bg-yellow-600/60 text-yellow-200 font-bold rounded-lg text-sm border border-yellow-500/40 transition-colors"
+                        >
+                          🎯 Quay Tiebreaker
+                        </button>
+                        <button
+                          onClick={toggleTiebreakerBGM}
+                          className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-yellow-800/40 hover:bg-yellow-700/50 border border-yellow-600/40 text-yellow-200 text-sm font-medium transition-colors"
+                        >
+                          {tiebreakerBGMPlaying ? "⏸" : "▶"} BGM
+                        </button>
+                      </div>
                     )}
                   </div>
                 );
@@ -4629,3 +4655,4 @@ export const StatsComparisonMode = ({
     </div>
   );
 };
+

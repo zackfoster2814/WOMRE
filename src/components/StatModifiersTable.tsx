@@ -222,26 +222,47 @@ const StatModifiersTable = ({
           </tr>
 
           {/* Source rows */}
-          {sourcesWithStats.map((source, idx) => (
-            <tr key={idx} className="border-b border-gray-700/30">
-              <td
-                className={`py-1.5 px-2 ${sourceTypeColors[source.type]} max-w-[120px]`}
-                title={source.description || source.name}
-              >
-                <span className="truncate block">{source.name}</span>
-                {source.description && (
-                  <span className="text-gray-500 text-[9px] leading-tight block truncate" title={source.description}>
-                    {source.description}
-                  </span>
-                )}
-              </td>
-              {statKeys.map((statKey) => (
-                <td key={statKey} className="text-center py-1.5 px-1.5">
-                  {formatStatChanges(getStatChanges(source, statKey))}
+          {sourcesWithStats.map((source, idx) => {
+            // other_source với "all" stats: hiển thị gộp 1 dòng thay vì tách 6 cột
+            if (source.allStatsValue !== undefined) {
+              const v = source.allStatsValue;
+              const color = v > 0 ? "text-green-400" : "text-red-400";
+              const prefix = v > 0 ? "+" : "";
+              return (
+                <tr key={idx} className="border-b border-gray-700/30">
+                  <td
+                    className={`py-1.5 px-2 ${sourceTypeColors[source.type]} max-w-[120px]`}
+                    title={source.description || source.name}
+                  >
+                    <span className="truncate block">{source.name}</span>
+                  </td>
+                  <td colSpan={6} className={`text-center py-1.5 px-1.5 ${color}`}>
+                    {prefix}{v} all stats
+                  </td>
+                </tr>
+              );
+            }
+            return (
+              <tr key={idx} className="border-b border-gray-700/30">
+                <td
+                  className={`py-1.5 px-2 ${sourceTypeColors[source.type]} max-w-[120px]`}
+                  title={source.description || source.name}
+                >
+                  <span className="truncate block">{source.name}</span>
+                  {source.description && (
+                    <span className="text-gray-500 text-[9px] leading-tight block truncate" title={source.description}>
+                      {source.description}
+                    </span>
+                  )}
                 </td>
-              ))}
-            </tr>
-          ))}
+                {statKeys.map((statKey) => (
+                  <td key={statKey} className="text-center py-1.5 px-1.5">
+                    {formatStatChanges(getStatChanges(source, statKey))}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
 
           {/* Separator */}
           <tr>

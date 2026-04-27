@@ -2311,16 +2311,6 @@ registerImmediateHandler(
     if (auraFarmer && (auraFarmer as any).isLost) {
       return { skipDefault: true, description: "Aura Farmer đã mất aura" };
     }
-    const inFinals =
-      ctx.character.tournament?.bracket === "winner" ||
-      ctx.character.tournament?.round === "final";
-    if (inFinals) {
-      return {
-        statModifiers: STAT_NAMES.map((stat) => ({ stat, value: 3 })),
-        skipDefault: true,
-        description: "+3 All Stats (Aura Farmer - chung kết)",
-      };
-    }
     return { skipDefault: false, description: "+2 All Stats (Aura Farmer)" };
   },
   "+2 all stats, extra in finals",

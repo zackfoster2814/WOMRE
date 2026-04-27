@@ -1232,7 +1232,8 @@ export class EffectResolver {
       for (const m of character.otherSourceMods) {
         const statTarget = abbrevToStat[m.stat];
         if (statTarget) {
-          const desc = `${m.value > 0 ? "+" : ""}${m.value} ${m.stat.toUpperCase()}${m.source ? ` (${m.source})` : ""}`;
+          const statLabel = m.stat === "all" ? "all stats" : m.stat.toUpperCase();
+          const desc = `${m.value > 0 ? "+" : ""}${m.value} ${statLabel}${m.source ? ` (${m.source})` : ""}`;
           sources.push({
             type: "other_source",
             name: desc,
@@ -2532,6 +2533,15 @@ export class EffectResolver {
           runningStats[change.stat] += change.value;
         }
 
+        // Detect "all stats" other_source để hiển thị gộp 1 dòng trong UI
+        let allStatsValue: number | undefined;
+        if (source.type === "other_source" && source.effects.length === 1) {
+          const eff = source.effects[0];
+          if (eff.stat === "all" && eff.value !== undefined) {
+            allStatsValue = eff.value;
+          }
+        }
+
         breakdown.push({
           type: source.type,
           name: customHandlerDisplayName || source.name,
@@ -2541,6 +2551,7 @@ export class EffectResolver {
           isDisabled: source.isDisabled || false,
           conditionalEffects:
             conditionalEffects.length > 0 ? conditionalEffects : undefined,
+          allStatsValue,
         });
       }
     }
@@ -2573,6 +2584,8 @@ export interface EffectSourceBreakdown {
   isDisabled: boolean;
   // Info about conditional/combat effects that aren't immediately applied
   conditionalEffects?: ConditionalEffect[];
+  // Nếu source là "+X all stats" → giá trị gộp để hiển thị 1 dòng
+  allStatsValue?: number;
 }
 
 // ============================================================================

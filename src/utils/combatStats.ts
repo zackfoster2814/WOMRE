@@ -209,7 +209,8 @@ export function applyBeforeCombatStatMods(
       handler !== "kings_landing_penalty_check" &&
       handler !== "banana_peel_iq_compare" &&
       handler !== "sarastro_flute_debuff" &&
-      handler !== "frost_fingers_per_gear"
+      handler !== "frost_fingers_per_gear" &&
+      handler !== "bagpipe_power_bonus"
     )
       continue;
     if (handler === "kings_landing_penalty_check") {
@@ -279,6 +280,22 @@ export function applyBeforeCombatStatMods(
           }
           applyStatDelta(base, highestKey, -1);
         }
+      }
+      continue;
+    }
+    if (handler === "bagpipe_power_bonus") {
+      if (targetFilter !== "self") continue;
+      const srcName = ce.source?.name || "?";
+      const srcType = ce.source?.type || "?";
+      if (disabledItems.has(`${charNo}-${srcType}-${srcName}`)) continue;
+      const selfPowers = ((char as any)?.powers || []).filter(
+        (p: any) => !p?.isLost,
+      ).length;
+      const oppPowers = ((opponentChar as any)?.powers || []).filter(
+        (p: any) => !p?.isLost,
+      ).length;
+      if (selfPowers > oppPowers) {
+        for (const k of _ALL_STAT_KEYS) applyStatDelta(base, k, 1);
       }
       continue;
     }

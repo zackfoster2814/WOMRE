@@ -452,18 +452,18 @@ export function computeRoundPoints(
             return { pts: 0, pending: true, color: "text-amber-500" };
           const successCount =
             (sandSpun.isSuccess ? 1 : 0) + (sand2Spun.isSuccess ? 1 : 0);
-          // Cả 2 thành công: B +2, A -1 (opponentPtsAdjust = -1 thêm vào pts=0 của A từ winner branch)
-          const opponentPtsAdjust = successCount === 2 ? -1 : 0;
+          // Winner branch đã xử lý: 1 kích → pts:0, 2 kích → pts:-1
+          // Loser nhận đúng successCount điểm, không cần opponentPtsAdjust thêm
           return {
             pts: successCount,
             pending: false,
             color: successCount > 0 ? "text-amber-300" : "text-gray-600",
-            opponentPtsAdjust,
           };
         }
         if (!sandSpun)
           return { pts: 0, pending: true, color: "text-amber-500" };
         if (sandSpun.isSuccess) {
+          // Kích 1 lần: loser +1, winner net 0 (winner branch đã trả pts:0)
           return { pts: 1, pending: false, color: "text-amber-300" };
         }
       }

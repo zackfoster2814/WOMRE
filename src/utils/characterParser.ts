@@ -548,13 +548,11 @@ export class CharacterParser {
       // Bóc dấu - đầu dòng list: "- -1 Dura" → "-1 Dura"
       const item = cleanLine.replace(/^-\s*/, "").trim();
 
-      // "+1 All stats" hoặc "-2 All stats"
+      // "+1 All stats" hoặc "-2 All stats" → giữ stat: "all" để UI gộp 1 dòng
       const allMatch = item.match(/^([+-]?\d+)\s+All\s+[Ss]tats?/i);
       if (allMatch) {
         const value = parseInt(allMatch[1]);
-        for (const s of ["str", "spd", "dur", "iq", "biq", "ma"]) {
-          result.push({ stat: s, value, source });
-        }
+        result.push({ stat: "all", value, source });
         continue;
       }
 
