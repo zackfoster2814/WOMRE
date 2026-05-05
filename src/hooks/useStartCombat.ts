@@ -1993,6 +1993,7 @@ export function useStartCombat(params: UseStartCombatParams): {
         init.p1Stats,
       );
 
+
       if (preCombatEvents.length > 0) {
         init.roundLogs.push({
           roundIndex: -1,

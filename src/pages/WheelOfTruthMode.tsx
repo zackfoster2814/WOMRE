@@ -14,6 +14,7 @@ import {
 import { CombatEffectsPanel } from "../components/CombatEffectsPanel";
 import { ArenaLoadingScreen } from "../components/three/ArenaLoadingScreen";
 import { CombatIntroScreen } from "../components/three/CombatIntroScreen";
+import { ChampionshipIntroScreen } from "../components/three/ChampionshipIntroScreen";
 import { CombatOutroScreen } from "../components/three/CombatOutroScreen";
 import { PvPBackground3D } from "../components/three/PvPBackground3D";
 import { CombatEffects3D } from "../components/three/CombatEffects3D";
@@ -163,6 +164,10 @@ export const WheelOfTruthMode = ({
 
   // ── Intro / Outro ─────────────────────────────────────────────────────────
   const [showIntro, setShowIntro] = useState(false);
+  const [showChampionshipIntro, setShowChampionshipIntro] = useState(false);
+
+  // Khi chạy intro chung kết thì mute toàn bộ âm thanh nền
+  const effectiveMasterVolume = showChampionshipIntro ? 0 : masterVolume;
   const [showOutro, setShowOutro] = useState(false);
 
   // ── Combat state ──────────────────────────────────────────────────────────
@@ -1180,15 +1185,31 @@ export const WheelOfTruthMode = ({
     return 0;
   };
 
+  // Venturers: +4 nếu stat round này cao hơn đối thủ, +8 nếu thấp hơn (apply trước spin)
+  const _wotVenturersBoost = (targetSide: "player1" | "player2"): number => {
+    if (!currentStatInfo || !stepState || !player1 || !player2) return 0;
+    const p = targetSide === "player1" ? player1 : player2;
+    const hasVenturers = (p.character?.archetypes || []).some(
+      (a: string) => a === "Venturers" && !disabledItems.has(`${p.no}-archetype-Venturers`),
+    );
+    if (!hasVenturers) return 0;
+    const selfVal = stepState[targetSide === "player1" ? "p1Stats" : "p2Stats"][currentStatInfo.key] ?? 0;
+    const oppVal = stepState[targetSide === "player1" ? "p2Stats" : "p1Stats"][currentStatInfo.key] ?? 0;
+    if (selfVal === oppVal) return 0;
+    return selfVal > oppVal ? 4 : 8;
+  };
+
   const wotP1Val =
     currentStatInfo && stepState
       ? (stepState.p1Stats[currentStatInfo.key] ?? 0) +
-        _wotBashDebuffForSide("player1")
+        _wotBashDebuffForSide("player1") +
+        _wotVenturersBoost("player1")
       : 0;
   const wotP2Val =
     currentStatInfo && stepState
       ? (stepState.p2Stats[currentStatInfo.key] ?? 0) +
-        _wotBashDebuffForSide("player2")
+        _wotBashDebuffForSide("player2") +
+        _wotVenturersBoost("player2")
       : 0;
   // Clamp về 0 chỉ để tính weight (không clamp wotP1Val/wotP2Val để điều kiện <= 0 hoạt động)
   const wotP1W =
@@ -1446,6 +1467,20 @@ export const WheelOfTruthMode = ({
       {/* 3D animated background layer */}
       <PvPBackground3D />
 
+      {/* Championship intro screen */}
+      {showChampionshipIntro && player1 && player2 && (
+        <ChampionshipIntroScreen
+          allPlayers={allPlayers}
+          player1No={player1.no}
+          player2No={player2.no}
+          volume={masterVolume}
+          onComplete={() => {
+            setShowChampionshipIntro(false);
+            setShowIntro(true); // Sang intro chính thức sau khi flash xong
+          }}
+        />
+      )}
+
       {/* Combat intro screen */}
       {showIntro && player1 && player2 && (
         <CombatIntroScreen
@@ -1602,7 +1637,7 @@ export const WheelOfTruthMode = ({
             accent="blue"
             audioResetKey={audioResetKey}
             combatResult={combatResult}
-            masterVolume={masterVolume}
+            masterVolume={effectiveMasterVolume}
             bgmVolume={bgmVolume}
             isTournamentMode={isTournamentMode}
             onClear={() => {
@@ -1887,7 +1922,7 @@ export const WheelOfTruthMode = ({
                         <FallbackBgmController
                           key={audioResetKey}
                           stopped={!!combatResult}
-                          volumeScale={masterVolume * bgmVolume}
+                          volumeScale={effectiveMasterVolume * bgmVolume}
                         />
                       </div>
                     )}
@@ -2134,7 +2169,26 @@ export const WheelOfTruthMode = ({
                     <div className="flex justify-center pt-2">
                       <button
                         onClick={() => {
-                          if (player1 && player2) setShowIntro(true);
+                          if (player1 && player2) {
+                            const label = tournamentMatch?.displayLabel?.toLowerCase() || "";
+                            const isChampionshipKeyword = label.includes("championship") || label.includes("chung kết");
+                            
+                            // Nhận diện trận chung kết (bằng matchNumber hoặc tên)
+                            const isChampionshipMatch = tournamentMatch?.matchNumber === 319 || isChampionshipKeyword;
+                            
+                            // Nhận diện các trận thứ 2, thứ 3 trong chuỗi Bo3 để không chiếu lại Intro
+                            const isSubsequentBo3 = label.includes(" 2") || label.includes(" 3") || 
+                                                    label.includes("#2") || label.includes("#3") || 
+                                                    label.includes("game 2") || label.includes("game 3") || 
+                                                    label.includes("trận 2") || label.includes("trận 3") ||
+                                                    label.includes("lượt 2") || label.includes("lượt 3");
+
+                            if (isChampionshipMatch && !isSubsequentBo3) {
+                              setShowChampionshipIntro(true);
+                            } else {
+                              setShowIntro(true);
+                            }
+                          }
                         }}
                         disabled={pendingPreCombatCount > 0}
                         className={`px-10 py-3 rounded-xl font-display font-bold text-base transition-all transform tracking-widest ${
@@ -3134,7 +3188,7 @@ export const WheelOfTruthMode = ({
             accent="red"
             audioResetKey={audioResetKey}
             combatResult={combatResult}
-            masterVolume={masterVolume}
+            masterVolume={effectiveMasterVolume}
             bgmVolume={bgmVolume}
             isTournamentMode={isTournamentMode}
             onClear={() => {

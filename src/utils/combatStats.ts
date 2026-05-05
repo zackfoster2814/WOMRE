@@ -300,6 +300,7 @@ export function applyBeforeCombatStatMods(
       continue;
     }
 
+
     const srcName = ce.source?.name || "?";
     const srcType = ce.source?.type || "?";
     if (disabledItems.has(`${charNo}-${srcType}-${srcName}`)) continue;

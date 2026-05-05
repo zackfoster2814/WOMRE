@@ -766,13 +766,8 @@ export const PlayerListPage = () => {
     if (onlyAlive) {
       result = result.filter((p) => {
         if (p.tournament?.status === "eliminated") return false;
-        // Loại Symbiosis nếu vật chủ đã bị eliminated
-        if (p.isSymbiosis && p.symbiosisHost) {
-          const host = players.find(
-            (h) => h.name === p.symbiosisHost || h.username === p.symbiosisHost,
-          );
-          if (host?.tournament?.status === "eliminated") return false;
-        }
+        // Loại player ký sinh (Symbiosis)
+        if (p.isSymbiosis) return false;
         return true;
       });
     }

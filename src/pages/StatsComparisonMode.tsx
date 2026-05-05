@@ -1420,6 +1420,7 @@ export const StatsComparisonMode = ({
         const MULTI_EFFECT_HANDLERS = [
           "angling_scheming_str_win",
           "the_world_speed_win",
+          "venturers_weight_bonus",
         ];
         if (
           timing === "during_combat" &&
